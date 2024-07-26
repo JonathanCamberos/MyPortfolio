@@ -1,7 +1,16 @@
-import { Inter } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// Documentation:
+// layout.js will be shared across all the routes 
+// if I create any route in this app directory, it will have these html tags and classnames
+// any component I render here, it will be rendered across all the routes
+
+
+// we are going to use 2 fonts -  Inter and Manrope
+// note: we are not going to use the 'className' but these 'variables' we have created
+const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-in" });
+const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-mr" });
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +20,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      
+      {/* w/ inter. any component inside the children can use these variable names */}
+      <body className={`${inter.variable} ${manrope.variable} font-mr bg-light dark:bg-dark`}>{children}</body>
     </html>
   );
 }

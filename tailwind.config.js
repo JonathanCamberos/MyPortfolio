@@ -14,10 +14,21 @@ module.exports = {
         accentDark: "#ffdb4d",
         gray: "#747474",
       },
+      fontFamily:{
+        mr: ["var(--font-mr)"],   
+        in: ["var(--font-in)"]
+      },
     },
   },
   plugins: [],
 };
+
+/*!
+   fontFamily:
+   we can use font families similar to CSS:  font-in  or  font-mr
+*/
+
+
 
 
 
