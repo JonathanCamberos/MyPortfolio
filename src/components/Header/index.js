@@ -3,7 +3,7 @@ import Logo from './Logo'
 import Link from 'next/link'
 import { LinkedInIcon } from '../Icons'
 
-//header
+  
 const Header = () => {
   return (
     <header className="w-full p-4 px-10 flex items-center justify-between">
