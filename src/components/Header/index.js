@@ -20,12 +20,12 @@ const Header = () => {
             <button>Night Button </button>
         </nav>
         <div>
-            {/* resizing the icons */}
+            {/* hover: allows for resize ui feautre*/}
             <a href="http://" className="inline-block w-6 h-6 mr-4">
-              <LinkedInIcon className="hover:scale-105 transition-all ease duration-200"/>
+              <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
             </a>
             <a href="http://" className="inline-block w-6 h-6 mr-4">
-              <GithubIcon className="hover:scale-105 transition-all ease duration-200"/>
+              <GithubIcon className="hover:scale-125 transition-all ease duration-200"/>
             </a>
 
         </div>

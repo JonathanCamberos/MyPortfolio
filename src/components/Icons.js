@@ -1,6 +1,8 @@
 import React from "react";
 import { cx } from "../utils";
 
+// react Component created from svg using svg playground
+// Sun/Moon Light/Dark mode icons 
 
 export const SunIcon = ({ className, ...rest }) => (
     <svg
