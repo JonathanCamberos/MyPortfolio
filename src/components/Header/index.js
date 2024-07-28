@@ -1,6 +1,8 @@
 import React from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
+import { LinkedInIcon } from '../Icons'
+
 
 const Header = () => {
   return (
@@ -15,9 +17,13 @@ const Header = () => {
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/about" className="mx-2">About</Link>
             <Link href="/contact" className="mr-2">Contact</Link>
-            <button>T</button>
+            <button>Night Button </button>
         </nav>
-        <div>Social Links</div>
+        <div>
+            <LinkedInIcon />
+            <a href="http://">Github</a>
+
+        </div>
     </header>
   )
 }
