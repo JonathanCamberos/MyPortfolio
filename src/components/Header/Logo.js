@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import profileImg from "./../../../public/profile-img.png"
+//import profileImg from "./../../../public/profile-img.png"
+import profileImg from "./profile-img.png"
 
 const Logo = () => {
   return (
