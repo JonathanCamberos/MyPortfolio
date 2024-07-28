@@ -1,9 +1,9 @@
 import React from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
-import { LinkedInIcon } from '../Icons'
+import { GithubIcon, LinkedInIcon } from '../Icons'
 
-  
+
 const Header = () => {
   return (
     <header className="w-full p-4 px-10 flex items-center justify-between">
@@ -20,8 +20,13 @@ const Header = () => {
             <button>Night Button </button>
         </nav>
         <div>
-            <LinkedInIcon />
-            <a href="http://">Github</a>
+            {/* resizing the icons */}
+            <a href="http://" className="inline-block w-6 h-6 mr-4">
+              <LinkedInIcon className="hover:scale-105 transition-all ease duration-200"/>
+            </a>
+            <a href="http://" className="inline-block w-6 h-6 mr-4">
+              <GithubIcon className="hover:scale-105 transition-all ease duration-200"/>
+            </a>
 
         </div>
     </header>
