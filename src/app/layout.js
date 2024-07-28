@@ -1,7 +1,7 @@
 import { cx } from '@/utils'
 import './globals.css'
 import { Inter, Manrope } from 'next/font/google'
-import Header from '@/components/Header';
+import Header from './../components/Header';
 
 // documentation:
 // layout.js will also be shared across all the routes
