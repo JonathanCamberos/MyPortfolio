@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
-import { GithubIcon, LinkedInIcon } from '../Icons'
+import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 
 
 const Header = () => {
@@ -17,7 +17,9 @@ const Header = () => {
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/about" className="mx-2">About</Link>
             <Link href="/contact" className="mr-2">Contact</Link>
-            <button>Night Button </button>
+            <button>
+              <SunIcon />
+            </button>
         </nav>
         <div>
             {/* hover: allows for resize ui feautre*/}
