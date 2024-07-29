@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-// safe
+// attempting
 
 // the page.js is a ui that is unique to every route
 // page.js is directly under the app directory
