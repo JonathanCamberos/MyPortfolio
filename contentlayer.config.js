@@ -1,5 +1,7 @@
 import { makeSource, defineDocumentType } from '@contentlayer/source-files'
 
+// works on vercel
+
 const Blog = defineDocumentType(() => ({
     name: "Blog",
     filePathPattern: "**/**/*.mdx",
