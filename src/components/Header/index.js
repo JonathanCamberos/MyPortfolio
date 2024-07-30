@@ -11,9 +11,19 @@ const Header = () => {
 
         {/* this className creates the rounded center piece at the center of the page*/}
         {/* also added the backdrop effect on scroll so it looks blurrry on scroll */}
-        <nav className="w-max py-3 px-8 border border-solid border-dark rounded-full 
-                        font-medium capitalize flex items-center fixed top-6 right-1/2 translate-x-1/2
-                        bg-light/80 backdrop-blur-sm">
+        
+        {/* py-3          : affects length left to right
+            px-8          : affects length up to down
+            border        : border create()
+            border-solid  : border style
+            border-dark   : border color
+            rounded-full  : div shape
+            font-medium   : size of font
+            capitalize    : stype of font
+            items-center  : 
+        */}
+        <nav className=" w-max py-3 px-8 border border-solid border-dark rounded-full font-medium capitalize items-center hidden sm:flex
+        fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/about" className="mx-2">About</Link>
             <Link href="/contact" className="mr-2">Contact</Link>
@@ -21,6 +31,7 @@ const Header = () => {
               <SunIcon />
             </button>
         </nav>
+
         <div>
             {/* hover: allows for resize ui feautre*/}
             <a href="http://" className="inline-block w-6 h-6 mr-4">
