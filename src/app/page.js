@@ -15,8 +15,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center">
-      {/* <HomeCoverSection blogs={allBlogs} /> */}
-      <h1>helloo</h1>
+      <HomeCoverSection blogs={allBlogs} />
+      {/* <h1>helloo</h1> */}
     </main>
   )
 }

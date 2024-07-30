@@ -14,6 +14,7 @@ const HomeCoverSection = ( {blogs} ) => {
             fill
             className='w-full h-full object-center object-cover'
         />
+        helo
     </article>
   )
 }
