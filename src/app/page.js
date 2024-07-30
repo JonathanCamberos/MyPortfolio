@@ -8,15 +8,9 @@ import HomeCoverSection from "../components/Home/HomeCoverSection";
 // represents https://localhost:3000
 
 export default function Home() {
-  
-  console.log("Log")
-  let blog = allBlogs[0];
-  console.log(blog);
-
-  return (
+    return (
     <main className="flex flex-col items-center justify-center">
       <HomeCoverSection blogs={allBlogs} />
-      {/* <h1>helloo</h1> */}
     </main>
   )
 }
