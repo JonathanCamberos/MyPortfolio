@@ -6,6 +6,15 @@ import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 
 const Header = () => {
   return (
+    /*  w-full            : setting the width of an element (w-9/12)
+        p-4               : controlling an element's padding (times 4) p-4 => p-16
+        px-10             : overides overall padding (p-4 => px-10) (times 4) px-10 => px-40 
+        flex              : controlling how flex items (ONLY Children) both grow and shrink.
+        item-center       : controlling how flex and grid items are positioned along a container's cross axis
+                            'items-center' to align items along the center of the container’s cross axis
+        justify-between   : 'justify-between' to justify items along the container’s main axis such 
+                            that there is an equal amount of space between each item
+    */
     <header className="w-full p-4 px-10 flex items-center justify-between">
         <Logo />
 
