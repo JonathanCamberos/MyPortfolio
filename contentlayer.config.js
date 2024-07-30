@@ -1,6 +1,7 @@
 import { makeSource, defineDocumentType } from '@contentlayer/source-files'
 
 // works on vercel
+// 1 documenyt created
 
 const Blog = defineDocumentType(() => ({
     name: "Blog",
@@ -31,6 +32,10 @@ const Blog = defineDocumentType(() => ({
       author: {
         type: "string",
         required: true,
+      },
+      tags: {
+        type: "list",
+        of: { type: "string" },
       },
     },
     computedFields: {
