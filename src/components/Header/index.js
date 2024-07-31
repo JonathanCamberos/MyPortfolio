@@ -6,30 +6,39 @@ import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 
 const Header = () => {
   return (
-    /*  w-full            : setting the width of an element (w-9/12)
-        p-4               : controlling an element's padding (times 4) p-4 => p-16
-        px-10             : overides overall padding (p-4 => px-10) (times 4) px-10 => px-40 
-        flex              : controlling how flex items (ONLY Children) both grow and shrink.
-        item-center       : controlling how flex and grid items are positioned along a container's cross axis
-                            'items-center' to align items along the center of the container’s cross axis
-        justify-between   : 'justify-between' to justify items along the container’s main axis such 
-                            that there is an equal amount of space between each item
+    /*  w-full            : setting the width of an element                                    [ex: w-9/12]
+        p-4               : control element's padding (times 4: p-4 => p-16)                   [ex: p-0]
+        px-5              : overides overall padding (p-4 => px-10) (times 4: px-10 => px-40)  [ex: py-10]
+        flex              : creates flex items (ONLY Children)                                 [ex: flex is only for parent class]
+        
+        items-center      : control flex and grid items position on container's cross axis     [ex: items-start]
+                            'items-center' aligns to center of the container’s cross axis
+        
+        justify-between   : 'control flex and grid items position on container's main axis     [ex: justify-start]
+                             justify items along the center of the container’s main axis:
+
+        
+        Working with "flexbox" the two main axes - the MAIN AXIS and the CROSS AXIS
+          main axis:  defined by 'flex-direction' property
+          cross axis: perpendicular to main axis
+        
+        main axis: 
+            four possible values: row, row-reverse, column, column-reverse 
+
+                  row / row-reverse,        left to right, and right to left
+                  column / column-reverse,  up to down, and down to up  (?? not sure on which order) 
+
+        cross axis: 
+                              
     */
-    <header className="w-full p-4 px-10 flex items-center justify-between">
+    <header className="w-full p-4 px-5 flex items-center justify-between">
         <Logo />
 
         {/* this className creates the rounded center piece at the center of the page*/}
         {/* also added the backdrop effect on scroll so it looks blurrry on scroll */}
         
-        {/* py-3          : affects length left to right
-            px-8          : affects length up to down
-            border        : border create()
-            border-solid  : border style
-            border-dark   : border color
-            rounded-full  : div shape
-            font-medium   : size of font
-            capitalize    : stype of font
-            items-center  : 
+        {/* 
+
         */}
         <nav className=" w-max py-3 px-8 border border-solid border-dark rounded-full font-medium capitalize items-center hidden sm:flex
         fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
