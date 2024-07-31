@@ -21,25 +21,38 @@ import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 
 const Header = () => {
   return (
-    /*  w-full            : setting the width of an element                                    [ex: w-9/12]
-        p-4               : control element's padding (times 4: p-4 => p-16)                   [ex: p-0]
-        px-5              : overides overall padding (p-4 => px-10) (times 4: px-10 => px-40)  [ex: py-10]
-        flex              : creates flex items (ONLY Children)                                 [ex: flex is only for parent class]
+    /*  w-full            : | Sizing  : Width   | -> [width: 100%] setting the width of an element                      [ex: w-9/12]
+        p-4               : | Spacing : Padding | -> control element's padding (times 4: p-4 => p-16)                   [ex: p-0]
+        px-5              : | Spacing : Padding | -> overides overall padding (p-4 => px-10) (times 4: px-10 => px-40)  [ex: py-10]
+        flex              : | Layout  : Display | -> utility to create a block-level flex container                     [ex: flex for parent class]
         
-        items-center      : control flex and grid items position on container's cross axis     [ex: items-start]
-                            'items-center' aligns to center of the container’s cross axis
+        items-center      : | Flexbox & Grid : Align Items     | -> 
+                                    must be used with 'flex'
+                                    center top to bottom                      [ex: items-start]
+                                    aligns to center of container’s cross axis
         
-        justify-between   : 'control flex and grid items position on container's main axis     [ex: justify-start]
-                             justify items along the center of the container’s main axis:                
+        justify-between   : | Flexbox & Grid : Justify Content | -> 
+                                    must be used with 'flex'
+                                    center left to right                      [ex: justify-start]
+                                    aligns to center of container’s main axis:                
     */
     <header className="w-full p-4 px-5 flex items-center justify-between">
         <Logo />
 
-        {/* this className creates the rounded center piece at the center of the page*/}
-        {/* also added the backdrop effect on scroll so it looks blurrry on scroll */}
-        
         {/* 
-
+            w-max        : | Sizing  : Width   | -> [width: max-content]
+            py-3         : | Spacing : Padding | ->
+            px-8         : | Spacing : Padding | -> 
+            border       : | Borders : Border Width | -> [border-width: 1px] control width of element's borders
+            border-solid : | Borders : Border Style | -> [border-style: solid] control style of element's borders
+            border-dark  : border style
+            rounded-full : | Borders : Border Radius | -> [border-radius: 9999px]  control border radius of element
+            font-medium  : | Typography : Font Weight | -> [font-weight: 500] controlling font weight of an element
+            capitalize   : | Typography : Text Transform | -> [text-transform: capitalize] control transformation of text.
+            
+            items-center : | Flexbox & Grid : Align Items | -> [align-items: center] align items based on cross-axis
+            
+            hidden       : [ Layout : Display]  -> [display: none] remove from the page layout     [ex: flex, inline]
         */}
         <nav className=" w-max py-3 px-8 border border-solid border-dark rounded-full font-medium capitalize items-center hidden sm:flex
         fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
