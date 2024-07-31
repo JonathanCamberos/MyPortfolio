@@ -4,6 +4,21 @@ import Link from 'next/link'
 import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 
 
+/*
+  Working with "flexbox"
+  main axis:  defined by 'flex-direction' property
+  cross axis: perpendicular to main axis
+        
+   main axis: four possible values 
+        row / row-reverse,        left to right, and right to left
+        column / column-reverse,  up to down, and down to up  (?? not sure on which order) 
+
+   cross axis: perpendicular to main axis 
+        
+    quick-read:
+    https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox
+*/
+
 const Header = () => {
   return (
     /*  w-full            : setting the width of an element                                    [ex: w-9/12]
@@ -15,21 +30,7 @@ const Header = () => {
                             'items-center' aligns to center of the container’s cross axis
         
         justify-between   : 'control flex and grid items position on container's main axis     [ex: justify-start]
-                             justify items along the center of the container’s main axis:
-
-        
-        Working with "flexbox" the two main axes - the MAIN AXIS and the CROSS AXIS
-          main axis:  defined by 'flex-direction' property
-          cross axis: perpendicular to main axis
-        
-        main axis: 
-            four possible values: row, row-reverse, column, column-reverse 
-
-                  row / row-reverse,        left to right, and right to left
-                  column / column-reverse,  up to down, and down to up  (?? not sure on which order) 
-
-        cross axis: 
-                              
+                             justify items along the center of the container’s main axis:                
     */
     <header className="w-full p-4 px-5 flex items-center justify-between">
         <Logo />
