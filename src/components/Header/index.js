@@ -52,7 +52,24 @@ const Header = () => {
             
             items-center : | Flexbox & Grid : Align Items | -> [align-items: center] align items based on cross-axis
             
-            hidden       : [ Layout : Display]  -> [display: none] remove from the page layout     [ex: flex, inline]
+            hidden       : | Layout : Display |  -> [display: none] remove from the page layout     [ex: flex, inline]
+
+            sm:flex      : 
+            fixed        : | Layout : Position | -> [position: fixed] control how element is positioned in DOM
+                                                    fixed utility to position an element relative to the browser window.
+                                                    Any offsets w/ Top/Right/Bottom/Left are calculated relative to the viewport 
+                                                    and the element will act as a position reference for absolutely positioned children.
+                                                    A viewport is generally in Web Brower terms the browser window
+
+            top-6        : | Layout : Top/Right/Bottom/Left | -> [top: 1.5rem; /* 24px]  control placement of positioned elements
+                                                                top-*, right-*, bottom-*, left-*, and inset-* utilities to set the 
+                                                                horizontal or vertical position of a positioned element.
+            right-1/2    :
+
+            translate-x-1/2  :
+            bg-light/80      :
+            backdrop-blur-sm :
+            z-50             :
         */}
         <nav className=" w-max py-3 px-8 border border-solid border-dark rounded-full font-medium capitalize items-center hidden sm:flex
         fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
