@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import profileImg from "../../../public/icons8-logo-100.png"
+// icon from https://icons8.com/icon/set/react-logo/group-outlined :)
 
 const Logo = () => {
   return (

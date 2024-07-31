@@ -37,8 +37,11 @@ export default function RootLayout({ children }) {
         manrope.variable, 
         "font-mr bg-light"
         )}>
+        
+        {/* same header is used for all pages (ie all children) */}
         <Header />
         {children}
+        {/* same goes for footer */}
       </body>
     </html>
   )
