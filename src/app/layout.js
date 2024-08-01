@@ -38,10 +38,19 @@ export default function RootLayout({ children }) {
         "font-mr bg-light"
         )}>
         
-        {/* same header is used for all pages (ie all children) */}
+        {/* ##### Header component ####
+            same header is used for all pages (ie all children) 
+        */}
         <Header />
+        
+        {/* #### Childen Components #####
+            everything and anything will be loaded here
+        */}
         {children}
-        {/* same goes for footer */}
+
+        {/* ##### Footer component #####
+        
+        */}
       </body>
     </html>
   )
