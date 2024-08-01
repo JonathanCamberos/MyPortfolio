@@ -11,27 +11,24 @@ const BlogLayoutOne = ({blog}) => {
                                                         absolute utility to position an element outside of the normal flow of the document
                                                         Note*****: CAUSING NEIGHBORING ELEMENTS TO ACT AS IF THE ELEMENT DOESN'T EXIST 
                   
-                    top-0 left-0 bottom-0 right-0: -> top-*, right-*, bottom-*, left-*, and inset-* utilities to set the 
-                                                      horizontal or vertical position of a positioned element
-                    note! ^ is the same as "inset-0"
-
+                    top-0: -> | Layout : Top/Right/Bottom/Left | -> top-*... inset-* utilities to set the horizontal or vertical position of a positioned element
+                    left-0 bottom-0 right-0  note!    ^  is the same as "inset-0"
+                                                      
                     h-full:  | Sizing : Height | ->  [height: 100%] h-full to set an element’s height to 100% of its parent, as long as the parent has a defined height
                     
                     bg-gradient-to-b: | Backgrounds : Background Image | -> [background-image: linear-gradient(to bottom, var(--tw-gradient-stops))]
-                                                                            bg-gradient-* utilities in combination with the gradient color stop 
-                                                                            utilities to give an element a linear gradient background.
+                                                                            bg-gradient-* utilities in combination with the gradient color stop utilities to give an element a linear gradient background.
 
-                    from-transparent: | Backgrounds : Gradient Color Stops | -> [--tw-gradient-from: transparent var(--tw-gradient-from-position);
-                                                                                --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
+                    from-transparent: | Backgrounds : Gradient Color Stops | -> [--tw-gradient-from: transparent var(--tw-gradient-from-position); --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
                                                                                 --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);]
-                                                                      from-* utilities to set the starting color of a gradient.          
+                                                                          from-* utilities to set the starting color of a gradient.          
                     
                     from-0%: | Backgrounds : Gradient Color Stops | -> [--tw-gradient-from-position: 0%] 
                                                                       from-* utilities to set the starting color of a gradient.
 
                     to-dark/90:
                     rounded-3xl: | Borders : Border Radius | -> [border-radius: 1.5rem; 24px] apply different border radius sizes to an element.
-                    z-0:         | Layout : Z-Index | -> [z-index: 0]
+                    z-0:         | Layout : Z-Index | -> [z-index: 0] layer thing
 
                 */}
                 <div className='absolute top-0 left-0 bottom-0 right-0 h-full 
@@ -49,9 +46,9 @@ const BlogLayoutOne = ({blog}) => {
               height={blog.image.height}
               className='w-full h-full object-center object-cover rounded-xl group-hover:scale-105 
               transition-all ease duration-300'
-              sizes='100vw'
-              priority
+              sizes='(max-width: 1180px) 100vw, 50vw'
             />
+            {/* aspect-square w-full h-full object-cover object-center group-hover:scale-105 */}
 
             {/* ##### Tag and Description Div ##### 
                 w-full:   | Sizing : Width |   -> [width: 100%] 

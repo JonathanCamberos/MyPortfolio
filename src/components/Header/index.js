@@ -49,7 +49,7 @@ const Header = () => {
             px-8         : | Spacing : Padding | -> 
             border       : | Borders : Border Width | -> [border-width: 1px] control width of element's borders
             border-solid : | Borders : Border Style | -> [border-style: solid] control style of element's borders
-            border-dark  : border style
+            border-dark  : style
             rounded-full : | Borders : Border Radius | -> [border-radius: 9999px]  control border radius of element
             font-medium  : | Typography : Font Weight | -> [font-weight: 500] controlling font weight of an element
             capitalize   : | Typography : Text Transform | -> [text-transform: capitalize] control transformation of text.
@@ -57,8 +57,8 @@ const Header = () => {
             items-center : | Flexbox & Grid : Align Items | -> [align-items: center] align items based on cross-axis
             
             hidden       : | Layout : Display |  -> [display: none] remove from the page layout     [ex: flex, inline]
+            sm:flex      : | Layout : Display | -> create a block-level flex container
 
-            sm:flex      : 
             fixed        : | Layout : Position | -> [position: fixed] control how element is positioned in DOM
                                                     fixed utility to position an element relative to the browser window.
                                                     Any offsets w/ Top/Right/Bottom/Left are calculated relative to the viewport 

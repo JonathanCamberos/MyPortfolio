@@ -39,7 +39,7 @@ const BlogLayoutTwo = ({blog}) => {
                 
                 text-light:
             */}
-            <div className='col-span-6 w-full'>
+            <div className='col-span-7 w-full'>
                 
                 {/*  ##### Span w/ Link ##### 
                      Links to blog categories
@@ -57,9 +57,7 @@ const BlogLayoutTwo = ({blog}) => {
                 <Link href={blog.url} className='inline-block my-1'>
 
 
-                  {/* ##### h1 styling ##### 
-                      font styling 
-                  */}
+                  {/* ##### h1 styling ###### */}
                   <h2 className='font-semibold capitalize text-lg sm:text-md md:text-lg lg:text-lg'>
                       
                       {/*  #### Span Hover over Blog Title #####
@@ -72,6 +70,8 @@ const BlogLayoutTwo = ({blog}) => {
                       </span>
                   </h2>
                 </Link>
+
+                {/* ##### Date ##### */}
                 <span className="capitalize text-dark/50 font-semibold text-base">
                     {format(new Date(blog.publishedAt), "MMMM dd, yyyy")}
                 </span>

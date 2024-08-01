@@ -23,7 +23,14 @@ Header tag:
 Tells the search engine about the main heading of the document
 Note: main -> article -> header: heading of the content containing keywords for SEO
 
+Section tag:
+You can use the HTML Section element to divide up a web page into standalone sections of related content.
+Using the section element over a generic container element like div can make code more accessible and easier to understand to
+search engines, browsers, assistive technologies, and other developers
 
+# Dynamic Routing
+Used to create url such as https://..../blogs/blog_example
+via blogs\[slug], whatever the blog name is will be passed in place of 'slug'
 
 # React Hook Forms
 React Hook Forms is a performant, flexible and extensible forms with easy-to-use validation

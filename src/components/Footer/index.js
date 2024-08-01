@@ -14,6 +14,9 @@ const Footer = () => {
     console.log(errors);
 
   return (
+    /* ##### footer component #####
+    
+    */
     <footer className="mt-16 rounded-2xl bg-dark m-10 flex flex-col items-center text-light">
         <h3 className='mt-16 font-medium text-center capitalize text-4xl px-4'>
             Interesting Stories | Updates | Guides
@@ -22,10 +25,16 @@ const Footer = () => {
             Subscribe to learn about new technology and updates. Join over 5000+ members community to stay up to date with latest news.
         </p>
 
+        {/* ##### Form #####
+        
+        */}
         <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-6 w-fit sm:min-w-[384px] flex items-stretch bg-light dark:bg-dark p-1 sm:p-2 rounded mx04"
         >
+            {/* ##### Input #####
+            
+            */}
             <input
             type="email"
             placeholder="Enter your email"
@@ -33,6 +42,9 @@ const Footer = () => {
             className="w-full bg-transparent pl-2 sm:pl-0 text-dark focus:border-dark focus:ring-0 border-0 border-b mr-2 pb-1"
             />
 
+            {/* ##### Submit #####
+            
+            */}
             <input
             type="submit"
             className="bg-dark text-light dark:text-dark dark:bg-light cursor-pointer font-medium rounded px-3 sm:px-5 py-1"
@@ -77,16 +89,25 @@ const Footer = () => {
 
         </div>
 
+        {/* ##### The Foots Foot #####
+        
+        */}
         <div className="w-full  mt-16 md:mt-24 relative font-medium border-t border-solid border-light py-6 px-8 flex  flex-col md:flex-row items-center justify-between">
+        
+        {/*  */}
         <span className="text-center">
           JC
         </span>
+
+        {/*  */}
         <Link
           href="/sitemap.xml"
           className="text-center underline my-4 md:my-0"
         >
           sitemap.xml
         </Link>
+        
+        {/*  */}
         <div className="text-center">
           :)
         </div>
