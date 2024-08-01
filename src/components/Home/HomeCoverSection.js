@@ -76,9 +76,8 @@ const HomeCoverSection = ( {blogs} ) => {
               md:p-12   | Spacing : Padding | 
               lg:p-16   | Spacing : Padding | 
 
-              flex:      | Layout  : Display | -> create a block-level flex container
-              flex-col:  | Flexbox & Grid : Flex Direction | -> flex-col to position flex items vertically
-
+              flex:     | Layout  : Display | -> create a block-level flex container
+              flex-col: | Flexbox & Grid : Flex Direction | -> flex-col to position flex items vertically
               items-start:    | Flexbox & Grid : Align Items | -> items-start align items to start of container’s cross axis (top to bottom)
               justify-center: | Flexbox & Grid : Justify Content | ->  justify items along the center of the container’s main axis (left to right)
 
@@ -90,9 +89,15 @@ const HomeCoverSection = ( {blogs} ) => {
                 {/*  */}
                 {/* <Tag link={`/categories/${slug(blog.tags[0])}`} name={blog.tags[0]} /> */}
                 
-                {/*  */}
+                {/*  
+                  mt-6:   | Spacing : Margin | -> [margin-top: 1.5rem; 24px]
+                */}
                 <Link href={blog.url} className='mt-6'>
+                  
+                  {/*  font styling */}
                   <h1 className='font-bold capitalize text-lg sm:text-xl md:text-3xl lg:text-4xl'>
+                      
+                      {/*  cool hover animation */}
                       <span className='bg-gradient-to-r from-accent to-accent dark:from-accentDark/50 
                       dark:to-accentDark/50 bg-[length:0px_6px]
                       hover:bg-[length:100%_6px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 '>
@@ -101,8 +106,19 @@ const HomeCoverSection = ( {blogs} ) => {
                   </h1>
                 </Link>
 
-                {/*  */}
-                <p className='hidden  sm:inline-block mt-4 md:text-lg lg:text-xl font-in'>
+                {/*  
+                  hidden:
+                  
+                  sm:inline-block:
+                  
+                  mt-4: 
+
+                  md:text-lg: 
+                  lg:text-xl: 
+                  
+                  font-in
+                */}
+                <p className='hidden sm:inline-block mt-4 md:text-lg lg:text-xl font-in'>
                     {blog.description}
                 </p>
             </div>
