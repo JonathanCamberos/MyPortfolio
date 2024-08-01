@@ -2,6 +2,7 @@ import { cx } from './../utils'
 import './globals.css'
 import { Inter, Manrope } from 'next/font/google'
 import Header from './../components/Header';
+import Footer from '../components/Footer';
 
 // documentation:
 // layout.js will also be shared across all the routes
@@ -39,7 +40,7 @@ export default function RootLayout({ children }) {
         )}>
         
         {/* ##### Header component ####
-            same header is used for all pages (ie all children) 
+            same header is used for all children 
         */}
         <Header />
         
@@ -49,8 +50,9 @@ export default function RootLayout({ children }) {
         {children}
 
         {/* ##### Footer component #####
-        
+          same footer is used for all children
         */}
+        <Footer />
       </body>
     </html>
   )

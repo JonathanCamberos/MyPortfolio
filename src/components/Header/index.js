@@ -82,13 +82,13 @@ const Header = () => {
         fixed top-4 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/about" className="mx-2">About</Link>
-            <Link href="/contact" className="mr-2">Contact</Link>
+            <Link href="/contact" className="mx-2">Contact</Link>
             <button>
               <SunIcon />
             </button>
         </nav>
 
-        
+        {/* ##### Header Icons Div ##### */}
         <div>
             {/* ##### LinkedIn Div #####
                 inline-block: | Layout : Display | -> [display: inline-block] 

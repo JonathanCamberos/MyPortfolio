@@ -3,10 +3,10 @@ import Link from 'next/link'
 import React from 'react'
 import { format } from 'date-fns'
 
-const BlogLayoutTwo = ({blog}) => {
+const BlogLayoutThree = ({blog}) => {
   return (
-    <div className="group grid grid-cols-12 gap-4 items-center text-dark">
-        <Link href={blog.url} className="col-span-4 h-full rounded-xl overflow-hidden">
+    <div className="group flex flex-col items-center text-dark">
+        <Link href={blog.url} className="h-full rounded-xl overflow-hidden">
             
             {/*  ##### Image #####
             
@@ -17,7 +17,7 @@ const BlogLayoutTwo = ({blog}) => {
               alt={blog.title}
               width={blog.image.width}
               height={blog.image.height}
-              className='aspect-square w-full h-full object-cover object-center group-hover:scale-105 
+              className='aspect-[4/3] w-full h-full object-cover object-center group-hover:scale-105 
               transition-all ease duration-300'
             />
         </Link>
@@ -39,7 +39,7 @@ const BlogLayoutTwo = ({blog}) => {
                 
                 text-light:
             */}
-            <div className='col-span-6 w-full'>
+            <div className='flex flex-col w-full mt-4'>
                 
                 {/*  ##### Span w/ Link ##### 
                      Links to blog categories
@@ -81,4 +81,4 @@ const BlogLayoutTwo = ({blog}) => {
   )
 }
 
-export default BlogLayoutTwo
+export default BlogLayoutThree

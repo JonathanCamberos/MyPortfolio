@@ -2,6 +2,7 @@ import { allBlogs } from "../../.contentlayer/generated"
 import FeaturedPosts from "../components/Home/FeaturedPosts";
 
 import HomeCoverSection from "../components/Home/HomeCoverSection";
+import RecentPosts from "../components/Home/RecentPosts";
 // success!
 
 // the page.js is a ui that is unique to every route
@@ -27,6 +28,11 @@ export default function Home() {
           same import as HomeCoverSection 
       */}
       <FeaturedPosts blogs={allBlogs} />
+
+      {/* ##### FeaturedPosts component #####
+          same import as HomeCoverSection 
+      */}
+      <RecentPosts blogs={allBlogs}/>
     </main>
   )
 }

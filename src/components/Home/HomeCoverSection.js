@@ -29,7 +29,7 @@ const HomeCoverSection = ( {blogs} ) => {
                 {/* ##### Overlay Div for Image #####
                     absolute: | Layout : Position | -> [position: absolute] 
                                                         absolute utility to position an element outside of the normal flow of the document
-                                                        Note*****: CAUSING NEIGHBORING ELEMENTS TO ACT AS IF THE ELEMENT DOESN'T EXIST 
+                                                        note: CAUSEING NEIGHBORING ELEMENTS TO ACT AS IF THE ELEMENT DOESN'T EXIST 
                   
                     top-0 left-0 bottom-0 right-0: -> top-*, right-*, bottom-*, left-*, and inset-* utilities to set the 
                                                       horizontal or vertical position of a positioned element
