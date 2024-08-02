@@ -28,7 +28,7 @@ You can use the HTML Section element to divide up a web page into standalone sec
 Using the section element over a generic container element like div can make code more accessible and easier to understand to
 search engines, browsers, assistive technologies, and other developers
 
-# Dynamic Routing
+# Dynamic Routing / Slug
 Used to create url such as https://..../blogs/blog_example
 via blogs\[slug], whatever the blog name is will be passed in place of 'slug'
 
@@ -36,7 +36,8 @@ via blogs\[slug], whatever the blog name is will be passed in place of 'slug'
 React Hook Forms is a performant, flexible and extensible forms with easy-to-use validation
 
 
-# Slug
-
 # useMDXComponent -> 'next-contentlayer/hooks'
 
+# GithubSlugger
+
+# 

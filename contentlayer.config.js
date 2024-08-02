@@ -7,9 +7,10 @@ import remarkGfm from 'remark-gfm'
 import GithubSlugger from 'github-slugger'
 
 
-// All Blogs come w/ these parameters
-// used for ease of manipulation for React display
-const Blog = defineDocumentType(() => ({
+/* All Blogs come w/ these parameters
+   used for ease of manipulation for React display
+*/
+ const Blog = defineDocumentType(() => ({
     name: "Blog",
     filePathPattern: "**/**/*.mdx",
     contentType: "mdx",
@@ -85,15 +86,14 @@ const Blog = defineDocumentType(() => ({
   },
 }))
 
-// options for code style in blogs
+/* options for code style in blogs */
 const codeOptions = {
   theme: 'github-dark',
   grid: false,
 }
 
-// different plugins to make the blogs pretty :) 
+/* // different plugins to make the blogs pretty :) */ 
 export default makeSource({
-    /* */
     contentDirPath: 'content',
     documentTypes: [Blog],
     mdx: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {behavior: "append"}],
