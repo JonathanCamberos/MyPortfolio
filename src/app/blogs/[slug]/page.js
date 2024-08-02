@@ -9,10 +9,9 @@ import BlogToc from "../../../components/Blog/BlogToc"
 
 export default function BlogPage({ params }){
 
-    // Grabs current blog
+    // Grabs and renders and blog post
     const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug)
     
-    // Render any blog via params
     return <article>
 
         {/* ##### Picutre + Title + Tag ##### */}
@@ -43,14 +42,18 @@ export default function BlogPage({ params }){
             </div>      
         </div>
 
-        {/* ##### Span Component w/ Date, Views, Time, and Tag ##### */}
+        {/* ##### Span Date, Views, Time, and Tag ##### */}
         <BlogDetails blog={blog} slug={params.slug}/>
 
-
-        {/*  ##### Blog Table of Contents and BlogMdx Render ##### */}
         <div className="grid grid-cols-12 gap-16 mt-8 px-10">
+            
+            {/* ##### Table of Contents ##### */}
             <BlogToc blog={blog}/>
+            
+            {/* ##### Blog MarkDown ##### */}
             <RenderMdx blog={blog}/>
         </div>
+
+
     </article>
 }

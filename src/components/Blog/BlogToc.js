@@ -3,12 +3,17 @@ import React from 'react'
 const BlogToc = ( {blog} ) => {
   return (
     <div className="col-span-3">
+                
+                {/* ##### ##### */}
                 <details className="border-[1px] border-solid border-dark dark:border-light text-dark dark:text-light rounded-lg p-4 sticky top-6 max-h-[80vh] overflow-hidden overflow-y-auto"
                     open
                 >
+                    {/* ##### Title of Table ##### */}
                     <summary className="text-lg font-semibold capitalize cursor-pointer">
                         Table of Content
                     </summary>
+
+                    {/* ##### Grabs TOC auto generated from contentlayer.config.js #####  */}
                     <ul>
                         {blog.toc.map((heading) => {
                         return (
