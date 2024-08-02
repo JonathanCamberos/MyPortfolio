@@ -6,6 +6,7 @@ import RenderMdx from "../../../components/Blog/RenderMdx"
 
 export default function BlogPage({ params }){
     
+    
     const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug)
     
     return <article>

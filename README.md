@@ -34,3 +34,9 @@ via blogs\[slug], whatever the blog name is will be passed in place of 'slug'
 
 # React Hook Forms
 React Hook Forms is a performant, flexible and extensible forms with easy-to-use validation
+
+
+# Slug
+
+# useMDXComponent -> 'next-contentlayer/hooks'
+
