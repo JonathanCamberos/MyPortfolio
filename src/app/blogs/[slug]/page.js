@@ -6,7 +6,9 @@ import RenderMdx from "../../../components/Blog/RenderMdx"
 import BlogToc from "../../../components/Blog/BlogToc"
 import { slug } from "github-slugger"
 
-
+export async function generateStaticParams(){
+    return allBlogs.map((blog) => ({slug: blog._raw.flattenedPath}));
+}
 
 export default function BlogPage({ params }){
 
@@ -22,7 +24,7 @@ export default function BlogPage({ params }){
             <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-dark/60"/>
             
             {/*  ##### Image Div #####*/}
-            <Image src={blog.imag  e.filePath.replace("../public", "")}
+            <Image src={blog.image.filePath.replace("../public", "")}
             placeholder='blur'
             blurDataURL={blog.image.blurhashDataUrl}
             alt={blog.title}
