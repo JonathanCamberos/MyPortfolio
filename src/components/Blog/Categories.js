@@ -15,7 +15,7 @@ const slugger = new GithubSlugger()
 export async function generateStaticParams() {
 
     const categories = [];
-    const path = [{params: {slug: "all"}}]
+    const path = [{slug: "all"}]
 
     allBlogs.map(blog => {
         if(blog.isPublished){
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
                 let slugifiedTag = slugger.slug(tag);
                 if(!categories.includes(slugifiedTag)){
                     categories.push(slugifiedTag)
-                    paths.push({params: {slug: slugifiedTag}})
+                    paths.push({slug: slugifiedTag})
                 }
             })
         }
