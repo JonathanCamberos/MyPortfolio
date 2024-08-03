@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { sortBlogs } from '../../utils'
 import Link from 'next/link';
 import Tag from '../Elements/Tag';
+import { slug } from 'github-slugger';
 
 // passing blog objects from page.js (which imports from content folder)
 const HomeCoverSection = ( {blogs} ) => {
@@ -93,7 +94,7 @@ const HomeCoverSection = ( {blogs} ) => {
                 {/*  ##### Tag w/ Link ##### 
                      Links to blog categories
                 */}
-                <Tag link={`/categories/${blog.tags[0]}`} name={blog.tags[0]} />
+                <Tag link={`/categories/${slug(blog.tags[0])}`} name={blog.tags[0]} />
                 
 
                 {/* #####  Link #####
