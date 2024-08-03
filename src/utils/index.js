@@ -1,7 +1,7 @@
 import { compareDesc, parseISO } from "date-fns"
 
 // filters all the nully values (null, empty string, etc)
-// joins all the className attributes
+// joins all the className attributes .
 export const cx = (...classNames) => classNames.filter(Boolean).join(" ")
 
 
