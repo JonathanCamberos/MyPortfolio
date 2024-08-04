@@ -4,6 +4,7 @@
    We will create it as a constant, as its shared across static pages
    such as blogs and the rest of the routes/pages
 
+   
 */
 const siteMetadata = {
     title: 'jonathancamberos-portfolio',
