@@ -7,20 +7,14 @@ import profileImg from "../../../public/pear.png"
 const Logo = () => {
   return (
 
-    /* ##### Link to homePage on icon + name #####
-       flex:              | Layout : Display | -> utility to create a block-level flex container
-       items-center:      | Flexbox & Grid : Align Items | -> (used w/ flex) align items along the center of the container’s cross axis (top to bottom)
-
-       text-dark          : style
-       dark:text-light    : style
-    */
+    /* ##### Link is for both ##### */
     <Link href="/" className="flex items-center text-dark dark:text-light">
 
         {/*  ##### Icon Div #####*/}
-        <div className=" w-12 md:w-12 overflow-hidden">
+        <div className=" w-12 md:w-16 rounded-full overflow-hidden border border-solid border-dark dark:border-gray  mr-2 md:mr-4">
             
             {/*  ##### Image #####*/}
-            <Image src={profileImg} alt="CodeBucks logo" className="w-full h-auto rounded-full" sizes="20vw" priority />
+            <Image src={profileImg} alt="Jc-alt logo" className="w-full h-auto rounded-full" sizes="20vw" priority />
         </div>
 
         {/*  ##### Span Div for name #####*/}

@@ -110,8 +110,8 @@ const Header = () => {
               <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
             </a>
 
-            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4 fill-light">
-              <GithubIcon className="hover:scale-125 transition-all ease duration-200"/>
+            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
+              <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light"/>
             </a>
 
         </div>
