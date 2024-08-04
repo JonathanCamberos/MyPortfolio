@@ -40,13 +40,11 @@ export function useThemeSwitch() {
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
-  }, []);
+  }, []); 
 
   useEffect(() => {
     toggleTheme(mode)
   }, [mode])
-  
-
 
   return [mode, setMode]
 }

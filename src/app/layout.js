@@ -4,6 +4,7 @@ import { Inter, Manrope } from 'next/font/google'
 import Header from './../components/Header';
 import Footer from '../components/Footer';
 import siteMetadata from '../utils/siteMetaDataFile'
+import Script from 'next/script';
 
 // documentation:
 // layout.js will also be shared across all the routes
@@ -70,22 +71,21 @@ export default function RootLayout({ children }) {
       className={cx(
         inter.variable,  
         manrope.variable, 
-        "font-mr bg-light dark:bg-dark"
+        "font-mr bg-light dark:bg-dark "
         )}>
         
-        {/* ##### Header component ####
-            same header is used for all children 
-        */}
-        <Header />
-        
-        {/* #### Childen Components #####
-            everything and anything will be loaded here
-        */}
-        {children}
 
-        {/* ##### Footer component #####
-          same footer is used for all children
-        */}
+        {/* from tailwindcss.com/docs/dark-mode */}
+        <Script id="theme-switcher" strategy="beforeInteractive">
+          {`if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+          } else {
+            document.documentElement.classList.remove('dark')
+          }`}
+        </Script>
+
+        <Header />
+        {children}
         <Footer />
       </body>
     </html>
