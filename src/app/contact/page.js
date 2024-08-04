@@ -1,6 +1,6 @@
 import ContactForm from "../../components/Contact/ContactForm";
 import LottieAnimation from "../../components/Contact/LottieAnimation";
-import siteMetadata from '../../utils/siteMetaData.js'
+import siteMetadata from '../../utils/siteMetadata'
 
 
 /* we dont need the generateMetadata func bc this page is not dynamic */
