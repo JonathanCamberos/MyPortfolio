@@ -3,7 +3,7 @@ import './globals.css'
 import { Inter, Manrope } from 'next/font/google'
 import Header from './../components/Header';
 import Footer from '../components/Footer';
-import siteMetadata from '../utils/siteMetadata'
+import siteMetadata from '../utils/siteMetadata.js'
 
 // documentation:
 // layout.js will also be shared across all the routes
