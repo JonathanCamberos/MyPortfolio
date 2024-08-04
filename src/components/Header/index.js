@@ -3,7 +3,7 @@ import React from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
 import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
-import siteMetadata from '../../utils/siteMetadata'
+import siteMetadata from '../../utils/siteMetaDataFile'
 import { useThemeSwitch } from '../Hooks/useThemeSwitch'
 
 

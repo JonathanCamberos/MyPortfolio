@@ -5,7 +5,7 @@ import BlogDetails from "../../../components/Blog/BlogDetails"
 import RenderMdx from "../../../components/Blog/RenderMdx"
 import BlogToc from "../../../components/Blog/BlogToc"
 import { slug } from "github-slugger"
-import siteMetadata, { description } from "../../../utils/siteMetaData"
+import siteMetadata, { description } from "../../../utils/siteMetaDataFile"
 
 export async function generateStaticParams(){
     return allBlogs.map((blog) => ({slug: blog._raw.flattenedPath}));
