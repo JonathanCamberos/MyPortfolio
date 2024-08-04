@@ -1,9 +1,38 @@
-import { slug } from "github-slugger";
 import { allBlogs } from "../../../../.contentlayer/generated";
 import Categories from "../../../components/Blog/Categories";
 import BlogLayoutThree from "../../../components/Blog/BlogLayoutThree";
+import GithubSlugger, { slug } from "github-slugger"
 
 
+const slugger = new GithubSlugger();
+
+export async function generateStaticParams() {
+  const categories = [];
+  const paths = [{ slug: "all" }];
+
+  allBlogs.map((blog) => {
+    if (blog.isPublished) {
+      blog.tags.map((tag) => {
+        let slugified = slugger.slug(tag);
+        if (!categories.includes(slugified)) {
+          categories.push(slugified);
+          paths.push({ slug: slugified });
+        }
+      });
+    }
+  });
+
+  return paths;
+}
+
+export async function generateMetadata({ params }) {
+   
+    return {
+      title: `${params.slug.replaceAll("-"," ")} Blogs`,
+      /* Slug is the category name */
+      description: `Learn more about ${params.slug === "all" ? "web development" : params.slug} through out collection of blogs :)` 
+    }
+  }
 
 const CategoryPage = ({params}) => {
 
