@@ -3,6 +3,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 import Link from 'next/link'
+import siteMetadata from '../../utils/siteMetadata'
 
 const Footer = () => {
     const {
@@ -54,60 +55,28 @@ const Footer = () => {
         {/* ##### Footer Icons Div ##### */}
         <div className="flex items-center mt-8">
             
-            {/* ##### LinkedIn Div #####
-                inline-block: | Layout : Display | -> [display: inline-block] 
-                                                      inline, inline-block, and block utilities to control the flow of text and elements.
-                
-                w-6: | Sizing : Width | -> [width: 1.5rem; 24px] w-px, w-1, and w-64 to set an element to a fixed width
-                h-6: | Sizing : Height| -> [height: 1.5rem; 24px] h-px, h-1, and h-64 to set an element to a fixed height
-
-                mr-4: | Spacing : Margin | -> [margin-right: 1rem; 16px]  mt-*, mr-*, mb-*, and ml-* utilities to control the margin on ONE SIDE of an element.
-                                                                          oppose to padding which is default on all sides
-            */}
-            <a href="http://" className="inline-block w-6 h-6 mr-4">
-
-              {/* ##### LinkedIn Icon Styling #####
-                  hover:scale-125: | Transforms : Scale | ->   only apply the scale-125 utility on hover.
-                  transition-all:  | Transitions & Animation : Transition Property | -> transition-property: all;
-                                                                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                                                                        transition-duration: 150ms;
-                  ease: | Transitions & Animation : Transition Timing Function | ->
-                  duration-200: | Transitions & Animation : Transition Duration | -> [transition-duration: 200ms] 
-              */} 
+            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
               <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
             </a>
 
-            {/* ##### GitHub Div #####
-                same as linkedIn
-            */}
-            <a href="http://" className="inline-block w-6 h-6 mr-4 fill-light">
-              {/* ##### Github Icon Styling ##### 
-                same as linkedIn
-              */}
+            <a href={siteMetadata.github} className="inline-block w-6 h-6 mr-4 fill-light">
               <GithubIcon className="hover:scale-125 transition-all ease duration-200 "/>
             </a>
 
         </div>
 
-        {/* ##### The Foots Foot #####
-        
-        */}
+        {/* ##### The Foots Foot ##### */}
         <div className="w-full  mt-16 md:mt-24 relative font-medium border-t border-solid border-light py-6 px-8 flex  flex-col md:flex-row items-center justify-between">
         
-        {/*  */}
         <span className="text-center">
           JC
         </span>
 
-        {/*  */}
-        <Link
-          href="/sitemap.xml"
-          className="text-center underline my-4 md:my-0"
-        >
+        <Link href="/sitemap.xml" className="text-center underline my-4 md:my-0">
           sitemap.xml
         </Link>
         
-        {/*  */}
+
         <div className="text-center">
           :)
         </div>

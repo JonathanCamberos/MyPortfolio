@@ -3,7 +3,7 @@ import './globals.css'
 import { Inter, Manrope } from 'next/font/google'
 import Header from './../components/Header';
 import Footer from '../components/Footer';
-import siteMetadata from '../utils/siteMetaData';
+import siteMetadata from '../utils/siteMetadata'
 
 // documentation:
 // layout.js will also be shared across all the routes
@@ -68,9 +68,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body 
       className={cx(
-        inter.variable, 
+        inter.variable,  
         manrope.variable, 
-        "font-mr bg-light"
+        "font-mr bg-light dark:bg-dark"
         )}>
         
         {/* ##### Header component ####

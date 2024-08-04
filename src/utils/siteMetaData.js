@@ -8,11 +8,11 @@
 const siteMetadata = {
     title: 'jonathancamberos-portfolio',
     author: 'jonathancamberos',
-    headerTitle: 'jonathancamberos-portfolio',
+    headerTitle: 'jonathancamberos-portfolio-header',
     description: 'death',
     language: 'en-us',
     theme: 'system', // system, dark or light
-    siteUrl: 'https://github.com/JonathanCamberos', /* update w/ final url */
+    siteUrl: 'https://github.com/JonathanCamberos/', /* update w/ final url */
     siteLogo: '/pear.png',
     socialBanner: '/social-banner.png', // add social banner in the public folder
     email: '', 

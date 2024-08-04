@@ -1,7 +1,10 @@
+"use client"
 import React from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
 import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
+import siteMetadata from '../../utils/siteMetadata'
+import { useThemeSwitch } from '../Hooks/useThemeSwitch'
 
 
 /*
@@ -20,6 +23,9 @@ import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
 */
 
 const Header = () => {
+
+  const [mode, setMode] = useThemeSwitch();
+
   return (
     /*  ###### Overall Header Div ######
         w-full            : | Sizing  : Width   | -> [width: 100%] setting the width of an element                      [ex: w-9/12]
@@ -83,43 +89,20 @@ const Header = () => {
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/about" className="mx-2">About</Link>
             <Link href="/contact" className="mx-2">Contact</Link>
-            <button>
+            <button onClick={() => setMode(mode === "light" ? "dark" : "light") }>
               <SunIcon />
             </button>
         </nav>
 
         {/* ##### Header Icons Div ##### */}
         <div>
-            {/* ##### LinkedIn Div #####
-                inline-block: | Layout : Display | -> [display: inline-block] 
-                                                      inline, inline-block, and block utilities to control the flow of text and elements.
-                
-                w-6: | Sizing : Width | -> [width: 1.5rem; 24px] w-px, w-1, and w-64 to set an element to a fixed width
-                h-6: | Sizing : Height| -> [height: 1.5rem; 24px] h-px, h-1, and h-64 to set an element to a fixed height
 
-                mr-4: | Spacing : Margin | -> [margin-right: 1rem; 16px]  mt-*, mr-*, mb-*, and ml-* utilities to control the margin on ONE SIDE of an element.
-                                                                          oppose to padding which is default on all sides
-            */}
-            <a href="http://" className="inline-block w-6 h-6 mr-4">
-
-              {/* ##### LinkedIn Icon Styling #####
-                  hover:scale-125: | Transforms : Scale | ->   only apply the scale-125 utility on hover.
-                  transition-all:  | Transitions & Animation : Transition Property | -> transition-property: all;
-                                                                                        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                                                                                        transition-duration: 150ms;
-                  ease: | Transitions & Animation : Transition Timing Function | ->
-                  duration-200: | Transitions & Animation : Transition Duration | -> [transition-duration: 200ms] 
-              */} 
+            {/* Links come from siteMetadata in utils */}
+            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
               <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
             </a>
 
-            {/* ##### GitHub Div #####
-                same as linkedIn
-            */}
-            <a href="http://" className="inline-block w-6 h-6 mr-4">
-              {/* ##### Github Icon Styling ##### 
-                same as linkedIn
-              */}
+            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
               <GithubIcon className="hover:scale-125 transition-all ease duration-200"/>
             </a>
 
