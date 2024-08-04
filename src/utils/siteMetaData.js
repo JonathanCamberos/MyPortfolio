@@ -1,12 +1,19 @@
+
+
+/* Here is all the required metaData that is important for the blog
+   We will create it as a constant, as its shared across static pages
+   such as blogs and the rest of the routes/pages
+
+*/
 const siteMetaData = {
-    title: 'Next.js Blog With Tailwind CSS and Contentlayer',
+    title: 'jonathancamberos-portfolio',
     author: 'jonathancamberos',
-    headerTitle: 'Next.js Blog',
-    description: 'A blog created with Next.js, Tailwind.css and contentlayer.',
+    headerTitle: 'jonathancamberos-portfolio',
+    description: 'death',
     language: 'en-us',
     theme: 'system', // system, dark or light
-    siteUrl: '', /* update w/ final url */
-    siteLogo: '/logo.png',
+    siteUrl: 'to-do', /* update w/ final url */
+    siteLogo: '/pear.png',
     socialBanner: '/social-banner.png', // add social banner in the public folder
     email: '', 
     github: 'https://github.com/codebucks27',
