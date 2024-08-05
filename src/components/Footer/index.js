@@ -22,7 +22,7 @@ const Footer = () => {
     /* ##### footer component #####
     
     */
-    <footer className="mt-16 rounded-2xl bg-dark m-10 flex flex-col items-center text-light">    
+    <footer className="mt-16 rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-10 flex flex-col items-center text-light dark:text-dark">
 
         {/* ##### The Foots Foot ##### */}
         <div className="w-full  relative font-medium border-t border-solid border-light py-6 px-8 flex  flex-col md:flex-row items-center justify-between">
@@ -36,9 +36,13 @@ const Footer = () => {
           <Link href="/sitemap.xml" className="text-center underline ml:-4  my-4 md:my-0">
             sitemap.xml
           </Link>
-           Thanks for visiting!
 
           <div>
+            Thanks for visiting!
+          </div>
+           
+
+          <div className="sm:mt-4">
             <button
                 role="link"
                 onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}
@@ -52,7 +56,7 @@ const Footer = () => {
                 onClick={() => openInNewTab(`${siteMetadata.github}`)}
                 className="inline-block w-6 h-6 mr-4"
               >
-                <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light"/>
+                <GithubIcon className="hover:scale-125 transition-all ease duration-200 fill-light dark:fill-dark"/>
               </button>
           </div>
 
