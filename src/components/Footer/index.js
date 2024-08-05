@@ -40,7 +40,7 @@ const Footer = () => {
           </div>
            
 
-          <div className="sm:mt-4">
+          <div>
             <button
                 role="link"
                 onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}
