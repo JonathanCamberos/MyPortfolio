@@ -19,13 +19,11 @@ const Footer = () => {
     };
 
   return (
-    /* ##### footer component #####
-    
-    */
+    /* ##### footer component ##### */
     <footer className="mt-16 rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-10 flex flex-col items-center text-light dark:text-dark">
 
         {/* ##### The Foots Foot ##### */}
-        <div className="w-full  relative font-medium border-t border-solid border-light py-6 px-8 flex  flex-col md:flex-row items-center justify-between">
+        <div className="w-full  relative font-medium py-6 px-8 flex  flex-col md:flex-row items-center justify-between">
           
           <span className="text-center">
             <div className="flex items-center">
