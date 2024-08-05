@@ -2,6 +2,7 @@ import { format, parseISO } from 'date-fns'
 import { slug } from 'github-slugger'
 import Link from 'next/link'
 import React from 'react'
+import ViewCounter from './ViewCounter'
 
 // working
 
@@ -17,7 +18,7 @@ const BlogDetails = ({blog, slug: blogSlug}) => {
 
         {/* ##### #####  */}
         <span className="m-3">
-            10 views
+            <ViewCounter slug={blogSlug}/>
         </span>
         
         {/* ##### Reading Time ##### */}
