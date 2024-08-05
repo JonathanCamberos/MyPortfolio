@@ -4,13 +4,14 @@ import { sortBlogs } from '../../utils'
 import Link from 'next/link';
 import Tag from '../Elements/Tag';
 import { slug } from 'github-slugger';
+import { format } from 'date-fns';
 
 // passing blog objects from page.js (which imports from content folder)
 const HomeCoverSection = ( {blogs} ) => {
   
     //sorting to find newest blog       
     const sortedBlogs = sortBlogs(blogs)
-    const blog = blogs[2]
+    const blog = blogs[0]
 
   return (
 
@@ -65,6 +66,9 @@ const HomeCoverSection = ( {blogs} ) => {
                 <p className='hidden  sm:inline-block mt-4 md:text-lg lg:text-xl font-in'>
                   {blog.description}
                 </p>
+                <span className="inline-block w-full capitalize text-light/60 dark:text-light font-semibold  text-xs sm:text-base">
+                  {format(new Date(blog.publishedAt), "MMMM dd, yyyy")}
+                </span>
             </div>
         </article>
     </div>

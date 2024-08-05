@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Tag from '../Elements/Tag';
 import Link from 'next/link';
 import { slug } from 'github-slugger';
+import { format } from 'date-fns';
 
 const BlogLayoutOne = ({blog}) => {
   return (
@@ -49,6 +50,9 @@ const BlogLayoutOne = ({blog}) => {
                     {blog.title}
                   </span>
               </h2>
+              <span className="inline-block w-full capitalize text-light/50 dark:text-light font-semibold  text-xs sm:text-base">
+                {format(new Date(blog.publishedAt), "MMMM dd, yyyy")}
+              </span>
             </Link>
         </div>
     </div>
