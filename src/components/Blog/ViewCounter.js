@@ -2,6 +2,7 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import React, { useEffect, useState } from 'react'
 
+// achievement: the end?
 
 const supabase = createClientComponentClient();
 
