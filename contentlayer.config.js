@@ -94,8 +94,8 @@ const codeOptions = {
 
 /* // different plugins to make the blogs pretty :) */ 
 export default makeSource({
-    contentDirPath: 'content',
-    documentTypes: [Blog],
-    mdx: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {behavior: "append"}],
-    rehypePrettyCode, codeOptions]}
-})
+  /* options */
+  contentDirPath: "content",
+  documentTypes: [Blog],
+  mdx: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {behavior: "append"}], [rehypePrettyCode, codeOptions] ] }
+});
