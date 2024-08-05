@@ -11,7 +11,7 @@ const HomeCoverSection = ( {blogs} ) => {
   
     //sorting to find newest blog       
     const sortedBlogs = sortBlogs(blogs)
-    const blog = blogs[0]
+    const blog = sortedBlogs[0]
 
   return (
 
