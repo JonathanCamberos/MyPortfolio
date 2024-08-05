@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
 import { GithubIcon, LinkedInIcon, MoonIcon, SunIcon } from '../Icons'
@@ -26,66 +26,70 @@ import { cx } from '../../utils'
 const Header = () => {
 
   const [mode, setMode] = useThemeSwitch();
+  const [click, setClick] = useState(false);
+
+  const toggle = () =>{
+    setClick(!click)
+  }
 
   return (
-    /*  ###### Overall Header Div ######
-        w-full            : | Sizing  : Width   | -> [width: 100%] setting the width of an element                      [ex: w-9/12]
-        p-4               : | Spacing : Padding | -> control element's padding (times 4: p-4 => p-16)                   [ex: p-0]
-        px-5              : | Spacing : Padding | -> overides overall padding (p-4 => px-10) (times 4: px-10 => px-40)  [ex: py-10]
-        flex              : | Layout  : Display | -> utility to create a block-level flex container                     [ex: flex for parent class]
-        
-        items-center      : | Flexbox & Grid : Align Items     | -> 
-                                    must be used with 'flex'
-                                    center top to bottom                      [ex: items-start]
-                                    aligns to center of container’s cross axis
-        
-        justify-between   : | Flexbox & Grid : Justify Content | -> 
-                                    must be used with 'flex'
-                                    center left to right                      [ex: justify-start]
-                                    aligns to center of container’s main axis:                
-    */
-    <header className="w-full p-4 px-5 flex items-center justify-between">
+    /*  ###### Overall Header Div ###### */ 
+    <header className="w-full p-4 px-5 sm:px-10 flex items-center justify-between">
         
         {/* ##### Logo + nameTag Div ##### */}
         <Logo />
 
+        {/* ##### Hamburger Button */}
+        <button className="inline-block sm:hidden z-50 mr-7" onClick={toggle} aria-label="Hamburger Menu">
+          <div className="w-6 cursor-pointer transition-all ease duration-300">
+            <div className="relative">
+            <span className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200" 
+            style={{
+             transform: click ? "rotate(-45deg) translateY(0)" : "rotate(0deg) translateY(6px)"
+            }}
+            
+            >&nbsp;</span>
+            <span className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
+            style={{
+              opacity: click ? 0 : 1
+             }}
+            >&nbsp;</span>
+            <span className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
+            style={{
+              transform: click ? "rotate(45deg) translateY(0)" : "rotate(0deg) translateY(-6px)"
+             }}
+            >&nbsp;</span>
+            </div>
+
+          </div>
+        </button>
+
+        {/* ##### Nav controlled by Button ##### */}
+        <nav className=" w-max py-3 px-6 sm:px-8 border border-solid border-dark rounded-full font-medium capitalize  items-center flex  sm:hidden
+        fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50
+        transition-all ease duration-300
+        "
+        style={{
+          top: click ? "1rem" : "-5rem"
+         }}
         
-        {/* ##### Home About Contact Sun/Moon Div #####            
-            w-max        : | Sizing  : Width   | -> [width: max-content] w-px, w-1, and w-64 set an element to a fixed width.
-            py-3         : | Spacing : Padding | ->
-            px-8         : | Spacing : Padding | -> 
-            border       : | Borders : Border Width | -> [border-width: 1px] control width of element's borders
-            border-solid : | Borders : Border Style | -> [border-style: solid] control style of element's borders
-            border-dark  : style
-            rounded-full : | Borders : Border Radius | -> [border-radius: 9999px]  control border radius of element
-            font-medium  : | Typography : Font Weight | -> [font-weight: 500] controlling font weight of an element
-            capitalize   : | Typography : Text Transform | -> [text-transform: capitalize] control transformation of text.
-            
-            items-center : | Flexbox & Grid : Align Items | -> [align-items: center] align items based on cross-axis
-            
-            hidden       : | Layout : Display |  -> [display: none] remove from the page layout     [ex: flex, inline]
-            sm:flex      : | Layout : Display | -> create a block-level flex container
+        >
+            <Link href="/" className="mr-2">Home</Link>
+            <Link href="/about" className="mx-2">About</Link>
+            <Link href="/contact" className="mx-2">Contact</Link>
+            <button onClick={() => setMode(mode === "light" ? "dark" : "light")  }
+            className={cx("w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1", mode === "light" ? "bg-dark text-light" :
+            "bg-light text-dark" )}
+            aria-label="theme-switcher"
+            >
+                {
+                  mode === "light" ? <MoonIcon className={"fill-dark"} />  : <SunIcon className={"fill-dark"} />
+                }
+            </button>
+        </nav>
 
-            fixed        : | Layout : Position | -> [position: fixed] control how element is positioned in DOM
-                                                    fixed utility to position an element relative to the browser window.
-                                                    Any offsets w/ Top/Right/Bottom/Left are calculated relative to the viewport 
-                                                    and the element will act as a position reference for absolutely positioned children.
-                                                    A viewport is generally in Web Brower terms the browser window
-
-            top-4        : | Layout : Top/Right/Bottom/Left | -> [top: 1.0rem; /* 16px]  control placement of positioned elements
-                                                                top-*, right-*, bottom-*, left-*, and inset-* utilities to set the 
-                                                                horizontal or vertical position of a positioned element.
-            
-            right-1/2    : | Layout : Top/Right/Bottom/Left | -> [right: 50%] 
-
-            translate-x-1/2  : | Transforms : Translate | -> [transform: translateX(50%)] translate-x-* and translate-y-* utilities to translate an element
-            bg-light/80      :
-            backdrop-blur-sm : | Filters : Backdrop Blur | -> [backdrop-filter: blur(4px)]  applying backdrop blur filters to an element
-            
-            z-50             : | Layout : Z-Index | -> [z-index: 50] control the stack order of an element
-                                                        useful for layering say 5 circles in a certain order
-        */}
-        <nav className=" w-max py-3 px-8 border border-solid border-dark rounded-full font-medium capitalize items-center hidden sm:flex
+        {/* ##### Header Button ##### */}
+        <nav className=" w-max py-3 px-8 border border-solid border-dark rounded-full font-medium capitalize items-center hidden md:flex
         fixed top-4 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/about" className="mx-2">About</Link>
@@ -102,9 +106,29 @@ const Header = () => {
             </button>
         </nav>
 
-        {/* ##### Header Icons Div ##### */}
-        <div>
-
+        {/* ##### Header Icons Div ##### */}<nav className=" w-max py-3 px-6 sm:px-8 border border-solid border-dark rounded-full font-medium capitalize  items-center flex  sm:hidden
+        fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50
+        transition-all ease duration-300
+        "
+        style={{
+          top: click ? "1rem" : "-5rem"
+         }}
+        
+        >
+            <Link href="/" className="mr-2">Home</Link>
+            <Link href="/about" className="mx-2">About</Link>
+            <Link href="/contact" className="mx-2">Contact</Link>
+            <button onClick={() => setMode(mode === "light" ? "dark" : "light")  }
+            className={cx("w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1", mode === "light" ? "bg-dark text-light" :
+            "bg-light text-dark" )}
+            aria-label="theme-switcher"
+            >
+                {
+                  mode === "light" ? <MoonIcon className={"fill-dark"} />  : <SunIcon className={"fill-dark"} />
+                }
+            </button>
+        </nav>
+        <div className="hidden sm:flex items-center">
             {/* Links come from siteMetadata in utils */}
             <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
               <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
