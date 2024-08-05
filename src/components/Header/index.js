@@ -46,10 +46,10 @@ const Header = () => {
 
 
         {/* ##### Hamburger Button */}
-        <button className="w-5 inline-block sm:hidden mr-5 fixed right-5 bg-light/80 backdrop-blur-sm z-50 rounded-full p-5"
+        <button className="w-5 inline-block sm:hidden mr-5 fixed right-0 bg-light/80 backdrop-blur-sm z-50 rounded-full p-5"
         
           onClick={toggle} aria-label="Hamburger Menu">
-          <div className="w-6 cursor-pointer transition-all ease duration-300 fixed right-5">
+          <div className="w-6 cursor-pointer transition-all ease duration-300 fixed right-6">
             <div className="relative">
             <span className="absolute top-0 inline-block w-full h-0.5 bg-dark  rounded transition-all ease duration-200" 
             style={{
