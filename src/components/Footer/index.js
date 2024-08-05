@@ -14,6 +14,10 @@ const Footer = () => {
     const onSubmit = (data) => console.log(data);
     console.log(errors);
 
+    const openInNewTab = (url) => {
+      window.open(url, "_blank", "noreferrer");
+    };
+
   return (
     /* ##### footer component #####
     
@@ -35,13 +39,21 @@ const Footer = () => {
            Thanks for visiting!
 
           <div>
-              <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4 ml-5">
+            <button
+                role="link"
+                onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}
+                className="inline-block w-6 h-6 mr-4"
+              >
                 <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
-              </a>
+              </button>
 
-              <a href={siteMetadata.github} className="inline-block w-6 h-6 mr-4 fill-light">
-                <GithubIcon className="hover:scale-125 transition-all ease duration-200 "/>
-              </a>
+              <button
+                role="link"
+                onClick={() => openInNewTab(`${siteMetadata.github}`)}
+                className="inline-block w-6 h-6 mr-4"
+              >
+                <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light"/>
+              </button>
           </div>
 
         </div>
