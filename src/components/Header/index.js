@@ -32,6 +32,10 @@ const Header = () => {
     setClick(!click)
   }
 
+  const openInNewTab = (url) => {
+    window.open(url, "_blank", "noreferrer");
+  };
+
   return (
     /*  ###### Overall Header Div ###### */ 
     <header className="w-full p-4 px-5 sm:px-10 flex items-center justify-between">
@@ -130,13 +134,22 @@ const Header = () => {
         </nav>
         <div className="hidden sm:flex items-center">
             {/* Links come from siteMetadata in utils */}
-            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
-              <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
-            </a>
+            
+            <button
+              role="link"
+              onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}
+              className="inline-block w-6 h-6 mr-4"
+            >
+               <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
+            </button>
 
-            <a href={siteMetadata.linkedin} className="inline-block w-6 h-6 mr-4">
-              <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light"/>
-            </a>
+            <button
+              role="link"
+              onClick={() => openInNewTab(`${siteMetadata.github}`)}
+              className="inline-block w-6 h-6 mr-4"
+            >
+               <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light"/>
+            </button>
 
         </div>
     </header>
