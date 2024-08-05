@@ -14,7 +14,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-12 text-base xs:text-lg sm:text-xl font-medium leading-relaxed font-in"
+      className="mt-2 text-base xs:text-lg sm:text-xl font-medium leading-relaxed font-in"
     >
       Hello! My name is{" "}
       <input
