@@ -1,7 +1,7 @@
 ---
 title: "New Bank App"
 description: "New Bank App"
-image: "../../public/blogs/luca-bravo-XJXWbfSo2f0-unsplash.jpg"
+image: "../../public/blogs/color_keyboard.jpg"
 publishedAt: "2024-08-02"
 updatedAt: "2024-08-02"
 author: "jonathancamberos"
@@ -38,7 +38,8 @@ This is a simple python Server! And a server is simply a while loop listening on
 if __name__ == '__main__':
 
     # 1.1 - Server Information
-    server_ip = '0.0.0.0'  # Use '0.0.0.0' to listen on all available interfaces
+    # Use '0.0.0.0' to listen on all available interfaces
+    server_ip = '0.0.0.0'  
     default_port = 4000
 
     # 1.2 - Creating Server Socket 
@@ -54,12 +55,98 @@ if __name__ == '__main__':
     #1.4 - Listen on that Server Socket (Port)
     server_socket.listen()
 
-    print("Listening...)
+    server_on = True
+
+    #2.1 - Infinite Loop to Keep Server Constantly listening for Client Information
+    while server_on:
+        print("Listening")
 ```
 
-This is creating an instance of what we will call a 'listener'. From this, we can 'listen'
-and detect when someone else is trying to send us packets on our corresponding port:
+What is a port?
+In computer networking, a port is a logical connection that two endpoints
+ -- such as a client and server -- use to communicate.
+As in 1.1, the server will use port 4000
 
+What is a Socket?
+A socket represents one of the logical endpoints in a two-way networking connection. 
+It works at the application layer, combining the IP address and port number to communicate: 
+Identiy via IP address, Application via the port number the following information
+(Some applications have set port numbers: ssh -> port 22, MongoDB -> port 27017)
+As in 1.2, the server combines ip address + port number to create a socket
+
+Finally, calling listen() makes a socket ready for accepting connections.
+Running this file will cause an infinite loop, which would seem like an error.
+However, that is exactly what we want, a server should 'idealy' never turn off and always be listening
+for new connections/communication.
+
+So now that we are constanlty listening on a corresponding port, 
+we do not have a way of detecting if someone is trying to communicate with us.
+So lets add it:
+
+```python
+    #2.0 - Creating empty file descriptors lists needed for select call below
+    #      Each file description is in charge of 
+    #           - Listening if a client has sent a message
+    #           - Prepare to send a message to a client  
+    rlist, wlist, xlist = [], [], []
+    socket_error = False
+
+    server_on = True
+
+    #2.1 - Infinite Loop to Keep Server Constantly listening for Client Information
+    while server_on:
+        
+        #2.2 -
+        rfds = []
+        rlist = []
+```
+
+Here we have created 3 arrays. As with servers, multiple clients may try to talk to us at the same time.
+In order to communicate effectly, clients will queue via their socket in lists pertaining to sending 
+and recieving packets. 
+
+These arrays are effectly queues/lists for sockets. 
+Remember, a socket is IP + port number, so effectly we are keeping track of an address that is interested
+in either sending or recieving packets.
+
+1. rlist: readlist      - program has queued socket to read. 
+2. wlist: writelist     - program has queded socket to send to.
+3. xlist: exceptionlist - program has queued sockets for exceptions
+
+Great! So we can detect now, however, it will be hard to have conversations 
+with clients if we can just detect one way communucation. 
+That would be as if someone walked up to you said 'HI' and then ran away, thats not helpful! 
+
+Therefore we need a way of keeping track of the conversations we are having via client_state_list:
+
+```python
+    #2.4 - For Each Client
+    #           - Add Client's Read Socket to rlist (Read List)
+    for c in client_state_list:
+        rlist.append(c.sock)
+
+    #2.5 - Add Servers Read Socket to rlist (for new handshakes from client's)
+    rlist.append(server_socket)
+
+    #2.6 - Timer (not sure, figure out later)
+    time_before_select = dt.now()
+
+    #2.7 - Select socket function:
+    #      Select function takes three lists of file descriptors as parameters:
+    #               - Read List:  A list of sockets that the program is interested in for reading.
+    #                         If data is available for reading on any of these sockets, select will return,
+    #                         indicating that I/O is possible on one or more of them.
+    #
+    #               - Write List:   A list of sockets that the program is interested in for writing
+    #                             If it's possible to write data to any of these sockets without blocking,
+    #                             select will return.     
+    #
+    #               - Error List:  A list of sockets that the program is interested in for exceptions 
+    #                         (e.g., out-of-band data).  If an exceptional condition occurs on any of these sockets, 
+    #                         select will return.
+    rfds, wfds, xfds = select.select(rlist, wlist, xlist, 5)
+
+```
 
 
 
