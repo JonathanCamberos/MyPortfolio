@@ -1,0 +1,81 @@
+---
+title: "LeetCode Problems: Arrays & Hashing"
+description: "Arrays & Hashing"
+image: "../../public/blogs/code_3.jpg"
+publishedAt: "2024-08-01"
+updatedAt: "2024-08-06"
+author: "codebucks"
+isPublished: true
+tags:
+- data structures & algorithms
+- web development
+---
+
+## Arrays & Hashing:
+
+Getting aquanted and learning how hashmaps and hashsets can solve wide 'array' of problems
+
+### What is a Hashmap?
+First lets understand what hashing is. Hashing is the process of transforming any given key 
+or string of charactesr into another value. The result is normally a shorter, fixed-length
+value that makes it computationally easier to work with than the original key.
+
+Hashmaps, aka hashtable, are one of the most common implementations of hashing.
+Hashmaps store key-value pairs (eg: employee ID / employee name) in a list that is 
+accessible through its index.
+
+A hash table uses a hash function to compute the index, aka hash code, into an arrary 
+of buckets ro slots, from which the desired value can be found. 
+During lookup, the same method is followed. The key is hashed and the resulting hash
+indiates where the corresponding value is stored
+
+### Hashmap benefits?
+Hash tables are O(1) average if implemented well and O(n) worst case.
+1. Hash tables suffer from O(n) worst time complexity due to two reasons:
+If too many elements were hashed into the same key: looking inside this key may take
+O(n) time.
+
+Once a hash table has passed its load abalance - it has to rehash and create a bigger table/reinsert elements 
+
+2. Hash tables are said to be O(1) average if implement well 
+It is rare that many items will be hashed to the same key (if you used a good hash function
+and dont have too big load balance) 
+
+The rehash operation, which is O(n), can at most happen after n/2 ops, which are all
+assumed O(1): Thus when you sum the average time per op, you get: (n*O(1) + O(n)) / n) = O(1)
+
+
+
+## 217. Contains Duplicate
+
+Given an integer array nums, return true if any value appears at least twice in the array, 
+and return false if every element is distinct.
+
+Example 1:
+Input: nums = [1,2,3,1]
+Output: true
+
+Example 2:
+Input: nums = [1,2,3,4]
+Output: false
+
+Example 3:
+Input: nums = [1,1,1,3,3,4,3,2,4,2]
+Output: true
+
+
+Solution 1: hashmap 
+
+```python
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        
+        seen = {}
+
+        for num in nums:
+            if num in seen and seen[num] >= 1:
+                return True
+            seen[num] = seen.get(num, 0) + 1
+        return False
+```
+
+Solution 2: hashset 
