@@ -1,43 +1,14 @@
 ## MyPortfolio :)
 
+Hi! I'm Jonathan. Made this blog thing to post projects im working on to keep up with new technologies.
+Hope you enjoy!
+I made my portfolio in React.js using other libraries as well, notably:
 
-# Development Notes
+1. Tailwindcss
+2. Contentlayer for MDX
+3. Githubslugger
+4. Search Engine Optimization
+5. Supabase
+6. youtube react.js tutorials :)
 
-# SEO
-HTML5 tags assist search engines in analyzing and understanding page structure and content, leading to improved on-page SEO for the webpage.
-In contrast to the previous HTML versions, which only had a few tags, HTML5 offers more flexibility in defing our webpage.
-These semantic tags are beneficial for serach engines to analze the complete content of the webpage
-
-ex: these elemnts can be used to define the different sections of a web page: header, nav, footer 
-
-Main tag: 
-Notifies the serach engine of the main content of the page. The 'Main' tag contains the content or
-article that is to be ranked in the search engine.
-Note: 'Main' tag can't be a child of header, nav, article, aside, or footer, as this would be wrong practice
-
-Article tag:
-Used to speicifc the main article of the document.
-Note: if you use 'article' under the 'main' tag, it will make more sense for the SEO of webpages
-
-Header tag:
-Tells the search engine about the main heading of the document
-Note: main -> article -> header: heading of the content containing keywords for SEO
-
-Section tag:
-You can use the HTML Section element to divide up a web page into standalone sections of related content.
-Using the section element over a generic container element like div can make code more accessible and easier to understand to
-search engines, browsers, assistive technologies, and other developers
-
-# Dynamic Routing / Slug
-Used to create url such as https://..../blogs/blog_example
-via blogs\[slug], whatever the blog name is will be passed in place of 'slug'
-
-# React Hook Forms
-React Hook Forms is a performant, flexible and extensible forms with easy-to-use validation
-
-
-# useMDXComponent -> 'next-contentlayer/hooks'
-
-# GithubSlugger
-
-# 
+More info inside the MyPortfolio project post
