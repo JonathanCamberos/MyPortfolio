@@ -11,7 +11,7 @@ const Logo = () => {
     <Link href="/" className="flex items-center text-dark dark:text-light">
 
         {/*  ##### Icon Div #####*/}
-        <div className="w-8 md:w-4 rounded-full overflow-hidden mr-0">
+        <div className="w-8 md:w-8 rounded-full overflow-hidden mr-0">
             
             {/*  ##### Image #####*/}
             <Image src={profileImg} alt="Jc-alt logo" className="w-full h-auto rounded-full" sizes="20vw" priority />
