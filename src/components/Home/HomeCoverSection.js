@@ -25,7 +25,7 @@ const HomeCoverSection = ( {blogs} ) => {
             
             {/* Overlay for image */}
             <div className='absolute top-0 left-0 bottom-0 right-0 h-full
-            bg-gradient-to-b from-transparent from-0% to-dark/90 rounded-3xl z-0
+            bg-gradient-to-b from-transparent from-0% to-dark/30 rounded-3xl z-0
             ' />
             
             {/*  ##### Image ##### */}
