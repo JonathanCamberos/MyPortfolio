@@ -18,7 +18,7 @@ const Logo = () => {
         <div className="w-8 md:w-8 rounded-full overflow-hidden mr-1">
             
             {/*  ##### Image #####*/}
-            <Image src={cat30} alt="Jc-alt logo" className="w-half h-auto" sizes="20vw" priority />
+            <Image src={cat30} alt="Jc-alt logo" className="w-1/2 h-auto" sizes="20vw" priority />
         </div>
 
         {/*  ##### Span Div for name #####*/}
