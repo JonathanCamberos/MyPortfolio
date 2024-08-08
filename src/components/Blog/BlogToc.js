@@ -10,9 +10,11 @@ const BlogToc = ( {blog} ) => {
             <summary className="text-lg font-semibold capitalize cursor-pointer">
               Table Of Content
             </summary>
+
             <ul className="mt-4 font-in text-base">
               {blog.toc.map((heading) => {
                 return (
+                  
                   <li key={`#${heading.slug}`} className="py-1">
                     <a
                       href={`#${heading.slug}`}
@@ -24,13 +26,17 @@ const BlogToc = ( {blog} ) => {
                                        flex items-center justify-start
                                        "
                     >
+
                       {heading.level === "three" ? (
                         <span className="flex w-1 h-1 rounded-full bg-dark mr-2">
                           &nbsp;
                         </span>
                       ) : null}
 
-                      <span className="hover:underline">{heading.text}</span>
+                      <span className="hover:underline">
+                        {heading.text}
+                      </span>
+                    
                     </a>
                   </li>
                 );
