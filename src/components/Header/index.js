@@ -73,7 +73,7 @@ const Header = () => {
         </button>
 
         {/* ##### Nav controlled by Button ##### */}
-        <nav className=" w-max py-3 px-4 sm:px-4 border border-solid border-dark rounded-full font-small capitalize  items-center flex  sm:hidden
+        <nav className=" w-max py-2 px-4 sm:px-4 border border-solid border-dark rounded-full font-small capitalize  items-center flex  sm:hidden
         fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50
         transition-all ease duration-300
         "
@@ -97,7 +97,7 @@ const Header = () => {
         </nav>
 
         {/* ##### Header Button ##### */}
-        <nav className=" w-max py-3 px-4 border border-solid border-dark rounded-full font-small capitalize items-center hidden md:flex
+        <nav className=" w-max py-2 px-4 border border-solid border-dark rounded-full font-small capitalize items-center hidden md:flex
         fixed top-4 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/categories/all-categories" className="mx-2">All Categories</Link>
