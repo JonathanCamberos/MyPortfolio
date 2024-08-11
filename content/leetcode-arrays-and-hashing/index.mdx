@@ -297,5 +297,31 @@ else, created a new list.
         
         # return [[unsorted_string]]
         return list(anagram_map.values())
-
 ``` 
+
+
+
+### Solution 2: char count array/tuple + hashmap
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        
+        # hashmap (char_count_tuple, string)
+        dic = defaultdict(list)
+        
+        for word in strs:
+            
+            # array for char count
+            lis = 26*[0]
+            for chr in word:
+                lis[ord(chr)-ord('a')]+=1
+            
+            # matches tuples to group strings 
+            dic[tuple(lis)].append(word)
+            
+        return dic.values()
+```
+This takes advatange of a handy function to `convert a char count array into a tuple`.
+Tuples can serve as a `key for hashmaps, leading our hashmap to be 
+(tuple_of_char_count, [string])`
+
+https://www.geeksforgeeks.org/python-convert-a-list-into-a-tuple/ 
