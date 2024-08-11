@@ -183,8 +183,10 @@ of size 26.
 ## 1. Two Sum - Easy
 
 ### Intro
->Given an array of integers nums and an integer target, `return indices of the two numbers` such that they `add up to target`.
->You may assume that each input would have exactly one solution, and you may not use the same element twice.
+>Given an array of integers nums and an integer target, `return indices of the two numbers` 
+>such that they `add up to target`.
+>You may assume that each input would have exactly one solution, 
+>and you may not use the same element twice.
 >You can return the answer in any order.
 
 |  nums[]         | Target    | Output |  
@@ -236,3 +238,64 @@ A littttle bit of a step up from the previous, but great way to show versitily o
             # if miss, push (currElement, index) into HashMap
             numMap[nums[i]] = i
 ```
+
+
+
+## 49. Group Anagrams - Medium
+
+### Intro
+>Given an array of strings strs, `group the anagrams together`. 
+>You can return the answer in any order.
+>An Anagram is a word or phrase formed by rearranging the letters of a
+>different word or phrase, typically using all the original letters exactly once.
+
+|  Input                                   | Output                                      |  
+| ---------------------------------------- | ------------------------------------------- | 
+| ["eat","tea","tan","ate","nat","bat"]    | [["bat"],["nat","tan"],["ate","eat","tea"]] |
+| [""]                                     | [[""]]
+| ["a"]                                    | [["a"]]
+
+
+### Constraints
+strs[i] consists of lowercase Engish letters
+
+
+### Abstraction
+There are `many` ways to do this problem. 
+Overall, the idea is the same as the previous anagram problem. 
+A string is made up of characters, and those characters have a certain total count.
+
+We could for each string - create a hashmap containing the count of characters and then 
+group the strings that have the same hashmap. 
+
+While this would be possible, it would be extremely intricate. Given that this is our 4th
+leetcode problem, were gonna cut some corners and maaaaybe come back to it later.
+
+If we have a list of words, the `counts do not necessarly need to be calculated`.
+Consider: "abc", "bca".
+
+These are anagrams, and we could absolutly use the hashmap char count approach from before,
+`but`, we could simply sort "bca" and match it with "abc" 
+
+Now if we use this approach with every string, we can abstract having a char count to sorting,
+and then search if the sorted string has been found yet, if so, add the current string to the list,
+else, created a new list.
+
+`So our hashmap would be: (sorted_string, [unsorted_string])`
+
+### Solution 1: sorted() + hashmap
+```python 
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        
+        # hashmap (sorted_string, [unsorted_string])
+        anagram_map = defaultdict(list)
+        
+        # add string to sorted anagram key
+        for word in strs:
+            sorted_word = ''.join(sorted(word))
+            anagram_map[sorted_word].append(word)
+        
+        # return [[unsorted_string]]
+        return list(anagram_map.values())
+
+``` 
