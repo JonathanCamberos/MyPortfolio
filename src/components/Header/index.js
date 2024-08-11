@@ -84,7 +84,10 @@ const Header = () => {
         >
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/categories/all-categories" className="mx-2">All Categories</Link>
-            <Link href="/contact" className="mx-2">Contact</Link>
+            
+            <Link href="/about-me" className="mx-2">About Me</Link>
+            {/* <Link href="/contact" className="mx-2">Contact</Link> */}
+            
             <button onClick={() => setMode(mode === "light" ? "dark" : "light")  }
             className={cx("w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1", mode === "light" ? "bg-dark text-light" :
             "bg-light text-dark" )}
@@ -101,7 +104,9 @@ const Header = () => {
         fixed top-4 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/categories/all-categories" className="mx-2">All Categories</Link>
-            <Link href="/contact" className="mx-2">Contact</Link>
+            
+            <Link href="/about-me" className="mx-2">About Me</Link>
+            {/* <Link href="/contact" className="mx-2">Contact</Link> */}
             
             <button onClick={() => setMode(mode === "light" ? "dark" : "light")  }
             className={cx("w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1", mode === "light" ? "bg-dark text-light" :
@@ -125,7 +130,10 @@ const Header = () => {
         >
             <Link href="/" className="mr-2">Home</Link>
             <Link href="/categories/all-categories" className="mx-2">All Categories</Link>
-            <Link href="/contact" className="mx-2">Contact</Link>
+
+            <Link href="/about-me" className="mx-2">About Me</Link>
+            {/* <Link href="/contact" className="mx-2">Contact</Link> */}
+            
             <button onClick={() => setMode(mode === "light" ? "dark" : "light")  }
             className={cx("w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1", mode === "light" ? "bg-dark text-light" :
             "bg-light text-dark" )}
