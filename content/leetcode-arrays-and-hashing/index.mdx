@@ -346,4 +346,43 @@ most frequent: 1 `leq` k `leq` number of distinct elemnts in nums
 size: -1000 `leq` nums[i] `leq` 1000
 
 ### Abstraction
-What the hell is this :) 
+So this is the first `interesting` leet code question we've had.    
+The first step to finding the k most frequent element is to taverse nums[] and `create a occurence counter`
+for each element in the list.
+
+Now that we have the count, we must `grab the top k highest occuring` elements. 
+
+Here the are again `many` ways to do it
+
+### Solution 1: stack with pushpop()
+The simplest revolve around is 
+`a stack in which smaller elements get replaced by higher elements while maintaining 
+a max size of k`. 
+
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        # occurence char hashmap 
+        freq = defaultdict(int)
+        for n in nums:
+            freq[n] += 1
+            
+        # heap replaces smaller occur w/ higher occur while maintaining size <= k
+        heap = []
+        for key, count in freq.items():
+            if len(heap) == k:
+                heappushpop(heap, (count, key))
+            else:
+                heappush(heap, (count, key))
+        return [item[1] for item in heap]
+```
+
+### Solution 2: 
+
+```python
+    def topKFrequent(self, nums: List[int], k:int) -> List[int]:
+
+        count = {}
+        freq = [[] for i in range(len(nums) + 1)]
+
+        for n in nums:
+```

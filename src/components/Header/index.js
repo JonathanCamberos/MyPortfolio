@@ -103,7 +103,7 @@ const Header = () => {
         <nav className=" w-max py-2 px-4 border border-solid border-dark rounded-full font-medium capitalize items-center hidden md:flex
         fixed top-4 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50">
             <Link href="/" className="mr-2">Home</Link>
-            <Link href="/categories/all-categories" className="mx-2">All Categories</Link>
+            <Link href="/categories/all-categories" className="mx-2">Categories</Link>
             
             <Link href="/about-me" className="mx-2">About Me</Link>
             {/* <Link href="/contact" className="mx-2">Contact</Link> */}
@@ -129,7 +129,7 @@ const Header = () => {
         
         >
             <Link href="/" className="mr-2">Home</Link>
-            <Link href="/categories/all-categories" className="mx-2">All Categories</Link>
+            <Link href="/categories/all-categories" className="mx-2">Categories</Link>
 
             <Link href="/about-me" className="mx-2">About Me</Link>
             {/* <Link href="/contact" className="mx-2">Contact</Link> */}
