@@ -140,7 +140,7 @@ checking if two elements had a count of >= 1`. We simply add an extra step and
 `now we check if the total count for every element in the list is equal` 
 between any two lists. 
 
-### Solution 1: hashmap
+### Solution 1: hashmap (dictionary)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         # hashmap
@@ -154,13 +154,15 @@ between any two lists.
                return False
         return True
 ```
+`Note: Dictionary vs HashMap:` A dictionary is just Python's native implementation of hashmaps
+
 Creates a hashmap (key,value) pair matching any alphabetic character 
 to an integer representing the count.
 Iterate over s incrementing +1 per appearence.
 Iterate over t decrementing -1 per appearance.
 If at the end, each (key,value) pair maps to 0, then you have a valid anagram.
 
-### Solution 2: hashset 
+### Solution 2: hashmap (array of 26) 
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         # hashmap (as an array)
@@ -225,9 +227,9 @@ A littttle bit of a step up from the previous, but great way to show versitily o
         n = len(nums)
         numMap = {}
 
-        # for every element  
+        # for every index  
         for i in range (n):
-            
+                             
             complement = target - nums[i]
 
             # search for complement of curr element
@@ -299,7 +301,6 @@ else, created a new list.
 ``` 
 
 
-
 ### Solution 2: char count array/tuple + hashmap
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
@@ -311,6 +312,8 @@ else, created a new list.
             
             # array for char count
             lis = 26*[0]
+
+            # unicode of char         
             for chr in word:
                 lis[ord(chr)-ord('a')]+=1
             
@@ -324,3 +327,23 @@ Tuples can serve as a `key for hashmaps, leading our hashmap to be
 (tuple_of_char_count, [string])`
 
 https://www.geeksforgeeks.org/python-convert-a-list-into-a-tuple/ 
+
+
+## Top K Elements in List - Medium
+
+### Intro 
+> Given an integer array `nums` and an integer `k`, return the `k most frequent` element within the array. 
+> Test cases are generated such that the answer is always unique 
+> You may return the output in any order
+
+|  Input             | k     | Output    |  
+| -------------------| ----- | --------- | 
+| [1,2,2,3,3,3,3]    | 2     | [2,3]     |
+| [7,7]              | 1     | [7]       |
+
+### Constraints
+most frequent: 1 `leq` k `leq` number of distinct elemnts in nums
+size: -1000 `leq` nums[i] `leq` 1000
+
+### Abstraction
+What the hell is this :) 
