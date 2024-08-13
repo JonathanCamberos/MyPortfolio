@@ -12,3 +12,5 @@ I made my portfolio in React.js using other libraries as well, notably:
 6. youtube react.js tutorials :)
 
 More info inside the MyPortfolio project post
+
+Live at: https://jcmyportfolio-jcprojects.vercel.app/

@@ -1,5 +1,5 @@
 ---
-title: "LeetCode Problems: Arrays & Hashing"
+title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
 image: "../../public/blogs/code_3.jpg"
 publishedAt: "2024-08-05"
@@ -329,7 +329,7 @@ Tuples can serve as a `key for hashmaps, leading our hashmap to be
 https://www.geeksforgeeks.org/python-convert-a-list-into-a-tuple/ 
 
 
-## Top K Elements in List - Medium
+## 347. Top K Elements in List - Medium
 
 ### Intro 
 > Given an integer array `nums` and an integer `k`, return the `k most frequent` element within the array. 
@@ -354,10 +354,7 @@ Now that we have the count, we must `grab the top k highest occuring` elements.
 
 Here the are again `many` ways to do it
 
-### Solution 1: stack with pushpop()
-The simplest revolve around is 
-`a stack in which smaller elements get replaced by higher elements while maintaining 
-a max size of k`. 
+### Solution 1: Stack/PushPop
 
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -376,13 +373,44 @@ a max size of k`.
         return [item[1] for item in heap]
 ```
 
-### Solution 2: 
+The simplest revolve around is 
+`a stack in which smaller elements get replaced by higher elements while maintaining 
+a max size of k`. 
+
+### Solution 2: Bucket Sort
 
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
-
+            
+        # occurence hashmap 
         count = {}
-        freq = [[] for i in range(len(nums) + 1)]
+        for key in nums:
+            count[key] = 1 + count.get(key, 0)
 
-        for n in nums:
+        # list comprehension - create len() empty buckets 
+        num_buckets = len(nums) + 1
+        freq = [[] for i in range(num_buckets)]
+
+        # sort into buckets 
+        for key, value in count.items():
+            freq[value].append(key)
+
+        res = []
+
+        # decreasing for loop, grab k highest occuring 
+        for i in range(len(freq) - 1, 0, -1):
+            
+            # stop at kth 
+            for key in freq[i]:
+                res.append(key)
+                if len(res) == k:
+                    return res
 ```
+
+This one is the first time we use an algorithm, albiet a simple one. 
+
+Here, we create a list of len(num[]) empty lists, which represent `buckets`.
+Here we will sort each occurence into its appropriate bucket, `(occurences of 2 go to bucket 2, 3 to 3, etc)`.
+
+Afterwords, we `simply iterate backwords starting at the highest bucket and grab k number of elements`
+
