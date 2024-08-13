@@ -224,20 +224,19 @@ A littttle bit of a step up from the previous, but great way to show versitily o
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
-        n = len(nums)
-        numMap = {}
+        tracking = {}
 
         # for every index  
-        for i in range (n):
+        for i in range (len(nums)):
                              
             complement = target - nums[i]
 
             # search for complement of curr element
-            if complement in numMap and numMap[complement] != i:
-                return [i, numMap[complement]]
+            if complement in tracking and tracking[complement] != i:
+                return [i, tracki     ng[complement]]
     
             # if miss, push (currElement, index) into HashMap
-            numMap[nums[i]] = i
+            tracking[nums[i]] = i
 ```
 
 
@@ -254,7 +253,7 @@ A littttle bit of a step up from the previous, but great way to show versitily o
 | ---------------------------------------- | ------------------------------------------- | 
 | ["eat","tea","tan","ate","nat","bat"]    | [["bat"],["nat","tan"],["ate","eat","tea"]] |
 | [""]                                     | [[""]]
-| ["a"]                                    | [["a"]]
+| ["a"]                                    | [["a"]]           
 
 
 ### Constraints
@@ -284,7 +283,7 @@ else, created a new list.
 
 `So our hashmap would be: (sorted_string, [unsorted_string])`
 
-### Solution 1: sorted() + hashmap
+### Solution 1: Sorted() per String
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -299,28 +298,28 @@ else, created a new list.
         # return [[unsorted_string]]
         return list(anagram_map.values())
 ``` 
+Takes advantage of sorted() function which creates key for (key, [str])
 
-
-### Solution 2: char count array/tuple + hashmap
+### Solution 2: Grouping via Tuple
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # hashmap (char_count_tuple, string)
-        dic = defaultdict(list)
+        # hashmap (count, [str])
+        groups = defaultdict(list)
         
         for word in strs:
             
             # array for char count
-            lis = 26*[0]
+            count = 26*[0]
 
             # unicode of char         
-            for chr in word:
-                lis[ord(chr)-ord('a')]+=1
+            for ch in word:  
+                count[ord(ch)-ord('a')] += 1
             
-            # matches tuples to group strings 
-            dic[tuple(lis)].append(word)
+            # matches tuples to group 
+            groups[tuple(count)].append(word)
             
-        return dic.values()
+        return groups.values()
 ```
 This takes advatange of a handy function to `convert a char count array into a tuple`.
 Tuples can serve as a `key for hashmaps, leading our hashmap to be 
@@ -383,34 +382,57 @@ a max size of k`.
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
         # occurence hashmap 
-        count = {}
+        num_count = {}
         for key in nums:
-            count[key] = 1 + count.get(key, 0)
+            num_count[key] = 1 + num_count.get(key, 0)
 
         # list comprehension - create len() empty buckets 
-        num_buckets = len(nums) + 1
-        freq = [[] for i in range(num_buckets)]
+        num_buckets = len(nums) + 1  # empty list requires at least 1 bucket
+        freq_buckets = [[] for i in range(num_buckets)]
 
         # sort into buckets 
-        for key, value in count.items():
-            freq[value].append(key)
+        for num, occurences in num_count.items():
+            freq_buckets[occurences].append(num)
 
         res = []
 
-        # decreasing for loop, grab k highest occuring 
-        for i in range(len(freq) - 1, 0, -1):
+        # decreasing for loop, starting by grabbing highest bucket
+        for i in range(len(freq_buckets) - 1, 0, -1):
             
-            # stop at kth 
-            for key in freq[i]:
-                res.append(key)
+            # grabbing elements in curr bucket
+            for num in freq_buckets[i]:
+                res.append(num)
+                
+                # check if kth reached
                 if len(res) == k:
                     return res
 ```
 
-This one is the first time we use an algorithm, albiet a simple one. 
+This one is the first time we use an algorithm, albiet a simple one: `bucket sort`
 
 Here, we create a list of len(num[]) empty lists, which represent `buckets`.
 Here we will sort each occurence into its appropriate bucket, `(occurences of 2 go to bucket 2, 3 to 3, etc)`.
 
 Afterwords, we `simply iterate backwords starting at the highest bucket and grab k number of elements`
+
+
+## String Encode and Decode - Medium 
+
+### Intro
+
+> Design an alogirthm to encode a list of strings to a single string.
+> The encoded string is then decoded back to the original list of strings
+> Please implement `encode` and `decode`
+
+|  Input                           | Output                              |  
+| -------------------------------- | ----------------------------------- | 
+| ["leet", "code", "love", "you"]  | ["leet", "code", "love", "you"]     |
+| ["we", "say", ":", "yes"]        | ["we", "say", ":", "yes"]           |
+
+### Contraints
+
+### Abstraction 
+This is leaning into being a design problem. 
+
+### Solution 1:   
 
