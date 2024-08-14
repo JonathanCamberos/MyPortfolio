@@ -97,7 +97,7 @@ export default function BlogPage({ params }){
 
     <div className="grid grid-cols-12  gap-y-8 lg:gap-8 sxl:gap-16 mt-8 px-5 md:px-10">
       
-      
+      {/* direct BlogToc */}
       {/* <div className="col-span-12  lg:col-span-3">
         <details
           className="border-[1px] border-solid border-dark dark:border-light text-dark dark:text-light rounded-lg p-4 sticky top-6 max-h-[80vh] overflow-hidden overflow-y-auto"
