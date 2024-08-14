@@ -62,10 +62,12 @@ import GithubSlugger from 'github-slugger'
         toc: {
           type: "json",
           resolve: async (doc) => {
+            
             // RegExp to match headings
             const regulrExp = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
             const slugger = new GithubSlugger();
         
+            // will be type: [h2, [h3]]
             let toc = {};
             let currentH2 = null;
         
@@ -80,12 +82,16 @@ import GithubSlugger from 'github-slugger'
         
               if (level === 2) {
                 // If it's a level 2 heading, create a new entry in TOC
+
                 currentH2 = content;
                 toc[currentH2] = { slug, subheadings: [] };
+              
               } else if (level === 3 && currentH2) {
                 // If it's a level 3 heading, add it to the current level 2 entry
+
                 toc[currentH2].subheadings.push({ text: content, slug });
               }
+
             });
         
             return toc;
