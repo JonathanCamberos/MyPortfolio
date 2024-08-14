@@ -59,29 +59,37 @@ import GithubSlugger from 'github-slugger'
         },
 
         /* Creates TOC via slugging */
-        toc:{
-            type: "json",
-            resolve: async (doc) => {
-      
-              // RegExp to match headings
-              const regulrExp = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
-              const slugger = new GithubSlugger();
-
-              // create headings objects from headers matched from RegExp
-              const headings = Array.from(doc.body.raw.matchAll(regulrExp)).map(({groups}) => {
-                const flag = groups?.flag;
-                const content = groups?.content;
-                  
-                // shoves json into 'headings'  
-                return {
-                    level: flag?.length == 1 ? "one" : flag?.length == 2 ? "two" : "three",
-                    text: content,
-                    slug: content ? slugger.slug(content) : undefined
-                  } 
-                })
-    
-              return headings; //returns heading, becomes 'resolve'
-            }
+        toc: {
+          type: "json",
+          resolve: async (doc) => {
+            // RegExp to match headings
+            const regulrExp = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
+            const slugger = new GithubSlugger();
+        
+            let toc = {};
+            let currentH2 = null;
+        
+            // Create headings objects from headers matched by RegExp
+            Array.from(doc.body.raw.matchAll(regulrExp)).forEach(({ groups }) => {
+              const flag = groups?.flag;
+              const content = groups?.content;
+              const level = flag?.length;
+        
+              // Create the slug for the heading
+              const slug = content ? slugger.slug(content) : undefined;
+        
+              if (level === 2) {
+                // If it's a level 2 heading, create a new entry in TOC
+                currentH2 = content;
+                toc[currentH2] = { slug, subheadings: [] };
+              } else if (level === 3 && currentH2) {
+                // If it's a level 3 heading, add it to the current level 2 entry
+                toc[currentH2].subheadings.push({ text: content, slug });
+              }
+            });
+        
+            return toc;
+          }
         }
   },
 }))
@@ -89,10 +97,10 @@ import GithubSlugger from 'github-slugger'
 /* options for code style in blogs */
 const codeOptions = {
   theme: 'github-dark',
-  grid: false,
+  grid: false,         
 }
 
-/* // different plugins to make the blogs pretty :) */ 
+/* different plugins to make the blogs pretty :) */ 
 export default makeSource({
   /* options */
   contentDirPath: "content",
