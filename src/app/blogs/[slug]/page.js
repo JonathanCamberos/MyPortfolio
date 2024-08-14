@@ -55,6 +55,11 @@ export async function generateMetadata({ params }) {
     }
   }
 
+
+
+
+
+
 export default function BlogPage({ params }){
 
     /* Grabs and renders a blog post */
@@ -87,10 +92,13 @@ export default function BlogPage({ params }){
         sizes="100vw"
       />
     </div>
+    
     <BlogDetails blog={blog} slug={params.slug} />
 
     <div className="grid grid-cols-12  gap-y-8 lg:gap-8 sxl:gap-16 mt-8 px-5 md:px-10">
-      <div className="col-span-12  lg:col-span-3">
+      
+      
+      {/* <div className="col-span-12  lg:col-span-3">
         <details
           className="border-[1px] border-solid border-dark dark:border-light text-dark dark:text-light rounded-lg p-4 sticky top-6 max-h-[80vh] overflow-hidden overflow-y-auto"
           open
@@ -125,7 +133,10 @@ export default function BlogPage({ params }){
             })}
           </ul>
         </details>
-      </div>
+      </div> */}
+
+      <BlogToc blog={blog}/>
+
       <RenderMdx blog={blog} />
     </div>
   </article>

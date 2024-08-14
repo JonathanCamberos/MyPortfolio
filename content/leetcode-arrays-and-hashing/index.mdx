@@ -434,5 +434,71 @@ Afterwords, we `simply iterate backwords starting at the highest bucket and grab
 ### Abstraction 
 This is leaning into being a design problem. 
 
-### Solution 1:   
+### Solution 1: i & j pointers
+
+```python 
+class Solution:
+
+    # ex "5#hello3#bye"
+    def encode(self, strs: List[str]):
+        ans = "" 
+        for word in strs:
+            ans += str(len(word)) + "#" + word
+
+        return ans
+    
+    # decode above pattern
+    def decode(self, s: str):
+        ans = []
+        i = 0
+
+        # complete until end of encoded string
+        while i < len(s):
+            j = i
+
+            # find the #
+            while s[j] != "#":
+                j += 1
+            
+            # anything left will be int
+            length = int(s[i:j])
+
+            # point to start of string
+            i = j + 1 
+
+            # point to +1 after string (for substringing)
+            j = i + length
+
+            # grab string 
+            ans.append(s[i:j])
+
+            # start of next section
+            i = j
+
+        return ans
+```
+
+Seemingly a confusing problem, since we are designing the encoding method we 
+can make it as simple as possible. 
+
+
+## 238. Product of Array Except Self
+
+### Intro
+>Given an integer array nums, return an array answer such that answer[i] is 
+>equal to the product of all the elements of nums except nums[i].
+>The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+>You must write an algorithm that runs in O(n) time and without using the division 
+>operation.
+
+|  Input         | Output          |  
+| -------------- | --------------- | 
+| [1,2,3,4]      | [24,12,8,6]     |
+| [-1,1,0,-3,3]  | [0,0,9,0,0]     |
+
+### Constraints 
+
+### Abstraction
+
+### Solution 1:
 
