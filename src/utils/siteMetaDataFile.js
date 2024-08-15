@@ -13,8 +13,8 @@ const siteMetadata = {
     description: 'death',
     language: 'en-us',
     theme: 'system', // system, dark or light
-    siteUrl: 'https://github.com/JonathanCamberos/', /* update w/ final url */
-    siteLogo: '/pear.png',
+    siteUrl: 'https://jcmyportfolio-jcprojects.vercel.app/', /* update w/ final url */
+    siteLogo: '/logo/cat30.png',
     socialBanner: '/social-banner.png', // add social banner in the public folder
     email: '', 
     github: 'https://github.com/JonathanCamberos',
