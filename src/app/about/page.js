@@ -29,10 +29,10 @@ export default function About() {
         </div>
 
         {/* Horizontal Line Divider for small screens */}
-        <div className="block md:hidden w-full h-px bg-black dark:bg-light my-4"></div>
+        <div className="block md:hidden w-full h-px bg-black dark:bg-white my-4"></div>
 
         {/* Vertical Line Divider for larger screens */}
-        <div className="hidden md:flex w-px bg-black mx-4"></div>
+        <div className="hidden md:flex w-px bg-black dark:bg-white mx-4"></div>
 
         {/* Right side: Education, Experience, and Skills */}
         <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
