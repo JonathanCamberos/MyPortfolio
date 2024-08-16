@@ -79,7 +79,7 @@ export default function About() {
               {/* Left Side Content */}
               <div className="flex flex-col">
                 <span className="font-bold">University of Maryland</span>
-                <span className="text-dark dark:text-light mt-1">Computer Science B.S.</span> {/* Added margin for spacing */}
+                <span className="text-dark dark:text-light mt-1">B.S. Computer Science</span> {/* Added margin for spacing */}
               </div>
               
               {/* Right Side Content */}
