@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import JobLayout from '../../components/About/JobLayout';
+import Image from 'next/image';
 
 export default function About() {
   const skills = [
@@ -32,30 +33,37 @@ export default function About() {
     }
   ];
 
+  const image = "../../public/about_img.jpg"
+
   return (
     <section className="w-full min-h-screen pt-4 border-t-2 border-b-2 border-solid 
         border-dark dark:border-light flex flex-col md:flex-row items-center justify-center 
         text-dark dark:text-light"
     >
       <div className="w-full flex flex-col md:flex-row min-h-[calc(100vh-2rem)]">
-        {/* Left side: Picture and Introduction */}
-        {/* Left side: Picture and Introduction */}
-        <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
-          <img src="path-to-your-image.jpg" alt="img" className="rounded-lg mb-4" />
-          <p className="text-left mt-4">
-            Hi! I'm Jonathan. A recent grad from the University of Maryland, College Park.
-            I majored in Computer Science with a concentration in Cybersecurity and a minor in 
-            ACES (Advanced Cybersecurity Experience for Students). 
-          </p>
-          <p className="text-left mt-4">
-            I worked alongside the UMD Office of Multi-Ethnic Student Education to foster and increase minority representation in CS
-            through tutoring undergrad computer science courses and supporting the internal database 
-            of the University of Maryland Hispanic and Black support under OMSE (Office of Multi-Ethnic Student Education): College Success Scholars.
-          </p>
-          <p className="text-left mt-4">
-            I currently work as a Software Engineer at Bank of America supporting and building internal Cybersecurity Applications.
-          </p>
-        </div>
+      {/* Left side: Picture and Introduction */}
+      <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
+        <img 
+          src="about_img.jpg" 
+          alt="img" 
+          className="w-64 h-64 md:w-96 md:h-96 object-cover rounded-lg mb-4" 
+        />
+        
+        <p className="text-left mt-4">
+          Hi! I'm Jonathan. A recent grad from the University of Maryland, College Park.
+          I majored in Computer Science with a concentration in Cybersecurity and a minor in 
+          ACES (Advanced Cybersecurity Experience for Students). 
+        </p>
+        <p className="text-left mt-4">
+          I worked alongside the UMD Office of Multi-Ethnic Student Education to foster and increase minority representation in CS
+          through tutoring undergrad computer science courses and supporting the internal database 
+          of the University of Maryland Hispanic and Black organization under UMD - OMSE 
+          (Office of Multi-Ethnic Student Education): College Success Scholars.
+        </p>
+        <p className="text-left mt-4">
+          I currently work as a Software Engineer at Bank of America supporting and building internal Cybersecurity Applications.
+        </p>
+      </div>
 
         {/* Horizontal Line Divider for small screens */}
         <div className="block md:hidden w-full h-px bg-black dark:bg-light my-4"></div>

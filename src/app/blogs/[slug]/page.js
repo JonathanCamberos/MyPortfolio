@@ -55,11 +55,6 @@ export async function generateMetadata({ params }) {
     }
   }
 
-
-
-
-
-
 export default function BlogPage({ params }){
 
     /* Grabs and renders a blog post */
