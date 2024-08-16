@@ -16,7 +16,7 @@ const HomeCoverSection = ( {blogs} ) => {
   return (
 
     /*  ##### HomeCoverSection Div ##### */
-    <div className='w-11/12 sm:w-full inline-block'>
+    <div className='sm:w-full w-11/12 inline-block'>
         
         {/* ##### Article Div #####
                       
