@@ -59,7 +59,6 @@ export default function About() {
 
         {/* Horizontal Line Divider for small screens */}
         <div className="block md:hidden w-full h-px bg-black dark:bg-light my-4"></div>
-
         {/* Vertical Line Divider for larger screens */}
         <div className="hidden md:flex w-px bg-black dark:bg-light mx-4"></div>
 
@@ -81,7 +80,7 @@ export default function About() {
           </div>
 
           {/* Experience Section with Timeline */}
-          <div className="p-6 rounded-lg w-full max-w-lg relative mb-4">
+          <div className="w-full p-4 rounded-lg max-w-lg relative mb-2">
             <h2 className="text-xl font-semibold mb-4 text-center">Experience</h2>
             <div className="absolute left-0 top-0 h-full w-1 bg-gray-300 dark:bg-gray-700"></div>
             <div className="ml-8">
