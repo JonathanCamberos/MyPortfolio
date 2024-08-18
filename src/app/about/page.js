@@ -4,12 +4,16 @@ import Image from 'next/image';
 
 export default function About() {
   const skills = [
-    "React.js",
-    "SQL",
-    "Python",
     "Java",
+    "Python",
+    "OCaml",
+    "Haskell",
+    "C",
     "JavaScript",
-    "Node.js"
+    "Docker",
+    "Git",
+    "React",
+    "SQL"
   ];
 
   const jobs = [
@@ -32,6 +36,17 @@ export default function About() {
       description: "Web Applications Consulting Team"
     }
   ];
+
+  const coursework = [
+    "Computer Networks",
+    "Cryptography",
+    "Computer and Network Security (Teaching Assistant)",
+    "Algorithms",
+    "Compilers", 
+    "IoT Security",
+    "Ethical Hacking",
+    "Web Application Development with JavaScript"
+  ]
 
   const image = "../../public/about_img.jpg"
 
@@ -70,29 +85,31 @@ export default function About() {
         {/* Vertical Line Divider for larger screens */}
         <div className="hidden md:flex w-px bg-black dark:bg-light mx-4"></div>
 
-        {/* Right side: Education, Experience, and Skills */}
+        {/* Right side: Education, Experience, Skills, and Coursework */}
         <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
           {/* Education Section */}
-          <div className="p-6 rounded-lg w-full max-w-lg mb-4">
+          <div className="p-6 rounded-lg w-full max-w-lg mb-1"> {/* Reduced margin-bottom */}
             <h2 className="text-xl font-semibold mb-2 text-center">Education</h2>
             <div className="flex justify-between items-start">
-              {/* Left Side Content */}
               <div className="flex flex-col flex-1">
                 <span className="font-bold">University of Maryland</span>
                 <span className="text-dark dark:text-light mt-1 text-sm sm:text-base leading-tight">
-                  B.S. Computer Science - Cybersecurity Concentration
-                </span> {/* Reduced font size and adjusted line height */}
+                  B.S. Computer Science - Cybersecurity Track
+                </span>
               </div>
-              
-              {/* Right Side Content */}
-              <span className="text-accent dark:text-accentDark font-light whitespace-nowrap ml-4">
-                Aug 2020 - May 2024
-              </span>
+              <div className="flex flex-col items-end">
+                <span className="text-accent dark:text-accentDark font-light whitespace-nowrap">
+                  Aug 2020 - May 2024
+                </span>
+                <span className="text-sm font-medium text-dark dark:text-light mt-1">
+                  GPA: 3.5
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Experience Section with Timeline */}
-          <div className="w-full p-4 rounded-lg max-w-lg relative mb-2">
+          <div className="w-full p-4 rounded-lg max-w-lg relative mb-2 mt-1"> {/* Reduced margin-bottom and added margin-top */}
             <h2 className="text-xl font-semibold mb-4 text-center">Experience</h2>
             <div className="absolute left-0 top-0 h-full w-1 bg-gray-300 dark:bg-gray-700"></div>
             <div className="ml-8">
@@ -109,20 +126,35 @@ export default function About() {
           </div>
 
           {/* Skills Section */}
-          <div className="p-6 rounded-lg w-full max-w-lg">
+          <div className="p-6 rounded-lg w-full max-w-lg mb-4">
             <h2 className="text-xl font-semibold mb-4 text-center">Skills</h2>
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="flex flex-wrap gap-2 justify-center"> {/* Slightly increased gap */}
               {skills.map(skill => (
                 <Link
                   key={skill}
                   href={`/categories/${skill}`}
-                  className="inline-block py-2 sm:py-3 px-6 sm:px-10 bg-accent dark:bg-accentDark 
+                  className="inline-block py-1.5 px-4 bg-accent dark:bg-accentDark 
                       text-light dark:text-dark rounded-full capitalize font-semibold 
                       border-2 border-solid border-light dark:border-dark hover:scale-105 transition-all 
-                      ease duration-200 text-sm sm:text-base"
+                      ease duration-200 text-sm"
                 >
                   {skill}
                 </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Relevant Coursework Section */}
+          <div className="p-6 rounded-lg w-full max-w-lg">
+            <h2 className="text-xl font-semibold mb-4 text-center">Relevant Coursework</h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {coursework.map((course, index) => (
+                <span 
+                  key={index} 
+                  className="text-sm sm:text-base font-medium text-dark dark:text-light 
+                          pb-1 px-2">
+                  {course}
+                </span>
               ))}
             </div>
           </div>
