@@ -292,15 +292,14 @@ else, created a new list.
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
         # hashmap (sorted_string, [unsorted_string])
-        anagram_map = defaultdict(list)
+        groups = defaultdict(list)
         
-        # add string to sorted anagram key
+        # add string via sorted word key
         for word in strs:
             sorted_word = ''.join(sorted(word))
-            anagram_map[sorted_word].append(word)
+            groups[sorted_word].append(word)
         
-        # return [[unsorted_string]]
-        return list(anagram_map.values())
+        return groups.values()
 ``` 
 Takes advantage of sorted() function which creates key for (key, [str])
 
@@ -324,7 +323,7 @@ Takes advantage of sorted() function which creates key for (key, [str])
             groups[tuple(count)].append(word)
             
         return groups.values()
-```
+```     
 This takes advatange of a handy function to `convert a char count array into a tuple`.
 Tuples can serve as a `key for hashmaps, leading our hashmap to be 
 (tuple_of_char_count, [string])`

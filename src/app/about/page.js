@@ -77,13 +77,17 @@ export default function About() {
             <h2 className="text-xl font-semibold mb-2 text-center">Education</h2>
             <div className="flex justify-between items-start">
               {/* Left Side Content */}
-              <div className="flex flex-col">
+              <div className="flex flex-col flex-1">
                 <span className="font-bold">University of Maryland</span>
-                <span className="text-dark dark:text-light mt-1">B.S. Computer Science - Cybersecurity Concentration</span> {/* Added margin for spacing */}
+                <span className="text-dark dark:text-light mt-1 text-sm sm:text-base leading-tight">
+                  B.S. Computer Science - Cybersecurity Concentration
+                </span> {/* Reduced font size and adjusted line height */}
               </div>
               
               {/* Right Side Content */}
-              <span className="text-accent dark:text-accentDark font-light">Aug 2020 - May 2024</span>
+              <span className="text-accent dark:text-accentDark font-light whitespace-nowrap ml-4">
+                Aug 2020 - May 2024
+              </span>
             </div>
           </div>
 
