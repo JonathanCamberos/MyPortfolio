@@ -40,12 +40,13 @@ export default function About() {
   const coursework = [
     "Computer Networks",
     "Cryptography",
+    "Compilers", 
     "Computer and Network Security (Teaching Assistant)",
     "Algorithms",
-    "Compilers", 
+    "Computer Systems Architecture", 
     "IoT Security",
-    "Ethical Hacking",
-    "Web Application Development with JavaScript"
+    "Web Application Development with JavaScript",
+    "Ethical Hacking"
   ]
 
   const image = "../../public/about_img.jpg"
@@ -109,7 +110,7 @@ export default function About() {
           </div>
 
           {/* Experience Section with Timeline */}
-          <div className="w-full p-4 rounded-lg max-w-lg relative mb-2 mt-1"> {/* Reduced margin-bottom and added margin-top */}
+          <div className="w-full p-2 rounded-lg max-w-lg relative mb-2 mt-1"> {/* Reduced margin-bottom and added margin-top */}
             <h2 className="text-xl font-semibold mb-4 text-center">Experience</h2>
             <div className="absolute left-0 top-0 h-full w-1 bg-gray-300 dark:bg-gray-700"></div>
             <div className="ml-8">
@@ -126,7 +127,7 @@ export default function About() {
           </div>
 
           {/* Skills Section */}
-          <div className="p-6 rounded-lg w-full max-w-lg mb-4">
+          <div className="p-4 rounded-lg w-full max-w-lg mb-4">
             <h2 className="text-xl font-semibold mb-4 text-center">Skills</h2>
             <div className="flex flex-wrap gap-2 justify-center"> {/* Slightly increased gap */}
               {skills.map(skill => (
@@ -145,16 +146,16 @@ export default function About() {
           </div>
 
           {/* Relevant Coursework Section */}
-          <div className="p-6 rounded-lg w-full max-w-lg">
+          <div className="p-6 rounded-lg w-full max-w-xl"> {/* Increased max-width */}
             <h2 className="text-xl font-semibold mb-4 text-center">Relevant Coursework</h2>
             <div className="flex flex-wrap justify-center gap-3">
               {coursework.map((course, index) => (
-                <span 
-                  key={index} 
-                  className="text-sm sm:text-base font-medium text-dark dark:text-light 
-                          pb-1 px-2">
-                  {course}
-                </span>
+                <div key={index} className="flex items-center">
+                  <span className="w-2.5 h-2.5 bg-gray-600 dark:bg-gray-400 rounded-full mr-2"></span> {/* Dot */}
+                  <span className="text-sm sm:text-base font-medium text-dark dark:text-light">
+                    {course}
+                  </span>
+                </div>
               ))}
             </div>
           </div>
