@@ -22,13 +22,13 @@ export default function About() {
     {
       title: "Cybersecurity Engineer Intern",
       company: "Bank of America",
-      date: "June 2023 - August 2023",
+      date: "June 2023 - Aug 2023",
       description: "Network Security Team"
     },
     {
       title: "Software Engineer Intern",
       company: "PwC",
-      date: "June 2022 - August 2022",
+      date: "June 2022 - Aug 2022",
       description: "Web Applications Consulting Team"
     }
   ];
@@ -83,7 +83,7 @@ export default function About() {
               </div>
               
               {/* Right Side Content */}
-              <span className="text-accent dark:text-accentDark font-light">August 2020 - May 2024</span>
+              <span className="text-accent dark:text-accentDark font-light">Aug 2020 - May 2024</span>
             </div>
           </div>
 
