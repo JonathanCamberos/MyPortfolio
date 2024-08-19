@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import JobLayout from '../../components/About/JobLayout';
 import Image from 'next/image';
+// import aboutImage from '../../public/images/about_img.jpg'
 
 export default function About() {
   const skills = [
@@ -49,8 +50,6 @@ export default function About() {
     "Ethical Hacking"
   ]
 
-  const image = "../../public/about_img.jpg"
-
   return (
     <section className="w-full min-h-screen pt-4 border-t-2 border-b-2 border-solid 
         border-dark dark:border-light flex flex-col md:flex-row items-center justify-center 
@@ -60,7 +59,7 @@ export default function About() {
       {/* Left side: Picture and Introduction */}
       <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
         <img 
-          src="about_img.jpg" 
+          src="/images/about_img.jpg" 
           alt="img" 
           className="w-64 h-64 md:w-96 md:h-96 object-cover rounded-lg mb-4" 
         />

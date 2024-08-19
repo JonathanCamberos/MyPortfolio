@@ -26,7 +26,6 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-   
     return {
       title: `${params.slug.replaceAll("-"," ")} Blogs`,
       /* Slug is the category name */

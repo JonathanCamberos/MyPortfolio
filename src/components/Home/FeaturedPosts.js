@@ -11,7 +11,7 @@ const FeaturedPosts = ({ blogs }) => {
   
       <div className="grid grid-cols-2 grid-rows-2 gap-6  mt-10 sm:mt-16">
 
-        <article className=" col-span-2  sxl:col-span-1 row-span-2 relative">
+        <article className="col-span-2  sxl:col-span-1 row-span-2 relative">
           <BlogLayoutOne blog={sortedBlogs[1]} />
         </article>
         
