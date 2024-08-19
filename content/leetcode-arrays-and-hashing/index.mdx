@@ -619,3 +619,50 @@ While sets are generally more efficient for larger and more dynamic data due to 
 lookups and insertions, for a fixed-size 9x9 board like this, the overhead introduced by defaultdict and 
 set operations can make the list-based approach faster in practice. 
 
+
+
+
+## Longest Consecutive Sequence - Medium 
+
+### Intro 
+> Given an array of integers nums, return the length of the longest consecutive sequence of elements.
+> A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than 
+> the previous element
+> You must wrtie an algorithm that runs in O(n) time.
+
+|  Input                    | Output  |  
+| ------------------------- | ------- | 
+| [2, 20, 4, 10, 3, 4, 5]   | 4       | 
+| [0, 3, 2, 5, 4, 6, 1, 1]  | 7       |
+
+
+### Constraints 
+
+### Abstraction 
+As usual, our goal is to translate this problem into something that is easier. 
+
+A longest consecutive sequence on a number line would look like this:
+
+[ 12, 1, 13, 0, 7, 2, 3, 11, 4] ---> 
+
+| 0 1 2 3 4 |  ..... | 7 | ..... | 11 12 13 | 
+
+Here, it is very simple to see what is the longest sequence.
+Now the question is how to translate into this.
+A set would be the easiest as we can simply check if some element exists 
+
+### Solution 1: Set abstraction
+```python
+def longestConsecutive(self, nums: List[int]) -> int: 
+    numSet = set(nums)
+    longest = 0
+    for i in numSet:
+        # found start of a sequence (left most element)
+        if (i - 1) not in numSet: 
+            currLen = 1
+            while (i + currLen) in numSet:
+                currLen += 1 
+            longest = max(longest, currLen)
+
+    return longest        
+```
