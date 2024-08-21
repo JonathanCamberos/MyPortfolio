@@ -574,21 +574,24 @@ So we simply create sets for all of these groups and as we traverse the board, w
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         cols = defaultdict(set)
         rows = defaultdict(set)
-        squares = defaultdict(set)  # key = (r /3, c /3)
+        squares = defaultdict(set) # tuple key = (r /3, c /3)
 
         for r in range(9):
             for c in range(9):
-                if board[r][c] == ".":
+                
+                tmp = board[r][c]
+
+                if tmp == ".":
                     continue
-                if (
-                    board[r][c] in rows[r]
-                    or board[r][c] in cols[c]
-                    or board[r][c] in squares[(r // 3, c // 3)]
-                ):
+                
+                if (tmp in rows[r] or 
+                    tmp in cols[c] or 
+                    tmp in squares[(r // 3, c // 3)] ):
                     return False
-                cols[c].add(board[r][c])
-                rows[r].add(board[r][c])
-                squares[(r // 3, c // 3)].add(board[r][c])
+                
+                cols[c].add(tmp)
+                rows[r].add(tmp)
+                squares[(r // 3, c // 3)].add(tmp)
 
         return True
 ```
@@ -605,8 +608,11 @@ So we simply create sets for all of these groups and as we traverse the board, w
                 tmp = board[i][j]
                 if tmp != ".":    
                     box = 3 * (i//3) + (j//3)
-                    if tmp in rows[i] or tmp in col[j] or tmp in boxes[box]:
+                    if (tmp in rows[i] or 
+                       tmp in col[j]  or 
+                       tmp in boxes[box]):
                         return False
+
                     col[j].append(tmp)
                     rows[i].append(tmp)
                     boxes[box].append(tmp)
@@ -621,11 +627,9 @@ lookups and insertions, for a fixed-size 9x9 board like this, the overhead intro
 set operations can make the list-based approach faster in practice. 
 
 
+## 128. Longest Consecutive Sequence - Medium
 
-
-## 128. Longest Consecutive Sequence - Medium 
-
-### Intro 
+### Intro
 > Given an array of integers nums, return the length of the longest consecutive sequence of elements.
 > A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than 
 > the previous element
@@ -637,9 +641,9 @@ set operations can make the list-based approach faster in practice.
 | [0, 3, 2, 5, 4, 6, 1, 1]  | 7       |
 
 
-### Constraints 
+### Constraints
 
-### Abstraction 
+### Abstraction
 As usual, our goal is to translate this problem into something that is easier. 
 
 A longest consecutive sequence on a number line would look like this:
