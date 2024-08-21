@@ -101,11 +101,66 @@ to the string that reverse and check over.
 ## 167. Two Sum II - Input Array Is Sorted
 
 ### Intro 
+> Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, 
+> find two numbers such that they add up to a specific target number. 
+> Let these two numbers be numbers[index1] and numbers[index2] where 1 `leq` index1 `lt` index2 `leq` numbers.length.
+> Return the indices of the two numbers, index1 and index2, added by one as an 
+> integer array [index1, index2] of length 2.
+> The tests are generated such that there is exactly one solution. 
+> You may not use the same element twice.
 
 ### Constraints
+Your solution must use only constant extra space.
 
 ### Abstraction
+There are two main abstractions to help simplify this problem, 
+specifically because the array is sorted
+
+If we start with the naive solution where we iterate of the array with 
+2 pointers L & R starting at index 0 and iterate n^2 times
+
+| 1 | 3 | 4 | 5 | 7 | 10 | 11 |    Target = 9
+
+L^ ------------- R^
+
+Lets say L = 1 and R = 10
+1 + 10 = 11, so we know that this is bigger than our target (11 > 9) and we know that
+the array is sorted, we know that any number to the right of 10 is too large and we can
+discard that half of the array.
+
+Thus are array becomes 
+
+| 1 | 3 | 4 | 5 | 7 |    Target = 9
+
+-L/R^
+
+
+And we start both pointers on the left, and shift the L pointer to the right by one index 
+and start the R pointer iteration again, starting at the number 3. 
+
+Essentially we are chopping off the right handside of the array if our current L + R > Target. 
+
+We can replicate this via 2 pointers if L = 0 and R = len(nums)-1 
+
+and move R - 1 index if L + R > Target 
+
+and move L + 1 index if L + R < Target
+
+because of the chopping off patern that we mentioned from the O(n^2) solution above
 
 ### Solution 1:
+```python 
+ def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        l,r = 0,len(numbers)-1
 
+        while l < r:
+            tmp = numbers[l] + numbers[r]
+        
+            if tmp > target:
+                r -= 1
+            elif tmp < target:
+                l += 1
+            else:
+                return [l+1,r+1]
+```
 ### Solution 2:
