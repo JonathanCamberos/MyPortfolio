@@ -22,7 +22,7 @@ Usually by breaking the problem into chunks, these two pointers allows us to ext
 we need to solve the problem.
 
 
-## 125. Valid Palindrome
+## 125. Valid Palindrome - Easy
 
 ### Intro
 > A phrase is a palindrome if, after converting all uppercase letters into lowercase letters 
@@ -96,7 +96,11 @@ For this problem, using library functions is quicker than using pointers, but si
 Two Pointers category it is still good practice to use the pointer solution 
 
 
-## 167. Two Sum II - Input Array Is Sorted
+
+
+
+
+## 167. Two Sum II - Input Array Is Sorted - Medium
 
 ### Intro
 > Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, 
@@ -200,7 +204,9 @@ left of L is smaller and thus could not be the answer )
 
 
 
-## 15. threeSum
+
+
+## 15. threeSum - Medium
 
 ### Intro
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] 
@@ -221,10 +227,11 @@ This is a step up from the previous 167. Two Sum II - Sorted problem.
 The only differences is that we are using 3 integers for the sum, and our array is not sorted.
 
 We have two main ways to do this:
-1. frozen negative number + mini twoSum
-2. grouping by parity + 4 subcases
+1. sort() + frozen negative number + mini twoSum
+2. 
+3. grouping by parity + 4 subcases
 
-frozen negative number + mini twoSum:
+sort() + frozen negative number + mini twoSum:
 
 Here, we are converting the threeSum problem into a twoSum problem.
 
@@ -246,38 +253,38 @@ We then iterate over the original array while going through the 3 following case
 3. (-num1, -num2, num3)
 4. (num1, num2, -num3)
 
-### Solution 1: frozen negative number + mini twoSum
+### Solution 1: sort() + frozen negative number + mini twoSum
 ```python
 def threeSum(self, nums: List[int]) -> List[List[int]]:
-        res = []
-        nums.sort()
+    res = []
+    nums.sort()
 
-        for i, a in enumerate(nums):
-            if a > 0:
-                break
+    for i, a in enumerate(nums):
+        if a > 0:
+            break
 
-            if i > 0 and a == nums[i - 1]:
-                continue
+        if i > 0 and a == nums[i - 1]:
+            continue
 
-            l, r = i + 1, len(nums) - 1
-            while l < r:
-                threeSum = a + nums[l] + nums[r]
-                if threeSum > 0:
-                    r -= 1
-                elif threeSum < 0:
+        l, r = i + 1, len(nums) - 1
+        while l < r:
+            threeSum = a + nums[l] + nums[r]
+            if threeSum > 0:
+                r -= 1
+            elif threeSum < 0:
+                l += 1
+            else:
+                res.append([a, nums[l], nums[r]])
+                l += 1
+                r -= 1
+                while nums[l] == nums[l - 1] and l < r:
                     l += 1
-                else:
-                    res.append([a, nums[l], nums[r]])
-                    l += 1
-                    r -= 1
-                    while nums[l] == nums[l - 1] and l < r:
-                        l += 1
-                        
-        return res
+                    
+    return res
 ``` 
 
 
-### Solution 2: grouping by parity + 4 subcases
+### Solution 3: grouping by parity + 4 subcases
 ```python
 def threeSum(self, nums: List[int]) -> List[List[int]]:
     p, n, z = [], [], []
@@ -324,3 +331,6 @@ def threeSum(self, nums: List[int]) -> List[List[int]]:
 
 while this is arguably cleaner and more satisfying than the mini twoSum solution, this is again 
 not utilziing two pointers. But its still a cool approach to the problem.
+
+
+## 
