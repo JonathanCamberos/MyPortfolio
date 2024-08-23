@@ -13,4 +13,4 @@ I made my portfolio in React.js using other libraries as well, notably:
 5. Supabase
 6. alotttttttt of youtube react.js tutorials :)
 
-Live at: https://jcmyportfolio-jcprojects.vercel.app/
+Live at: https://portfolio-jcprojects.vercel.app
