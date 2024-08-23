@@ -17,8 +17,9 @@ tags:
 Getting aquanted and learning how two simple pointers can can 'point' to the solution
 
 ### What are Two Pointers 
-First lets understand what two pointers are 
-
+Two Pointers strategy has to do with using L and R pointers to traverse lists of nums.
+Usually by breaking the problem into chunks, these two pointers allows us to extract the info
+we need to solve the problem.
 
 
 ## 125. Valid Palindrome
@@ -36,14 +37,14 @@ First lets understand what two pointers are
 | " "                                | true    |
 
 ### Constraints
-s consists only of printable ASCII characters.
+string s consists only of printable ASCII characters.
 
 ### Abstraction 
-Not much abstraction is needed but rather steps
+The abstraction is simply following the steps and using two pointers to traverse the string.
 
 First we need to convert the string s into lowercase.
 Then we need to remove non-alphanumeric characters, isalnum() comes handy 
-Then simple traverse or reverse the string to compare
+Then simple traverse using points or reverse the string and compare it with itself.
 
 ### Solution 1: Two Pointers L + R
 ```python
@@ -91,11 +92,8 @@ def isPalindrome(self, s: str) -> bool:
     return ans == ans[::-1]
         
 ``` 
-For this problem, its actually quicker to use the library functions as the alphaNum function from 
-solution 1 is incredibly slow
-
-We simply loop over the string after calling lowercase, then add only the alphaNumeric characters 
-to the string that reverse and check over. 
+For this problem, using library functions is quicker than using pointers, but since we are in the 
+Two Pointers category it is still good practice to use the pointer solution 
 
 
 ## 167. Two Sum II - Input Array Is Sorted
@@ -119,42 +117,64 @@ to the string that reverse and check over.
 Your solution must use only constant extra space.
 
 ### Abstraction
-There are two main abstractions to help simplify this problem, 
-specifically because the array is sorted
+Since the array is sorted we can make assumptions as we traverse the array using pointers.
+Lets build up to the assumption.
 
-If we start with the naive solution where we iterate of the array with 
-2 pointers L & R starting at index 0 and iterate n^2 times
+Naive solution: we iterate of the array with 2 pointers L & R, compare every element for a
+O(n^2) solution 
+
+Situation #1:
 
 | 1 | 3 | 4 | 5 | 7 | 10 | 11 |    Target = 9
 
 L^ ------------- R^
 
-Lets say L = 1 and R = 10
-1 + 10 = 11, so we know that this is bigger than our target (11 > 9) and we know that
-the array is sorted, we know that any number to the right of 10 is too large and we can
-discard that half of the array.
+Lets pause iteration at the pointer values --> L = 1 and R = 10
 
-Thus are array becomes 
+We know that the current value is bigger than our target: (11 > 9) 
+
+Assumption #1: 
+
+Since the array is sorted, we know that any element to the right of pointer R is bigger than it. 
+And because of this, we know that anything to the right will not be valid for our target, since we 
+need to decrease our estimate to get to our target
+
+Thus, we can discard that right portion of the array. Our array becomes -->
 
 | 1 | 3 | 4 | 5 | 7 |    Target = 9
 
--L/R^
 
+Situation #2:
 
-And we start both pointers on the left, and shift the L pointer to the right by one index 
-and start the R pointer iteration again, starting at the number 3. 
+| 1 | 3 | 4 | 5 | 7 |    Target = 9
 
-Essentially we are chopping off the right handside of the array if our current L + R > Target. 
+-----L^------R^
 
-We can replicate this via 2 pointers if L = 0 and R = len(nums)-1 
+Lets pause iteration at the pointer values --> L=3 and R=5
 
-and move R - 1 index if L + R > Target 
+We know that the current value is smaller than our target: (8 < 9)
 
-and move L + 1 index if L + R < Target
+Assumption #2: 
 
-because of the chopping off patern that we mentioned from the O(n^2) solution above
+Since the array is sorted, we know that any element to the left of pointer L is smaller than it.
+And because of this, we know that anything to the left will not be valid for our target, since we 
+need to increase our estimate to get to our target.
 
-### Solution 1:
+Thus, we can discard that left portion of the array. Our array becomes --> 
+
+| 4 | 5 | 7 |    Target = 9
+
+Mimicing Pattern:
+
+In the above, we are essentially we are chopping off the right handside of the array 
+if our estimate > target, and chopping off the left handside if estimate < target.
+
+If we were instead of doing the naive approach of comparing every element via starting both pointers 
+on the left, if we start L = 0 and R = len(nums)-1, we are able to mimic the above chopping pattern.
+
+With this pattern, we end up with a solution of O(n) as both pointers approach the center from each end.
+
+### Solution 1: L + R pointers
 ```python 
  def twoSum(self, numbers: List[int], target: int) -> List[int]:
         l,r = 0,len(numbers)-1
@@ -178,12 +198,13 @@ right of R is bigger and thus could not be the answer )
 If tmp is smaller than target, move L to the right (because every elem to the 
 left of L is smaller and thus could not be the answer )
 
-## 15. 3Sum
+
+
+## 15. threeSum
 
 ### Intro
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] 
 > such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
-
 > Notice that the solution set must not contain duplicate triplets.
 
 |  nums            | Output                |  
@@ -195,119 +216,111 @@ left of L is smaller and thus could not be the answer )
 ### Constraints
 
 ### Abstraction
-While this may be a pointer problem, solving it cleanly is simply a matter of breaking it down cleanly
+This is a step up from the previous 167. Two Sum II - Sorted problem. 
 
-Our main cases:
+The only differences is that we are using 3 integers for the sum, and our array is not sorted.
+
+We have two main ways to do this:
+1. frozen negative number + mini twoSum
+2. grouping by parity + 4 subcases
+
+frozen negative number + mini twoSum:
+
+Here, we are converting the threeSum problem into a twoSum problem.
+
+By freezing some negative element, we have 2 elements left that must be the complement of the frozen element, 
+adding up to zero. 
+
+These two elements are found by setting L to the index of the current frozen negative element + 1, and R to the right most element.
+
+Via this, we portion our array into a mini twoSum problem
+
+grouping by parity + 4 subcases:
+
+Here, we iterate the array once and place each number into a bucket of postive, negative, a zero numbers.
+
+We then iterate over the original array while going through the 3 following cases:
+
 1. (0, 0, 0)
 2. (-num1, +num1, 0)
 3. (-num1, -num2, num3)
 4. (num1, num2, -num3)
 
-So if we just use sets to help us find that then we are good to go.
-
-### Solution 1: Split list into positives, negatives, and zeros
+### Solution 1: frozen negative number + mini twoSum
 ```python
 def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
 
-	res = set()
+        for i, a in enumerate(nums):
+            if a > 0:
+                break
 
-	#1. Split nums into three lists: negative numbers, positive numbers, and zeros
-	n, p, z = [], [], []
-	for num in nums:
-		if num > 0:
-			p.append(num)
-		elif num < 0: 
-			n.append(num)
-		else:
-			z.append(num)
+            if i > 0 and a == nums[i - 1]:
+                continue
 
-	#2. Create a separate set for negatives and positives for O(1) look-up times
-	N, P = set(n), set(p)
-
-	#3. If there is at least 1 zero in the list, add all cases where -num exists in N and num exists in P
-	#   i.e. (-3, 0, 3) = 0
-	if z:
-		for num in P:
-			if -1*num in N:
-				res.add((-1*num, 0, num))
-
-	#3. If there are at least 3 zeros in the list then also include (0, 0, 0) = 0
-	if len(z) >= 3:
-		res.add((0,0,0))
-
-	#4. For all pairs of negative numbers (-3, -1), check to see if their complement (4)
-	#   exists in the positive number set
-	for i in range(len(n)):
-		for j in range(i+1,len(n)):
-			target = -1*(n[i]+n[j])
-			if target in P:
-				res.add(tuple(sorted([n[i],n[j],target])))
-
-	#5. For all pairs of positive numbers (1, 1), check to see if their complement (-2)
-	#   exists in the negative number set
-	for i in range(len(p)):
-		for j in range(i+1,len(p)):
-			target = -1*(p[i]+p[j])
-			if target in N:
-				res.add(tuple(sorted([p[i],p[j],target])))
-
-	return res
-```
-
-Here, we simply account for each of the cases in abstraction, and code it out.
-
-### Solution 2: itertools small optimization
-```python
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-            
-        if len(nums) < 3:
-            return []
-
-        res = set()
-
-        # 1. Split nums into three lists: negative numbers, positive numbers, and zeros
-        n, p, z = [], [], []
-        for num in nums:
-            if num > 0:
-                p.append(num)
-            elif num < 0:
-                n.append(num)
-            else:
-                z.append(num)
-
-        # 2. Create a separate set for negatives and positives for O(1) look-up times
-        N, P = set(n), set(p)
-
-        # 3. If there is at least 1 zero in the list, add all cases where -num exists in N and num exists in P
-        #   i.e. (-3, 0, 3) = 0
-        if z:
-            for num in P:
-                if -1 * num in N:
-                    res.add((-1 * num, 0, num))
-
-            # 3. If there are at least 3 zeros in the list then also include (0, 0, 0) = 0
-            if len(z) >= 3:
-                res.add((0, 0, 0))
-
-        # 4. For all pairs of negative numbers (-3, -1), check to see if their complement (4)
-        #   exists in the positive number set
-        
-        from itertools import combinations
-
-        for x, y in combinations(n, 2):
-            target = -1 * (x + y)
-            if target in P:
-                res.add(tuple(sorted([x, y, target])))
-
-        # 5. For all pairs of positive numbers (1, 1), check to see if their complement (-2)
-        #   exists in the negative number set
-
-        for x, y in combinations(p, 2):
-            target = -1 * (x + y)
-            if target in N:
-                res.add(tuple(sorted([x, y, target])))
-
-        return [list(x) for x in res]
+            l, r = i + 1, len(nums) - 1
+            while l < r:
+                threeSum = a + nums[l] + nums[r]
+                if threeSum > 0:
+                    r -= 1
+                elif threeSum < 0:
+                    l += 1
+                else:
+                    res.append([a, nums[l], nums[r]])
+                    l += 1
+                    r -= 1
+                    while nums[l] == nums[l - 1] and l < r:
+                        l += 1
+                        
+        return res
 ``` 
 
-For the double for loops, itertools provides an efficient way of 
+
+### Solution 2: grouping by parity + 4 subcases
+```python
+def threeSum(self, nums: List[int]) -> List[List[int]]:
+    p, n, z = [], [], []
+    res = set()
+
+    for i in nums:
+        if i < 0:
+            n.append(i)
+        elif i > 0:
+            p.append(i)
+        else:
+            z.append(i)
+
+    # sets for access
+    P, N = set(p), set(n)
+
+    # 1. (0, num, -num) if at least one 0
+    if len(z) > 0:
+        for i in P:
+            n_target = -i
+            if n_target in N:
+                res.add((n_target, 0, i ))
+
+    # 2. (0, 0, 0) if at least three 0's
+    if len(z) > 2:
+        res.add((0, 0, 0))
+
+    # 3. (-, -, +) negative pairs
+    for i in range(len(n)):
+        for j in range(i+1, len(n)):
+            p_target = -(n[i] + n[j])
+            if p_target in P:
+                res.add(tuple(sorted([n[i], n[j], p_target])))
+    
+    # 4. (-, +, +) positive pairs
+    for i in range(len(p)):
+        for j in range(i+1, len(p)):
+            n_target = -(p[i] + p[j])
+            if n_target in N:
+                res.add(tuple(sorted([p[i], p[j], n_target])))
+
+    return res	
+```
+
+while this is arguably cleaner and more satisfying than the mini twoSum solution, this is again 
+not utilziing two pointers. But its still a cool approach to the problem.
