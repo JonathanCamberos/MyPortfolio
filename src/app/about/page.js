@@ -67,7 +67,12 @@ export default function About() {
         <p className="text-left mt-4">
           Hi! I'm Jonathan. A recent grad from the University of Maryland, College Park.
           I majored in Computer Science with a concentration in Cybersecurity and a minor in 
-          ACES (Advanced Cybersecurity Experience for Students). 
+          ACES (Advanced Cybersecurity Experience for Students).
+        </p>
+        <p className="text-left mt-4">
+        University of Maryland, College Park - 
+        Computer Science: No. 18 nationally and No. 9 public institutions, 
+        Cybersecurity: No. 11 overall, No. 7 among publics as of September 18, 2023
         </p>
         <p className="text-left mt-4">
           I worked alongside the UMD Office of Multi-Ethnic Student Education to foster and increase minority representation in CS
@@ -78,6 +83,15 @@ export default function About() {
         <p className="text-left mt-4">
           I currently work as a Software Engineer at Bank of America supporting and building internal Cybersecurity Applications.
         </p>
+
+        <a 
+          href="/path/to/your/resume.pdf" 
+          download 
+          className="mt-4 px-4 py-2 bg-accent dark:bg-accentDark  text-light dark:text-dark rounded-lg
+                    hover:scale-105 transition-all ease duration-200 text-sm"
+        >
+           Resume
+        </a>
       </div>
 
         {/* Horizontal Line Divider for small screens */}
