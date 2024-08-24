@@ -347,7 +347,7 @@ while this is arguably cleaner and more satisfying than the mini twoSum solution
 not utilziing two pointers. But its still a cool approach to the problem.
 
 
-## 11. Container With Most Water
+## 11. Container With Most Water - Medium
 
 ### Intro
 > You are given an integer array height of length n. There are n vertical lines drawn 
@@ -355,6 +355,15 @@ not utilziing two pointers. But its still a cool approach to the problem.
 > Find two lines that together with the x-axis form a container, such that the container
 > contains the most water
 > Return the maximum amount of water a container can store
+
+
+|  nums            | Output                |  
+| ---------------- | --------------------- | 
+|  |   |
+|           |                     |
+|         |              |
+
+
 
 ### Constraints
 Notice you may not slant the container
@@ -397,3 +406,64 @@ def maxArea(self, height: List[int]) -> int:
 
     return maxWater
 ```
+
+
+## 42. Trapping Rain Water
+
+### Intro
+> Given n non-negative integers representing an elevation map where the width of 
+> each bar is 1, computer how much water it can trap after raining
+
+|  height                   | Output  |  
+| ------------------------- | ------- | 
+| [0,1,0,2,1,0,1,3,2,1,2,1] | 6       |
+| [4,2,0,3,2,5]             | 9       |
+
+### Constraints 
+
+### Abstraction 
+This problem can be simplified by 1 main example.
+
+Lets say:
+[0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+
+Here, the rain water would be the space inbetween the two barriers of height one.
+If we were to use a L and R pointer, we could move the pointers towards the middle,
+land at the height 1 barriers.
+
+Now we need a way to figure out how to calculate the water trapped.
+
+Again, visually its simply, everything thats under the height of 1 (all the 0's),
+would be able to catch 1 block of rain water. The reasoning, is that all the blocks
+of 0 have a height that is lower than that on the left and right hand side.
+
+If we were to have values storing these left_max and right_max height values, the L 
+and R pointers could be used to traverse the row of 0's and calculate either:
+
+rain += min(left_max, right_max) - height[L]
+
+rain += min(left_max, right_max) - height[R]
+
+in order to check how much water would be added per column in our height array.
+
+### Solution 1: Two Pointers 
+```python 
+def trap(self, height: List[int]) -> int:
+    L, R = 0, len(height) - 1
+    left_max, right_max = height[L], height[R]
+    water = 0
+
+    while L < R:
+        
+        if height[L] < height[R]:
+            L += 1
+            left_max = max(left_max, height[L])
+            water += min(left_max, right_max) - height[L]
+        else: 
+            R -= 1
+            right_max = max(right_max, height[R])
+            water += min(left_max, right_max) - height[R]
+    
+    return water
+
+``

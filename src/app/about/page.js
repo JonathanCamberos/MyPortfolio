@@ -70,9 +70,17 @@ export default function About() {
           ACES (Advanced Cybersecurity Experience for Students).
         </p>
         <p className="text-left mt-4">
-        University of Maryland, College Park - 
-        Computer Science: No. 18 nationally and No. 9 public institutions, 
-        Cybersecurity: No. 11 overall, No. 7 among publics as of September 18, 2023
+          University of Maryland, College Park - 
+          Computer Science: No. 18 nationally and No. 9 public institutions, 
+          Cybersecurity: No. 11 overall, No. 7 among publics as of{" "}
+          <a 
+            href="https://today.umd.edu/umd-rises-in-u-s-news-rankings-of-national-universities" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-blue-500 underline hover:text-blue-700 transition-colors"
+          >
+            September 18, 2023
+          </a>
         </p>
         <p className="text-left mt-4">
           I worked alongside the UMD Office of Multi-Ethnic Student Education to foster and increase minority representation in CS
