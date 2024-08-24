@@ -347,4 +347,53 @@ while this is arguably cleaner and more satisfying than the mini twoSum solution
 not utilziing two pointers. But its still a cool approach to the problem.
 
 
-## 
+## 11. Container With Most Water
+
+### Intro
+> You are given an integer array height of length n. There are n vertical lines drawn 
+> such that the two endpoints of the ith line are (i, 0) and (i, hieght[i]).
+> Find two lines that together with the x-axis form a container, such that the container
+> contains the most water
+> Return the maximum amount of water a container can store
+
+### Constraints
+Notice you may not slant the container
+
+### Abstract
+If we image the array 'height' as a bar graph, we are using the max(L, R) heigh and the 
+distance between the two bars in order to calculate the amount of water stored.
+
+Here, both height of bars and distance are the important steps.
+
+We start our points are the left and right hand edge of the array. Similarly to the twoSum 
+problem, we calculate the current water stored, compare it to the currMax, and the shift the
+the pointer which is currently at min(height[L], height[R]).
+
+A small optimization is that we keep shifting this chosen pointer until we find a new bar 
+with a higher height than the first bar.
+
+### Solution 1: 
+```python
+def maxArea(self, height: List[int]) -> int:
+    L, R = 0, len(height)-1
+    maxWater = 0 
+
+    while L < R:
+        smallerHeight = min(height[L], height[R])
+        currWater = smallerHeight * (R-L)
+        maxWater = max(maxWater, currWater)
+
+        if height[L] < height[R]:
+            L += 1
+
+            while height[L] < smallerHeight:
+                L += 1 
+        
+        else:
+            R -= 1
+
+            while height[R] < smallerHeight:
+                R -= 1
+
+    return maxWater
+```
