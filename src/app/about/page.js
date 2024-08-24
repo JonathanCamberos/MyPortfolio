@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import JobLayout from '../../components/About/JobLayout';
 import Image from 'next/image';
+// import aboutImage from "/images/about_img.jpg"
 // import aboutImage from '../../public/images/about_img.jpg'
 //
 
@@ -59,12 +60,30 @@ export default function About() {
       <div className="w-full flex flex-col md:flex-row min-h-[calc(100vh-2rem)]">
       {/* Left side: Picture and Introduction */}
       <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
-        <img 
+        {/* <img 
           src="/images/about_img.jpg" 
           alt="img" 
           className="w-64 h-64 md:w-96 md:h-96 object-cover rounded-lg mb-4" 
-        />
+        /> */}
         
+        {/*  ##### Image #####  */}
+        <Image src="/images/about_img.jpg"
+          placeholder='blur'
+          alt="img of me:)"
+          blurDataURL="blur.jpg"
+          width="80"
+          height="60"
+          className='w-1/2 object-center object-cover rounded-xl group-hover:scale-105 
+          transition-all ease duration-300'
+          sizes='(max-width: 1180px) 100vw, 50vw'
+        />
+
+        {/* <Image src={aboutImage}
+          alt="img of author"
+        /> */}
+
+
+
         <p className="text-left mt-4">
           Hi! I'm Jonathan. A recent grad from the University of Maryland, College Park.
           I majored in Computer Science with a concentration in Cybersecurity and a minor in 
