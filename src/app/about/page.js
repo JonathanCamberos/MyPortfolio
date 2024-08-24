@@ -2,6 +2,7 @@ import Link from 'next/link';
 import JobLayout from '../../components/About/JobLayout';
 import Image from 'next/image';
 // import aboutImage from '../../public/images/about_img.jpg'
+//
 
 export default function About() {
   const skills = [
