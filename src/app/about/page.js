@@ -84,14 +84,14 @@ export default function About() {
           I currently work as a Software Engineer at Bank of America supporting and building internal Cybersecurity Applications.
         </p>
 
-        <a 
+        {/* <a 
           href="/path/to/your/resume.pdf" 
           download 
           className="mt-4 px-4 py-2 bg-accent dark:bg-accentDark  text-light dark:text-dark rounded-lg
                     hover:scale-105 transition-all ease duration-200 text-sm"
         >
            Resume
-        </a>
+        </a> */}
       </div>
 
         {/* Horizontal Line Divider for small screens */}
