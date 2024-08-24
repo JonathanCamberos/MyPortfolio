@@ -259,27 +259,41 @@ def threeSum(self, nums: List[int]) -> List[List[int]]:
     res = []
     nums.sort()
 
+    # (index, value) iterator
     for i, a in enumerate(nums):
+        
+        # we are freezing one pointer on a negative number
+        # if we hit postive number we can end
         if a > 0:
             break
 
-        if i > 0 and a == nums[i - 1]:
+        # if we hit a repeated negative number, skip
+        if i > 0 and a == nums[i-1]:
             continue
 
-        l, r = i + 1, len(nums) - 1
-        while l < r:
-            threeSum = a + nums[l] + nums[r]
-            if threeSum > 0:
-                r -= 1
-            elif threeSum < 0:
-                l += 1
+        # mini twoSum problem
+        # chunk of array to the right of the frozen negative number
+        L, R, = i + 1, len(nums)-1
+        while L < R:
+            curr3Sum = a + nums[L] + nums[R]
+
+            if curr3Sum < 0:
+                L += 1
+            elif curr3Sum > 0:
+                R -= 1
             else:
-                res.append([a, nums[l], nums[r]])
-                l += 1
-                r -= 1
-                while nums[l] == nums[l - 1] and l < r:
-                    l += 1
-                    
+                res.append([a, nums[L], nums[R]])
+
+                # why dont we just shift over L?
+                # following while loops moves L until we hit a new number
+                # but we know that a + L + R --> 0
+                # thus, there is no a + new_L + R != 0
+                # so we must shift both pointers
+                L += 1
+                R -= 1
+
+                while nums[L] == nums[L-1] and L < R:
+                    L += 1
     return res
 ``` 
 
