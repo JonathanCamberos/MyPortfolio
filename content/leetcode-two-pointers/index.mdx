@@ -422,29 +422,46 @@ def maxArea(self, height: List[int]) -> int:
 ### Constraints 
 
 ### Abstraction 
-This problem can be simplified by 1 main example.
+Lets define how we can trap water.
 
-Lets say:
-[0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+[1, 0, 1]: allows us to trap 1 unit of water. 
 
-Here, the rain water would be the space inbetween the two barriers of height one.
-If we were to use a L and R pointer, we could move the pointers towards the middle,
-land at the height 1 barriers.
+[1, 0, 2]: also allows 1 unit of water
 
-Now we need a way to figure out how to calculate the water trapped.
+[1, 0, 0]: also 0 units of water
 
-Again, visually its simply, everything thats under the height of 1 (all the 0's),
-would be able to catch 1 block of rain water. The reasoning, is that all the blocks
-of 0 have a height that is lower than that on the left and right hand side.
+Easy enough, the pattern is: min(left, right) - currHeight
 
-If we were to have values storing these left_max and right_max height values, the L 
-and R pointers could be used to traverse the row of 0's and calculate either:
+Now we need a way to traverse the array that allows us to take advantage of this pattern.
 
-rain += min(left_max, right_max) - height[L]
+Our main restriction for caputuring water, is the less of the two pointers/sides. 
 
-rain += min(left_max, right_max) - height[R]
+So lets say: [0, 1, 0, 0, 0, 0, 0, 10]
 
-in order to check how much water would be added per column in our height array.
+Here, the L pointer would always be L < R since R = 10. We want to keep track of our restriction 
+(the lesser of the two pointers), but we also want to traverse the array at some point. 
+
+Thus, we need both L/R pointers, and left_max and right_max for heights.
+
+The max heights will keep track of our "restrictions" and the pointers will be used to traverse 
+the array. 
+
+Here, we know that each of the 0 height spaces can capture 1 unit of water, being restricted by the 
+1 unit height barrier on the left side. 
+
+Thus: min(left_max, right_max) - height[0 unit]
+Thus: 1 - 0  --> for the 5 spaces with 0 height.
+
+NOTE: here we are only moving the L pointer as the R pointer is always L < R.
+
+Thus we know we also need: if L < R --> L += 1 
+
+NOTE: we also need to check if everytime we move the pointer, we find a new max_height for the left 
+or right 
+
+Thus we know we also need: left or rigth_max_height = max(left or right_max_height, height[L or R])
+
+We simply put this into code now: 
 
 ### Solution 1: Two Pointers 
 ```python 
@@ -465,5 +482,4 @@ def trap(self, height: List[int]) -> int:
             water += min(left_max, right_max) - height[R]
     
     return water
-
 ``
