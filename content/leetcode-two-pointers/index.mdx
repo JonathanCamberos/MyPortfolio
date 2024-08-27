@@ -11,16 +11,14 @@ tags:
 - data structures & algorithms
 ---
 
-
 ## Two Pointer Intro
 
-Getting aquanted and learning how two simple pointers can can 'point' to the solution
+Getting aquanted how simply two pointers can help 'point' to the solution
 
 ### What are Two Pointers 
-Two Pointers strategy has to do with using L and R pointers to traverse lists of nums.
-Usually by breaking the problem into chunks, these two pointers allows us to extract the info
-we need to solve the problem.
-
+Two Pointers is the strategy of using L and R pointers to travere a list of integers.
+Usually by iterating over the list and breaking the problem into chunks, 
+we can extract enough info to solve the problem.
 
 ## 125. Valid Palindrome - Easy
 
@@ -40,11 +38,12 @@ we need to solve the problem.
 string s consists only of printable ASCII characters.
 
 ### Abstraction 
-The abstraction is simply following the steps and using two pointers to traverse the string.
+Simply follow the steps in the intro while using two pointers L and R to traverse the string.
 
-First we need to convert the string s into lowercase.
-Then we need to remove non-alphanumeric characters, isalnum() comes handy 
-Then simple traverse using points or reverse the string and compare it with itself.
+First, convert the string s into lowercase.
+Then, remove non-alphanumeric character. ( ".isalnum()" function comes in handy ) 
+Then, traverse using pointers comparing characters on each side 
+or reverse the string and compare new string with original.
 
 ### Solution 1: Two Pointers L + R
 ```python
