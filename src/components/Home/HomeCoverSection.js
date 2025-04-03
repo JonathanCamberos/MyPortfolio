@@ -13,6 +13,7 @@ const HomeCoverSection = ( {blogs} ) => {
     const sortedBlogs = sortBlogs(blogs)
     const blog = sortedBlogs[0]
 
+    
   return (
 
     /*  ##### HomeCoverSection Div ##### */
