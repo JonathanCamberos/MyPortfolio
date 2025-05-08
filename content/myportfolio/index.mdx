@@ -28,3 +28,95 @@ I made my portfolio in React.js using other libraries as well, notably:
 4. Search Engine Optimization
 5. Supabase
 6. lotsssss of youtube react.js tutorials :)
+
+
+
+Dont need 
+--------------
+dolottie -> animation
+supabase -> view count
+
+
+Need
+---------------
+Tailwind -> css
+contentlayer -> markdown
+github-slugger -> generate slugs
+next-sitemap -> generate sitemap, shows url for each blog
+                helps search engine index to each blog
+
+react-hook-form -> get response from form
+reading-time -> generate reading time 
+
+rehype-autolink -> format and prettier
+remark-gfm -> format and prettier
+
+
+
+
+Walkthrough
+-------------
+
+Great lets do this step by step just to have documentation for future reference
+And we will go down every rabbit hole to explain as my intro into JavaScript
+
+
+Creating page
+-----------------
+
+npx create-next-app@latest .
+
+Would you like to use TypeScript
+JavaScript is a loosely typed language.
+
+By definition: A loosely typed language is a programming language that does
+not require a variable to be defined.
+
+```javascript
+let x = 42;          // x is a number
+console.log(typeof x); // Output: "number"
+
+x = "Hello, world!"; // x is now a string
+console.log(typeof x); // Output: "string"
+
+x = true;            // x is now a boolean
+console.log(typeof x); // Output: "boolean"
+```
+
+Whats the opposite? A strongly typed language such as C:
+
+```c
+#include <stdio.h>
+
+int main() {
+    int x = 42;          // x is explicitly declared as an integer
+    printf("x: %d\n", x);
+
+    x = "Hello, world!"; // Error: incompatible type assignment
+    return 0;
+}
+```
+
+Would you like to use ESLint?
+
+Yes. ESLint, short for "ECMAScript Link", is a tool used in 
+JavaScript and TypeScritip development used to catch errors and ensure 
+consistency
+
+```javascript
+const x = 42;
+console.log(y); // ESLint: 'y' is not defined.
+```
+
+Would you like to use Tailwind CSS? 
+
+Yes. TailwindCSS simplifies styling and avoids need to write custom CSS 
+from scratch
+
+Would you like your code inside a 'src/' directory?
+
+Yes. Organizing files under src/ directory keeps project structure clean
+and manageable
+
+Would you like to use App Router?
+
