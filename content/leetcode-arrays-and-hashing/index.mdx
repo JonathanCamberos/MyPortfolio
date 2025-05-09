@@ -323,7 +323,15 @@ Takes advantage of sorted() function which creates key for (key, [str])
             groups[tuple(count)].append(word)
             
         return groups.values()
-```     
+```
+```c++
+    #include <iostream>
+    int main() {
+        std::cout << "Hello, World!" << std::endl;
+        return 0;
+    }
+```
+
 This takes advatange of a handy function to `convert a char count array into a tuple`.
 Tuples can serve as a `key for hashmaps, leading our hashmap to be 
 (tuple_of_char_count, [string])`
