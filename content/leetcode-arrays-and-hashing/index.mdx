@@ -83,14 +83,25 @@ Since we need to check every elemeent, best space complexity should be O(unique(
 ### Solution 1: hashmap
 
 ```python
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        # hashmap
+    def containsDuplicate_hashmap(self, nums: List[int]) -> bool:
+        # hashmap, subtype of dictionary
         seen = {}
         # for every element, check if element count >= 1
         for num in nums:
             if num in seen and seen[num] >= 1:
                 return True
             seen[num] = seen.get(num, 0) + 1
+        return False
+```
+
+```python
+    def containsDuplicate_defaultdict(sef, nums: List[int]) -> bool:
+        # defaultdict automatically initializes missing keys to 0
+        seen = defaultdict(int)
+        for num in nums:
+            if seen[num] >= 1:
+                return True
+            seen[num] += 1
         return False
 ```
 
@@ -101,7 +112,7 @@ have found a duplicate
 ### Solution 2: hashset
 
 ```python
-    def containsDuplicate(self, nums: List[int]) -> bool:
+    def containsDuplicate_hashset(self, nums: List[int]) -> bool:
         # hashset
         seen = set()
         # for every eleemnt, check if element present in hashset
@@ -324,14 +335,6 @@ Takes advantage of sorted() function which creates key for (key, [str])
             
         return groups.values()
 ```
-```c++
-    #include <iostream>
-    int main() {
-        std::cout << "Hello, World!" << std::endl;
-        return 0;
-    }
-```
-
 This takes advatange of a handy function to `convert a char count array into a tuple`.
 Tuples can serve as a `key for hashmaps, leading our hashmap to be 
 (tuple_of_char_count, [string])`
