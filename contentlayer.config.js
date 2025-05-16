@@ -62,40 +62,33 @@ import GithubSlugger from 'github-slugger'
         toc: {
           type: "json",
           resolve: async (doc) => {
-            
-            // RegExp to match headings
             const regulrExp = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
             const slugger = new GithubSlugger();
-        
-            // will be type: [h2, [h3]]
-            let toc = {};
-            let currentH2 = null;
-        
-            // Create headings objects from headers matched by RegExp
+            const toc = {};
+            const stack = []; // To handle multiple heading levels
+      
             Array.from(doc.body.raw.matchAll(regulrExp)).forEach(({ groups }) => {
-              const flag = groups?.flag;
-              const content = groups?.content;
-              const level = flag?.length;
-        
-              // Create the slug for the heading
-              const slug = content ? slugger.slug(content) : undefined;
-        
-              if (level === 2) {
-                // If it's a level 2 heading, create a new entry in TOC
-
-                currentH2 = content;
-                toc[currentH2] = { slug, subheadings: [] };
-              
-              } else if (level === 3 && currentH2) {
-                // If it's a level 3 heading, add it to the current level 2 entry
-
-                toc[currentH2].subheadings.push({ text: content, slug });
+              const level = groups.flag.length;
+              const content = groups.content;
+              const slug = slugger.slug(content);
+      
+              const current = { text: content, slug, subheadings: [] };
+      
+              while (stack.length && stack[stack.length - 1].level >= level) {
+                stack.pop();
               }
-
+      
+              if (stack.length) {
+                stack[stack.length - 1].subheadings.push(current);
+              } else {
+                toc[content] = current;
+              }
+      
+              stack.push({ ...current, level });
             });
-        
+      
             return toc;
-          }
+          },
         }
   },
 }))

@@ -23,7 +23,7 @@ const BlogToc = ({ blog }) => {
                 <summary
                   className="cursor-pointer hover:underline"
                 >
-                  <a href={`#${slug}`}>
+                  <a href={`${blog.url}#${slug}`}>
                     {headingText}
                   </a>
                 </summary>
