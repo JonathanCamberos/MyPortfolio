@@ -132,13 +132,12 @@ Outer loop: runs n times.
 
 Inner loop: runs n/2 times
 
-When outer loop starts at index i = 0, inner loop iterates (n-1) times.
+Outer starts at 1, hits n elements -> Inner starts at 2, hits (n-1) elements. 
+Outer starts at 2, hits (n-1) elements -> Inner starts at 3, hits (n-2) elements
 
-When outer loop starts at index i = 1, inner loop iterates (n-2) times.
+Inner pattern then is: (n-1) + (n-2) + (n-3) + ... + 1
 
-When outer loop starts at index i = 2, inner loop iterates (n-3) times, etc...
-
-Total iterations: (n-1) + (n-2) + (n-3) + ... + 1 = [n * (n-1)]/2
+Now we can just derive this
 
 Space Complexity: O(1)
 
