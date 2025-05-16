@@ -235,23 +235,28 @@ However, the question asks us to `return the index` of the pair. Thus we must us
 
 A littttle bit of a step up from the previous, but great way to show versitily of hashmap/hashsets.
 
-### Solution 1: hashmap 1-pass
+### Solution 1: hashmap, track complement 1-pass
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
+        # map of {complement: index, complement: index...}
         tracking = {}
-
-        # for every index  
+ 
         for i in range (len(nums)):
-                             
+
+            # grab curr complement -> (target = nums[i] + complement)  
             complement = target - nums[i]
 
-            # search for complement of curr element
+            # if complement has been tracked
             if complement in tracking and tracking[complement] != i:
+                
+                # [curr_index, complement_index]
                 return [i, tracking[complement]]
     
-            # if miss, push (currElement, index) into HashMap
+            # if miss, track currElement as potential complement
             tracking[nums[i]] = i
+
+        return []
 ```
 
 
