@@ -27,8 +27,11 @@ Hashing is simply a function. It takes in an input, and spits out an output.
 
 As an example, we could use mod as a function:
 1 mod (3) = 1
+
 2 mod (3) = 2
+
 3 mod (3) = 0
+
 4 mod (3) = 1
 
 In our case, this is could be our function for our hashmap, but it would lead to high collisions and low randomness.
@@ -65,9 +68,13 @@ And usually, a common load factor is 0.75 or 75% full.
 If the table is resized to 2n, it can accomodate (2n * 0.75) - n more elements, or:
 
 (double table size * load factor) - elements currently present
-(2n * 0.75) - n 
+
+(2n * 0.75) - n  
+
 1.5n - n
+
 0.5n
+
 n/2
 
 ### Hashmap applications
