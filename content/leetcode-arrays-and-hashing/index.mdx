@@ -26,6 +26,7 @@ And in this use case, we choose hashing to maxmize randomness, and minimize coll
 Hashing is simply a function. It takes in an input, and spits out an output.
 
 As an example, we could use mod as a function:
+
 1 mod (3) = 1
 
 2 mod (3) = 2
@@ -65,7 +66,7 @@ Rehashing is thus, expensive as we get O(n) for resizing and reinserting n eleme
 Usually, when the load factor is reached, the table size doubles to 2n.
 And usually, a common load factor is 0.75 or 75% full.
 
-If the table is resized to 2n, it can accomodate (2n * 0.75) - n more elements, or:
+If the table is resized to 2n, it can accomodate (2n * 0.75) - n more elements:
 
 (double table size * load factor) - elements currently present
 
@@ -78,11 +79,13 @@ If the table is resized to 2n, it can accomodate (2n * 0.75) - n more elements, 
 n/2
 
 ### Hashmap applications
-Due to their quick O(1) average time for insert(), lookup(), and delete(), they are great for storing key pairs of lists of elements 
-to perform more complex tasks. 
+Due to their quick O(1) average time for insert(), lookup(), and delete(), 
+they are great for storing key pairs of lists of elements to perform more complex tasks. 
 
-This is commonly the first step of learning a 'leetcode' mindset
-for performance where both time complexity and space complextiy are important.
+This is commonly the first step of adopting a 'leetcode' mindset
+where both time complexity and space complextiy are important for performance.
+
+Now lets see some examples! :) 
 
 ## 217. Contains Duplicate - Easy
 
@@ -110,8 +113,6 @@ Since we need to check every elemeent, best space complexity should be O(unique(
 
 
 ### Solution 1: hashmap/defaultdict
-Time Complexity:  O(n) -> loop and dictionary operations
-Space Complexity: O(n) -> dictionary storage.
 ```python
     def containsDuplicate_hashmap(self, nums: List[int]) -> bool:
         # hashmap, subtype of dictionary
@@ -123,7 +124,6 @@ Space Complexity: O(n) -> dictionary storage.
             seen[num] = seen.get(num, 0) + 1
         return False
 ```
-
 ```python
     def containsDuplicate_defaultdict(sef, nums: List[int]) -> bool:
         # defaultdict automatically initializes missing keys to 0
@@ -134,6 +134,10 @@ Space Complexity: O(n) -> dictionary storage.
             seen[num] += 1
         return False
 ```
+
+Time Complexity:  O(n) -> loop and dictionary operations
+
+Space Complexity: O(n) -> dictionary storage.
 
 Here, we traverse the list, adding a count for every element we've seen. Thus, if we check an 
 element in the hashmap which has >= 1 count, it means we've seen that element previously and 
