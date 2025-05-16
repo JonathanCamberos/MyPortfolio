@@ -14,54 +14,46 @@ const HomeCoverSection = ( {blogs} ) => {
     const blog = sortedBlogs[0]
 
     
-  return (
-
-    /*  ##### HomeCoverSection Div ##### */
-    <div className='md:w-11/12 w-full inline-block'>
-        
-        {/* ##### Article Div #####
-                      
-        */}
-        <article className="relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden">
-
-          {/* Image */}
+    return (
+      <div className="md:w-11/12 w-full inline-block">
+        <article className="group relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden">
+          
+          {/* Shadow Overlay 
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 z-10 rounded-3xl"></div>
+          */}
+          
+          {/* Blog Image */}
           <Image
             src={blog.image.filePath.replace("../public", "")}
             placeholder="blur"
             blurDataURL={blog.image.blurhashDataUrl}
             alt={blog.title}
             fill
-            className="object-cover object-center rounded-3xl"
+            className="object-cover object-center rounded-3xl transition-transform duration-300 ease-in-out group-hover:scale-105"
             sizes="100vw"
             priority
           />
-
-          {/* Overlay for image */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark/30 rounded-3xl" />
-
-          {/* Tag and Description Div */}
-          <div className="absolute bottom-0 left-0 w-full lg:w-3/4 p-6 sm:p-8 md:p-12 lg:p-16 flex flex-col items-start justify-center text-light">
+  
+          {/* Blog Details */}
+          <div className="absolute bottom-0 left-0 w-full lg:w-3/4 p-6 sm:p-8 md:p-12 lg:p-16 text-light z-20">
             <Tag link={`/categories/${slug(blog.tags[0])}`} name={blog.tags[0]} />
-
             <Link href={blog.url} className="mt-6">
-              <h1 className="font-bold capitalize text-lg sm:text-xl md:text-3xl lg:text-4xl">
+              <h1 className="font-bold capitalize text-lg sm:text-xl md:text-3xl lg:text-4xl text-shadow-outline">
                 <span className="bg-gradient-to-r from-accent to-accent dark:from-accentDark/50 dark:to-accentDark/50 bg-[length:0px_6px] hover:bg-[length:100%_6px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500">
                   {blog.title}
                 </span>
               </h1>
             </Link>
-
             <p className="hidden sm:inline-block mt-4 md:text-lg lg:text-xl font-in">
               {blog.description}
             </p>
-
             <span className="inline-block w-full capitalize text-light/60 dark:text-light font-semibold text-xs sm:text-base">
               {format(new Date(blog.publishedAt), "MMMM dd, yyyy")}
             </span>
           </div>
         </article>
-    </div>
-  )
+      </div>
+    )
 }
 
 export default HomeCoverSection

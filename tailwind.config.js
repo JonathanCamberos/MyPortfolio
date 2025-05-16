@@ -25,12 +25,19 @@ module.exports = {
         // @media (min-width: 1180px){...}
         xs: "480px"
         // @media (min-width: 480px){...}
-      }
+      },
     },
   },
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
+    function ({ addUtilities, theme }) {
+      addUtilities({
+        '.text-shadow-outline': {
+          textShadow: `1px 1px 2px ${theme('colors.accent')}, -1px -1px 2px ${theme('colors.accent')}`,
+        },
+      });
+    },
   ],
 }
 
