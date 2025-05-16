@@ -25,19 +25,19 @@ export default function About() {
       title: "Software Engineer",
       company: "Bank of America",
       date: "July 2024 - Present",
-      description: "Cybeysecurity Applications Development Team"
+      description: "Security Operations and Threat Response"
     },
     {
-      title: "Cybersecurity Engineer Intern",
+      title: "Software Engineer",
       company: "Bank of America",
       date: "June 2023 - Aug 2023",
-      description: "Network Security Team"
+      description: "Network Security"
     },
     {
-      title: "Software Engineer Intern",
+      title: "Software Engineer",
       company: "PwC",
       date: "June 2022 - Aug 2022",
-      description: "Web Applications Consulting Team"
+      description: "Web Applications Consulting"
     }
   ];
 
