@@ -12,48 +12,70 @@ tags:
 
 ## Arrays & Hashing Intro:
 
-Getting aquanted and learning how hashmaps and hashsets can solve wide 'array' of problems
+Leetcode problems with elegent solutions using hashing. 
 
 ### What is a Hashmap
-First lets understand what hashing is. Hashing is the process of transforming any given key 
-or string of charactesr into another value. The result is normally a shorter, fixed-length
-value that makes it computationally easier to work with than the original key.
+A Hashmap is a specific implementation of a dictionary. 
+A dictionary is just a direct mapping of keys->values:
+dictionary: ['a': 2, 'b': 2...] 
+Thus, a Hashmap is just a dictionary that maps keys->values using a hash function.
+Hashmaps aka Hashtables, is a common use case for hashing.
+And in this use case, we choose hashing to maxmize randomness, and minimize collisions.
 
-Hashmaps, aka hashtable, are one of the most common implementations of hashing.
-Hashmaps store key-value pairs (eg: employee ID / employee name) in a list that is 
-accessible through its index.
+### Hashing benefits
+Hashing is simply a function. It takes in an input, and spits out an output.
 
-A hash table uses a hash function to compute the index, aka hash code, into an arrary 
-of buckets ro slots, from which the desired value can be found. 
-During lookup, the same method is followed. The key is hashed and the resulting hash
-indiates where the corresponding value is stored
+As an example, we could use mod as a function:
+1 mod (3) = 1
+2 mod (3) = 2
+3 mod (3) = 0
+4 mod (3) = 1
 
-### Hashmap benefits
-Hash tables are O(1) average if implemented well and O(n) worst case.
-1. Hash tables suffer from O(n) worst time complexity due to two reasons:
-If too many elements were hashed into the same key: looking inside this key may take
-O(n) time.
+In our case, this is could be our function for our hashmap, but it would lead to high collisions and low randomness.
+So we learn, Hashmaps are only efficient as the choosen function.
 
-Once a hash table has passed its load abalance - it has to rehash and create a bigger table/reinsert elements 
+With a good Hash function:
+Hash tables are O(1)
+In this case, every element gets its own unique key.
+Looking inside this key would be immediate O(1)
 
-2. Hash tables are said to be O(1) average if implement well 
-It is rare that many items will be hashed to the same key (if you used a good hash function
-and dont have too big load balance) 
+With a bad Hash function:
+Hash tables are O(n). (say our function maps everything to the value of 2)
+In this case, too many elements (every element) were hashed into the same key (value of 2).
+Looking inside this key would be the same as traversing a list, O(n) 
 
-The rehash operation, which is O(n), can at most happen after n/2 ops, which are all
-assumed O(1): Thus when you sum the average time per op, you get: (n*O(1) + O(n)) / n) = O(1)
+### Balancing:
+Balancing occurs when a hash table has passed its set load factor.
+
+Load Factor = n/m
+Where n: num of elements, m: num of slots
+
+Thus, when certain fraction of the table size (ex: 0.75% full), the table must rehash and create a bigger table/reinsert elements 
+
+The efficiency of a hash table decreases significally without rehashing, as this leads to increased collisions
+and increased time to resolving collisions (through chaining or probing).
+Operations like search, insert, and delete, degrade from O(1) on average to O(n) in the worst case.
+
+When rehashing, we must rehash every element with the new hash function. 
+Rehashing is thus, expensive as we get O(n) for resizing and reinserting n elements.
+
+Usually, when the load factor is reached, the table size doubles to 2n.
+And usually, a common load factor is 0.75 or 75% full.
+
+If the table is resized to 2n, it can accomodate (2n * 0.75) - n more elements, or:
+
+(double table size * load factor) - elements currently present
+(2n * 0.75) - n 
+1.5n - n
+0.5n
+n/2
 
 ### Hashmap applications
-Due to their quick O(1) average time, they are great for storing key pairs of lists of elements 
-to perform more complex tasks. Essentially they are the first step of switching to a leetcode
-mind set where both time complexity and space complextiy are important.
+Due to their quick O(1) average time for insert(), lookup(), and delete(), they are great for storing key pairs of lists of elements 
+to perform more complex tasks. 
 
-
-### What is a Hashset
-
-### Hashset benefits
-
-### Hashset applications
+This is commonly the first step of learning a 'leetcode' mindset
+for performance where both time complexity and space complextiy are important.
 
 ## 217. Contains Duplicate - Easy
 
@@ -80,8 +102,9 @@ So our best possible time complexity is by definition O(N).
 Since we need to check every elemeent, best space complexity should be O(unique(N))
 
 
-### Solution 1: hashmap
-
+### Solution 1: hashmap/defaultdict
+Time Complexity:  O(n) -> loop and dictionary operations
+Space Complexity: O(n) -> dictionary storage.
 ```python
     def containsDuplicate_hashmap(self, nums: List[int]) -> bool:
         # hashmap, subtype of dictionary
@@ -149,9 +172,9 @@ s and t consist of lowercase English letters
 
 ### Abstraction
 
-This builds directly off of the previous find duplicates problem. `Before we were 
-checking if two elements had a count of >= 1`. We simply add an extra step and 
-`now we check if the total count for every element in the list is equal` 
+This builds directly off of the previous find duplicates problem. Before we were 
+checking if two elements had a count of >= 1. We simply add an extra step and 
+now we check if the total count for every element in the list is equal 
 between any two lists. 
 
 ### Solution 1: hashmap (dictionary)
