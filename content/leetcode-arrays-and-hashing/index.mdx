@@ -50,7 +50,7 @@ Hash tables are O(n). (say our function maps everything to the value of 2)
 In this case, too many elements (every element) were hashed into the same key (value of 2).
 Looking inside this key would be the same as traversing a list, O(n) 
 
-### Balancing:
+### Balancing
 Balancing occurs when a hash table has passed its set load factor.
 
 Load Factor = n/m
@@ -108,11 +108,43 @@ integer: -10^9 &le; nums[i] &le; 10^9
 
 
 ### Abstraction
-Bascially, we just have a list of elements and need to `check if any of those elements are duplicated`.
-Minimum: we need to traverse the list at least once to peak at every element in it.
-So our best possible time complexity is by definition O(N).
-Since we need to check every elemeent, best space complexity should be O(unique(N))
+Given a list of elements, we need to check if any of those elements are duplicated.
 
+Lower bound: 
+We need to traverse the list at least once to peak at every element in it. 
+So the best possible time complexity is O(n).
+
+Since we need to track every elemeent, best space complexity is O(unique(n))
+
+### Brute Force
+```python
+    def containsDuplicate_bruteforce(self, nums: List[int]) -> bool:
+        # compare every element, with every element
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+                if nums[i] == nums[j]:
+                    return True
+        return False
+```
+Time Complexity:
+
+Outer loop: runs n times.
+
+Inner loop: runs n/2 times
+
+When outer loop starts at index i = 0, inner loop iterates (n-1) times.
+
+When outer loop starts at index i = 1, inner loop iterates (n-2) times.
+
+When outer loop starts at index i = 2, inner loop iterates (n-3) times, etc...
+
+Total iterations: (n-1) + (n-2) + (n-3) + ... + 1 = [n * (n-1)]/2
+
+Space Complexity: O(1)
+
+No additional data strcutures are used. Only a few variables are maintained.
+
+Space Complexity is O(1).
 
 ### Solution 1: hashmap/defaultdict
 ```python
