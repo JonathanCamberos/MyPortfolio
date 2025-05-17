@@ -90,7 +90,7 @@ export default function About() {
           I majored in Computer Science with a concentration in Cybersecurity and a minor in 
           ACES (Advanced Cybersecurity Experience for Students).
         </p>
-        <p className="text-left mt-4">
+        {/* <p className="text-left mt-4">
           University of Maryland, College Park - 
           Computer Science: No. 18 nationally and No. 9 public institutions, 
           Cybersecurity: No. 11 overall, No. 7 among publics as of{" "}
@@ -108,7 +108,7 @@ export default function About() {
           through tutoring undergrad computer science courses and supporting the internal database 
           of the University of Maryland Hispanic and Black organization under UMD - OMSE 
           (Office of Multi-Ethnic Student Education): College Success Scholars.
-        </p>
+        </p> */}
         <p className="text-left mt-4">
           I currently work as a Software Engineer at Bank of America supporting and building internal Cybersecurity Applications.
         </p>
