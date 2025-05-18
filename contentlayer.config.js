@@ -104,5 +104,5 @@ export default makeSource({
   /* options */
   contentDirPath: "content",
   documentTypes: [Blog],
-  mdx: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {behavior: "append"}], [rehypePrettyCode, codeOptions] ] }
+  mdx: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, {behavior: "wrap"}], [rehypePrettyCode, codeOptions] ] }
 });
