@@ -92,7 +92,7 @@ Now lets see some examples! :)
 ## 217. Contains Duplicate - Easy
 
 ### Intro
->Given an integer array nums, return true if any value appears at least twice in the array, 
+> Given an integer array nums, return true if any value appears at least twice in the array, 
 > return false if every element is distinct.
 
 |  Example Input           | Output |  
@@ -115,6 +115,14 @@ We need to traverse the list at least once to peak at every element in it.
 So the best possible time complexity is O(n).
 
 Since we need to track every elemeent, best space complexity is O(unique(n))
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------------- | ------ | ----------- | --------- | --------- |
+| Brute Force | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quardratic number of comparisons | No additional space is used as we do not store any extra data |
+| Hashmap | O(n) | O(n) | Each element is processed once, with O(1) lookup and insertion into the map, resulting in linear time | We store each each element in a hashmap, which requires additional memory proportional to the number of elements |
+| Hashset | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap
+
 
 ### Brute Force
 ```python
