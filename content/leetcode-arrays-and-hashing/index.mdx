@@ -363,14 +363,14 @@ Finally, since the question asks us to return the index of the pair, we must use
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force |  |  |  | |
-| Hashmap |  |  |  |  |
+| Hashmap 1-pass |  |  |  |  |
 
 
 ### Brute Force
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
-        # iterate over list comparing every element to eachother
+        # iterate over list comparing every element to each other
         for i in range(len(nums)):
             for j in range(i + 1, len(nums)):
               if nums[i] + nums[j] == target:
@@ -380,7 +380,7 @@ Finally, since the question asks us to return the index of the pair, we must use
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
+| Outer Loop | O(n) | O(1) | Iterates over the array once for each element O(n) | Uses the loop counter, no additional storage O(1) |
 | Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
 | Summation | O(1) | O(1) | Summing two numbers takes constant time O(1) | No additional space is needed for summation. |
 | Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional space is needed for comparisons O(1) |
@@ -450,60 +450,97 @@ Hashmap ( sorted_string -> [[unsorted anagram string group]])
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  |
-| Sorted |  |  |  |  |
-| Hashmap Grouping |  |  |  |  |
+| Brute Force | O(n<sup>2</sup> k) | O(n) | For each string, compares with every other string for equality, resulting in quadratic pairwise checks O(n<sup>2</sup>). Counting characters for each string takes O(k).  | Stores temporary intermediate groups in a list |
+| Sort Grouping - Merge sort | O(n k log k) | O(n k) | Sorting each string takes O(k log k). Iterating over all strings takes linear O(n). | Sorted strings are stored with associated groups in memory. |
+| Hashmap | O(n k) | O(n k) | Iterating over all strings is linear O(n) and counting character is O(k) | Stores a Hashmap with character counts O(k) for each string O(n) |
 
-### Solution 1: Sorting Merge sort
+### Brute Force
+Not shown in code as is inefficient with O(n<sup>2</sup> k). It checks each string against every other
+for inequality.
+
+### Solution 1: Sort Grouping - Merge sort
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        def merge_sort(word):
         
-        # hashmap (sorted_string, [unsorted_string])
-        groups = defaultdict(list)
+            if len(word) <= 1:
+                return word
+            
+            mid = len(word) // 2
+            
+            left = merge_sort(word[:mid])
+            right = merge_sort(word[mid:])
+            
+            sorted_word = []
+            
+            i = j = 0
+            
+            while i < len(left) and j < len(right):
+                if left[i] < right[j]:
+                    sorted_word.append(left[i])
+                    i += 1
+                else:
+                    sorted_word.append(right[j])
+                    j += 1
+            
+            sorted_word.extend(left[i:])
+            sorted_word.extend(right[j:])
+            
+            return ''.join(sorted_word)
+    
+        hashmap = {}
         
-        # add string via sorted word key
         for word in strs:
-            sorted_word = ''.join(sorted(word))
-            groups[sorted_word].append(word)
+            sorted_word = merge_sort(word)
+            if sorted_word in hashmap:
+                hashmap[sorted_word].append(word)
+            else:
+                hashmap[sorted_word] = [word]
         
-        return groups.values()
+        return list(hashmap.values())
 ``` 
-Takes advantage of sorted() function which creates key for (key, [str])
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Sorting |  |  |  |  |
+| Iteration |  |  |  |  |
+| Lookup | |  |  |  |
+| Overall |  |  |  |   |
+
 
 ### Solution 2: Hashmap Grouping
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # hashmap (count, [str])
-        groups = defaultdict(list)
-        
+        hashmap = {}
         for word in strs:
             
-            # array for char count
-            count = 26*[0]
+            char_count = [0] * 26  # Assuming only lowercase English letters
+            
+            for char in word:
+                char_count[ord(char) - ord('a')] += 1
+                key = tuple(char_count)  # Use tuple of counts as key
+            
+            if key not in hashmap:
+                hashmap[key] = []  # Initialize a list for this key if it doesn't exist
+            hashmap[key].append(word)  # Add the current word to the corresponding key group
 
-            # unicode of char         
-            for ch in word:  
-                count[ord(ch)-ord('a')] += 1
-            
-            # matches tuples to group 
-            groups[tuple(count)].append(word)
-            
-        return groups.values()
+        return list(hashmap.values())
 ```
-This takes advatange of a handy function to `convert a char count array into a tuple`.
-Tuples can serve as a `key for hashmaps, leading our hashmap to be 
-(tuple_of_char_count, [string])`
 
-https://www.geeksforgeeks.org/python-convert-a-list-into-a-tuple/ 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Hashmap Building |  |  |  |  |
+| Iteration |  |  |  |  |
+| Lookup | |  |  |  |
+| Overall |  |  |  |   |
 
 
 ## 347. Top K Elements in List - Medium
 
 ### Intro
-> Given an integer array `nums` and an integer `k`, return the `k most frequent` element within the array. 
-> Test cases are generated such that the answer is always unique 
-> You may return the output in any order
+> Given an integer array nums and an integer k, return the k most frequent element within the array. 
+> Test cases are generated such that the answer is always unique. You may return the output in any order
 
 |  Input             | k     | Output    |  
 | -------------------| ----- | --------- | 
@@ -511,17 +548,21 @@ https://www.geeksforgeeks.org/python-convert-a-list-into-a-tuple/
 | [7,7]              | 1     | [7]       |
 
 ### Constraints
-most frequent: 1 &le; k &le; number of distinct elemnts in nums
+most frequent: 1 &le; k &le; number of distinct elements in nums
 size: -1000 &le; nums[i] &le; 1000
 
 ### Abstraction
-So this is the first `interesting` leet code question we've had.    
-The first step to finding the k most frequent element is to taverse nums[] and `create a occurence counter`
-for each element in the list.
+To find the k most frequent elements, we must first create an occurrence counter for each element in the list.
+Now that we have the count, we just grab the top k highest occurring elements. 
 
-Now that we have the count, we must `grab the top k highest occuring` elements. 
+Here the are a few ways to implement that.
 
-Here the are again `many` ways to do it
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
+
 
 ### Solution 1: Stack/PushPop
 
@@ -542,16 +583,19 @@ Here the are again `many` ways to do it
         return [item[1] for item in heap]
 ```
 
-The simplest revolve around is 
-`a stack in which smaller elements get replaced by higher elements while maintaining 
-a max size of k`. 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Hashmap Building |  |  |  |  |
+| Iteration |  |  |  |  |
+| Lookup | |  |  |  |
+| Overall |  |  |  |   |
 
 ### Solution 2: Bucket Sort
 
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
-        # occurence hashmap 
+        # occurrence hashmap 
         num_count = {}
         for key in nums:
             num_count[key] = 1 + num_count.get(key, 0)
@@ -561,8 +605,8 @@ a max size of k`.
         freq_buckets = [[] for i in range(num_buckets)]
 
         # sort into buckets 
-        for num, occurences in num_count.items():
-            freq_buckets[occurences].append(num)
+        for num, occurrences in num_count.items():
+            freq_buckets[occurrences].append(num)
 
         res = []
 
@@ -578,12 +622,12 @@ a max size of k`.
                     return res
 ```
 
-This one is the first time we use an algorithm, albiet a simple one: `bucket sort`
-
-Here, we create a list of len(num[]) empty lists, which represent `buckets`.
-Here we will sort each occurence into its appropriate bucket, `(occurences of 2 go to bucket 2, 3 to 3, etc)`.
-
-Afterwords, we `simply iterate backwords starting at the highest bucket and grab k number of elements`
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Hashmap Building |  |  |  |  |
+| Iteration |  |  |  |  |
+| Lookup | |  |  |  |
+| Overall |  |  |  |   |
 
 
 ## 271. String Encode and Decode - Medium
@@ -603,6 +647,12 @@ Afterwords, we `simply iterate backwords starting at the highest bucket and grab
 
 ### Abstraction
 This is leaning into being a design problem. 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
 
 ### Solution 1: i & j pointers
 
@@ -688,6 +738,12 @@ If we traverse the array from left to right, we can `calculate the prefix and pl
 For the postfix, since we cant just store and grab the postfix as we go (the `previously calculated prefix is already stored
 in the array`). We just `need an extra integer to store the current postfix` and use this to generate the result we need.
 
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
+
 ### Solution 1:  Prefix & Postfix
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
@@ -734,6 +790,12 @@ Here, we are looking for duplicates much like the original `217. Contains Duplic
 The only difference here, is that we are looking for duplicates in 3 sets along the rows, columns, and 3x3 squares.
 
 So we simply create sets for all of these groups and as we traverse the board, we check for duplicates
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
 
 ### Solution 1: defaultdict()
 ```python 
@@ -821,6 +883,12 @@ A longest consecutive sequence on a number line would look like this:
 Here, it is very simple to see what is the longest sequence.
 Now the question is how to translate into this.
 A set would be the easiest as we can simply check if some element exists 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
 
 ### Solution 1: Set abstraction
 ```python
