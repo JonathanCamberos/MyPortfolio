@@ -290,7 +290,7 @@ between any two lists.
 | Building Map | O(n) | O(n) | Iterating over the first string to populate a Hashset takes linear time O(n) | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
 | Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
 | Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
-| Overall | O(n) | O(n) | Character counting and verification result in O(2n) which is just O(n) | Space usage is directly proportional to the unique character count. |
+| Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Space usage is directly proportional to the unique character count. |
 
 ### Solution 2: Hashmap (array of 26)
 ```python
@@ -339,21 +339,27 @@ length: 2 &le; nums.length &le; 10^4
 target: -10^9 &le; target &le; 10^9
 
 ### Abstraction
-Somewhat of a step-up from the previous questions. The question asks us to find a combination
-of two elements in the array that add up to the target. 
+We must find a combination of two elements in the array that add up to the target. 
 
-Lets say we were to `iterate left to right` over the array. At any given moment, we would only 
-have `half of the solution`. We still need to find the second element. 
-But we still have the target! We can do `target - currNum = complement` and get the second half of the solution.
-Since we are traversing the array, `we cannot do array.contains(complement)`, but if we `build
-a hashset as we go` we will be able to use the `contains()` function. 
+Lets say we were to iterate over the array linearly in O(n). 
+At any given moment, if we are pointing to some index n, 
+we would only have half of a potential solution. We would still need to confirm that a second element adds up to target. 
 
-Thus, the pattern to find the pair is, grab element in array, check if complement is inside hashset.
+Note that during this linear iteration, we would still have access to the target.
 
-However, the question asks us to `return the index` of the pair. Thus we must use a `HashMap instead with
-(element, index)` where `element is the complement` we search using the contains().
+Since we are finding (target = currNum + complement) we can do (target - currNum = complement) 
+and get the second half of the solution.
+If this complement is present in the Array, then that is our final solution. 
+Our next step is finding that complement.
 
-A littttle bit of a step up from the previous, but great way to show versitily of hashmap/hashsets.
+Since we are traversing the array, we can build up a hashset of elements we have seen, and use these as a 
+complement -> key -> index mapper for future elmements.
+
+The pattern to find the pair is is to iterate, grab element in array, caluclate the complement, 
+and check if complement is inside hashset.
+
+Finally, since the question asks us to return the index of the pair, we must use a Hashmap with
+(element, index) where element is the complement that maps to the it's index in the Array.
 
 ### Solution 1: hashmap, track complement 1-pass
 ```python
