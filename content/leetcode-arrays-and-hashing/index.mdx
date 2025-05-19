@@ -129,14 +129,14 @@ If we want to track every element, best space complexity is O(n)
                     return True
         return False
 ```
-Time Complexity O(n<sup>2</sup>):
 
-Calculation for O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop).
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
+| Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
+| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(n) | No additional space is needed for comparisons O(1) |
+| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
 
-Space Complexity: O(1)
-
-No additional data strcutures are used. Only the given variables are maintained.
-Space Complexity is O(1).
 
 ### Solution 1: Hashmap
 ```python
@@ -161,19 +161,12 @@ Space Complexity is O(1).
         return False
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashmap in O(1) time. Iteration dominates O(n). | Hashmap grows proportional to the number of unique elements. Worst case O(n) |
+| Lookup | O(1) | O(1) | Each loopup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
+| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates space complexity. | 
 
-
-Time Complexity:  O(n)
-
-We iterate over the list once. Time Complexity is O(n).
-
-Space Complexity: O(n)
-
-We traverse the list, adding a count for every element we've seen. If we check an 
-element in the hashmap which has >= 1 count, it means we've seen that element previously and 
-have found a duplicate
-
-Worst case is a list with no duplicates in which case we store O(n) keys with values of 1. Space Complexity is O(n).
 
 ### Solution 2: Hashset
 
@@ -189,15 +182,12 @@ Worst case is a list with no duplicates in which case we store O(n) keys with va
         return False
 ```
 
-Time Complexity: O(n)
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashset in O(1) time. Iteration dominates O(n). | Hashset grows proportional to the number of unique elements. Worst case O(n) |
+| Lookup | O(1) | O(1) | Each loopup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
+| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates space complexity. | 
 
-We iterate over the list once. Time Complexity is O(n).
-
-Space Complexity: O(n)
-
-We traverse the list, adding an element into a set if the element is not already present. 
-
-Worse case is a list with no duplicates in which case we store O(n) elements in the set. Space Complexity is O(n)
 
 ## 242. Valid Anagram - Easy
 
@@ -216,9 +206,9 @@ An Anagram is a word or phrase formed by rearranging the letters of a different 
 
 ### Constraints
 
-1 &le; s.length, t.length &le; 5 * 104
+String Length: 1 &le; s.length, t.length &le; 5 * 104
 
-s and t consist of lowercase English letters
+Characters: s and t consist of lowercase English letters
 
 ### Abstraction
 
