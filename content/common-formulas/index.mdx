@@ -25,14 +25,74 @@ tags:
         return False
 ```
 
-Outer starts at 1, hits n elements -> Inner starts at 2, hits (n-1) elements. 
-Outer starts at 2, hits (n-1) elements -> Inner starts at 3, hits (n-2) elements
+### Time Complexity Derivation
+|  Outer Loop Iteration  | Inner Loop Start | Inner Loop End |  Total Inner Iterations (per outer iteration) |  
+| -------- | ------------| ---------------- | -------------- |
+| i = 0 | j = 1 | j = n - 1 |  n - 1 |   
+| i = 1 | j = 2 | j = n - 1 |  n - 2 |   
+| i = 2 | j = 3 | j = n - 1 |  n - 3 |   
+| ...   | ... | ... | ... |
+| i = n - 2 |  j = n - 1 | j = n - 1 | 1 | 
+| i = n - 1 |  j = n | - | 0 |
 
-Inner pattern then is: (n-1) + (n-2) + (n-3) + ... + 1
+The total number of iterations in the inner loop across all iterations of the outer loop is:
+(n−1)+(n−2)+(n−3)+…+1
 
-Now we can just derive this
+We can write this series backwards: 
+1+2+3+⋯+(n−1)
 
+Now if we add 2 of the same series term by term:
+
+[ (n−1)+(n−2)+(n−3)+…+1 ] + [ 1+2+3+⋯+(n−1) ] = [ (n−1)+1,(n−2)+2,(n−3)+3,… ]
+
+Each individual pair cancels out n, and we left n-1 number of pairs. So the sum of the two series is:
+
+n * (n-1)
+
+And since we added the series twice, divide by 2 we get: 
+
+[n * (n-1)] / 2
+
+Now if we simplify and apply Big(O) then we arrive at O(n<sup>2</sup>) time complexity.
 
 ## Merge Sort
+Merge Sort is a divide and conquer sorting algorithm that sorts an array by recursion:
 
-Merge Sort Time and Space complexity explanation.
+1. Given an array. Split into two halves
+2. Split until you get base case of list of 1 element per list
+3. Recurse, merging and sorting 2 lists at a time
+4. Return to original length now sorted list
+
+### Merge Sort Diagram
+```
+Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]             (n elements, O(n))
+                   /              \
+Level 1:    [8, 4, 7, 3]      [2, 6, 5, 1]          (n/2 elements, O(n/2))
+               /     \          /     \
+Level 2:    [8, 4] [7, 3]     [2, 6] [5, 1]         (n/4 elements, O(n/4))
+             /  \    /   \     /   \   /  \
+Level 3:    [8] [4] [7] [3]   [2] [6] [5] [1]       (1 element, O(1))
+```
+
+```
+Level 3:   [8] [4]   [7] [3]    [2] [6]   [5] [1]   (base case, list of 1 element)
+            \  /      \  /        \  /      \  /
+Level 2:   [4, 8]   [3, 7]       [2, 6]   [1, 5]    (sort lists when merging)
+               \       /             \       /
+Level 1:     [3, 4, 7, 8]         [1, 2, 5, 6]      (sort lists when merging)
+                   \                  /
+Level 0:        [1, 2, 3, 4, 5, 6, 7, 8]            (final merge + sort)
+```
+
+### Space & Time Complexity
+|  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
+| -------- | --------------- | ---------------- | ---------------- | ----------------- |
+| Best Case | O(n log n) | O(n) |  Time Complexity of merge sort is O(n log n) across the best, average, and worst cases. Merge sort still recursively divides the array into halves and merges them back, regardless of initial array is sorted or unsorted.  | During merging, temporary arrays are required to hold intermediate elements for the merge process |
+| Average Case | O(n log n) | O(n) |  |   |
+| Worst Case | O(n log n) | O(n) |  |  |
+
+
+### Summary 
+Merge sort's behavior does not depend on the input order.
+It is a predicable sorting algorithm. Its main drawback is its space requirement O(n) when
+compared to in-place sorting algorithms like quicksort or heap sort.
