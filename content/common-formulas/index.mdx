@@ -1,42 +1,38 @@
 ---
-title: "Leetcode: Common Time/Space Complexity Derivations"
-description: "Common Formulas"
+title: "Leetcode: Common Space-Time Complexity Calucations"
+description: "Common Space-Time Calucations"
 image: "../../public/blogs/chalk_board_1.png"
 publishedAt: "2024-01-01"
 updatedAt: "2024-01-01"
 author: "jonathancamberos"
 isPublished: true
 tags: 
-- Concepts
+- data structures & algorithms
 ---
-
-here we will add the derivations for common cases.
-such as double for loop for brute force.
 
 ## Brute Case Double For Loop
 
-hi, lets see if we can jump here
+```python
+    def example(self, nums: List[int]) -> bool:
+
+        # compare every element, with every element
+
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+                if nums[i] == nums[j]:
+                    return True
+
+        return False
+```
+
+Outer starts at 1, hits n elements -> Inner starts at 2, hits (n-1) elements. 
+Outer starts at 2, hits (n-1) elements -> Inner starts at 3, hits (n-2) elements
+
+Inner pattern then is: (n-1) + (n-2) + (n-3) + ... + 1
+
+Now we can just derive this
 
 
-sdf
+## Merge Sort
 
-sdf
-sdf
-
-sdf
-
-sdf
-sdfs
-def
-
-sdf
-sdf
-sdf
-
-sdf
-
-
-
-sdf
-
-## Burger
+Merge Sort Time and Space complexity explanation.
