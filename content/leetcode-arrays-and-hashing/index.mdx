@@ -3,7 +3,7 @@ title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
 image: "../../public/blogs/code_3.jpg"
 publishedAt: "2024-08-05"
-updatedAt: "2025-05-04"
+updatedAt: "2025-05-19"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -113,7 +113,7 @@ If we want to track every element, best space complexity is O(n)
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
-| ---------------- | ------ | ----------- | --------- | --------- |
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quardratic number of comparisons | No additional space is used as we do not store any extra data |
 | Hashmap | O(n) | O(n) | Each element is processed once, with O(1) lookup and insertion into the map, resulting in linear time | We store each each element in a hashmap, which requires additional memory proportional to the number of elements |
 | Hashset | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
@@ -131,7 +131,7 @@ If we want to track every element, best space complexity is O(n)
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
 | Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
 | Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional space is needed for comparisons O(1) |
@@ -162,7 +162,7 @@ If we want to track every element, best space complexity is O(n)
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashmap in O(1) time. Iteration dominates O(n). | Hashmap grows proportional to the number of unique elements. Worst case O(n) |
 | Lookup | O(1) | O(1) | Each loopup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
 | Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates space complexity. | 
@@ -183,7 +183,7 @@ If we want to track every element, best space complexity is O(n)
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashset in O(1) time. Iteration dominates O(n). | Hashset grows proportional to the number of unique elements. Worst case O(n) |
 | Lookup | O(1) | O(1) | Each loopup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
 | Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates space complexity. | 
@@ -220,7 +220,7 @@ between any two lists.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
-| ---------------- | ------ | ----------- | --------- | --------- |
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force | O(n log n) | O(n) | Sorting dominates the complexity since comparing strings is linear O(n) | No additional space is used as we do not store any extra data |
 | Hashmap | O(n) | O(n) | Each element is processed once, with O(1) lookup and insertion into the map, resulting in linear time | We store each each element in a hashmap, which requires additional memory proportional to the number of elements |
 | Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
@@ -263,7 +263,7 @@ between any two lists.
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Sorting | O(n log n) | O(n) | Sorting the strings involves recursively dividing the input and merging them back. Merge sort explanation [here](/blogs/common-formulas#merge-sort). | Temporary arrays are used during merging, leading to O(n) space |
 | Comparison | O(n) | O(1) | Comparing the sorted strings element-by-element takes linear time | No additional space is required for comparison |
 | Overall | O(n log n) | O(n) | Sorting dominates the time complexity, comparison adds negligible overhead. | Space required for sorting is portportional to input size. |
@@ -286,7 +286,7 @@ between any two lists.
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Building Map | O(n) | O(n) | Iterating over the first string to populate a Hashset takes linear time O(n) | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
 | Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
 | Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
@@ -308,7 +308,7 @@ between any two lists.
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Building Array | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used, independing of input size |
 | Editing Array | O(n) | O(1) | Iterating over the second string to edit the Array takes linear time O(n) | Space is reused from the Array, no additional memory is allocated |
 | Verification | O(n) | O(n) | Iterating over the Array takes linear time O(n) | Space is resued from the Array, no additional memory is allocated |
@@ -359,6 +359,12 @@ and check if complement is inside hashset.
 Finally, since the question asks us to return the index of the pair, we must use a Hashmap with
 (element, index) where element is the complement that maps to the it's index in the Array.
 
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
+
 
 ### Brute Force
 ```python
@@ -373,7 +379,7 @@ Finally, since the question asks us to return the index of the pair, we must use
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
 | Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
 | Summation | O(1) | O(1) | Summing two numbers takes constant time O(1) | No additional space is needed for summation. |
@@ -406,20 +412,19 @@ Finally, since the question asks us to return the index of the pair, we must use
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| ------------------- | ----------------- | ------ | ---- |  --- |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Building Hashmap | O(n) | O(n) | Iterating over the first string to populate a Hashmap takes linear time O(n) | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
 | Lookup | O(1) | O(1) | Each lookup operation takes constant O(1) time. | Lookups do not require additional memory. |
-| Interstion | O(1) | O(n) |Each insertion operation takes constant O(1) time. | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
+| Insertion | O(1) | O(n) |Each insertion operation takes constant O(1) time. | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
 | Overall | O(n) | O(n) | Iterating dominates time complexity linearly O(n). | Building Hashmap dominates space complexity proportional to number of unique elements in hashmap O(n). |
 
 
 ## 49. Group Anagrams - Medium
 
 ### Intro
->Given an array of strings strs, `group the anagrams together`. 
->You can return the answer in any order.
->An Anagram is a word or phrase formed by rearranging the letters of a
->different word or phrase, typically using all the original letters exactly once.
+> Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+> An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, 
+> typically using all the original letters exactly once.
 
 |  Input                                   | Output                                      |  
 | ---------------------------------------- | ------------------------------------------- | 
@@ -429,33 +434,27 @@ Finally, since the question asks us to return the index of the pair, we must use
 
 
 ### Constraints
-strs[i] consists of lowercase Engish letters
+strs[i] consists of lowercase English letters
 
 
 ### Abstraction
-There are `many` ways to do this problem. 
-Overall, the idea is the same as the previous anagram problem. 
-A string is made up of characters, and those characters have a certain total count.
+There are different ways to solve this problem. 
 
-We could for each string - create a hashmap containing the count of characters and then 
-group the strings that have the same hashmap. 
+One premise is that a string can be represented as a Hashmap of character counts.
+We could then use the Hashmaps as keys which would group anagrams in a list of strings:
+Hashmap(Hashmap(char_count) -> [anagram list string]) 
 
-While this would be possible, it would be extremely intricate. Given that this is our 4th
-leetcode problem, were gonna cut some corners and maaaaybe come back to it later.
+Another premise is we could sort the string and use that as the key: 
+Hashmap ( sorted_string -> [[unsorted anagram string group]])
 
-If we have a list of words, the `counts do not necessarly need to be calculated`.
-Consider: "abc", "bca".
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  |
+| Sorted |  |  |  |  |
+| Hashmap Grouping |  |  |  |  |
 
-These are anagrams, and we could absolutly use the hashmap char count approach from before,
-`but`, we could simply sort "bca" and match it with "abc" 
-
-Now if we use this approach with every string, we can abstract having a char count to sorting,
-and then search if the sorted string has been found yet, if so, add the current string to the list,
-else, created a new list.
-
-`So our hashmap would be: (sorted_string, [unsorted_string])`
-
-### Solution 1: Sorted() per String
+### Solution 1: Sorting Merge sort
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -471,7 +470,7 @@ else, created a new list.
 ``` 
 Takes advantage of sorted() function which creates key for (key, [str])
 
-### Solution 2: Grouping via Tuple
+### Solution 2: Hashmap Grouping
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
