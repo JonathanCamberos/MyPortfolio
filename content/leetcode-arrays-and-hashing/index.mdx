@@ -3,7 +3,7 @@ title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
 image: "../../public/blogs/code_3.jpg"
 publishedAt: "2024-08-05"
-updatedAt: "2024-08-05"
+updatedAt: "2025-05-04"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -15,15 +15,13 @@ tags:
 Leetcode problems with elegent solutions using hashing. 
 
 ### What is a Hashmap
-A Hashmap is a specific implementation of a dictionary. 
 A dictionary is just a direct mapping of keys->values:
 
 dictionary: ['a': 2, 'b': 2...] 
 
-Thus, a Hashmap is just a dictionary that maps keys->values using a hash function.
-
+A Hashmap is just a dictionary that maps keys->values using a hash function.
 Hashmaps aka Hashtables, is a common use case for hashing.
-And in this use case, we choose hashing to maxmize randomness, and minimize collisions.
+We choose hashing to maximize randomness and minimize collisions between elements to keys.
 
 ### Hashing benefits
 Hashing is simply a function. It takes in an input, and spits out an output.
@@ -163,6 +161,8 @@ Space Complexity is O(1).
         return False
 ```
 
+
+
 Time Complexity:  O(n)
 
 We iterate over the list once. Time Complexity is O(n).
@@ -274,12 +274,9 @@ between any two lists.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | ------------------- | ----------------- | ------ | ---- |  --- |
-| Brute Force | O(n log n) | O(n) | Sorting the strings involves recursively dividing the input and merging them back. Merge sort explanation [here](/blogs/common-formulas#merge-sort). | Temporary arrays are used during merging, leading to O(n) space |
+| Sorting | O(n log n) | O(n) | Sorting the strings involves recursively dividing the input and merging them back. Merge sort explanation [here](/blogs/common-formulas#merge-sort). | Temporary arrays are used during merging, leading to O(n) space |
 | Comparison | O(n) | O(1) | Comparing the sorted strings element-by-element takes linear time | No additional space is required for comparison |
 | Overall | O(n log n) | O(n) | Sorting dominates the time complexity, comparison adds negligible overhead. | Space required for sorting is portportional to input size. |
-
-
-
 
 
 ### Solution 1: Hashmap
@@ -297,13 +294,13 @@ between any two lists.
                return False
         return True
 ```
-`Note: Dictionary vs HashMap:` A dictionary is just Python's native implementation of hashmaps
 
-Creates a hashmap (key,value) pair matching any alphabetic character 
-to an integer representing the count.
-Iterate over s incrementing +1 per appearence.
-Iterate over t decrementing -1 per appearance.
-If at the end, each (key,value) pair maps to 0, then you have a valid anagram.
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Building Map | O(n) | O(n) | Iterating over the first string to populate a Hashset takes linear time O(n) | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
+| Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
+| Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
+| Overall | O(n) | O(n) | Character counting and verification result in O(2n) which is just O(n) | Space usage is directly proportional to the unique character count. |
 
 ### Solution 2: Hashmap (array of 26)
 ```python
@@ -319,8 +316,13 @@ If at the end, each (key,value) pair maps to 0, then you have a valid anagram.
               return False
         return True
 ```
-Same as above but taking into account alphabetic contraints and creating array
-of size 26. 
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Building Array | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used, independing of input size |
+| Editing Array | O(n) | O(1) | Iterating over the second string to edit the Array takes linear time O(n) | Space is reused from the Array, no additional memory is allocated |
+| Verification | O(n) | O(n) | Iterating over the Array takes linear time O(n) | Space is resued from the Array, no additional memory is allocated |
+| Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array |
 
 
 
