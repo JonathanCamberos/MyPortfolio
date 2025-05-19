@@ -134,7 +134,7 @@ If we want to track every element, best space complexity is O(n)
 | ------------------- | ----------------- | ------ | ---- |  --- |
 | Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
 | Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
-| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(n) | No additional space is needed for comparisons O(1) |
+| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional space is needed for comparisons O(1) |
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
 
 
@@ -319,11 +319,9 @@ between any two lists.
 ## 1. Two Sum - Easy
 
 ### Intro
->Given an array of integers nums and an integer target, `return indices of the two numbers` 
->such that they `add up to target`.
->You may assume that each input would have exactly one solution, 
->and you may not use the same element twice.
->You can return the answer in any order.
+> Given an array of integers nums and an integer target, return indices of the two numbers
+> such that they add up to target. You may assume that each input would have exactly one solution, 
+> and you may not use the same element twice. You can return the answer in any order.
 
 |  nums[]         | Target    | Output |  
 | --------------- | ----------| ------ | 
@@ -361,7 +359,29 @@ and check if complement is inside hashset.
 Finally, since the question asks us to return the index of the pair, we must use a Hashmap with
 (element, index) where element is the complement that maps to the it's index in the Array.
 
-### Solution 1: hashmap, track complement 1-pass
+
+### Brute Force
+```python
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        
+        # iterate over list comparing every element to eachother
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+              if nums[i] + nums[j] == target:
+                   return [i, j]
+        return []
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
+| Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
+| Summation | O(1) | O(1) | Summing two numbers takes constant time O(1) | No additional space is needed for summation. |
+| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional space is needed for comparisons O(1) |
+| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
+
+
+### Solution 1: Hashmap 1-pass
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -385,6 +405,12 @@ Finally, since the question asks us to return the index of the pair, we must use
         return []
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| ------------------- | ----------------- | ------ | ---- |  --- |
+| Building Hashmap | O(n) | O(n) | Iterating over the first string to populate a Hashmap takes linear time O(n) | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
+| Lookup | O(1) | O(1) | Each lookup operation takes constant O(1) time. | Lookups do not require additional memory. |
+| Interstion | O(1) | O(n) |Each insertion operation takes constant O(1) time. | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
+| Overall | O(n) | O(n) | Iterating dominates time complexity linearly O(n). | Building Hashmap dominates space complexity proportional to number of unique elements in hashmap O(n). |
 
 
 ## 49. Group Anagrams - Medium
