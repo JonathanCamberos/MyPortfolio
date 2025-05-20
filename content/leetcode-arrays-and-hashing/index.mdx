@@ -459,9 +459,9 @@ Space Upper Bound: If we want to track every character count Hashmap per every s
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n<sup>2</sup> * k) | O(1) | For each string O(n), compares with every other string O(n), to check if they are anagrams O(k).  | Stores temporary intermediate groups in a list |
-| Merge sort | O(n * k log k) | O(n * k) | Sorting each string with merge sort takes O(k log k). Iterating over all strings takes linear O(n). | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
-| Hashmap | O(n * k) | O(n * k) | Iterates over n strings O(n) and computes character count O(k) per string | Uses hashmap where each string O(n) requires O(k) for the key.|
+| Brute Force | O(n<sup>2</sup> * k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
+| Merge sort | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
+| Hashmap | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 
 ### Brute Force
 Not shown in code as is inefficient with O(n<sup>2</sup> k). It checks each string against every other
@@ -501,8 +501,11 @@ for inequality.
     
         anaGroup = {}
         
+        # for each word, sort + add to corresponding hashmap
         for word in strs:
+            
             sorted = mergeSort(word)
+
             if sorted in hashmap:
                 hashmap[sorted].append(word)
             else:
