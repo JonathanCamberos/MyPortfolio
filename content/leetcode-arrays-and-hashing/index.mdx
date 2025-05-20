@@ -2,8 +2,8 @@
 title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
 image: "../../public/blogs/code_3.jpg"
-publishedAt: "2024-08-05"
-updatedAt: "2025-05-19"
+publishedAt: "2024-08-14"
+updatedAt: "2025-05-21"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -12,7 +12,7 @@ tags:
 
 ## Arrays & Hashing Intro:
 
-Leetcode problems with elegent solutions using hashing. 
+Leetcode problems with elegant solutions using hashing. 
 
 ### What is a Hashmap
 A dictionary is just a direct mapping of keys->values:
@@ -50,7 +50,7 @@ In this case, too many elements (every element) were hashed into the same key (v
 Looking inside this key would be the same as traversing a list, O(n) 
 
 ### Balancing
-Balancing occurs when a hash table **has** passed its set load factor.
+Balancing occurs when a hash table has passed its set load factor.
 
 Load Factor = n/m
 Where n: num of elements, m: num of slots
@@ -67,18 +67,18 @@ It is expensive as we get O(n) for resizing and reinserting n elements.
 Usually, when the load factor is reached, the table size doubles to 2n.
 And usually, a common load factor is 0.75 or 75% full.
 Finally, we must rehash every element leading to:
-[(double table size * load factor) - current n elements] = additional space
+[(double table size * load factor) - current n elements] = 
 
-(2n * 0.75) - n  
+(2n * 0.75) - n  =
 
-1.5n - n
+1.5n - n =
 
-0.5n
+0.5n =
 
-n/2
+n/2 = additional space after rebalancing
 
 ### Application
-Hashmaps, with quick O(1) average time for insert(), lookup(), and delete(), 
+Hashmaps having quick O(1) average time for insert(), lookup(), and delete(), 
 are great for storing key pairs of lists of elements to perform more complex tasks 
 where performance in time and space complexity are important.
 
@@ -97,9 +97,9 @@ Lets see some examples.
 | nums = [1,1,1,3,3,4,3,2,4,2] | true |
  
 ### Constraints
-Array Length: 1 &le; nums.length &le; 10^5 
+Array Length: 1 &le; nums.length &le; 10<sup>5</sup>
 
-Integer Size: -10^9 &le; nums[i] &le; 10^9  
+Integer Size: -10<sup>9</sup>  &le; nums[i] &le; 10<sup>9</sup> 
 
 
 ### Abstraction
@@ -114,9 +114,9 @@ If we want to track every element, best space complexity is O(n)
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quardratic number of comparisons | No additional space is used as we do not store any extra data |
-| Hashmap | O(n) | O(n) | Each element is processed once, with O(1) lookup and insertion into the map, resulting in linear time | We store each each element in a hashmap, which requires additional memory proportional to the number of elements |
-| Hashset | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
+| Brute Force | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
+| Hashmap | O(n) | O(n) | Iterate over every element O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires additional memory proportional to the number of elements O(n) |
+| Hashset | O(n) | O(n) | Same logic as Hashmap | Same logic as Hashmap |
 
 
 ### Brute Force
@@ -132,10 +132,10 @@ If we want to track every element, best space complexity is O(n)
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Outer Loop | O(n) | O(1) | Iterates over the array once for each elemenet O(n) | Uses the loop counter, no additional storage O(1) |
-| Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
-| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional space is needed for comparisons O(1) |
-| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
+| Outer Loop | O(n) | O(1) | Iteration over the list takes linear time O(n) | No additional memory is allocated O(1) |
+| Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, the inner loop iterates through all subsequent elements with Big(O) is O(n<sup>2</sup>). Derivation [here](/blogs/common-formulas#brute-case-double-for-loop) | No additional memory is allocated O(1) |
+| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional memory is needed for comparisons O(1) |
+| Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity.| No additional memory was allocated leading to constant O(1) space complexity. | 
 
 
 ### Solution 1: Hashmap
@@ -163,9 +163,9 @@ If we want to track every element, best space complexity is O(n)
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashmap in O(1) time. Iteration dominates O(n). | Hashmap grows proportional to the number of unique elements. Worst case O(n) |
+| Iteration + Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashmap in O(1) time. Iteration dominates O(n). | Hashmap grows proportional to the number of unique elements. Worst case O(n) |
 | Lookup | O(1) | O(1) | Each loopup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
-| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates space complexity. | 
+| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates leading to O(n) space complexity.  | 
 
 
 ### Solution 2: Hashset
@@ -184,9 +184,9 @@ If we want to track every element, best space complexity is O(n)
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashset in O(1) time. Iteration dominates O(n). | Hashset grows proportional to the number of unique elements. Worst case O(n) |
-| Lookup | O(1) | O(1) | Each loopup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
-| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates space complexity. | 
+| Iteration + Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashset in O(1) time. Iteration dominates O(n). | Hashset grows proportional to the number of unique elements. Worst case O(n) |
+| Lookup | O(1) | O(1) | Lookup operation O(1), performed once per element, is still O(1) | Lookup operations do not require additional memory allocation. O(1) |
+| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashset dominates leading to O(n) space complexity.  | 
 
 
 ## 242. Valid Anagram - Easy
@@ -215,12 +215,15 @@ Characters: s and t consist of lowercase English letters
 Given a string, we represent its character count as a Hashmap.
 We then validate it to the second string character count.
 
+Time Lower Bound: We are required to traverse both strings to peak at every element at least once, best possible time complexity is O(n).
+
+Space Upper Bound: If we want to track every element, best space complexity is O(n)
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n log n) | O(n) | Sorting dominates the complexity since comparing strings is linear O(n) | No additional space is used as we do not store any extra data |
-| Hashmap | O(n) | O(n) | Each element is processed once, with O(1) lookup and insertion into the map, resulting in linear time | We store each each element in a hashmap, which requires additional memory proportional to the number of elements |
+| Brute Force | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
+| Hashmap | O(n) | O(n) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
 | Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
 
 ### Brute Force
@@ -262,9 +265,9 @@ We then validate it to the second string character count.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Sorting | O(n log n) | O(n) | Sorting the strings involves recursively dividing the input and merging them back. Merge sort explanation [here](/blogs/common-formulas#merge-sort). | Temporary arrays are used during merging, leading to O(n) space |
-| Comparison | O(n) | O(1) | Comparing the sorted strings character by-element takes linear time | No additional space is required for comparison |
-| Overall | O(n log n) | O(n) | Sorting dominates the time complexity, comparison adds negligible overhead. | Space required for sorting is portportional to input size. |
+| Sorting | O(n log n) | O(n) | Sorting the strings involves recursively dividing the input and merging them back leading to O(n log n) time complexity. Merge sort derivation [here](/blogs/common-formulas#merge-sort). | Temporary arrays are used during merging, leading to O(n) space |
+| Comparison | O(n) | O(1) | Comparing the sorted strings character by-element takes linear time | No additional memory is allocated O(1) |
+| Overall | O(n log n) | O(n) | Sorting dominates the time complexity as comparison adds negligible overhead leading to O(n log n) time complexity. | Temporary arrays required for merge sort is proportional to input size leading to O(n) space complexity. |
 
 
 ### Solution 1: Hashmap
@@ -285,10 +288,10 @@ We then validate it to the second string character count.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Building Map | O(n) | O(n) | Iterating over the first string to populate a Hashset takes linear time O(n) | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
-| Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
-| Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | Space is reused from the Hashmap, no additional memory is allocated |
-| Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Space usage is directly proportional to the unique character count. |
+| Building Map + Insertion | O(n) | O(n) | Iterating over the first string takes linear time O(n) with O(1) insertion. | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
+| Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | No additional memory is allocated O(1) |
+| Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | No additional memory is allocated O(1) |
+| Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Memory allocation for Hashmap dominates leading to O(n) space complexity |
 
 ### Solution 2: Hashmap (array of 26)
 ```python
@@ -307,10 +310,10 @@ We then validate it to the second string character count.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Building Array | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used, independing of input size |
-| Editing Array | O(n) | O(1) | Iterating over the second string to edit the Array takes linear time O(n) | Space is reused from the Array, no additional memory is allocated |
-| Verification | O(n) | O(n) | Iterating over the Array takes linear time O(n) | Space is resued from the Array, no additional memory is allocated |
-| Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array |
+| Building Array | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used O(1) |
+| Editing Array | O(n) | O(1) | Iterating over the second string to edit the Array takes linear time O(n) | No additional memory is allocated O(1) |
+| Verification | O(n) | O(1) | Iterating over the Array takes linear time O(n) | No additional memory is allocated O(1) |
+| Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array O(1) |
 
 
 
@@ -357,6 +360,10 @@ and check if complement is inside hashset.
 Finally, since the question asks us to return the index of the pair, we must use a Hashmap with
 (element, index) where element is the complement that maps to the it's index in the Array.
 
+Time Lower Bound: We are required to traverse the list to peak at every element at least once, best possible time complexity is O(n).
+
+Space Upper Bound: If we want to track every element/complement, best space complexity is O(n)
+
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
@@ -378,8 +385,8 @@ Finally, since the question asks us to return the index of the pair, we must use
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Outer Loop | O(n) | O(1) | Iterates over the array once for each element O(n) | Uses the loop counter, no additional storage O(1) |
-| Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all subsequent elements O(n) | Uses the loop counter, no additional storage O(1). |
+| Outer Loop | O(n) | O(1) | Iterates over the array once for each element O(n) | No additional memory is allocated O(1) |
+| Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
 | Summation | O(1) | O(1) | Summing two numbers takes constant time O(1) | No additional space is needed for summation. |
 | Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional space is needed for comparisons O(1) |
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
@@ -398,7 +405,7 @@ Finally, since the question asks us to return the index of the pair, we must use
             complement = target - nums[i]
 
             # if complement has been tracked
-            if complement in tracking and tracking[complement] != i:
+            if complement in tracking:
                 
                 # [curr_index, complement_index]
                 return [i, tracking[complement]]
@@ -414,7 +421,7 @@ Finally, since the question asks us to return the index of the pair, we must use
 | Building Hashmap | O(n) | O(n) | Iterating over the first string to populate a Hashmap takes linear time O(n) | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
 | Lookup | O(1) | O(1) | Each lookup operation takes constant O(1) time. | Lookups do not require additional memory. |
 | Insertion | O(1) | O(n) |Each insertion operation takes constant O(1) time. | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
-| Overall | O(n) | O(n) | Iterating dominates time complexity linearly O(n). | Building Hashmap dominates space complexity proportional to number of unique elements in hashmap O(n). |
+| Overall | O(n) | O(n) | Iterating dominates time complexity leading to linear O(n) time complexity. | Memory allocation for Hashmap dominates leading to O(n) space complexity. |
 
 
 ## 49. Group Anagrams - Medium
@@ -445,12 +452,16 @@ Hashmap(Hashmap(char_count) -> [anagram list string])
 Another premise is we could sort the string and use that as the key: 
 Hashmap ( sorted_string -> [[unsorted anagram string group]])
 
+Time Lower Bound: We are required to traverse the list to peak at every string at least once O(n). We also need to calculate character frequencies to determine anagrams O(k). Best possible time complexity is O(n * k).
+
+Space Upper Bound: If we want to track every character count Hashmap per every string, best space complexity is O(n * k)
+
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n<sup>2</sup> k) | O(n) | For each string, compares with every other string for equality, resulting in quadratic pairwise checks O(n<sup>2</sup>). Counting characters for each string takes O(k).  | Stores temporary intermediate groups in a list |
-| Sort Grouping - Merge sort | O(n k log k) | O(n k) | Sorting each string takes O(k log k). Iterating over all strings takes linear O(n). | Sorted strings are stored with associated groups in memory. |
-| Hashmap | O(n k) | O(n k) | Iterating over all strings is linear O(n) and counting character is O(k) | Stores a Hashmap with character counts O(k) for each string O(n) |
+| Brute Force | O(n<sup>2</sup> * k) | O(1) | For each string O(n), compares with every other string O(n), to check if they are anagrams O(k).  | Stores temporary intermediate groups in a list |
+| Merge sort | O(n * k log k) | O(n * k) | Sorting each string with merge sort takes O(k log k). Iterating over all strings takes linear O(n). | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
+| Hashmap | O(n * k) | O(n * k) | Iterates over n strings O(n) and computes character count O(k) per string | Uses hashmap where each string O(n) requires O(k) for the key.|
 
 ### Brute Force
 Not shown in code as is inefficient with O(n<sup>2</sup> k). It checks each string against every other
@@ -555,12 +566,18 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
 Here the are a few ways to implement that.
 
+Time Lower Bound: 
+
+Space Upper Bound: 
+
+
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force |  |  |  | |
 | Hashmap |  |  |  |  |
 
+### Brute Force
 
 ### Solution 1: Stack/PushPop
 
