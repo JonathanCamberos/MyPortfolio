@@ -470,43 +470,45 @@ for inequality.
 ### Solution 1: Sort Grouping - Merge sort
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        def merge_sort(word):
+        
+        # merge sort algorithm
+        def mergeSort(word):
         
             if len(word) <= 1:
                 return word
             
             mid = len(word) // 2
             
-            left = merge_sort(word[:mid])
-            right = merge_sort(word[mid:])
+            left = mergeSort(word[:mid])
+            right = mergeSort(word[mid:])
             
-            sorted_word = []
+            sorted = []
             
             i = j = 0
             
             while i < len(left) and j < len(right):
                 if left[i] < right[j]:
-                    sorted_word.append(left[i])
+                    sorted.append(left[i])
                     i += 1
                 else:
-                    sorted_word.append(right[j])
+                    sorted.append(right[j])
                     j += 1
             
-            sorted_word.extend(left[i:])
-            sorted_word.extend(right[j:])
+            sorted.extend(left[i:])
+            sorted.extend(right[j:])
             
             return ''.join(sorted_word)
     
-        hashmap = {}
+        anaGroup = {}
         
         for word in strs:
-            sorted_word = merge_sort(word)
-            if sorted_word in hashmap:
-                hashmap[sorted_word].append(word)
+            sorted = mergeSort(word)
+            if sorted in hashmap:
+                hashmap[sorted].append(word)
             else:
-                hashmap[sorted_word] = [word]
+                hashmap[sorted] = [word]
         
-        return list(hashmap.values())
+        return list(anaGroup.values())
 ``` 
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -517,24 +519,32 @@ for inequality.
 | Overall |  |  |  |   |
 
 
-### Solution 2: Hashmap Grouping
+### Solution 2: Hashmap -> Tuple Key Grouping
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        hashmap = {}
+        # <tuple char count key -> [anagram group list]>
+        anaGroup = {}
+
         for word in strs:
             
-            char_count = [0] * 26  # Assuming only lowercase English letters
+            # Assuming only lowercase English letters
+            char_count = [0] * 26  
             
             for char in word:
                 char_count[ord(char) - ord('a')] += 1
-                key = tuple(char_count)  # Use tuple of counts as key
             
-            if key not in hashmap:
-                hashmap[key] = []  # Initialize a list for this key if it doesn't exist
-            hashmap[key].append(word)  # Add the current word to the corresponding key group
+            # Use tuple of counts as key
+            key = tuple(char_count)  
+            
+            # Initialize a list for this key if it doesn't exist
+            if key not in anaGroup:
+                anaGroup[key] = []  
 
-        return list(hashmap.values())
+            # Add the current word to the corresponding key group
+            anaGroup[key].append(word)  
+
+        return list(anaGroup.values())
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -544,6 +554,40 @@ for inequality.
 | Lookup | |  |  |  |
 | Overall |  |  |  |   |
 
+### Solution 3: Hashmap -> Manual Key Grouping
+
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+
+        anaGroup = {}
+
+        for word in strs:
+            # Initialize character count for all lowercase English letters
+            char_count = [0] * 26
+            
+            # Count the characters in the word
+            for char in word:
+                char_count[ord(char) - ord('a')] += 1
+            
+            # Create a unique string key manually, instead of tuple(char_count)
+            key = ""
+            for count in char_count:
+                key += str(count) + "#"  # Add a separator to distinguish between counts
+
+            # Group the word into the hashmap based on the key
+            if key not in anaGroup:
+                anaGroup[key] = []  # Initialize a list for this key if it doesn't exist
+            anaGroup[key].append(word)  # Add the current word to the corresponding key group
+
+        return list(anaGroup.values())
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Hashmap Building |  |  |  |  |
+| Iteration |  |  |  |  |
+| Lookup | |  |  |  |
+| Overall |  |  |  |   |
 
 ## 347. Top K Elements in List - Medium
 
