@@ -17,15 +17,15 @@ Leetcode problems with elegant solutions using hashing.
 ### What is a Hashmap
 A dictionary is just a direct mapping of keys->values:
 
-dictionary: ['a': 2, 'b': 2...] 
+Dictionary: ['a': 2, 'b': 2, 'c' : 3, ...] 
 
 A Hashmap is just a dictionary that maps keys->values using a hash function.
-Hashmaps aka Hashtables, is a common use case for hashing.
+Hashmaps are a common use case for hashing.
 We choose hashing to maximize randomness and minimize collisions between elements to keys.
 
-### Hashing benefits
+### Hashing Benefits
 Hashing is simply a function. It takes in an input, and spits out an output.
-As an example, we could use mod as a function:
+As an example, here is the function mod, which takes in an integer and spits out an integer:
 
 1 mod (3) = 1
 
@@ -35,34 +35,54 @@ As an example, we could use mod as a function:
 
 4 mod (3) = 1
 
-In our case, this is could be our function for our hashmap, but it would lead to high collisions and low randomness
+Now this is could be our function for our hashmap, but it would lead to high collisions and low randomness
 as there are only 3 possible key results: 0, 1, and 2.
-Thus, Hashmaps are only efficient as the choosen function.
+Thus, Hashmaps are only efficient as the chosen function.
 
 With a good Hash function:
-Hash tables are O(1)
-In this case, every element gets its own unique key.
-Looking inside this key would be immediate O(1)
+
+Insert, Lookup, and Delete take O(1).
+In this case, every element gets its own unique key and so
+a lookup using this function would be constant O(1).
 
 With a bad Hash function:
-Hash tables are O(n). (say our function maps everything to the value of 2)
-In this case, too many elements (every element) were hashed into the same key (value of 2).
-Looking inside this key would be the same as traversing a list, O(n) 
+
+Insert, Lookup, and Delete take O(n). 
+Lets say our function is hash():
+
+```
+    hash()  ->  [key mod (5)]
+    hash(10) = 10 % 5 = 0
+    hash(22) = 22 % 5 = 2
+    hash(31) = 31 % 5 = 1
+    hash(14) = 14 % 5 = 4
+    hash(17) = 17 % 5 = 2 (collision!)
+
+    Handle collision using chaining with a linked list of elements.
+
+    Index 0  |  Index 1  |  Index 2         |  Index 3  |  Index 4
+    -------- | --------- | ---------------- | --------- | ---------
+    [10]     |  [31]     |  [22 -> 17]      |  [  ]     |  [14]
+```
+
+In this case there are only 5 buckets or arrays keys would be hashed to.
+After inserting n elements, performing a lookup would for some element k, 
+would result in traversing a list of size n in the worst case leading to O(n).
+
+This would degrade insert, lookup, and delete from the original O(1) to O(n).
 
 ### Balancing
 Balancing occurs when a hash table has passed its set load factor.
 
 Load Factor = n/m
-Where n: num of elements, m: num of slots
+Where n = num of elements, m = num of keys
 
-Thus, when certain fraction of the table size, say 0.75% full, the table must increase in size and rehash/reinsert every element. 
+Thus, when certain fraction of the table size, say 75% full with 3 elements and 4 potential keys. 
+The table must increase in size and rehash/reinsert every element. 
 
-The efficiency of a hash table decreases significally without balancing, as this leads to increased collisions as the table fills up.
-Additionally, increased collions leads to increased time to resolving collisions, as we must traverse in inner list to find the element.
+The efficiency of a hash table decreases significantly without balancing, as this leads to increased collisions as the table fills up,
+which leads to time needed to resolve collisions, as we traverse through list to find the element in linear time O(n).
 Operations like search, insert, and delete, degrade from O(1) on average to O(n) in the worst case.
-
-When rehashing, we must rehash every element with the new hash function. 
-It is expensive as we get O(n) for resizing and reinserting n elements.
 
 Usually, when the load factor is reached, the table size doubles to 2n.
 And usually, a common load factor is 0.75 or 75% full.
@@ -77,12 +97,15 @@ Finally, we must rehash every element leading to:
 
 n/2 = additional space after rebalancing
 
+Rehashing is notably expensive as we must rehash every element with the new hash function, 
+leading to O(n) for resizing and reinserting n elements.
+
+
 ### Application
 Hashmaps having quick O(1) average time for insert(), lookup(), and delete(), 
 are great for storing key pairs of lists of elements to perform more complex tasks 
 where performance in time and space complexity are important.
 
-Lets see some examples.
 
 ## 217. Contains Duplicate - Easy
 
@@ -96,7 +119,8 @@ Lets see some examples.
 | nums = [1,2,3,4] | false  |  
 | nums = [1,1,1,3,3,4,3,2,4,2] | true |
  
-### Constraints
+Constraints:
+
 Array Length: 1 &le; nums.length &le; 10<sup>5</sup>
 
 Integer Size: -10<sup>9</sup>  &le; nums[i] &le; 10<sup>9</sup> 
@@ -143,21 +167,25 @@ If we want to track every element, best space complexity is O(n)
     def containsDuplicate_hashmap(self, nums: List[int]) -> bool:
         # hashmap, subtype of dictionary
         seen = {}
-        # for every element, check if element count >= 1
+
+        # for every element, check if element is in seen (with count of 1)
         for num in nums:
-            if num in seen and seen[num] >= 1:
+            if num in seen:
                 return True
-            seen[num] = seen.get(num, 0) + 1
+            seen[num] = 1
+
         return False
 ```
 ```python
     def containsDuplicate_defaultdict(sef, nums: List[int]) -> bool:
-        # defaultdict automatically initializes missing keys to 0
+        # dictionary automatically initializes missing keys to 0
         seen = defaultdict(int)
+
         for num in nums:
             if seen[num] >= 1:
                 return True
             seen[num] += 1
+
         return False
 ```
 
@@ -204,7 +232,7 @@ An Anagram is a word or phrase formed by rearranging the letters of a different 
 | "rat"               | "car"             | false  |  
 
 
-### Constraints
+Constraints:
 
 String Length: 1 &le; s.length, t.length &le; 5 * 104
 
@@ -232,34 +260,35 @@ Space Upper Bound: If we want to track every element, best space complexity is O
         if len(s) != len(t):
             return False
         
-            # Implementing merge sort
-        def merge_sort(string):
+        # Splitting list and recursively sorting
+        def mergeSort(string):
             if len(string) <= 1:
                 return string
             
             mid = len(string) // 2
-            left = merge_sort(string[:mid])
-            right = merge_sort(string[mid:])
+            left = mergeSort(string[:mid])
+            right = mergeSort(string[mid:])
             
             return merge(left, right)
         
+        # merging and sorting left + right sorted arrays
         def merge(left, right):
-            sorted_list = []
+            sorted = []
             i = j = 0
             while i < len(left) and j < len(right):
                 if left[i] <= right[j]:
-                    sorted_list.append(left[i])
+                    sorted.append(left[i])
                     i += 1
                 else:
-                    sorted_list.append(right[j])
+                    sorted.append(right[j])
                     j += 1
-            sorted_list.extend(left[i:])
-            sorted_list.extend(right[j:])
-            return sorted_list
+            sorted.extend(left[i:])
+            sorted.extend(right[j:])
+            return sorted
 
-        # Sort both strings and compare
-        sorted_s = merge_sort(list(s))
-        sorted_t = merge_sort(list(t))
+        # Sorting both strings and comparing
+        sorted_s = mergeSort(list(s))
+        sorted_t = mergeSort(list(t))
         return sorted_s == sorted_t
 ```
 
@@ -288,7 +317,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Building Map + Insertion | O(n) | O(n) | Iterating over the first string takes linear time O(n) with O(1) insertion. | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
+| Iteration + Insertion | O(n) | O(n) | Iterating over the first string takes linear time O(n) with O(1) insertion. | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
 | Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | No additional memory is allocated O(1) |
 | Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | No additional memory is allocated O(1) |
 | Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Memory allocation for Hashmap dominates leading to O(n) space complexity |
@@ -310,7 +339,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Building Array | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used O(1) |
+| Iteration + Insertion | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used O(1) |
 | Editing Array | O(n) | O(1) | Iterating over the second string to edit the Array takes linear time O(n) | No additional memory is allocated O(1) |
 | Verification | O(n) | O(1) | Iterating over the Array takes linear time O(n) | No additional memory is allocated O(1) |
 | Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array O(1) |
@@ -330,12 +359,13 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | [3,2,4]         | 6         | [1,2]  |  
 | [3,3]           | 6         | [0,1]  |
 
-### Constraints
+Constraints:
+
 Only one valid answer exists
 
-length: 2 &le; nums.length &le; 10^4
+Target = n + m, n/m value: 2 &le; nums.length &le; 10^4
 
-target: -10^9 &le; target &le; 10^9
+Target value: -10^9 &le; target &le; 10^9
 
 ### Abstraction
 We must find a combination of two elements in the array that add up to the target. 
@@ -418,7 +448,7 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Building Hashmap | O(n) | O(n) | Iterating over the first string to populate a Hashmap takes linear time O(n) | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
+| Iteration + Insertion | O(n) | O(n) | Iterating over the first string to populate a Hashmap takes linear time O(n) | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
 | Lookup | O(1) | O(1) | Each lookup operation takes constant O(1) time. | Lookups do not require additional memory. |
 | Insertion | O(1) | O(n) |Each insertion operation takes constant O(1) time. | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
 | Overall | O(n) | O(n) | Iterating dominates time complexity leading to linear O(n) time complexity. | Memory allocation for Hashmap dominates leading to O(n) space complexity. |
@@ -438,7 +468,8 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 | ["a"]                                    | [["a"]]           
 
 
-### Constraints
+Constraints:
+
 strs[i] consists of lowercase English letters
 
 
@@ -552,7 +583,7 @@ for inequality.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Hashmap Building |  |  |  |  |
+| Iteration + Insertion |  |  |  |  |
 | Iteration |  |  |  |  |
 | Lookup | |  |  |  |
 | Overall |  |  |  |   |
@@ -587,7 +618,7 @@ for inequality.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Hashmap Building |  |  |  |  |
+| Iteration + Insertion |  |  |  |  |
 | Iteration |  |  |  |  |
 | Lookup | |  |  |  |
 | Overall |  |  |  |   |
@@ -603,9 +634,10 @@ for inequality.
 | [1,2,2,3,3,3,3]    | 2     | [2,3]     |
 | [7,7]              | 1     | [7]       |
 
-### Constraints
-most frequent: 1 &le; k &le; number of distinct elements in nums
-size: -1000 &le; nums[i] &le; 1000
+Constraints:
+
+Most Occurrences: 1 &le; k &le; number of distinct elements in nums
+Integer value: -1000 &le; nums[i] &le; 1000
 
 ### Abstraction
 To find the k most frequent elements, we must first create an occurrence counter for each element in the list.
@@ -647,7 +679,7 @@ Space Upper Bound:
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Hashmap Building |  |  |  |  |
+| Iteration + Insertion |  |  |  |  |
 | Iteration |  |  |  |  |
 | Lookup | |  |  |  |
 | Overall |  |  |  |   |
@@ -686,7 +718,7 @@ Space Upper Bound:
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Hashmap Building |  |  |  |  |
+| Iteration + Insertion |  |  |  |  |
 | Iteration |  |  |  |  |
 | Lookup | |  |  |  |
 | Overall |  |  |  |   |
@@ -696,7 +728,7 @@ Space Upper Bound:
 
 ### Intro
 
-> Design an alogirthm to encode a list of strings to a single string.
+> Design an algorithm to encode a list of strings to a single string.
 > The encoded string is then decoded back to the original list of strings
 > Please implement `encode` and `decode`
 
@@ -779,7 +811,8 @@ can make it as simple as possible.
 | [1,2,3,4]      | [24,12,8,6]     |
 | [-1,1,0,-3,3]  | [0,0,9,0,0]     |
 
-### Constraints
+Constraints:
+
 The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer
 
 ### Abstraction
@@ -837,7 +870,8 @@ in the array`). We just `need an extra integer to store the current postfix` and
 > Each column must contain the digits 1-9 without repetition.
 > Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
 
-### Constraints
+Constraints:
+
 A Sudoku board (partially filled) could be valid but is not necessarily solvable.
 Only the filled cells need to be validated according to the mentioned rules.
 
@@ -931,7 +965,8 @@ set operations can make the list-based approach faster in practice.
 | [0, 3, 2, 5, 4, 6, 1, 1]  | 7       |
 
 
-### Constraints
+Constraints:
+
 
 ### Abstraction
 As usual, our goal is to translate this problem into something that is easier. 

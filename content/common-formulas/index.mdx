@@ -55,6 +55,11 @@ And since we added the series twice, divide by 2 we get:
 
 Now if we simplify and apply Big(O) then we arrive at O(n<sup>2</sup>) time complexity.
 
+
+## Heigh of Recursion tree
+
+
+
 ## Merge Sort
 Merge Sort is a divide and conquer sorting algorithm that sorts an array by recursion:
 
@@ -65,31 +70,87 @@ Merge Sort is a divide and conquer sorting algorithm that sorts an array by recu
 
 ### Merge Sort Diagram
 ```
-Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]             (n elements, O(n))
+Splitting Phase:
+
+Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]        2^0 = 1 subarrays  (n elements, O(n))
                    /              \
-Level 1:    [8, 4, 7, 3]      [2, 6, 5, 1]          (n/2 elements, O(n/2))
+Level 1:    [8, 4, 7, 3]      [2, 6, 5, 1]     2^1 = 2 subarrays  (n/2 elements, O(n/2))
                /     \          /     \
-Level 2:    [8, 4] [7, 3]     [2, 6] [5, 1]         (n/4 elements, O(n/4))
+Level 2:    [8, 4] [7, 3]     [2, 6] [5, 1]    2^2 = 4 subarrays  (n/4 elements, O(n/4))
              /  \    /   \     /   \   /  \
-Level 3:    [8] [4] [7] [3]   [2] [6] [5] [1]       (1 element, O(1))
+Level 3:    [8] [4] [7] [3]   [2] [6] [5] [1]  2^3 = 8 subarrays  (n/8 element, O(1))
 ```
 
++ In merge sort, the splitting does not contribute to O(n) per level, since we simply pass indices indicating bounds of the subarray which is O(1).
+
 ```
-Level 3:   [8] [4]   [7] [3]    [2] [6]   [5] [1]   (base case, list of 1 element)
+Merging Phase:
+
+Level 3:   [8] [4]   [7] [3]    [2] [6]   [5] [1]   (base case, single elements)
             \  /      \  /        \  /      \  /
-Level 2:   [4, 8]   [3, 7]       [2, 6]   [1, 5]    (sort lists when merging)
+Level 2:   [4, 8]   [3, 7]       [2, 6]   [1, 5]    (merge and sort pairs)
                \       /             \       /
-Level 1:     [3, 4, 7, 8]         [1, 2, 5, 6]      (sort lists when merging)
+Level 1:     [3, 4, 7, 8]         [1, 2, 5, 6]      (merge sorted halves)
                    \                  /
-Level 0:        [1, 2, 3, 4, 5, 6, 7, 8]            (final merge + sort)
+Level 0:        [1, 2, 3, 4, 5, 6, 7, 8]            (final merge)
+
+```
+
++ In merge sort, the merging step is where all the real work happens.
++ At each level, you have 2<sup>level</sup> subarrays.
++ Each subarray's size of n/2<sup>level</sup>
++ Total merge work done at each level = num of subarrays * size per subarray = 2<sup>level</sup> * n/2<sup>level</sup> = n
++ Total merge work done = merge work at each level * num of levels = n * log(n) = O(n log n)
+
+
+### Merge Sort Code
+```python
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        
+        # Splitting list and recursively sorting
+        def mergeSort(string):
+            if len(string) <= 1:
+                return string
+            
+            mid = len(string) // 2
+            left = mergeSort(string[:mid])
+            right = mergeSort(string[mid:])
+            
+            return merge(left, right)
+        
+        # merging and sorting left + right sorted arrays
+        def merge(left, right):
+            sorted = []
+            i = j = 0
+            while i < len(left) and j < len(right):
+                if left[i] <= right[j]:
+                    sorted.append(left[i])
+                    i += 1
+                else:
+                    sorted.append(right[j])
+                    j += 1
+            sorted.extend(left[i:])
+            sorted.extend(right[j:])
+            return sorted
+
+        # Sorting both strings and comparing
+        sorted_s = mergeSort(list(s))
+        sorted_t = mergeSort(list(t))
+        return sorted_s == sorted_t
 ```
 
 ### Space & Time Complexity
 |  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
 | -------- | --------------- | ---------------- | ---------------- | ----------------- |
-| Best Case | O(n log n) | O(n) |  Time Complexity of merge sort is O(n log n) across the best, average, and worst cases. Merge sort still recursively divides the array into halves and merges them back, regardless of initial array is sorted or unsorted.  | During merging, temporary arrays are required to hold intermediate elements for the merge process |
-| Average Case | O(n log n) | O(n) |  |   |
+| Dividing the Array | O(log n) | O(log n) |  Time Complexity of merge sort is O(n log n) across the best, average, and worst cases. Merge sort still recursively divides the array into halves and merges them back, regardless of initial array is sorted or unsorted.  | During merging, temporary arrays are required to hold intermediate elements for the merge process |
+| Merging Subarrays | O(n log n) | O(n) |  |   |
 | Worst Case | O(n log n) | O(n) |  |  |
+
+
+Best, Average, Worst Case: 
+Time Complexity of merge sort is O(n log n) across the best, average, and worst cases. Merge sort still recursively divides the array into halves and merges them back, regardless of initial array is sorted or unsorted.  | During merging, temporary arrays are required to hold intermediate elements for the merge process 
 
 
 ### Summary 
