@@ -55,10 +55,7 @@ And since we added the series twice, divide by 2 we get:
 
 Now if we simplify and apply Big(O) then we arrive at O(n<sup>2</sup>) time complexity.
 
-
 ## Heigh of Recursion tree
-
-
 
 ## Merge Sort
 Merge Sort is a divide and conquer sorting algorithm that sorts an array by recursion:
@@ -82,6 +79,8 @@ Level 3:    [8] [4] [7] [3]   [2] [6] [5] [1]  2^3 = 8 subarrays  (n/8 element, 
 ```
 
 + In merge sort, the splitting does not contribute to O(n) per level, since we simply pass indices indicating bounds of the subarray which is O(1).
++ Recursive Memory Lifecycle:
+
 
 ```
 Merging Phase:
@@ -131,29 +130,36 @@ Level 0:        [1, 2, 3, 4, 5, 6, 7, 8]            (final merge)
                 else:
                     sorted.append(right[j])
                     j += 1
-            sorted.extend(left[i:])
-            sorted.extend(right[j:])
+            
+            # Explicitly handle any remaining elements
+            if i < len(left):   # If elements remain in `left`
+                sorted.extend(left[i:])
+            else:               # If elements remain in `right`
+                sorted.extend(right[j:])
             return sorted
 
-        # Sorting both strings and comparing
+        # Sorting both s and t strings and comparing
         sorted_s = mergeSort(list(s))
         sorted_t = mergeSort(list(t))
+        
         return sorted_s == sorted_t
 ```
 
 ### Space & Time Complexity
 |  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
 | -------- | --------------- | ---------------- | ---------------- | ----------------- |
-| Dividing the Array | O(log n) | O(log n) |  Time Complexity of merge sort is O(n log n) across the best, average, and worst cases. Merge sort still recursively divides the array into halves and merges them back, regardless of initial array is sorted or unsorted.  | During merging, temporary arrays are required to hold intermediate elements for the merge process |
-| Merging Subarrays | O(n log n) | O(n) |  |   |
-| Worst Case | O(n log n) | O(n) |  |  |
+| Dividing the Array | O(log n) | O(log n) | The recursive functional calls use stack memory proportional to the depth of recursion, which is O(log n)| |
+| Merging at 1 level | O(n) | O(n) | A merge operation at a single level combines two sorted subarrays, by iterating over both sorted arrays and adding elements in order to the result array. For a merge at level l, the work is (num of subarrays * work per subarray) = O(2<sup>t</sup> * n/2<sup>t</sup>) = O(n) | .   |
+| Merging across all levels | O(n log n) | O(n) | Over log n levels of recursion, each level processes n elements, leading to O(n log n) | While we do create arrays of size n/4, n/8, and so forth, there will only actually exist two of such arrays at any given time. For example, we start by creating two arrays of size n/2. Then, we recurse down only one one of the arrays and create two arrays of size n/4. Then we recurse down again and create two arrays of size n/8... And once we return from a recursive call, we end up destroying the temporary arrays we created in that call. |
+| Overall | O(n log n) | O(n) | Merging across all levels dominates time complexity. Leading to O(n log n) | Memory allocation for temporary arrays during merging at each level dominate space complexity. Leading to O(n) |  |  |
 
+### Best, Average, Worst Case
 
-Best, Average, Worst Case: 
-Time Complexity of merge sort is O(n log n) across the best, average, and worst cases. Merge sort still recursively divides the array into halves and merges them back, regardless of initial array is sorted or unsorted.  | During merging, temporary arrays are required to hold intermediate elements for the merge process 
-
+Time Complexity of merge sort is O(n log n) across the all 3 cases. 
+This is because Merge sort still recursively divides and merges the array, regardless if the initial array is sorted or unsorted.  
+So it still goes through all the steps and requirements of dividing and merging across all levels leading to the same time and space complexity for best, average, and worst case.
 
 ### Summary 
 Merge sort's behavior does not depend on the input order.
-It is a predicable sorting algorithm. Its main drawback is its space requirement O(n) when
+It is a predicable sorting algorithm with its main drawback being the space requirement O(n) when
 compared to in-place sorting algorithms like quicksort or heap sort.
