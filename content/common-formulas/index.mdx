@@ -100,6 +100,61 @@ Level 0:        [1, 2, 3, 4, 5, 6, 7, 8]            (final merge)
 + Total merge work done = merge work at each level * num of levels = n * log(n) = O(n log n)
 
 
+```
+Recursion Phase 1:
+
+Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]        2^0 = 1 subarrays  (n elements, O(n))
+                   /            \     
+Level 1:    [8, 4, 7, 3]     [2, 6, 5, 1]      2^1 = 2 subarrays  (n/2 elements, O(n/2)) 
+               /                      
+Level 2:    [8, 4]                             2^2 = 4 subarrays  (n/4 elements, O(n/4))
+             /  \                      
+Level 3:    [8] [4]                            2^3 = 8 subarrays  (n/8 element, O(1))
+```
+
++ We can also go step by step to demonstrate why space complexity is O(n)
+
+```
+Recursion Phase 2:
+
+Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]        2^0 = 1 subarrays  (n elements, O(n))
+                   /             \ 
+Level 1:    [8, 4, 7, 3]     [2, 6, 5, 1]      2^1 = 2 subarrays  (n/2 elements, O(n/2)) 
+               /     \               
+Level 2:    [4, 8] [7, 3]                      2^2 = 4 subarrays  (n/4 elements, O(n/4))
+                    /   \             
+Level 3:           [7] [3]                     2^3 = 8 subarrays  (n/8 element, O(1))
+```
+
+```
+Recursion Phase 3:
+
+Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]        2^0 = 1 subarrays  (n elements, O(n))
+                   /             \ 
+Level 1:    [8, 4, 7, 3]     [2, 6, 5, 1]      2^1 = 2 subarrays  (n/2 elements, O(n/2)) 
+               /     \               
+Level 2:    [4, 8] [3, 7]                      2^2 = 4 subarrays  (n/4 elements, O(n/4))
+                                      
+Level 3:                                       2^3 = 8 subarrays  (n/8 element, O(1))
+```
+
+```
+Recursion Phase 4:
+
+Level 0:       [8, 4, 7, 3, 2, 6, 5, 1]        2^0 = 1 subarrays  (n elements, O(n))
+                   /              \
+Level 1:    [3, 4, 7, 8]     [2, 6, 5, 1]      2^1 = 2 subarrays  (n/2 elements, O(n/2))                  2^1 = 2 subarrays  (n/2 elements, O(n/2))
+                                   
+Level 2:                                       2^2 = 4 subarrays  (n/4 elements, O(n/4))
+                                      
+Level 3:                                       2^3 = 8 subarrays  (n/8 element, O(1))
+```
+
++ Notice that how peak memory usage at any moment involves only a few active arrays 
+sums roughly to n.
++ Therefore, memory is not cumulative across all calls, but localized to active recursive paths
+
+
 ### Merge Sort Code
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
