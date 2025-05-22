@@ -11,7 +11,6 @@ tags:
 ---
 
 ## Brute Case Double For Loop
-
 ```python
     def example(self, nums: List[int]) -> bool:
 
@@ -26,26 +25,33 @@ tags:
 ```
 
 ### Time Complexity Derivation
-|  Outer Loop Iteration  | Inner Loop Start | Inner Loop End |  Total Inner Iterations (per outer iteration) |  
-| -------- | ------------| ---------------- | -------------- |
-| i = 0 | j = 1 | j = n - 1 |  n - 1 |   
-| i = 1 | j = 2 | j = n - 1 |  n - 2 |   
-| i = 2 | j = 3 | j = n - 1 |  n - 3 |   
-| ...   | ... | ... | ... |
-| i = n - 2 |  j = n - 1 | j = n - 1 | 1 | 
-| i = n - 1 |  j = n | - | 0 |
+|  Outer Loop (i) | Inner Loop Start: (j = i + 1) | Inner Loop End: (j) |  Total Inner Loop Iterations | Total Outer Loop Iterations (Remaining) |
+| --------------- | ----------------------------- | ------------------- | ---------------------------- | --------------------------- |
+| i = 0 | j = 1 | j = n - 1 |  n - 1 |  n |
+| i = 1 | j = 2 | j = n - 1 |  n - 2 |  n - 1 | 
+| i = 2 | j = 3 | j = n - 1 |  n - 3 |  n - 2 | 
+| ...   | ... | ... | ... | ... |
+| i = n - 2 |  j = n - 1 | j = n - 1 | 1 | 2 |
+| i = n - 1 |  j = n | None (out of bounds) | 0 | 1 |
+| i = n |  j = n + 1 | None (out of bounds) | 0 | 0 |
 
-The total number of iterations in the inner loop across all iterations of the outer loop is:
-(n−1)+(n−2)+(n−3)+…+1
+The total number of iterations in the inner loop across each iteration of the outer loop is:
+(n − 1) + (n − 2) + (n − 3) + ... + 3 + 2 + 1
 
 We can write this series backwards: 
-1+2+3+⋯+(n−1)
+1 + 2 + 3 + ... + (n - 3) + (n - 2) + (n − 1)
 
-Now if we add 2 of the same series term by term:
+Now if we add 2 of the same series:
 
-[ (n−1)+(n−2)+(n−3)+…+1 ] + [ 1+2+3+⋯+(n−1) ] = [ (n−1)+1,(n−2)+2,(n−3)+3,… ]
+[Forward series] + [Backward series] = 
 
-Each individual pair cancels out n, and we left n-1 number of pairs. So the sum of the two series is:
+[(n − 1) + (n − 2) + (n − 3) + ... + 3 + 2 + 1] + [1 + 2 + 3 + ... + (n - 3) + (n - 2) + (n − 1)] =
+
+We can merge the same pairs:
+
+[(n − 1) + 1, (n − 2) + 2,(n − 3) + 3, ... ] =
+
+Each individual pairs cancel out n, and we left n-1 number of pairs. So the sum of the two series is:
 
 n * (n-1)
 
