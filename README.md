@@ -1,6 +1,6 @@
 ## MyPortfolio
 
-Hi! I'm Jonathan. 
+Hi, I'm Jonathan. 
 Made this swe portfolio to log leetcode + projects im working on to keep up with new technologies.
 
 Portfolio is made with React.js. tailwind, contentlayer, and other libraries:
