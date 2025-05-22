@@ -281,22 +281,34 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ### Brute Force
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
+        
+        # time complexity: comparison of O(1)
         if len(s) != len(t):
             return False
         
-        # Splitting list and recursively sorting
+        # time complexity: sorting of O(n log n) for sorting each string
+        # space complexity: overall of O(n) = temporary arrays O(n) + recursion stack of O(log n)
         def mergeSort(string):
+            
+            # base case of list with single element
+            # time complexity: O(1)
+            # space complexity: O(1)
             if len(string) <= 1:
                 return string
             
             mid = len(string) // 2
+
+            # time complexity: sorting of O(n log n) for sorting each string
+            # space complexity: overall of O(n) = temporary arrays O(n) + recursion stack of O(log n)
             left = mergeSort(string[:mid])
             right = mergeSort(string[mid:])
             
             return merge(left, right)
         
-        # merging and sorting left + right sorted arrays
+        # Time Complexity: O(n) per merge
+        # Space Complexity: O(n) for temporary storage of the merged array
         def merge(left, right):
+        
             sorted = []
             i = j = 0
             while i < len(left) and j < len(right):
@@ -310,9 +322,11 @@ Space Upper Bound: If we want to track every element, best space complexity is O
             sorted.extend(right[j:])
             return sorted
 
-        # Sorting both strings and comparing
+        # Time Complexity: O(n log n) for sorting each string
+        # Space Complexity: O(n) for temporary arrays and recursion stack
         sorted_s = mergeSort(list(s))
         sorted_t = mergeSort(list(t))
+
         return sorted_s == sorted_t
 ```
 
