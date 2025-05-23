@@ -782,6 +782,38 @@ Space Upper Bound:
 
 ### Brute Force
 
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        
+        # space complexity: int count O(n)
+        freq = defaultdict(int)
+
+        for num in nums: 
+            freq[num] += 1
+
+        # sort ascending by frequency:
+        sorted = sorted(freq.items(), key=lambda tuple: tuple[1])
+        sorted = sorted[::-1] # manual reverse
+
+        result = []
+        for i in range(k):
+            result.append(sorted[i][0]) # grabbing int key
+
+        return result
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+|  |  |  |  |  |
+
+
+
+
 ### Solution 1: Stack/PushPop
 
 ```python
