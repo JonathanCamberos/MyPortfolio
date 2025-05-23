@@ -138,14 +138,14 @@ If we want to track every element, best space complexity is O(n)
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
+| Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
 | Hashmap | O(n) | O(n) | Iterate over every element O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires additional memory proportional to the number of elements O(n) |
 | Hashset | O(n) | O(n) | Same logic as Hashmap | Same logic as Hashmap |
 
 
 ### Brute Force
 ```python
-    def containsDuplicate_bruteforce(self, nums: List[int]) -> bool:
+    def containsDuplicate(self, nums: List[int]) -> bool:
 
         # time complexity: iteration of O(n)
         for i in range(len(nums)):
@@ -279,7 +279,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
+| Brute Force (merge sorting both strings) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
 | Hashmap | O(n) | O(n) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
 | Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
 
@@ -471,7 +471,7 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  | |
+| Brute Force (all pairs comparison) |  |  |  | |
 | Hashmap 1-pass |  |  |  |  |
 
 
@@ -578,7 +578,7 @@ Space Upper Bound: If we want to track every character count Hashmap per every s
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force | O(n<sup>2</sup> * k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
+| Brute Force (merge sorting + hashmap key value list) | O(n<sup>2</sup> * k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
 | Merge sort | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
 | Hashmap | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 
@@ -777,28 +777,37 @@ Space Upper Bound:
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  | |
-| Hashmap |  |  |  |  |
+| Brute Force (Sort all frequencies descending) | O(n + m log m) | O(n + k) | Sorting m unique elements domi | |
+| Stack PushPop | O(n + m log m) | O(n + k) |  |  |
+| Frequency Buckets | O(n) | O(n) | | |
+| Heap | O(n + m log k) | O(n + k) | | | |
 
-### Brute Force
+### Brute Force (Sort all frequencies descending)
 
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
-        # space complexity: int count O(n)
+        # space complexity: count for all ints O(n)
         freq = defaultdict(int)
 
+        # time complexity: iterate over all nums O(n)
         for num in nums: 
             freq[num] += 1
 
-        # sort ascending by frequency:
+        # generate tuple of [(int, count), ...], ascending by count
         sorted = sorted(freq.items(), key=lambda tuple: tuple[1])
-        sorted = sorted[::-1] # manual reverse
+        sorted = sorted[::-1] # reverse list
 
+        
         result = []
+        
+        # time complexity: grab k top occurring ints from frequency list O(k)
         for i in range(k):
-            result.append(sorted[i][0]) # grabbing int key
+            result.append(sorted[i][0]) # grabbing int key from tuple [(int, count), ...]
 
+
+        # overall: time complexity  O(n)
+        # overall: space complexity 
         return result
 ```
 

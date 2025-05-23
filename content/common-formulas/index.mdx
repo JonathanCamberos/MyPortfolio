@@ -61,6 +61,8 @@ And since we added the series twice, divide by 2 we get:
 
 Now if we simplify and apply Big(O) then we arrive at O(n<sup>2</sup>) time complexity.
 
+
+
 ## Merge Sort
 Merge Sort is a divide and conquer sorting algorithm that sorts an array by recursion:
 
@@ -222,3 +224,49 @@ So it still goes through all the steps and requirements of dividing and merging 
 Merge sort's behavior does not depend on the input order.
 It is a predicable sorting algorithm with its main drawback being the space requirement O(n) when
 compared to in-place sorting algorithms like quicksort or heap sort.
+
+
+## Insertion Sort
+
+Insertion sort is a comparison-based sorting algorithm that builds that final sorted
+array one element at a time.
+
+1. Set a sorted partition with the first element in the array
+2. Work from left to right, compare each new element to the right most element in the sorted partition
+3. If a new element is sorted given the partition, traverse the partition right to left until the element's correct position is found
+4. Continue and will generate an array of sorted partition
+
+```python
+    def insertion_sort(arr):
+
+        # time complexity: iterate over int array O(n)
+        for i in range(1, len(arr)):
+
+            key = arr[i]
+            j = i - 1
+
+            # compare new element to sorted partition list right to left, until correct position is found
+            # Best time complexity: O(1) int array is sorted and no shifting is necessary
+            # Average time complexity: O(n) = O(n/2) on average, compares with half of total elements in sorted partition
+            # Worst time complexity: O(n), compares with all elements in sorted partition
+            while j >= 0 and arr[j] > key:
+                
+                # Shift elements sorted partition to the right if they're greater than the key
+                arr[j + 1] = arr[j]
+                j -= 1
+
+            # Insert the key into its correct position
+            arr[j + 1] = key
+
+        # overall: time complexity - Best O(n) - Average O(n^2) - Worst O(n^2)
+        # overall: space complexity - Best O(1) - Average O(1) - Worst O(1)
+        return arr
+```
+
+### Best, Average, Worst Case
+|  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
+| -------- | --------------- | ---------------- | ---------------- | ----------------- |
+| Best Case |  |  |  |  |
+| Average Case |  |  |  |  |
+| Worst |  |  |  |  |
+
