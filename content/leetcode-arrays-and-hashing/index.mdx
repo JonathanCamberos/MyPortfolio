@@ -159,7 +159,8 @@ If we want to track every element, best space complexity is O(n)
                 if nums[i] == nums[j]:
                     return True
         
-        # overall: time complexity O(n^2) / space complexity O(1)
+        # overall: time complexity O(n^2) 
+        # overall: space complexity O(1)
         return False
 ```
 
@@ -186,7 +187,8 @@ If we want to track every element, best space complexity is O(n)
                 return True
             seen[num] = 1
 
-        # overall: time complexity O(n) / space complexity O(n)
+        # overall: time complexity  O(n)
+        # overall: space complexity O(n)
         return False
 ```
 ```python
@@ -204,7 +206,8 @@ If we want to track every element, best space complexity is O(n)
                 return True
             seen[num] += 1
 
-        # overall: time complexity O(n) / space complexity O(n)
+        # overall: time complexity  O(n) 
+        # overall: space complexity O(n)
         return False
 ```
 
@@ -231,7 +234,8 @@ If we want to track every element, best space complexity is O(n)
                 return True
             seen.add(n)
             
-        # overall: time complexity O(n) / space complexity O(n)
+        # overall: time complexity  O(n)
+        # overall: space complexity O(n)
         return False
 ```
 
@@ -300,7 +304,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
             # time complexity: dividing operation O(1)
             mid = len(string) // 2
 
-            # mergeSort 2 subarrays -> mergeSort time/space complexity
+            # mergeSort both subarrays -> mergeSort time/space complexity * 2
             left = mergeSort(string[:mid])
             right = mergeSort(string[mid:])
             
@@ -312,6 +316,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
         
             sorted = []
             i = j = 0
+
             while i < len(left) and j < len(right):
                 if left[i] <= right[j]:
                     sorted.append(left[i])
@@ -320,11 +325,10 @@ Space Upper Bound: If we want to track every element, best space complexity is O
                     sorted.append(right[j])
                     j += 1
             
-            # Explicitly handle any remaining elements
-            if i < len(left):   # If elements remain in `left`
-                sorted.extend(left[i:])
-            else:               # If elements remain in `right`
-                sorted.extend(right[j:])
+            # If elements remain in `left`
+            sorted.extend(left[i:])
+            # If elements remain in `right`
+            sorted.extend(right[j:])
 
             return sorted
 
@@ -333,6 +337,9 @@ Space Upper Bound: If we want to track every element, best space complexity is O
         sorted_s = mergeSort(list(s))
         sorted_t = mergeSort(list(t))
 
+
+        # overall: time complexity: O(n log n)
+        # overall: space complexity: O(n)
         return sorted_s == sorted_t
 ```
 
@@ -366,7 +373,8 @@ Space Upper Bound: If we want to track every element, best space complexity is O
             if value != 0:
                 return False
 
-        # overall: time complexity O(n) / space complexity O(n)
+        # overall: time complexity  O(n)
+        # overall: space complexity O(n)
         return True
 ```
 
@@ -399,7 +407,8 @@ Space Upper Bound: If we want to track every element, best space complexity is O
             if value != 0:
                 return False
 
-        # overall: time complexity: O(n) / space complexity O(1)
+        # overall: time complexity: O(n)
+        # overall: space complexity O(1)
         return True
 ```
 
@@ -482,7 +491,8 @@ Space Upper Bound: If we want to track every element/complement, best space comp
                 if nums[i] + nums[j] == target:
                     return [i, j]
 
-        # overall: time complexity O(n^2) / space complexity O(1)
+        # overall: time complexity  O(n^2) 
+        # overall: space complexity O(1)
         return []
 ```
 
@@ -519,7 +529,8 @@ Space Upper Bound: If we want to track every element/complement, best space comp
             # time complexity: insert operation O(1)
             tracking[nums[i]] = i
 
-        # overall: time complexity O(n) / space complexity O(n)
+        # overall: time complexity  O(n) 
+        # overall: space complexity O(n)
         return []
 ```
 
@@ -579,11 +590,11 @@ for inequality.
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # time complexity: O(n log n) to split + merge array 
-        # space complexity: overall O(n) = temporary array during merging O(n) + stack memory O(log n)
+        # time complexity: O(k log k) = merge two halves O(k) * num of levels of recursion O(log k) 
+        # space complexity: O(k) = temporary array during merging O(k) + recursion stack memory O(log k)
         def mergeSort(word):
         
-            # base case of list with 1 element
+            # base case: list with 1 element
             # time complexity: O(1)
             # space complexity: O(1)
             if len(word) <= 1:
@@ -591,11 +602,13 @@ for inequality.
             
             mid = len(word) // 2
             
+
+            # space complexity: temporary array O(k) + recursion stack memory O(log k)
             left = mergeSort(word[:mid])
             right = mergeSort(word[mid:])
             
+            # space complexity: temporary array O(k)
             sorted = []
-            
             i = j = 0
             
             # time complexity: iteration of both subarrays O(n)
@@ -608,107 +621,131 @@ for inequality.
                     sorted.append(right[j])
                     j += 1
             
-            # Explicitly handle any remaining elements
-            # time complexity: worst case of O(n)
-            if i < len(left):   # If elements remain in `left`
-                sorted.extend(left[i:])
-            else:               # If elements remain in `right`
-                sorted.extend(right[j:])
-            
+            # Adding remaining elements from either half
+            sorted.extend(left[i:])  # time complexity: O(n)
+            sorted.extend(right[j:]) # time complexity: O(n)
+
             return ''.join(sorted_word)
     
+        # space complexity: O(n * k) = for n sorted string key O(n) and original string value of length k O(k)
         anaGroup = {}
         
-        # for each word, sort + add to corresponding hashmap
+        # time complexity: O(n * k log k), where n is number of strings and k is maximum length
         for word in strs:
             
+            # time complexity: merge sort O(k log k)
             sorted = mergeSort(word)
 
+            # time complexity: lookup + insertion O(1)
             if sorted in hashmap:
                 hashmap[sorted].append(word)
             else:
                 hashmap[sorted] = [word]
         
+
+        # overall: time complexity 
+        # overall: space complexity
         return list(anaGroup.values())
 ``` 
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Sorting |  |  |  |  |
-| Iteration |  |  |  |  |
-| Lookup | |  |  |  |
-| Overall |  |  |  |   |
+| Merge Sort per string | O(k log k) | O(k) | Sorting a single string of length k.  | Temporary arrays O(k) and recursion stack O(log k) |
+| Sorting all strings | O(n * k log k) | O(k) (temporary per string sequentially)  | Sorting n strings, each of length k | O(k) per string dominates recursion stack O(log k)  |
+| Hashmap insertion | O(1) | O(n * k) | Lookup and insertion are O(1)  | Memory allocation for sorted n string keys O(n) * original string values O(k) |
+| Overall | O(n * k log k) | O(n * k) |  Merge sort O(k log k) for all strings O(n) dominates. Leading to O(n * k log k) |  Storing sorted string keys O(n) with original string value O(k) dominates. Leading to O(n * k) |
 
 
 ### Solution 2: Hashmap -> Tuple Key Grouping
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # <tuple char count key -> [anagram group list]>
+        # Note: Tuples in python are immutable which makes them suitable as 
+        # keys for a hashmaps, as you can’t do that with a list. 
+        # You should use tuples where the position carries symantec meaning. 
+
+        # [26 char count tuple key -> [anagram group list], ...]
+        # space complexity: O(n * k) = hashmap stores n tuple keys and lists of original strings with length k
         anaGroup = {}
 
+        # time complexity: iterating over all strings O(n) 
         for word in strs:
             
-            # Assuming only lowercase English letters
+            # space complexity: fixed-sized array for 26 lowercase letters O(1)
             char_count = [0] * 26  
             
+            # time complexity: counting chars in string of k length O(k)
             for char in word:
                 char_count[ord(char) - ord('a')] += 1
             
-            # Use tuple of counts as key
+            # space complexity: fixed-size tuple of length 26 O(1)
             key = tuple(char_count)  
             
-            # Initialize a list for this key if it doesn't exist
+            # time complexity: lookup operation of O(1) 
             if key not in anaGroup:
                 anaGroup[key] = []  
 
-            # Add the current word to the corresponding key group
+            # time complexity: append operation to list O(1)
             anaGroup[key].append(word)  
 
+
+        # overall: time complexity  O(n * k)  
+        # overall: space complexity O(n * k)
         return list(anaGroup.values())
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion |  |  |  |  |
-| Iteration |  |  |  |  |
-| Lookup | |  |  |  |
-| Overall |  |  |  |   |
+| Iterating over strings  | O(n) | O(1) | Loop over n strings O(n) | No additional memory per iteration O(1) |
+| Counting Characters | O(k) per string | O(1) | counting characters for string k length O(k) | fixed-sized array for 26 chars O(1) |
+| Tuple | O(1) | O(1) | Converting fixed-size array to tuple in constant O(1) | fixed-size tuple of 26 elements O(1) |
+| Lookup in hashmap | O(1) | O(n * k) | Lookup operation takes constant O(1) | For n string keys of length k O(n * k)  |
+| Appending to list | O(1) | O(n * k) | Appending operation takes constant O(1) | Hashmap of n keys to list of strings k length O(n * k) |
+| Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
+
 
 ### Solution 3: Hashmap -> Manual Key Grouping
 
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
+        # space complexity: hashmap of n string keys to list of strings k length O(n * k)
         anaGroup = {}
 
+        # time complexity: iterating over n strings O(n)
         for word in strs:
-            # Initialize character count for all lowercase English letters
+
+            # space complexity: fixed-sized array of 26 lowercase characters O(1)
             char_count = [0] * 26
             
-            # Count the characters in the word
+            # time complexity: counting characters for string k length O(k)
             for char in word:
                 char_count[ord(char) - ord('a')] += 1
             
-            # Create a unique string key manually, instead of tuple(char_count)
+            # time complexity: creating unique char count key from fixed-sized array of 26 O(1)
             key = ""
             for count in char_count:
-                key += str(count) + "#"  # Add a separator to distinguish between counts
+                key += str(count) + "#"  # Separator between counts
 
-            # Group the word into the hashmap based on the key
+            # time complexity: lookup operation for key O(1)
             if key not in anaGroup:
-                anaGroup[key] = []  # Initialize a list for this key if it doesn't exist
-            anaGroup[key].append(word)  # Add the current word to the corresponding key group
+                anaGroup[key] = []  # Initialize list for key if doesn't exist
+            anaGroup[key].append(word)  # Add word to corresponding key group
 
+        # overall: time complexity
+        # overall: space complexity 
         return list(anaGroup.values())
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion |  |  |  |  |
-| Iteration |  |  |  |  |
-| Lookup | |  |  |  |
-| Overall |  |  |  |   |
+| Iterating over strings | O(n) | O(1) | Iterating over n strings O(n) | No additional memory per iteration O(1)  |
+| Counting Characters | O(k) per string | O(1) | Counting characters for string k length | Fixed-sized character count array of 26 lowercase letters O(1) |
+| Key Generator | O(1) | O(1) | Iterating over fixed-sized 26 character array to generate key O(1) | Unique string key generated O(1) |
+| Lookup in hashmap | O(1) | O(n * k) | Lookup operation in hashmaps takes constant O(1) | Hashmap of n string keys to list of strings k length O(n * k)   |
+| Appending to list | O(1) | O(1) | Appending operation to list takes constant O(1) | No additional memory required for append O(1) | 
+| Overall | O(n * k) | O(n * k) | Iterating over n strings and counting characters for strings k length dominates O(n * k) | Hashmap of n string keys with lists of strings k length dominates O(n * k) |
+
 
 ## 347. Top K Elements in List - Medium
 
