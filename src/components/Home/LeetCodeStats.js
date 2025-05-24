@@ -13,6 +13,7 @@ import {
 // Register the required components/scales
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+
 const LeetCodeStats = () => {
     const [stats, setStats] = useState({ total: 0, easy: 0, medium: 0, hard: 0 });
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -28,7 +29,6 @@ const LeetCodeStats = () => {
   
     const totalPerCategory = { easy: 50, medium: 30, hard: 20 };
   
-    // Define light & dark mode background colors for the non-filled slice
     const bgColorsLight = {
       easy: "#E0F2E9",
       medium: "#FFF8E1",
@@ -36,9 +36,9 @@ const LeetCodeStats = () => {
     };
   
     const bgColorsDark = {
-      easy: "#264d2e",   // darker green background
-      medium: "#665900", // darker amber background
-      hard: "#5a1210",   // darker red background
+      easy: "#264d2e",
+      medium: "#665900",
+      hard: "#5a1210",
     };
   
     const data = {
@@ -88,21 +88,7 @@ const LeetCodeStats = () => {
       cutout: "90%",
       plugins: {
         legend: {
-          position: "bottom",
-          labels: {
-            boxWidth: 15,
-            padding: 15,
-            generateLabels: (chart) => {
-              return chart.data.datasets.map((dataset, i) => ({
-                text: dataset.label,
-                fillStyle: dataset.backgroundColor[0],
-                strokeStyle: dataset.backgroundColor[0],
-                lineWidth: 1,
-                hidden: false,
-                index: i,
-              }));
-            },
-          },
+          display: false, // Disable the legend
         },
         tooltip: {
           callbacks: {
@@ -118,12 +104,23 @@ const LeetCodeStats = () => {
     };
   
     return (
-      <div className="p-4 max-w-sm mx-auto">
+      <div className="p-4 max-w-sm mx-auto dark:text-light">
         <h2 className="text-xl font-bold mb-4 text-center">LeetCode Progress</h2>
         <Doughnut data={data} options={options} />
         <p className="mt-4 text-center text-lg font-semibold">
           Total Questions Solved: {stats.total}
         </p>
+        <div className="flex justify-center mt-4 space-x-4">
+          <span className="font-bold text-sm" style={{ color: "#4CAF50" }}>
+            Easy: {stats.easy}
+          </span>
+          <span className="font-bold text-sm" style={{ color: "#FFC107" }}>
+            Medium: {stats.medium}
+          </span>
+          <span className="font-bold text-sm" style={{ color: "#F44336" }}>
+            Hard: {stats.hard}
+          </span>
+        </div>
       </div>
     );
   };

@@ -23,8 +23,10 @@ const HomeCoverSection = ( {blogs} ) => {
           {/* Intro Section */}
           <div className="md:w-1/2 w-full text-left md:pr-10">
             {/* Welcome Section */}
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Welcome to My Portfolio</h2>
-            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            <h2 className="font-bold capitalize text-sm xs:text-base sm:text-xl md:text-2xl capitalize dark:text-light mt-2 sm:mt-4">
+              Welcome to My Portfolio
+            </h2>
+            <p className="text-base sm:text-lg dark:text-light leading-relaxed">
               Hi, I’m Jonathan Camberos, a passionate software engineer with a
               love for solving challenging problems and sharing knowledge. This
               portfolio showcases my journey in coding, blogging, and problem-solving.
