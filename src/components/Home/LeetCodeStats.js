@@ -13,33 +13,18 @@ import {
 // Register the required components/scales
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
 const LeetCodeStats = () => {
     const [stats, setStats] = useState({ total: 0, easy: 0, medium: 0, hard: 0 });
-    const [isDarkMode, setIsDarkMode] = useState(false);
   
     useEffect(() => {
       fetch("/leetcodeStats.json")
         .then((res) => res.json())
         .then((data) => setStats(data))
         .catch((err) => console.error("Failed to fetch stats:", err));
-  
-      setIsDarkMode(document.documentElement.classList.contains("dark"));
     }, []);
   
+    // Dummy total questions per category - replace with actual totals if needed
     const totalPerCategory = { easy: 50, medium: 30, hard: 20 };
-  
-    const bgColorsLight = {
-      easy: "#E0F2E9",
-      medium: "#FFF8E1",
-      hard: "#FFEBEE",
-    };
-  
-    const bgColorsDark = {
-      easy: "#264d2e",
-      medium: "#665900",
-      hard: "#5a1210",
-    };
   
     const data = {
       labels: ["Easy", "Medium", "Hard"],
@@ -47,10 +32,7 @@ const LeetCodeStats = () => {
         {
           label: "Easy",
           data: [stats.easy, totalPerCategory.easy - stats.easy],
-          backgroundColor: [
-            "#4CAF50",
-            isDarkMode ? bgColorsDark.easy : bgColorsLight.easy,
-          ],
+          backgroundColor: ["#4CAF50", "#E0F2E9"],
           borderWidth: 1,
           circumference: 360,
           rotation: -90,
@@ -59,10 +41,7 @@ const LeetCodeStats = () => {
         {
           label: "Medium",
           data: [stats.medium, totalPerCategory.medium - stats.medium],
-          backgroundColor: [
-            "#FFC107",
-            isDarkMode ? bgColorsDark.medium : bgColorsLight.medium,
-          ],
+          backgroundColor: ["#FFC107", "#FFF8E1"],
           borderWidth: 1,
           circumference: 360,
           rotation: -90,
@@ -71,10 +50,7 @@ const LeetCodeStats = () => {
         {
           label: "Hard",
           data: [stats.hard, totalPerCategory.hard - stats.hard],
-          backgroundColor: [
-            "#F44336",
-            isDarkMode ? bgColorsDark.hard : bgColorsLight.hard,
-          ],
+          backgroundColor: ["#F44336", "#FFEBEE"],
           borderWidth: 1,
           circumference: 360,
           rotation: -90,
@@ -88,7 +64,7 @@ const LeetCodeStats = () => {
       cutout: "90%",
       plugins: {
         legend: {
-          display: false, // Disable the legend
+          display: false, // Remove the legend
         },
         tooltip: {
           callbacks: {
