@@ -6,7 +6,7 @@ import Tag from '../Elements/Tag';
 import { slug } from 'github-slugger';
 import { format } from 'date-fns';
 import LeetCodeStats from "./../../components/Home/LeetCodeStats"; 
-import GitHubCommits from "./../../components/Home/GitHubCommits"; 
+import GitHubCommits from "./GitHubCommitsGrid"; 
 
 // passing blog objects from page.js (which imports from content folder)
 const HomeCoverSection = ( {blogs} ) => {
@@ -32,21 +32,25 @@ const HomeCoverSection = ( {blogs} ) => {
       </div>
 
       {/* Stats Section (50:50 Split) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10">
-        {/* LeetCode Stats */}
-        <div className="flex justify-center items-center">
-          <div className="w-full max-w-sm">
-            <LeetCodeStats />
-          </div>
-        </div>
+{/* Stats Section (50:50 Split) */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10">
+  {/* LeetCode Stats */}
+  <div className="flex justify-center items-center">
+    <div className="w-full max-w-sm">
+      <LeetCodeStats />
+    </div>
+  </div>
 
-        {/* GitHub Commits */}
-        <div className="flex justify-center items-center dark:text-light">
-          <div className="w-full max-w-sm">
-            <GitHubCommits />
-          </div>
-        </div>
-      </div>
+  {/* GitHub Commits */}
+  <div className="flex justify-center items-center dark:text-light overflow-x-auto w-full">
+    {/* Remove max-w-sm here so the grid can expand */}
+    <div style={{ minWidth: 700 }}>
+      <GitHubCommits />
+    </div>
+  </div>
+</div>
+
+
         <article className="group relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden">
           
           {/* Shadow Overlay 

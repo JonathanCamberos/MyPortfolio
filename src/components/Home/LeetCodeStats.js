@@ -13,6 +13,7 @@ import {
 // Register the required components/scales
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+
 const LeetCodeStats = () => {
     const [stats, setStats] = useState({ total: 0, easy: 0, medium: 0, hard: 0 });
   
@@ -34,34 +35,24 @@ const LeetCodeStats = () => {
           data: [stats.easy, totalPerCategory.easy - stats.easy],
           backgroundColor: ["#4CAF50", "#E0F2E9"],
           borderWidth: 1,
-          circumference: 360,
-          rotation: -90,
-          cutout: "80%",
         },
         {
           label: "Medium",
           data: [stats.medium, totalPerCategory.medium - stats.medium],
           backgroundColor: ["#FFC107", "#FFF8E1"],
           borderWidth: 1,
-          circumference: 360,
-          rotation: -90,
-          cutout: "60%",
         },
         {
           label: "Hard",
           data: [stats.hard, totalPerCategory.hard - stats.hard],
           backgroundColor: ["#F44336", "#FFEBEE"],
           borderWidth: 1,
-          circumference: 360,
-          rotation: -90,
-          cutout: "40%",
         },
       ],
     };
   
     const options = {
       responsive: true,
-      cutout: "90%",
       plugins: {
         legend: {
           display: false, // Remove the legend
@@ -81,8 +72,10 @@ const LeetCodeStats = () => {
   
     return (
       <div className="p-4 max-w-sm mx-auto dark:text-light">
-        <h2 className="text-xl font-bold mb-4 text-center">LeetCode Progress</h2>
-        <Doughnut data={data} options={options} />
+        <h2 className="text-xl font-bold mb-4 text-center">LeetCode</h2>
+        <div style={{ width: "200px", height: "200px", margin: "0 auto" }}>
+          <Doughnut data={data} options={options} />
+        </div>
         <p className="mt-4 text-center text-lg font-semibold">
           Total Questions Solved: {stats.total}
         </p>
