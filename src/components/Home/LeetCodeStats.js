@@ -5,14 +5,18 @@ import { TypeAnimation } from "react-type-animation";
 
 const LeetCodeStats = () => {
   const [stats, setStats] = useState({ total: 0, easy: 0, medium: 0, hard: 0 });
-  const [sanity, setSanity] = useState("50.00%");
+  const sanityOptions = [
+    "15.00%", "20.00%", "25.00%", "30.00%", "35.00%", "40.00%", "45.00%",
+    "50.00%", "55.00%", "60.00%", "65.00%", "70.00%", "75.00%", "80.00%",
+    "85.00%", "90.00%",
+  ];
 
-  const getRandomMultipleOf5 = () => {
-    const min = 3; // 15/5
-    const max = 18; // 90/5
-    const randomMultiple = Math.floor(Math.random() * (max - min + 1)) + min;
-    return (randomMultiple * 5).toFixed(2) + "%";
+  const getRandomSanity = () => {
+    const randomIndex = Math.floor(Math.random() * sanityOptions.length);
+    return sanityOptions[randomIndex];
   };
+
+  const [sanity, setSanity] = useState("50.00%");
 
   useEffect(() => {
     fetch("/leetcodeStats.json")
@@ -23,10 +27,11 @@ const LeetCodeStats = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSanity(getRandomMultipleOf5());
+      const newSanity = getRandomSanity();
+      setSanity(newSanity);
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   return (
@@ -50,12 +55,18 @@ const LeetCodeStats = () => {
         <span className="text-purple-400">sanity</span>:{" "}
         <span className="text-blue-300">
           <TypeAnimation
-            key={sanity}
-            sequence={[sanity]}
+            key={sanity} // Ensure animation re-runs when sanity changes
+            sequence={[
+              sanity, // Type the current value
+              2000,   // Wait for 2 seconds
+              "",     // Delete the text
+              500,    // Pause before typing the next value
+            ]}
             wrapper="span"
             cursor={true}
-            repeat={0}
-            speed={300}
+            repeat={0} // Do not repeat a single animation
+            speed={75}
+            deletionSpeed={50}
           />
         </span>
         ;
