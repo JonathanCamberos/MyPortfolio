@@ -279,11 +279,11 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (merge sorting both strings) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
+| Brute Force (Merge sort on strings) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
 | Hashmap | O(n) | O(n) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
 | Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
 
-### Brute Force
+### Brute Force (Merge sort on strings)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -471,11 +471,11 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (all pairs comparison) |  |  |  | |
+| Brute Force (Comparing all pairs) |  |  |  | |
 | Hashmap 1-pass |  |  |  |  |
 
 
-### Brute Force
+### Brute Force (Comparing all pairs)
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -578,11 +578,11 @@ Space Upper Bound: If we want to track every character count Hashmap per every s
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (merge sorting + hashmap key value list) | O(n<sup>2</sup> * k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
+| Brute Force (Merge sort to group hashmap values by sorted key) | O(n<sup>2</sup> * k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
 | Merge sort | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
 | Hashmap | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 
-### Brute Force
+### Brute Force (Merge sort to group hashmap values by sorted key)
 Not shown in code as is inefficient with O(n<sup>2</sup> k). It checks each string against every other
 for inequality.
 
@@ -782,7 +782,7 @@ Space Upper Bound:
 | Frequency Buckets | O(n) | O(n) | | |
 | Heap | O(n + m log k) | O(n + k) | | | |
 
-### Brute Force (Sort all frequencies descending)
+### Brute Force (Insertion Sort on frequency tuples descending)
 
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:

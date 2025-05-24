@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Tag from '../Elements/Tag';
 import { slug } from 'github-slugger';
 import { format } from 'date-fns';
+import LeetCodeStats from "./../../components/Home/LeetCodeStats"; // Assuming this is the component created for LeetCode stats.
 
 // passing blog objects from page.js (which imports from content folder)
 const HomeCoverSection = ( {blogs} ) => {
@@ -16,6 +17,26 @@ const HomeCoverSection = ( {blogs} ) => {
     
     return (
       <div className="md:w-11/12 w-full inline-block">
+
+              {/* Intro and LeetCode Section */}
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-between mb-10 p-6 sm:p-10">
+          {/* Intro Section */}
+          <div className="md:w-1/2 w-full text-left md:pr-10">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Welcome to My Portfolio</h2>
+            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              Hi, I’m Jonathan Camberos, a passionate software engineer with a
+              love for solving challenging problems and sharing knowledge. This
+              portfolio showcases my journey in coding, blogging, and problem-solving.
+            </p>
+          </div>
+
+          {/* LeetCode Stats Section */}
+          <div className="md:w-1/2 w-full flex justify-center items-center">
+            <div className="w-full max-w-sm">
+              <LeetCodeStats />
+            </div>
+          </div>
+        </div>
         <article className="group relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden">
           
           {/* Shadow Overlay 
