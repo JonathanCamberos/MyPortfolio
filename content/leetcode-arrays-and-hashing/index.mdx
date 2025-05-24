@@ -3,7 +3,7 @@ title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
 image: "../../public/blogs/code_3.jpg"
 publishedAt: "2024-08-14"
-updatedAt: "2025-05-23"
+updatedAt: "2025-05-24"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -174,7 +174,7 @@ If we want to track every element, best space complexity is O(n)
 
 ### Solution 1: Hashmap
 ```python
-    def containsDuplicate_hashmap(self, nums: List[int]) -> bool:
+    def containsDuplicate(self, nums: List[int]) -> bool:
 
         # space complexity: hashmap of O(n)
         seen = {}
@@ -192,7 +192,7 @@ If we want to track every element, best space complexity is O(n)
         return False
 ```
 ```python
-    def containsDuplicate_defaultdict(sef, nums: List[int]) -> bool:
+    def containsDuplicate(sef, nums: List[int]) -> bool:
 
         # space complexity: dictionary of O(n)
         # dictionary auto initializes missing key's values to 0
@@ -221,7 +221,7 @@ If we want to track every element, best space complexity is O(n)
 ### Solution 2: Hashset
 
 ```python
-    def containsDuplicate_hashset(self, nums: List[int]) -> bool:
+    def containsDuplicate(self, nums: List[int]) -> bool:
         
         # space complexity: hashset of O(n)
         seen = set()
@@ -325,10 +325,10 @@ Space Upper Bound: If we want to track every element, best space complexity is O
                     sorted.append(right[j])
                     j += 1
             
-            # If elements remain in `left`
-            sorted.extend(left[i:])
-            # If elements remain in `right`
-            sorted.extend(right[j:])
+
+            # time complexity: O(n) in worst case if 1 list is empty
+            sorted.extend(left[i:]) # If elements remain in `left`
+            sorted.extend(right[j:]) # If elements remain in `right`
 
             return sorted
 
@@ -787,27 +787,33 @@ Space Upper Bound:
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
-        # space complexity: count for all ints O(n)
-        freq = defaultdict(int)
+        # space complexity: frequency count for all ints O(n)
+        count = defaultdict(int)
 
         # time complexity: iterate over all nums O(n)
         for num in nums: 
-            freq[num] += 1
+            count[num] += 1
 
-        # generate tuple of [(int, count), ...], ascending by count
-        sorted = sorted(freq.items(), key=lambda tuple: tuple[1])
-        sorted = sorted[::-1] # reverse list
+        countTuple = list(count.items()) # [(num, freq), ...]
 
-        
+        # time complexity: Best case O(n), Average 
+        for i in range(1, len(countTuple)):
+            curr = countTup[i]
+            j = i - 1
+
+            while j >= 0 and countTuple[j][1] < curr[1]:
+                countTuple[j + 1] = countTuple[j]
+                j -= 1
+            
+            countTuple[j + 1] = curr # insert element in correct place
+
+        # time complexity: grab k top occurring ints from frequency list O(k)        
         result = []
-        
-        # time complexity: grab k top occurring ints from frequency list O(k)
         for i in range(k):
-            result.append(sorted[i][0]) # grabbing int key from tuple [(int, count), ...]
+            result.append(countTuple[i][0]) # grabbing int key from tuple [(int, count), ...]
 
-
-        # overall: time complexity  O(n)
-        # overall: space complexity 
+        # overall: time complexity  O(m^2) = O(n + m^2 + k)
+        # overall: space complexity O(m)
         return result
 ```
 
