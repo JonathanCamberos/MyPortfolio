@@ -18,10 +18,11 @@ const HomeCoverSection = ( {blogs} ) => {
     return (
       <div className="md:w-11/12 w-full inline-block">
 
-              {/* Intro and LeetCode Section */}
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-between mb-10 p-6 sm:p-10">
+         {/* Intro and LeetCode Section */}
+         <div className="flex flex-col md:flex-row items-center md:items-start justify-between mb-10 p-6 sm:p-10">
           {/* Intro Section */}
           <div className="md:w-1/2 w-full text-left md:pr-10">
+            {/* Welcome Section */}
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">Welcome to My Portfolio</h2>
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
               Hi, I’m Jonathan Camberos, a passionate software engineer with a
