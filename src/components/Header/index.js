@@ -116,13 +116,13 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="hidden sm:flex items-center dark:text-light">
-          <Link href="/" className="mr-2">
+          <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link>
-          <Link href="/categories/all-categories" className="mx-2">
+          <Link href="/categories/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             Posts
           </Link>
-          <Link href="/about" className="mx-2">
+          <Link href="/about" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             About
           </Link>
           <button
@@ -167,13 +167,13 @@ const Header = () => {
       {/* Dummy Item */}
       <div className="mb-1 invisible">ur not supposed to see this :)</div>
 
-      <Link href="/" className="mb-2" onClick={toggle}>
+      <Link href="/" className="mb-2 hover:text-accent dark:hover:text-accentDark" onClick={toggle}>
         Home
       </Link>
-      <Link href="/categories/all-categories" className="mb-2" onClick={toggle}>
+      <Link href="/categories/all-categories" className="mb-2 hover:text-accent dark:hover:text-accentDark" onClick={toggle}>
         Categories
       </Link>
-      <Link href="/about" className="mb-2" onClick={toggle}>
+      <Link href="/about" className="mb-2 hover:text-accent dark:hover:text-accentDark" onClick={toggle}>
         About
       </Link>
       <button
