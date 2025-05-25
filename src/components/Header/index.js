@@ -120,7 +120,7 @@ const Header = () => {
             Home
           </Link>
           <Link href="/categories/all-categories" className="mx-2">
-            Categories
+            Posts
           </Link>
           <Link href="/about" className="mx-2">
             About
