@@ -55,67 +55,66 @@ const Header = () => {
         <Logo />
 
         {/* Hamburger Menu */}
-<button
-  className="w-10 h-10 flex items-center justify-center sm:hidden mr-5 cursor-pointer rounded transition-all ease duration-300"
-  onClick={toggle}
-  aria-label="Hamburger Menu"
->
-  <div className="relative w-6 h-6">
-    {/* Original Top Line */}
-    <span
-      className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
-      style={{
-        width: click ? "60%" : "100%",
-        transform: click
-          ? "rotate(45deg) translate(-50%, -50%)"
-          : "translateY(-6px) translateX(-50%)",
-      }}
-    />
-    {/* Original Middle Line */}
-    <span
-      className="absolute top-1/2 left-0 w-full h-0.5 bg-dark dark:bg-light rounded transition-opacity duration-300 ease-in-out"
-      style={{
-        opacity: click ? 0 : 1,
-      }}
-    />
-    {/* Original Bottom Line */}
-    <span
-      className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
-      style={{
-        width: click ? "60%" : "100%",
-        transform: click
-          ? "rotate(-45deg) translate(-50%, -50%)"
-          : "translateY(6px) translateX(-50%)",
-      }}
-    />
-    {/* New Additional Line 1 (Up Right) */}
-    <span
-      className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
-      style={{
-        width: click ? "60%" : "100%",
-        transform: click
-          ? "rotate(-45deg) translate(50%, -50%)"
-          : "translateY(-6px) translateX(-50%)",
-        opacity: click ? 1 : 0,
-      }}
-    />
-    {/* New Additional Line 2 (Down Right) */}
-    <span
-      className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
-      style={{
-        width: click ? "60%" : "100%",
-        transform: click
-          ? "rotate(45deg) translate(50%, -50%)"
-          : "translateY(6px) translateX(-50%)",
-        opacity: click ? 1 : 0,
-      }}
-    />
-  </div>
-</button>
-
+        <button
+          className="w-10 h-10 flex items-center justify-center sm:hidden mr-5 cursor-pointer rounded transition-all ease duration-300"
+          onClick={toggle}
+          aria-label="Hamburger Menu"
+        >
+          <div className="relative w-6 h-6">
+            {/* Original Top Line */}
+            <span
+              className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
+              style={{
+                width: click ? "60%" : "100%",
+                transform: click
+                  ? "rotate(45deg) translate(-50%, -50%)"
+                  : "translateY(-6px) translateX(-50%)",
+              }}
+            />
+            {/* Original Middle Line */}
+            <span
+              className="absolute top-1/2 left-0 w-full h-0.5 bg-dark dark:bg-light rounded transition-opacity duration-300 ease-in-out"
+              style={{
+                opacity: click ? 0 : 1,
+              }}
+            />
+            {/* Original Bottom Line */}
+            <span
+              className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
+              style={{
+                width: click ? "60%" : "100%",
+                transform: click
+                  ? "rotate(-45deg) translate(-50%, -50%)"
+                  : "translateY(6px) translateX(-50%)",
+              }}
+            />
+            {/* New Additional Line 1 (Up Right) */}
+            <span
+              className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
+              style={{
+                width: click ? "60%" : "100%",
+                transform: click
+                  ? "rotate(-45deg) translate(50%, -50%)"
+                  : "translateY(-6px) translateX(-50%)",
+                opacity: click ? 1 : 0,
+              }}
+            />
+            {/* New Additional Line 2 (Down Right) */}
+            <span
+              className="absolute top-1/2 left-1/2 h-0.5 bg-dark dark:bg-light rounded transition-transform duration-300 ease-in-out"
+              style={{
+                width: click ? "60%" : "100%",
+                transform: click
+                  ? "rotate(45deg) translate(50%, -50%)"
+                  : "translateY(6px) translateX(-50%)",
+                opacity: click ? 1 : 0,
+              }}
+            />
+          </div>
+        </button>
 
         {/* Navigation */}
-        <nav className="hidden sm:flex items-center dark:text-light">
+        <nav className="hidden sm:flex items-center dark:text-light  ">
           <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link>

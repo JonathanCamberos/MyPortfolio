@@ -778,39 +778,46 @@ Space Upper Bound:
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Sort all frequencies descending) | O(n + m log m) | O(n + k) | Sorting m unique elements domi | |
-| Stack PushPop | O(n + m log m) | O(n + k) |  |  |
 | Frequency Buckets | O(n) | O(n) | | |
-| Heap | O(n + m log k) | O(n + k) | | | |
 
 ### Brute Force (Insertion Sort on frequency tuples descending)
 
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
-        # space complexity: frequency count for all ints O(n)
+        # space complexity: frequency count for all unique integers O(m)
         count = defaultdict(int)
 
-        # time complexity: iterate over all nums O(n)
+        # time complexity: iterate over array of n integers O(n)
         for num in nums: 
+
+            # time complexity: insertion operation takes constant O(1)
             count[num] += 1
 
+
+        # time complexity: iteration for conversion to list takes O(m)
+        # space complexity: list size is equal to number of unique integers O(m)
         countTuple = list(count.items()) # [(num, freq), ...]
 
-        # time complexity: Best case O(n), Average 
+        # time complexity: Insertion sort 
+        # Best case O(m), Average O(m) = O(m^2/2), Worst O(m^2)
         for i in range(1, len(countTuple)):
-            curr = countTup[i]
+            key = countTup[i]
             j = i - 1
 
-            while j >= 0 and countTuple[j][1] < curr[1]:
+            # while left element is greater than key
+            while j >= 0 and countTuple[j][1] < key[1]:
                 countTuple[j + 1] = countTuple[j]
                 j -= 1
             
-            countTuple[j + 1] = curr # insert element in correct place
+            countTuple[j + 1] = key # place key
 
         # time complexity: grab k top occurring ints from frequency list O(k)        
         result = []
         for i in range(k):
-            result.append(countTuple[i][0]) # grabbing int key from tuple [(int, count), ...]
+            
+            # grabbing int key from tuple [(int, count), ...]
+            result.append(countTuple[i][0]) 
 
         # overall: time complexity  O(m^2) = O(n + m^2 + k)
         # overall: space complexity O(m)
@@ -819,81 +826,68 @@ Space Upper Bound:
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-|  |  |  |  |  |
+| Iteration + Insertion | O(n) | O(m) | Iterating over array of n integers O(n) | Hashmap with m unique elements results in O(m) memory allocation with O(n) in worst case |
+| Conversion to list | O(m) | O(m) | Iterating over hashmap to create list takes O(m) | List of tuples stores m (int, count) pairs O(m) |
+| Insertion sort | Best O(m), O(m<sup>2</sup>) average, O(m<sup>2</sup>) worst | Insertion sort on tuples of (int, count) sorting by count results in usual time complexity of insertion sort | No additional memory allocation required for in-place insertion sort O(1) |  |
+| Grabbing top-k elements | O(k) | O(k) | Iterating over sorted list for k elements O(k) | Storing top k elements into result array O(k) | 
+| Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
 
-
-
-### Solution 1: Stack/PushPop
-
-```python
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        # occurence char hashmap 
-        freq = defaultdict(int)
-        for n in nums:
-            freq[n] += 1
-            
-        # heap replaces smaller occur w/ higher occur while maintaining size <= k
-        heap = []
-        for key, count in freq.items():
-            if len(heap) == k:
-                heappushpop(heap, (count, key))
-            else:
-                heappush(heap, (count, key))
-        return [item[1] for item in heap]
-```
-
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion |  |  |  |  |
-| Iteration |  |  |  |  |
-| Lookup | |  |  |  |
-| Overall |  |  |  |   |
-
-### Solution 2: Bucket Sort
+### Solution 1: Bucket Sort
 
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
-        # occurrence hashmap 
-        num_count = {}
+        # space complexity: frequency count for unique integers O(m) 
+        count = defaultdict(int)
+
+        # time complexity: iterate over list of n integers O(n)
         for key in nums:
-            num_count[key] = 1 + num_count.get(key, 0)
 
-        # list comprehension - create len() empty buckets 
-        num_buckets = len(nums) + 1  # empty list requires at least 1 bucket
-        freq_buckets = [[] for i in range(num_buckets)]
+            # time complexity: insertion operation takes constant O(1)
+            count[key] += 1
 
-        # sort into buckets 
-        for num, occurrences in num_count.items():
-            freq_buckets[occurrences].append(num)
+        # space complexity: numBuckets equal to length of list, if list if full of 1 element O(n)
+        numBuckets = len(nums)  
 
+        # time complexity: iterating to set empty list for each bucket
+        # space complexity: creating O(n) bucket lists
+        freqBuckets = [[] for i in range(numBuckets)]
+
+        # time complexity: iterate over frequency list for m unique integer tuples (int, occurrences) O(m) 
+        for int, occurrences in count.items():
+
+            # time complexity: insert operation takes constant O(1)
+            freqBuckets[occurrences].append(int)
+
+        # space complexity: grabbing top k integers O(k)
         res = []
 
-        # decreasing for loop, starting by grabbing highest bucket
-        for i in range(len(freq_buckets) - 1, 0, -1):
+        # time complexity: iterate over n buckets O(n)
+        for i in range(len(freqBuckets) - 1, 0, -1):
             
-            # grabbing elements in curr bucket
-            for num in freq_buckets[i]:
+            # time complexity: iterate over all entries in current bucket O(n)
+            for num in freqBuckets[i]:
+                
+                # time complexity: insert operation takes constant O(1)
                 res.append(num)
                 
-                # check if kth reached
+                # time complexity: continue while less than k integers have been grabbed O(k)
                 if len(res) == k:
                     return res
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return []
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion |  |  |  |  |
-| Iteration |  |  |  |  |
-| Lookup | |  |  |  |
-| Overall |  |  |  |   |
-
+| Iteration + Insertion | O(n) | O(m) | Iteration over array of n integers O(n) | Hashmap for m unique integers O(m) |
+| Bucket Initialization | O(n) | O(n) | Iterating over list length to create n empty buckets O(n) | At least n buckets needed for worst case scenario of list filled with only 1 integer O(n) |
+| Bucket Population | O(m) | O(m) | Inserting m unique integers into their respective buckets |  Buckets will store m unique integers in their respective buckets O(m) |
+| Result Extraction | O(n) | O(k) | Iterating over n buckets to collect k integers, worst case all buckets must be traverse O(n) | Top k integers must be stored in result list O(k) | 
+| Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
 ## 271. String Encode and Decode - Medium
 
