@@ -31,16 +31,16 @@ const Footer = () => {
             </div>
           </span>
 
-          <Link href="/sitemap.xml" className="text-center underline ml:-4  my-4 md:my-0">
+          {/* <Link href="/sitemap.xml" className="text-center underline ml:-4  my-4 md:my-0">
             sitemap.xml
-          </Link>
+          </Link> */}
 
           <div>
-            Thanks for visiting!
+            Thanks for visiting
           </div>
            
 
-          <div>
+          {/* <div>
             <button
                 role="link"
                 onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}
@@ -56,7 +56,7 @@ const Footer = () => {
               >
                 <GithubIcon className="hover:scale-125 transition-all ease duration-200 fill-light dark:fill-dark"/>
               </button>
-          </div>
+          </div> */}
 
         </div>
         

@@ -23,28 +23,24 @@ const HomeCoverSection = ( {blogs} ) => {
       
 
         {/* Stats Section (50:50 Split) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10">
-          
-            {/* Intro Section */}
-      <div className="flex flex-col items-center text-center p-6 sm:p-10 mb-10">
-        <h2 className="text-2xl font-bold dark:text-light">
-          Welcome to My Portfolio
-        </h2>
-        <p className="text-lg dark:text-light leading-relaxed max-w-3xl">
-          Hi, I’m Jonathan Camberos, a passionate software engineer with a love
-          for solving challenging problems and sharing knowledge. This portfolio
-          showcases my journey in coding, problem-solving, and design.
-        </p>
-      </div> 
-          {/* LeetCode Stats */}
-          <div className="flex justify-center items-center">
-            <div className="w-full max-w-sm">
-              <LeetCodeStats />
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10 items-center min-h-[60vh]">
+  <div className="flex flex-col items-center text-center p-6 sm:p-10">
+    <h2 className="text-2xl font-bold dark:text-light">
+      Welcome to My Portfolio
+    </h2>
+    <p className="text-lg dark:text-light leading-relaxed max-w-3xl">
+      Hi, I’m Jonathan Camberos, a passionate software engineer with a love
+      for problem solving. This portfolio
+      showcases my journey in algorithms, problem-solving, and design.
+    </p>
+  </div>
 
-          
-        </div>
+  <div className="flex justify-center items-center">
+    <div className="w-full max-w-sm">
+      <LeetCodeStats />
+    </div>
+  </div>
+</div>
 
 
         {/* <article className="group relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden"> */}

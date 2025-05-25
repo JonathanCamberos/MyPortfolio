@@ -6,9 +6,9 @@ import { TypeAnimation } from "react-type-animation";
 const LeetCodeStats = () => {
   const [stats, setStats] = useState({ total: 0, easy: 0, medium: 0, hard: 0 });
   const sanityOptions = [
-    "15.00%", "20.00%", "25.00%", "30.00%", "35.00%", "40.00%", "45.00%",
-    "50.00%", "55.00%", "60.00%", "65.00%", "70.00%", "75.00%", "80.00%",
-    "85.00%", "90.00%",
+    "15.00%;", "20.00%;", "25.00%;", "30.00%;", "35.00%;", "40.00%;", "45.00%;",
+    "50.00%;", "55.00%;", "60.00%;", "65.00%;", "70.00%;", "75.00%;", "80.00%;",
+    "85.00%;", "90.00%;",
   ];
 
   const getRandomSanity = () => {
@@ -16,7 +16,7 @@ const LeetCodeStats = () => {
     return sanityOptions[randomIndex];
   };
 
-  const [sanity, setSanity] = useState("50.00%");
+  const [sanity, setSanity] = useState("50.00%;");
 
   useEffect(() => {
     fetch("/leetcodeStats.json")
@@ -69,7 +69,7 @@ const LeetCodeStats = () => {
             deletionSpeed={50}
           />
         </span>
-        ;
+        
       </p>
       <p>&#125;</p>
     </div>
