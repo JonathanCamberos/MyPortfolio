@@ -1,9 +1,9 @@
 ---
 title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
-image: "../../public/blogs/code_3.jpg"
+image: "../../public/blogs/hashmap-2.png"
 publishedAt: "2025-05-13"
-updatedAt: "2025-05-13"
+updatedAt: "2025-05-26"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -847,8 +847,10 @@ Space Upper Bound:
             # time complexity: insertion operation takes constant O(1)
             count[key] += 1
 
-        # space complexity: numBuckets equal to length of list, if list if full of 1 element O(n)
-        numBuckets = len(nums)  
+        # numBuckets equal to length to account for max possible frequency count
+        # the case where list is full of only 1 element O(n)
+        # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1
+        numBuckets = len(nums) + 1
 
         # time complexity: iterating to set empty list for each bucket
         # space complexity: creating O(n) bucket lists
