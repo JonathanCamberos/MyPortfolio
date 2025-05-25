@@ -17,9 +17,15 @@ const HomeCoverSection = ( {blogs} ) => {
 
     
     return (
-      <div className="md:w-11/12 w-full inline-block">
+      <div>
+       {/* <div className="md:w-11/12 w-full inline-block"> */}
 
-        {/* Intro Section */}
+      
+
+        {/* Stats Section (50:50 Split) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10">
+          
+            {/* Intro Section */}
       <div className="flex flex-col items-center text-center p-6 sm:p-10 mb-10">
         <h2 className="text-2xl font-bold dark:text-light">
           Welcome to My Portfolio
@@ -29,10 +35,7 @@ const HomeCoverSection = ( {blogs} ) => {
           for solving challenging problems and sharing knowledge. This portfolio
           showcases my journey in coding, problem-solving, and design.
         </p>
-      </div>
-
-        {/* Stats Section (50:50 Split) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10">
+      </div> 
           {/* LeetCode Stats */}
           <div className="flex justify-center items-center">
             <div className="w-full max-w-sm">
@@ -44,14 +47,14 @@ const HomeCoverSection = ( {blogs} ) => {
         </div>
 
 
-        <article className="group relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden">
+        {/* <article className="group relative flex flex-col items-start justify-end mx-5 sm:mx-10 h-[60vh] sm:h-[85vh] rounded-3xl overflow-hidden"> */}
           
           {/* Shadow Overlay 
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 z-10 rounded-3xl"></div>
           */}
           
           {/* Blog Image */}
-          <Image
+          {/* <Image
             src={blog.image.filePath.replace("../public", "")}
             placeholder="blur"
             blurDataURL={blog.image.blurhashDataUrl}
@@ -60,10 +63,10 @@ const HomeCoverSection = ( {blogs} ) => {
             className="object-cover object-center rounded-3xl transition-transform duration-300 ease-in-out group-hover:scale-105"
             sizes="100vw"
             priority
-          />
+          /> */}
   
           {/* Blog Details */}
-          <div className="absolute bottom-0 left-0 w-full lg:w-3/4 p-6 sm:p-8 md:p-12 lg:p-16 text-light z-20">
+          {/* <div className="absolute bottom-0 left-0 w-full lg:w-3/4 p-6 sm:p-8 md:p-12 lg:p-16 text-light z-20">
             <Tag link={`/categories/${slug(blog.tags[0])}`} name={blog.tags[0]} />
             <Link href={blog.url} className="mt-6">
               <h1 className="font-bold capitalize text-lg sm:text-xl md:text-3xl lg:text-4xl text-shadow-outline">
@@ -78,8 +81,8 @@ const HomeCoverSection = ( {blogs} ) => {
             <span className="inline-block w-full capitalize text-light/60 dark:text-light font-semibold text-xs sm:text-base">
               {format(new Date(blog.publishedAt), "MMMM dd, yyyy")}
             </span>
-          </div>
-        </article>
+          </div> */}
+        {/* </article> */}
       </div>
     )
 }
