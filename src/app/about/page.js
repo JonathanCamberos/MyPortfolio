@@ -5,7 +5,6 @@ import Image from 'next/image';
 // import aboutImage from '../../public/images/about_img.jpg'
 //
 
-
 export default function About() {
   const skills = [
     "Java",
@@ -68,7 +67,7 @@ export default function About() {
         /> */}
         
         {/*  ##### Image #####  */}
-        <Image src="/images/about_img.jpg"
+        {/* <Image src="/images/about_img.jpg"
           placeholder="blur"
           blurDataURL="data:image/jpeg;base64,...base64-encoded-string..."
           alt="Image of me :)"
@@ -76,7 +75,7 @@ export default function About() {
           height={400}
           className="object-cover rounded-xl group-hover:scale-105 transition-all ease duration-300"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-        />
+        /> */}
 
         {/* <Image src={aboutImage}
           alt="img of author"
