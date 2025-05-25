@@ -49,7 +49,7 @@ const Header = () => {
   return (
     <>
       <header
-        className="w-full p-4 px-5 sm:px-10 flex items-center justify-between fixed top-0 z-50 bg-light dark:bg-dark shadow-md transition-all duration-300"
+        className="w-full sm:p-4 px-5 flex items-center justify-between fixed top-0 z-50 bg-light dark:bg-dark shadow-md transition-all duration-300"
       >
         {/* Logo Section */}
         <Logo />
@@ -165,7 +165,7 @@ const Header = () => {
   <div className="fixed top-0 left-0 w-full bg-light dark:bg-dark p-6 shadow-lg z-40 transition-all duration-300">
     <nav className="flex flex-col items-start text-dark dark:text-light">
       {/* Dummy Item */}
-      <div className="mb-7 invisible">ur not supposed to see this :)</div>
+      <div className="mb-1 invisible">ur not supposed to see this :)</div>
 
       <Link href="/" className="mb-2" onClick={toggle}>
         Home
