@@ -27,7 +27,7 @@ const Footer = () => {
           
           <span className="text-center">
             <div className="flex items-center">
-                JC :)
+                :)
             </div>
           </span>
 
