@@ -54,7 +54,7 @@ export default function About() {
   ]
 
   return (
-    <section className="w-full min-h-screen pt-4 border-t-2 border-b-2 border-solid 
+    <section className="w-full min-h-screen sm:pt-12 pt-8 border-t-2 border-b-2 border-solid 
         border-dark dark:border-light flex flex-col md:flex-row items-center justify-center 
         text-dark dark:text-light"
     >
