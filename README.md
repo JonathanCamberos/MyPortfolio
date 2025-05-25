@@ -1,8 +1,11 @@
-## MyPortfolio
+## Jonathan's blog template
 
-Hi, I'm Jonathan. 
-Made this swe portfolio to log leetcode + projects im working on to keep up with new technologies.
+Hello, welcome. This is a blog template. 
+
+## See the blog
+[https://portfolio-jcprojects.vercel.app](https://portfolio-jcprojects.vercel.app/)
+
+## To use the template
+...
 
 Portfolio is made with React.js. tailwind, contentlayer, and other libraries:
-
-Live at: [https://portfolio-jcprojects.vercel.app](https://portfolio-jcprojects.vercel.app/)
