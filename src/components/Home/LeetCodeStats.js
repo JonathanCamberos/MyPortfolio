@@ -35,25 +35,25 @@ const LeetCodeStats = () => {
   }, []);
 
   return (
-    <div className="p-4 bg-gray-800 text-white rounded-md font-mono text-sm">
+    <div className="p-4 bg-gray-800 dark:text-white rounded-md font-mono text-sm">
       <p>
-        <span className="text-pink-400">#leetcode_solved</span> &#123;
+        <span className="text-pink-500 dark:text-pink-400">#leetcode_solved</span> &#123;
       </p>
       <p className="ml-4">
-        <span className="text-green-400">easy</span>:{" "}
-        <span className="text-blue-300">{stats.easy};</span>
+        <span className="text-green-600 dark:text-green-400">easy</span>:{" "}
+        <span className="text-blue-500 dark:text-blue-300">{stats.easy};</span>
       </p>
       <p className="ml-4">
-        <span className="text-yellow-400">medium</span>:{" "}
-        <span className="text-blue-300">{stats.medium};</span>
+        <span className="text-yellow-500 dark:text-yellow-400">medium</span>:{" "}
+        <span className="text-blue-500 dark:text-blue-300">{stats.medium};</span>
       </p>
       <p className="ml-4">
-        <span className="text-red-400">hard</span>:{" "}
-        <span className="text-blue-300">{stats.hard};</span>
+        <span className="text-red-600 dark:text-red-400">hard</span>:{" "}
+        <span className="text-blue-500 dark:text-blue-300">{stats.hard};</span>
       </p>
       <p className="ml-4">
-        <span className="text-purple-400">sanity</span>:{" "}
-        <span className="text-blue-300">
+        <span className="text-purple-600 dark:text-purple-400">sanity</span>:{" "}
+        <span className="text-blue-500 dark:text-blue-300">
           <TypeAnimation
             key={sanity} // Ensure animation re-runs when sanity changes
             sequence={[

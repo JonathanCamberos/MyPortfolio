@@ -15,6 +15,12 @@ module.exports = {
         accent: "#ed7b27",
         accentDark: "#ffdb4d",
         gray: "#747474",
+        pink400: "#f472b6",
+        green400: "#34d399",
+        yellow400: "#fbbf24",
+        red400: "#f87171",
+        purple400: "#c084fc",
+        blue300: "#93c5fd",
       },
       fontFamily:{
         mr: ["var(--font-mr)"],
@@ -30,14 +36,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    function ({ addUtilities, theme }) {
-      addUtilities({
-        '.text-shadow-outline': {
-          textShadow: `1px 1px 2px ${theme('colors.accent')}, -1px -1px 2px ${theme('colors.accent')}`,
-        },
-      });
-    },
+    require('@tailwindcss/typography')
   ],
 }
 

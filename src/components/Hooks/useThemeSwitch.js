@@ -2,20 +2,24 @@
 
 import { useEffect, useState } from "react";
 
+
 export function useThemeSwitch() {
-  const preferDarkQuery = "(prefers-color-schema:dark)";
+  const preferDarkQuery = "(prefers-color-scheme: dark)";
   const storageKey = "theme";
 
   const toggleTheme = (theme) => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (typeof window !== "undefined") {
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      window.localStorage.setItem(storageKey, theme);
     }
-    window.localStorage.setItem(storageKey, theme);
   };
 
   const getUserPreference = () => {
+    if (typeof window === "undefined") return null; // Prevent SSR mismatch
     const userPref = window.localStorage.getItem(storageKey);
     if (userPref) {
       return userPref;
@@ -23,28 +27,21 @@ export function useThemeSwitch() {
     return window.matchMedia(preferDarkQuery).matches ? "dark" : "light";
   };
 
-  const [mode, setMode] = useState("dark");
+  const [mode, setMode] = useState(null); // Start as null to avoid mismatch
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(preferDarkQuery);
-    const handleChange = () => {
-      const newMode = getUserPreference();
+    const newMode = getUserPreference();
+    if (newMode) {
       setMode(newMode);
       toggleTheme(newMode);
-    };
-
-    handleChange();
-
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleChange);
-    };
-  }, []); 
+    }
+  }, []);
 
   useEffect(() => {
-    toggleTheme(mode)
-  }, [mode])
+    if (mode) toggleTheme(mode);
+  }, [mode]);
 
-  return [mode, setMode]
+  return [mode, setMode];
 }
+
+
