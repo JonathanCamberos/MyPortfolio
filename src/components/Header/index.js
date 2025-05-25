@@ -128,7 +128,7 @@ const Header = () => {
           <button
             onClick={() => setMode(mode === "light" ? "dark" : "light")}
             className={cx(
-              "w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1",
+              "w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200",
               mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
             )}
             aria-label="theme-switcher"
@@ -182,7 +182,7 @@ const Header = () => {
           toggle();
         }}
         className={cx(
-          "w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1",
+          "w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200",
           mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
         )}
         aria-label="theme-switcher"
