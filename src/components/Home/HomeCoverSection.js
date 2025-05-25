@@ -30,7 +30,7 @@ const HomeCoverSection = ( {blogs} ) => {
     </h2>
     <p className="text-lg dark:text-light leading-relaxed max-w-3xl">
       Hi, I’m Jonathan Camberos, a passionate software engineer with a love
-      for problem solving. This portfolio
+      for building. This portfolio
       showcases my journey in algorithms, problem-solving, and design.
     </p>
   </div>
