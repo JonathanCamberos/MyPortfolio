@@ -7,7 +7,7 @@ const path = require('path'); // <--- Add this line
 
 const filePaths = [
     'content/leetcode-arrays-and-hashing/index.mdx',
-    'content/leetcode-stack/index.mdx',
+    'content/leetcode-stacks/index.mdx',
     'content/leetcode-two-pointers/index.mdx',
   ];
 
