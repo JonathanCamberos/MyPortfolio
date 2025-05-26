@@ -1,7 +1,7 @@
 ---
 title: "LeetCode: Arrays & Hashing"
 description: "Arrays & Hashing"
-image: "../../public/blogs/hashmap-2.png"
+image: "../../public/blogs/hashmap-8.png"
 publishedAt: "2025-05-13"
 updatedAt: "2025-05-26"
 author: "jonathancamberos"
@@ -143,7 +143,7 @@ If we want to track every element, best space complexity is O(n)
 | Hashset | O(n) | O(n) | Same logic as Hashmap | Same logic as Hashmap |
 
 
-### Brute Force
+### Brute Force (all pairs comparison)
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
@@ -917,27 +917,27 @@ So, for some num n, the result should be the product of all the numbers to the l
 times the product of all the numbers to the right of it:
 
 ```
-Array:           [  2,   3,   4,   5,   6  ]
-Prefix:          [  1,   2,   6,  24, 120  ]
-Postfix:         [ 360, 120,  30,   6,   1  ]
-Result:          [ 360, 240, 180, 120, 120 ]
+Array:           [   2,    3,    4,    5,    6  ]
+Prefix:          [   1,    2,    6,   24,  120  ]
+Postfix:         [ 360,  120,   30,    6,    1  ]
+Result:          [ 360,  240,  180,  120,  120  ]
 ```
 
 To calculate the prefix, we can just iterate over the array multiplying each integer.
 To calculate the postfix, we can just iterate over the array backwards multiplying each integer. 
+And to calculate the result array, we can just iterate over both arrays and multiple corresponding index values.
 
-This would lead to O(3n)
-
-Lets see how we can do it in O(n):
+This would lead to O(n) for time and space. 
+Lets see how we can do it in O(1) for space:
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  | |
-| Prefix & Postfix |  |  |  |  |
-| Prefix & Postfix |  |  |  |  |
+| Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(n) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>) | Memory allocation for result array O(n) |
+| Prefix & Postfix | O(n) | O(n) | Three iterations over the array for prefix, postfix, and result calculation O(n) = O(3n)  | Memory allocation for prefix, postfix, and result arrays O(n) = O(3n) |
+| Prefix & Postfix | O(n) | O(1) | Two iterations over the array for prefix and postfix calculations O(n) |  |
 
-### Brute Force (multiplying all except self)
+### Brute Force (all pairs comparison)
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         res = [0] * len(nums) # result array to store the product
@@ -963,7 +963,7 @@ Lets see how we can do it in O(n):
 |  |  |  |  |  |
 
 
-### Solution 1:  Prefix & Postfix
+### Solution 1:  Prefix & Postfix 3 arrays O(n)
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
