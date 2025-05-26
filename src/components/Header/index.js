@@ -114,7 +114,7 @@ const Header = () => {
         </button>
 
         {/* Navigation */}
-        <nav className="hidden sm:flex items-center dark:text-light  ">
+        <nav className="hidden sm:flex items-center dark:text-light -translate-x-16 sm:-translate-x-12 xs:-translate-x-1">
           <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link>
