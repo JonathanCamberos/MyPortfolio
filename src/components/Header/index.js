@@ -13,7 +13,7 @@ import { cx } from '../../utils'
   main axis:  defined by 'flex-direction' property
   cross axis: perpendicular to main axis
         
-   main axis: four possible values 
+   main axis: fo ur possible values 
         row / row-reverse,        left to right, and right to left
         column / column-reverse,  up to down, and down to up  (?? not sure on which order) 
 
@@ -160,61 +160,76 @@ const Header = () => {
       </header>
 
       {/* Hamburger Popup */}
-      {click && (
-  <div className="fixed top-0 left-0 w-full bg-light dark:bg-dark p-6 shadow-lg z-40 transition-all duration-300">
-    <nav className="flex flex-col items-start text-dark dark:text-light">
-      {/* Dummy Item */}
-      <div className="mb-1 invisible">ur not supposed to see this :)</div>
+      <div
+  className={`fixed top-0 left-0 w-full bg-light dark:bg-dark p-6 shadow-lg z-40 
+    transform transition-all duration-300 ease-in-out ${
+      click ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+    }`}
+>
+  <nav className="flex flex-col items-start text-dark dark:text-light">
+    {/* Dummy Item */}
+    <div className="mb-1 invisible">ur not supposed to see this :)</div>
 
-      <Link href="/" className="mb-2 hover:text-accent dark:hover:text-accentDark" onClick={toggle}>
-        Home
-      </Link>
-      <Link href="/categories/all-categories" className="mb-2 hover:text-accent dark:hover:text-accentDark" onClick={toggle}>
-        Categories
-      </Link>
-      <Link href="/about" className="mb-2 hover:text-accent dark:hover:text-accentDark" onClick={toggle}>
-        About
-      </Link>
-      <button
-        onClick={() => {
-          setMode(mode === "light" ? "dark" : "light");
-          toggle();
-        }}
-        className={cx(
-          "w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200",
-          mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
-        )}
-        aria-label="theme-switcher"
-      >
-        {mode === "light" ? (
-          <MoonIcon className={"fill-dark"} />
-        ) : (
-          <SunIcon className={"fill-dark"} />
-        )}
-      </button>
-      <button
-        role="link"
-        onClick={() => {
-          openInNewTab(`${siteMetadata.linkedin}`);
-          toggle();
-        }}
-        className="inline-block w-6 h-6 mb-4"
-      >
-        <LinkedInIcon className="hover:scale-125 transition-all ease duration-200" />
-      </button>
-      <button
-        role="link"
-        onClick={() => {
-          openInNewTab(`${siteMetadata.github}`);
-          toggle();
-        }}
-        className="inline-block w-6 h-6"
-      >
-        <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
-      </button>
-    </nav>
-  </div>
-)}
+    <Link
+      href="/"
+      className="mb-2 hover:text-accent dark:hover:text-accentDark"
+      onClick={toggle}
+    >
+      Home
+    </Link>
+    <Link
+      href="/categories/all-categories"
+      className="mb-2 hover:text-accent dark:hover:text-accentDark"
+      onClick={toggle}
+    >
+      Categories
+    </Link>
+    <Link
+      href="/about"
+      className="mb-2 hover:text-accent dark:hover:text-accentDark"
+      onClick={toggle}
+    >
+      About
+    </Link>
+    <button
+      onClick={() => {
+        setMode(mode === "light" ? "dark" : "light");
+        toggle();
+      }}
+      className={`w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200 ${
+        mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
+      }`}
+      aria-label="theme-switcher"
+    >
+      {mode === "light" ? (
+        <MoonIcon className={"fill-dark"} />
+      ) : (
+        <SunIcon className={"fill-dark"} />
+      )}
+    </button>
+    <button
+      role="link"
+      onClick={() => {
+        openInNewTab(`${siteMetadata.linkedin}`);
+        toggle();
+      }}
+      className="inline-block w-6 h-6 mb-4"
+    >
+      <LinkedInIcon className="hover:scale-125 transition-all ease duration-200" />
+    </button>
+    <button
+      role="link"
+      onClick={() => {
+        openInNewTab(`${siteMetadata.github}`);
+        toggle();
+      }}
+      className="inline-block w-6 h-6"
+    >
+      <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
+    </button>
+  </nav>
+</div>
+
     </>
   );
 };
