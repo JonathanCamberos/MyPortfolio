@@ -3,7 +3,7 @@ title: "LeetCode: Arrays & Hashing"
 description: "arrays & hashing"
 image: "../../public/blogs/hashmap-8.png"
 publishedAt: "2025-05-13"
-updatedAt: "2025-05-26"
+updatedAt: "2025-05-27"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -578,12 +578,15 @@ Space Upper Bound: If we want to track every character count Hashmap per every s
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Merge sort to group hashmap values by sorted key) | O(n<sup>2</sup> * k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
+| Brute Force (Compare all pairs * Merge sort) | O(n<sup>2</sup> * k log k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
 | Merge sort | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
-| Hashmap | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
+| Hashmap Tuple | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 
-### Brute Force (Merge sort to group hashmap values by sorted key)
-Not shown in code as is inefficient with O(n<sup>2</sup> k). It checks each string against every other
+### Brute Force (Compare all pairs * Merge sort)
+Not shown in code 
+
+Is extremely inefficient with O(n<sup>2</sup> * k log k). It compares each pair of strings
+via merge sort for anagram grouping.
 for inequality.
 
 ### Solution 1: Sort Grouping - Merge sort
@@ -656,7 +659,7 @@ for inequality.
 | Overall | O(n * k log k) | O(n * k) |  Merge sort O(k log k) for all strings O(n) dominates. Leading to O(n * k log k) |  Storing sorted string keys O(n) with original string value O(k) dominates. Leading to O(n * k) |
 
 
-### Solution 2: Hashmap -> Tuple Key Grouping
+### Solution 2: Hashmap Tuple
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -802,11 +805,11 @@ Space Upper Bound:
         # time complexity: Insertion sort 
         # Best case O(m), Average O(m) = O(m^2/2), Worst O(m^2)
         for i in range(1, len(countTuple)):
-            key = countTup[i]
+            key = countTup[i][1]
             j = i - 1
 
             # while left element is greater than key
-            while j >= 0 and countTuple[j][1] < key[1]:
+            while j >= 0 and countTuple[j][1] < key:
                 countTuple[j + 1] = countTuple[j]
                 j -= 1
             
@@ -880,7 +883,7 @@ Space Upper Bound:
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
-        return []
+        return res
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -928,10 +931,10 @@ Result:          [ 360,  240,  180,  120,  120  ]
 
 To calculate the prefix, we can just iterate over the array multiplying each integer.
 To calculate the postfix, we can just iterate over the array backwards multiplying each integer. 
-And to calculate the result array, we can just iterate over both arrays and multiple corresponding index values.
+To calculate the result array, we can just iterate over both prefix and postfix arrays multiplying corresponding index values.
 
-This would lead to O(n) for time and space. 
-Lets see how we can do it in O(1) for space.
+This would lead to O(n) = O(3n) for time and O(n) = O(3n) space. 
+Now lets see how we can do it in O(1) for space.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -982,23 +985,25 @@ Lets see how we can do it in O(1) for space.
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        # space complexity: prefix, postfix, and result arrays to calculate and store final value for n integers O(n)
+        # space complexity: prefix, postfix, and result arrays to calculate and store final value for n integers O(n) = O(3n)
         prefix = [1] * len(nums)
         postfix = [1] * len(nums)
         res = [1] * len(nums)
 
         # Compute prefix products
-        # time complexity: iteration over list of length n O(n)
+        # time complexity: iteration over list of n length O(n)
         for i in range(1, len(nums)):
             
             # time complexity: lookup + multiplication operations take constant O(1)
+            # (prefix of i) = (prefix of i - 1) * (nums[i - 1])
             prefix[i] = prefix[i - 1] * nums[i - 1]
 
         # Compute postfix products
-        # time complexity: iteration over list of length n O(n)
+        # time complexity: iteration over list of n length O(n)
         for i in range(n - 2, -1, -1):
 
             # time complexity: lookup + multiplication operations take constant O(1)
+            # (postfix of i) = (postfix of i + 1) * (nums[i + 1])
             postfix[i] = postfix[i + 1] * nums[i + 1]
 
         # Combine prefix and postfix products
@@ -1006,21 +1011,21 @@ Lets see how we can do it in O(1) for space.
         for i in range(n):
 
             # time complexity: lookup + multiplication operations take constant O(1)
+            # (product except self of i) = (prefix of i) * (postfix of i)
             res[i] = prefix[i] * postfix[i]
 
 
-        # overall: time complexity
-        # overall: space complexity 
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-|  |  |  |  |  |
+| Prefix Computation | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation for prefix array of n length O(n) |
+| Postfix Computation | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation for postfix array of n length O(n) |
+| Product except self computation | O(n) | O(n) | Iterate over prefix/postfix list of n length O(n) | Memory allocation for result array of n length O(n) |
+| Overall | O(n) | O(n) | Iteration over list of n length takes linear time leading to O(n) | Memory allocation for list of n length leading to O(n) | 
 
 
 ### Solution 2: Prefix & Postfix Optimal O(1) space
@@ -1040,12 +1045,13 @@ Lets see how we can do it in O(1) for space.
             # (prefix of i) = (prefix of i - 1) * (num at i - 1)
             res[i] = res[i - 1] * nums[i - 1]
 
-        # accumulate running postfix through iteration
-        postfix = nums[len(nums)-1]
+        # accumulate running postfix through reverse iteration
+        # postfix starts at 1, the postfix of len(n) - 1
+        postfix = 1
 
-        # start at (n-1), start postfix calculation at res[n-2] (second to last index), postfix of res[n-1] (last index) is always 1
+        # start iteration at (len(n)-1), postfix of last integer will always be 1
         # time complexity: iterate over list of size n in reverse O(n)
-        for i in range(len(nums) - 2, -1, -1):
+        for i in range(len(nums) - 1, -1, -1):
             
             # (product except i) = (prefix of i) * (postfix of i)
             res[i] *= postfix
@@ -1053,18 +1059,16 @@ Lets see how we can do it in O(1) for space.
             # (postfix of i - 1) = (postfix of i) * (num at i) 
             postfix *= nums[i]
 
-        # overall: time complexity 
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return res
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-|  |  |  |  |  |
+| Prefix Computation | O(n) | O(1) | Iteration over list of n length O(n) | Prefix value stored directly in result array O(1) |
+| Postfix Computation + Product except self computation | Iteration over list of n length O(n) | Postfix value stored in integer, product except self stored in result array O(1) |  |  |
+| Overall | O(n) | O(1) | Iteration over list of n length O(n) | Prefix, postfix, and product except self all stored in result array or an integer leading to constant O(1) |
 
 
 ## 36. Valid Sudoku - Medium
@@ -1077,16 +1081,15 @@ Lets see how we can do it in O(1) for space.
 
 Constraints:
 
-A Sudoku board (partially filled) could be valid but is not necessarily solvable.
-Only the filled cells need to be validated according to the mentioned rules.
-
+A Sudoku board that is partially filled could be valid, but not necessarily solvable.
+Only the currently filled cells need to be validated.
 
 |  Input         | Output          |  
 | -------------- | --------------- | 
-| this is too big to put here lol | just look at -> [sudoku board example](https://leetcode.com/problems/valid-sudoku/description/) | 
+| a sudoku table is too big to put here lol | just look at -> [sudoku board example](https://leetcode.com/problems/valid-sudoku/description/) | 
 
 ### Abstraction
-Here, we are looking for duplicates much like the original 217. Contains Duplicates.
+With sudoku, valid boards , we have rows  are looking for duplicates much like the original 217. Contains Duplicates.
 
 The only difference here, is that we are looking for duplicates in 3 sets along the rows, columns, and 3x3 squares.
 
@@ -1095,10 +1098,55 @@ So we simply create sets for all of these groups and as we traverse the board, w
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  | |
-| Hashmap |  |  |  |  |
+| Brute Force | O(n<sup>2</sup>) = O(3 * n<sup>2</sup>)  |  |  | |
+| Hashmap | O(n<sup>2</sup>) | O(n) |  |  |
 
-### Solution 1: defaultdict()
+### Brute Force (check row, column, box)
+```python
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        
+        # time complexity: iterating over row, col, or box (flattened) of n length O(n)
+        def isValidLine(line: List[str]) -> bool:
+            seen = set()
+            for num in line:
+                if num != ".":
+                    if num in seen:
+                        return False
+                    seen.add(num)
+            return True
+
+        # time complexity: iterating over board with n rows of length n and validating O(n^2)
+        for row in board:
+            if not isValidLine(row):
+                return False
+
+        # time complexity: iterating over board with n columns of length n and validating O(n^2)
+        for c in range(9):
+            
+            # grabbing column
+            column = []
+            for r in range(9):
+                column.append(board[r][c])
+            if not isValidLine(column):
+                return False
+
+        # time complexity: iterating over n boxes of flattened length n <- (√n x √n) and validating O(n^2)
+        for box_row in range(0, 9, 3):
+            for box_col in range(0, 9, 3):
+                line = []
+                for r in range(box_row, box_row + 3):
+                    for c in range(box_col, box_col + 3):
+                        line.append(board[r][c])
+
+                if not isValidLine(line):
+                    return False
+
+        # overall: time complexity O(n^2) = (3 * n^2)
+        # overall: space complexity O(1)
+        return True
+```
+
+### Solution 1.1: defaultdict
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         cols = defaultdict(set)
@@ -1107,33 +1155,23 @@ So we simply create sets for all of these groups and as we traverse the board, w
 
         for r in range(9):
             for c in range(9):
-                
                 tmp = board[r][c]
 
-                if tmp == ".":
-                    continue
-                
-                if (tmp in rows[r] or 
-                    tmp in cols[c] or 
-                    tmp in squares[(r // 3, c // 3)] ):
-                    return False
-                
-                cols[c].add(tmp)
-                rows[r].add(tmp)
-                squares[(r // 3, c // 3)].add(tmp)
+                if tmp != ".":
+                    boxTuple = (r // 3, c // 3)
+
+                    if (tmp in rows[r] or 
+                        tmp in cols[c] or 
+                        tmp in squares[box] ):
+                        return False
+                    
+                    cols[c].add(tmp)
+                    rows[r].add(tmp)
+                    squares[boxTuple].add(tmp)
 
         return True
 ```
-
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-|  |  |  |  |  |
-
-### Solution 2: Faster Manual []
+### Solution 1.2: [] of []
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         rows = [[], [], [], [], [], [], [], [], []]
@@ -1143,11 +1181,13 @@ So we simply create sets for all of these groups and as we traverse the board, w
         for i in range(9):
             for j in range(9):
                 tmp = board[i][j]
+
                 if tmp != ".":    
                     box = 3 * (i//3) + (j//3)
+
                     if (tmp in rows[i] or 
-                       tmp in col[j]  or 
-                       tmp in boxes[box]):
+                        tmp in col[j]  or 
+                        tmp in boxes[box]):
                         return False
 
                     col[j].append(tmp)
