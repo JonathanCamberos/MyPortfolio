@@ -60,7 +60,7 @@ export default function BlogPage({ params }){
     /* Grabs and renders a blog post */
     const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug)
     
-    return <article>
+    return (<article className="lg:translate-y-10">
     <div className="mb-8 text-center relative w-full h-[70vh] bg-dark">
       <div className="w-full z-10 flex flex-col items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <Tag
@@ -94,5 +94,5 @@ export default function BlogPage({ params }){
       <BlogToc blog={blog}/>
       <RenderMdx blog={blog} />
     </div>
-  </article>
+  </article>)
 }
