@@ -1027,19 +1027,34 @@ Lets see how we can do it in O(1) for space.
 
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        n = len(nums)
-        res = [1] * n
+        
+        # instantiate to 1, start prefix calculation at res[1], prefix of res[0] is always 1
+        # space complexity: array to store results for n integers O(n) 
+        res = [1] * len(nums)
 
         # Compute prefix products in res
-        for i in range(1, n):
+        # time complexity: iterate over list of size n O(n)
+        for i in range(1, len(nums)):
+
+            # time complexity:
+            # (prefix of i) = (prefix of i - 1) * (num at i - 1)
             res[i] = res[i - 1] * nums[i - 1]
 
-        # Compute postfix products and update res
-        postfix = 1
-        for i in range(n - 1, -1, -1):
+        # accumulate running postfix through iteration
+        postfix = nums[len(nums)-1]
+
+        # start at (n-1), start postfix calculation at res[n-2] (second to last index), postfix of res[n-1] (last index) is always 1
+        # time complexity: iterate over list of size n in reverse O(n)
+        for i in range(len(nums) - 2, -1, -1):
+            
+            # (product except i) = (prefix of i) * (postfix of i)
             res[i] *= postfix
+            
+            # (postfix of i - 1) = (postfix of i) * (num at i) 
             postfix *= nums[i]
 
+        # overall: time complexity
+        # overall: space complexity
         return res
 ```
 
