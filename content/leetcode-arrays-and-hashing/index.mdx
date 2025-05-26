@@ -499,7 +499,7 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Outer Loop | O(n) | O(1) | Iterates over the array once for each element O(n) | No additional memory is allocated O(1) |
-| Inner Loop | O(n) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
+| Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
 | Summation + Comparison | O(1) | O(1) | Summing two numbers takes constant time O(1) and comparison to target takes constant time O(1) | No additional space is needed for summation O(1), no additional space is needed for comparison O(1)  |
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
 
@@ -512,7 +512,7 @@ Space Upper Bound: If we want to track every element/complement, best space comp
         # space complexity: hashmap of O(n)
         tracking = {}
  
-        # time complexity: iteration of O(n)
+        # time complexity: iterating over list of size n O(n)
         for i in range (len(nums)):
 
             # grab curr complement -> (target = nums[i] + complement) 
@@ -788,7 +788,7 @@ Space Upper Bound:
         # space complexity: frequency count for all unique integers O(m)
         count = defaultdict(int)
 
-        # time complexity: iterate over array of n integers O(n)
+        # time complexity: iterate over list of n integers O(n)
         for num in nums: 
 
             # time complexity: insertion operation takes constant O(1)
@@ -931,7 +931,7 @@ To calculate the postfix, we can just iterate over the array backwards multiplyi
 And to calculate the result array, we can just iterate over both arrays and multiple corresponding index values.
 
 This would lead to O(n) for time and space. 
-Lets see how we can do it in O(1) for space:
+Lets see how we can do it in O(1) for space.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -943,50 +943,74 @@ Lets see how we can do it in O(1) for space:
 ### Brute Force (all pairs comparison)
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        res = [0] * len(nums) # result array to store the product
 
+        # space complexity: result array of length n O(n)
+        res = [0] * len(nums)
+
+        # time complexity: iterate over list of n integers O(n) 
         for i in range(len(nums)):
+
+            # starting value
             product = 1
 
+            # time complexity: iterate over list of n integers O(n)
             for j in range(n):
+
+                # skip current index i while multiplying
                 if i != j:
+
+                    # time complexity: multiplication operation takes constant O(1)
                     product *= nums[j]
                 
+            # time complexity: insert operation takes constant O(1)
             res[i] = product
         
+        # overall: time complexity  O(n^2)
+        # overall: space complexity O(n)
         return res
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Result array | O(1) | O(n) | Constant time to instantiate array of length n O(1) | Array to store n elements  O(n) |
+| Outer loop | O(n) | O(1) | Iteration over the list takes linear time O(n) | No additional memory is allocated O(1) |
+| Inner loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>) | No additional memory is allocated O(1) |
+| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | Memory allocation for array to store n result elements O(n) |
 
 
 ### Solution 1:  Prefix & Postfix 3 arrays O(n)
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        n = len(nums)
-        prefix = [1] * n
-        postfix = [1] * n
-        res = [1] * n
+        # space complexity: prefix, postfix, and result arrays to calculate and store final value for n integers O(n)
+        prefix = [1] * len(nums)
+        postfix = [1] * len(nums)
+        res = [1] * len(nums)
 
         # Compute prefix products
-        for i in range(1, n):
+        # time complexity: iteration over list of length n O(n)
+        for i in range(1, len(nums)):
+            
+            # time complexity: lookup + multiplication operations take constant O(1)
             prefix[i] = prefix[i - 1] * nums[i - 1]
 
         # Compute postfix products
+        # time complexity: iteration over list of length n O(n)
         for i in range(n - 2, -1, -1):
+
+            # time complexity: lookup + multiplication operations take constant O(1)
             postfix[i] = postfix[i + 1] * nums[i + 1]
 
         # Combine prefix and postfix products
+        # time complexity: iteration over list of length n O(n)
         for i in range(n):
+
+            # time complexity: lookup + multiplication operations take constant O(1)
             res[i] = prefix[i] * postfix[i]
 
+
+        # overall: time complexity
+        # overall: space complexity 
         return res
 ```
 
