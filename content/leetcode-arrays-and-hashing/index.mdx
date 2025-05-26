@@ -37,7 +37,7 @@ As an example, here is the function mod, which takes in an integer and spits out
 
 Now this is could be our function for our hashmap, but it would lead to high collisions and low randomness
 as there are only 3 possible key results: 0, 1, and 2.
-Thus, Hashmaps are only efficient as the chosen function.
+So hashmaps are only efficient as the chosen function.
 
 With a good Hash function:
 
@@ -65,8 +65,8 @@ Lets say our function is hash():
     [10]     |  [31]     |  [22 -> 17]      |  [  ]     |  [14]
 ```
 
-In this case there are only 5 buckets or arrays keys would be hashed to.
-After inserting n elements, performing a lookup would for some element k, 
+In this case there are only 5 keys or buckets would be hashed to.
+After inserting n elements into one key or bucket, performing a lookup would for some element k 
 would result in traversing a list of size n in the worst case leading to O(n).
 
 This would degrade insert, lookup, and delete from the original O(1) to O(n).
@@ -777,7 +777,7 @@ Space Upper Bound:
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Sort all frequencies descending) | O(n + m log m) | O(n + k) | Sorting m unique elements domi | |
+| Brute Force (Insertion sort frequencies) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
 | Frequency Buckets | O(n) | O(n) | | |
 
 ### Brute Force (Insertion Sort on frequency tuples descending)
@@ -891,78 +891,6 @@ Space Upper Bound:
 | Result Extraction | O(n) | O(k) | Iterating over n buckets to collect k integers, worst case all buckets must be traverse O(n) | Top k integers must be stored in result list O(k) | 
 | Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
-## 271. String Encode and Decode - Medium
-
-### Intro
-
-> Design an algorithm to encode a list of strings to a single string.
-> The encoded string is then decoded back to the original list of strings
-> Please implement `encode` and `decode`
-
-|  Input                           | Output                              |  
-| -------------------------------- | ----------------------------------- | 
-| ["leet", "code", "love", "you"]  | ["leet", "code", "love", "you"]     |
-| ["we", "say", ":", "yes"]        | ["we", "say", ":", "yes"]           |
-
-### Contraints
-
-### Abstraction
-This is leaning into being a design problem. 
-
-### Space & Time Complexity
-|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
-| ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  | |
-| Hashmap |  |  |  |  |
-
-### Solution 1: i & j pointers
-
-```python 
-class Solution:
-
-    # example: "5#hello3#bye"
-    
-    def encode(self, strs: List[str]):
-        ans = "" 
-        for word in strs:
-            ans += str(len(word)) + "#" + word
-
-        return ans
-    
-    # decode above pattern
-    def decode(self, s: str):
-        ans = []
-        i = 0
-
-        # complete until end of encoded string
-        while i < len(s):
-            j = i
-
-            # find the #
-            while s[j] != "#":
-                j += 1
-            
-            # anything left will be int
-            length = int(s[i:j])
-
-            # point to start of string
-            i = j + 1 
-
-            # point to +1 after string (for substringing)
-            j = i + length
-
-            # grab string 
-            ans.append(s[i:j])
-
-            # start of next section
-            i = j
-
-        return ans
-```
-
-Seemingly a confusing problem, since we are designing the encoding method we 
-can make it as simple as possible. 
-
 
 ## 238. Product of Array Except Self - Medium
 
@@ -983,50 +911,118 @@ Constraints:
 The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer
 
 ### Abstraction
-The statement as always seems more complex that the breakdown.
 Given a list of nums, return a list of nums that is the product of the array except itself.
 
-So, for som num n, the result should be the product of all the numbers to the left of it,
+So, for some num n, the result should be the product of all the numbers to the left of it,
 times the product of all the numbers to the right of it:
 
-| 0 ... n-1 |  `n` | n+1 ... len(nums)-1 |
+```
+Array:           [  2,   3,   4,   5,   6  ]
+Prefix:          [  1,   2,   6,  24, 120  ]
+Postfix:         [ 360, 120,  30,   6,   1  ]
+Result:          [ 360, 240, 180, 120, 120 ]
+```
 
-| product | `n` | product | 
+To calculate the prefix, we can just iterate over the array multiplying each integer.
+To calculate the postfix, we can just iterate over the array backwards multiplying each integer. 
 
-We will call the `prefix the product on the left side` and the `postfix the product on the right side`.
+This would lead to O(3n)
 
-If we traverse the array from left to right, we can `calculate the prefix and place it in the result array`.
-
-For the postfix, since we cant just store and grab the postfix as we go (the `previously calculated prefix is already stored
-in the array`). We just `need an extra integer to store the current postfix` and use this to generate the result we need.
+Lets see how we can do it in O(n):
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force |  |  |  | |
-| Hashmap |  |  |  |  |
+| Prefix & Postfix |  |  |  |  |
+| Prefix & Postfix |  |  |  |  |
+
+### Brute Force (multiplying all except self)
+```python
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        res = [0] * len(nums) # result array to store the product
+
+        for i in range(len(nums)):
+            product = 1
+
+            for j in range(n):
+                if i != j:
+                    product *= nums[j]
+                
+            res[i] = product
+        
+        return res
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
 
 ### Solution 1:  Prefix & Postfix
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        # create result array 
-        res = [1] * (len(nums))
+        n = len(nums)
+        prefix = [1] * n
+        postfix = [1] * n
+        res = [1] * n
 
-        # prefix for nth is product of (0 ... (n-1))
-        for i in range(1, len(nums)):
-            prefix = res[i-1] * nums[i-1]  # prefix of curr num  = (previous prefix * nums[i-1])
-            res[i] = prefix                # set prefix for curr num
+        # Compute prefix products
+        for i in range(1, n):
+            prefix[i] = prefix[i - 1] * nums[i - 1]
 
-        # need holder as array is not set to 1
-        postfix = 1 # postfix of next num
+        # Compute postfix products
+        for i in range(n - 2, -1, -1):
+            postfix[i] = postfix[i + 1] * nums[i + 1]
 
-        # postfix for nth is product of (n+1 .... (len(nums)-1))
-        for i in range(len(nums) - 1, -1, -1):
-            res[i] = res[i] * postfix     # set postfix for curr num
-            postfix = nums[i] * postfix   # postfix of next num
+        # Combine prefix and postfix products
+        for i in range(n):
+            res[i] = prefix[i] * postfix[i]
+
         return res
 ```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+|  |  |  |  |  |
+
+
+### Solution 2: Prefix & Postfix Optimal O(1) space
+
+```python
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        res = [1] * n
+
+        # Compute prefix products in res
+        for i in range(1, n):
+            res[i] = res[i - 1] * nums[i - 1]
+
+        # Compute postfix products and update res
+        postfix = 1
+        for i in range(n - 1, -1, -1):
+            res[i] *= postfix
+            postfix *= nums[i]
+
+        return res
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+|  |  |  |  |  |
 
 
 ## 36. Valid Sudoku - Medium
@@ -1045,7 +1041,7 @@ Only the filled cells need to be validated according to the mentioned rules.
 
 |  Input         | Output          |  
 | -------------- | --------------- | 
-|                |                 | 
+| this is too big to put here lol | just look at -> [sudoku board example](https://leetcode.com/problems/valid-sudoku/description/) | 
 
 ### Abstraction
 Here, we are looking for duplicates much like the original 217. Contains Duplicates.
@@ -1087,6 +1083,14 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+|  |  |  |  |  |
+
 ### Solution 2: Faster Manual []
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
@@ -1110,6 +1114,14 @@ So we simply create sets for all of these groups and as we traverse the board, w
 
         return True
 ```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+|  |  |  |  |  |
 
 Solution 2 ends up being faster than Solution 1:
 
@@ -1169,3 +1181,11 @@ def longestConsecutive(self, nums: List[int]) -> int:
 
     return longest        
 ```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+|  |  |  |  |  |

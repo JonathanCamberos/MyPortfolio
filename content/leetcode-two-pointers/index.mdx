@@ -95,6 +95,78 @@ Two Pointers category it is still good practice to use the pointer solution
 
 
 
+## 271. String Encode and Decode - Medium
+
+### Intro
+
+> Design an algorithm to encode a list of strings to a single string.
+> The encoded string is then decoded back to the original list of strings
+> Please implement encode and decode
+
+|  Input                           | Output                              |  
+| -------------------------------- | ----------------------------------- | 
+| ["leet", "code", "love", "you"]  | ["leet", "code", "love", "you"]     |
+| ["we", "say", ":", "yes"]        | ["we", "say", ":", "yes"]           |
+
+Constraints:
+
+### Abstraction
+
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Brute Force |  |  |  | |
+| Hashmap |  |  |  |  |
+
+### Solution 1: i & j pointers
+
+```python 
+class Solution:
+
+    # example: "5#hello3#bye"
+    
+    def encode(self, strs: List[str]):
+        ans = "" 
+        for word in strs:
+            ans += str(len(word)) + "#" + word
+
+        return ans
+    
+    # decode above pattern
+    def decode(self, s: str):
+        ans = []
+        i = 0
+
+        # complete until end of encoded string
+        while i < len(s):
+            j = i
+
+            # find the #
+            while s[j] != "#":
+                j += 1
+            
+            # anything left will be int
+            length = int(s[i:j])
+
+            # point to start of string
+            i = j + 1 
+
+            # point to +1 after string (for substringing)
+            j = i + length
+
+            # grab string 
+            ans.append(s[i:j])
+
+            # start of next section
+            i = j
+
+        return ans
+```
+
+Seemingly a confusing problem, since we are designing the encoding method we 
+can make it as simple as possible. 
+
 
 
 
