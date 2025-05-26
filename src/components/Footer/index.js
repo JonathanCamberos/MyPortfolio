@@ -27,7 +27,7 @@ const Footer = () => {
           
           <span className="text-center">
             <div className="flex items-center">
-                :)
+                
             </div>
           </span>
 
@@ -36,7 +36,7 @@ const Footer = () => {
           </Link> */}
 
           <div>
-            Thanks for visiting
+            Thanks for visiting!
           </div>
            
 
