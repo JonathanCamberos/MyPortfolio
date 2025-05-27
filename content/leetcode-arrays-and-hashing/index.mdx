@@ -176,7 +176,7 @@ If we want to track every element, best space complexity is O(n)
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
-        # space complexity: hashmap of O(n)
+        # space complexity: hashmap of list of n length O(n)
         seen = {}
 
         # time complexity: iteration of O(n)
@@ -355,7 +355,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
-        # space complexity: hashmap of O(n) 
+        # space complexity: hashmap of list of n length  O(n) 
         count = defaultdict(int)
 
         # time complexity: iteration of O(n)
@@ -509,7 +509,7 @@ Space Upper Bound: If we want to track every element/complement, best space comp
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
         # map of {complement: index, complement: index...}
-        # space complexity: hashmap of O(n)
+        # space complexity: hashmap of list of n length  O(n)
         tracking = {}
  
         # time complexity: iterating over list of size n O(n)
@@ -1105,7 +1105,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
-        # time complexity: iterating over row, col, or box (flattened) of n length O(n)
+        # time complexity: iterating over row, col, or box (flattened) of n length (+ O(n)) not (* O(n))
         def isValidLine(line: List[str]) -> bool:
             seen = set()
             for num in line:
@@ -1122,8 +1122,6 @@ So we simply create sets for all of these groups and as we traverse the board, w
 
         # time complexity: iterating over board with n columns of length n and validating O(n^2)
         for c in range(9):
-            
-            # grabbing column
             column = []
             for r in range(9):
                 column.append(board[r][c])
@@ -1149,68 +1147,85 @@ So we simply create sets for all of these groups and as we traverse the board, w
 ### Solution 1.1: defaultdict
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
+        
+        # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)
         cols = defaultdict(set)
         rows = defaultdict(set)
-        squares = defaultdict(set) # tuple key = (r /3, c /3)
+        squares = defaultdict(set)
 
+        # time complexity: iterating over all cells (r * c) O(n^2)
         for r in range(9):
             for c in range(9):
+                
                 tmp = board[r][c]
-
                 if tmp != ".":
+
+                    # indexing box sets by tuple key (r/3, c/3)
                     boxTuple = (r // 3, c // 3)
 
+                    # time complexity: lookup operation for element to corresponding sets in constant O(1)
                     if (tmp in rows[r] or 
                         tmp in cols[c] or 
                         tmp in squares[box] ):
                         return False
                     
+                    # time complexity: insert operation for new element to corresponding sets in constant O(1)
                     cols[c].add(tmp)
                     rows[r].add(tmp)
                     squares[boxTuple].add(tmp)
 
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n)
         return True
 ```
-### Solution 1.2: [] of []
+### Solution 1.2: [[]]
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
+        
+        # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)
         rows = [[], [], [], [], [], [], [], [], []]
         col = [[], [], [], [], [], [], [], [], []]
         boxes = [[], [], [], [], [], [], [], [], []]
 
+        # time complexity: iterating over all cells (r * c) O(n^2)
         for i in range(9):
             for j in range(9):
+                
                 tmp = board[i][j]
+                if tmp != ".":  
 
-                if tmp != ".":    
+                    # indexing box sets by unique int calculation  
                     box = 3 * (i//3) + (j//3)
 
+                    # time complexity: lookup operation for element to corresponding sets in constant O(1)
                     if (tmp in rows[i] or 
                         tmp in col[j]  or 
                         tmp in boxes[box]):
                         return False
 
+                    # space complexity: lookup operation for new element to corresponding sets in constant O(1)
                     col[j].append(tmp)
                     rows[i].append(tmp)
                     boxes[box].append(tmp)
-
+        
+        # overall: time complexity O(n^2)
+        # overall: space complexity  O(n)
         return True
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-|  |  |  |  |  |
+| Row, Col, Box Initialization | O(1) | O(n<sup>2</sup>) |  | Memory allocation for n rows, cols, boxs, of n length O(n<sup>2</sup>) |
+| Iterating over all cells | O(n<sup>2</sup>) | O(1) | Iterating over n x n board O(n<sup>2</sup>) | No additional memory allocation for iteration O(1) |
+| Lookup | O(1) | O(1) | Lookup operation takes constant O(1) | No additional memory allocation for lookups O(1)  |
+| Insertion | O(1) | O(n<sup>2</sup>) | Insertion operation takes constant O(1) | List of n lists each of n length O(n<sup>2</sup>) | 
+| Overall | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over all cells in n x n board dominates, leading to O(n<sup>2</sup>) | List of n lists of n length dominates leading to O(n<sup>2</sup>)  |
 
-Solution 2 ends up being faster than Solution 1:
+Note: Solution 1.2 is faster than Solution 1.
 
-While sets are generally more efficient for larger and more dynamic data due to constant-time 
-lookups and insertions, for a fixed-size 9x9 board like this, the overhead introduced by defaultdict and 
-set operations can make the list-based approach faster in practice. 
-
+While sets are efficient for large data due to constant time insert, lookup, delete, 
+for a fixed-sized 9x9 board like this the overhead of defaultdict and 
+set operations is slower than the [[]] solution. 
 
 ## 128. Longest Consecutive Sequence - Medium
 
@@ -1230,17 +1245,13 @@ Constraints:
 
 
 ### Abstraction
-As usual, our goal is to translate this problem into something that is easier. 
-
+Give a list of integers, find the longest sequence of increasing integers 
 A longest consecutive sequence on a number line would look like this:
 
-[ 12, 1, 13, 0, 7, 2, 3, 11, 4] ---> 
-
-| 0 1 2 3 4 |  ..... | 7 | ..... | 11 12 13 | 
-
-Here, it is very simple to see what is the longest sequence.
-Now the question is how to translate into this.
-A set would be the easiest as we can simply check if some element exists 
+```
+Sequence of length 4:     [ 1,  2,  3,  4,  2  ]
+Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
+```
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -1248,26 +1259,113 @@ A set would be the easiest as we can simply check if some element exists
 | Brute Force |  |  |  | |
 | Hashmap |  |  |  |  |
 
-### Solution 1: Set abstraction
+### Brute Force
+```python
+    def longestConsecutive(nums: List[int]) -> int:
+        
+        longest = 0
+
+        # time complexity: Iterate over list of n length O(n)
+        for num in nums:
+
+            currLen = 1
+            
+            # time complexity: Iterate over potential n consecutive integers O(n)
+            # time complexity: Lookup in list takes O(n)
+            # time complexity: O(n^2)
+            while num + currLen in nums:
+                currLen += 1
+
+            # compare to global max
+            longest = max(longest, currLen)
+
+        # Overall time complexity: O(n^3) for worst-case where we scan sequences n times for n numbers
+        # Space complexity: O(1)
+        return longest
+```
+|  Aspect  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Iterate | O(n) | O(1) | Iterate over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Iterate consecutive sequence | O(n) |O(1) | Iterate over potential n consecutive integers O(n) | No additional memory allocation for iteration O(1) |
+| List lookup | O(n) | O(1) | Lookup in list takes O(n) | No additional memory allocation for list lookup O(1) |
+| Overall | O(n<sup>3</sup>) | O(1) | Iterating * Iterating * Lookup dominate leading to O(n<sup>3</sup>) | No additional memory allocation O(1) |
+
+
+### Solution 1: Hashmap Boundaries
+```python
+    def longestConsecutive(nums: List[int]) -> int:
+        
+        # space complexity: hashmap of list of n length O(n)
+        seqLen = deafultdict(int)
+        longest = 0
+
+        # time complexity: iterate over list of n length O(n)
+        for num in nums:
+
+            # if new num found
+            # time complexity: lookup operations in constant O(1)
+            if num not in seqLen:
+
+                # grab left (right-most) -> sequence count
+                # grab right (left-most) -> sequence count
+                # may be 0 if no value
+                leftContinentBoundary = seqLen[num - 1]  
+                rightContinentBoundary = seqLen[num + 1] 
+
+                # bridge the two continents together
+                bridgedLen = 1 + left + right
+
+                # Update prev, curr, next, sequence counts if applicable
+                seqLen[num - leftContinentBoundary] = bridgedLen
+                seqLen[num] = bridgedLen
+                seqLen[num + rightContinentBoundary] = bridgedLen
+
+                # Validate with global max sequence
+                longest = max(longest, currLen)
+
+        # overall: time complexity: O(n)
+        # overall: space complexity: O(n)
+        return longest
+```
+|  Aspect  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+| Iteration + Insertion | O(n) | O(n) | Iterating over list of n length O(n) | Memory allocation for sequence length for n integers O(n) |
+| Lookups | O(1) | O(1) | Lookup operation takes constant O(1) | No additional memory allocation needed for lookup O(1) |
+| Updating sequence count | O(1) | O(1) | Boundary updates for left most, curr, and right most in constant O(1) | Insert operation takes constant O(1) | 
+| Overall | O(n) | O(n) | Iterating over list of n length dominates O(n) | Memory allocation for n sequences O(n) | 
+
+### Solution 2: Set
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
+    
+    # space complexity: hashset for list of n length O(n)
     numSet = set(nums)
     longest = 0
+
+    # time complexity: iterate over list of n length O(n)
     for i in numSet:
-        # found start of a sequence (left most element)
+
+        # found start of new sequence (left most element)
+        # time complexity: lookup operation takes constant O(1)
         if (i - 1) not in numSet: 
+
+            # time complexity: iterate over potential n sequence O(n) + lookup operation constant O(1)
             currLen = 1
             while (i + currLen) in numSet:
                 currLen += 1 
+
+            # validate with global max sequence
             longest = max(longest, currLen)
 
+    # overall: time complexity O(n)
+    # overall: space complexity O(n)
     return longest        
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-|  |  |  |  |  |
+| Hashset | O(n) | O(n) | Converting list to hashset uses insert operation O(1) for n linear O(n) | Memory allocation for list o n length O(n) |
+| Outer Loop | O(n) | O(1) | Iterating over hashset of n length O(n) | No additional memory allocation for iteration |
+| Start of sequence check | O(1) | O(1) | Lookup operation takes constant O(1) | No additional space of lookup operation O(1) |
+| while loop sequence | O(n) | O(1) | Iterate white sequence is valid, note all numbers are checked only once due to start of sequence check O(n) | No additional memory allocation for while loop O(1) |
+| Overall | O(n) | O(n) | Iterating over hashset of n length dominates leading to O(n) | Memory allocation for hashset of list n length dominates o(n) | 
