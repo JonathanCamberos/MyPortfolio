@@ -11,13 +11,10 @@ tags:
 ---
 
 ## Two Pointer Intro
+Leetcode problems with elegant solutions using two pointers. 
 
-Getting aquanted how simply two pointers can help 'point' to the solution
-
-### What are Two Pointers 
-Two Pointers is the strategy of using L and R pointers to traverse a list of integers.
-Usually by iterating over the list and breaking the problem into chunks, 
-we can extract enough info to solve the problem.
+### L + R
+Two Pointers is the strategy of using L and R pointers to iterate over a list of elements.
 
 ## 125. Valid Palindrome - Easy
 
@@ -33,16 +30,24 @@ we can extract enough info to solve the problem.
 | "race a car"                       | false   |
 | " "                                | true    |
 
-### Constraints
+Constraints:
 string s consists only of printable ASCII characters.
 
 ### Abstraction 
-Simply follow the steps in the intro while using two pointers L and R to traverse the string.
+Use two pointers, L and R, to traverse the string validating palindrome status.
 
-First, convert the string s into lowercase.
+We can convert the string s into lowercase.
 Then, remove non-alphanumeric character. ( ".isalnum()" function comes in handy ) 
 Then, traverse using pointers comparing characters on each side 
 or reverse the string and compare new string with original.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
 
 ### Solution 1: Two Pointers L + R
 ```python
@@ -75,6 +80,13 @@ or reverse the string and compare new string with original.
                 ord('0') <= ord(c) <= ord('9'))
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
 Here we simply follow the steps we mentioned above. 
 
 Use pointers l and r, skip over all non-alphaNum chars, 
@@ -90,9 +102,12 @@ def isPalindrome(self, s: str) -> bool:
     return ans == ans[::-1]
         
 ``` 
-For this problem, using library functions is quicker than using pointers, but since we are in the 
-Two Pointers category it is still good practice to use the pointer solution 
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
 
 
 ## 271. String Encode and Decode - Medium
@@ -116,8 +131,9 @@ Constraints:
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force |  |  |  | |
-| Hashmap |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 ### Solution 1: i & j pointers
 
@@ -164,6 +180,12 @@ class Solution:
         return ans
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
 Seemingly a confusing problem, since we are designing the encoding method we 
 can make it as simple as possible. 
 
@@ -187,7 +209,8 @@ can make it as simple as possible.
 | [2, 3, 4]      | 6      | [1,3]  |
 | [-1, 0]        | -1     | [1,2]  |
 
-### Constraints
+Constraints:
+
 Your solution must use only constant extra space.
 
 ### Abstraction
@@ -248,6 +271,13 @@ on the left, if we start L = 0 and R = len(nums)-1, we are able to mimic the abo
 
 With this pattern, we end up with a solution of O(n) as both pointers approach the center from each end.
 
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
 ### Solution 1: L + R pointers
 ```python 
  def twoSum(self, numbers: List[int], target: int) -> List[int]:
@@ -264,6 +294,12 @@ With this pattern, we end up with a solution of O(n) as both pointers approach t
                 return [l+1,r+1]
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
 To summarize abstraction:
 
 If tmp is bigger than target, move R to the left (because every elem to the 
@@ -271,8 +307,6 @@ right of R is bigger and thus could not be the answer )
 
 If tmp is smaller than target, move L to the right (because every elem to the 
 left of L is smaller and thus could not be the answer )
-
-
 
 
 
@@ -289,7 +323,7 @@ left of L is smaller and thus could not be the answer )
 | [0,1,1]          | []                    |
 | [0,0,0]          | [[0,0,0]]             |
 
-### Constraints
+Constraints:
 
 ### Abstraction
 This is a step up from the previous 167. Two Sum II - Sorted problem. 
@@ -322,6 +356,13 @@ We then iterate over the original array while going through the 3 following case
 2. (-num1, +num1, 0)
 3. (-num1, -num2, num3)
 4. (num1, num2, -num3)
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 ### Solution 1: sort() + frozen negative number + mini twoSum
 ```python
@@ -367,6 +408,11 @@ def threeSum(self, nums: List[int]) -> List[List[int]]:
     return res
 ``` 
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
 
 ### Solution 3: grouping by parity + 4 subcases
 ```python
@@ -413,6 +459,12 @@ def threeSum(self, nums: List[int]) -> List[List[int]]:
     return res	
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
 while this is arguably cleaner and more satisfying than the mini twoSum solution, this is again 
 not utilziing two pointers. But its still a cool approach to the problem.
 
@@ -435,7 +487,8 @@ not utilziing two pointers. But its still a cool approach to the problem.
 
 
 
-### Constraints
+Constraints:
+
 Notice you may not slant the container
 
 ### Abstract
@@ -450,6 +503,13 @@ the pointer which is currently at min(height[L], height[R]).
 
 A small optimization is that we keep shifting this chosen pointer until we find a new bar 
 with a higher height than the first bar.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 ### Solution 1: 
 ```python
@@ -477,6 +537,12 @@ def maxArea(self, height: List[int]) -> int:
     return maxWater
 ```
 
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
 
 ## 42. Trapping Rain Water - Hard
 
@@ -489,7 +555,7 @@ def maxArea(self, height: List[int]) -> int:
 | [0,1,0,2,1,0,1,3,2,1,2,1] | 6       |
 | [4,2,0,3,2,5]             | 9       |
 
-### Constraints 
+Constraints: 
 
 ### Abstraction 
 Lets define how we can trap water.
@@ -533,6 +599,13 @@ Thus we know we also need: left or rigth_max_height = max(left or right_max_heig
 
 We simply put this into code now: 
 
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
 ### Solution 1: Two Pointers 
 ```python 
 def trap(self, height: List[int]) -> int:
@@ -552,4 +625,10 @@ def trap(self, height: List[int]) -> int:
             water += min(left_max, right_max) - height[R]
     
     return water
-``
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
