@@ -1,11 +1,10 @@
-## Jonathan's blog template
+## Jonathan's portfolio template
 
 Hello, welcome. This is a blog template. 
 
-## See the blog
-[https://portfolio-jcprojects.vercel.app](https://portfolio-jcprojects.vercel.app/)
+## See the portfolio
+https://portfolio-jonathan-camberos.vercel.app/
 
 ## To use the template
 ...
-
 Portfolio is made with React.js. tailwind, contentlayer, and other libraries:
