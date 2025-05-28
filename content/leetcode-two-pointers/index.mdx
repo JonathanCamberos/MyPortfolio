@@ -314,7 +314,7 @@ Lets build up to the assumption.
 
 ### Brute Force (all pairs comparison)
 ```python
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
         # time complexity: iteration of O(n)
         for i in range(len(numbers)): 
@@ -338,7 +338,7 @@ Lets build up to the assumption.
 
 ### Solution 1: Binary Search for Complement
 ```python 
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    def twoSumII(self, numbers: List[int], target: int) -> List[int]:
         
         # time complexity: iteration over list of n length O(n)
         for i in range(len(numbers)): 
@@ -350,7 +350,9 @@ Lets build up to the assumption.
             while left <= right:
                 mid = (left + right) // 2
                 if numbers[mid] == complement:
-                    return [i + 1, mid + 1]  # Convert to 1-indexed
+
+                    # Convert to 1-indexed array
+                    return [i + 1, mid + 1]  
                 elif numbers[mid] < complement:
                     left = mid + 1
                 else:
@@ -369,7 +371,7 @@ Lets build up to the assumption.
 
 ### Solution 2: Two Pointers
 ```python
-    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+    def twoSumII(self, numbers: List[int], target: int) -> List[int]:
         # Time complexity: O(n), Space complexity: O(1)
         left, right = 0, len(numbers) - 1  # Initialize two pointers
         while left < right:  # Traverse until pointers meet

@@ -339,7 +339,101 @@ Level 0:            [1, 2, 3, 4, 5, 6, 7, 8]    Final merge (O(n))
 
 ## Bucket Sort (to-do)
 
-## Binary Search (to-do)
+
+## Binary Search
+
+### Intro
+Binary Search is a divide and conquer algorithm for finding a target element in a 
+sorted array.
+It halves the search space in each iteration.
+
+1. Start with two pointers, left and right, at the beginning and end of the array
+2. Calculate the middle index, mid, in between left and right
+3. Compare the target with the element at mid:
+  - if the target equals num[mid], target has been found 
+  - if the target is smaller, move the right pointer to mid - 1
+  - if the target is larger, move the left pointer to mid + 1
+4. Repeat until left > right or target has been found
+
+### Diagram
+```
+    Find Target = 7
+
+    ---------
+    Initial Array:  [2, 3, 5, 7, 9, 11, 15]
+    Initial L + R:  L^                 R^       (left = 0, right = 6)
+                    
+    mid = (L + R) // 2 -> (0 + 6) // 2 = 3
+    Compare: numbers[mid] 7 == target 7
+    Match found!
+```
+
+```
+    Find Target = 9
+    
+    ---------
+    Initial Array:  [2, 3, 5, 7, 9, 11, 15]
+    Initial L & R:  L^                 R^       (left = 0, right = 6)
+
+    mid = (L + R) // 2 -> (0 + 6) // 2 = 3
+    compare: num[mid] ? target -> 7 < 9
+    result: mid less than target, update L -> mid + 1 = 4 
+
+    ---------
+    Array          [2, 3, 5, 7, 9, 11, 15]
+    L & R:                     L^     R^        (left = 4, right = 6)
+
+    mid = (4 + 6) // 2 = 5
+    compare: 11 > 9
+    result: mid greater than target, update R -> mid - 1 = 4
+
+    ---------
+    Array          [2, 3, 5, 7, 9, 11, 15]
+    L & R:                   L/R^            (left = 4, right = 4)
+
+    mid = (4 + 4) // 2 = 4
+    compare: 9 == 9
+    result: target found!
+```
+
+### Code
+```python
+    def binarySearch(numbers: List[int], target: int, left: int, right: int) -> int:
+        
+        # base case: target not found
+        if left > right:
+            return null  
+        
+        # calculate mid index 
+        mid = (left + right) // 2
+        
+        # time complexity: O(1) for each comparison
+        if numbers[mid] == target:
+            return mid  # Target found
+
+        # time complexity: O(log n)
+        elif numbers[mid] < target:
+            return binarySearch(numbers, target, mid + 1, right)
+        
+        # time complexity: O(log n)
+        else:
+            return binarySearch(numbers, target, left, mid - 1)
+
+        # overall: time complexity  O(log n)
+        # overall: space complexity O(log n)
+```
+
+### Space & Time Complexity
+|  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
+| -------- | --------------- | ---------------- | ---------------- | ----------------- |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Best, Average, Worst Case
+
+### Summary 
 
 ## Double For Loop
 ```python

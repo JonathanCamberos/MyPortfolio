@@ -38,7 +38,7 @@ const LeetCodeStats = () => {
   return (
     <div className="p-4 bg-gray-800 dark:text-white rounded-md font-mono text-sm md:translate-x-0 sm:translate-x-20 translate-x-20">
       <p>
-        <span className="text-pink-500 dark:text-pink-400">#leetcode_solved</span> &#123;
+        <span className="text-pink-500 dark:text-pink-400">#python3_leetcode_solved</span> &#123;
       </p>
       <p className="ml-4">
         <span className="text-green-600 dark:text-green-400">easy</span>:{" "}
