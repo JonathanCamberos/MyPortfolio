@@ -19,6 +19,7 @@ const siteMetadata = {
     email: '', 
     github: 'https://github.com/JonathanCamberos',
     linkedin: 'https://www.linkedin.com/in/jonathancamberos/',
+    leetcode: 'https://leetcode.com/u/jonathancamberos/',
     locale: 'en-US'
   }
   

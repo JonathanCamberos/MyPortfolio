@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Logo from './Logo'
 import Link from 'next/link'
-import { GithubIcon, LinkedInIcon, MoonIcon, SunIcon } from '../Icons'
+import { GithubIcon, LinkedInIcon, MoonIcon, SunIcon, LeetCodeIcon } from '../Icons'
 import siteMetadata from '../../utils/siteMetaDataFile'
 import { useThemeSwitch } from '../Hooks/useThemeSwitch'
 import { cx } from '../../utils'
@@ -114,7 +114,7 @@ const Header = () => {
         </button>
 
         {/* Navigation */}
-        <nav className="hidden sm:flex items-center dark:text-light -translate-x-16 sm:-translate-x-12 xs:-translate-x-1">
+        <nav className="hidden sm:flex items-center dark:text-light -translate-x-16 sm:-translate-x-2 xs:-translate-x-1">
           <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link>
@@ -156,79 +156,97 @@ const Header = () => {
           >
             <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
           </button>
+          <button
+            role="link"
+            onClick={() => openInNewTab(`${siteMetadata.leetcode}`)}
+            className="inline-block w-6 h-6 mr-4"
+          >
+            <LeetCodeIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
+          </button>
         </div>
       </header>
 
       {/* Hamburger Popup */}
       <div
-  className={`fixed top-0 left-0 w-full bg-light dark:bg-dark p-6 shadow-lg z-40 
+        className={`fixed top-0 left-0 w-full bg-light dark:bg-dark p-6 shadow-lg z-40 
     transform transition-all duration-300 ease-in-out ${
       click ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
     }`}
->
-  <nav className="flex flex-col items-start text-dark dark:text-light">
-    {/* Dummy Item */}
-    <div className="mb-1 invisible">ur not supposed to see this :)</div>
-
-    <Link
-      href="/"
-      className="mb-2 hover:text-accent dark:hover:text-accentDark"
-      onClick={toggle}
-    >
-      Home
-    </Link>
-    <Link
-      href="/categories/all-categories"
-      className="mb-2 hover:text-accent dark:hover:text-accentDark"
-      onClick={toggle}
-    >
-      Categories
-    </Link>
-    <Link
-      href="/about"
-      className="mb-2 hover:text-accent dark:hover:text-accentDark"
-      onClick={toggle}
-    >
-      About
-    </Link>
-    <button
-      onClick={() => {
-        setMode(mode === "light" ? "dark" : "light");
-        toggle();
-      }}
-      className={`w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200 ${
-        mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
-      }`}
-      aria-label="theme-switcher"
-    >
-      {mode === "light" ? (
-        <MoonIcon className={"fill-dark"} />
-      ) : (
-        <SunIcon className={"fill-dark"} />
-      )}
-    </button>
-    <button
-      role="link"
-      onClick={() => {
-        openInNewTab(`${siteMetadata.linkedin}`);
-        toggle();
-      }}
-      className="inline-block w-6 h-6 mb-4"
-    >
-      <LinkedInIcon className="hover:scale-125 transition-all ease duration-200" />
-    </button>
-    <button
-      role="link"
-      onClick={() => {
-        openInNewTab(`${siteMetadata.github}`);
-        toggle();
-      }}
-      className="inline-block w-6 h-6"
-    >
-      <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
-    </button>
-  </nav>
-</div>
+      >
+        {/* Dummy Item */}
+    <div className="mb-1 invisible">
+      ur not supposed to see this :)
+    </div>
+        <nav className="flex flex-col items-start text-dark dark:text-light">
+          <Link
+            href="/"
+            className="mb-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={toggle}
+          >
+            Home
+          </Link>
+          <Link
+            href="/categories/all-categories"
+            className="mb-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={toggle}
+          >
+            Categories
+          </Link>
+          <Link
+            href="/about"
+            className="mb-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={toggle}
+          >
+            About
+          </Link>
+          <button
+            onClick={() => {
+              setMode(mode === "light" ? "dark" : "light");
+              toggle();
+            }}
+            className={`w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200 ${
+              mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
+            }`}
+            aria-label="theme-switcher"
+          >
+            {mode === "light" ? (
+              <MoonIcon className={"fill-dark"} />
+            ) : (
+              <SunIcon className={"fill-dark"} />
+            )}
+          </button>
+          <button
+            role="link"
+            onClick={() => {
+              openInNewTab(`${siteMetadata.linkedin}`);
+              toggle();
+            }}
+            className="inline-block w-6 h-6 mb-4"
+          >
+            <LinkedInIcon className="hover:scale-125 transition-all ease duration-200" />
+          </button>
+          <button
+            role="link"
+            onClick={() => {
+              openInNewTab(`${siteMetadata.github}`);
+              toggle();
+            }}
+            className="inline-block w-6 h-6 mb-4"
+          >
+            <GithubIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
+          </button>
+          <button
+            role="link"
+            onClick={() => {
+              openInNewTab(`${siteMetadata.leetcode}`);
+              toggle();
+            }}
+            className="inline-block w-6 h-6"
+          >
+            <LeetCodeIcon className="hover:scale-125 transition-all ease duration-200 dark:fill-light" />
+          </button>
+        </nav>
+      </div>
 
     </>
   );

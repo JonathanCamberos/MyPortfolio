@@ -2,8 +2,8 @@
 title: "LeetCode: Two Pointers"
 description: "two pointers"
 image: "../../public/blogs/two-pointer-9.png"
-publishedAt: "2025-05-07"
-updatedAt: "2025-05-07"
+publishedAt: "2025-05-28"
+updatedAt: "2025-05-28"
 author: "jonathancamberos"
 isPublished: true
 tags: 
@@ -14,7 +14,8 @@ tags:
 Leetcode problems with elegant solutions using two pointers. 
 
 ### L + R
-Two Pointers is the strategy of using L and R pointers to iterate over a list of elements.
+Two Pointers is the strategy of using L and R pointers to iterate over a list of elements
+to solve logic problems.
 
 ## 125. Valid Palindrome - Easy
 
@@ -34,80 +35,148 @@ Constraints:
 string s consists only of printable ASCII characters.
 
 ### Abstraction 
-Use two pointers, L and R, to traverse the string validating palindrome status.
+Using two pointers, L and R, we can traverse the string validating palindrome status.
 
-We can convert the string s into lowercase.
-Then, remove non-alphanumeric character. ( ".isalnum()" function comes in handy ) 
-Then, traverse using pointers comparing characters on each side 
-or reverse the string and compare new string with original.
+We can convert the string s into lowercase, 
+traverse using pointers comparing characters on the start and end of the string.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Brute Force One Pointer | O(n) | O(n) | Iterate over string of n length O(n) | Memory allocation for cleaned list of n length O(n) |
+| Two Pointer | O(n) | O(n) | Iterate over string of n length O(n) | Memory allocation for cleaned list of n length O(n) |
+| Two Pointer In Place | O(n) | O(1) | Iterate over string of n length O(n) | No additional memory allocation for in place comparison O(1) |
 
-
-### Solution 1: Two Pointers L + R
+### Brute Force One Pointer
 ```python
     def isPalindrome(self, s: str) -> bool:
-        
-        # simultanious assignment
-        l, r = 0, len(s) - 1
 
-        while l < r:
-            
-            # moving both pointers until both are at alphaNum
-            while l < r and not self.alphaNum(s[l]):
-                l += 1
-            while r > l and not self.alphaNum(s[r]):
-                r -= 1
+        # space complexity: list to store cleaned string of n length O(n)
+        cleaned = []
 
-            # check both curr alphaNum for match 
-            if s[l].lower() != s[r].lower():
+        # simple way for alphaNum check
+        def alphaNum(c):
+            return (ord('A') <= ord(c) <= ord('Z') or 
+                    ord('a') <= ord(c) <= ord('z') or 
+                    ord('0') <= ord(c) <= ord('9'))
+
+        # time complexity: iterate over string of n length O(n)
+        for c in s:
+
+            if alphaNum(c):
+                if 'A' <= c <= 'Z':
+                    cleaned.append(chr(ord(c) + 32))
+                else:
+                    cleaned.append(c)
+
+        # time complexity: two pointer iteration of string of n length O(n)
+        n = len(cleaned)
+        for i in range(n // 2):
+            if cleaned[i] != cleaned[n - i - 1]:
                 return False
 
-            # move pointers to next step
-            l, r = l + 1, r - 1
-
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return True
-    
-    # simple way for alphaNum check
-    def alphaNum(self, c):
-        return (ord('A') <= ord(c) <= ord('Z') or 
-                ord('a') <= ord(c) <= ord('z') or 
-                ord('0') <= ord(c) <= ord('9'))
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Cleaned list | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation to store clean string of n length O(n) |
+| Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
+| Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
-
-Here we simply follow the steps we mentioned above. 
-
-Use pointers l and r, skip over all non-alphaNum chars, 
-then check if the pointers match, and continue
-
-### Solution 2: Reverse String [::-1]
-```python 
-def isPalindrome(self, s: str) -> bool:
-    ans = ""
-    for c in s.lower():
-        if c.isalnum():
-            ans += c
-    return ans == ans[::-1]
+### Solution 1: Two Pointers
+```python
+    def isPalindrome(self, s: str) -> bool:
         
+        # space complexity: list to store cleaned string of n length O(n)
+        cleaned = []
+
+        # simple way for alphaNum check
+        def alphaNum(c):
+            return (ord('A') <= ord(c) <= ord('Z') or 
+                    ord('a') <= ord(c) <= ord('z') or 
+                    ord('0') <= ord(c) <= ord('9'))
+
+        # time complexity: iterate over string of n length O(n)
+        for c in s:
+            # Check if character is alphanumeric
+            if isAlphaNum(c):
+                # Convert uppercase to lowercase
+                if 'A' <= c <= 'Z':
+                    cleaned.append(chr(ord(c) + 32))
+                else:
+                    cleaned.append(c)
+
+        # time complexity: two-pointer traversal of cleaned string O(n)
+        left, right = 0, len(cleaned) - 1
+        while left < right:
+            if cleaned[left] != cleaned[right]:
+                return False
+            left += 1
+            right -= 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return True
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Cleaned list | O(n) | O(n) | Iterating over list of n length O(n) | Memory allocation to store clean string of n length O(n) |
+| Two Pointer | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
+| Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
+
+
+### Solution 2: Two Pointers In Place
+```python 
+    def isPalindrome(self, s: str) -> bool:
+        # space complexity: no additional space used for storage O(1)
+        left, right = 0, len(s) - 1
+
+        # simple way for alphaNum check
+        def alphaNum(c):
+            return (ord('A') <= ord(c) <= ord('Z') or 
+                    ord('a') <= ord(c) <= ord('z') or 
+                    ord('0') <= ord(c) <= ord('9'))
+
+        # time complexity: iteration over string of n length O(n)
+        while left < right:
+            # time complexity: moving left pointer to next alphanumeric character O(n)
+            while left < right and not isAlphaNum(s[left]):
+                left += 1
+
+            # time complexity: moving right pointer to previous alphanumeric character O(n)
+            while left < right and not isAlphaNum(s[right]):
+                right -= 1
+
+            # Convert characters to lowercase
+            leftChar = s[left]
+            if 'A' <= left_char <= 'Z':
+                left_char = chr(ord(leftChar) + 32)
+
+            rightChar = s[right]
+            if 'A' <= right_char <= 'Z':
+                rightChar = chr(ord(rightChar) + 32)
+
+            # Compare characters
+            if leftChar != rightChar:
+                return False
+
+            left += 1
+            right -= 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return True
+            
 ``` 
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Two Pointer | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
+| Overall | O(n) | O(1) | Iterating over string n length dominates leading to O(n) | No additional memory allocation O(1) |
 
 
 ## 271. String Encode and Decode - Medium
@@ -126,70 +195,89 @@ def isPalindrome(self, s: str) -> bool:
 Constraints:
 
 ### Abstraction
-
+We need to create an encode and decode function and mark the start of a new string
+as well as its length.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Two Pointers Length Delimiter |  |  |  |  |
 
-### Solution 1: i & j pointers
+### Solution 1: One Pointer Length Delimiter
+```python
+    def encode(self, strs: List[str]) -> str:
 
-```python 
-class Solution:
+        # python strings are immutable so concatenation creates new string time complexity o(n^2)
+        # python list allows us to add encoded strings in O(n)
+        # space complexity: storage for encoding all strings in a list O(n)
+        encoded = []
 
-    # example: "5#hello3#bye"
-    
-    def encode(self, strs: List[str]):
-        ans = "" 
-        for word in strs:
-            ans += str(len(word)) + "#" + word
-
-        return ans
-    
-    # decode above pattern
-    def decode(self, s: str):
-        ans = []
-        i = 0
-
-        # complete until end of encoded string
-        while i < len(s):
-            j = i
-
-            # find the #
-            while s[j] != "#":
-                j += 1
+        # time complexity: iterate over list of strings n length O(n)
+        for s in strings:
             
-            # anything left will be int
-            length = int(s[i:j])
+            # time complexity: iterate over all chars in string O(n)
 
-            # point to start of string
-            i = j + 1 
+            # lenDelim = len + delim
+            left = 0
+            lenDelim = str(len(s)) + "#"
 
-            # point to +1 after string (for substringing)
-            j = i + length
+            # append each char of (length + delimiter) O(n)
+            while left < len(lenDelim):
+                encoded.append(lenDelim[left])
+                left += 1
+            
+            # append each char of string itself O(n)
+            left = 0
+            while left < len(s):
+                encoded.append(s[left])
+                left += 1
+        
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n^2)
+        return ''.join(res)
 
-            # grab string 
-            ans.append(s[i:j])
 
-            # start of next section
-            i = j
+    def decode(self, s: str) -> List[str]:
 
-        return ans
+        # space complexity:
+        decoded = []
+        left = 0
+
+        # time complexity: iterate over list of n chars O(n)
+        while left < len(encoded):
+
+            # time complexity: 
+            currLen = 0
+            while encoded[left] != "#":
+
+                # grabbing value ensuring base 10
+                currLen = currLen * 10 + int(encoded[i]) 
+                left += 1
+
+            # skip delimiter, point to string
+            left += 1  
+
+            # grabbing currLen many chars to form string
+            # time complexity: 
+            substring = ""
+            while left < range(currLen)
+
+                # forming string
+                substring += encoded[left]
+                left += 1
+            
+            # added string to decoded list of strings
+            decoded.append(substring)
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n^2)
+        return decoded
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-Seemingly a confusing problem, since we are designing the encoding method we 
-can make it as simple as possible. 
-
-
+| Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of strings n length O(n) | Memory allocation for encoded string of length O(n)  |
+| Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded string with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
 ## 167. Two Sum II - Input Array Is Sorted - Medium
@@ -197,13 +285,13 @@ can make it as simple as possible.
 ### Intro
 > Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, 
 > find two numbers such that they add up to a specific target number. 
-> Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 `lt` index2 &le; numbers.length.
+> Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length.
 > Return the indices of the two numbers, index1 and index2, added by one as an 
 > integer array [index1, index2] of length 2.
 > The tests are generated such that there is exactly one solution. 
 > You may not use the same element twice.
 
-|  nums          | target | Output |  
+|  Input List          | Input Target | Output |  
 | -------------- | ------ | ------ | 
 | [2, 7, 11, 15] | 9      | [1,2]  |
 | [2, 3, 4]      | 6      | [1,3]  |
@@ -211,103 +299,97 @@ can make it as simple as possible.
 
 Constraints:
 
-Your solution must use only constant extra space.
+Your solution must use only constant extra space O(1)
 
 ### Abstraction
 Since the array is sorted we can make assumptions as we traverse the array using pointers.
 Lets build up to the assumption.
 
-Naive solution: we iterate of the array with 2 pointers L & R, compare every element for a
-O(n^2) solution 
-
-Situation #1:
-
-| 1 | 3 | 4 | 5 | 7 | 10 | 11 |    Target = 9
-
-L^ ------------- R^
-
-Lets pause iteration at the pointer values --> L = 1 and R = 10
-
-We know that the current value is bigger than our target: (11 > 9) 
-
-Assumption #1: 
-
-Since the array is sorted, we know that any element to the right of pointer R is bigger than it. 
-And because of this, we know that anything to the right will not be valid for our target, since we 
-need to decrease our estimate to get to our target
-
-Thus, we can discard that right portion of the array. Our array becomes -->
-
-| 1 | 3 | 4 | 5 | 7 |    Target = 9
-
-
-Situation #2:
-
-| 1 | 3 | 4 | 5 | 7 |    Target = 9
-
------L^------R^
-
-Lets pause iteration at the pointer values --> L=3 and R=5
-
-We know that the current value is smaller than our target: (8 < 9)
-
-Assumption #2: 
-
-Since the array is sorted, we know that any element to the left of pointer L is smaller than it.
-And because of this, we know that anything to the left will not be valid for our target, since we 
-need to increase our estimate to get to our target.
-
-Thus, we can discard that left portion of the array. Our array becomes --> 
-
-| 4 | 5 | 7 |    Target = 9
-
-Mimicing Pattern:
-
-In the above, we are essentially we are chopping off the right handside of the array 
-if our estimate > target, and chopping off the left handside if estimate < target.
-
-If we were instead of doing the naive approach of comparing every element via starting both pointers 
-on the left, if we start L = 0 and R = len(nums)-1, we are able to mimic the above chopping pattern.
-
-With this pattern, we end up with a solution of O(n) as both pointers approach the center from each end.
-
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Brute Force (all pair comparison) |  |  |  |  |
+| Binary Search for Complement |  |  |  |  |
+| Two Pointers |  |  |  |  |
 
-### Solution 1: L + R pointers
-```python 
- def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        l,r = 0,len(numbers)-1
+### Brute Force (all pairs comparison)
+```python
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
 
-        while l < r:
-            tmp = numbers[l] + numbers[r]
-        
-            if tmp > target:
-                r -= 1
-            elif tmp < target:
-                l += 1
-            else:
-                return [l+1,r+1]
+        # time complexity: iteration of O(n)
+        for i in range(len(numbers)): 
+
+            # time complexity: iteration of O(n^2)
+            for j in range(i + 1, len(numbers)): 
+
+                # time complexity: sum and comparison operations take constant O(1)
+                if numbers[i] + numbers[j] == target:
+                    return [i + 1, j + 1]  # Convert to 1-indexed
+
+        # overall: time complexity
+        # overall: space complexity 
+        return []
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-To summarize abstraction:
+### Solution 1: Binary Search for Complement
+```python 
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        
+        # time complexity: iteration over list of n length O(n)
+        for i in range(len(numbers)): 
 
-If tmp is bigger than target, move R to the left (because every elem to the 
-right of R is bigger and thus could not be the answer )
+            complement = target - numbers[i]
+            
+            # Binary search: O(log n)
+            left, right = i + 1, len(numbers) - 1
+            while left <= right:
+                mid = (left + right) // 2
+                if numbers[mid] == complement:
+                    return [i + 1, mid + 1]  # Convert to 1-indexed
+                elif numbers[mid] < complement:
+                    left = mid + 1
+                else:
+                    right = mid - 1
 
-If tmp is smaller than target, move L to the right (because every elem to the 
-left of L is smaller and thus could not be the answer )
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(1)
+        return []
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
 
+
+### Solution 2: Two Pointers
+```python
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        # Time complexity: O(n), Space complexity: O(1)
+        left, right = 0, len(numbers) - 1  # Initialize two pointers
+        while left < right:  # Traverse until pointers meet
+            current_sum = numbers[left] + numbers[right]  # O(1) sum calculation
+            if current_sum == target:
+                return [left + 1, right + 1]  # Convert to 1-indexed
+            elif current_sum < target:
+                left += 1  # Move left pointer to increase the sum
+            else:
+                right -= 1  # Move right pointer to decrease the sum
+
+        # overall: time complexity
+        # overall: space complexity
+        return []
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
 
 
 ## 15. threeSum - Medium
