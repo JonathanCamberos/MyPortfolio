@@ -276,8 +276,8 @@ as well as its length.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of strings n length O(n) | Memory allocation for encoded string of length O(n)  |
-| Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded string with delimiter n length o(n) | Memory allocation for list of strings n length |
+| Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of n strings of n n length O(n) | Memory allocation for encoded string of length O(n)  |
+| Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
 ## 167. Two Sum II - Input Array Is Sorted - Medium
@@ -308,9 +308,9 @@ Lets build up to the assumption.
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (all pair comparison) |  |  |  |  |
-| Binary Search for Complement |  |  |  |  |
-| Two Pointers |  |  |  |  |
+| Brute Force (all pair comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>) | No additional memory allocation O(1) |
+| Binary Search for Complement | O(n log n) | O(1) | Iterates over list of n elements O(n), performing binary search on each O(log n) leading to O(n log n) | No additional memory allocation O(1) |
+| Two Pointers | Iterates through array of n length using two pointers O(n) | No additional memory allocation O(1) |  |  |
 
 ### Brute Force (all pairs comparison)
 ```python
@@ -326,15 +326,17 @@ Lets build up to the assumption.
                 if numbers[i] + numbers[j] == target:
                     return [i + 1, j + 1]  # Convert to 1-indexed
 
-        # overall: time complexity
-        # overall: space complexity 
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
         return []
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Outer loop | O(n) | O(1) | Iterates over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Inner loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, the inner loop iterates through all subsequent elements with Big(O) is O(n<sup>2</sup>). Derivation [here](/blogs/common-formulas#brute-case-double-for-loop) | No additional memory allocation for iteration O(1) |
+| Comparison | O(1) | O(1) | Sum and comparison operations in constant O(1) | No additional memory allocation for sum or comparison O(1) | 
+| Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity | No additional memory was allocated leading to constant O(1) space complexity. |
+
 
 ### Solution 1: Binary Search for Complement
 ```python 
@@ -364,37 +366,48 @@ Lets build up to the assumption.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Outer loop | O(n) | O(1) | Iterates over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Binary Search | O(log n) | O(1) | Binary search over array for complement O(log n) | No additional memory allocation for binary search O(1) |
+| Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
 ### Solution 2: Two Pointers
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
-        # Time complexity: O(n), Space complexity: O(1)
-        left, right = 0, len(numbers) - 1  # Initialize two pointers
-        while left < right:  # Traverse until pointers meet
-            current_sum = numbers[left] + numbers[right]  # O(1) sum calculation
-            if current_sum == target:
-                return [left + 1, right + 1]  # Convert to 1-indexed
-            elif current_sum < target:
-                left += 1  # Move left pointer to increase the sum
-            else:
-                right -= 1  # Move right pointer to decrease the sum
 
-        # overall: time complexity
-        # overall: space complexity
+        # space complexity: l and r pointers constant O(1)
+        left, right = 0, len(numbers) - 1  
+
+        # time complexity: iterate over list of n length until l and r pointers meet O(n)
+        while left < right:
+
+            # check current pointer values
+            currSum = numbers[left] + numbers[right]  
+
+            if currSum == target:
+                # convert to 1-indexed array
+                return [left + 1, right + 1]
+
+            # increase left pointer to increase currSum
+            elif currSum < target:
+                left += 1
+
+            # decrease right pointer to decrease currSum
+            else:
+                right -= 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return []
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Pointer Loop | O(n) | O(1) | Left and right pointers iterate over list of n length O(n) | No additional memory allocation O(1) |
+| Comparison | O(1) | O(1) | Sum and comparison operations take constant O(1) | No additional memory allocation for sum and comparison operations O(1) |
+| Overall | O(n) | O(1) | Iterating with left and right pointers over list of n length dominates leading to O(n) | No additional memory allocation leading to constant O(1) | 
 
 
-## 15. threeSum - Medium
+## 15. 3 Sum - Medium
 
 ### Intro
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] 
@@ -410,36 +423,6 @@ Lets build up to the assumption.
 Constraints:
 
 ### Abstraction
-This is a step up from the previous 167. Two Sum II - Sorted problem. 
-
-The only differences is that we are using 3 integers for the sum, and our array is not sorted.
-
-We have two main ways to do this:
-1. sort() + frozen negative number + mini twoSum
-2. 
-3. grouping by parity + 4 subcases
-
-sort() + frozen negative number + mini twoSum:
-
-Here, we are converting the threeSum problem into a twoSum problem.
-
-By freezing some negative element, we have 2 elements left that must be the complement of the frozen element, 
-adding up to zero. 
-
-These two elements are found by setting L to the index of the current frozen negative element + 1, and R to the right most element.
-
-Via this, we portion our array into a mini twoSum problem
-
-grouping by parity + 4 subcases:
-
-Here, we iterate the array once and place each number into a bucket of postive, negative, a zero numbers.
-
-We then iterate over the original array while going through the 3 following cases:
-
-1. (0, 0, 0)
-2. (-num1, +num1, 0)
-3. (-num1, -num2, num3)
-4. (num1, num2, -num3)
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -447,6 +430,34 @@ We then iterate over the original array while going through the 3 following case
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
+
+### Brute Force (all triplets comparison)
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        results = set()  # To avoid duplicate triplets
+        n = len(nums)
+
+        # Triple nested loop
+        for i in range(n - 2):
+
+            for j in range(i + 1, n - 1):
+
+                for k in range(j + 1, n):
+                    
+                    if nums[i] + nums[j] + nums[k] == 0:
+                        # Create a triplet and sort manually
+                        triplet = [nums[i], nums[j], nums[k]]
+                        for m in range(3):
+                            for n in range(m + 1, 3):
+                                if triplet[m] > triplet[n]:
+                                    triplet[m], triplet[n] = triplet[n], triplet[m]
+                        results.add(tuple(triplet))  # Use tuple to store in set
+
+        # overall: time complexity O(n^3)
+        # overall: space complexity O(k)
+        return [list(triplet) for triplet in results]
+```
+
 
 ### Solution 1: sort() + frozen negative number + mini twoSum
 ```python
@@ -540,7 +551,7 @@ def threeSum(self, nums: List[int]) -> List[List[int]]:
             if n_target in N:
                 res.add(tuple(sorted([p[i], p[j], n_target])))
 
-    return res	
+    return res  
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
