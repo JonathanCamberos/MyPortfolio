@@ -5,11 +5,11 @@ import { compareDesc, parseISO } from "date-fns"
 export const cx = (...classNames) => classNames.filter(Boolean).join(" ")
 
 
-// sorts all the blogs by published date, leaving most recent at [0]
+// sorts all the blogs by updated date, leaving most recent at [0]
 export const sortBlogs = (blogs) => {
     return blogs
         .slice()
         .sort((a,b) =>
-             compareDesc(parseISO(a.publishedAt), parseISO(b.publishedAt))
+             compareDesc(parseISO(a.updatedAt), parseISO(b.updatedAt))
         );
 };
