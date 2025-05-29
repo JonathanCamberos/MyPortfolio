@@ -1,7 +1,7 @@
 ---
 title: "LeetCode: Two Pointers"
 description: "two pointers"
-image: "../../public/blogs/two-pointer-9.png"
+image: "../../public/blogs/two-pointer.png"
 publishedAt: "2025-05-28"
 updatedAt: "2025-05-28"
 author: "jonathancamberos"
@@ -302,8 +302,10 @@ Constraints:
 Your solution must use only constant extra space O(1)
 
 ### Abstraction
-Since the array is sorted we can make assumptions as we traverse the array using pointers.
-Lets build up to the assumption.
+Given a sorted array, find two numbers which add up to target.
+
+Unlike Two Sum I, we do not neccesarrily have to traverse the entire array, as since
+the given array is sorted, we can make assumptions about our traversal using l and r pointers.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -406,7 +408,6 @@ Lets build up to the assumption.
 | Comparison | O(1) | O(1) | Sum and comparison operations take constant O(1) | No additional memory allocation for sum and comparison operations O(1) |
 | Overall | O(n) | O(1) | Iterating with left and right pointers over list of n length dominates leading to O(n) | No additional memory allocation leading to constant O(1) | 
 
-
 ## 15. 3 Sum - Medium
 
 ### Intro
@@ -424,90 +425,98 @@ Constraints:
 
 ### Abstraction
 
+
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Brute Force (all triplets comparison) |  |  |  |  |
+| Two Pointers Set |  |  |  |  |
+| Two Pointers Early Breaks Set |  |  |  |  |
 
 ### Brute Force (all triplets comparison)
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        results = set()  # To avoid duplicate triplets
+
+        # space complexity: set of unique m triplets tuples O(m)
+        res = set() 
         n = len(nums)
 
-        # Triple nested loop
+        # time complexity: n choose 3 of all triples O(n^3)
         for i in range(n - 2):
-
             for j in range(i + 1, n - 1):
-
                 for k in range(j + 1, n):
                     
+                    # validate
                     if nums[i] + nums[j] + nums[k] == 0:
-                        # Create a triplet and sort manually
+
+                        # create triplet array
                         triplet = [nums[i], nums[j], nums[k]]
+
+                        # sort manually
                         for m in range(3):
                             for n in range(m + 1, 3):
                                 if triplet[m] > triplet[n]:
                                     triplet[m], triplet[n] = triplet[n], triplet[m]
-                        results.add(tuple(triplet))  # Use tuple to store in set
+
+                        # add tuple to res
+                        res.add(tuple(triplet))  # Use tuple to store in set
 
         # overall: time complexity O(n^3)
         # overall: space complexity O(k)
-        return [list(triplet) for triplet in results]
+        return [list(triplet) for triplet in res]
 ```
-
-
-### Solution 1: sort() + frozen negative number + mini twoSum
-```python
-def threeSum(self, nums: List[int]) -> List[List[int]]:
-    res = []
-    nums.sort()
-
-    # (index, value) iterator
-    for i, a in enumerate(nums):
-        
-        # we are freezing one pointer on a negative number
-        # if we hit postive number we can end
-        if a > 0:
-            break
-
-        # if we hit a repeated negative number, skip
-        if i > 0 and a == nums[i-1]:
-            continue
-
-        # mini twoSum problem
-        # chunk of array to the right of the frozen negative number
-        L, R, = i + 1, len(nums)-1
-        while L < R:
-            curr3Sum = a + nums[L] + nums[R]
-
-            if curr3Sum < 0:
-                L += 1
-            elif curr3Sum > 0:
-                R -= 1
-            else:
-                res.append([a, nums[L], nums[R]])
-
-                # why dont we just shift over L?
-                # following while loops moves L until we hit a new number
-                # but we know that a + L + R --> 0
-                # thus, there is no a + new_L + R != 0
-                # so we must shift both pointers
-                L += 1
-                R -= 1
-
-                while nums[L] == nums[L-1] and L < R:
-                    L += 1
-    return res
-``` 
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  | 
+
+### Solution Two Pointers Set
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+
+        # space complexity: 
+        results = set()
+            n = len(nums)
+
+            # Sort array manually
+            for i in range(n):
+                for j in range(i + 1, n):
+                    if nums[i] > nums[j]:
+                        nums[i], nums[j] = nums[j], nums[i]
+
+            for i in range(n - 2):
+                if i > 0 and nums[i] == nums[i - 1]:
+                    continue
+
+                left, right = i + 1, n - 1
+                while left < right:
+                    curr_sum = nums[i] + nums[left] + nums[right]
+
+                    if curr_sum == 0:
+                        results.add((nums[i], nums[left], nums[right]))
+                        while left < right and nums[left] == nums[left + 1]:
+                            left += 1
+                        while left < right and nums[right] == nums[right - 1]:
+                            right -= 1
+                        left += 1
+                        right -= 1
+                    elif curr_sum < 0:
+                        left += 1
+                    else:
+                        right -= 1
+
+            return [list(triplet) for triplet in results]
+
+        # Time Complexity: O(n^2) for two-pointer traversal + O(n^2) for manual sorting.
+        # Space Complexity: O(k), where k is the number of unique triplets.
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
 
 ### Solution 3: grouping by parity + 4 subcases
 ```python

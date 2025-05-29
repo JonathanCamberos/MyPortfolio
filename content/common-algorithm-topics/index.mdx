@@ -1,7 +1,7 @@
 ---
-title: "Common Algorithm Topics"
-description: "Common Algorithm Topics"
-image: "../../public/blogs/color-tree-algo-2.png"
+title: "Common DSA Topics"
+description: "Common DSA Topics"
+image: "../../public/blogs/notepad-old.png"
 publishedAt: "2025-05-08"
 updatedAt: "2025-05-26" 
 author: "jonathancamberos"
@@ -10,13 +10,11 @@ tags:
 - data structures & algorithms
 ---
 
-## Time & Space Complexity (to-do)
+## Sorting Algorithms
 
-## Amortized Complexity (to-do)
+### Merge Sort
 
-## Merge Sort
-
-### Intro
+#### Intro
 Merge Sort is a divide and conquer sorting algorithm that sorts an array by recursion:
 
 1. Given an array. Split into two halves
@@ -24,7 +22,7 @@ Merge Sort is a divide and conquer sorting algorithm that sorts an array by recu
 3. Recurse, merging and sorting 2 lists at a time
 4. Return to original length now sorted list
 
-### Diagram
+#### Diagram
 ```
 Splitting Phase:
 
@@ -116,7 +114,7 @@ sums roughly to n.
 + Therefore, memory is not cumulative across all calls, but localized to active recursive paths
 
 
-### Code
+#### Code
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         if len(s) != len(t):
@@ -159,7 +157,7 @@ sums roughly to n.
         return sorted_s == sorted_t
 ```
 
-### Space & Time Complexity
+#### Space & Time Complexity
 |  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
 | -------- | --------------- | ---------------- | ---------------- | ----------------- |
 | Dividing the Array | O(log n) | O(log n) | The recursive functional calls use stack memory proportional to the depth of recursion, which is O(log n)| |
@@ -167,21 +165,21 @@ sums roughly to n.
 | Merging across all levels | O(n log n) | O(n) | Over log n levels of recursion, each level processes n elements, leading to O(n log n) | While we do create arrays of size n/4, n/8, and so forth, there will only actually exist two of such arrays at any given time. For example, we start by creating two arrays of size n/2. Then, we recurse down only one one of the arrays and create two arrays of size n/4. Then we recurse down again and create two arrays of size n/8... And once we return from a recursive call, we end up destroying the temporary arrays we created in that call. |
 | Overall | O(n log n) | O(n) | Merging across all levels dominates time complexity. Leading to O(n log n) | Memory allocation for temporary arrays during merging at each level dominate space complexity. Leading to O(n) |  |  |
 
-### Best, Average, Worst Case
+#### Best, Average, Worst Case
 
 Time Complexity of merge sort is O(n log n) across the all 3 cases. 
 This is because Merge sort still recursively divides and merges the array, regardless if the initial array is sorted or unsorted.  
 So it still goes through all the steps and requirements of dividing and merging across all levels leading to the same time and space complexity for best, average, and worst case.
 
-### Summary 
+#### Summary 
 Merge sort's behavior does not depend on the input order.
 It is a predicable sorting algorithm with its main drawback being the space requirement O(n) when
 compared to in-place sorting algorithms like quicksort or heap sort.
 
 
-## Insertion Sort
+### Insertion Sort
 
-### Intro
+#### Intro
 Insertion sort is a comparison-based sorting algorithm that builds that final sorted
 array one element at a time.
 
@@ -191,10 +189,10 @@ array one element at a time.
 4. Continue and will generate an array of sorted partition
 
 
-### Diagram 
+#### Diagram 
 
 
-### Code
+#### Code
 ```python
     def insertion_sort(arr):
 
@@ -223,28 +221,28 @@ array one element at a time.
 ```
 
 
-### Space & Time Complexity
+#### Space & Time Complexity
 
 
-### Best, Average, Worst Case
+#### Best, Average, Worst Case
 |  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
 | -------- | --------------- | ---------------- | ---------------- | ----------------- |
 | Best Case |  |  |  |  |
 | Average Case |  |  |  |  |
 | Worst |  |  |  |  |
 
-### Summary
+#### Summary
 
 
-## Tim Sort
+### Tim Sort
 
-### Intro 
+#### Intro 
 TimSort is a hybrid sorting algorithm derived from merge sort and insertion sort. It
 uses small arrays of length 'run_length' typically 32 or 64 to sort and merge them efficiently.
 We use insertion sort of the sub run arrays and then we merge each of the sub run arrays, leveraging
 benefits of both insertion and merge sort.
 
-### Diagram
+#### Diagram
 
 ```
 Run Identification and Sorting Phase:
@@ -262,7 +260,7 @@ Level 1:      [3, 4, 7, 8]      [1, 2, 5, 6]    Merge pairs of runs (O(n))
 Level 0:            [1, 2, 3, 4, 5, 6, 7, 8]    Final merge (O(n))
 ```
 
-### Code 
+#### Code 
 
 ```python
     def timsort(arr):
@@ -333,16 +331,18 @@ Level 0:            [1, 2, 3, 4, 5, 6, 7, 8]    Final merge (O(n))
 
 ```
 
-### Space & Time Complexity
+#### Space & Time Complexity
 
-### Best, Average, Worst Case
+#### Best, Average, Worst Case
 
-## Bucket Sort (to-do)
+### Bucket Sort (to-do)
 
 
-## Binary Search
+## Searching Algorithms
 
-### Intro
+### Binary Search
+
+#### Intro
 Binary Search is a divide and conquer algorithm for finding a target element in a 
 sorted array.
 It halves the search space in each iteration.
@@ -355,7 +355,7 @@ It halves the search space in each iteration.
   - if the target is larger, move the left pointer to mid + 1
 4. Repeat until left > right or target has been found
 
-### Diagram
+#### Diagram
 ```
     Find Target = 7
 
@@ -396,7 +396,7 @@ It halves the search space in each iteration.
     result: target found!
 ```
 
-### Code
+#### Code
 ```python
     def binarySearch(numbers: List[int], target: int, left: int, right: int) -> int:
         
@@ -423,7 +423,7 @@ It halves the search space in each iteration.
         # overall: space complexity O(log n)
 ```
 
-### Space & Time Complexity
+#### Space & Time Complexity
 |  Aspect  | Time Complexity | Space Complexity | Time Explanation | Space Explanation |  
 | -------- | --------------- | ---------------- | ---------------- | ----------------- |
 |  |  |  |  |  |
@@ -431,11 +431,29 @@ It halves the search space in each iteration.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Best, Average, Worst Case
+#### Best, Average, Worst Case
 
-### Summary 
+#### Summary 
 
-## Double For Loop
+
+## Graph Algorithms
+
+
+
+
+## Performance
+
+### Time & Space Complexity
+
+### Amortized Complexity (to-do)
+
+### Caching (to-do)
+
+### Dynamic Programming (to-do)
+
+### Double For Loop
+
+#### Code
 ```python
     def example(self, nums: List[int]) -> bool:
 
@@ -449,7 +467,7 @@ It halves the search space in each iteration.
         return False
 ```
 
-### Diagram
+#### Diagram
 |  Outer Loop (i) | Inner Loop Start: (j = i + 1) | Inner Loop End: (j) |  Total Inner Loop Iterations | Total Outer Loop Iterations (Remaining) |
 | --------------- | ----------------------------- | ------------------- | ---------------------------- | --------------------------- |
 | i = 0 | j = 1 | j = n - 1 |  n - 1 |  n |
@@ -461,7 +479,7 @@ It halves the search space in each iteration.
 | i = n |  j = n + 1 | None (out of bounds) | 0 | 0 |
 
 
-### Time Complexity Derivation
+#### Time Complexity Derivation
 
 The total number of iterations in the inner loop across each iteration of the outer loop is:
 (n − 1) + (n − 2) + (n − 3) + ... + 3 + 2 + 1
@@ -490,17 +508,35 @@ And since we added the series twice, divide by 2 we get:
 Now if we simplify and apply Big(O) then we arrive at O(n<sup>2</sup>) time complexity.
 
 
-### Combinatorics
+#### Combinatorics
 
-We can also interpret the double for loop as counting all unique pairs (i, j).
+We can also interpret the double for loop as counting all pairs (i, j).
 Which would be equivalent to n choose 2.
 
+c(n 2) = n(n - 1)/2
 
-## Triple For Loop
+### Triple For Loop
 
-### Code
+#### Code
+```python
+    def example(self, nums: List[int]) -> bool:
 
-### Diagram 
+        # trying to find triplets
 
-### Time Complexity Derivation
+        for i in range(len(nums)):
+            for j in range(i + 1, len(nums)):
+                for k in range(j + 1, len(nums)):
+                    if nums[i] == nums[j] and nums[j] == nums[k] :
+                    return True
 
+        return False
+```
+
+#### Diagram 
+to much to show!
+
+#### Time Complexity Derivation
+Similar to double for loop, we can interpret a triple for loop as counting all triples (i, j, k).
+Which would be equivalent to n choose 3.
+
+c(n 3) = n(n - 1)(n - 2)/3
