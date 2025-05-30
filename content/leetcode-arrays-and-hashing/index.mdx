@@ -420,7 +420,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array O(1) |
 
 
-## 1. Two Sum - Easy
+## 1. Two Sum I - Easy
 
 ### Intro
 > Given an array of integers nums and an integer target, return indices of the two numbers
@@ -456,7 +456,7 @@ If this complement is present in the Array, then that is our final solution.
 Our next step is finding that complement.
 
 Since we are traversing the array, we can build up a hashset of elements we have seen, and use these as a 
-complement -> key -> index mapper for future elmements.
+complement -> key -> index mapper for future elements.
 
 The pattern to find the pair is is to iterate, grab element in array, caluclate the complement, 
 and check if complement is inside hashset.
