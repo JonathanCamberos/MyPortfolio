@@ -3,7 +3,7 @@ title: "LeetCode: Two Pointers"
 description: "two pointers"
 image: "../../public/blogs/two-pointer.png"
 publishedAt: "2025-05-28"
-updatedAt: "2025-05-28"
+updatedAt: "2025-05-31"
 author: "jonathancamberos"
 isPublished: true
 tags: 
@@ -843,8 +843,8 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # INCORRECT: water calculation uses updated rightMax prematurely
                 water += min(leftMax, rightMax) - height[R]
         
-        # overall: time complexity
-        # overall: space complexity 
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return water
 ```
 
@@ -868,20 +868,20 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 if height[L] >= leftMax:
                     leftMax = height[L]
 
-                # reverse implies right is taller, so add to water count
+                # outer if/else implies right is taller, so simply add to water count
                 else:
                     water += leftMax - height[L]
 
                 # shifting pointer after calculation
                 L += 1
 
-            # grabbing weak link, reverse implies left is taller so
+            # grabbing weak link
             else:
                 # Update rightMax
                 if height[R] >= rightMax:
                     rightMax = height[R]
 
-                # reverse implies left is taller, so add to water count
+                # outer if/else implies left is taller, so simply add to water count
                 else:
                     water += rightMax - height[R]
 

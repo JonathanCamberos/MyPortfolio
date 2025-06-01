@@ -110,7 +110,8 @@ where performance in time and space complexity are important.
 ## 217. Contains Duplicate - Easy
 
 ### Intro
-> Given an integer array nums, return true if any value appears at least twice in the array, 
+> Given an integer array nums, 
+> return true if any value appears at least twice in the array, 
 > return false if every element is distinct.
 
 |  Example Input           | Output |  
@@ -202,7 +203,7 @@ If we want to track every element, best space complexity is O(n)
         for num in nums:
 
             # time complexity: indexing of O(1)
-            if seen[num] >= 1:
+            if seen[num] > 0:
                 return True
             seen[num] += 1
 
@@ -252,14 +253,13 @@ If we want to track every element, best space complexity is O(n)
 
 > Given two strings s and t, return true if t is an anagram of s, and false otherwise.
 
-An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
-
+An Anagram is a word or phrase formed by rearranging the letters of a different 
+word or phrase, typically using all the original letters exactly once.
 
 |  Example Input 'S'  | Example Input 'T' | Output |  
 | ------------------- | ----------------- | ------ | 
 | "anagram"           | "nagaram"         | true   |
 | "rat"               | "car"             | false  |  
-
 
 Constraints:
 
@@ -295,19 +295,20 @@ Space Upper Bound: If we want to track every element, best space complexity is O
         # space complexity: overall of O(n) = temporary arrays O(n) + recursion stack of O(log n)
         def mergeSort(string):
             
-            # base case of list with single element
+            # base case of list with single element ['']
             # time complexity: O(1)
             # space complexity: O(1)
             if len(string) <= 1:
                 return string
             
-            # time complexity: dividing operation O(1)
+            # time complexity: dividing operation in constant O(1)
             mid = len(string) // 2
 
-            # mergeSort both subarrays -> mergeSort time/space complexity * 2
+            # mergeSort both subarrays
             left = mergeSort(string[:mid])
             right = mergeSort(string[mid:])
             
+            # base case of merge two lists with single element merge ([''], [''])
             return merge(left, right)
         
         # Time Complexity: O(n) per merge
@@ -317,7 +318,10 @@ Space Upper Bound: If we want to track every element, best space complexity is O
             sorted = []
             i = j = 0
 
+            # time complexity: iterate over two strings combined n length O(n) 
             while i < len(left) and j < len(right):
+
+                # sort characters into sorted while iterating
                 if left[i] <= right[j]:
                     sorted.append(left[i])
                     i += 1
@@ -326,7 +330,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
                     j += 1
             
 
-            # time complexity: O(n) in worst case if 1 list is empty
+            # time complexity: O(n) in worst case if either list is empty
             sorted.extend(left[i:]) # If elements remain in `left`
             sorted.extend(right[j:]) # If elements remain in `right`
 
@@ -349,6 +353,29 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | Comparison | O(n) | O(1) | Comparing the sorted strings character by-element takes linear time | No additional memory is allocated O(1) |
 | Overall | O(n log n) | O(n) | Sorting dominates the time complexity as comparison adds negligible overhead leading to O(n log n) time complexity. | Temporary arrays required for merge sort is proportional to input size leading to O(n) space complexity. |
 
+
+### Find the Bug: (all pairs comparison)
+```python
+    def isAnagram(self, s: str, t: str) -> bool:
+        
+        # time complexity: iterate over list of n length O(n)
+        for char1 in s:
+
+            # time complexity: iterate over list of n length per outer iteration O(n^2)
+            for char2 in t:
+
+                # INCORRECT: does not take into account freq count for chars
+                if char1 == char2:
+                    return True
+
+        # overall: time complexity  O(n)
+        # overall: space complexity O(1)
+        return False
+```
+Above will not work as it does not take validate if the frequency count 
+for characters is the same for both strings. 
+
+Frequency count matching as well as occurrence is required for anagrams.
 
 ### Solution 1: Hashmap
 
@@ -377,6 +404,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
         # overall: space complexity O(n)
         return True
 ```
+
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
