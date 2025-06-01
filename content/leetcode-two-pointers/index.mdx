@@ -672,8 +672,8 @@ two sides is calculated using the index of the array
                 currWater = min(height[i], height[j]) * (j - i)
                 maxWater = max(maxWater, currWater)
         
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
         return maxWater
 ```
 
@@ -700,6 +700,7 @@ two sides is calculated using the index of the array
             maxWater = max(maxWater, currWater)
 
             # find weak link
+            # time complexity: continue iterating over list n length with two pointers O(n)
             if height[L] < height[R]:
                 L += 1
 
@@ -716,8 +717,8 @@ two sides is calculated using the index of the array
                 while height[R] < smallerHeight:
                     R -= 1
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return maxWater
 ```
 
@@ -759,6 +760,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Brute Force |  |  |  |  |
 | Two Pointer Early Break |  |  |  |  |
 |  |  |  |  |  |
+
 
 
 ### Brute Force
