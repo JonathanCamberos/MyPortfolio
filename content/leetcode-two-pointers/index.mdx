@@ -630,8 +630,8 @@ not utilziing two pointers. But its still a cool approach to the problem.
 ### Intro
 > You are given an integer array height of length n. There are n vertical lines drawn 
 > such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
-> Find two lines that together with the x-axis form a container, such that the container
-> contains the most water
+> Find two lines that together with the x-axis form a container, 
+> such that the container contains the most water.
 > Return the maximum amount of water a container can store
 
 |  nums            | Output                |  
@@ -648,6 +648,9 @@ We need to calculate the container with the most water.
 
 The integer value represents the height of a side of a container, and the distance between
 two sides is calculated using the index of the array
+
+We can iterate over the array calculating the sides of the container that will 
+give us the most water.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -679,33 +682,37 @@ two sides is calculated using the index of the array
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Outer loop | O(n) | O(1) | Iteration over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Inner loop | O(n<sup>2</sup>) | O(1) | Iteration over list of n length per iteration in outer loop O(n<sup>2</sup>) | No additional memory allocation for iteration O(1) |
+| Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) | 
+| Overall | O(n<sup>2</sup>) | O(1) | Inner loop dominates leading to O(n<sup>2</sup>) | No additional memory allocation leading to O(1) | 
 
 ### Solution 1: Two Pointer Early Break
 ```python
     def maxArea(self, height: List[int]) -> int:
+        
         L, R = 0, len(height)-1
         maxWater = 0 
 
         # time complexity: iterate over list of n length with two pointers O(n)
         while L < R:
 
-            # grab weak link
+            # grabbing weak link
             smallerHeight = min(height[L], height[R])
 
-            # calculate curr water
+            # calculate curr water = (smallerHeight * width)
             currWater = smallerHeight * (R-L)
+            
+            # compare to max
             maxWater = max(maxWater, currWater)
 
-            # find weak link
+            # grabbing weak link, continue past it
             # time complexity: continue iterating over list n length with two pointers O(n)
             if height[L] < height[R]:
                 L += 1
 
                 # early break: eliminate redundant comparisons
-                # skips heights guaranteed to be suboptimal
+                # by skipping heights guaranteed to be suboptimal
                 while height[L] < smallerHeight:
                     L += 1 
             
@@ -713,7 +720,7 @@ two sides is calculated using the index of the array
                 R -= 1
 
                 # early break: eliminate redundant comparisons
-                # skips heights guaranteed to be suboptimal 
+                # by skipping heights guaranteed to be suboptimal 
                 while height[R] < smallerHeight:
                     R -= 1
 
@@ -724,9 +731,9 @@ two sides is calculated using the index of the array
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iteration | O(n) | O(1) | Iteration over list of n length with two pointers O(n) | No additional memory allocation for iteration O(1) |
+| Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) |
+| Overall | O(n) | O(1) | Iteration over list of n length dominates leading to O(n) | No additional memory allocation O(1) | 
 
 ## 42. Trapping Rain Water - Hard
 
@@ -769,50 +776,122 @@ Now we need a way to traverse the array that allows us to take advantage of this
         n = len(height)
         water = 0
 
-        # Iterate through each bar
+        # time complexity: iterate over list of n length o(n)
         for i in range(n):
-            # Find the maximum height to the left
-            left_max = max(height[:i+1])
-            
-            # Find the maximum height to the right
-            right_max = max(height[i:])
 
-            # Calculate water trapped on current bar
-            water += min(left_max, right_max) - height[i]
+            # Use two pointers to calculate leftMax and rightMax
+            leftMax, left = 0, i
+            rightMax, right = 0, i
 
-        # overall: time complexity
-        # overall: space complexity
+            # time complexity: iterate over left hand side of list n length per outer iteration O(n^2)
+            while left >= 0:
+                leftMax = max(leftMax, height[left])
+                left -= 1
+
+            # time complexity: iterate over right hand side of list n length per outer iteration O(n^2)
+            while right < n:
+                rightMax = max(rightMax, height[right])
+                right += 1
+
+            # curr water trapped for curr bar i
+            water += min(leftMax, rightMax) - height[i]
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
         return water
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iterate |  |  |  |  |
+| Left/Right max |  |  |  |  |
+| Curr Water |  |  |  |  | 
+| Overall | | | | |
 
-
-### Solution 1: Two Pointers Early Break
+### Find the Bug: Two Pointers Early Break
 ```python 
     def trap(self, height: List[int]) -> int:
+        
         L, R = 0, len(height) - 1
-        left_max, right_max = height[L], height[R]
         water = 0
 
+        # setting curr left/right max to ends of list
+        leftMax, rightMax = height[L], height[R]
+
+        # time complexity: iterate over list of n length with two pointers O(n)
         while L < R:
             
+            # grabbing weak link
             if height[L] < height[R]:
+                # INCORRECT: skips water trapped at previous position before the pointer moved
                 L += 1
-                left_max = max(left_max, height[L])
-                water += min(left_max, right_max) - height[L]
+
+                # INCORRECT: updating leftMax *before* calculating trapped water causes error
+                leftMax = max(leftMax, height[L])
+
+                # INCORRECT: water calculation uses updated leftMax prematurely
+                water += min(leftMax, rightMax) - height[L]
+
+            # grabbing weak link
             else: 
+                # INCORRECT: skips water trapped at previous position before the pointer moved
                 R -= 1
-                right_max = max(right_max, height[R])
-                water += min(left_max, right_max) - height[R]
+
+                # INCORRECT: updating rightMax *before* calculating trapper water causes error
+                rightMax = max(rightMax, height[R])
+
+                # INCORRECT: water calculation uses updated rightMax prematurely
+                water += min(leftMax, rightMax) - height[R]
         
+        # overall: time complexity
+        # overall: space complexity 
         return water
 ```
 
+
+### Solution 1: Two Pointers Early Break
+```python
+    def trap(self, height: List[int]) -> int:
+
+        # Set initial variables
+        L, R = 0, len(height) - 1
+        water = 0
+        leftMax, rightMax = 0, 0
+
+        # time complexity: iterate over list of n length with two pointers O(n)
+        while L <= R:
+
+            # grabbing weak link
+            if height[L] < height[R]:
+
+                # Update leftMax
+                if height[L] >= leftMax:
+                    leftMax = height[L]
+
+                # reverse implies right is taller, so add to water count
+                else:
+                    water += leftMax - height[L]
+
+                # shifting pointer after calculation
+                L += 1
+
+            # grabbing weak link, reverse implies left is taller so
+            else:
+                # Update rightMax
+                if height[R] >= rightMax:
+                    rightMax = height[R]
+
+                # reverse implies left is taller, so add to water count
+                else:
+                    water += rightMax - height[R]
+
+                # shifting pointer after calculation
+                R -= 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return water
+```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 |  |  |  |  |  |
