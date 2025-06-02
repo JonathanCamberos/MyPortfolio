@@ -84,7 +84,7 @@ export default function About() {
 
 
         <p className="text-left mt-4">
-          Hi! I'm Jonathan. A recent grad from the University of Maryland, College Park.
+          I'm Jonathan. A recent grad from the University of Maryland, College Park.
           I majored in Computer Science with a concentration in Cybersecurity and a minor in 
           ACES (Advanced Cybersecurity Experience for Students).
         </p>
