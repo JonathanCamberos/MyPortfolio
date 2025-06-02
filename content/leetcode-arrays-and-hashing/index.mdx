@@ -173,6 +173,25 @@ If we want to track every element, best space complexity is O(n)
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity.| No additional memory was allocated leading to constant O(1) space complexity. | 
 
 
+### Find the Bug: (all pairs comparison)
+```python
+    def containsDuplicate(self, nums: List[int]) -> bool:
+
+        # time complexity: iteration of O(n)
+        for i in nums:
+
+            # time complexity: iteration of O(n)
+            for j in nums: 
+
+                # INCORRECT: iterating over elements of a collection
+                # will lead to comparing element to itself at least once 
+                #  vs index iteration
+                if i == j 
+                    return True
+
+        return False 
+```
+
 ### Solution 1: Hashmap
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
@@ -220,7 +239,6 @@ If we want to track every element, best space complexity is O(n)
 
 
 ### Solution 2: Hashset
-
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         

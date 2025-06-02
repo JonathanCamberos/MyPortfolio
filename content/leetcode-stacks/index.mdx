@@ -2,8 +2,8 @@
 title: "LeetCode: Stacks"
 description: "stacks"
 image: "../../public/blogs/stack.png"
-publishedAt: "2025-05-04"
-updatedAt: "2025-05-04"
+publishedAt: "2025-06-02"
+updatedAt: "2025-06-02"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -12,7 +12,7 @@ tags:
 
 ## Stack Intro
 
-Getting aquanted how stacks can push and pop
+Leetcode problems with elegant solutions using stacks.
 
 ### What are stacks 
 
@@ -23,7 +23,7 @@ Getting aquanted how stacks can push and pop
 > Given a string s containing: ( ) [ ] \{ \},
 > determine if the input string is valid. 
 > An input string is valid if: 1. Open brackets must be closed by the same type
-> of backets 2. Open brackets must be closed in the correct order. 3. Every close
+> of brackets 2. Open brackets must be closed in the correct order. 3. Every close
 > bracket has a corresponding open bracket of the same type.
 
 |  Input   | Output  |  
@@ -34,10 +34,123 @@ Getting aquanted how stacks can push and pop
 | "([])"   | true    |
 
 
-### Constraints
+Constraints:
+
+1 &le; s.length &le; 10<sup>4</sup>
+
+s consists of parentheses only '()[]{}'
 
 ### Abstract
+We need to validate that every open parenthesis has a matching close
+in the correct order.
 
-### Solution 1: 
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
-### Solution 2: 
+
+### Brute Force: (replace with empty)
+```python
+    def isValid(self, s: str) -> bool:
+        
+        # note: in python, an empty string "" is falsy evaluating to false
+        # not "" -> true
+
+        # time complexity: 
+        while '()' in s or '{}' in s or '[]' in s:
+            s = s.replace('()', '').replace('{}', '').replace('[]', '')
+        
+
+        # overall: time complexity
+        # overall: space complexity
+        return not s
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Find the Bug: (Hashmap)
+```python
+    def isValid(self, s: str) -> bool:
+
+        # time complexity: 
+        counts = {"(": 0, "[": 0, "{": 0}
+        closing = {")": "(", "]": "[", "}": "{"}
+
+        # time complexity: 
+        for c in s:
+
+            # Count opening brackets
+            if c in counts:  
+                counts[c] += 1
+
+            # Count closing brackets
+            else c in closing:  
+
+                opening = closing[c]
+
+                # No matching opening bracket
+                if counts[opening] == 0:  
+                    return False
+
+                # Matching opening bracket
+                counts[opening] -= 1
+
+        # INCORRECT: hashmap open value may be 0, but did not take into 
+        # consideration whether they were in the correct order
+        # time complexity: 
+        for count in counts.values():
+        if count != 0:
+            return False
+
+        # overall: time complexity
+        # overall: space complexity
+        return True
+```
+
+### Solution 1: Stack (redundant operations)
+```python
+    def isValid(self, s: str) -> bool:
+        stack = []
+        for char in s:
+            if char in '([{':
+                stack.append(char)
+            elif char in ')]}':
+                if not stack or (char == ')' and stack[-1] != '(') or \
+                                (char == '}' and stack[-1] != '{') or \
+                                (char == ']' and stack[-1] != '['):
+                    return False
+                stack.pop()
+        return not stack
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
+### Solution 2: Stack
+```python
+    def isValid(self, s: str) -> bool:
+        stack = []
+        mapping = {')': '(', '}': '{', ']': '['}
+        for char in s:
+            if char in mapping:  # Closing bracket
+                top_element = stack.pop() if stack else '#'
+                if mapping[char] != top_element:
+                    return False
+            else:  # Opening bracket
+                stack.append(char)
+        return not stack
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
