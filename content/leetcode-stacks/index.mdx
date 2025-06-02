@@ -3,7 +3,7 @@ title: "LeetCode: Stacks"
 description: "stacks"
 image: "../../public/blogs/stack.png"
 publishedAt: "2025-06-02"
-updatedAt: "2025-06-02"
+updatedAt: "2025-06-03"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -47,10 +47,9 @@ in the correct order.
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
+| Brute Force (replace with empty) |  |  |  |  |
+| Stack (redundant operations) |  |  |  |  |
+| Stack |  |  |  |  |
 
 ### Brute Force: (replace with empty)
 ```python
@@ -59,73 +58,96 @@ in the correct order.
         # note: in python, an empty string "" is falsy evaluating to false
         # not "" -> true
 
-        # time complexity: 
+        # time complexity: iterate over string of n length O(n)
+        # each iterate removes at least one pair, and there are at most n/2 pairs so O(n/2) iterations O(n/2)
+        # O(n) * O(n/2) = O(n^2)
         while '()' in s or '{}' in s or '[]' in s:
             s = s.replace('()', '').replace('{}', '').replace('[]', '')
         
-
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
         return not s
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iterate over string | O(n) | O(1) |  |  |
+| Total Iterations | O(n/2) | O(1) |  |  |
+| Overall | O(n<sup>2</sup>) | O(1) |  |  | 
 
 ### Find the Bug: (Hashmap)
 ```python
     def isValid(self, s: str) -> bool:
 
-        # time complexity: 
+        # time complexity: constant hashmap of 3 length O(1)
         counts = {"(": 0, "[": 0, "{": 0}
         closing = {")": "(", "]": "[", "}": "{"}
 
-        # time complexity: 
+        # time complexity: iterate over string of n length O(n)
         for c in s:
 
             # Count opening brackets
+            # time complexity: lookup operation in constant O(1)
             if c in counts:  
                 counts[c] += 1
 
             # Count closing brackets
+            # time complexity: lookup operation in constant O(1)
             else c in closing:  
 
-                opening = closing[c]
+                closingMatch = closing[c]
 
                 # No matching opening bracket
-                if counts[opening] == 0:  
+                if counts[closingMatch] == 0:  
                     return False
 
                 # Matching opening bracket
-                counts[opening] -= 1
+                counts[closingMatch] -= 1
 
         # INCORRECT: hashmap open value may be 0, but did not take into 
         # consideration whether they were in the correct order
-        # time complexity: 
+        # time complexity: iterate over hashmap of 3 length O(1)
         for count in counts.values():
         if count != 0:
             return False
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return True
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iterate |  |  |  |  |
+| Verify |  |  |  |  |
+| Overall |  |  |  |  | 
+
 
 ### Solution 1: Stack (redundant operations)
 ```python
     def isValid(self, s: str) -> bool:
+
+        # note: in python, an empty list [] is falsy evaluating to false
+        # not [] -> true
+
+        # space complexity: 
         stack = []
-        for char in s:
-            if char in '([{':
-                stack.append(char)
-            elif char in ')]}':
-                if not stack or (char == ')' and stack[-1] != '(') or \
-                                (char == '}' and stack[-1] != '{') or \
-                                (char == ']' and stack[-1] != '['):
+
+        # time complexity:
+        for c in s:
+
+            # add opening parenthesis
+            if c in '([{':
+                stack.append(c)
+
+            # validate closing parenthesis
+            elif c in ')]}':
+                if not stack or (c == ')' and stack[-1] != '(') or \
+                                (c == '}' and stack[-1] != '{') or \
+                                (c == ']' and stack[-1] != '['):
                     return False
                 stack.pop()
+
+        # overall: time complexity
+        # overall: space complexity
         return not stack
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -138,16 +160,307 @@ in the correct order.
 ### Solution 2: Stack
 ```python
     def isValid(self, s: str) -> bool:
+
+        # space complexity: 
         stack = []
         mapping = {')': '(', '}': '{', ']': '['}
-        for char in s:
-            if char in mapping:  # Closing bracket
-                top_element = stack.pop() if stack else '#'
-                if mapping[char] != top_element:
+
+        # time complexity: iterate over list of n length O(n)
+        for c in s:
+            
+            # validate closing parenthesis
+            if c in mapping:  
+                
+                # pop top element if stack is non-empty
+                topElem = stack.pop() if stack else '#'
+
+                if mapping[c] != topElem:
                     return False
-            else:  # Opening bracket
-                stack.append(char)
+
+            # append opening bracket
+            else:
+                stack.append(c)
+
+        # overall: time complexity
+        # overall: space complexity
         return not stack
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
+
+
+## 155. Min Stack - Medium
+
+### Intro
+> Design a stack that supports push, pop, top, and retrieving 
+> the minimum element in constant time.
+> Implement the MinStack class:
+> MinStack() initializes the stack object.
+> void push(int val) pushes the element val onto the stack.
+> void pop() removes the element on the top of the stack.
+> int top() gets the top element of the stack.
+> int getMin() retrieves the minimum element in the stack.
+> You must implement a solution with O(1) time complexity for each function.
+
+|  Input   | Output  |  
+| -------- | ------- | 
+| ["MinStack","push","push","push","getMin","pop","top","getMin"] [[],[-2],[0],[-3],[],[],[],[]] | [null,null,null,null,-3,null,0,-2]  | 
+
+Constraints:
+
+-2<sup>31</sup> &le; val &le; 2<sup>31</sup> - 1
+
+Methods pop, top and getMin operations will always be called on non-empty stacks.
+
+At most 3 * 10<sup>4</sup> calls will be made to push, pop, top, and getMin.
+
+### Abstract
+We need to design a stack that runs in O(1) time complexity for each main function.
+
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Brute Force:
+```python
+    def __init__(self):
+        
+        # tracking logical size vs physical size
+        # space complexity: stores all n elements O(n)
+        self.stack = []
+        self.size = 0
+
+    def push(self, val: int) -> None:
+        # time complexity: append operation in constant O(1)
+
+        # size = 1     vs [5, _, _]
+        # logical size vs physical size -> 
+        # stack will only grow when absolutely necessary / avoids unnecessary resizing
+        if self.size < len(self.stack):
+            # self.size == length, so append at self.size
+            self.stack[self.size] = val
+        else:
+            # stack needs to grow
+            self.stack.append(val)
+
+        # increases logical size
+        self.size += 1
+
+    def pop(self) -> None:       
+        if self.size == 0:
+            raise IndexError("Pop from empty stack")
+
+        # size = 2 [5, 4]
+        # size = 1 [5, 4]
+        # logical size vs physical size -> 
+        # time complexity: pop operation in constant O(1)
+
+        # decreases logical size
+        self.size -= 1
+
+    def top(self) -> int:
+        if self.size == 0:
+            raise IndexError("Stack is empty")
+ 
+         # time complexity: index top element in constant O(1)
+        return self.stack[self.size - 1]
+
+    def getMin(self) -> int:
+        if self.size == 0:
+            raise IndexError("Stack is empty")
+        
+        minVal = float('inf')
+
+        # stack is not minSorted
+        # time complexity: iterate over entire stack n length O(n)
+        for i in range(self.size):
+            if self.stack[i] < minVal:
+                min = self.stack[i] 
+        return minVal
+
+    # overall: time complexity O(n)
+    # overall: space complexity O(n)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Find the Bug:
+```python
+    def __init__(self):
+        # space complexity: 
+        self.stack = []
+        self.size = 0
+        self.minVal = float('inf')
+
+    def push(self, val: int):
+        # time complexity:
+        if self.size < len(self.stack)
+            self.stack[self.size] = val
+        else:
+            self.stack.append(val)
+
+        # increases logical size
+        self.size += 1
+
+        if val < self.minVal:
+            self.minVal = val
+
+    def pop(self):
+        # time complexity:
+        if self.size == 0:
+            raise IndexError("Pop from empty stack")
+        
+        # decreases logical size
+        # INCORRECT: does not update minVal when the popped value is the minVal
+        # Stack implementation does not track previous minVal for updates
+        self.size -= 1
+
+        
+    def top(self):
+        # time complexity:
+        if self.size == 0:
+            raise IndexError("Stack is empty")
+        
+        return self.stack[self.size - 1]
+
+    def getMin(self):
+        # time complexity:
+        return self.minVal
+
+    # overall: time complexity
+    # overall: time complexity 
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
+### Solution 1: Main Stack + Min Tracker
+```python
+    def __init__(self):
+
+        # using a minTracker stack, we track the min value at each
+        # level of the main stack. Ensures when we pop a top value
+        # we can instantly know the min value at that point
+
+        # space complexity:
+        self.mainStack = []
+        self.minTracker = []
+        self.mainSize = 0
+
+    def push(self, val: int):
+
+        # logical size vs physical size
+        if self.mainSize < len(self.mainStack):
+            self.mainStack[self.mainSize] = val
+        else:
+            self.mainStack.append(val)
+
+        # logical size vs physical size
+        if self.mainSize < len(self.minTracker)
+            
+            # compares new value with previous level of minTracker
+            self.minTracker[self.mainSize] = min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val)
+        else:
+            self.minTracker.append(min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val))
+        
+        # increases logical size
+        self.mainSize += 1
+
+    def pop(self):
+        # time complexity: 
+        if self.mainSize == 0:
+            raise IndexError("Pop from empty stack")
+        
+        self.mainSize -= 1
+
+    def top(self):
+        # time complexity:
+        if self.mainSize == 0:
+            raise IndexError("Stack is empty")
+        return self.mainStack[self.mainSize - 1]
+
+    def getMin(self):
+        # time complexity:
+        if self.mainSize == 0:
+            raise IndexError("Stack is empty")
+
+        return self.minTracker[self.mainSize - 1]
+
+    # overall: time complexity
+    # overall: time complexity 
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
+### Solution 2: Tuple Stack
+```python
+    def __init__(self):
+
+        # using of having a separate minTracker stack, we track the min value
+        # at each level of the main stack using tuples (val, min).
+        # Ensures when we pop a top value we can instantly know 
+        # the min value at that level of the stack 
+
+        # space complexity:
+        self.stack = []
+        self.size = 0
+
+    def push(self, val: int):
+
+        # compares val with previous level tuple minValue
+        # sets new (val, minValue) to lower value
+        currMin = min(val, self.stack[self.size - 1][1] if self.size > 0 else val)
+        
+        # logical size vs physical size
+        if self.size < len(self.stack):
+            self.stack[self.size] = (val, currMin)
+        else:
+            self.stack.append((val, currMin))
+
+        # increases logical size
+        self.size += 1
+
+    def pop(self):
+        # time complexity:
+        if self.size == 0:
+            raise IndexError("Pop from empty stack")
+        self.size -= 1
+
+    def top(self):
+        # time complexity:
+        if self.size == 0:
+            raise IndexError("Stack is empty")
+        
+        return self.stack[self.size - 1][0]
+
+    def getMin(self):
+        # time complexity:
+        if self.size == 0:
+            raise IndexError("Stack is empty")
+
+        return self.stack[self.size - 1][1]
+
+    # overall: time complexity
+    # overall: time complexity 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |

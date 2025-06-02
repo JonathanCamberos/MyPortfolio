@@ -26,11 +26,11 @@ const HomeCoverSection = ( {blogs} ) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10 items-center min-h-[60vh]">
   <div className="flex flex-col items-center text-center p-6 sm:p-10">
     <h2 className="text-2xl font-bold dark:text-light">
-      Welcome to My Portfolio
+      Hola!
     </h2>
     <p className="text-lg dark:text-light leading-relaxed max-w-3xl">
       Hi, I’m Jonathan Camberos, a passionate software engineer with a love
-      for building. Using this website for personal notes for
+      for building. Using this portfolio to store notes regarding
       leetcode and projects.
     </p>
   </div>
