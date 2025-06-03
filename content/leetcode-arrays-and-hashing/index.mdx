@@ -634,50 +634,11 @@ Lets see:
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Compare all pairs * Merge sort) | O(n<sup>2</sup> * k log k) | O(1) | For each pair of strings, we compare them leading to O(n<sup>2</sup>). Using a Hashmap to check if they are anagrams takes O(k). Leading to O(n<sup>2</sup> * k)  | Stores temporary intermediate groups in a list |
-| Merge sort | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
-| Hashmap Tuple | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
+| Brute Force (Merge sort) | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
+| Hashmap (array of 26) -> Tuple Key | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
+| Hashmap (array of 26) -> String Key | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 
-### Brute Force (Compare all pairs * Merge sort)
-Not shown in code 
-
-Is extremely inefficient with O(n<sup>2</sup> * k log k). It compares each pair of strings
-via merge sort for anagram grouping.
-for inequality.
-
-
-
-### Find the Bug: Hashmap (unhashable type)
-```python
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        
-        # space complexity: hashmap stores n tuple keys and lists of original strings of 26 length O(n)
-        anaGroup = {}
-        
-        # Iterating over all strings O(n)
-        for word in strs:
-            
-            # Counting character frequencies O(k)
-            charCount = [0] * 26
-            for char in word:
-                charCount[ord(char) - ord('a')] += 1
-            
-            # INCORRECT: Mutable list `charCount` used as key
-            if charCount not in anaGroup:
-                anaGroup[charCount] = []  # Initialize list for group if key doesn't exist
-            
-            anaGroup[charCount].append(word)
-        
-        return list(anaGroup.values())
-```
-
-### Find the Bug: Set (excludes duplicates)
-```python
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-
-```
-
-### Solution 1: Sort Grouping - Merge sort
+### Brute Force: (String Merge sort)
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -747,7 +708,54 @@ for inequality.
 | Overall | O(n * k log k) | O(n * k) |  Merge sort O(k log k) for all strings O(n) dominates. Leading to O(n * k log k) |  Storing sorted string keys O(n) with original string value O(k) dominates. Leading to O(n * k) |
 
 
-### Solution 2: Hashmap Tuple
+
+### Find the Bug: Hashmap (unhashable type)
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        
+        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)
+        anaGroup = {}
+        
+        # Iterating over all strings O(n)
+        for word in strs:
+            
+            # Counting character frequencies O(k)
+            charCount = [0] * 26
+            for char in word:
+                charCount[ord(char) - ord('a')] += 1
+            
+            # INCORRECT: Mutable list `charCount` used as key
+            if charCount not in anaGroup:
+                anaGroup[charCount] = []  # Initialize list for group if key doesn't exist
+            
+            anaGroup[charCount].append(word)
+        
+        # overall: time complexity
+        # overall: space complexity 
+        return list(anaGroup.values())
+```
+
+### Find the Bug: Set (excludes duplicates)
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        
+        # space complexity: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
+        anaGroup = {}
+        
+        # time complexity: iterating over list of n length O(n)
+        for word in strs:
+            
+            # INCORRECT: Set creates a key excluding duplicates
+            setSort = ''.join(sorted(set(word)))
+
+            if setSort not in anaGroup:
+                anaGroup[setSort] = [] 
+            anaGroup[setSort].append(word)
+        
+        return list(anaGroup.values())
+```
+
+### Solution 1: Hashmap (array of 26) -> Tuple Key
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -756,7 +764,8 @@ for inequality.
         # You should use tuples where the position carries symantec meaning. 
 
         # [26 char count tuple key -> [anagram group list], ...]
-        # space complexity: O(n * k) = hashmap stores n tuple keys and lists of original strings with length k
+        
+        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)
         anaGroup = {}
 
         # time complexity: iterating over all strings O(n) 
@@ -781,7 +790,7 @@ for inequality.
 
 
         # overall: time complexity  O(n * k)  
-        # overall: space complexity O(n * k)
+        # overall: space complexity O(m * k)
         return list(anaGroup.values())
 ```
 
@@ -795,12 +804,12 @@ for inequality.
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-### Solution 3: Hashmap -> Manual Key Grouping
+### Solution 2: Hashmap (array of 26) -> String Key
 
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
-        # space complexity: hashmap of n string keys to list of strings k length O(n * k)
+        # space complexity: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
         anaGroup = {}
 
         # time complexity: iterating over n strings O(n)
