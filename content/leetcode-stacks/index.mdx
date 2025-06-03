@@ -487,7 +487,9 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 
 |  Input   | Output  |  
 | -------- | ------- | 
-|  |  | 
+| ["2","1","+","3","*"] | 9 | 
+| ["4","13","5","/","+"] | 6 |
+| ["10","6","9","3","+","-11","*","/","*","17","+","5","+"] | 22 |
 
 Constraints:
 
@@ -509,6 +511,29 @@ operations in reverse polish notation.
 
 ### Brute Force:
 ```python
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+
+        for token in tokens:
+            if token not in "+-*/":
+                # Push operand onto stack
+                stack.append(int(token))
+            else:
+                # Pop two operands
+                b = stack.pop()
+                a = stack.pop()
+                
+                # Perform operation and push result
+                if token == "+":
+                    stack.append(a + b)
+                elif token == "-":
+                    stack.append(a - b)
+                elif token == "*":
+                    stack.append(a * b)
+                elif token == "/":
+                    stack.append(int(a / b))  # Truncate towards 0
+
+        return stack.pop()
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -518,6 +543,28 @@ operations in reverse polish notation.
 
 ### Find the Bug:
 ```python
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+
+        for token in tokens:
+            if token not in "+-*/":
+                stack.append(int(token))
+            else:
+
+                # INCORRECT order of popping operands
+                a = stack.pop()  # a should be second operand
+                b = stack.pop()  # b should be the first operand
+                
+                if token == "+":
+                    stack.append(a + b)  # Incorrect operand order
+                elif token == "-":
+                    stack.append(a - b)  # Incorrect operand order
+                elif token == "*":
+                    stack.append(a * b)  # Correct, since order doesn't matter
+                elif token == "/":
+                    stack.append(int(a / b))  # Incorrect operand order
+
+        return stack.pop()
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -528,6 +575,27 @@ operations in reverse polish notation.
 
 ### Solution 1: 
 ```python
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+
+        for token in tokens:
+            if token not in "+-*/":
+                stack.append(int(token))
+            else:
+                b = stack.pop()
+                a = stack.pop()
+
+                match token:
+                    case "+":
+                        stack.append(a + b)
+                    case "-":
+                        stack.append(a - b)
+                    case "*":
+                        stack.append(a * b)
+                    case "/":
+                        stack.append(int(a / b))  # Explicit truncation towards zero
+
+        return stack[-1]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -538,9 +606,268 @@ operations in reverse polish notation.
 
 ### Solution 2:
 ```python
+    from operator import add, sub, mul, floordiv
+
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+        operations = {"+": add, "-": sub, "*": mul, "/": lambda a, b: int(a / b)}
+
+        for token in tokens:
+            if token not in operations:
+                stack.append(int(token))
+            else:
+                b = stack.pop()
+                a = stack.pop()
+                stack.append(operations[token](a, b))
+
+        return stack[-1]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  | 
+
+
+
+
+## 22. Generate Parentheses - Medium
+
+### Intro
+> Given n pairs of parentheses, write a function to generate all 
+> combinations of well-formed parentheses.
+
+|  Input   | Output  |  
+| -------- | ------- | 
+| 1 | ["()"] | 
+| 3 | ["((()))","(()())","(())()","()(())","()()()"] |
+
+Constraints:
+
+1 &le; n &le; 8
+
+### Abstract
+Given a number, generate all possible combinations of parentheses.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Brute Force:
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+        
+        # generates all possible combinations of n pairs of parentheses
+        def generate_combinations(current, length, combinations):
+            
+            # base case: if 
+            if length == 2 * n:
+                combinations.append(current)
+                return
+
+            # recursively add '(' and ')' to the current string to generate all possible combinations
+            generate_combinations(current + "(", length + 1, combinations)
+            generate_combinations(current + ")", length + 1, combinations)
+
+        # checks if given parentheses string is valid
+        def isValid(s: str) -> bool:
+            # counter to track balance of parentheses
+            balance = 0
+
+            # iterate through parentheses string
+            for char in s:
+                
+                # increment balance
+                if char == '(':
+                    balance += 1
+                # decrement balance
+                else:
+                    balance -= 1
+                # closing parenthesis has no matching
+                if balance < 0:
+                    return False
+
+            # validate all parentheses have match
+            return balance == 0
+
+        # grab all possible combinations
+        combinations = []
+        generate_combinations("", 0, combinations)
+
+        result = []
+        
+        # generate and validate all combinations
+        for combo in combinations:
+            if isValid(combo):
+                result.append(combo)
+        
+        # overall: time complexity
+        # overall: space complexity
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Find the Bug:
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+        
+        # Initialize a stack to simulate depth-first search (DFS)        
+        # (currString, openParenCount, closedParenCount)
+        stack = [("", 0, 0)]
+        result = []
+
+        # while stack is non-empty
+        while stack:
+
+            # 
+            current, open_count, close_count = stack.pop()
+
+            # if we have a valid combination of n '(' and n ')' add to list
+            if open_count == n and close_count == n:
+                result.append(current)
+                continue
+
+            # INCORRECT: condition allows ')' to be added even if they exceed the number of '('
+            # should be `close_count < open_count`
+            if close_count < n:
+                stack.append((current + ")", open_count, close_count + 1))
+            if open_count < n:
+                stack.append((current + "(", open_count + 1, close_count))
+
+        # overall: time complexity
+        # overall: space complexity
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
+### Solution 1: Iterative Stack
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        # stack initial state
+        stack = [("", 0, 0)] 
+
+        # store valid parentheses
+        result = []
+
+        # 
+        while stack:
+
+            # grab the current state of the stack
+            current, open_count, close_count = stack.pop()
+
+            # base case: if we have used all open and close parentheses
+            if open_count == n and close_count == n:
+
+                # add valid combination  
+                result.append(current)
+                continue
+
+            # push new state with '(' added
+            if open_count < n:
+                stack.append((current + "(", open_count + 1, close_count))
+
+            # push new state with '(' added
+            if close_count < open_count:
+                stack.append((current + ")", open_count, close_count + 1))
+
+        # overall: time complexity
+        # overall: space complexity
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Extra Solution 1: BackTracking (String)
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        res = []
+
+        # Backtracking        
+        def helper(current: List[str], num_open: int, num_closed: int):
+            
+            # Base case: If the length of the current combination is 2 * n, it's complete
+            if len(current) == n * 2:
+                # convert list to string and add to res
+                res.append("".join(current))
+                return
+
+            # Recursive case 1: Add '(' if the number of '(' used is less than n
+            if num_open < n: 
+                current.append('(')
+                helper(current, num_open + 1, num_closed)
+
+                # Backtrack by removing the last added '('
+                current.pop()  
+            
+            # Recursive case 2: Add ')' if the number of ')' used is less than the number of '('
+            if num_closed < num_open:
+                current.append(')')
+                helper(current, num_open, num_closed + 1)
+
+                # Backtrack by removing the last added ')'
+                current.pop()
+
+        # Start Backtracking process with an empty list and counts at 0
+        helper([], 0, 0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
+
+
+### Extra Solution 2: BackTracking (Mutable List)
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+        
+        res = []
+        
+        # Backtracking
+        def backtrack(current, open_count, close_count):
+
+            # Base case: if we have used all open and close parentheses
+            if open_count == n and close_count == n:
+                # add valid combination to res
+                res.append(current)
+                return
+            
+            # Recursive case 1: Add '(' if the number of '(' used is less than n
+            if open_count < n: 
+
+                # Backtrack by adding '(' to curr string, and incrementing open_count by 1
+                # recursive call explores all combinations starting from this new state
+                backtrack(current + "(", open_count + 1, close_count)
+            
+            # recursive case: Add ')' if the number of ')' used is less than the number of '('
+            if close_count < open_count:
+
+                # Backtrack by adding ')' to the curr string, and incrementing close_count by 1
+                # recursive call explores all combinations starting from this new state
+                backtrack(current + ")", open_count, close_count + 1)
+        
+        # starts recursion with an empty string and zero counts
+        # backtracking process builds strings by choosing '(' or ')' at each step
+        # and checking a possible valid paths through the recursion tree
+        backtrack("", 0, 0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
