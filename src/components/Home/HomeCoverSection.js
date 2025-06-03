@@ -30,7 +30,7 @@ const HomeCoverSection = ( {blogs} ) => {
     </h2>
     <p className="text-lg dark:text-light leading-relaxed max-w-3xl">
       I’m Jonathan Camberos, a passionate software engineer with a love
-      for building. Created this portfolio to store notes regarding
+      for building. Created this portfolio to organize notes regarding
       leetcode and projects.
     </p>
   </div>

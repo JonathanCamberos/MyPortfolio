@@ -143,6 +143,10 @@ If we want to track every element, best space complexity is O(n)
 | Hashmap | O(n) | O(n) | Iterate over every element O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires additional memory proportional to the number of elements O(n) |
 | Hashset | O(n) | O(n) | Same logic as Hashmap | Same logic as Hashmap |
 
+| Bug | Error |
+| --- | ----- |
+| Find the Bug: (iterating element-wise) | Iterating element-wise will cause elements to compare with themselves. | 
+
 
 ### Brute Force (all pairs comparison)
 ```python
@@ -173,7 +177,7 @@ If we want to track every element, best space complexity is O(n)
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity.| No additional memory was allocated leading to constant O(1) space complexity. | 
 
 
-### Find the Bug: (all pairs comparison)
+### Find the Bug: (iterating element-wise)
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
@@ -301,6 +305,11 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | Hashmap | O(n) | O(n) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
 | Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
 
+| Bug | Error |
+| --- | ----- |
+| Find the Bug: (frequency count) |  Does not take into account frequency count. | 
+
+
 ### Brute Force (Merge sort on strings)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
@@ -372,34 +381,32 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | Overall | O(n log n) | O(n) | Sorting dominates the time complexity as comparison adds negligible overhead leading to O(n log n) time complexity. | Temporary arrays required for merge sort is proportional to input size leading to O(n) space complexity. |
 
 
-### Find the Bug: (all pairs comparison)
+### Find the Bug: (frequency count)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
-        # time complexity: iterate over list of n length O(n)
-        for char1 in s:
+        # checking if length match
+        if len(s) != len(t):
+            return False
 
-            # time complexity: iterate over list of n length per outer iteration O(n^2)
-            for char2 in t:
-
-                # INCORRECT: does not take into account freq count for chars
-                if char1 == char2:
-                    return True
-
-        # overall: time complexity  O(n)
-        # overall: space complexity O(1)
-        return False
+        # INCORRECT: checks only if all characters of s are in t
+        # and not vice versa
+        for char in s:
+            if char not in t:
+                return False
+        
+        # INCORRECT: does not validate that character frequency counts match
+        return True
 ```
-Above will not work as it does not take validate if the frequency count 
-for characters is the same for both strings. 
-
-Frequency count matching as well as occurrence is required for anagrams.
 
 ### Solution 1: Hashmap
 
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
+        # note: a defaultdict (hashmap) allows us to index into
+        # our map with direct chars, as the hashing is done for us
+
         # space complexity: hashmap of list of n length  O(n) 
         count = defaultdict(int)
 
@@ -434,6 +441,13 @@ Frequency count matching as well as occurrence is required for anagrams.
 ### Solution 2: Hashmap (array of 26)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
+
+        # note: ord() converts a single uni-code character to
+        # its integer representation
+        # int: 97-122 -> lowercase English alphabet (a-z)
+        # so we can subtract the lowest char 'a' to get 
+        # a value from 0-26 to index into our array
+        # we are simulating a hash function given the lowercase char constraint
 
         # space complexity: fixed size constant 26 element array O(1)
         count = [0] * 26
@@ -488,36 +502,13 @@ Target = n + m, n/m value: 2 &le; nums.length &le; 10^4
 Target value: -10^9 &le; target &le; 10^9
 
 ### Abstraction
-We must find a combination of two elements in the array that add up to the target. 
-
-Lets say we were to iterate over the array linearly in O(n). 
-At any given moment, if we are pointing to some index n, 
-we would only have half of a potential solution. We would still need to confirm that a second element adds up to target. 
-
-Note that during this linear iteration, we would still have access to the target.
-
-Since we are finding (target = currNum + complement) we can do (target - currNum = complement) 
-and get the second half of the solution.
-If this complement is present in the Array, then that is our final solution. 
-Our next step is finding that complement.
-
-Since we are traversing the array, we can build up a hashset of elements we have seen, and use these as a 
-complement -> key -> index mapper for future elements.
-
-The pattern to find the pair is is to iterate, grab element in array, caluclate the complement, 
-and check if complement is inside hashset.
-
-Finally, since the question asks us to return the index of the pair, we must use a Hashmap with
-(element, index) where element is the complement that maps to the it's index in the Array.
-
-Time Lower Bound: We are required to traverse the list to peak at every element at least once, best possible time complexity is O(n).
-
-Space Upper Bound: If we want to track every element/complement, best space complexity is O(n)
+We need to find two elements that add up to the target
+and return their indexes.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Comparing all pairs) |  |  |  | |
+| Brute Force (Comparing all pairs) |  |  |  |  |
 | Hashmap 1-pass |  |  |  |  |
 
 
@@ -550,7 +541,31 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/blogs/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
 
 
-### Solution 1: Hashmap 1-pass
+### Find the Bug: (overwriting duplicates)
+```python
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        
+        # space complexity: hashmap of (int, index) for list n length O(n)
+        tracking = {} 
+
+        # time complexity: iterate over list n length o(n)
+        for i, num in enumerate(nums):
+
+            # INCORRECT: Overwrites already existing value in the tracking map
+            # nums = [3, 3] target = 6 would fail
+            tracking[num] = i
+
+            # find complement
+            complement = target - num
+
+            # grab complement 
+            if complement in tracking:
+                return [tracking[complement], i]
+
+        return []
+```
+
+### Solution 1: Hashmap
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -601,25 +616,20 @@ Space Upper Bound: If we want to track every element/complement, best space comp
 | [""]                                     | [[""]]
 | ["a"]                                    | [["a"]]           
 
-
 Constraints:
 
 strs[i] consists of lowercase English letters
 
-
 ### Abstraction
 There are different ways to solve this problem. 
 
-One premise is that a string can be represented as a Hashmap of character counts.
-We could then use the Hashmaps as keys which would group anagrams in a list of strings:
-Hashmap(Hashmap(char_count) -> [anagram list string]) 
+We could then use the Hashmaps of character counts as keys to group anagrams in a list of strings:
+Hashmap(Hashmap(charCount) -> [anagram list string]) 
 
-Another premise is we could sort the string and use that as the key: 
+We could sort the string and use that as the key: 
 Hashmap ( sorted_string -> [[unsorted anagram string group]])
 
-Time Lower Bound: We are required to traverse the list to peak at every string at least once O(n). We also need to calculate character frequencies to determine anagrams O(k). Best possible time complexity is O(n * k).
-
-Space Upper Bound: If we want to track every character count Hashmap per every string, best space complexity is O(n * k)
+Lets see:
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -634,6 +644,38 @@ Not shown in code
 Is extremely inefficient with O(n<sup>2</sup> * k log k). It compares each pair of strings
 via merge sort for anagram grouping.
 for inequality.
+
+
+
+### Find the Bug: Hashmap (unhashable type)
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        
+        # space complexity: hashmap stores n tuple keys and lists of original strings of 26 length O(n)
+        anaGroup = {}
+        
+        # Iterating over all strings O(n)
+        for word in strs:
+            
+            # Counting character frequencies O(k)
+            charCount = [0] * 26
+            for char in word:
+                charCount[ord(char) - ord('a')] += 1
+            
+            # INCORRECT: Mutable list `charCount` used as key
+            if charCount not in anaGroup:
+                anaGroup[charCount] = []  # Initialize list for group if key doesn't exist
+            
+            anaGroup[charCount].append(word)
+        
+        return list(anaGroup.values())
+```
+
+### Find the Bug: Set (excludes duplicates)
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+
+```
 
 ### Solution 1: Sort Grouping - Merge sort
 ```python 
@@ -721,14 +763,14 @@ for inequality.
         for word in strs:
             
             # space complexity: fixed-sized array for 26 lowercase letters O(1)
-            char_count = [0] * 26  
+            charCount = [0] * 26  
             
             # time complexity: counting chars in string of k length O(k)
             for char in word:
-                char_count[ord(char) - ord('a')] += 1
+                charCount[ord(char) - ord('a')] += 1
             
             # space complexity: fixed-size tuple of length 26 O(1)
-            key = tuple(char_count)  
+            key = tuple(charCount)  
             
             # time complexity: lookup operation of O(1) 
             if key not in anaGroup:
@@ -765,15 +807,15 @@ for inequality.
         for word in strs:
 
             # space complexity: fixed-sized array of 26 lowercase characters O(1)
-            char_count = [0] * 26
+            charCount = [0] * 26
             
             # time complexity: counting characters for string k length O(k)
             for char in word:
-                char_count[ord(char) - ord('a')] += 1
+                charCount[ord(char) - ord('a')] += 1
             
             # time complexity: creating unique char count key from fixed-sized array of 26 O(1)
             key = ""
-            for count in char_count:
+            for count in charCount:
                 key += str(count) + "#"  # Separator between counts
 
             # time complexity: lookup operation for key O(1)
