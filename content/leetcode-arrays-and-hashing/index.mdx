@@ -861,18 +861,12 @@ Lets see:
 Constraints:
 
 Most Occurrences: 1 &le; k &le; number of distinct elements in nums
+
 Integer value: -1000 &le; nums[i] &le; 1000
 
 ### Abstraction
 To find the k most frequent elements, we must first create an occurrence counter for each element in the list.
 Now that we have the count, we just grab the top k highest occurring elements. 
-
-Here the are a few ways to implement that.
-
-Time Lower Bound: 
-
-Space Upper Bound: 
-
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -880,7 +874,7 @@ Space Upper Bound:
 | Brute Force (Insertion sort frequencies) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
 | Frequency Buckets | O(n) | O(n) | | |
 
-### Brute Force (Insertion Sort on frequency tuples descending)
+### Brute Force (Insertion sort frequency tuples descending)
 
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -991,6 +985,38 @@ Space Upper Bound:
 | Result Extraction | O(n) | O(k) | Iterating over n buckets to collect k integers, worst case all buckets must be traverse O(n) | Top k integers must be stored in result list O(k) | 
 | Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
+
+### Extra Solution: MinHeap
+```python    
+    def topKFrequent(self, nums: List[int], k:int) -> List[int]:
+
+        # space complexity: frequency map of m unique integers o(m)
+        count = defaultdict(int)
+
+        # time complexity: iterate over list of n length O(n)
+        for num in nums: 
+            count[num] += 1
+
+        # space complexity: minHeap tracks k most frequent elements O(k)
+        minHeap = []
+
+        # time complexity: iterate over frequency map of m unique int O(m)
+        for num, freq in count.items(): 
+
+            # manage the heap manually, Push current element
+            heapq.heappush(minHeap, (freq, num)) 
+            
+            # heap grows beyond size k, remove smallest frequent element
+            if len(minHeap) > k:
+
+                # time complexity: # O(log k)
+                heapq.heappop(minHeap) 
+        
+        # Step 4: Extract the elements from the heap
+        result = [num for freq, num in minHeap]  # O(k)
+
+        return result
+```
 
 ## 238. Product of Array Except Self - Medium
 
