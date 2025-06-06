@@ -2,8 +2,8 @@
 title: "Data Structures"
 description: "data structures"
 image: "../../public/blogs/notepad-2.png"
-publishedAt: "2025-05-08"
-updatedAt: "2025-05-26" 
+publishedAt: "2025-05-04"
+updatedAt: "2025-05-04" 
 author: "jonathancamberos"
 isPublished: true
 tags: 
@@ -11,11 +11,55 @@ tags:
 ---
 
 
-## Monotone Stack
+## MinHeap 
+
+from problem -> 347. Top K Frequent Elements
+
+### Intro
+A MinHeap is a binary tree data structure where:
+1. The parent node is always smaller than or equal to its children
+2. The smallest element is always at the root of the tree 
+3. MinHeap operations allow efficient insertion, deletion, and retrieval of the smallest element
+
+MinHeaps are commonly implemented using arrays, where the structure
+of the binary tree is represented implicitly:
+
+Parent of node at index i is stored at index: floor[(i-1)/2].
+Left child is at index 2i+1
+Right child is at index 2i+2
+
+```
+Array Representation: [2, 4, 7, 8, 10, 15]
+
+Heap Structure:
+         2
+       /   \
+      4     7
+     / \   /
+    8  10 15
+```
+
+Insert(7):
+```
+Array Representation: [1, 4, 2, 8, 10, 15, 7]
+
+Heap Structure:
+         1
+       /   \
+      4     2
+     / \   /
+    8  10 15
+          /
+         7
+```
+
+
+
+## Monotone Stack (to-do)
 
 from problem -> stack 84. Largest Rectangle in Histogram
 
 
-## Segment Tree 
+## Segment Tree (to-do)
 
 from problem -> stack 84. Largest Rectangle in Histogram
