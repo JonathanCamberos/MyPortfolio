@@ -198,24 +198,6 @@ If we want to track every element, best space complexity is O(n)
 
 ### Solution 1: Hashmap
 ```python
-    def containsDuplicate(self, nums: List[int]) -> bool:
-
-        # space complexity: hashmap of list of n length O(n)
-        seen = {}
-
-        # time complexity: iteration of O(n)
-        for num in nums:
-
-            # time complexity: lookup operation of O(1)
-            if num in seen:
-                return True
-            seen[num] = 1
-
-        # overall: time complexity  O(n)
-        # overall: space complexity O(n)
-        return False
-```
-```python
     def containsDuplicate(sef, nums: List[int]) -> bool:
 
         # space complexity: dictionary of O(n)
@@ -226,7 +208,7 @@ If we want to track every element, best space complexity is O(n)
         for num in nums:
 
             # time complexity: indexing of O(1)
-            if seen[num] > 0:
+            if seen[num] >= 1:
                 return True
             seen[num] += 1
 
@@ -746,8 +728,13 @@ Lets see:
         for word in strs:
             
             # INCORRECT: Set creates a key excluding duplicates
-            setSort = ''.join(sorted(set(word)))
-
+            charSet = set()  
+            for c in word:
+                charSet.add(c) 
+            
+            # set sort string key
+            setSort = ''.join(sorted(charSet))
+            
             if setSort not in anaGroup:
                 anaGroup[setSort] = [] 
             anaGroup[setSort].append(word)
@@ -759,9 +746,9 @@ Lets see:
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # Note: Tuples in python are immutable which makes them suitable as 
-        # keys for a hashmaps, as you can’t do that with a list. 
-        # You should use tuples where the position carries symantec meaning. 
+        # Note: Tuples in python are immutable which makes them suitable as keys for a hashmaps
+        # Lists are mutable and as such not hashable for hashmaps
+        # You should use tuples where the position carries semantic meaning. 
 
         # [26 char count tuple key -> [anagram group list], ...]
         
@@ -809,6 +796,10 @@ Lets see:
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
+        # note: using a list to build the string key is more efficient than repeatedly appending to a string, 
+        # as it avoids the overhead of creating new string objects on each append
+        # list takes O(m) time vs string append which takes O(m^2)
+
         # space complexity: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
         anaGroup = {}
 
@@ -823,9 +814,14 @@ Lets see:
                 charCount[ord(char) - ord('a')] += 1
             
             # time complexity: creating unique char count key from fixed-sized array of 26 O(1)
-            key = ""
+            # Using a list to build the key
+            key_parts = []
             for count in charCount:
-                key += str(count) + "#"  # Separator between counts
+                key_parts.append(str(count))
+                key_parts.append("#")  # Separator
+
+            # Concatenate once at the end
+            key = ''.join(key_parts)
 
             # time complexity: lookup operation for key O(1)
             if key not in anaGroup:
