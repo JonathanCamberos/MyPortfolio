@@ -140,6 +140,7 @@ If we want to track every element, best space complexity is O(n)
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
+| Tim Sort | O(n log n) | O(n) | Tim sort over the array dominates, leading to O(n log n)  | Temporary arrays used during the merge phase dominate, leading to O(n) |
 | Hashmap | O(n) | O(n) | Iterate over every element O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires additional memory proportional to the number of elements O(n) |
 | Hashset | O(n) | O(n) | Same logic as Hashmap | Same logic as Hashmap |
 
@@ -196,7 +197,7 @@ If we want to track every element, best space complexity is O(n)
         return False 
 ```
 
-### Solution 1: Sorting
+### Solution 1: Tim Sort
 ```python
    def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -252,10 +253,12 @@ If we want to track every element, best space complexity is O(n)
             n = len(arr)
 
             # Sort small runs using Insertion Sort
+            # time complexity: initial sort runs O((n/run)) * run^2) ~ O(n)
             for i in range(0, n, run):
                 insertionSort(arr, i, min(i + run - 1, n - 1))
 
             # Iterate over array and merge sort runs
+            # time complexity: O(log(n/run) * n) ~ O(n log n)
             size = run
             while size < n:
 
@@ -274,16 +277,23 @@ If we want to track every element, best space complexity is O(n)
 
         timSort(nums)
         
-        # Check for duplicates in the sorted array
+        # check for duplicates in the sorted array
+        # time complexity: iterate over sorted array of n length O(n)
         for i in range(1, len(nums)):
             if nums[i] == nums[i - 1]:
                 return True
         
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(n)
         return False
 
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Insertion Sort | O(n) | O(1) | Sorting small runs of size run with O(run^2) per segment, totaling O(n) | No additional memory allocation for in-place sorting O(1) |
+| Merging Segments | O(n log n) | O(n) | log(n/run) levels of merges, each requiring O(n) time, O(n log (n/run)), leading to O(n log n) | Temporary arrays during merge O(n) |
+| Duplicate Validation | O(n) | O(1) | Iterating over sorted array of n length O(n) | No additional memory for comparison operation O(1) |
+| Overall | O(n log n) | O(n) | Merge sort dominates time complexity, leading to O(n log n) | Temporary arrays during merge dominates, leading to O(n) |
 
 ### Solution 2: Hashmap
 ```python
