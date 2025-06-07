@@ -196,7 +196,96 @@ If we want to track every element, best space complexity is O(n)
         return False 
 ```
 
-### Solution 1: Hashmap
+### Solution 1: Sorting
+```python
+   def containsDuplicate(self, nums: List[int]) -> bool:
+        
+        # sorts small segment of array using Insertion Sort
+        def insertionSort(arr: List[int], start: int, end: int) -> None:
+            
+            # insertion sort algo on small segment [start+1, end]
+            for i in range(start + 1, end + 1):
+                key = arr[i]
+                j = i - 1
+
+                while j >= start and arr[j] > key:
+                    arr[j + 1] = arr[j]
+                    j -= 1
+                arr[j + 1] = key
+
+        # merges two sorted subarrays into a single sorted segment
+        def merge(arr: List[int], start: int, mid: int, end: int) -> None:
+            
+            # temporary arrays for left and right halves
+            left = arr[start:mid + 1]
+            right = arr[mid + 1:end + 1]
+
+            # pointer for left and right arrays
+            i = j = 0
+
+            # pointer for main array where merged elements are placed
+            k = start
+
+            # merge sort algo elements into arr[start...end]
+            while i < len(left) and j < len(right):
+                if left[i] <= right[j]:
+                    arr[k] = left[i]
+                    i += 1
+                else:
+                    arr[k] = right[j]
+                    j += 1
+                k += 1
+
+            # place left over elements within the array, cannot use extend()
+            while i < len(left):
+                arr[k] = left[i]
+                i += 1
+                k += 1
+            while j < len(right):
+                arr[k] = right[j]
+                j += 1
+                k += 1
+
+        # sorts array into place using runs of 32
+        def timSort(arr: List[int], run: int = 32) -> None:
+            
+            n = len(arr)
+
+            # Sort small runs using Insertion Sort
+            for i in range(0, n, run):
+                insertionSort(arr, i, min(i + run - 1, n - 1))
+
+            # Iterate over array and merge sort runs
+            size = run
+            while size < n:
+
+                # merge neighbor pairs of runs of length 'size'
+                for start in range(0, n, size * 2):
+                    mid = min(start + size - 1, n - 1)
+                    end = min(start + size * 2 - 1, n - 1)
+
+                    # merge if two valid runs exists (mid < end)
+                    if mid < end:
+                        merge(arr, start, mid, end)
+
+                # merged two runs of length size
+                # update new run length = old run len + old run len
+                size *= 2
+
+        timSort(nums)
+        
+        # Check for duplicates in the sorted array
+        for i in range(1, len(nums)):
+            if nums[i] == nums[i - 1]:
+                return True
+        
+        # overall: time complexity
+        # overall: space complexity
+        return False
+
+```
+
+### Solution 2: Hashmap
 ```python
     def containsDuplicate(sef, nums: List[int]) -> bool:
 
@@ -224,7 +313,7 @@ If we want to track every element, best space complexity is O(n)
 | Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates leading to O(n) space complexity.  | 
 
 
-### Solution 2: Hashset
+### Solution 3: Hashset
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
