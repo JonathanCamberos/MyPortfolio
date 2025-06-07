@@ -201,7 +201,7 @@ If we want to track every element, best space complexity is O(n)
 ```python
    def containsDuplicate(self, nums: List[int]) -> bool:
         
-        # sorts small segment of array using Insertion Sort
+        # sorts small segment of array using in-place Insertion Sort 
         def insertionSort(arr: List[int], start: int, end: int) -> None:
             
             # insertion sort algo on small segment [start+1, end]
@@ -214,7 +214,7 @@ If we want to track every element, best space complexity is O(n)
                     j -= 1
                 arr[j + 1] = key
 
-        # merges two sorted subarrays into a single sorted segment
+        # merges two sorted subarrays into a single sorted segment using in-place Merge Sort
         def merge(arr: List[int], start: int, mid: int, end: int) -> None:
             
             # temporary arrays for left and right halves
@@ -286,7 +286,6 @@ If we want to track every element, best space complexity is O(n)
         # overall: time complexity O(n log n)
         # overall: space complexity O(n)
         return False
-
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -382,16 +381,16 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Merge sort on strings) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
+| Brute Force (Merge Sort) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
 | Hashmap | O(n) | O(n) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
 | Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
 
 | Bug | Error |
 | --- | ----- |
-| Find the Bug: (frequency count) |  Does not take into account frequency count. | 
+| Find the Bug: (Set Frequency Count) |  Does not take into account frequency count of characters since sets can only have unique elements. | 
 
 
-### Brute Force (Merge sort on strings)
+### Brute Force (Merge Sort)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -462,7 +461,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | Overall | O(n log n) | O(n) | Sorting dominates the time complexity as comparison adds negligible overhead leading to O(n log n) time complexity. | Temporary arrays required for merge sort is proportional to input size leading to O(n) space complexity. |
 
 
-### Find the Bug: (frequency count)
+### Find the Bug: (Set Frequency Count)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -719,7 +718,12 @@ Lets see:
 | Hashmap (array of 26) -> Tuple Key | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 | Hashmap (array of 26) -> String Key | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
 
-### Brute Force: (String Merge sort)
+| Bug | Error |
+| --- | ----- |
+| Find the Bug: Set -> String Key (Set Frequency Count) |  Does not take into account frequency count of characters since sets can only have unique elements. | 
+
+
+### Brute Force: (Merge Sort)
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -790,7 +794,7 @@ Lets see:
 
 
 
-### Find the Bug: Hashmap (unhashable type)
+### Find the Bug: Hashmap Key (Unhashable type)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -816,7 +820,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Find the Bug: Set (excludes duplicates)
+### Find the Bug: Set -> String Key (Set Frequency Count)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -841,7 +845,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Solution 1: Hashmap (array of 26) -> Tuple Key
+### Solution 1: Hashmap Array of 26 -> Tuple Key
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -890,7 +894,7 @@ Lets see:
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-### Solution 2: Hashmap (array of 26) -> String Key
+### Solution 2: Hashmap Array of 26 -> String Key
 
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
@@ -967,7 +971,10 @@ Now that we have the count, we just grab the top k highest occurring elements.
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Insertion sort frequencies) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
-| Frequency Buckets | O(n) | O(n) | | |
+| Hashmap -> Bucket Sort | O(n) | O(n) | | |
+| MinHeap |  |  |  |  |
+| Divide and Conquer |  |  |  |  |
+| Quickselect |  |  |  |  |
 
 ### Brute Force (Insertion sort frequency tuples descending)
 
@@ -1022,7 +1029,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
 
-### Solution 1: Bucket Sort
+### Solution 1: Hashmap -> Bucket Sort
 
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
@@ -1081,7 +1088,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
 
-### Extra Solution: MinHeap
+### Solution 2: MinHeap
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1112,6 +1119,89 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
         return result
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+| overall |  |  |  |  |
+
+
+### Solution 3: Quickselect
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+
+        # Finds the k most frequent elements using a divide-and-conquer selection approach.
+        def partition(left, right, pivotIndex):
+            pivot_frequency = frequency[unique[pivotIndex]]
+            # Move pivot to the end
+            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]
+            store_index = left
+
+            # Partition the array around the pivot
+            for i in range(left, right):
+                if frequency[unique[i]] > pivot_frequency:  # Higher frequency -> "greater"
+                    unique[i], unique[store_index] = unique[store_index], unique[i]
+                    store_index += 1
+
+            # Move pivot to its final place
+            unique[store_index], unique[right] = unique[right], unique[store_index]
+            return store_index
+
+        # modified quicksort
+        # once the k-th smallest/largest element is placed in its correct position, everything
+        # to its right or left is already divided into the required groups based on frequency
+        # This avoids sorting the entire array and directly focuses on isolating the 
+        # elements we care about
+        def quickselectHelper(left, right, kSmallest):
+            
+            # Base case: the list contains only one element
+            if left == right:
+                return
+
+            # Randomly choose a pivot index
+            pivotIndex = random.randint(left, right)
+
+            # Partition the array
+            pivotIndex = partition(left, right, pivotIndex)
+            
+            # Base Case: found the top-k partition
+            if kSmallest == pivotIndex:
+                return 
+            
+            # Recursively select the pivot
+            elif kSmallest < pivotIndex:
+                quickselectHelper(left, pivotIndex - 1, kSmallest)
+            else:
+                quickselectHelper(pivotIndex + 1, right, kSmallest)
+
+        # time complexity: iterate over list of n length O(n)
+        count = defaultdict(int)
+        for num in nums:
+            count[num] += + 1
+
+        # grab list the unique elements
+        unique = list(frequency.keys())
+
+        # Quickselect to find the k most frequent elements
+        n = len(unique)
+
+        # time complexity:
+        quickselectHelper(0, n - 1, k - 1)
+
+        # overall: time complexity
+        # overall: space complexity 
+        return unique[:k]
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+| overall |  |  |  |  |
 
 ## 238. Product of Array Except Self - Medium
 
