@@ -970,13 +970,13 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Insertion sort frequencies) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
+| Brute Force (Insertion sort) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
 | Hashmap -> Bucket Sort | O(n) | O(n) | | |
 | MinHeap |  |  |  |  |
 | Divide and Conquer |  |  |  |  |
 | Quickselect |  |  |  |  |
 
-### Brute Force (Insertion sort frequency tuples descending)
+### Brute Force (Insertion sort)
 
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -1128,32 +1128,46 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | overall |  |  |  |  |
 
 
-### Solution 3: Quickselect
+### Solution 3: Quickselect (high to low)
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
-        # Finds the k most frequent elements using a divide-and-conquer selection approach.
-        def partition(left, right, pivotIndex):
-            pivot_frequency = frequency[unique[pivotIndex]]
-            # Move pivot to the end
+        # In-place partition of array based on pivot value
+        def partitionPivot(left, right, pivotIndex):
+            
+            # Frequency of pivot element
+            pivotFrequency = frequency[unique[pivotIndex]]
+
+            # Move pivot to end
+            # tuple unpacking in python, allows to swap two variables in a single line
             unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]
-            store_index = left
+            
+            # Index to place larger elements
+            partitionIndex = left
 
-            # Partition the array around the pivot
+            # Partition elements with freq more than pivotFrequency to left
+            # time complexity: iterates over unique elements between left and right segment O(m)
             for i in range(left, right):
-                if frequency[unique[i]] > pivot_frequency:  # Higher frequency -> "greater"
-                    unique[i], unique[store_index] = unique[store_index], unique[i]
-                    store_index += 1
 
-            # Move pivot to its final place
-            unique[store_index], unique[right] = unique[right], unique[store_index]
-            return store_index
+                # Higher frequency -> "greater"
+                if pivotFrequency < frequency[unique[i]]:  
 
-        # modified quicksort
-        # once the k-th smallest/largest element is placed in its correct position, everything
+                    # swap smaller element
+                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
+                    partitionIndex += 1
+
+            # swap pivot to its final correct partitioned index
+            # now elements to the right and left follow the conditions according to pivot element
+            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
+            return partitionIndex
+
+        # Quickselect is a modified quicksort
+        # Once the k-th smallest/largest element is placed in its correct position, everything
         # to its right or left is already divided into the required groups based on frequency
-        # This avoids sorting the entire array and directly focuses on isolating the 
-        # elements we care about
+        # This allows us to avoid sorting the entire array and directly focuses on isolating 
+        # the elements we care about
+        # time complexity: average recursion depth O(log m)
+        # space complexity: recursion stack for in place partitioning on average O(log m)
         def quickselectHelper(left, right, kSmallest):
             
             # Base case: the list contains only one element
@@ -1161,25 +1175,29 @@ Now that we have the count, we just grab the top k highest occurring elements.
                 return
 
             # Randomly choose a pivot index
+            # differs from QuickSort "median-of-three" approach
+            # random pivot is focused on finding the k-th smallest or largest
+            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
             pivotIndex = random.randint(left, right)
 
             # Partition the array
-            pivotIndex = partition(left, right, pivotIndex)
+            pivotIndex = partitionPivot(left, right, pivotIndex)
             
-            # Base Case: found the top-k partition
+            # Base Case: placed the top-k element in correct index
+            # array is now partitioned
             if kSmallest == pivotIndex:
                 return 
             
-            # Recursively select the pivot
+            # Recursively selects next partition pivot
             elif kSmallest < pivotIndex:
                 quickselectHelper(left, pivotIndex - 1, kSmallest)
             else:
                 quickselectHelper(pivotIndex + 1, right, kSmallest)
 
         # time complexity: iterate over list of n length O(n)
-        count = defaultdict(int)
+        frequency = defaultdict(int)
         for num in nums:
-            count[num] += + 1
+            frequency[num] += + 1
 
         # grab list the unique elements
         unique = list(frequency.keys())
@@ -1193,7 +1211,68 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # overall: time complexity
         # overall: space complexity 
         return unique[:k]
+```
+### Solution 4: Quickselect (low to high)
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
+        # In-place partition of array based on pivot frequency (low to high sorting)
+        def partitionPivot(left, right, pivotIndex):
+            
+            # Frequency of pivot element
+            pivotFrequency = frequency[unique[pivotIndex]]
+
+            # Move pivot to end
+            # tuple unpacking in python, allows to swap two variables in a single line
+            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]
+            
+            # Index to place smaller elements
+            partitionIndex = left
+
+            # Partition elements with freq less than pivotFrequency to left
+            # time complexity: iterates over unique elements between left and right segment O(m)
+            for i in range(left, right):
+
+                # Lower frequency -> "lower"
+                if frequency[unique[i]] < pivotFrequency:
+                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
+                    partitionIndex += 1
+
+            # swap pivot to its final correct partitioned index
+            # now elements to the right and left follow the conditions according to pivot element
+            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
+            return partitionIndex
+
+        # Quickselect helper for low to high sorting
+        # Avg recursion depth: O(log m), space: O(log m)
+        def quickselectHelper(left, right, kSmallest):
+            if left == right:
+                return
+
+            pivotIndex = random.randint(left, right)
+            pivotIndex = partitionPivot(left, right, pivotIndex)
+
+            # If pivot is at the kth smallest position, done
+            if kSmallest == pivotIndex:
+                return
+            elif kSmallest < pivotIndex:
+                quickselectHelper(left, pivotIndex - 1, kSmallest)
+            else:
+                quickselectHelper(pivotIndex + 1, right, kSmallest)
+
+        # Count frequencies O(n)
+        frequency = defaultdict(int)
+        for num in nums:
+            frequency[num] += 1
+
+        unique = list(frequency.keys())
+        n = len(unique)
+
+        # For low-to-high sorting, k-th smallest corresponds to index n - k
+        quickselectHelper(0, n - 1, n - k)
+
+        # Now top k frequent are the last k elements
+        return unique[n - k:]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
