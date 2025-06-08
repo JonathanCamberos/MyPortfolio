@@ -1276,11 +1276,11 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-| overall |  |  |  |  |
+| Frequency Count | O(n) | O(n) | Iterate over list of n length O(n) | Frequency count for at most n keys O(n) |
+| Unique list | O(m) | O(m) | Grab unique keys from frequency map O(m) | Unique list contains m unique elements O(m) |
+| Single Partition | O(m) | O(1) | Iterates over m unique elements in portion for a single partition O(m) | No additional memory allocation for in-place partition O(1) |
+| Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
+| Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
 
 ## 238. Product of Array Except Self - Medium
 
@@ -1531,7 +1531,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-### Solution 1.1: defaultdict
+### Solution 1.1: Defaultdict Matrix
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1565,7 +1565,8 @@ So we simply create sets for all of these groups and as we traverse the board, w
         # overall: space complexity O(n)
         return True
 ```
-### Solution 1.2: [[]]
+
+### Solution 1.2: [[]] Matrix
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1608,10 +1609,10 @@ So we simply create sets for all of these groups and as we traverse the board, w
 | Insertion | O(1) | O(n<sup>2</sup>) | Insertion operation takes constant O(1) | List of n lists each of n length O(n<sup>2</sup>) | 
 | Overall | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over all cells in n x n board dominates, leading to O(n<sup>2</sup>) | List of n lists of n length dominates leading to O(n<sup>2</sup>)  |
 
-Note: Solution 1.2 is faster than Solution 1.
+Note: Solution 1.2 is faster than Solution 1:
 
 While sets are efficient for large data due to constant time insert, lookup, delete, 
-for a fixed-sized 9x9 board like this the overhead of defaultdict and 
+for a fixed-sized 9x9 board like this, the overhead of defaultdict and 
 set operations is slower than the [[]] solution. 
 
 ## 128. Longest Consecutive Sequence - Medium
@@ -1756,3 +1757,17 @@ def longestConsecutive(self, nums: List[int]) -> int:
 | Start of sequence check | O(1) | O(1) | Lookup operation takes constant O(1) | No additional space of lookup operation O(1) |
 | while loop sequence | O(n) | O(1) | Iterate white sequence is valid, note all numbers are checked only once due to start of sequence check O(n) | No additional memory allocation for while loop O(1) |
 | Overall | O(n) | O(n) | Iterating over hashset of n length dominates leading to O(n) | Memory allocation for hashset of list n length dominates o(n) | 
+
+
+
+### Solution 3: Union Find
+```python
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 

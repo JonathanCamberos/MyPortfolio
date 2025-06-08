@@ -10,4 +10,79 @@ tags:
 - data structures & algorithms
 ---
 
-Hello! Todo 
+## Intro
+
+Graphs are data structures representing relationships
+between entities. Graphs contain:
+
+Vertices (n): The entities (ex: nodes)
+
+Edges (m): The connections between entities
+
+
+### Graph Representations: Adjacency Matrix
+
+Graph:
+```
+    1---2
+     \ /
+      3
+```
+
+Adjacency Matrix Representation (n = 3):
+```
+        1  2  3
+    1  [0, 1, 1]
+    2  [1, 0, 1]
+    3  [1, 1, 0]
+```
+
+The rows and columns represent vertices.
+
+A[i][j] = 1 indicates an edge between vertex i and vertex j.
+
+A[i][j] = 0 indicates no edge
+
+### Graph Representations: Adjacency List
+
+Graph:
+```
+    1---2
+     \ /
+      3
+```
+
+Adjacency List Representation (n = 3, m = 3):
+```
+    1: [2, 3]
+    2: [1, 3]
+    3: [1, 2]
+```
+
+Each vertex points to a list of its neighbors
+
+Space-efficient for sparse graphs
+
+### Graph Representations: Edge List
+
+Graph:
+```
+    1---2
+     \ /
+      3
+```
+
+Edge List Representation (m = 3):
+```
+    Edges:
+    (1, 2)
+    (1, 3)
+    (2, 3)
+```
+
+Each edge is explicitly listed as a pair of vertices (u,v)
+
+Simplest representation for algorithms that only care about edges.
+
+
+### Notation
