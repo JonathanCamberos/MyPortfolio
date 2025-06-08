@@ -475,7 +475,7 @@ Let see:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1. Hashmap No Sorting (Two Sum I Approach)
+### Solution 1. Hashmap Two Sum I Approach (No Sorting)
 ```python    
     def threeSum(self, nums: List[int]) -> List[List[int]]:
        
@@ -518,7 +518,7 @@ Let see:
 |  |  |  |  |  | 
 
 
-### Solution 2: Two Pointers Sorting Early Break
+### Solution 2: Two Pointers Early Break (Sorting)
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -573,7 +573,7 @@ while this is arguably cleaner and more satisfying than the mini twoSum solution
 not utilziing two pointers. But its still a cool approach to the problem.
 
 
-### Solution 3: Grouping By Parity No Sorting
+### Solution 3: Grouping By Parity (No Sorting)
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         p, n, z = [], [], []
@@ -735,6 +735,8 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) |
 | Overall | O(n) | O(1) | Iteration over list of n length dominates leading to O(n) | No additional memory allocation O(1) | 
 
+### Solution 2: Greedy 
+
 ## 42. Trapping Rain Water - Hard
 
 ### Intro
@@ -890,6 +892,77 @@ Now we need a way to traverse the array that allows us to take advantage of this
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
+        return water
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+
+### Solution 2: Monotonic Stack
+```python
+    def trap(self, height: List[int]) -> int:
+        stack = []  # Monotonic stack to store indices
+        water = 0
+        n = len(height)
+
+        # Traverse the height array
+        for i in range(n):
+            # While current height > height at stack top (possible water trap)
+            while stack and height[i] > height[stack[-1]]:
+                top = stack.pop()  # Index of the bottom of the trapped water
+
+                # No water can be trapped without both left and right walls
+                if not stack:
+                    break
+
+                # Calculate the distance and bounded height
+                distance = i - stack[-1] - 1
+                bounded_height = min(height[i], height[stack[-1]]) - height[top]
+                water += distance * bounded_height
+
+            stack.append(i)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) (due to the stack)
+        return water
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Solution 3: Dynamic Programming
+```python
+    def trap(self, height: List[int]) -> int:
+        n = len(height)
+        if n == 0:
+            return 0
+
+        # Arrays to store max heights from the left and right
+        left_max = [0] * n
+        right_max = [0] * n
+        water = 0
+
+        # Calculate left max for each bar
+        left_max[0] = height[0]
+        for i in range(1, n):
+            left_max[i] = max(left_max[i - 1], height[i])
+
+        # Calculate right max for each bar
+        right_max[n - 1] = height[n - 1]
+        for i in range(n - 2, -1, -1):
+            right_max[i] = max(right_max[i + 1], height[i])
+
+        # Calculate trapped water for each bar
+        for i in range(n):
+            water += min(left_max[i], right_max[i]) - height[i]
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) (for left_max and right_max arrays)
         return water
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

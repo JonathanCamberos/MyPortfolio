@@ -1,0 +1,96 @@
+---
+title: "Dynamic Programming"
+description: "dynamic programming"
+image: "../../public/blogs/dynamic-programming.png"
+publishedAt: "2025-05-03"
+updatedAt: "2025-05-03" 
+author: "jonathancamberos"
+isPublished: true
+tags: 
+- data structures & algorithms
+---
+
+
+## Intro
+
+Dynamic Programming is a problem-solving technique aimed at taking advantage 
+of overlapping subproblems. It involves breaking down a problem into its subproblems,
+solving each subproblem only once, and storing its result to avoid redundant calculations
+
+### Example Problem: Fibonacci Numbers
+ 
+
+> Calculate the nth Fibonacci numbers: 
+> where F(0) = 0, F(1) = 1, F(n) = F(n - 1) + F(n - 2) for n &leq; 2
+
+
+### Recursive Approach (Inefficient)
+```python
+    def fib_recursive(self, n: int):
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        return fib_recursive(n - 1) + fib_recursive(n - 2)
+```
+```
+ASCII Diagram for Recursive Approach
+                   F(5)
+                /        \
+            F(4)         F(3)
+            /    \       /   \
+        F(3)    F(2)   F(2) F(1)
+        /   \   /   \     
+    F(2)  F(1) F(1) F(0)
+    /   \
+    F(1) F(0)
+```
+
+Redundant Calculations:
+F(3) is calculated twice.
+F(2) is calculated three times.
+
+Exponential Growth:
+The time complexity is O(2<sup>n</sup>).
+
+
+### Dynamic Programming Approach (Efficient)
+```python
+    def fib_dp(self, n: int):
+        dp = [0] * (n + 1)  # Table to store results
+        dp[0], dp[1] = 0, 1  # Base cases
+
+        for i in range(2, n + 1):  # Solve from 2 to n
+            dp[i] = dp[i - 1] + dp[i - 2]  # Transition relation
+
+        return dp[n]
+```
+```
+Dynamic Programming Table Evolution
+
+    Step 0: Initialize base cases
+    Index:  0   1   2   3   4   5
+    Value:  0   1   -   -   -   -
+
+    Step 1: Compute F(2) = F(1) + F(0)
+    Index:  0   1   2   3   4   5
+    Value:  0   1   1   -   -   -
+
+    Step 2: Compute F(3) = F(2) + F(1)
+    Index:  0   1   2   3   4   5
+    Value:  0   1   1   2   -   -
+
+    Step 3: Compute F(4) = F(3) + F(2)
+    Index:  0   1   2   3   4   5
+    Value:  0   1   1   2   3   -
+
+    Step 4: Compute F(5) = F(4) + F(3)
+    Index:  0   1   2   3   4   5
+    Value:  0   1   1   2   3   5
+```
+
+Avoid Redundant Calculations:
+F(3) is calculated once.
+F(2) is calculated once.
+
+Time complexity:
