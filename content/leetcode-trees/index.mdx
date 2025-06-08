@@ -9,3 +9,44 @@ isPublished: true
 tags:
 - data structures & algorithms
 ---
+
+## Intro
+
+Trees are hierachical data structures representing relationships
+between entities, often in a parent-child format.
+Trees are a special type of graph, characters by:
+
+1. Nodes: The entities (ex: values, objects)
+
+2. Edges: The connections between the entities. A tree with n nodes has n - 1 edges.
+
+3. Root: The top-most node, with no parent
+
+4. Leaves: Nodes with no children 
+
+5. Height: The number of edges on the longest path from the root to a leaf
+
+6. Depth: The number of edges from the root to a specific node
+
+7. Cycles: Trees do not contain cycles
+
+8. Paths: Trees have exactly one path between any two nodes
+
+Tree:
+```
+      1
+     / \
+    2   3
+       / \
+      4   5
+```
+
+Parent Array:
+```
+Index (Node):   1   2   3   4   5
+Parent:        N/A  1   1   3   3
+```
+
+### Tree Representations
+
+Please see [graph representations](/blogs/leetcode-graphs#graph-representations)

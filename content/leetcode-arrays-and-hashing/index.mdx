@@ -1733,11 +1733,12 @@ def longestConsecutive(self, nums: List[int]) -> int:
     # time complexity: iterate over list of n length O(n)
     for i in numSet:
 
-        # found start of new sequence (left most element)
+        # found a new left most element, (start of new sequence)
         # time complexity: lookup operation takes constant O(1)
         if (i - 1) not in numSet: 
 
-            # time complexity: iterate over potential n sequence O(n) + lookup operation constant O(1)
+            # add sequential numbers while present in numSet, compare length
+            # time complexity: iterate over potential n sequence O(n) + lookup operation constant O(1), O(n)
             currLen = 1
             while (i + currLen) in numSet:
                 currLen += 1 
@@ -1760,8 +1761,63 @@ def longestConsecutive(self, nums: List[int]) -> int:
 
 
 
-### Solution 3: Union Find
+### Solution 3: Union Find Tree
 ```python
+    def longestConsecutive(self, nums: List[int]) -> int:
+        
+        if not nums:
+            return 0
+
+        # Union-Find Initialization
+        parent = {}  # Stores parent of each number
+        size = {}    # Stores the size of the connected components
+
+        # Find operation with path compression
+        # Amortized O(α(n)) time complexity
+        def find(x):
+
+            # if the parent of x is not itself, we have not reached the representative  
+            if parent[x] != x:
+
+                parent[x] = find(parent[x])  # Path compression
+            return parent[x]
+
+        # Union operation with size optimization
+        # Amortized O(α(n)) time complexity
+        def union(x, y):
+
+            # grab representatives of both x and y
+            root_x = find(x)
+            root_y = find(y)
+
+            # If both nodes do not have the same representative
+            # Attach smaller tree under the larger tree
+            if root_x != root_y:
+
+                # update representative for smaller
+                # update size for larger
+                if size[root_x] > size[root_y]:
+                    parent[root_y] = root_x
+                    size[root_x] += size[root_y]
+                else:
+                    parent[root_x] = root_y
+                    size[root_y] += size[root_x]
+
+        # Initialize Union-Find structure for unique numbers
+        # and set parents to themselves
+        for num in nums:
+            if num not in parent:
+                parent[num] = num
+                size[num] = 1
+
+        # Join consecutive numbers via Union operation
+        for num in nums:
+            if num + 1 in parent:
+                union(num, num + 1)
+
+        # Find the largest component size
+        # Amortized O(n) due to path compression
+        return max(size.values())
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
