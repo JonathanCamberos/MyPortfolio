@@ -14,10 +14,193 @@ tags:
 
 Leetcode problems with elegant solutions using stacks.
 
+### Stack Use Case: Tracking Nested or Hierarchical Structures
+
+We can track structure while iterating over an object ensuring it maintains 
+some criteria
+
+Ex: Validate if a string containing brackets ()[]{} is properly balanced:
+```python
+    def balancedParentheses(s: str) -> bool:
+        stack = []
+        pairs = {')': '(', ']': '[', '}': '{'}
+        for char in s:
+            if char in pairs.values():
+                stack.append(char)
+            elif char in pairs:
+                if not stack or stack.pop() != pairs[char]:
+                    return False
+        return not stack
+```
+
+### Stack Use Case: Backtracking by Tracking History or State
+We can use stacks in backtracking to store the state of exploration. 
+When a branch reaches a dead end or a solution, we pop the state to return
+to the previous state and continue exploring other branches.
+
+Ex: Subset Sum with Backtracking
+```python
+    def subset_sum(nums, target):
+        stack = [(0, [], 0)]  # (index, current_subset, current_sum)
+        result = []
+        
+        while stack:
+            index, current_subset, current_sum = stack.pop()
+            
+            if current_sum > target:  # Prune invalid paths
+                continue
+            
+            if current_sum == target:  # Valid solution
+                result.append(list(current_subset))
+                continue
+            
+            # Push new states for further exploration
+            for i in range(index, len(nums)):
+                stack.append((i + 1, current_subset + [nums[i]], current_sum + nums[i]))
+        
+        return result
+
+    # subset_sum([2, 3, 6, 7], 7) = [[7]]
+```
 
 
-### State Tracking
+### Stack Use Case: Monotonic Property Maintenance
+A stack can maintain a monotonic property (increasing or decreasing)
+over a sequence while processing elements, ensuring efficient lookups
+or modifications.
 
+Ex: Find the Next Greater Element
+```python
+    def nextGreaterElement(nums):
+        stack = []  # Stores indices of elements in decreasing order
+        result = [-1] * len(nums)  # Initialize result with -1
+        
+        for i in range(len(nums)):
+            while stack and nums[i] > nums[stack[-1]]:
+                idx = stack.pop()
+                result[idx] = nums[i]  # Found the next greater element
+            stack.append(i)
+        
+        return result
+
+    # Example: nextGreaterElement([2, 1, 2, 4, 3]) -> [4, 2, 4, -1, -1]
+```
+
+### Stack Use Case: Simulating Recursion or Call Stacks
+We can use a stack to emulate recursion by explicitly managing the call stack.
+
+Ex: Traverse a binary tree in preorder (root -> left -> right):
+```python
+    def preorderTraversal(root):
+        if not root:
+            return []
+        
+        stack = [root]  # Start with the root node
+        result = []
+        
+        while stack:
+            node = stack.pop()  # Simulate recursion by processing the top of the stack
+            if node:
+                result.append(node.val)  # Visit the node
+                # Push right child first so the left child is processed next
+                if node.right:
+                    stack.append(node.right)
+                if node.left:
+                    stack.append(node.left)
+        
+        return result
+
+    # Example: For a tree with root → 1, left → 2, right → 3, preorderTraversal(root) -> [1, 2, 3]
+```
+
+### Stack Use Case: Expression Evaluation and Parsing
+We can use a stack to evaluate or parse expressions by storing operands
+and incrementally applying operators. 
+This approach is well-suited for postfix and prefix notations.
+```python
+    def evaluatePostfix(expression):
+        stack = []  # To hold operands during evaluation
+        
+        for token in expression.split():
+            if token.isdigit():  # If it's an operand, push it to the stack
+                stack.append(int(token))
+            else:  # If it's an operator, pop two operands and apply the operator
+                b = stack.pop()
+                a = stack.pop()
+                if token == '+':
+                    stack.append(a + b)
+                elif token == '-':
+                    stack.append(a - b)
+                elif token == '*':
+                    stack.append(a * b)
+                elif token == '/':  # Assuming integer division
+                    stack.append(a // b)
+        
+        return stack.pop()  # Final result is the only item left in the stack
+
+    # Example:
+    # Input: "3 4 + 2 * 1 +"
+    # Output: 15 (Equivalent to (3 + 4) * 2 + 1)
+```
+
+### Stack Use Case: Backtracking
+We can cache paths or partial solutions to prune the search space effectively.
+
+Ex: Generate all valid combinations of n pairs of parentheses
+```python 
+    def generateParentheses(n: int) -> list[str]:
+        result = []
+
+        def backtrack(current: str, open_count: int, close_count: int):
+            # Base case: If the current string is valid and complete
+            if len(current) == 2 * n:
+                result.append(current)
+                return
+            
+            # Add an open parenthesis if it's valid 
+            # (Inherently prune invalid cases where open_count >= n)            
+            if open_count < n:
+                backtrack(current + "(", open_count + 1, close_count)
+            
+            # Add a closing parenthesis if it's valid 
+            # (Inherently prune invalid cases where close_count >= open_count)            
+            if close_count < open_count:
+                backtrack(current + ")", open_count, close_count + 1)
+
+        # Start the recursion with an empty string
+        backtrack("", 0, 0)
+        return result
+```
+
+
+
+### Stack Use Case: Partitioning
+We can use a stack to partition or segment a sequence into meaningful parts 
+by tracking boundaries or "cut points" as we iterate through the input.
+
+Ex: Given an array, partition it into the minimum number of strictly 
+increasing subsequences
+```python
+    def min_partitions(nums):
+        stacks = []  # Each element represents the last number in a subsequence
+        
+        for num in nums:
+            placed = False
+            for i in range(len(stacks)):
+                # If we can append to subsequence i
+                if stacks[i] < num:
+                    stacks[i] = num
+                    placed = True
+                    break
+            if not placed:
+                # Start a new subsequence (partition)
+                stacks.append(num)
+        return len(stacks)
+
+    # Example usage:
+    nums = [1, 3, 2, 4, 6, 5]
+    print(min_partitions(nums))  # Output: 2
+```
 
 
 ## 20. Valid Parentheses - Easy

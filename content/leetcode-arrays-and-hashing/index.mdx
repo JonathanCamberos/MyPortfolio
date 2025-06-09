@@ -23,7 +23,7 @@ A Hashmap is just a dictionary that maps keys->values using a hash function.
 Hashmaps are a common use case for hashing.
 We choose hashing to maximize randomness and minimize collisions between elements to keys.
 
-### Hashing Benefits
+### Hashing
 Hashing is simply a function. It takes in an input, and spits out an output.
 As an example, here is the function mod, which takes in an integer and spits out an integer:
 
@@ -71,6 +71,11 @@ would result in traversing a list of size n in the worst case leading to O(n).
 
 This would degrade insert, lookup, and delete from the original O(1) to O(n).
 
+Hashmaps having quick O(1) average time for insert(), lookup(), and delete(), 
+are great for storing key pairs of lists of elements to perform more complex tasks 
+where performance in time and space complexity are important.
+
+
 ### Balancing
 Balancing occurs when a hash table has passed its set load factor.
 
@@ -100,12 +105,110 @@ n/2 = additional space after rebalancing
 Rehashing is notably expensive as we must rehash every element with the new hash function, 
 leading to O(n) for resizing and reinserting n elements.
 
+### Hashmaps Use Case: Representations
 
-### Application
-Hashmaps having quick O(1) average time for insert(), lookup(), and delete(), 
-are great for storing key pairs of lists of elements to perform more complex tasks 
-where performance in time and space complexity are important.
+We can represent an object based on a criteria.
 
+Ex: Given a string, count the frequency of each character:
+```python
+    s = "aabbcc"
+    freq = {}
+    for char in s:
+        freq[char] = freq.get(char, 0) + 1
+    # freq = {'a': 2, 'b': 2, 'c': 2}
+```
+
+### Hashmap Use Case: Grouping
+
+We can grouping elements based on a criteria.
+
+Ex: Group strings that are anagrams of each other:
+```python
+    strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    anagrams = {}
+    for word in strs:
+        key = "".join(sorted(word))
+        if key not in anagrams:
+            anagrams[key] = []
+        anagrams[key].append(word)
+    # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}
+```
+
+### Hashmap Use Case: Dynamic Programming Storing Subproblems
+
+We can store solutions to subproblems to avoid redundant calculations.
+
+Ex: Fibonacci number solutions with memoization:
+```python
+    def fib(n, memo={}):
+        if n <= 1:
+            return n
+        if n not in memo:
+            memo[n] = fib(n - 1, memo) + fib(n - 2, memo)
+        return memo[n]
+```
+
+### Hashmap Use Case: Backtracking Storing Potential Solutions for Pruning
+
+We can cache paths or partial solutions to prune the search space effectively
+
+Ex: Subset Sum:
+```python
+    def subsetSum(nums, target):
+        # Cache to store paths that can no longer lead to valid solutions
+        cache = {}
+        result = []
+
+        def backtrack(current, index, total):
+            # Check if we've encountered this path before
+            state = (tuple(current), total)
+            if state in cache:
+                return
+            cache[state] = True
+
+            # Prune: If the total exceeds the target
+            if total > target:
+                return
+            
+            # Valid solution
+            if total == target:
+                result.append(list(current))
+                return
+
+            # Explore further candidates
+            for i in range(index, len(nums)):
+                # Choose
+                current.append(nums[i])
+                # Recurse
+                backtrack(current, i + 1, total + nums[i])
+                # Undo the choice
+                current.pop()
+
+        backtrack([], 0, 0)
+        return result
+```
+
+### Hashmap Use Case: Representing Relationships 
+
+We can represent relationships between items.
+
+Adjacency list representation of a graph:
+```python
+    edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph
+    graph = {}  # Initialize an empty hashmap to represent the graph
+
+    # Build the adjacency list
+    for u, v in edges:
+        if u not in graph:  # If the node `u` is not yet in the graph, initialize it
+            graph[u] = []
+        if v not in graph:  # If the node `v` is not yet in the graph, initialize it
+            graph[v] = []
+        graph[u].append(v)  # Add `v` to the list of neighbors for `u`
+        graph[v].append(u)  # Add `u` to the list of neighbors for `v`
+
+    # Resulting adjacency list representation
+    # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}
+```
 
 ## 217. Contains Duplicate - Easy
 
