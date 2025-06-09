@@ -26,12 +26,18 @@ solving each subproblem only once, and storing its result to avoid redundant cal
 
 ### Recursive Approach (Inefficient)
 ```python
-    def fib_recursive(self, n: int):
+    def fibRecursive(self, n: int):
+
+        # base case: fib(0) = 0
         if n == 0:
             return 0
+
+        # base case: fib(1) = 1
         if n == 1:
             return 1
-        return fib_recursive(n - 1) + fib_recursive(n - 2)
+
+        # recursively calculate fib 
+        return fibRecursive(n - 1) + fibRecursive(n - 2)
 ```
 ```
 ASCII Diagram for Recursive Approach
@@ -49,6 +55,7 @@ ASCII Diagram for Recursive Approach
 Redundant Calculations:
 F(3) is calculated twice.
 F(2) is calculated three times.
+etc...
 
 Exponential Growth:
 The time complexity is O(2<sup>n</sup>).
@@ -56,13 +63,23 @@ The time complexity is O(2<sup>n</sup>).
 
 ### Dynamic Programming Approach (Efficient)
 ```python
-    def fib_dp(self, n: int):
-        dp = [0] * (n + 1)  # Table to store results
-        dp[0], dp[1] = 0, 1  # Base cases
+    def fibDp(self, n: int):
 
-        for i in range(2, n + 1):  # Solve from 2 to n
-            dp[i] = dp[i - 1] + dp[i - 2]  # Transition relation
+        # Table to store results and build up solution
+        # space complexity: 
+        dp = [0] * (n + 1) 
+        
+        # Base case: Fib(0) = 0 and Fib(1) = 1
+        dp[0], dp[1] = 0, 1
 
+        # time complexity: iterate over list of n length O(n)
+        for i in range(2, n + 1):
+
+            # Transition relation
+            dp[i] = dp[i - 1] + dp[i - 2]  
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return dp[n]
 ```
 ```
@@ -89,8 +106,8 @@ Dynamic Programming Table Evolution
     Value:  0   1   1   2   3   5
 ```
 
-Avoid Redundant Calculations:
+Avoided Redundant Calculations:
 F(3) is calculated once.
 F(2) is calculated once.
 
-Time complexity:
+Time complexity: 
