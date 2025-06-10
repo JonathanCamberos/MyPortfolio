@@ -190,7 +190,7 @@ const Header = () => {
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >
-            Categories
+            Blogs
           </Link>
           <Link
             href="/about"
