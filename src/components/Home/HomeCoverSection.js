@@ -6,7 +6,6 @@ import Tag from '../Elements/Tag';
 import { slug } from 'github-slugger';
 import { format } from 'date-fns';
 import LeetCodeStats from "./../../components/Home/LeetCodeStats"; 
-import GitHubCommits from "./GitHubCommitsGrid"; 
 
 // passing blog objects from page.js (which imports from content folder)
 const HomeCoverSection = ( {blogs} ) => {

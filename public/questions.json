@@ -1,0 +1,178 @@
+{
+  "1": {
+    "questionNum": 1,
+    "questionTitle": "Two Sum I",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers and you may not use the same element twice. You can return the answer in any order.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-1"
+  },
+  "11": {
+    "questionNum": 11,
+    "questionTitle": "Container With Most Water",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an integer array height of length n. There are n vertical lines drawn Find two lines that together with the x-axis form a container, Return the maximum amount of water a container can store",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-11"
+  },
+  "15": {
+    "questionNum": 15,
+    "questionTitle": "3Sum (Two Sum II.2)",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] Notice that the solution set must not contain duplicate triplets.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-15"
+  },
+  "20": {
+    "questionNum": 20,
+    "questionTitle": "Valid Parentheses",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given a string s containing: ( ) [ ] \\{ \\}, An input string is valid if: 1. Open brackets must be closed by the same type bracket has a corresponding open bracket of the same type.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-20"
+  },
+  "22": {
+    "questionNum": 22,
+    "questionTitle": "Generate Parentheses",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given n pairs of parentheses, write a function to generate all",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-22"
+  },
+  "36": {
+    "questionNum": 36,
+    "questionTitle": "Valid Sudoku",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules: Each column must contain the digits 1-9 without repetition.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-36"
+  },
+  "42": {
+    "questionNum": 42,
+    "questionTitle": "Trapping Rain Water",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "Given n non-negative integers representing an elevation map where the width of",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-42"
+  },
+  "49": {
+    "questionNum": 49,
+    "questionTitle": "Group Anagrams",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. typically using all the original letters exactly once.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-49"
+  },
+  "84": {
+    "questionNum": 84,
+    "questionTitle": "Largest Rectangle in Histogram",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "Given an array of integers heights representing the return the area of the largest rectangle in the histogram.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-84"
+  },
+  "125": {
+    "questionNum": 125,
+    "questionTitle": "Valid Palindrome",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters Alphanumeric characters include letters and numbers.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-125"
+  },
+  "128": {
+    "questionNum": 128,
+    "questionTitle": "Longest Consecutive Sequence",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of integers nums, return the length of the longest consecutive sequence of elements. the previous element",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-128"
+  },
+  "150": {
+    "questionNum": 150,
+    "questionTitle": "Evaluate Reverse Polish Notation",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an array of strings tokens that represents an arithmetic Evaluate the expression. Return an integer that represents the value of Note that: Each operand may be an integer or another expression. There will not be any division by zero. The answer and all the intermediate calculations can be represented in a 32-bit integer.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-150"
+  },
+  "155": {
+    "questionNum": 155,
+    "questionTitle": "Min Stack",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Design a stack that supports push, pop, top, and retrieving Implement the MinStack class: void push(int val) pushes the element val onto the stack. int top() gets the top element of the stack. You must implement a solution with O(1) time complexity for each function.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-155"
+  },
+  "167": {
+    "questionNum": 167,
+    "questionTitle": "Two Sum II - Input Array Is Sorted",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length. integer array [index1, index2] of length 2. You may not use the same element twice.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-167"
+  },
+  "217": {
+    "questionNum": 217,
+    "questionTitle": "Contains Duplicate",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given an integer array nums, return false if every element is distinct.",
+    "questionTopics": [
+      "Array",
+      "HashTable",
+      "Sorting"
+    ],
+    "questionLink": "/blogs/common-formulas#question-217"
+  },
+  "238": {
+    "questionNum": 238,
+    "questionTitle": "Product of Array Except Self",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-238"
+  },
+  "242": {
+    "questionNum": 242,
+    "questionTitle": "Valid Anagram",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given two strings s and t, return true if t is an anagram of s, and false otherwise.",
+    "questionTopics": [
+      "HashTable",
+      "String",
+      "Sorting"
+    ],
+    "questionLink": "/blogs/common-formulas#question-242"
+  },
+  "271": {
+    "questionNum": 271,
+    "questionTitle": "String Encode and Decode",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Design an algorithm to encode a list of strings to a single string. Please implement encode and decode",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-271"
+  },
+  "347": {
+    "questionNum": 347,
+    "questionTitle": "Top K Elements in List",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums and an integer k, return the k most frequent element within the array.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-347"
+  },
+  "739": {
+    "questionNum": 739,
+    "questionTitle": "Daily Temperatures",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of integers temperatures represents the daily number of days you have to wait after the ith day to get a warmer keep answer[i] == 0 instead.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-739"
+  },
+  "853": {
+    "questionNum": 853,
+    "questionTitle": "Car Fleet",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There are n cars at given miles away from the starting mile 0, traveling to reach the mile target. A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car. If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet.",
+    "questionTopics": [],
+    "questionLink": "/blogs/common-formulas#question-853"
+  }
+}
