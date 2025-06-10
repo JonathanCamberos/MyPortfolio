@@ -20,11 +20,18 @@ solving each subproblem only once, and storing its result to avoid redundant cal
 
 Here is a good refresher video to [dynamic programming.](https://www.youtube.com/watch?v=r4-cftqTcdI)
 
-memoization
+First easy steps to Dynamic Programming:
 
-### Example Problem: Fibonacci Numbers
+1. Define Subproblems
+2. Guess (part of sol.)
+3. Recurrence (time/sub)
+4. Recurse and memoize (check recurrence is acyclic) or Build it Botton-up (need a topological order)
+We get the total running time = # subproblems * time/subproblem
+5. Solve Original Problem
+
+
+### Dynamic Programming I: Fibonacci Numbers
  
-
 > Calculate the nth Fibonacci numbers: 
 > where F(0) = 0, F(1) = 1, F(n) = F(n - 1) + F(n - 2) for n &leq; 2
 
@@ -35,8 +42,7 @@ memoization
 |      |     |
 |      |     |
 
-
-### Recursive Approach (Inefficient)
+Recursive Approach (Inefficient)
 ```python
     def fibRecursive(self, n: int):
 
@@ -73,7 +79,7 @@ Exponential Growth:
 The time complexity is O(2<sup>n</sup>).
 
 
-### Dynamic Programming Approach (Efficient)
+Dynamic Programming Approach (Efficient)
 ```python
     def fibDp(self, n: int):
 
@@ -123,3 +129,10 @@ F(3) is calculated once.
 F(2) is calculated once.
 
 Time complexity: 
+
+
+### Dynamic Programming I: Shortest Path 
+
+### Dynamic Programming II: Text Justification
+
+### Dynamic Programming II: Blackjack 
