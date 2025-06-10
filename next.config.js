@@ -27,6 +27,14 @@ const nextConfig = {
           const questionRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
           const topicRegex = /^Topics:\s+(.+)$/gm;
           const introRegex = /^> (.+)$/gm;
+          const titleRegex = /^title:\s+"(.+)"$/m;
+
+          const blogTitleMatch = titleRegex.exec(content);
+          const blogTitle = blogTitleMatch ? blogTitleMatch[1] : "unknown-blog";
+          const formattedBlogTitle = blogTitle
+            .toLowerCase()
+            .replace(/[^a-zA-Z0-9\s]/g, "")
+            .replace(/\s+/g, "-");
 
           const lines = content.split("\n");
           let currentQuestion = null;
@@ -58,7 +66,12 @@ const nextConfig = {
                 questionDifficulty: questionDifficulty.trim(),
                 questionBlurb: "", // To fill later
                 questionTopics: [], // To fill later
-                questionLink: `/blogs/common-formulas#question-${questionNum}`,
+                questionLink: `/blogs/${formattedBlogTitle}#${questionNum}-${questionTitle
+                  .trim()
+                  .replace(/[^a-zA-Z0-9\s]/g, "")
+                  .replace(/\s+/g, "-")
+                  .toLowerCase()}---${questionDifficulty.toLowerCase()}`,
+                blog: blogTitle,
               };
 
               return;

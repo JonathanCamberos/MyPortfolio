@@ -9,7 +9,7 @@ const QuestionSection = () => {
   const [topics, setTopics] = useState(["all"]);
   const [questions, setQuestions] = useState({});
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const [activeTopic, setActiveTopic] = useState("all");
+  const [activeTopic, setActiveTopic] = useState(null);  // <-- changed from "all" to null
 
   useEffect(() => {
     Promise.all([
@@ -19,16 +19,16 @@ const QuestionSection = () => {
       .then(([topicsData, questionsData]) => {
         setTopics(["all", ...Object.keys(topicsData)]);
         setQuestions(questionsData);
-        setFilteredQuestions(Object.values(questionsData));
+        setFilteredQuestions([]); // <-- start empty (no questions shown)
       })
       .catch((err) => console.error("Failed to fetch data:", err));
   }, []);
 
   const handleTopicChange = (topic) => {
-    // If the same topic is clicked, untoggle and reset
     if (activeTopic === topic) {
+      // Clicking same topic toggles off
       setActiveTopic(null);
-      setFilteredQuestions([]); // No questions to show
+      setFilteredQuestions([]);
     } else {
       setActiveTopic(topic);
 
@@ -52,7 +52,7 @@ const QuestionSection = () => {
           Search Questions
         </h1>
         <span className="mt-2 inline-block">
-           Question with solutions of a certain topic.  
+          Questions with solutions for various topics.
         </span>
       </div>
 
@@ -62,7 +62,13 @@ const QuestionSection = () => {
         {filteredQuestions.length > 0 ? (
           filteredQuestions.map((question) => (
             <Link
-              href={`/questions/${question.questionNum}`}
+              href={`/blogs/${question.blog
+                .toLowerCase()
+                .replace(/[^a-zA-Z0-9\s]/g, "")
+                .replace(/\s+/g, "-")}#${question.questionNum}-${question.questionTitle
+                .replace(/[^a-zA-Z0-9\s]/g, "")
+                .replace(/\s+/g, "-")
+                .toLowerCase()}---${question.questionDifficulty.toLowerCase()}`}
               key={question.questionNum}
               className="col-span-1 row-span-1"
             >
