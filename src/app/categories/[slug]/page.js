@@ -56,28 +56,35 @@ const CategoryPage = ({params}) => {
         })
     })
 
-    return (
+  return (
     <article className="mt-20 flex flex-col text-dark dark:text-light">
-        <div className=" px-5 sm:px-10  md:px-24  sxl:px-32 flex flex-col">
-            <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
-                Search Categories:
-            </h1>
-            <span className="mt-2 inline-block">
-                Different DSA topics and areas of study
-            </span>
-        </div>
-        <Categories categories={allCategories} currentSlug={params.slug} /> 
+      <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
+        <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
+          Search Categories:
+        </h1>
+        <span className="mt-2 inline-block">
+          Different DSA topics and areas of study
+        </span>
+      </div>
 
-        <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-16 mt-5 sm:mt-10 md:mt-24 sxl:mt-32 px-5 sm:px-10 md:px-24 sxl:px-32">
-            {blogs.map((blog, index) => (
+      <Categories categories={allCategories} currentSlug={params.slug} /> 
+
+      {blogs.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-16 mt-8 sm:mt-12 md:mt-28 sxl:mt-36 px-5 sm:px-10 md:px-24 sxl:px-32">
+          {blogs.map((blog, index) => (
             <article key={index} className="col-span-1 row-span-1 relative">
-                <BlogLayoutThree blog={blog} />
+              <BlogLayoutThree blog={blog} />
             </article>
-            ))}
+          ))}
         </div>
+      ) : (
+        // Spacer div only when no blogs to add separation
+        <div className="my-5" />
+      )}
 
-        <QuestionSection></QuestionSection>
-    </article>)
-}
+      <QuestionSection />
+    </article>
+  );
+};
 
 export default CategoryPage
