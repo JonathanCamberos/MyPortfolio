@@ -9,7 +9,7 @@ const QuestionSection = () => {
   const [topics, setTopics] = useState(["all"]);
   const [questions, setQuestions] = useState({});
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const [activeTopic, setActiveTopic] = useState(null);  // <-- changed from "all" to null
+  const [activeTopic, setActiveTopic] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -19,45 +19,39 @@ const QuestionSection = () => {
       .then(([topicsData, questionsData]) => {
         setTopics(["all", ...Object.keys(topicsData)]);
         setQuestions(questionsData);
-        setFilteredQuestions([]); // <-- start empty (no questions shown)
+        setFilteredQuestions([]);
       })
       .catch((err) => console.error("Failed to fetch data:", err));
   }, []);
 
   const handleTopicChange = (topic) => {
     if (activeTopic === topic) {
-        // Clicking the same topic toggles off
-        setActiveTopic(null);
-        setFilteredQuestions([]);
+      setActiveTopic(null);
+      setFilteredQuestions([]);
     } else {
-        setActiveTopic(topic);
+      setActiveTopic(topic);
 
-        if (topic === "all") {
-        // Sort all questions by questionNum
+      if (topic === "all") {
         const sortedQuestions = Object.values(questions).sort(
-            (a, b) => a.questionNum - b.questionNum
+          (a, b) => a.questionNum - b.questionNum
         );
         setFilteredQuestions(sortedQuestions);
-        } else {
+      } else {
         fetch("/topicQuestions.json")
-            .then((res) => res.json())
-            .then((topicsData) => {
+          .then((res) => res.json())
+          .then((topicsData) => {
             const questionNums = topicsData[topic] || [];
             const filtered = questionNums.map((num) => questions[num]);
-            // Sort filtered questions by questionNum
             const sortedQuestions = filtered.sort(
-                (a, b) => a.questionNum - b.questionNum
+              (a, b) => a.questionNum - b.questionNum
             );
             setFilteredQuestions(sortedQuestions);
-            });
-        }
+          });
+      }
     }
-    };
+  };
 
-
-  // Sort categories alphabetically (case-insensitive)
   topics.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-
 
   return (
     <article className="mt-5 flex flex-col text-dark dark:text-light">
@@ -66,15 +60,15 @@ const QuestionSection = () => {
           Search Questions
         </h1>
         <span className="mt-2 inline-block">
-          Questions with solutions using certain strategies
+          Questions with solutions using certain strategies, yes there’s a lot :')
         </span>
       </div>
 
       <Topics topics={topics} currentTopic={activeTopic} onTopicChange={handleTopicChange} />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 mt-5 sm:mt-10 md:mt-24 sxl:px-32 px-5 sm:px-10 md:px-24">
-        {filteredQuestions.length > 0 ? (
-          filteredQuestions.map((question) => (
+      {filteredQuestions.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 mt-5 sm:mt-10 md:mt-24 sxl:px-32 px-5 sm:px-10 md:px-24">
+          {filteredQuestions.map((question) => (
             <Link
               href={`/blogs/${question.blog
                 .toLowerCase()
@@ -88,12 +82,11 @@ const QuestionSection = () => {
             >
               <Question question={question} />
             </Link>
-          ))
-        ) : (
-          <p className="mt-8 text-center w-full col-span-full text-gray-600 dark:text-gray-400">
-          </p>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="my-5" />
+      )}
     </article>
   );
 };

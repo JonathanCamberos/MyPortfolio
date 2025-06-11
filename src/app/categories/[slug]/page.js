@@ -3,7 +3,7 @@ import Categories from "../../../components/Blog/Categories";
 import BlogLayoutThree from "../../../components/Blog/BlogLayoutThree";
 import GithubSlugger, { slug } from "github-slugger"
 import QuestionSection from "../../../components/Blog/QuestionSection";
-
+import DifficultySection from "../../../components/Blog/DifficultySection";
 
 const slugger = new GithubSlugger();
 
@@ -83,6 +83,7 @@ const CategoryPage = ({params}) => {
       )}
 
       <QuestionSection />
+      <DifficultySection />
     </article>
   );
 };
