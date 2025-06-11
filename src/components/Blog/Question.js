@@ -16,6 +16,9 @@ const Question = ({ question }) => {
       <p className="text-sm text-gray-500 mt-2">
         Topics: {question.questionTopics.join(", ")}
       </p>
+      <p className="text-sm text-gray-500 mt-2">
+        Category: {question.blog.replace(/leetcode:\s*/i, "")}
+      </p>
       <p className="mt-2">{question.questionBlurb}</p>
     </div>
   );

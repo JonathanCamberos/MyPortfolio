@@ -60,7 +60,7 @@ const QuestionSection = () => {
           Search Topics
         </h1>
         <span className="mt-2 inline-block">
-          Questions with solutions using certain topics, [yes there are a lot :')]
+          Questions with solutions using certain topics, yes there are a lot :')
         </span>
       </div>
 
