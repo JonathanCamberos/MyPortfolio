@@ -119,7 +119,7 @@ const Header = () => {
             Home
           </Link>
           <Link href="/categories/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
-            Posts
+            LeetCode
           </Link>
           <Link href="/about" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             About
@@ -190,7 +190,7 @@ const Header = () => {
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >
-            Blogs
+            LeetCode
           </Link>
           <Link
             href="/about"

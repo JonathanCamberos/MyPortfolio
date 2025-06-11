@@ -1,16 +1,110 @@
 {
   "Array": [
-    217
-  ],
-  "HashTable": [
     217,
-    242
+    1,
+    49,
+    347,
+    238,
+    36,
+    128,
+    150,
+    739,
+    853,
+    84,
+    167,
+    15,
+    11,
+    42
+  ],
+  "Hash Table": [
+    217,
+    242,
+    1,
+    49,
+    347,
+    36,
+    128
   ],
   "Sorting": [
     217,
-    242
+    242,
+    49,
+    347,
+    853,
+    15
   ],
   "String": [
-    242
+    242,
+    49,
+    20,
+    22,
+    125
+  ],
+  "Divide and Conquer": [
+    347
+  ],
+  "Heap (Priority Queue)": [
+    347
+  ],
+  "Bucket Sort": [
+    347
+  ],
+  "Counting": [
+    347
+  ],
+  "Quickselect": [
+    347
+  ],
+  "Prefx Sum": [
+    238
+  ],
+  "Matrix": [
+    36
+  ],
+  "Union Find": [
+    128
+  ],
+  "Stack": [
+    20,
+    155,
+    739,
+    853,
+    84,
+    42
+  ],
+  "Design": [
+    155,
+    150,
+    271
+  ],
+  "Math": [
+    150
+  ],
+  "Dynamic Programming": [
+    22,
+    42
+  ],
+  "Backtracking": [
+    22
+  ],
+  "Monotonic Stack": [
+    739,
+    853,
+    84,
+    42
+  ],
+  "Two Pointers": [
+    125,
+    271,
+    167,
+    15,
+    11,
+    42
+  ],
+  "Binary Search": [
+    167
+  ],
+  "Greedy": [
+    11
   ]
 }

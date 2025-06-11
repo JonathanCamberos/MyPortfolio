@@ -4,7 +4,10 @@
     "questionTitle": "Two Sum I",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers and you may not use the same element twice. You can return the answer in any order.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Hash Table"
+    ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#1-two-sum-i---easy",
     "blog": "LeetCode: Arrays and Hashing"
   },
@@ -13,7 +16,11 @@
     "questionTitle": "Container With Most Water",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given an integer array height of length n. There are n vertical lines drawn Find two lines that together with the x-axis form a container, Return the maximum amount of water a container can store",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Two Pointers",
+      "Greedy"
+    ],
     "questionLink": "/blogs/leetcode-two-pointers#11-container-with-most-water---medium",
     "blog": "LeetCode: Two Pointers"
   },
@@ -22,7 +29,11 @@
     "questionTitle": "3Sum (Two Sum II.2)",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] Notice that the solution set must not contain duplicate triplets.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Two Pointers",
+      "Sorting"
+    ],
     "questionLink": "/blogs/leetcode-two-pointers#15-3sum-two-sum-ii2---medium",
     "blog": "LeetCode: Two Pointers"
   },
@@ -31,7 +42,10 @@
     "questionTitle": "Valid Parentheses",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given a string s containing: ( ) [ ] \\{ \\}, An input string is valid if: 1. Open brackets must be closed by the same type bracket has a corresponding open bracket of the same type.",
-    "questionTopics": [],
+    "questionTopics": [
+      "String",
+      "Stack"
+    ],
     "questionLink": "/blogs/leetcode-stacks#20-valid-parentheses---easy",
     "blog": "LeetCode: Stacks"
   },
@@ -40,7 +54,11 @@
     "questionTitle": "Generate Parentheses",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given n pairs of parentheses, write a function to generate all",
-    "questionTopics": [],
+    "questionTopics": [
+      "String",
+      "Dynamic Programming",
+      "Backtracking"
+    ],
     "questionLink": "/blogs/leetcode-stacks#22-generate-parentheses---medium",
     "blog": "LeetCode: Stacks"
   },
@@ -49,7 +67,11 @@
     "questionTitle": "Valid Sudoku",
     "questionDifficulty": "Medium",
     "questionBlurb": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules: Each column must contain the digits 1-9 without repetition.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Matrix"
+    ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#36-valid-sudoku---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
@@ -58,7 +80,13 @@
     "questionTitle": "Trapping Rain Water",
     "questionDifficulty": "Hard",
     "questionBlurb": "Given n non-negative integers representing an elevation map where the width of",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Two Pointers",
+      "Dynamic Programming",
+      "Stack",
+      "Monotonic Stack"
+    ],
     "questionLink": "/blogs/leetcode-two-pointers#42-trapping-rain-water---hard",
     "blog": "LeetCode: Two Pointers"
   },
@@ -67,7 +95,12 @@
     "questionTitle": "Group Anagrams",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. typically using all the original letters exactly once.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "String",
+      "Sorting"
+    ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#49-group-anagrams---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
@@ -76,7 +109,11 @@
     "questionTitle": "Largest Rectangle in Histogram",
     "questionDifficulty": "Hard",
     "questionBlurb": "Given an array of integers heights representing the return the area of the largest rectangle in the histogram.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Stack",
+      "Monotonic Stack"
+    ],
     "questionLink": "/blogs/leetcode-stacks#84-largest-rectangle-in-histogram---hard",
     "blog": "LeetCode: Stacks"
   },
@@ -85,7 +122,10 @@
     "questionTitle": "Valid Palindrome",
     "questionDifficulty": "Easy",
     "questionBlurb": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters Alphanumeric characters include letters and numbers.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Two Pointers",
+      "String"
+    ],
     "questionLink": "/blogs/leetcode-two-pointers#125-valid-palindrome---easy",
     "blog": "LeetCode: Two Pointers"
   },
@@ -94,7 +134,11 @@
     "questionTitle": "Longest Consecutive Sequence",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of integers nums, return the length of the longest consecutive sequence of elements. the previous element",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Union Find"
+    ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#128-longest-consecutive-sequence---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
@@ -103,7 +147,11 @@
     "questionTitle": "Evaluate Reverse Polish Notation",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given an array of strings tokens that represents an arithmetic Evaluate the expression. Return an integer that represents the value of Note that: Each operand may be an integer or another expression. There will not be any division by zero. The answer and all the intermediate calculations can be represented in a 32-bit integer.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Math",
+      "Design"
+    ],
     "questionLink": "/blogs/leetcode-stacks#150-evaluate-reverse-polish-notation---medium",
     "blog": "LeetCode: Stacks"
   },
@@ -112,7 +160,10 @@
     "questionTitle": "Min Stack",
     "questionDifficulty": "Medium",
     "questionBlurb": "Design a stack that supports push, pop, top, and retrieving Implement the MinStack class: void push(int val) pushes the element val onto the stack. int top() gets the top element of the stack. You must implement a solution with O(1) time complexity for each function.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Stack",
+      "Design"
+    ],
     "questionLink": "/blogs/leetcode-stacks#155-min-stack---medium",
     "blog": "LeetCode: Stacks"
   },
@@ -121,7 +172,11 @@
     "questionTitle": "Two Sum II - Input Array Is Sorted",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length. integer array [index1, index2] of length 2. You may not use the same element twice.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Two Pointers",
+      "Binary Search"
+    ],
     "questionLink": "/blogs/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
     "blog": "LeetCode: Two Pointers"
   },
@@ -132,7 +187,7 @@
     "questionBlurb": "Given an integer array nums, return false if every element is distinct.",
     "questionTopics": [
       "Array",
-      "HashTable",
+      "Hash Table",
       "Sorting"
     ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#217-contains-duplicate---easy",
@@ -143,7 +198,10 @@
     "questionTitle": "Product of Array Except Self",
     "questionDifficulty": "Medium",
     "questionBlurb": "",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Prefx Sum"
+    ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#238-product-of-array-except-self---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
@@ -153,7 +211,7 @@
     "questionDifficulty": "Easy",
     "questionBlurb": "Given two strings s and t, return true if t is an anagram of s, and false otherwise.",
     "questionTopics": [
-      "HashTable",
+      "Hash Table",
       "String",
       "Sorting"
     ],
@@ -165,7 +223,10 @@
     "questionTitle": "String Encode and Decode",
     "questionDifficulty": "Medium",
     "questionBlurb": "Design an algorithm to encode a list of strings to a single string. Please implement encode and decode",
-    "questionTopics": [],
+    "questionTopics": [
+      "Two Pointers",
+      "Design"
+    ],
     "questionLink": "/blogs/leetcode-two-pointers#271-string-encode-and-decode---medium",
     "blog": "LeetCode: Two Pointers"
   },
@@ -174,7 +235,16 @@
     "questionTitle": "Top K Elements in List",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums and an integer k, return the k most frequent element within the array.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Divide and Conquer",
+      "Sorting",
+      "Heap (Priority Queue)",
+      "Bucket Sort",
+      "Counting",
+      "Quickselect"
+    ],
     "questionLink": "/blogs/leetcode-arrays-and-hashing#347-top-k-elements-in-list---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
@@ -183,7 +253,11 @@
     "questionTitle": "Daily Temperatures",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of integers temperatures represents the daily number of days you have to wait after the ith day to get a warmer keep answer[i] == 0 instead.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Stack",
+      "Monotonic Stack"
+    ],
     "questionLink": "/blogs/leetcode-stacks#739-daily-temperatures---medium",
     "blog": "LeetCode: Stacks"
   },
@@ -192,7 +266,12 @@
     "questionTitle": "Car Fleet",
     "questionDifficulty": "Medium",
     "questionBlurb": "There are n cars at given miles away from the starting mile 0, traveling to reach the mile target. A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car. If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet.",
-    "questionTopics": [],
+    "questionTopics": [
+      "Array",
+      "Stack",
+      "Sorting",
+      "Monotonic Stack"
+    ],
     "questionLink": "/blogs/leetcode-stacks#853-car-fleet---medium",
     "blog": "LeetCode: Stacks"
   }

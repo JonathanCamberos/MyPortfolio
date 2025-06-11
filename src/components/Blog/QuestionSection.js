@@ -26,24 +26,38 @@ const QuestionSection = () => {
 
   const handleTopicChange = (topic) => {
     if (activeTopic === topic) {
-      // Clicking same topic toggles off
-      setActiveTopic(null);
-      setFilteredQuestions([]);
+        // Clicking the same topic toggles off
+        setActiveTopic(null);
+        setFilteredQuestions([]);
     } else {
-      setActiveTopic(topic);
+        setActiveTopic(topic);
 
-      if (topic === "all") {
-        setFilteredQuestions(Object.values(questions));
-      } else {
+        if (topic === "all") {
+        // Sort all questions by questionNum
+        const sortedQuestions = Object.values(questions).sort(
+            (a, b) => a.questionNum - b.questionNum
+        );
+        setFilteredQuestions(sortedQuestions);
+        } else {
         fetch("/topicQuestions.json")
-          .then((res) => res.json())
-          .then((topicsData) => {
+            .then((res) => res.json())
+            .then((topicsData) => {
             const questionNums = topicsData[topic] || [];
-            setFilteredQuestions(questionNums.map((num) => questions[num]));
-          });
-      }
+            const filtered = questionNums.map((num) => questions[num]);
+            // Sort filtered questions by questionNum
+            const sortedQuestions = filtered.sort(
+                (a, b) => a.questionNum - b.questionNum
+            );
+            setFilteredQuestions(sortedQuestions);
+            });
+        }
     }
-  };
+    };
+
+
+  // Sort categories alphabetically (case-insensitive)
+  topics.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+
 
   return (
     <article className="mt-5 flex flex-col text-dark dark:text-light">
@@ -52,7 +66,7 @@ const QuestionSection = () => {
           Search Questions
         </h1>
         <span className="mt-2 inline-block">
-          Questions with solutions for various topics.
+          Questions with solutions using certain strategies
         </span>
       </div>
 
