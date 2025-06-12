@@ -70,13 +70,7 @@ const QuestionSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 mt-5 sm:mt-10 md:mt-24 sxl:px-32 px-5 sm:px-10 md:px-24">
           {filteredQuestions.map((question) => (
             <Link
-              href={`/blogs/${question.blog
-                .toLowerCase()
-                .replace(/[^a-zA-Z0-9\s]/g, "")
-                .replace(/\s+/g, "-")}#${question.questionNum}-${question.questionTitle
-                .replace(/[^a-zA-Z0-9\s]/g, "")
-                .replace(/\s+/g, "-")
-                .toLowerCase()}---${question.questionDifficulty.toLowerCase()}`}
+              href={question.questionLink}
               key={question.questionNum}
               className="col-span-1 row-span-1"
             >

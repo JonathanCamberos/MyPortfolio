@@ -104,13 +104,13 @@ const Header = () => {
           <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link>
-          <Link href="/notes/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
+          <Link href="/SearchNotes/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             Notes
           </Link>
-          <Link href="/leetcode" className="mx-2 hover:text-accent dark:hover:text-accentDark">
+          <Link href="/LeetCode" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             LeetCode
           </Link>
-          <Link href="/about" className="mx-2 hover:text-accent dark:hover:text-accentDark">
+          <Link href="/About" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             About
           </Link>
           <button
@@ -175,21 +175,21 @@ const Header = () => {
             Home
           </Link>
           <Link
-            href="/notes/all-categories"
+            href="/SearchNotes/all-categories"
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >
             Notes
           </Link>
           <Link
-            href="/leetcode"
+            href="/LeetCode"
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >
             LeetCode
           </Link>
           <Link
-            href="/about"
+            href="/About"
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >

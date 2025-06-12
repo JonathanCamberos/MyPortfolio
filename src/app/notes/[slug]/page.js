@@ -1,86 +1,98 @@
-import { allBlogs } from "../../../../.contentlayer/generated";
-import Categories from "../../../components/Blog/Categories";
-import BlogLayoutThree from "../../../components/Blog/BlogLayoutThree";
-import GithubSlugger, { slug } from "github-slugger"
+import Image from "next/image"
+import { allBlogs } from "../../../../.contentlayer/generated"
+import Tag from "../../../components/Elements/Tag"
+import BlogDetails from "../../../components/Blog/BlogDetails"
+import RenderMdx from "../../../components/Blog/RenderMdx"
+import BlogToc from "../../../components/Blog/BlogToc"
+import { slug } from "github-slugger"
+import siteMetadata, { description } from "../../../utils/siteMetaDataFile"
 
-const slugger = new GithubSlugger();
-
-export async function generateStaticParams() {
-  const categories = [];
-  const paths = [{ slug: "all" }];
-
-  allBlogs.map((blog) => {
-    if (blog.isPublished) {
-      blog.tags.map((tag) => {
-        let slugified = slugger.slug(tag);
-        if (!categories.includes(slugified)) {
-          categories.push(slugified);
-          paths.push({ slug: slugified });
-        }
-      });
-    }
-  });
-
-  return paths;
+export async function generateStaticParams(){
+    return allBlogs.map((blog) => ({slug: blog._raw.flattenedPath}));
 }
 
 export async function generateMetadata({ params }) {
+    
+    /* Grabs and renders a blog post */
+    const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug)
+    if(!blog){
+        return;
+    }
+ 
+    const publishedAt = new Date(blog.publishedAt).toISOString();
+    const modifiedAt = new Date(blog.updatedAt || blog.publishedAt).toISOString();
+
+    let imageList = [siteMetadata.socialBanner]
+    if(blog.image){
+        imageList = typeof blog.image.filePath === "string" ?
+        [siteMetadata.siteUrl + blog.image.filePath.replace("../public","")] : blog.image
+    }
+
+    /* second condition almost never gets used */
+    const ogImages = imageList.map(img => {
+        return {url: img.includes("http") ? img : siteMetadata.siteUrl + img}
+    })
+
+    /* if blog has author, then reutrn author, else just used metadata */
+    const authors = blog?.author? [blog.author] : siteMetadata.author
+ 
     return {
-      title: `${params.slug.replaceAll("-"," ")} Blogs`,
-      /* Slug is the category name */
-      description: `Learn more about ${params.slug === "all" ? "web development" : params.slug} through out collection of blogs :)` 
+      title: blog.title,
+      description: blog.description,
+      openGraph: {
+        title: blog.title,
+        description: blog.description,
+        /* url: siteMetadata + "/blogs" + params.slug,  slug here is the created slug for the blog*/
+        url: siteMetadata.siteUrl + blog.url,
+        siteName: siteMetadata.title,
+        locale: 'en_US',
+        type: 'article',
+        publishedTime: publishedAt,
+        modifiedTime: modifiedAt,
+        images: ogImages,
+        authors: authors.length > 0 ? authors : [siteMetadata.author]
+      },
     }
   }
 
-const NotesPage = ({params}) => {
+export default function BlogPage({ params }){
 
-    /* We want to filter all the tags as per params.slug */
-    const allCategories = ["all"];
-
-    /* for each tag, sluggify the tag 
-       if category is not in allCategories -> add it
-       if params.slug === all, then return true for all tags
-    */
-    const blogs = allBlogs.filter((blog) => {
-        return blog.tags.some(tag => {
-            const slugifiedTag = slug(tag);
-            if(!allCategories.includes(slugifiedTag)){
-                allCategories.push(slugifiedTag)
-            }
-            if(params.slug === "all"){
-                return true
-            }
-            return slugifiedTag === params.slug
-        })
-    })
-
-  return (
-    <article className="mt-20 flex flex-col text-dark dark:text-light">
-      <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
-        <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
-          Search Notes
+    /* Grabs and renders a blog post */
+    const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug)
+    
+    return (<article className="translate-y-10">
+    <div className="mb-8 text-center relative w-full h-[70vh] bg-dark">
+      <div className="w-full z-10 flex flex-col items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <Tag
+          name={blog.tags[0]}
+          link={`/SearchNotes/${slug(blog.tags[0])}`}
+          className="px-6 text-sm py-2"
+        />
+        <h1
+          className="inline-block mt-6 font-semibold capitalize text-light text-2xl md:text-3xl lg:text-5xl !leading-normal relative w-5/6"
+        >
+          {blog.title}
         </h1>
-        <span className="mt-2 inline-block">
-          Different topics and areas of study
-        </span>
       </div>
+      <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-dark/60 dark:bg-dark/40" />
+      <Image
+        src={blog.image.filePath.replace("../public", "")}
+        placeholder="blur"
+        blurDataURL={blog.image.blurhashDataUrl}
+        alt={blog.title}
+        width={blog.image.width}
+        height={blog.image.height}
+        className="aspect-square w-full h-full object-cover object-center"
+        priority
+        sizes="100vw"
+      />
+    </div>
+    
+    <BlogDetails blog={blog} slug={params.slug} />
 
-      <Categories categories={allCategories} currentSlug={params.slug} /> 
-
-      {blogs.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-16 mt-8 sm:mt-12 md:mt-28 sxl:mt-36 px-5 sm:px-10 md:px-24 sxl:px-32">
-          {blogs.map((blog, index) => (
-            <article key={index} className="col-span-1 row-span-1 relative">
-              <BlogLayoutThree blog={blog} />
-            </article>
-          ))}
-        </div>
-      ) : (
-        // Spacer div only when no blogs to add separation
-        <div className="my-5" />
-      )}
-    </article>
-  );
-};
-
-export default NotesPage
+    <div className="grid grid-cols-12  gap-y-8 lg:gap-8 sxl:gap-16 mt-8 px-5 md:px-10">
+      <BlogToc blog={blog}/>
+      <RenderMdx blog={blog} />
+    </div>
+  </article>)
+}

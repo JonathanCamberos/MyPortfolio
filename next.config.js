@@ -52,7 +52,7 @@ function parseQuestions(content, blogTitle) {
         questionDifficulty: questionDifficulty.trim(),
         questionBlurb: "",
         questionTopics: [],
-        questionLink: `/blogs/${formattedBlogTitle}#${questionNum}-${questionTitle
+        questionLink: `/Notes/${formattedBlogTitle}#${questionNum}-${questionTitle
           .trim()
           .replace(/[^a-zA-Z0-9\s]/g, "")
           .replace(/\s+/g, "-")
@@ -129,7 +129,7 @@ function parseUseCases(content, blogTitle) {
         summary: "",
         exampleIntro: "",
         codeExample: "",
-        useCaseLink: `/blogs/${formattedBlogTitle}#${normalizeKey(structureType)}-use-case-${normalizeKey(useCaseTitle)}`,
+        useCaseLink: `/Notes/${formattedBlogTitle}#${normalizeKey(structureType)}-use-case-${normalizeKey(useCaseTitle)}`,
         blog: blogTitle,
       };
       return;

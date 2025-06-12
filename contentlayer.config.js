@@ -49,7 +49,7 @@ import GithubSlugger from 'github-slugger'
        /* Simply creates url from doc._raw */
         url: {
           type: "string",
-          resolve: (doc) => `/blogs/${doc._raw.flattenedPath}`,
+          resolve: (doc) => `/Notes/${doc._raw.flattenedPath}`,
         },
 
         /* Calculates readingTime via extension that reads raw MDX file (word count, etc)*/

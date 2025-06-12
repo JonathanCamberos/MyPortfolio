@@ -40,7 +40,7 @@ const Categories = ({ categories, currentSlug }) => {
       {categories.map((cat) => {
         const catSlug = slug(cat);
         const isActive = currentSlug === catSlug;
-        const link = isActive ? "/notes/all-categories" : `/notes/${catSlug}`;
+        const link = isActive ? "/SearchNotes/all-categories" : `/SearchNotes/${catSlug}`;
 
         return (
           <Category

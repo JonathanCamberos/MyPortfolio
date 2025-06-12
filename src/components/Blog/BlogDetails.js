@@ -2,7 +2,6 @@ import { format, parseISO } from 'date-fns'
 import { slug } from 'github-slugger'
 import Link from 'next/link'
 import React from 'react'
-import ViewCounter from './ViewCounter'
 
 // working
 
@@ -33,7 +32,7 @@ const BlogDetails = ({blog, slug: blogSlug}) => {
         </div>
         
         {/* ##### Main Tag ##### */}
-        <Link href={`/notes/${slug(blog.tags[0])}`} className="m-3">
+        <Link href={`/SearchNotes/${slug(blog.tags[0])}`} className="m-3">
           #{blog.tags[0]}
         </Link>
     </div>

@@ -75,7 +75,7 @@ const DifficultySection = () => {
         {filteredQuestions.length > 0 ? (
           filteredQuestions.map((question) => (
             <Link
-              href={`/blogs/${question.blog
+              href={`/Notes${question.blog
                 .toLowerCase()
                 .replace(/[^a-zA-Z0-9\s]/g, "")
                 .replace(/\s+/g, "-")}#${question.questionNum}-${question.questionTitle

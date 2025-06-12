@@ -8,7 +8,7 @@
       "Array",
       "Hash Table"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#1-two-sum-i---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i---easy",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "11": {
@@ -21,7 +21,7 @@
       "Two Pointers",
       "Greedy"
     ],
-    "questionLink": "/blogs/leetcode-two-pointers#11-container-with-most-water---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water---medium",
     "blog": "LeetCode: Two Pointers"
   },
   "15": {
@@ -34,7 +34,7 @@
       "Two Pointers",
       "Sorting"
     ],
-    "questionLink": "/blogs/leetcode-two-pointers#15-3sum-two-sum-ii2---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#15-3sum-two-sum-ii2---medium",
     "blog": "LeetCode: Two Pointers"
   },
   "20": {
@@ -46,7 +46,7 @@
       "String",
       "Stack"
     ],
-    "questionLink": "/blogs/leetcode-stacks#20-valid-parentheses---easy",
+    "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses---easy",
     "blog": "LeetCode: Stacks"
   },
   "22": {
@@ -59,7 +59,7 @@
       "Dynamic Programming",
       "Backtracking"
     ],
-    "questionLink": "/blogs/leetcode-stacks#22-generate-parentheses---medium",
+    "questionLink": "/Notes/leetcode-stacks#22-generate-parentheses---medium",
     "blog": "LeetCode: Stacks"
   },
   "36": {
@@ -72,7 +72,7 @@
       "Hash Table",
       "Matrix"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#36-valid-sudoku---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "42": {
@@ -87,7 +87,7 @@
       "Stack",
       "Monotonic Stack"
     ],
-    "questionLink": "/blogs/leetcode-two-pointers#42-trapping-rain-water---hard",
+    "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water---hard",
     "blog": "LeetCode: Two Pointers"
   },
   "49": {
@@ -101,7 +101,7 @@
       "String",
       "Sorting"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#49-group-anagrams---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "84": {
@@ -114,7 +114,7 @@
       "Stack",
       "Monotonic Stack"
     ],
-    "questionLink": "/blogs/leetcode-stacks#84-largest-rectangle-in-histogram---hard",
+    "questionLink": "/Notes/leetcode-stacks#84-largest-rectangle-in-histogram---hard",
     "blog": "LeetCode: Stacks"
   },
   "125": {
@@ -126,7 +126,7 @@
       "Two Pointers",
       "String"
     ],
-    "questionLink": "/blogs/leetcode-two-pointers#125-valid-palindrome---easy",
+    "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome---easy",
     "blog": "LeetCode: Two Pointers"
   },
   "128": {
@@ -139,7 +139,7 @@
       "Hash Table",
       "Union Find"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#128-longest-consecutive-sequence---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "150": {
@@ -152,7 +152,7 @@
       "Math",
       "Design"
     ],
-    "questionLink": "/blogs/leetcode-stacks#150-evaluate-reverse-polish-notation---medium",
+    "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation---medium",
     "blog": "LeetCode: Stacks"
   },
   "155": {
@@ -164,7 +164,7 @@
       "Stack",
       "Design"
     ],
-    "questionLink": "/blogs/leetcode-stacks#155-min-stack---medium",
+    "questionLink": "/Notes/leetcode-stacks#155-min-stack---medium",
     "blog": "LeetCode: Stacks"
   },
   "167": {
@@ -177,7 +177,7 @@
       "Two Pointers",
       "Binary Search"
     ],
-    "questionLink": "/blogs/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
     "blog": "LeetCode: Two Pointers"
   },
   "217": {
@@ -190,7 +190,7 @@
       "Hash Table",
       "Sorting"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#217-contains-duplicate---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate---easy",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "238": {
@@ -202,7 +202,7 @@
       "Array",
       "Prefx Sum"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#238-product-of-array-except-self---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "242": {
@@ -215,7 +215,7 @@
       "String",
       "Sorting"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#242-valid-anagram---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram---easy",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "271": {
@@ -227,7 +227,7 @@
       "Two Pointers",
       "Design"
     ],
-    "questionLink": "/blogs/leetcode-two-pointers#271-string-encode-and-decode---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode---medium",
     "blog": "LeetCode: Two Pointers"
   },
   "347": {
@@ -245,7 +245,7 @@
       "Counting",
       "Quickselect"
     ],
-    "questionLink": "/blogs/leetcode-arrays-and-hashing#347-top-k-elements-in-list---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list---medium",
     "blog": "LeetCode: Arrays and Hashing"
   },
   "739": {
@@ -258,7 +258,7 @@
       "Stack",
       "Monotonic Stack"
     ],
-    "questionLink": "/blogs/leetcode-stacks#739-daily-temperatures---medium",
+    "questionLink": "/Notes/leetcode-stacks#739-daily-temperatures---medium",
     "blog": "LeetCode: Stacks"
   },
   "853": {
@@ -272,7 +272,7 @@
       "Sorting",
       "Monotonic Stack"
     ],
-    "questionLink": "/blogs/leetcode-stacks#853-car-fleet---medium",
+    "questionLink": "/Notes/leetcode-stacks#853-car-fleet---medium",
     "blog": "LeetCode: Stacks"
   }
 }
