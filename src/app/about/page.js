@@ -1,9 +1,6 @@
 import Link from 'next/link';
 import JobLayout from '../../components/About/JobLayout';
-import Image from 'next/image';
-// import aboutImage from "/images/about_img.jpg"
-// import aboutImage from '../../public/images/about_img.jpg'
-//
+
 
 export default function About() {
   const skills = [
@@ -60,26 +57,6 @@ export default function About() {
       <div className="w-full flex flex-col md:flex-row min-h-[calc(100vh-2rem)]">
       {/* Left side: Picture and Introduction */}
       <div className="md:w-1/2 flex flex-col items-center justify-center p-4">
-        {/* <img 
-          src="/images/about_img.jpg" 
-          alt="img" 
-          className="w-64 h-64 md:w-96 md:h-96 object-cover rounded-lg mb-4" 
-        /> */}
-        
-        {/*  ##### Image #####  */}
-        {/* <Image src="/images/about_img.jpg"
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,...base64-encoded-string..."
-          alt="Image of me :)"
-          width={400}
-          height={400}
-          className="object-cover rounded-xl group-hover:scale-105 transition-all ease duration-300"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-        /> */}
-
-        {/* <Image src={aboutImage}
-          alt="img of author"
-        /> */}
 
 
 
@@ -111,14 +88,6 @@ export default function About() {
           I currently work as a Software Engineer at Bank of America supporting and building internal Cybersecurity Applications.
         </p>
 
-        {/* <a 
-          href="/path/to/your/resume.pdf" 
-          download 
-          className="mt-4 px-4 py-2 bg-accent dark:bg-accentDark  text-light dark:text-dark rounded-lg
-                    hover:scale-105 transition-all ease duration-200 text-sm"
-        >
-           Resume
-        </a> */}
       </div>
 
         {/* Horizontal Line Divider for small screens */}
@@ -171,16 +140,12 @@ export default function About() {
             <h2 className="text-xl font-semibold mb-4 text-center">Skills</h2>
             <div className="flex flex-wrap gap-2 justify-center"> {/* Slightly increased gap */}
               {skills.map(skill => (
-                <Link
-                  key={skill}
-                  href={`/categories/${skill}`}
-                  className="inline-block py-1.5 px-4 bg-accent dark:bg-accentDark 
+                  <div className="inline-block py-1.5 px-4 bg-accent dark:bg-accentDark 
                       text-light dark:text-dark rounded-full capitalize font-semibold 
                       border-2 border-solid border-light dark:border-dark hover:scale-105 transition-all 
-                      ease duration-200 text-sm"
-                >
-                  {skill}
-                </Link>
+                      ease duration-200 text-sm">
+                    {skill}
+                  </div>
               ))}
             </div>
           </div>

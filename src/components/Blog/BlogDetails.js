@@ -33,7 +33,7 @@ const BlogDetails = ({blog, slug: blogSlug}) => {
         </div>
         
         {/* ##### Main Tag ##### */}
-        <Link href={`/categories/${slug(blog.tags[0])}`} className="m-3">
+        <Link href={`/notes/${slug(blog.tags[0])}`} className="m-3">
           #{blog.tags[0]}
         </Link>
     </div>

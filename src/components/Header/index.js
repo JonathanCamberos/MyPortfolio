@@ -8,20 +8,6 @@ import { useThemeSwitch } from '../Hooks/useThemeSwitch'
 import { cx } from '../../utils'
 
 
-/*
-  Working with "flexbox"
-  main axis:  defined by 'flex-direction' property
-  cross axis: perpendicular to main axis
-        
-   main axis: fo ur possible values 
-        row / row-reverse,        left to right, and right to left
-        column / column-reverse,  up to down, and down to up  (?? not sure on which order) 
-
-   cross axis: perpendicular to main axis 
-        
-    quick-read:
-    https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox
-*/
 const Header = () => {
   const [mode, setMode] = useThemeSwitch();
   const [click, setClick] = useState(false);
@@ -118,7 +104,10 @@ const Header = () => {
           <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link>
-          <Link href="/categories/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
+          <Link href="/notes/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
+            Notes
+          </Link>
+          <Link href="/leetcode" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             LeetCode
           </Link>
           <Link href="/about" className="mx-2 hover:text-accent dark:hover:text-accentDark">
@@ -186,7 +175,14 @@ const Header = () => {
             Home
           </Link>
           <Link
-            href="/categories/all-categories"
+            href="/notes/all-categories"
+            className="mb-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={toggle}
+          >
+            Notes
+          </Link>
+          <Link
+            href="/leetcode"
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >

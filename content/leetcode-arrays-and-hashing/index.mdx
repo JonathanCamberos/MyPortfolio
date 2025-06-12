@@ -293,16 +293,15 @@ If we want to track every element, best space complexity is O(n)
             # time complexity: iteration of O(n)
             for j in nums: 
 
-                # INCORRECT: iterating over elements of a collection
-                # will lead to comparing element to itself at least once 
-                #  vs index iteration
+                # INCORRECT: iterating element-wise will comparing elements to themselves
+                # use index iteration in this case
                 if i == j 
                     return True
 
         return False 
 ```
 
-### Solution 1: Tim Sort
+### Solution 1: Sorting (Tim Sort)
 ```python
    def containsDuplicate(self, nums: List[int]) -> bool:
         

@@ -2,9 +2,6 @@ import { allBlogs } from "../../../../.contentlayer/generated";
 import Categories from "../../../components/Blog/Categories";
 import BlogLayoutThree from "../../../components/Blog/BlogLayoutThree";
 import GithubSlugger, { slug } from "github-slugger"
-import QuestionSection from "../../../components/Blog/QuestionSection";
-import DifficultySection from "../../../components/Blog/DifficultySection";
-import UseCasesSection from "../../../components/Blog/UseCasesSection";
 
 const slugger = new GithubSlugger();
 
@@ -35,7 +32,7 @@ export async function generateMetadata({ params }) {
     }
   }
 
-const CategoryPage = ({params}) => {
+const NotesPage = ({params}) => {
 
     /* We want to filter all the tags as per params.slug */
     const allCategories = ["all"];
@@ -61,10 +58,10 @@ const CategoryPage = ({params}) => {
     <article className="mt-20 flex flex-col text-dark dark:text-light">
       <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
         <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
-          Search Categories
+          Search Notes
         </h1>
         <span className="mt-2 inline-block">
-          Different DSA topics and areas of study
+          Different topics and areas of study
         </span>
       </div>
 
@@ -82,12 +79,8 @@ const CategoryPage = ({params}) => {
         // Spacer div only when no blogs to add separation
         <div className="my-5" />
       )}
-
-      <QuestionSection />
-      <DifficultySection />
-      <UseCasesSection />
     </article>
   );
 };
 
-export default CategoryPage
+export default NotesPage

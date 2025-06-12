@@ -55,36 +55,6 @@ export async function generateMetadata({ params }) {
     }
   }
 
-
-//   export default function BlogPage2({ params }) {
-//   const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug);
-
-//   return (
-//     <article className="translate-y-10">
-//       <div className="mb-8 text-center relative w-full h-[20vh] bg-dark flex items-center justify-center">
-//         <div className="z-10 flex flex-col items-center">
-//           <Tag
-//             name={blog.tags[0]}
-//             link={`/categories/${slug(blog.tags[0])}`}
-//             className="px-4 text-sm py-1"
-//           />
-//           <h1 className="mt-4 font-semibold capitalize text-light text-xl md:text-2xl lg:text-3xl !leading-snug">
-//             {blog.title}
-//           </h1>
-//         </div>
-//         <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-dark/60 dark:bg-dark/40" />
-//       </div>
-
-//       <BlogDetails blog={blog} slug={params.slug} />
-
-//       <div className="grid grid-cols-12 gap-y-8 lg:gap-8 sxl:gap-16 mt-8 px-5 md:px-10">
-//         <BlogToc blog={blog} />
-//         <RenderMdx blog={blog} />
-//       </div>
-//     </article>
-//   );
-// }
-
 export default function BlogPage({ params }){
 
     /* Grabs and renders a blog post */
@@ -95,7 +65,7 @@ export default function BlogPage({ params }){
       <div className="w-full z-10 flex flex-col items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <Tag
           name={blog.tags[0]}
-          link={`/categories/${slug(blog.tags[0])}`}
+          link={`/notes/${slug(blog.tags[0])}`}
           className="px-6 text-sm py-2"
         />
         <h1

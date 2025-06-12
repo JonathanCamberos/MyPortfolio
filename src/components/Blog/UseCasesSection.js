@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const UseCaseSection = () => {
   // useCase categories
-  const useCaseCategories = ["all", "hashmap", "stack", "twopointers"];
+  const useCaseCategories = ["all", "hashmap", "stack", "two-pointers"];
 
   const [useCasesData, setUseCasesData] = useState({});
   const [filteredUseCases, setFilteredUseCases] = useState([]);
