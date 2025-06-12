@@ -89,10 +89,7 @@ const DifficultySection = () => {
             </Link>
           ))
         ) : (
-          <p className="mt-8 text-center w-full col-span-full text-gray-600 dark:text-gray-400">
-            {currentDifficulty
-              ? `No questions found for ${currentDifficulty} difficulty.`
-              : ""}
+          <p className="mt-0">
           </p>
         )}
       </div>

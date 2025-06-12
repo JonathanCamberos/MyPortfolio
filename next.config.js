@@ -8,8 +8,7 @@ const filePaths = [
   'content/leetcode-arrays-and-hashing/index.mdx',
   'content/leetcode-stacks/index.mdx',
   'content/leetcode-two-pointers/index.mdx',
-];
-
+];// Function to parse questions from content
 function parseQuestions(content, blogTitle) {
   const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
   const topicMap = {};
@@ -93,7 +92,8 @@ function parseQuestions(content, blogTitle) {
   return { questionStats, topicMap, questionsMap };
 }
 
-function parseUseCases(content) {
+// Function to parse use cases from content
+function parseUseCases(content, blogTitle) {
   const useCasesMap = {};
   const useCaseRegex = /^###\s([\w\s]+)\sUse\sCase:\s(.+)$/gm;
   const summaryRegex = /^(?!###).+$/;
@@ -101,6 +101,11 @@ function parseUseCases(content) {
   const codeBlockRegex = /```python([\s\S]*?)```/gm;
 
   const normalizeKey = (key) => key.replace(/\s+/g, "").toLowerCase();
+
+  const formattedBlogTitle = blogTitle
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .replace(/\s+/g, "-");
 
   let currentUseCase = null;
   let lines = content.split("\n");
@@ -121,6 +126,8 @@ function parseUseCases(content) {
         summary: "",
         exampleIntro: "",
         codeExample: "",
+        useCaseLink: `/blogs/${formattedBlogTitle}#${normalizeKey(structureType)}-use-case-${normalizeKey(useCaseTitle)}`,
+        blog: blogTitle,
       };
       return;
     }
@@ -203,7 +210,7 @@ const nextConfig = {
           });
 
           // Parse use cases separately
-          const uc = parseUseCases(content);
+          const uc = parseUseCases(content, blogTitle);
           Object.entries(uc).forEach(([k, arr]) => {
             if (!useCasesMap[k]) useCasesMap[k] = [];
             useCasesMap[k].push(...arr);
@@ -233,5 +240,7 @@ const nextConfig = {
     return config;
   },
 };
+
+
 
 module.exports = withContentlayer({ ...nextConfig });
