@@ -4,6 +4,7 @@ import BlogLayoutThree from "../../../components/Blog/BlogLayoutThree";
 import GithubSlugger, { slug } from "github-slugger"
 import QuestionSection from "../../../components/Blog/QuestionSection";
 import DifficultySection from "../../../components/Blog/DifficultySection";
+import UseCasesSection from "../../../components/Blog/UseCasesSection";
 
 const slugger = new GithubSlugger();
 
@@ -84,6 +85,7 @@ const CategoryPage = ({params}) => {
 
       <QuestionSection />
       <DifficultySection />
+      <UseCasesSection />
     </article>
   );
 };
