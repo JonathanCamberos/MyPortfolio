@@ -1,4 +1,6 @@
 import React from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const UseCase = ({ useCase }) => {
   return (
@@ -25,9 +27,20 @@ const UseCase = ({ useCase }) => {
         </span>{" "}
         {useCase.exampleIntro}
       </p>
-      <pre className="mt-2 bg-gray-100 dark:bg-gray-800 p-2 rounded text-sm overflow-x-auto">
-        <code>{useCase.codeExample}</code>
-      </pre>
+      <div className="mt-2 p-2 rounded overflow-x-auto" style={{ backgroundColor: "#2D2D2D" }}>
+        <SyntaxHighlighter
+          language="python"
+          style={dracula}
+          customStyle={{
+            background: "transparent",
+            fontSize: "0.9rem",
+            lineHeight: "1.5",
+            color: "#FFFFFF", // Ensures the text remains readable
+          }}
+        >
+          {useCase.codeExample}
+        </SyntaxHighlighter>
+      </div>
     </div>
   );
 };
