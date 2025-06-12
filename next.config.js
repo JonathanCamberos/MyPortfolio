@@ -4,131 +4,232 @@ const {withContentlayer} = require("next-contentlayer")
 const fs = require('fs');
 const path = require('path'); // <--- Add this line
 
-
 const filePaths = [
-    'content/leetcode-arrays-and-hashing/index.mdx',
-    'content/leetcode-stacks/index.mdx',
-    'content/leetcode-two-pointers/index.mdx',
-  ];
+  'content/leetcode-arrays-and-hashing/index.mdx',
+  'content/leetcode-stacks/index.mdx',
+  'content/leetcode-two-pointers/index.mdx',
+];
+
+function parseQuestions(content, blogTitle) {
+  const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
+  const topicMap = {};
+  const questionsMap = {};
+
+  const questionRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
+  const topicRegex = /^Topics:\s+(.+)$/gm;
+  const introRegex = /^> (.+)$/gm;
+
+  const formattedBlogTitle = blogTitle
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .replace(/\s+/g, "-");
+
+  const lines = content.split("\n");
+  let currentQuestion = null;
+  let questionBlurbLines = [];
+
+  lines.forEach((line) => {
+    const questionMatch = questionRegex.exec(line);
+    if (questionMatch) {
+      if (currentQuestion) {
+        if (questionBlurbLines.length) {
+          currentQuestion.questionBlurb = questionBlurbLines.join(" ");
+          questionBlurbLines = [];
+        }
+        questionsMap[currentQuestion.questionNum] = currentQuestion;
+      }
+
+      const [, questionNumStr, questionTitle, questionDifficulty] = questionMatch;
+      const questionNum = parseInt(questionNumStr, 10);
+
+      questionStats.total++;
+      if (questionDifficulty.toLowerCase() === "easy") questionStats.easy++;
+      else if (questionDifficulty.toLowerCase() === "medium") questionStats.medium++;
+      else if (questionDifficulty.toLowerCase() === "hard") questionStats.hard++;
+
+      currentQuestion = {
+        questionNum,
+        questionTitle: questionTitle.trim(),
+        questionDifficulty: questionDifficulty.trim(),
+        questionBlurb: "",
+        questionTopics: [],
+        questionLink: `/blogs/${formattedBlogTitle}#${questionNum}-${questionTitle
+          .trim()
+          .replace(/[^a-zA-Z0-9\s]/g, "")
+          .replace(/\s+/g, "-")
+          .toLowerCase()}---${questionDifficulty.toLowerCase()}`,
+        blog: blogTitle,
+      };
+      return;
+    }
+
+    const topicMatch = topicRegex.exec(line);
+    if (topicMatch && currentQuestion) {
+      const topics = topicMatch[1].split(",").map((t) => t.trim());
+      currentQuestion.questionTopics.push(...topics);
+
+      topics.forEach((topic) => {
+        if (!topicMap[topic]) topicMap[topic] = [];
+        if (!topicMap[topic].includes(currentQuestion.questionNum)) {
+          topicMap[topic].push(currentQuestion.questionNum);
+        }
+      });
+      return;
+    }
+
+    const introMatch = introRegex.exec(line);
+    if (introMatch && currentQuestion) {
+      questionBlurbLines.push(introMatch[1].trim());
+    }
+  });
+
+  if (currentQuestion) {
+    if (questionBlurbLines.length) {
+      currentQuestion.questionBlurb = questionBlurbLines.join(" ");
+    }
+    questionsMap[currentQuestion.questionNum] = currentQuestion;
+  }
+
+  return { questionStats, topicMap, questionsMap };
+}
+
+function parseUseCases(content) {
+  const useCasesMap = {};
+  const useCaseRegex = /^###\s([\w\s]+)\sUse\sCase:\s(.+)$/gm;
+  const summaryRegex = /^(?!###).+$/;
+  const exampleIntroRegex = /Ex:\s([\s\S]*?)(?=```)/;
+  const codeBlockRegex = /```python([\s\S]*?)```/gm;
+
+  const normalizeKey = (key) => key.replace(/\s+/g, "").toLowerCase();
+
+  let currentUseCase = null;
+  let lines = content.split("\n");
+  let currentExampleIntroIndex = -1;
+
+  lines.forEach((line, idx) => {
+    const useCaseMatch = useCaseRegex.exec(line);
+    if (useCaseMatch) {
+      if (currentUseCase) {
+        const normalizedKey = normalizeKey(currentUseCase.type);
+        if (!useCasesMap[normalizedKey]) useCasesMap[normalizedKey] = [];
+        useCasesMap[normalizedKey].push(currentUseCase);
+      }
+      const [, structureType, useCaseTitle] = useCaseMatch;
+      currentUseCase = {
+        type: structureType.trim(),
+        title: useCaseTitle.trim(),
+        summary: "",
+        exampleIntro: "",
+        codeExample: "",
+      };
+      return;
+    }
+
+    if (currentUseCase && !currentUseCase.summary && summaryRegex.test(line)) {
+      currentUseCase.summary += line.trim();
+      return;
+    }
+
+    if (currentUseCase && line.startsWith("Ex:")) {
+      const exampleIntroMatch = exampleIntroRegex.exec(content.slice(content.indexOf(line)));
+      if (exampleIntroMatch) {
+        currentUseCase.exampleIntro = exampleIntroMatch[1].trim();
+        currentExampleIntroIndex = idx;
+      }
+      return;
+    }
+
+    if (
+      currentUseCase &&
+      currentExampleIntroIndex !== -1 &&
+      idx > currentExampleIntroIndex &&
+      line.startsWith("```python")
+    ) {
+      const codeBlockMatch = codeBlockRegex.exec(content.slice(content.indexOf(line)));
+      if (codeBlockMatch) {
+        currentUseCase.codeExample = codeBlockMatch[1].trim();
+        currentExampleIntroIndex = -1;
+      }
+      return;
+    }
+  });
+
+  if (currentUseCase) {
+    const normalizedKey = normalizeKey(currentUseCase.type);
+    if (!useCasesMap[normalizedKey]) useCasesMap[normalizedKey] = [];
+    useCasesMap[normalizedKey].push(currentUseCase);
+  }
+
+  return useCasesMap;
+}
 
 const nextConfig = {
   webpack(config, { isServer }) {
     if (isServer) {
       const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
-      const topicMap = {};           // topic -> [questionNums]
-      const questionsMap = {};       // questionNum -> questionObject
+      const topicMap = {};
+      const questionsMap = {};
+      const useCasesMap = {};
 
       filePaths.forEach((relativePath) => {
         try {
           const filePath = path.join(process.cwd(), relativePath);
           const content = fs.readFileSync(filePath, "utf-8");
 
-          // Regex patterns
-          const questionRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
-          const topicRegex = /^Topics:\s+(.+)$/gm;
-          const introRegex = /^> (.+)$/gm;
-          const titleRegex = /^title:\s+"(.+)"$/m;
+          // Extract blog title from frontmatter or fallback
+          const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
+          const blogTitle = titleMatch ? titleMatch[1] : "unknown-blog";
 
-          const blogTitleMatch = titleRegex.exec(content);
-          const blogTitle = blogTitleMatch ? blogTitleMatch[1] : "unknown-blog";
-          const formattedBlogTitle = blogTitle
-            .toLowerCase()
-            .replace(/[^a-zA-Z0-9\s]/g, "")
-            .replace(/\s+/g, "-");
+          // Parse questions separately
+          const {
+            questionStats: qs,
+            topicMap: tm,
+            questionsMap: qm,
+          } = parseQuestions(content, blogTitle);
 
-          const lines = content.split("\n");
-          let currentQuestion = null;
-          let questionBlurbLines = [];
+          // Merge question data
+          questionStats.total += qs.total;
+          questionStats.easy += qs.easy;
+          questionStats.medium += qs.medium;
+          questionStats.hard += qs.hard;
 
-          lines.forEach((line) => {
-            const questionMatch = questionRegex.exec(line);
-            if (questionMatch) {
-              // Save previous question before starting a new one
-              if (currentQuestion) {
-                if (questionBlurbLines.length) {
-                  currentQuestion.questionBlurb = questionBlurbLines.join(" ");
-                  questionBlurbLines = [];
-                }
-                questionsMap[currentQuestion.questionNum] = currentQuestion;
-              }
-
-              const [, questionNumStr, questionTitle, questionDifficulty] = questionMatch;
-              const questionNum = parseInt(questionNumStr, 10);
-
-              questionStats.total++;
-              if (questionDifficulty.toLowerCase() === "easy") questionStats.easy++;
-              else if (questionDifficulty.toLowerCase() === "medium") questionStats.medium++;
-              else if (questionDifficulty.toLowerCase() === "hard") questionStats.hard++;
-
-              currentQuestion = {
-                questionNum,
-                questionTitle: questionTitle.trim(),
-                questionDifficulty: questionDifficulty.trim(),
-                questionBlurb: "", // To fill later
-                questionTopics: [], // To fill later
-                questionLink: `/blogs/${formattedBlogTitle}#${questionNum}-${questionTitle
-                  .trim()
-                  .replace(/[^a-zA-Z0-9\s]/g, "")
-                  .replace(/\s+/g, "-")
-                  .toLowerCase()}---${questionDifficulty.toLowerCase()}`,
-                blog: blogTitle,
-              };
-
-              return;
-            }
-
-            const topicMatch = topicRegex.exec(line);
-            if (topicMatch && currentQuestion) {
-              const topics = topicMatch[1].split(",").map((t) => t.trim());
-              currentQuestion.questionTopics.push(...topics);
-
-              topics.forEach((topic) => {
-                if (!topicMap[topic]) topicMap[topic] = [];
-                if (!topicMap[topic].includes(currentQuestion.questionNum)) {
-                  topicMap[topic].push(currentQuestion.questionNum);
-                }
-              });
-
-              return;
-            }
-
-            const introMatch = introRegex.exec(line);
-            if (introMatch && currentQuestion) {
-              questionBlurbLines.push(introMatch[1].trim());
-            }
+          Object.entries(tm).forEach(([k, v]) => {
+            if (!topicMap[k]) topicMap[k] = [];
+            topicMap[k].push(...v.filter((num) => !topicMap[k].includes(num)));
           });
 
-          // Save the last question in the file
-          if (currentQuestion) {
-            if (questionBlurbLines.length) {
-              currentQuestion.questionBlurb = questionBlurbLines.join(" ");
-            }
-            questionsMap[currentQuestion.questionNum] = currentQuestion;
-          }
+          Object.entries(qm).forEach(([k, v]) => {
+            questionsMap[k] = v;
+          });
+
+          // Parse use cases separately
+          const uc = parseUseCases(content);
+          Object.entries(uc).forEach(([k, arr]) => {
+            if (!useCasesMap[k]) useCasesMap[k] = [];
+            useCasesMap[k].push(...arr);
+          });
         } catch (error) {
-          console.error(`Error reading or parsing file ${relativePath}:`, error);
+          console.error(`Error processing ${relativePath}`, error);
         }
       });
 
-      // Write stats JSON
       fs.writeFileSync(
         path.join(process.cwd(), "public", "leetcodeStats.json"),
         JSON.stringify(questionStats, null, 2)
       );
-
-      // Write topicQuestions.json (topic -> [questionNums])
       fs.writeFileSync(
         path.join(process.cwd(), "public", "topicQuestions.json"),
         JSON.stringify(topicMap, null, 2)
       );
-
-      // Write questions.json (questionNum -> questionObject)
       fs.writeFileSync(
         path.join(process.cwd(), "public", "questions.json"),
         JSON.stringify(questionsMap, null, 2)
       );
+      fs.writeFileSync(
+        path.join(process.cwd(), "public", "useCases.json"),
+        JSON.stringify(useCasesMap, null, 2)
+      );
     }
-
     return config;
   },
 };

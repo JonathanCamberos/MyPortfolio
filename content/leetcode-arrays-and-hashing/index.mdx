@@ -105,7 +105,7 @@ n/2 = additional space after rebalancing
 Rehashing is notably expensive as we must rehash every element with the new hash function, 
 leading to O(n) for resizing and reinserting n elements.
 
-### Hashmaps Use Case: Representations
+### HashMap Use Case: Representations
 
 We can represent an object based on a criteria.
 
@@ -118,7 +118,7 @@ Ex: Given a string, count the frequency of each character:
     # freq = {'a': 2, 'b': 2, 'c': 2}
 ```
 
-### Hashmap Use Case: Grouping
+### HashMap Use Case: Grouping
 
 We can grouping elements based on a criteria.
 
@@ -134,7 +134,7 @@ Ex: Group strings that are anagrams of each other:
     # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}
 ```
 
-### Hashmap Use Case: Dynamic Programming Storing Subproblems
+### HashMap Use Case: Dynamic Programming Storing Subproblems
 
 We can store solutions to subproblems to avoid redundant calculations.
 
@@ -148,7 +148,7 @@ Ex: Fibonacci number solutions with memoization:
         return memo[n]
 ```
 
-### Hashmap Use Case: Backtracking Storing Potential Solutions for Pruning
+### HashMap Use Case: Backtracking Storing Potential Solutions for Pruning
 
 We can cache paths or partial solutions to prune the search space effectively
 
@@ -188,11 +188,11 @@ Ex: Subset Sum:
         return result
 ```
 
-### Hashmap Use Case: Representing Relationships 
+### HashMap Use Case: Representing Relationships 
 
 We can represent relationships between items.
 
-Adjacency list representation of a graph:
+Ex: Adjacency list representation of a graph:
 ```python
     edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph
     graph = {}  # Initialize an empty hashmap to represent the graph

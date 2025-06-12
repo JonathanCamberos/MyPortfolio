@@ -85,6 +85,7 @@ export default function RootLayout({ children }) {
         </Script>
 
         <Header />
+        {/* <Footer /> */}
         {children}
         <Footer />
       </body>

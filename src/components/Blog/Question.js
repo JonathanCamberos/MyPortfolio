@@ -15,15 +15,15 @@ const Question = ({ question }) => {
     </h2>
     <p className="text-sm text-gray-500 mt-2">
       <span className="text-accent dark:text-accentDark font-semibold text-xs sm:text-sm">
-        Topics:
-      </span>{" "}
-      {question.questionTopics.join(", ")}
-    </p>
-    <p className="text-sm text-gray-500 mt-2">
-      <span className="text-accent dark:text-accentDark font-semibold text-xs sm:text-sm">
         Category:
       </span>{" "}
       {question.blog.replace(/leetcode:\s*/i, "")}
+    </p>
+    <p className="text-sm text-gray-500 mt-2">
+      <span className="text-accent dark:text-accentDark font-semibold text-xs sm:text-sm">
+        Topics:
+      </span>{" "}
+      {question.questionTopics.join(", ")}
     </p>
     <p className="mt-2">{question.questionBlurb}</p>
   </div>

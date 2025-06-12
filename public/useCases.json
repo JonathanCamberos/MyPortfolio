@@ -1,0 +1,134 @@
+{
+  "hashmap": [
+    {
+      "type": "HashMap",
+      "title": "Representations",
+      "summary": "We can represent an object based on a criteria.",
+      "exampleIntro": "Given a string, count the frequency of each character:",
+      "codeExample": "s = \"aabbcc\"\n    freq = {}\n    for char in s:\n        freq[char] = freq.get(char, 0) + 1\n    # freq = {'a': 2, 'b': 2, 'c': 2}"
+    },
+    {
+      "type": "HashMap",
+      "title": "Grouping",
+      "summary": "We can grouping elements based on a criteria.",
+      "exampleIntro": "Group strings that are anagrams of each other:",
+      "codeExample": "strs = [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n    anagrams = {}\n    for word in strs:\n        key = \"\".join(sorted(word))\n        if key not in anagrams:\n            anagrams[key] = []\n        anagrams[key].append(word)\n    # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}"
+    },
+    {
+      "type": "HashMap",
+      "title": "Dynamic Programming Storing Subproblems",
+      "summary": "We can store solutions to subproblems to avoid redundant calculations.",
+      "exampleIntro": "Fibonacci number solutions with memoization:",
+      "codeExample": "def fib(n, memo={}):\n        if n <= 1:\n            return n\n        if n not in memo:\n            memo[n] = fib(n - 1, memo) + fib(n - 2, memo)\n        return memo[n]"
+    },
+    {
+      "type": "HashMap",
+      "title": "Backtracking Storing Potential Solutions for Pruning",
+      "summary": "We can cache paths or partial solutions to prune the search space effectively",
+      "exampleIntro": "Subset Sum:",
+      "codeExample": "def subsetSum(nums, target):\n        # Cache to store paths that can no longer lead to valid solutions\n        cache = {}\n        result = []\n\n        def backtrack(current, index, total):\n            # Check if we've encountered this path before\n            state = (tuple(current), total)\n            if state in cache:\n                return\n            cache[state] = True\n\n            # Prune: If the total exceeds the target\n            if total > target:\n                return\n            \n            # Valid solution\n            if total == target:\n                result.append(list(current))\n                return\n\n            # Explore further candidates\n            for i in range(index, len(nums)):\n                # Choose\n                current.append(nums[i])\n                # Recurse\n                backtrack(current, i + 1, total + nums[i])\n                # Undo the choice\n                current.pop()\n\n        backtrack([], 0, 0)\n        return result"
+    },
+    {
+      "type": "HashMap",
+      "title": "Representing Relationships",
+      "summary": "We can represent relationships between items.",
+      "exampleIntro": "Adjacency list representation of a graph:",
+      "codeExample": "edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph\n    graph = {}  # Initialize an empty hashmap to represent the graph\n\n    # Build the adjacency list\n    for u, v in edges:\n        if u not in graph:  # If the node `u` is not yet in the graph, initialize it\n            graph[u] = []\n        if v not in graph:  # If the node `v` is not yet in the graph, initialize it\n            graph[v] = []\n        graph[u].append(v)  # Add `v` to the list of neighbors for `u`\n        graph[v].append(u)  # Add `u` to the list of neighbors for `v`\n\n    # Resulting adjacency list representation\n    # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}"
+    }
+  ],
+  "stack": [
+    {
+      "type": "Stack",
+      "title": "Tracking Nested or Hierarchical Structures",
+      "summary": "We can track structure while iterating over an object ensuring it maintains",
+      "exampleIntro": "Validate if a string containing brackets ()[]{} is properly balanced:",
+      "codeExample": "def balancedParentheses(s: str) -> bool:\n        stack = []\n        pairs = {')': '(', ']': '[', '}': '{'}\n        for char in s:\n            if char in pairs.values():\n                stack.append(char)\n            elif char in pairs:\n                if not stack or stack.pop() != pairs[char]:\n                    return False\n        return not stack"
+    },
+    {
+      "type": "Stack",
+      "title": "Backtracking by Tracking History or State",
+      "summary": "We can use stacks in backtracking to store the state of exploration.",
+      "exampleIntro": "Subset Sum with Backtracking",
+      "codeExample": "def subset_sum(nums, target):\n        stack = [(0, [], 0)]  # (index, current_subset, current_sum)\n        result = []\n        \n        while stack:\n            index, current_subset, current_sum = stack.pop()\n            \n            if current_sum > target:  # Prune invalid paths\n                continue\n            \n            if current_sum == target:  # Valid solution\n                result.append(list(current_subset))\n                continue\n            \n            # Push new states for further exploration\n            for i in range(index, len(nums)):\n                stack.append((i + 1, current_subset + [nums[i]], current_sum + nums[i]))\n        \n        return result\n\n    # subset_sum([2, 3, 6, 7], 7) = [[7]]"
+    },
+    {
+      "type": "Stack",
+      "title": "Monotonic Property Maintenance",
+      "summary": "A stack can maintain a monotonic property (increasing or decreasing)",
+      "exampleIntro": "Find the Next Greater Element",
+      "codeExample": "def nextGreaterElement(nums):\n        stack = []  # Stores indices of elements in decreasing order\n        result = [-1] * len(nums)  # Initialize result with -1\n        \n        for i in range(len(nums)):\n            while stack and nums[i] > nums[stack[-1]]:\n                idx = stack.pop()\n                result[idx] = nums[i]  # Found the next greater element\n            stack.append(i)\n        \n        return result\n\n    # Example: nextGreaterElement([2, 1, 2, 4, 3]) -> [4, 2, 4, -1, -1]"
+    },
+    {
+      "type": "Stack",
+      "title": "Simulating Recursion or Call Stacks",
+      "summary": "We can use a stack to emulate recursion by explicitly managing the call stack.",
+      "exampleIntro": "Traverse a binary tree in preorder (root -> left -> right):",
+      "codeExample": "def preorderTraversal(root):\n        if not root:\n            return []\n        \n        stack = [root]  # Start with the root node\n        result = []\n        \n        while stack:\n            node = stack.pop()  # Simulate recursion by processing the top of the stack\n            if node:\n                result.append(node.val)  # Visit the node\n                # Push right child first so the left child is processed next\n                if node.right:\n                    stack.append(node.right)\n                if node.left:\n                    stack.append(node.left)\n        \n        return result\n\n    # Example: For a tree with root → 1, left → 2, right → 3, preorderTraversal(root) -> [1, 2, 3]"
+    },
+    {
+      "type": "Stack",
+      "title": "Expression Evaluation and Parsing",
+      "summary": "We can use a stack to evaluate or parse expressions by storing operands",
+      "exampleIntro": "Post and Prefix",
+      "codeExample": "def evaluatePostfix(expression):\n        stack = []  # To hold operands during evaluation\n        \n        for token in expression.split():\n            if token.isdigit():  # If it's an operand, push it to the stack\n                stack.append(int(token))\n            else:  # If it's an operator, pop two operands and apply the operator\n                b = stack.pop()\n                a = stack.pop()\n                if token == '+':\n                    stack.append(a + b)\n                elif token == '-':\n                    stack.append(a - b)\n                elif token == '*':\n                    stack.append(a * b)\n                elif token == '/':  # Assuming integer division\n                    stack.append(a // b)\n        \n        return stack.pop()  # Final result is the only item left in the stack\n\n    # Example:\n    # Input: \"3 4 + 2 * 1 +\"\n    # Output: 15 (Equivalent to (3 + 4) * 2 + 1)"
+    },
+    {
+      "type": "Stack",
+      "title": "Backtracking",
+      "summary": "We can cache paths or partial solutions to prune the search space effectively.",
+      "exampleIntro": "Generate all valid combinations of n pairs of parentheses",
+      "codeExample": "def isValid(self, s: str) -> bool:\n\n        # note: in python, an empty list [] is falsy evaluating to false\n        # not [] -> true\n\n        # space complexity: \n        stack = []\n\n        # time complexity:\n        for c in s:\n\n            # add opening parenthesis\n            if c in '([{':\n                stack.append(c)\n\n            # validate closing parenthesis\n            elif c in ')]}':\n                if not stack or (c == ')' and stack[-1] != '(') or \\\n                                (c == '}' and stack[-1] != '{') or \\\n                                (c == ']' and stack[-1] != '['):\n                    return False\n                stack.pop()\n\n        # overall: time complexity\n        # overall: space complexity\n        return not stack"
+    },
+    {
+      "type": "Stack",
+      "title": "Partitioning",
+      "summary": "We can use a stack to partition or segment a sequence into meaningful parts",
+      "exampleIntro": "Given an array, partition it into the minimum number of strictly \nincreasing subsequences",
+      "codeExample": "def isValid(self, s: str) -> bool:\n        \n        # note: in python, an empty string \"\" is falsy evaluating to false\n        # not \"\" -> true\n\n        # time complexity: iterate over string of n length O(n)\n        # each iterate removes at least one pair, and there are at most n/2 pairs so O(n/2) iterations O(n/2)\n        # O(n) * O(n/2) = O(n^2)\n        while '()' in s or '{}' in s or '[]' in s:\n            s = s.replace('()', '').replace('{}', '').replace('[]', '')\n        \n        # overall: time complexity O(n^2)\n        # overall: space complexity O(1)\n        return not s"
+    }
+  ],
+  "twopointers": [
+    {
+      "type": "Two Pointers",
+      "title": "Opposite Ends",
+      "summary": "We can have two pointers starting at opposite ends of a list and move them inward",
+      "exampleIntro": "Determine if a string is a palindrome",
+      "codeExample": "def is_palindrome(s: str) -> bool:\n        left, right = 0, len(s) - 1\n        while left < right:\n            if s[left] != s[right]:\n                return False\n            left += 1\n            right -= 1\n        return True\n\n    # Example:\n    print(is_palindrome(\"radar\"))  # Output: True\n    print(is_palindrome(\"hello\"))  # Output: False"
+    },
+    {
+      "type": "Two Pointers",
+      "title": "Sliding Window",
+      "summary": "We can have two pointers represent a window over a sequence that expands or shrinks",
+      "exampleIntro": "Find the length of the longest substring without repeating characters.",
+      "codeExample": "def longest_unique_substring(s: str) -> int:\n        char_set = set()\n        left = 0\n        max_length = 0\n\n        for right in range(len(s)):\n            while s[right] in char_set:\n                char_set.remove(s[left])\n                left += 1\n            char_set.add(s[right])\n            max_length = max(max_length, right - left + 1)\n        \n        return max_length\n\n    # Example:\n    print(longest_unique_substring(\"abcabcbb\"))  # Output: 3"
+    },
+    {
+      "type": "Two Pointers",
+      "title": "Fast & Slow Pointers",
+      "summary": "We can have have two pointers moving at different speeds to detect cycles or find midpoints",
+      "exampleIntro": "Detect a cycle in a linked list.",
+      "codeExample": "class ListNode:\n        def __init__(self, value=0, next=None):\n            self.value = value\n            self.next = next\n\n    def has_cycle(head: ListNode) -> bool:\n        slow, fast = head, head\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n            if slow == fast:\n                return True\n        return False\n\n    # Example:\n    # Construct a list with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)\n    node1 = ListNode(1)\n    node2 = ListNode(2)\n    node3 = ListNode(3)\n    node4 = ListNode(4)\n    node1.next = node2\n    node2.next = node3\n    node3.next = node4\n    node4.next = node2\n    print(has_cycle(node1))  # Output: True"
+    },
+    {
+      "type": "Two Pointers",
+      "title": "Partitioning",
+      "summary": "We can have two pointers in the same array moving inward/outward to rearrange elements",
+      "exampleIntro": "Move all zeros in an array to the end while maintaining the order of other elements",
+      "codeExample": "def move_zeros(nums):\n        left, right = 0, 0\n        while right < len(nums):\n            if nums[right] != 0:\n                nums[left], nums[right] = nums[right], nums[left]\n                left += 1\n            right += 1\n        return nums\n\n    # Example:\n    print(move_zeros([0, 1, 0, 3, 12]))  # Output: [1, 3, 12, 0, 0]"
+    },
+    {
+      "type": "Two Pointers",
+      "title": "Parallel Pointer Traversal",
+      "summary": "We can have two pointers traversing two separate arrays in parallel to merge, compare,",
+      "exampleIntro": "Merge two sorted arrays into one sorted array",
+      "codeExample": "def merge_sorted_arrays(arr1, arr2):\n        result = []\n        i, j = 0, 0\n\n        while i < len(arr1) and j < len(arr2):\n            if arr1[i] < arr2[j]:\n                result.append(arr1[i])\n                i += 1\n            else:\n                result.append(arr2[j])\n                j += 1\n        \n        result.extend(arr1[i:])\n        result.extend(arr2[j:])\n        return result\n\n    # Example:\n    print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]"
+    },
+    {
+      "type": "Two Pointers",
+      "title": "K-Pointer Variants",
+      "summary": "We can extend the two pointer case to track k pointers simultaneously.",
+      "exampleIntro": "Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] that sum to 0.",
+      "codeExample": "def threeSum(nums):\n        nums.sort()  # Step 1: Sort the array\n        result = []\n\n        for i in range(len(nums)):\n            # Avoid duplicates for the first element\n            if i > 0 and nums[i] == nums[i - 1]:\n                continue\n\n            # Two-pointer approach\n            left, right = i + 1, len(nums) - 1\n            while left < right:\n                current_sum = nums[i] + nums[left] + nums[right]\n                if current_sum == 0:\n                    result.append([nums[i], nums[left], nums[right]])\n\n                    # Move pointers and avoid duplicates\n                    left += 1\n                    while left < right and nums[left] == nums[left - 1]:\n                        left += 1\n                    right -= 1\n                    while left < right and nums[right] == nums[right + 1]:\n                        right -= 1\n\n                elif current_sum < 0:\n                    left += 1  # Increase sum by moving left pointer rightward\n                else:\n                    right -= 1  # Decrease sum by moving right pointer leftward\n\n        return result\n\n    # Example usage:\n    nums = [-1, 0, 1, 2, -1, -4]\n    print(threeSum(nums))  # Output: [[-1, -1, 2], [-1, 0, 1]]"
+    }
+  ]
+}
