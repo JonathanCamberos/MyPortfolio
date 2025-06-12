@@ -100,11 +100,14 @@ function parseUseCases(content, blogTitle) {
   const exampleIntroRegex = /Ex:\s([\s\S]*?)(?=```)/;
   const codeBlockRegex = /```python([\s\S]*?)```/gm;
 
-  const normalizeKey = (key) => key.replace(/\s+/g, "").toLowerCase();
+  const normalizeKey = (key) => key
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "") // Remove non-alphanumeric characters
+    .replace(/\s+/g, "-");       // Replace spaces with "-"
 
   const formattedBlogTitle = blogTitle
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
     .replace(/\s+/g, "-");
 
   let currentUseCase = null;
