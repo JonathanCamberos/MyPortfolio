@@ -14,7 +14,7 @@ tags:
 
 Leetcode problems with elegant solutions using stacks.
 
-### Stack Use Case: Tracking Nested or Hierarchical Structures
+### Stack Application: Tracking Nested or Hierarchical Structures
 
 We can track structure while iterating over an object ensuring it maintains 
 some criteria
@@ -33,7 +33,7 @@ Ex: Validate if a string containing brackets ()[]{} is properly balanced:
         return not stack
 ```
 
-### Stack Use Case: Backtracking by Tracking History or State
+### Stack Application: Backtracking by Tracking History or State
 We can use stacks in backtracking to store the state of exploration. 
 When a branch reaches a dead end or a solution, we pop the state to return
 to the previous state and continue exploring other branches.
@@ -64,7 +64,7 @@ Ex: Subset Sum with Backtracking
 ```
 
 
-### Stack Use Case: Monotonic Property Maintenance
+### Stack Application: Monotonic Property Maintenance
 A stack can maintain a monotonic property (increasing or decreasing)
 over a sequence while processing elements, ensuring efficient lookups
 or modifications.
@@ -86,7 +86,7 @@ Ex: Find the Next Greater Element
     # Example: nextGreaterElement([2, 1, 2, 4, 3]) -> [4, 2, 4, -1, -1]
 ```
 
-### Stack Use Case: Simulating Recursion or Call Stacks
+### Stack Application: Simulating Recursion or Call Stacks
 We can use a stack to emulate recursion by explicitly managing the call stack.
 
 Ex: Traverse a binary tree in preorder (root -> left -> right):
@@ -113,7 +113,7 @@ Ex: Traverse a binary tree in preorder (root -> left -> right):
     # Example: For a tree with root → 1, left → 2, right → 3, preorderTraversal(root) -> [1, 2, 3]
 ```
 
-### Stack Use Case: Expression Evaluation and Parsing
+### Stack Application: Expression Evaluation and Parsing
 We can use a stack to evaluate or parse expressions by storing operands
 and incrementally applying operators. 
 This approach is well-suited for postfix and prefix notations.
@@ -145,7 +145,7 @@ Ex: Post and Prefix
     # Output: 15 (Equivalent to (3 + 4) * 2 + 1)
 ```
 
-### Stack Use Case: Backtracking
+### Stack Application: Backtracking
 We can cache paths or partial solutions to prune the search space effectively.
 
 Ex: Generate all valid combinations of n pairs of parentheses
@@ -176,7 +176,7 @@ Ex: Generate all valid combinations of n pairs of parentheses
 
 
 
-### Stack Use Case: Partitioning
+### Stack Application: Partitioning
 We can use a stack to partition or segment a sequence into meaningful parts 
 by tracking boundaries or "cut points" as we iterate through the input.
 

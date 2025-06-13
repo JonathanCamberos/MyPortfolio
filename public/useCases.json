@@ -1,48 +1,68 @@
 {
+  "array": [
+    {
+      "type": "Array",
+      "title": "In-place Transformations and Reordering",
+      "summary": "Perform transformations or reorderings on the array without using extra space.",
+      "exampleIntro": "Rotate an array to the right by k steps.",
+      "codeExample": "def rotate(nums: List[int], k: int) -> None:\n        n = len(nums)\n        k %= n  # handle cases where k > n\n        \n        def reverse(start: int, end: int) -> None:\n            while start < end:\n                nums[start], nums[end] = nums[end], nums[start]\n                start += 1\n                end -= 1\n\n        reverse(0, n - 1)    # Reverse entire array\n        reverse(0, k - 1)    # Reverse first k elements\n        reverse(k, n - 1)    # Reverse remaining elements",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#array-use-case-inplace-transformations-and-reordering",
+      "blog": "LeetCode: Arrays and Hashing"
+    }
+  ],
   "hashmap": [
     {
       "type": "HashMap",
       "title": "Representations",
-      "summary": "We can represent an object based on a criteria.",
-      "exampleIntro": "Given a string, count the frequency of each character:",
-      "codeExample": "s = \"aabbcc\"\n    freq = {}\n    for char in s:\n        freq[char] = freq.get(char, 0) + 1\n    # freq = {'a': 2, 'b': 2, 'c': 2}",
+      "summary": "Using a HashMap to represent objects or data based on specific criteria.",
+      "exampleIntro": "Representing a string by character frequency.",
+      "codeExample": "def freqCount():\n        s = \"aabbcc\"\n        freq = {}\n        for char in s:\n            freq[char] = freq.get(char, 0) + 1\n        # freq = {'a': 2, 'b': 2, 'c': 2}",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-representations",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
-      "title": "Grouping",
-      "summary": "We can grouping elements based on a criteria.",
-      "exampleIntro": "Group strings that are anagrams of each other:",
-      "codeExample": "strs = [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n    anagrams = {}\n    for word in strs:\n        key = \"\".join(sorted(word))\n        if key not in anagrams:\n            anagrams[key] = []\n        anagrams[key].append(word)\n    # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}",
-      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-grouping",
+      "title": "Grouping by Criteria",
+      "summary": "Group elements based on a defined criterion, such as sorting or categorization.",
+      "exampleIntro": "Grouping strings that are anagrams of each other:",
+      "codeExample": "def groupAnagrams(strs):\n        anagrams = {}\n        for word in strs:\n            key = \"\".join(sorted(word))\n            if key not in anagrams:\n                anagrams[key] = []\n            anagrams[key].append(word)\n        # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-grouping-by-criteria",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
-      "title": "Dynamic Programming Storing Subproblems",
-      "summary": "We can store solutions to subproblems to avoid redundant calculations.",
-      "exampleIntro": "Fibonacci number solutions with memoization:",
+      "title": "Memoization in Dynamic Programming",
+      "summary": "Store solutions to subproblems in a HashMap to avoid redundant calculations.",
+      "exampleIntro": "Fibonacci number computation with memoization:",
       "codeExample": "def fib(n, memo={}):\n        if n <= 1:\n            return n\n        if n not in memo:\n            memo[n] = fib(n - 1, memo) + fib(n - 2, memo)\n        return memo[n]",
-      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-dynamic-programming-storing-subproblems",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-memoization-in-dynamic-programming",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
-      "title": "Backtracking Storing Potential Solutions for Pruning",
-      "summary": "We can cache paths or partial solutions to prune the search space effectively",
-      "exampleIntro": "Subset Sum:",
+      "title": "Backtracking with Caching for Pruning",
+      "summary": "Use a HashMap to cache explored paths or states to prune the search",
+      "exampleIntro": "Subset Sum with caching:",
       "codeExample": "def subsetSum(nums, target):\n        # Cache to store paths that can no longer lead to valid solutions\n        cache = {}\n        result = []\n\n        def backtrack(current, index, total):\n            # Check if we've encountered this path before\n            state = (tuple(current), total)\n            if state in cache:\n                return\n            cache[state] = True\n\n            # Prune: If the total exceeds the target\n            if total > target:\n                return\n            \n            # Valid solution\n            if total == target:\n                result.append(list(current))\n                return\n\n            # Explore further candidates\n            for i in range(index, len(nums)):\n                # Choose\n                current.append(nums[i])\n                # Recurse\n                backtrack(current, i + 1, total + nums[i])\n                # Undo the choice\n                current.pop()\n\n        backtrack([], 0, 0)\n        return result",
-      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-backtracking-storing-potential-solutions-for-pruning",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-backtracking-with-caching-for-pruning",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
       "title": "Representing Relationships",
-      "summary": "We can represent relationships between items.",
+      "summary": "Model relationships between entities.",
       "exampleIntro": "Adjacency list representation of a graph:",
-      "codeExample": "edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph\n    graph = {}  # Initialize an empty hashmap to represent the graph\n\n    # Build the adjacency list\n    for u, v in edges:\n        if u not in graph:  # If the node `u` is not yet in the graph, initialize it\n            graph[u] = []\n        if v not in graph:  # If the node `v` is not yet in the graph, initialize it\n            graph[v] = []\n        graph[u].append(v)  # Add `v` to the list of neighbors for `u`\n        graph[v].append(u)  # Add `u` to the list of neighbors for `v`\n\n    # Resulting adjacency list representation\n    # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}",
+      "codeExample": "def graph():\n        edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph\n        graph = {}  # Initialize an empty hashmap to represent the graph\n\n        # Build the adjacency list\n        for u, v in edges:\n            if u not in graph:  # If the node `u` is not yet in the graph, initialize it\n                graph[u] = []\n            if v not in graph:  # If the node `v` is not yet in the graph, initialize it\n                graph[v] = []\n            graph[u].append(v)  # Add `v` to the list of neighbors for `u`\n            graph[v].append(u)  # Add `u` to the list of neighbors for `v`\n\n        # Resulting adjacency list representation\n        # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-representing-relationships-",
+      "blog": "LeetCode: Arrays and Hashing"
+    },
+    {
+      "type": "HashMap",
+      "title": "Logic Mapping",
+      "summary": "Use a HashMap to represent problem specific logic or conditions.",
+      "exampleIntro": "Map complements to indices for quick lookup:",
+      "codeExample": "def twoSum(nums, target):\n        # Map to store complement -> index\n        complement_map = {}\n\n        for i, num in enumerate(nums):\n            complement = target - num\n            \n            # Check if current number is a complement of a previously seen number\n            if num in complement_map:\n                return [complement_map[num], i]\n            \n            # Store complement of current number with index for future lookup\n            complement_map[complement] = i\n\n        return []",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-use-case-logic-mapping",
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],

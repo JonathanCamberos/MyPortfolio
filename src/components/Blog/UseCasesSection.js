@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const UseCaseSection = () => {
   // useCase categories
-  const useCaseCategories = ["all", "hashmap", "stack", "two-pointers"];
+  const useCaseCategories = ["all", "array", "hashmap", "stack", "two-pointers"];
 
   const [useCasesData, setUseCasesData] = useState({});
   const [filteredUseCases, setFilteredUseCases] = useState([]);
@@ -73,10 +73,7 @@ const UseCaseSection = () => {
             </Link>
           ))
         ) : (
-          <p className="mt-8 text-center w-full col-span-full text-gray-600 dark:text-gray-400">
-            {currentCategory
-              ? `No use cases found for ${currentCategory} category.`
-              : ""}
+          <p className="mt-0">
           </p>
         )}
       </div>

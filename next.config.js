@@ -8,7 +8,9 @@ const filePaths = [
   'content/leetcode-arrays-and-hashing/index.mdx',
   'content/leetcode-stacks/index.mdx',
   'content/leetcode-two-pointers/index.mdx',
-];// Function to parse questions from content
+];
+
+// Function to parse questions from content
 function parseQuestions(content, blogTitle) {
   const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
   const topicMap = {};
@@ -95,7 +97,7 @@ function parseQuestions(content, blogTitle) {
 // Function to parse use cases from content
 function parseUseCases(content, blogTitle) {
   const useCasesMap = {};
-  const useCaseRegex = /^###\s([\w\s]+)\sUse\sCase:\s(.+)$/gm;
+  const useCaseRegex = /^###\s([\w\s]+)\sApplication:\s(.+)$/gm;  
   const summaryRegex = /^(?!###).+$/;
   const exampleIntroRegex = /Ex:\s([\s\S]*?)(?=```)/;
   const codeBlockRegex = /```python([\s\S]*?)```/gm;
