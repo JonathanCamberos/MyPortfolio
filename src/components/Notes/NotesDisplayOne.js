@@ -4,7 +4,7 @@ import React from 'react'
 import { format } from 'date-fns'
 
 
-const BlogLayoutTwo = ({ blog }) => {
+const NotesDisplayOne = ({ blog }) => {
   return (
     <div className="group grid grid-cols-12 gap-4 items-center text-dark dark:text-light">
       <Link
@@ -47,4 +47,4 @@ const BlogLayoutTwo = ({ blog }) => {
   );
 };
 
-export default BlogLayoutTwo;
+export default NotesDisplayOne;

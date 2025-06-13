@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Difficulties from "./Difficulties";
-import Question from "./Question";
+import Question from "../LeetCode/Question";
 import Link from "next/link";
 
 const DifficultySection = () => {

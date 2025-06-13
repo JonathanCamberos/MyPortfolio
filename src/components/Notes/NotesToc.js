@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BlogToc = ({ blog }) => {
+const NotesToc = ({ blog }) => {
   return (
     <div className="col-span-12 lg:col-span-3">
       <details
@@ -59,4 +59,4 @@ const BlogToc = ({ blog }) => {
   );
 };
 
-export default BlogToc;
+export default NotesToc;

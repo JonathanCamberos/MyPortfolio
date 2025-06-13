@@ -1,5 +1,5 @@
 import React from 'react'
-import Category from './Category'
+import Category from './Category';
 import { allBlogs } from '../../../.contentlayer/generated';
 import GithubSlugger, { slug } from "github-slugger";
 

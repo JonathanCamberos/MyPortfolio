@@ -1,8 +1,8 @@
 import { allBlogs } from "../../../.contentlayer/generated";
 import GithubSlugger, { slug } from "github-slugger"
-import QuestionSection from "../../components/Blog/QuestionSection";
-import DifficultySection from "../../components/Blog/DifficultySection";
-import UseCasesSection from "../../components/Blog/UseCasesSection";
+import QuestionSection from "../../components/LeetCode/QuestionSection";
+import DifficultySection from "../../components/LeetCode/DifficultySection";
+import UseCasesSection from "../../components/LeetCode/UseCasesSection";
 
 const slugger = new GithubSlugger();
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import { format } from 'date-fns'
 
-const BlogLayoutThree = ({ blog }) => {
+const NotesDisplayTwo = ({ blog }) => {
   return (
     <div className="group flex flex-col items-center text-dark dark:text-light ">
       <Link href={blog.url} className="h-full rounded-xl overflow-hidden">
@@ -44,4 +44,4 @@ const BlogLayoutThree = ({ blog }) => {
   );
 };
 
-export default BlogLayoutThree;
+export default NotesDisplayTwo;

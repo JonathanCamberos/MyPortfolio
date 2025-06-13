@@ -1,7 +1,6 @@
 import React from 'react'
 import { sortBlogs } from '../../utils';
-import BlogLayoutOne from '../Blog/BlogLayoutOne';
-import BlogLayoutTwo from '../Blog/BlogLayoutTwo';
+import NotesDisplayOne from '../Notes/NotesDisplayOne';
 
 
 const FeaturedPosts = ({ blogs }) => {
@@ -11,16 +10,16 @@ const FeaturedPosts = ({ blogs }) => {
   
       <div className="grid grid-cols-2 grid-rows-2 gap-6 mt-10 sm:mt-16">
         <article className="relative">
-          <BlogLayoutTwo blog={sortedBlogs[0]} />
+          <NotesDisplayOne blog={sortedBlogs[0]} />
         </article>
         <article className="relative">
-          <BlogLayoutTwo blog={sortedBlogs[1]} />
+          <NotesDisplayOne blog={sortedBlogs[1]} />
         </article>
         <article className="relative">
-          <BlogLayoutTwo blog={sortedBlogs[2  ]} />
+          <NotesDisplayOne blog={sortedBlogs[2  ]} />
         </article>
         <article className="relative">
-          <BlogLayoutTwo blog={sortedBlogs[3]} />
+          <NotesDisplayOne blog={sortedBlogs[3]} />
         </article>
       </div>
     </section>;

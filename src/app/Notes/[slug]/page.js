@@ -1,9 +1,9 @@
 import Image from "next/image"
 import { allBlogs } from "../../../../.contentlayer/generated"
 import Tag from "../../../components/Elements/Tag"
-import BlogDetails from "../../../components/Blog/BlogDetails"
-import RenderMdx from "../../../components/Blog/RenderMdx"
-import BlogToc from "../../../components/Blog/BlogToc"
+import NoteDetails from "../../../components/Notes/NoteDetails"
+import RenderMdx from "../../../components/Notes/RenderMdx"
+import NotesToc from "../../../components/Notes/NotesToc"
 import { slug } from "github-slugger"
 import siteMetadata, { description } from "../../../utils/siteMetaDataFile"
 
@@ -88,10 +88,10 @@ export default function BlogPage({ params }){
       />
     </div>
     
-    <BlogDetails blog={blog} slug={params.slug} />
+    <NoteDetails blog={blog} slug={params.slug} />
 
     <div className="grid grid-cols-12  gap-y-8 lg:gap-8 sxl:gap-16 mt-8 px-5 md:px-10">
-      <BlogToc blog={blog}/>
+      <NotesToc blog={blog}/>
       <RenderMdx blog={blog} />
     </div>
   </article>)

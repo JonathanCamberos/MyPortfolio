@@ -134,6 +134,15 @@
   "two-pointers": [
     {
       "type": "Two Pointers",
+      "title": "One Pointer with Auxiliary State",
+      "summary": "Use a single pointer to scan linearly and keep track of additional state",
+      "exampleIntro": "Move all zeros while maintaining order",
+      "codeExample": "def move_zeros(nums: list[int]) -> None:\n        # `last_non_zero_found_at` tracks the position where the next non-zero\n        # element should be placed, simulating a second pointer.\n        last_non_zero_found_at = 0\n\n        for current in range(len(nums)):\n            if nums[current] != 0:\n                nums[last_non_zero_found_at], nums[current] = nums[current], nums[last_non_zero_found_at]\n                last_non_zero_found_at += 1\n\n    # arr = [0, 1, 0, 3, 12] \n    # move_zeros(arr)  Output: [1, 3, 12, 0, 0]",
+      "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-use-case-one-pointer-with-auxiliary-state",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "type": "Two Pointers",
       "title": "Opposite Ends",
       "summary": "We can have two pointers starting at opposite ends of a list and move them inward",
       "exampleIntro": "Determine if a string is a palindrome",

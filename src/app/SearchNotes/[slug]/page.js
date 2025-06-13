@@ -1,6 +1,6 @@
 import { allBlogs } from "../../../../.contentlayer/generated";
-import Categories from "../../../components/Blog/Categories";
-import BlogLayoutThree from "../../../components/Blog/BlogLayoutThree";
+import Categories from "../../../components/Notes/Categories";
+import NotesDisplayTwo from "../../../components/Notes/NotesDisplayTwo";
 import GithubSlugger, { slug } from "github-slugger"
 
 const slugger = new GithubSlugger();
@@ -71,7 +71,7 @@ const NotesPage = ({params}) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-16 mt-8 sm:mt-12 md:mt-28 sxl:mt-36 px-5 sm:px-10 md:px-24 sxl:px-32">
           {blogs.map((blog, index) => (
             <article key={index} className="col-span-1 row-span-1 relative">
-              <BlogLayoutThree blog={blog} />
+              <NotesDisplayTwo blog={blog} />
             </article>
           ))}
         </div>
