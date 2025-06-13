@@ -3,6 +3,7 @@ import GithubSlugger, { slug } from "github-slugger"
 import QuestionSection from "../../components/LeetCode/QuestionSection";
 import DifficultySection from "../../components/LeetCode/Difficulty/DifficultySection";
 import UseCasesSection from "../../components/LeetCode/Application/ApplicationSection";
+import SolutionSection from "../../components/LeetCode/Solutions/SolutionSection";
 
 const slugger = new GithubSlugger();
 
@@ -33,6 +34,7 @@ const LeetCodePage = ({params}) => {
       <QuestionSection />
       <UseCasesSection />
       <DifficultySection />
+      <SolutionSection />
     </article>
   );
 };
