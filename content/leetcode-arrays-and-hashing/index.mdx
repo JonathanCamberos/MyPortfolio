@@ -105,7 +105,7 @@ n/2 = additional space after rebalancing
 Rehashing is notably expensive as we must rehash every element with the new hash function, 
 leading to O(n) for resizing and reinserting n elements.
 
-### Array Application: In-place Transformations and Reordering
+### Array Application: In-place Transformations
 Perform transformations or reorderings on the array without using extra space.
 
 Ex: Rotate an array to the right by k steps.
@@ -444,8 +444,7 @@ If we want to track every element, best space complexity is O(n)
 ```
 
 
-### Solution 1: Hashmap
-Application: Representation
+### Solution 1: Hashmap - Hashmap/Representation
 ```python
     def containsDuplicate(sef, nums: List[int]) -> bool:
 
@@ -473,8 +472,7 @@ Application: Representation
 | Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates leading to O(n) space complexity.  | 
 
 
-### Solution 2: Hashset
-Application: Representation
+### Solution 2: Hashset - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -633,8 +631,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
         return True
 ```
 
-### Solution 1: Hashmap
-Application: Representation
+### Solution 1: Hashmap - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -672,8 +669,7 @@ Application: Representation
 | Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | No additional memory is allocated O(1) |
 | Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Memory allocation for Hashmap dominates leading to O(n) space complexity |
 
-### Solution 2: Hashmap (array of 26)
-Application: Representation
+### Solution 2: Hashmap (array of 26) - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
@@ -802,8 +798,7 @@ and return their indexes.
         return []
 ```
 
-### Solution 1: Hashmap
-Application: Logic Mapping
+### Solution 1: Hashmap - Hashmap/Logic Mapping
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -1005,8 +1000,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Solution 1: Hashmap Array of 26 -> Tuple Key
-Application: Grouping by Criteria
+### Solution 1: Hashmap Array of 26 -> Tuple Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1055,8 +1049,7 @@ Application: Grouping by Criteria
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-### Solution 2: Hashmap Array of 26 -> String Key
-Application: Grouping by Criteria
+### Solution 2: Hashmap Array of 26 -> String Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
@@ -1192,7 +1185,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
 
-### Solution 1: Hashmap -> Bucket Sort
+### Solution 1: Hashmap -> Bucket Sort - Hashmap/Grouping by Criteria - Algorithm/Specific
 Application: Grouping by Criteria
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
@@ -1251,8 +1244,7 @@ Application: Grouping by Criteria
 | Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
 
-### Solution 2: MinHeap
-Application: Tree/MinHeap
+### Solution 2: MinHeap - Tree/MinHeap
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1292,8 +1284,7 @@ Application: Tree/MinHeap
 | overall |  |  |  |  |
 
 
-### Solution 3: Quickselect (high to low)
-Application: Sorting/Specific
+### Solution 3: Quickselect (high to low) - Algorithm/Specific
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
@@ -1378,8 +1369,7 @@ Application: Sorting/Specific
         return unique[:k]
 ```
 
-### Solution 4: Quickselect (low to high)
-Application: Sorting/Specific
+### Solution 4: Quickselect (low to high) - Algorithm/Specific
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
@@ -1537,8 +1527,7 @@ Now lets see how we can do it in O(1) for space.
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notescommon-formulas#brute-case-double-for-loop). | Memory allocation for array to store n result elements O(n) |
 
 
-### Solution 1:  Prefix & Postfix 3 arrays O(n)
-Application: Array/
+### Solution 1:  Prefix & Postfix 3 arrays O(n) - Array/In-place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
@@ -1585,8 +1574,7 @@ Application: Array/
 | Overall | O(n) | O(n) | Iteration over list of n length takes linear time leading to O(n) | Memory allocation for list of n length leading to O(n) | 
 
 
-### Solution 2: Prefix & Postfix Optimal O(1) space
-
+### Solution 2: Prefix & Postfix Optimal O(1) space - Array/In-place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
@@ -1703,7 +1691,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-### Solution 1.1: Defaultdict Matrix
+### Solution 1.1: Defaultdict Matrix - Hashmap/Representation
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1738,7 +1726,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-### Solution 1.2: [[]] Matrix
+### Solution 1.2: [[]] Matrix - Hashmap/Representation
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1853,7 +1841,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | Overall | O(n<sup>3</sup>) | O(1) | Iterating * Iterating * Lookup dominate leading to O(n<sup>3</sup>) | No additional memory allocation O(1) |
 
 
-### Solution 1: Hashmap Boundaries
+### Solution 1: Hashmap Boundaries - Hashmap/Representation
 ```python
     def longestConsecutive(nums: List[int]) -> int:
         
@@ -1896,7 +1884,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | Updating sequence count | O(1) | O(1) | Boundary updates for left most, curr, and right most in constant O(1) | Insert operation takes constant O(1) | 
 | Overall | O(n) | O(n) | Iterating over list of n length dominates O(n) | Memory allocation for n sequences O(n) | 
 
-### Solution 2: Set
+### Solution 2: Set - Hashmap/Representation
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
     
@@ -1935,7 +1923,7 @@ def longestConsecutive(self, nums: List[int]) -> int:
 
 
 
-### Solution 3: Union Find Tree
+### Solution 3: Union Find Tree - Tree/Union Find
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
         

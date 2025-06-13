@@ -1,0 +1,186 @@
+{
+  "hashmap": {
+    "representation": [
+      {
+        "number": 1,
+        "name": "Hashmap",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def containsDuplicate(sef, nums: List[int]) -> bool:\n\n        # space complexity: dictionary of O(n)\n        # dictionary auto initializes missing key's values to 0\n        seen = defaultdict(int)\n\n        # time complexity: iteration of O(n)\n        for num in nums:\n\n            # time complexity: indexing of O(1)\n            if seen[num] >= 1:\n                return True\n            seen[num] += 1\n\n        # overall: time complexity  O(n) \n        # overall: space complexity O(n)\n        return False",
+        "questionNumber": 217,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 2,
+        "name": "Hashset",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def containsDuplicate(self, nums: List[int]) -> bool:\n        \n        # space complexity: hashset of O(n)\n        seen = set()\n\n        # time complexity: iteration of O(n)\n        for n in nums:\n\n            # time complexity: lookup operation of O(1)\n            if n in seen:\n                return True\n            seen.add(n)\n            \n        # overall: time complexity  O(n)\n        # overall: space complexity O(n)\n        return False",
+        "questionNumber": 217,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-hashset",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 1,
+        "name": "Hashmap",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def isAnagram(self, s: str, t: str) -> bool:\n        \n        # note: a defaultdict (hashmap) allows us to index into\n        # our map with direct chars, as the hashing is done for us\n\n        # space complexity: hashmap of list of n length  O(n) \n        count = defaultdict(int)\n\n        # time complexity: iteration of O(n)\n        for x in s:\n           count[x] += 1\n\n        # time complexity: iteration of O(n)\n        for x in t:\n           count[x] -= 1\n\n        # time complexity: iteration of O(n)\n        for value in count.values():\n\n            # time complexity: comparison of O(1)\n            if value != 0:\n                return False\n\n        # overall: time complexity  O(n)\n        # overall: space complexity O(n)\n        return True",
+        "questionNumber": 242,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 2,
+        "name": "Hashmap (array of 26)",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def isAnagram(self, s: str, t: str) -> bool:\n\n        # note: ord() converts a single uni-code character to\n        # its integer representation\n        # int: 97-122 -> lowercase English alphabet (a-z)\n        # so we can subtract the lowest char 'a' to get \n        # a value from 0-26 to index into our array\n        # we are simulating a hash function given the lowercase char constraint\n\n        # space complexity: fixed size constant 26 element array O(1)\n        count = [0] * 26\n\n        # time complexity: iteration of O(n)\n        for x in s:\n           count[ord(x) - ord('a')] += 1\n\n        # time complexity: iteration of O(n)\n        for x in t:\n           count[ord(x) - ord('a')] -= 1\n\n        # time complexity: iteration of O(n)\n        for value in count:\n\n            # time complexity: comparison of O(1)\n            if value != 0:\n                return False\n\n        # overall: time complexity: O(n)\n        # overall: space complexity O(1)\n        return True",
+        "questionNumber": 242,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-hashmap-array-of-26",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 1,
+        "name": "Hashmap Boundaries",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def longestConsecutive(nums: List[int]) -> int:\n        \n        # space complexity: hashmap of list of n length O(n)\n        seqLen = deafultdict(int)\n        longest = 0\n\n        # time complexity: iterate over list of n length O(n)\n        for num in nums:\n\n            # if new num found\n            # time complexity: lookup operations in constant O(1)\n            if num not in seqLen:\n\n                # grab left (right-most) -> sequence count\n                # grab right (left-most) -> sequence count\n                # may be 0 if no value\n                leftContinentBoundary = seqLen[num - 1]  \n                rightContinentBoundary = seqLen[num + 1] \n\n                # bridge the two continents together\n                bridgedLen = 1 + left + right\n\n                # Update prev, curr, next, sequence counts if applicable\n                seqLen[num - leftContinentBoundary] = bridgedLen\n                seqLen[num] = bridgedLen\n                seqLen[num + rightContinentBoundary] = bridgedLen\n\n                # Validate with global max sequence\n                longest = max(longest, currLen)\n\n        # overall: time complexity: O(n)\n        # overall: space complexity: O(n)\n        return longest",
+        "questionNumber": 128,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap-boundaries",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 2,
+        "name": "Set",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def longestConsecutive(self, nums: List[int]) -> int: \n    \n    # space complexity: hashset for list of n length O(n)\n    numSet = set(nums)\n    longest = 0\n\n    # time complexity: iterate over list of n length O(n)\n    for i in numSet:\n\n        # found a new left most element, (start of new sequence)\n        # time complexity: lookup operation takes constant O(1)\n        if (i - 1) not in numSet: \n\n            # add sequential numbers while present in numSet, compare length\n            # time complexity: iterate over potential n sequence O(n) + lookup operation constant O(1), O(n)\n            currLen = 1\n            while (i + currLen) in numSet:\n                currLen += 1 \n\n            # validate with global max sequence\n            longest = max(longest, currLen)\n\n    # overall: time complexity O(n)\n    # overall: space complexity O(n)\n    return longest",
+        "questionNumber": 128,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-set",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ],
+    "logic-mapping": [
+      {
+        "number": 1,
+        "name": "Hashmap",
+        "type": "hashmap",
+        "application": "logic-mapping",
+        "code": "def twoSum(self, nums: List[int], target: int) -> List[int]:\n        \n        # map of {complement: index, complement: index...}\n        # space complexity: hashmap of list of n length  O(n)\n        tracking = {}\n \n        # time complexity: iterating over list of size n O(n)\n        for i in range (len(nums)):\n\n            # grab curr complement -> (target = nums[i] + complement) \n            # time complexity: subtraction O(1) \n            complement = target - nums[i]\n\n            # time complexity: lookup operation O(1)\n            if complement in tracking:\n                \n                # [curr_index, complement_index]\n                return [i, tracking[complement]]\n    \n            # if miss, track currElement as potential complement\n            # time complexity: insert operation O(1)\n            tracking[nums[i]] = i\n\n        # overall: time complexity  O(n) \n        # overall: space complexity O(n)\n        return []",
+        "questionNumber": 1,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ],
+    "grouping-by-criteria": [
+      {
+        "number": 1,
+        "name": "Hashmap Array of 26 -> Tuple Key",
+        "type": "hashmap",
+        "application": "grouping-by-criteria",
+        "code": "def groupAnagrams(self, strs: List[str]) -> List[List[str]]:\n        \n        # Note: Tuples in python are immutable which makes them suitable as keys for a hashmaps\n        # Lists are mutable and as such not hashable for hashmaps\n        # You should use tuples where the position carries semantic meaning. \n\n        # [26 char count tuple key -> [anagram group list], ...]\n        \n        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)\n        anaGroup = {}\n\n        # time complexity: iterating over all strings O(n) \n        for word in strs:\n            \n            # space complexity: fixed-sized array for 26 lowercase letters O(1)\n            charCount = [0] * 26  \n            \n            # time complexity: counting chars in string of k length O(k)\n            for char in word:\n                charCount[ord(char) - ord('a')] += 1\n            \n            # space complexity: fixed-size tuple of length 26 O(1)\n            key = tuple(charCount)  \n            \n            # time complexity: lookup operation of O(1) \n            if key not in anaGroup:\n                anaGroup[key] = []  \n\n            # time complexity: append operation to list O(1)\n            anaGroup[key].append(word)  \n\n\n        # overall: time complexity  O(n * k)  \n        # overall: space complexity O(m * k)\n        return list(anaGroup.values())",
+        "questionNumber": 49,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap-array-of-26-tuple-key",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 2,
+        "name": "Hashmap Array of 26 -> String Key",
+        "type": "hashmap",
+        "application": "grouping-by-criteria",
+        "code": "def groupAnagrams(self, strs: List[str]) -> List[List[str]]:\n\n        # note: using a list to build the string key is more efficient than repeatedly appending to a string, \n        # as it avoids the overhead of creating new string objects on each append\n        # list takes O(m) time vs string append which takes O(m^2)\n\n        # space complexity: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)\n        anaGroup = {}\n\n        # time complexity: iterating over n strings O(n)\n        for word in strs:\n\n            # space complexity: fixed-sized array of 26 lowercase characters O(1)\n            charCount = [0] * 26\n            \n            # time complexity: counting characters for string k length O(k)\n            for char in word:\n                charCount[ord(char) - ord('a')] += 1\n            \n            # time complexity: creating unique char count key from fixed-sized array of 26 O(1)\n            # Using a list to build the key\n            key_parts = []\n            for count in charCount:\n                key_parts.append(str(count))\n                key_parts.append(\"#\")  # Separator\n\n            # Concatenate once at the end\n            key = ''.join(key_parts)\n\n            # time complexity: lookup operation for key O(1)\n            if key not in anaGroup:\n                anaGroup[key] = []  # Initialize list for key if doesn't exist\n            anaGroup[key].append(word)  # Add word to corresponding key group\n\n        # overall: time complexity\n        # overall: space complexity \n        return list(anaGroup.values())",
+        "questionNumber": 49,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-hashmap-array-of-26-string-key",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ],
+    "grouping-by-criteria-algorithm-specific": [
+      {
+        "number": 1,
+        "name": "Hashmap -> Bucket Sort",
+        "type": "hashmap",
+        "application": "grouping-by-criteria-algorithm-specific",
+        "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n            \n        # space complexity: frequency count for unique integers O(m) \n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n integers O(n)\n        for key in nums:\n\n            # time complexity: insertion operation takes constant O(1)\n            count[key] += 1\n\n        # numBuckets equal to length to account for max possible frequency count\n        # the case where list is full of only 1 element O(n)\n        # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1\n        numBuckets = len(nums) + 1\n\n        # time complexity: iterating to set empty list for each bucket\n        # space complexity: creating O(n) bucket lists\n        freqBuckets = [[] for i in range(numBuckets)]\n\n        # time complexity: iterate over frequency list for m unique integer tuples (int, occurrences) O(m) \n        for int, occurrences in count.items():\n\n            # time complexity: insert operation takes constant O(1)\n            freqBuckets[occurrences].append(int)\n\n        # space complexity: grabbing top k integers O(k)\n        res = []\n\n        # time complexity: iterate over n buckets O(n)\n        for i in range(len(freqBuckets) - 1, 0, -1):\n            \n            # time complexity: iterate over all entries in current bucket O(n)\n            for num in freqBuckets[i]:\n                \n                # time complexity: insert operation takes constant O(1)\n                res.append(num)\n                \n                # time complexity: continue while less than k integers have been grabbed O(k)\n                if len(res) == k:\n                    return res\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
+        "questionNumber": 347,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap-bucket-sort",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ]
+  },
+  "tree": {
+    "minheap": [
+      {
+        "number": 2,
+        "name": "MinHeap",
+        "type": "tree",
+        "application": "minheap",
+        "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n\n        # space complexity: frequency map of m unique integers o(m)\n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n length O(n)\n        for num in nums: \n            count[num] += 1\n\n        # space complexity: minHeap tracks k most frequent elements O(k)\n        minHeap = []\n\n        # time complexity: iterate over frequency map of m unique int O(m)\n        for num, freq in count.items(): \n\n            # manage the heap manually, Push current element\n            heapq.heappush(minHeap, (freq, num)) \n            \n            # heap grows beyond size k, remove smallest frequent element\n            if len(minHeap) > k:\n\n                # time complexity: # O(log k)\n                heapq.heappop(minHeap) \n        \n        # Step 4: Extract the elements from the heap\n        result = [num for freq, num in minHeap]  # O(k)\n\n        return result",
+        "questionNumber": 347,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-minheap",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ],
+    "union-find": [
+      {
+        "number": 3,
+        "name": "Union Find Tree",
+        "type": "tree",
+        "application": "union-find",
+        "code": "def longestConsecutive(self, nums: List[int]) -> int:\n        \n        if not nums:\n            return 0\n\n        # Union-Find Initialization\n        parent = {}  # Stores parent of each number\n        size = {}    # Stores the size of the connected components\n\n        # Find operation with path compression\n        # Amortized O(α(n)) time complexity\n        def find(x):\n\n            # if the parent of x is not itself, we have not reached the representative  \n            if parent[x] != x:\n\n                parent[x] = find(parent[x])  # Path compression\n            return parent[x]\n\n        # Union operation with size optimization\n        # Amortized O(α(n)) time complexity\n        def union(x, y):\n\n            # grab representatives of both x and y\n            root_x = find(x)\n            root_y = find(y)\n\n            # If both nodes do not have the same representative\n            # Attach smaller tree under the larger tree\n            if root_x != root_y:\n\n                # update representative for smaller\n                # update size for larger\n                if size[root_x] > size[root_y]:\n                    parent[root_y] = root_x\n                    size[root_x] += size[root_y]\n                else:\n                    parent[root_x] = root_y\n                    size[root_y] += size[root_x]\n\n        # Initialize Union-Find structure for unique numbers\n        # and set parents to themselves\n        for num in nums:\n            if num not in parent:\n                parent[num] = num\n                size[num] = 1\n\n        # Join consecutive numbers via Union operation\n        for num in nums:\n            if num + 1 in parent:\n                union(num, num + 1)\n\n        # Find the largest component size\n        # Amortized O(n) due to path compression\n        return max(size.values())",
+        "questionNumber": 128,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-3-union-find-tree",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ]
+  },
+  "algorithm": {
+    "specific": [
+      {
+        "number": 3,
+        "name": "Quickselect (high to low)",
+        "type": "algorithm",
+        "application": "specific",
+        "code": "def topKFrequent(self, nums: List[int], k: int) -> List[int]:\n\n        # In-place partition of array based on pivot value\n        def partitionPivot(left, right, pivotIndex):\n            \n            # Frequency of pivot element\n            pivotFrequency = frequency[unique[pivotIndex]]\n\n            # Move pivot to end\n            # tuple unpacking in python, allows to swap two variables in a single line\n            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]\n            \n            # Index to place larger elements\n            partitionIndex = left\n\n            # Partition elements with freq more than pivotFrequency to left\n            # time complexity: iterates over unique elements between left and right segment O(m)\n            for i in range(left, right):\n\n                # Higher frequency -> \"greater\"\n                if pivotFrequency < frequency[unique[i]]:  \n\n                    # swap smaller element\n                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]\n                    partitionIndex += 1\n\n            # swap pivot to its final correct partitioned index\n            # now elements to the right and left follow the conditions according to pivot element\n            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]\n            return partitionIndex\n\n        # Quickselect is a modified quicksort\n        # Once the k-th smallest/largest element is placed in its correct position, everything\n        # to its right or left is already divided into the required groups based on frequency\n        # This allows us to avoid sorting the entire array and directly focuses on isolating \n        # the elements we care about\n        # time complexity: average recursion depth O(log m)\n        # space complexity: recursion stack for in place partitioning on average O(log m)\n        def quickselectHelper(left, right, kSmallest):\n            \n            # Base case: the list contains only one element\n            if left == right:\n                return\n\n            # Randomly choose a pivot index\n            # differs from QuickSort \"median-of-three\" approach\n            # random pivot is focused on finding the k-th smallest or largest\n            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)\n            pivotIndex = random.randint(left, right)\n\n            # Partition the array\n            pivotIndex = partitionPivot(left, right, pivotIndex)\n            \n            # Base Case: placed the top-k element in correct index\n            # array is now partitioned\n            if kSmallest == pivotIndex:\n                return \n            \n            # Recursively selects next partition pivot\n            elif kSmallest < pivotIndex:\n                quickselectHelper(left, pivotIndex - 1, kSmallest)\n            else:\n                quickselectHelper(pivotIndex + 1, right, kSmallest)\n\n        # time complexity: iterate over list of n length O(n)\n        frequency = defaultdict(int)\n        for num in nums:\n            frequency[num] += + 1\n\n        # grab list the unique elements\n        unique = list(frequency.keys())\n\n        # Quickselect to find the k most frequent elements\n        n = len(unique)\n\n        # time complexity:\n        quickselectHelper(0, n - 1, k - 1)\n\n        # overall: time complexity\n        # overall: space complexity \n        return unique[:k]",
+        "questionNumber": 347,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-3-quickselect-high-to-low",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 4,
+        "name": "Quickselect (low to high)",
+        "type": "algorithm",
+        "application": "specific",
+        "code": "def topKFrequent(self, nums: List[int], k: int) -> List[int]:\n\n        # In-place partition of array based on pivot frequency (low to high sorting)\n        def partitionPivot(left, right, pivotIndex):\n            \n            # Frequency of pivot element\n            pivotFrequency = frequency[unique[pivotIndex]]\n\n            # Move pivot to end\n            # tuple unpacking in python, allows to swap two variables in a single line\n            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]\n            \n            # Index to place smaller elements\n            partitionIndex = left\n\n            # Partition elements with freq less than pivotFrequency to left\n            # time complexity: iterates over unique elements between left and right segment O(m)\n            for i in range(left, right):\n\n                # Lower frequency -> \"lower\"\n                if frequency[unique[i]] < pivotFrequency:\n                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]\n                    partitionIndex += 1\n\n            # swap pivot to its final correct partitioned index\n            # now elements to the right and left follow the conditions according to pivot element\n            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]\n            return partitionIndex\n\n        # Quickselect helper for low to high sorting\n        # Avg recursion depth: O(log m), space: O(log m)\n        def quickselectHelper(left, right, kSmallest):\n            if left == right:\n                return\n\n            pivotIndex = random.randint(left, right)\n            pivotIndex = partitionPivot(left, right, pivotIndex)\n\n            # If pivot is at the kth smallest position, done\n            if kSmallest == pivotIndex:\n                return\n            elif kSmallest < pivotIndex:\n                quickselectHelper(left, pivotIndex - 1, kSmallest)\n            else:\n                quickselectHelper(pivotIndex + 1, right, kSmallest)\n\n        # Count frequencies O(n)\n        frequency = defaultdict(int)\n        for num in nums:\n            frequency[num] += 1\n\n        unique = list(frequency.keys())\n        n = len(unique)\n\n        # For low-to-high sorting, k-th smallest corresponds to index n - k\n        quickselectHelper(0, n - 1, n - k)\n\n        # Now top k frequent are the last k elements\n        return unique[n - k:]",
+        "questionNumber": 347,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-4-quickselect-low-to-high",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ]
+  },
+  "array": {
+    "in-place-transformations": [
+      {
+        "number": 1,
+        "name": "Prefix & Postfix 3 arrays O(n)",
+        "type": "array",
+        "application": "in-place-transformations",
+        "code": "def productExceptSelf(self, nums: List[int]) -> List[int]:\n        \n        # space complexity: prefix, postfix, and result arrays to calculate and store final value for n integers O(n) = O(3n)\n        prefix = [1] * len(nums)\n        postfix = [1] * len(nums)\n        res = [1] * len(nums)\n\n        # Compute prefix products\n        # time complexity: iteration over list of n length O(n)\n        for i in range(1, len(nums)):\n            \n            # time complexity: lookup + multiplication operations take constant O(1)\n            # (prefix of i) = (prefix of i - 1) * (nums[i - 1])\n            prefix[i] = prefix[i - 1] * nums[i - 1]\n\n        # Compute postfix products\n        # time complexity: iteration over list of n length O(n)\n        for i in range(n - 2, -1, -1):\n\n            # time complexity: lookup + multiplication operations take constant O(1)\n            # (postfix of i) = (postfix of i + 1) * (nums[i + 1])\n            postfix[i] = postfix[i + 1] * nums[i + 1]\n\n        # Combine prefix and postfix products\n        # time complexity: iteration over list of length n O(n)\n        for i in range(n):\n\n            # time complexity: lookup + multiplication operations take constant O(1)\n            # (product except self of i) = (prefix of i) * (postfix of i)\n            res[i] = prefix[i] * postfix[i]\n\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
+        "questionNumber": 238,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-prefix-postfix-3-arrays-o-n",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 2,
+        "name": "Prefix & Postfix Optimal O(1) space",
+        "type": "array",
+        "application": "in-place-transformations",
+        "code": "def productExceptSelf(self, nums: List[int]) -> List[int]:\n        \n        # instantiate to 1, start prefix calculation at res[1], prefix of res[0] is always 1\n        # space complexity: array to store results for n integers O(n) \n        res = [1] * len(nums)\n\n        # Compute prefix products in res\n        # time complexity: iterate over list of size n O(n)\n        for i in range(1, len(nums)):\n\n            # time complexity:\n            # (prefix of i) = (prefix of i - 1) * (num at i - 1)\n            res[i] = res[i - 1] * nums[i - 1]\n\n        # accumulate running postfix through reverse iteration\n        # postfix starts at 1, the postfix of len(n) - 1\n        postfix = 1\n\n        # start iteration at (len(n)-1), postfix of last integer will always be 1\n        # time complexity: iterate over list of size n in reverse O(n)\n        for i in range(len(nums) - 1, -1, -1):\n            \n            # (product except i) = (prefix of i) * (postfix of i)\n            res[i] *= postfix\n            \n            # (postfix of i - 1) = (postfix of i) * (num at i) \n            postfix *= nums[i]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
+        "questionNumber": 238,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-prefix-postfix-optimal-o-1-space",
+        "blog": "LeetCode: Arrays and Hashing"
+      }
+    ]
+  }
+}

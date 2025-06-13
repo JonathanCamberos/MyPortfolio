@@ -1,8 +1,8 @@
 import { allBlogs } from "../../../.contentlayer/generated";
 import GithubSlugger, { slug } from "github-slugger"
 import QuestionSection from "../../components/LeetCode/QuestionSection";
-import DifficultySection from "../../components/LeetCode/DifficultySection";
-import UseCasesSection from "../../components/LeetCode/UseCasesSection";
+import DifficultySection from "../../components/LeetCode/Difficulty/DifficultySection";
+import UseCasesSection from "../../components/LeetCode/Application/ApplicationSection";
 
 const slugger = new GithubSlugger();
 
@@ -33,7 +33,6 @@ const LeetCodePage = ({params}) => {
       <QuestionSection />
       <UseCasesSection />
       <DifficultySection />
-
     </article>
   );
 };

@@ -1,10 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import profileImg from "../../../public/logo/pear.png"
 import cat30 from "../../../public/logo/cat30.png"
-import cat60 from "../../../public/logo/cat60.png"
-import cat90 from "../../../public/logo/cat90.png"
 
 // icon from https://icons8.com/icon/set/react-logo/group-outlined :)
 

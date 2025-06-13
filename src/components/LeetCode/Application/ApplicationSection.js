@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import UseCases from "./UseCases";  // Buttons
+import UseCases from "./ApplicationButton";  // Buttons
 import UseCase from "./UseCase";    // Card display
 import Link from "next/link";
 
-const UseCaseSection = () => {
+const ApplicationSection = () => {
   // useCase categories
   const useCaseCategories = ["all", "array", "hashmap", "stack", "two-pointers"];
 
@@ -50,7 +50,7 @@ const UseCaseSection = () => {
     <article className="mt-10 flex flex-col text-dark dark:text-light">
       <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
         <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
-          Search by Use Case
+          DSA Use Cases
         </h1>
         <span className="mt-2 inline-block">
           Filter use cases by category.
@@ -81,4 +81,4 @@ const UseCaseSection = () => {
   );
 };
 
-export default UseCaseSection;
+export default ApplicationSection;

@@ -2,11 +2,11 @@
   "array": [
     {
       "type": "Array",
-      "title": "In-place Transformations and Reordering",
+      "title": "In-place Transformations",
       "summary": "Perform transformations or reorderings on the array without using extra space.",
       "exampleIntro": "Rotate an array to the right by k steps.",
       "codeExample": "def rotate(nums: List[int], k: int) -> None:\n        n = len(nums)\n        k %= n  # handle cases where k > n\n        \n        def reverse(start: int, end: int) -> None:\n            while start < end:\n                nums[start], nums[end] = nums[end], nums[start]\n                start += 1\n                end -= 1\n\n        reverse(0, n - 1)    # Reverse entire array\n        reverse(0, k - 1)    # Reverse first k elements\n        reverse(k, n - 1)    # Reverse remaining elements",
-      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#array-use-case-inplace-transformations-and-reordering",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#array-use-case-inplace-transformations",
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],

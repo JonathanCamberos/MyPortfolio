@@ -1,6 +1,6 @@
 import React from "react";
 
-const UseCases = ({ useCases, currentCategory, onCategoryChange }) => {
+const ApplicationButton = ({ useCases, currentCategory, onCategoryChange }) => {
   return (
     <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10">
       {useCases.map((category) => {
@@ -24,4 +24,4 @@ const UseCases = ({ useCases, currentCategory, onCategoryChange }) => {
   );
 };
 
-export default UseCases;
+export default ApplicationButton;

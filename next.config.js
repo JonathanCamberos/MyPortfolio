@@ -10,6 +10,99 @@ const filePaths = [
   'content/leetcode-two-pointers/index.mdx',
 ];
 
+
+// Function to parse solutions from content
+function parseSolutions(content, blogTitle) {
+  const solutionsMap = {};
+
+  // Regex to match the question number and title
+  const questionHeaderRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
+
+  // Regex to match solution headers, capturing number, name, type, application
+  const solutionHeaderRegex = /^### Solution (\d+): (.+?) - ([^\/]+)\/(.+)$/gm;
+
+  // Normalize keys (for use as object keys and URLs)
+  const normalizeKey = (key) =>
+    key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  const formattedBlogTitle = blogTitle
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+  // Collect all question headers and their indices
+  const questionHeaders = [];
+  let match;
+  while ((match = questionHeaderRegex.exec(content)) !== null) {
+    questionHeaders.push({
+      index: match.index,
+      questionNumber: parseInt(match[1], 10),
+      title: match[2].trim(),
+      difficulty: match[3].trim(),
+    });
+  }
+
+  // Collect all solution headers and their indices
+  const solutionHeaders = [];
+  while ((match = solutionHeaderRegex.exec(content)) !== null) {
+    solutionHeaders.push({
+      index: match.index,
+      number: parseInt(match[1], 10),
+      name: match[2].trim(),
+      typeRaw: match[3].trim(),
+      applicationRaw: match[4].trim(),
+    });
+  }
+
+  for (let i = 0; i < solutionHeaders.length; i++) {
+    const current = solutionHeaders[i];
+    const next = solutionHeaders[i + 1];
+
+    // Determine the question number associated with this solution
+    const associatedQuestion = questionHeaders.find(
+      (q, idx) =>
+        q.index <= current.index &&
+        (!questionHeaders[idx + 1] || questionHeaders[idx + 1].index > current.index)
+    );
+
+    const questionNumber = associatedQuestion ? associatedQuestion.questionNumber : null;
+
+    // Slice of content for this solution section (from current header to next or EOF)
+    const section = content.substring(current.index, next ? next.index : content.length);
+
+    // Find python code block inside this section (non-global regex)
+    const codeBlockRegex = /```python([\s\S]*?)```/;
+    const codeMatch = codeBlockRegex.exec(section);
+    const code = codeMatch ? codeMatch[1].trim() : "";
+
+    // Normalize keys
+    const type = normalizeKey(current.typeRaw);
+    const application = normalizeKey(current.applicationRaw);
+
+    // Construct solution object
+    const solutionObj = {
+      number: current.number,
+      name: current.name,
+      type,
+      application,
+      code,
+      questionNumber, // Add the question number here
+      solutionLink: `/Notes/${formattedBlogTitle}#solution-${current.number}-${normalizeKey(current.name)}`,
+      blog: blogTitle,
+    };
+
+    // Initialize nested maps if needed
+    if (!solutionsMap[type]) solutionsMap[type] = {};
+    if (!solutionsMap[type][application]) solutionsMap[type][application] = [];
+
+    solutionsMap[type][application].push(solutionObj);
+  }
+
+  return solutionsMap;
+}
+
+
+
 // Function to parse questions from content
 function parseQuestions(content, blogTitle) {
   const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
@@ -175,6 +268,25 @@ function parseUseCases(content, blogTitle) {
   return useCasesMap;
 }
 
+// New organizeSolutions function
+function organizeSolutions(inputPath, outputPath) {
+  const solutionsData = JSON.parse(fs.readFileSync(inputPath, "utf-8"));
+  const organizedData = {};
+
+  Object.entries(solutionsData).forEach(([typeKey, applications]) => {
+    Object.entries(applications).forEach(([appKey, solutions]) => {
+      solutions.forEach((solution) => {
+        if (!organizedData[solution.questionNumber]) {
+          organizedData[solution.questionNumber] = [];
+        }
+        organizedData[solution.questionNumber].push(solution);
+      });
+    });
+  });
+
+  fs.writeFileSync(outputPath, JSON.stringify(organizedData, null, 2));
+}
+
 const nextConfig = {
   webpack(config, { isServer }) {
     if (isServer) {
@@ -182,6 +294,7 @@ const nextConfig = {
       const topicMap = {};
       const questionsMap = {};
       const useCasesMap = {};
+      const solutionsMap = {};
 
       filePaths.forEach((relativePath) => {
         try {
@@ -220,6 +333,17 @@ const nextConfig = {
             if (!useCasesMap[k]) useCasesMap[k] = [];
             useCasesMap[k].push(...arr);
           });
+
+          const solutions = parseSolutions(content, blogTitle);
+          Object.entries(solutions).forEach(([typeKey, appMap]) => {
+            if (!solutionsMap[typeKey]) solutionsMap[typeKey] = {};
+
+            Object.entries(appMap).forEach(([appKey, solutionArr]) => {
+              if (!solutionsMap[typeKey][appKey]) solutionsMap[typeKey][appKey] = [];
+              solutionsMap[typeKey][appKey].push(...solutionArr);
+            });
+          });
+
         } catch (error) {
           console.error(`Error processing ${relativePath}`, error);
         }
@@ -240,6 +364,20 @@ const nextConfig = {
       fs.writeFileSync(
         path.join(process.cwd(), "public", "useCases.json"),
         JSON.stringify(useCasesMap, null, 2)
+      );
+      fs.writeFileSync(
+        path.join(process.cwd(), "public", "solutions.json"),
+        JSON.stringify(solutionsMap, null, 2)
+      );
+
+
+      const solutionsPath = path.join(process.cwd(), "public", "solutions.json");
+      fs.writeFileSync(solutionsPath, JSON.stringify(solutionsMap, null, 2));
+
+      // Call organizeSolutions after writing solutions.json
+      organizeSolutions(
+        solutionsPath,
+        path.join(process.cwd(), "public", "organizedSolutions.json")
       );
     }
     return config;

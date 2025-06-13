@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Difficulties from "./Difficulties";
-import Question from "../LeetCode/Question";
+import Difficulties from "./DifficultyButton";
+import Question from "../Question";
 import Link from "next/link";
 
 const DifficultySection = () => {
@@ -75,13 +75,7 @@ const DifficultySection = () => {
         {filteredQuestions.length > 0 ? (
           filteredQuestions.map((question) => (
             <Link
-              href={`/Notes${question.blog
-                .toLowerCase()
-                .replace(/[^a-zA-Z0-9\s]/g, "")
-                .replace(/\s+/g, "-")}#${question.questionNum}-${question.questionTitle
-                .replace(/[^a-zA-Z0-9\s]/g, "")
-                .replace(/\s+/g, "-")
-                .toLowerCase()}---${question.questionDifficulty.toLowerCase()}`}
+              href={question.questionLink}
               key={question.questionNum}
               className="col-span-1 row-span-1"
             >

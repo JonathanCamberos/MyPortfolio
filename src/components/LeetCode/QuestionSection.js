@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Topics from "./Topics";
+import Topics from "./TopicButton";
 import Question from "../LeetCode/Question";
 import Link from "next/link";
 
@@ -57,7 +57,7 @@ const QuestionSection = () => {
     <article className="mt-5 flex flex-col text-dark dark:text-light">
       <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
         <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
-          Search Topics
+          DSA Topics
         </h1>
         <span className="mt-2 inline-block">
           Questions with solutions using certain topics, yes there are a lot :')
