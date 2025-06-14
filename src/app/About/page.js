@@ -35,6 +35,9 @@ export default function About() {
       className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-dark dark:text-light bg-light dark:bg-dark"
     >
       <div className="max-w-5xl w-full">
+
+        <div className="py-10"></div>
+
         {/* Introduction Section */}
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold mb-4">About Me</h1>
