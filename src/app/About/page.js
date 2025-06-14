@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export default function About() {
-  const personalStatement = `I’m Jonathan, a Software Engineer in the Bank of America Security Operations and Threat Response (SOTR) group. My current work focuses on supporting and building internal SIEM applications.`;
+  const personalStatement = `I’m Jonathan, a Software Engineer in the Bank of America Security Operations and Threat Response (SOTR) group. My current work focuses on building internal SIEM applications.`;
 
   const educationStatement = `I completed my B.S. in Computer Science at the University of Maryland, College Park with a concentration in Cybersecurity and a minor in ACES, Advanced Cybersecurity Experience for Students.`;
 
@@ -16,14 +16,14 @@ export default function About() {
   const pastExperience = [
     {
       title: "Software Engineer",
-      company: "Bank of America",
+      company: "Bank of America Network Security",
       date: "2023",
       description: "Network Security",
       link: "https://business.bofa.com/en-us/content/fraud-prevention-and-cyber-security-solutions.html"
     },
     {
       title: "Software Engineer",
-      company: "PwC",
+      company: "PwC Web Applications Consulting",
       date: "2022",
       description: "Developed web applications Consulting",
       link: "https://www.pwc.com/us/en.html"

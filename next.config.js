@@ -112,7 +112,6 @@ function parseSolutions(content, blogTitle) {
   return solutionsMap;
 }
 
-
 // Function to parse questions from content
 function parseQuestions(content, blogTitle) {
   const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };

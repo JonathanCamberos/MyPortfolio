@@ -7,15 +7,6 @@ const mdxComponents = {
     Image
 }
 
-// difficulty.js TODO:
-export const Difficulty = {
-  EASY: "Easy",
-  MEDIUM: "Medium",
-  HARD: "Hard",
-};
-
-
-
 const RenderMdx = ({blog}) => {
 
   const MDXContent = useMDXComponent(blog.body.code)
