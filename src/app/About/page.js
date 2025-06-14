@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 export default function About() {
-  const personalStatement = `Hi, nice to meet you! I’m Jonathan, a Software Engineer at Bank of America. My current work focuses on supporting and building internal cybersecurity applications.`;
+  const personalStatement = `I’m Jonathan, a Software Engineer in the Bank of America Security Operations and Threat Response (SOTR) group. My current work focuses on supporting and building internal SIEM applications.`;
 
-  const educationStatement = `I completed my B.S. in Computer Science at the University of Maryland with a concentration in Cybersecurity and a minor in ACES (Advanced Cybersecurity Experience for Students).  `;
+  const educationStatement = `I completed my B.S. in Computer Science at the University of Maryland, College Park with a concentration in Cybersecurity and a minor in ACES, Advanced Cybersecurity Experience for Students.`;
 
   const currentRole = {
     title: "Software Engineer",
@@ -31,16 +31,11 @@ export default function About() {
   ];
 
   return (
-    <section
-      className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-dark dark:text-light bg-light dark:bg-dark"
-    >
-      <div className="max-w-5xl w-full">
-
-        <div className="py-5"></div>
-
+    <section className="min-h-screen flex items-center justify-center px-6 py-12 text-dark dark:text-light bg-light dark:bg-dark">
+      <div className="max-w-3xl w-full mx-auto">
         {/* Introduction Section */}
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl font-bold mb-4">About Me</h1>
+        <div className="mb-12">
+          <h1 className="text-3xl font-bold mb-4">Hi, nice to meet you!</h1>
           <p className="text-lg leading-relaxed">{personalStatement}</p>
         </div>
 
@@ -52,9 +47,9 @@ export default function About() {
 
         {/* Current Role Section */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Professional Experience</h2>
+          <h2 className="text-2xl font-semibold mb-4">Work Experience</h2>
           <p className="text-lg mb-6">
-            I am currently working as a {currentRole.title} at {currentRole.company} in{" "}
+            Currently working as a {currentRole.title} at {currentRole.company} in{" "}
             <Link
               href={currentRole.link}
               className="text-accent dark:text-accentDark no-underline hover:underline hover:text-accentLight"
