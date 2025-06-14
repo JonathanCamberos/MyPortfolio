@@ -112,7 +112,7 @@ const SolutionSection = () => {
         <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
           Search LeetCode Questions
         </h1>
-        <span className="mt-2 inline-block">Find questions by title or number.</span>
+        <span className="mt-2 inline-block">Find questions by title or number. Compare Solutions.</span>
       </div>
 
       {/* Search input */}
@@ -126,31 +126,35 @@ const SolutionSection = () => {
         />
       </div>
 
-      {/* Buttons container with border lines */}
-      {searchQuery !== "" && (
-        <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10">
-          {filteredQuestions.length > 0 ? (
-            filteredQuestions.map((key, index) => (
-              <button
-                key={index}
-                className={`py-1.5 md:py-2 px-6 md:px-10 rounded-full border-2 border-solid border-dark dark:border-light transition-all ease duration-200 m-2 ${
-                  selectedSolutions.length > 0 &&
-                  questionMapping[key] === selectedSolutions[0].questionNumber
-                    ? "bg-dark text-light dark:bg-light dark:text-dark"
-                    : "bg-light text-dark dark:bg-dark dark:text-light"
-                }`}
-                onClick={() => handleButtonClick(key)}
-              >
-                {key}
-              </button>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 dark:text-gray-400 w-full m-2">
-              No results found. Try a different search term.
-            </p>
-          )}
-        </div>
-      )}
+      {/* Buttons container with border lines - always visible */}
+<div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10 min-h-[60px]">
+  {searchQuery !== "" ? (
+    filteredQuestions.length > 0 ? (
+      filteredQuestions.map((key, index) => (
+        <button
+          key={index}
+          className={`py-1.5 md:py-2 px-6 md:px-10 rounded-full border-2 border-solid border-dark dark:border-light transition-all ease duration-200 m-2 ${
+            selectedSolutions.length > 0 &&
+            questionMapping[key] === selectedSolutions[0].questionNumber
+              ? "bg-dark text-light dark:bg-light dark:text-dark"
+              : "bg-light text-dark dark:bg-dark dark:text-light"
+          }`}
+          onClick={() => handleButtonClick(key)}
+        >
+          {key}
+        </button>
+      ))
+    ) : (
+      <p className="text-center text-gray-500 dark:text-gray-400 w-full m-2">
+        No results found. Try a different search term.
+      </p>
+    )
+  ) : (
+    // Empty placeholder to maintain height so borders don't collapse
+    <div className="w-full h-10"></div>
+  )}
+</div>
+
 
       {/* Display all selected solutions */}
       {selectedSolutions.length > 0 && (

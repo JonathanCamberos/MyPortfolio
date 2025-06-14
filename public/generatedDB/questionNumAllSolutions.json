@@ -11,6 +11,18 @@
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],
+  "11": [
+    {
+      "number": 1,
+      "name": "Two Pointer Early Break",
+      "type": "two-pointer",
+      "application": "partitioning",
+      "code": "def maxArea(self, height: List[int]) -> int:\n        \n        L, R = 0, len(height)-1\n        maxWater = 0 \n\n        # time complexity: iterate over list of n length with two pointers O(n)\n        while L < R:\n\n            # grabbing weak link\n            smallerHeight = min(height[L], height[R])\n\n            # calculate curr water = (smallerHeight * width)\n            currWater = smallerHeight * (R-L)\n            \n            # compare to max\n            maxWater = max(maxWater, currWater)\n\n            # grabbing weak link, continue past it\n            # time complexity: continue iterating over list n length with two pointers O(n)\n            if height[L] < height[R]:\n                L += 1\n\n                # early break: eliminate redundant comparisons\n                # by skipping heights guaranteed to be suboptimal\n                while height[L] < smallerHeight:\n                    L += 1 \n            \n            else:\n                R -= 1\n\n                # early break: eliminate redundant comparisons\n                # by skipping heights guaranteed to be suboptimal \n                while height[R] < smallerHeight:\n                    R -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return maxWater",
+      "questionNumber": 11,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-two-pointer-early-break",
+      "blog": "LeetCode: Two Pointers"
+    }
+  ],
   "49": [
     {
       "number": 1,
