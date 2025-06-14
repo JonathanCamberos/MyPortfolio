@@ -15,7 +15,7 @@ const Question = ({ question }) => {
       </span> */}
       <Link
           href={question.questionLink}
-          className="hover:text-orange-500 transition-colors duration-300"
+          className="hover:text-orange-500 dark:hover:text-accentDark transition-colors duration-300"
         >
           {`${question.questionNum}. ${question.questionTitle}`}
         </Link>

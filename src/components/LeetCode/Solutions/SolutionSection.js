@@ -79,17 +79,18 @@ const SolutionSection = () => {
         <h1 className="mt-6 font-semibold text-2xl md:text-3xl lg:text-3xl">
           Search LeetCode Questions
         </h1>
-        <span className="mt-2 inline-block">Find questions by title or number. Compare Solutions.</span>
+        <span className="mt-2 inline-block">Find questions by title or number and compare solutions.</span>
       </div>
 
       <div className="mt-5 px-5 sm:px-10 md:px-24 sxl:px-32">
         <input
           type="text"
           placeholder="Search by title or number..."
-          className="w-full p-2 border rounded-md shadow-sm dark:bg-gray-800 dark:text-light"
+          className="w-full p-2 border rounded-md shadow-sm bg-light dark:bg-dark text-dark dark:bg-gray-800 dark:text-light dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-yellow-500 focus:border-transparent"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+
       </div>
 
       <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10 min-h-[60px]">
