@@ -114,8 +114,7 @@ function parseQuestions(content, blogTitle) {
 
   const questionRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
   const topicRegex = /^Topics:\s+(.+)$/gm;
-  const introRegex = /^> (.+)$/gm;
-
+  const introLineRegex = /^>\s(.+)$/; // Match single lines starting with '>'
   const formattedBlogTitle = blogTitle
     .toLowerCase()
     .replace(/[^a-zA-Z0-9\s]/g, "")
@@ -124,10 +123,12 @@ function parseQuestions(content, blogTitle) {
   const lines = content.split("\n");
   let currentQuestion = null;
   let questionBlurbLines = [];
+  let insideIntro = false;
 
   lines.forEach((line) => {
     const questionMatch = questionRegex.exec(line);
     if (questionMatch) {
+      // Finalize the previous question
       if (currentQuestion) {
         if (questionBlurbLines.length) {
           currentQuestion.questionBlurb = questionBlurbLines.join(" ");
@@ -136,6 +137,7 @@ function parseQuestions(content, blogTitle) {
         questionsMap[currentQuestion.questionNum] = currentQuestion;
       }
 
+      // Start a new question
       const [, questionNumStr, questionTitle, questionDifficulty] = questionMatch;
       const questionNum = parseInt(questionNumStr, 10);
 
@@ -157,6 +159,8 @@ function parseQuestions(content, blogTitle) {
           .toLowerCase()}---${questionDifficulty.toLowerCase()}`,
         blog: blogTitle,
       };
+
+      insideIntro = false; // Reset intro flag
       return;
     }
 
@@ -174,12 +178,19 @@ function parseQuestions(content, blogTitle) {
       return;
     }
 
-    const introMatch = introRegex.exec(line);
-    if (introMatch && currentQuestion) {
-      questionBlurbLines.push(introMatch[1].trim());
+    if (introLineRegex.test(line) && currentQuestion) {
+      questionBlurbLines.push(line.match(introLineRegex)[1].trim());
+      insideIntro = true; // Signal we're inside an intro section
+      return;
+    }
+
+    if (insideIntro && line.trim() === "") {
+      // End of intro section
+      insideIntro = false;
     }
   });
 
+  // Finalize the last question
   if (currentQuestion) {
     if (questionBlurbLines.length) {
       currentQuestion.questionBlurb = questionBlurbLines.join(" ");

@@ -3,7 +3,7 @@
     "questionNum": 1,
     "questionTitle": "Two Sum I",
     "questionDifficulty": "Easy",
-    "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers and you may not use the same element twice. You can return the answer in any order.",
+    "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.",
     "questionTopics": [
       "Array",
       "Hash Table"
@@ -15,7 +15,7 @@
     "questionNum": 11,
     "questionTitle": "Container With Most Water",
     "questionDifficulty": "Medium",
-    "questionBlurb": "You are given an integer array height of length n. There are n vertical lines drawn Find two lines that together with the x-axis form a container, Return the maximum amount of water a container can store",
+    "questionBlurb": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container, such that the container contains the most water. Return the maximum amount of water a container can store",
     "questionTopics": [
       "Array",
       "Two Pointers",
@@ -28,7 +28,7 @@
     "questionNum": 15,
     "questionTitle": "3Sum (Two Sum II.2)",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] Notice that the solution set must not contain duplicate triplets.",
+    "questionBlurb": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0. Notice that the solution set must not contain duplicate triplets.",
     "questionTopics": [
       "Array",
       "Two Pointers",
@@ -41,7 +41,7 @@
     "questionNum": 20,
     "questionTitle": "Valid Parentheses",
     "questionDifficulty": "Easy",
-    "questionBlurb": "Given a string s containing: ( ) [ ] \\{ \\}, An input string is valid if: 1. Open brackets must be closed by the same type bracket has a corresponding open bracket of the same type.",
+    "questionBlurb": "Given a string s containing: ( ) [ ] \\{ \\}, determine if the input string is valid. An input string is valid if: 1. Open brackets must be closed by the same type of brackets 2. Open brackets must be closed in the correct order. 3. Every close bracket has a corresponding open bracket of the same type.",
     "questionTopics": [
       "String",
       "Stack"
@@ -53,7 +53,7 @@
     "questionNum": 22,
     "questionTitle": "Generate Parentheses",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given n pairs of parentheses, write a function to generate all",
+    "questionBlurb": "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.",
     "questionTopics": [
       "String",
       "Dynamic Programming",
@@ -66,7 +66,7 @@
     "questionNum": 36,
     "questionTitle": "Valid Sudoku",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules: Each column must contain the digits 1-9 without repetition.",
+    "questionBlurb": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules: Each row must contain the digits 1-9 without repetition. Each column must contain the digits 1-9 without repetition. Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.",
     "questionTopics": [
       "Array",
       "Hash Table",
@@ -79,7 +79,7 @@
     "questionNum": 42,
     "questionTitle": "Trapping Rain Water",
     "questionDifficulty": "Hard",
-    "questionBlurb": "Given n non-negative integers representing an elevation map where the width of",
+    "questionBlurb": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
     "questionTopics": [
       "Array",
       "Two Pointers",
@@ -94,7 +94,7 @@
     "questionNum": 49,
     "questionTitle": "Group Anagrams",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. typically using all the original letters exactly once.",
+    "questionBlurb": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
     "questionTopics": [
       "Array",
       "Hash Table",
@@ -108,7 +108,7 @@
     "questionNum": 84,
     "questionTitle": "Largest Rectangle in Histogram",
     "questionDifficulty": "Hard",
-    "questionBlurb": "Given an array of integers heights representing the return the area of the largest rectangle in the histogram.",
+    "questionBlurb": "Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.",
     "questionTopics": [
       "Array",
       "Stack",
@@ -121,7 +121,7 @@
     "questionNum": 125,
     "questionTitle": "Valid Palindrome",
     "questionDifficulty": "Easy",
-    "questionBlurb": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters Alphanumeric characters include letters and numbers.",
+    "questionBlurb": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.",
     "questionTopics": [
       "Two Pointers",
       "String"
@@ -133,7 +133,7 @@
     "questionNum": 128,
     "questionTitle": "Longest Consecutive Sequence",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given an array of integers nums, return the length of the longest consecutive sequence of elements. the previous element",
+    "questionBlurb": "Given an array of integers nums, return the length of the longest consecutive sequence of elements. A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than the previous element You must wrtie an algorithm that runs in O(n) time.",
     "questionTopics": [
       "Array",
       "Hash Table",
@@ -146,7 +146,7 @@
     "questionNum": 150,
     "questionTitle": "Evaluate Reverse Polish Notation",
     "questionDifficulty": "Medium",
-    "questionBlurb": "You are given an array of strings tokens that represents an arithmetic Evaluate the expression. Return an integer that represents the value of Note that: Each operand may be an integer or another expression. There will not be any division by zero. The answer and all the intermediate calculations can be represented in a 32-bit integer.",
+    "questionBlurb": "You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation. Evaluate the expression. Return an integer that represents the value of the expression. Note that: The valid operators are '+', '-', '*', and '/'. Each operand may be an integer or another expression. The division between two integers always truncates toward zero. There will not be any division by zero. The input represents a valid arithmetic expression in a reverse polish notation. The answer and all the intermediate calculations can be represented in a 32-bit integer.",
     "questionTopics": [
       "Array",
       "Math",
@@ -159,7 +159,7 @@
     "questionNum": 155,
     "questionTitle": "Min Stack",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Design a stack that supports push, pop, top, and retrieving Implement the MinStack class: void push(int val) pushes the element val onto the stack. int top() gets the top element of the stack. You must implement a solution with O(1) time complexity for each function.",
+    "questionBlurb": "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time. Implement the MinStack class: MinStack() initializes the stack object. void push(int val) pushes the element val onto the stack. void pop() removes the element on the top of the stack. int top() gets the top element of the stack. int getMin() retrieves the minimum element in the stack. You must implement a solution with O(1) time complexity for each function.",
     "questionTopics": [
       "Stack",
       "Design"
@@ -171,7 +171,7 @@
     "questionNum": 167,
     "questionTitle": "Two Sum II - Input Array Is Sorted",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length. integer array [index1, index2] of length 2. You may not use the same element twice.",
+    "questionBlurb": "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length. Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2. The tests are generated such that there is exactly one solution. You may not use the same element twice.",
     "questionTopics": [
       "Array",
       "Two Pointers",
@@ -184,7 +184,7 @@
     "questionNum": 217,
     "questionTitle": "Contains Duplicate",
     "questionDifficulty": "Easy",
-    "questionBlurb": "Given an integer array nums, return false if every element is distinct.",
+    "questionBlurb": "Given an integer array nums, return true if any value appears at least twice in the array, return false if every element is distinct.",
     "questionTopics": [
       "Array",
       "Hash Table",
@@ -222,7 +222,7 @@
     "questionNum": 271,
     "questionTitle": "String Encode and Decode",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Design an algorithm to encode a list of strings to a single string. Please implement encode and decode",
+    "questionBlurb": "Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings Please implement encode and decode",
     "questionTopics": [
       "Two Pointers",
       "Design"
@@ -234,7 +234,7 @@
     "questionNum": 347,
     "questionTitle": "Top K Elements in List",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given an integer array nums and an integer k, return the k most frequent element within the array.",
+    "questionBlurb": "Given an integer array nums and an integer k, return the k most frequent element within the array. Test cases are generated such that the answer is always unique. You may return the output in any order",
     "questionTopics": [
       "Array",
       "Hash Table",
@@ -252,7 +252,7 @@
     "questionNum": 739,
     "questionTitle": "Daily Temperatures",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Given an array of integers temperatures represents the daily number of days you have to wait after the ith day to get a warmer keep answer[i] == 0 instead.",
+    "questionBlurb": "Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.",
     "questionTopics": [
       "Array",
       "Stack",
@@ -265,7 +265,7 @@
     "questionNum": 853,
     "questionTitle": "Car Fleet",
     "questionDifficulty": "Medium",
-    "questionBlurb": "There are n cars at given miles away from the starting mile 0, traveling to reach the mile target. A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car. If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet.",
+    "questionBlurb": "There are n cars at given miles away from the starting mile 0, traveling to reach the mile target. You are given two integer array position and speed, both of length n, where position[i] is the starting mile of the ith car and speed[i] is the speed of the ith car in miles per hour. A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car. A car fleet is a car or cars driving next to each other. The speed of the car fleet is the minimum speed of any car in the fleet. If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet. Return the number of car fleets that will arrive at the destination.",
     "questionTopics": [
       "Array",
       "Stack",

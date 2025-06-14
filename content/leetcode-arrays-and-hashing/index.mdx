@@ -449,13 +449,12 @@ If we want to track every element, best space complexity is O(n)
     def containsDuplicate(sef, nums: List[int]) -> bool:
 
         # space complexity: dictionary of O(n)
-        # dictionary auto initializes missing key's values to 0
         seen = defaultdict(int)
 
-        # time complexity: iteration of O(n)
+        # time complexity: iteration over list of n length O(n)
         for num in nums:
 
-            # time complexity: indexing of O(1)
+            # time complexity: lookup operation in constant O(1)
             if seen[num] >= 1:
                 return True
             seen[num] += 1
@@ -635,24 +634,21 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
-        # note: a defaultdict (hashmap) allows us to index into
-        # our map with direct chars, as the hashing is done for us
-
-        # space complexity: hashmap of list of n length  O(n) 
+        # space complexity: hashmap of 26 elements constant  O(1) 
         count = defaultdict(int)
 
-        # time complexity: iteration of O(n)
+        # time complexity: iteration over string of n length O(n)
         for x in s:
            count[x] += 1
 
-        # time complexity: iteration of O(n)
+        # time complexity: iteration over string of n length O(n)
         for x in t:
            count[x] -= 1
 
-        # time complexity: iteration of O(n)
+        # time complexity: iteration over string of n length O(n)
         for value in count.values():
 
-            # time complexity: comparison of O(1)
+            # time complexity: comparison operation in constant O(1)
             if value != 0:
                 return False
 
@@ -673,14 +669,13 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
-        # note: ord() converts a single uni-code character to
-        # its integer representation
+        # note: ord() converts a single uni-code character to its integer representation
         # int: 97-122 -> lowercase English alphabet (a-z)
-        # so we can subtract the lowest char 'a' to get 
-        # a value from 0-26 to index into our array
-        # we are simulating a hash function given the lowercase char constraint
+        # we can calculate any char (a-z)'s uni-code integer by subtracting uni-code of 'a'
+        # '(a-z)' - 'a': returns a value of 0-25 which we can index into our array
+        # this simulates a hashing into a dictionary
 
-        # space complexity: fixed size constant 26 element array O(1)
+        # space complexity: array of 26 elements constant O(1)
         count = [0] * 26
 
         # time complexity: iteration of O(n)
@@ -975,7 +970,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Find the Bug: Set -> String Key (Set Frequency Count)
+### Find the Bug: Set to String Key (Set Frequency Count)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1000,7 +995,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Solution 1: Hashmap Array of 26 -> Tuple Key - Hashmap/Grouping by Criteria
+### Solution 1: Hashmap Array of 26 to Tuple Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1049,7 +1044,7 @@ Lets see:
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-### Solution 2: Hashmap Array of 26 -> String Key - Hashmap/Grouping by Criteria
+### Solution 2: Hashmap Array of 26 to String Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
