@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import UseCases from "./ApplicationButton";  // Buttons
-import UseCase from "./Application";    // Card display
+import ApplicationButton from "./ApplicationButton";  // Buttons
+import Application from "./Application";    // Card display
 import Link from "next/link";
 
 const ApplicationSection = () => {
@@ -58,7 +58,7 @@ const ApplicationSection = () => {
       </div>
 
       {/* Category buttons */}
-      <UseCases
+      <ApplicationButton
         useCases={useCaseCategories}
         currentCategory={currentCategory}
         onCategoryChange={handleCategoryChange}
@@ -69,7 +69,7 @@ const ApplicationSection = () => {
         {filteredUseCases.length > 0 ? (
           filteredUseCases.map((useCase, index) => (
             <Link href={useCase.useCaseLink} key={index} className="col-span-1 row-span-1">
-              <UseCase useCase={useCase} />
+              <Application useCase={useCase} />
             </Link>
           ))
         ) : (
