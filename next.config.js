@@ -9,8 +9,6 @@ const filePaths = [
   'content/leetcode-stacks/index.mdx',
   'content/leetcode-two-pointers/index.mdx',
 ];
-
-
 // Function to parse solutions from content
 function parseSolutions(content, blogTitle) {
   const solutionsMap = {};
@@ -101,8 +99,6 @@ function parseSolutions(content, blogTitle) {
   return solutionsMap;
 }
 
-
-
 // Function to parse questions from content
 function parseQuestions(content, blogTitle) {
   const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
@@ -190,15 +186,16 @@ function parseQuestions(content, blogTitle) {
 // Function to parse use cases from content
 function parseUseCases(content, blogTitle) {
   const useCasesMap = {};
-  const useCaseRegex = /^###\s([\w\s]+)\sApplication:\s(.+)$/gm;  
+  const useCaseRegex = /^###\s([\w\s]+)\sApplication:\s(.+)$/gm;
   const summaryRegex = /^(?!###).+$/;
   const exampleIntroRegex = /Ex:\s([\s\S]*?)(?=```)/;
   const codeBlockRegex = /```python([\s\S]*?)```/gm;
 
-  const normalizeKey = (key) => key
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, "") // Remove non-alphanumeric characters
-    .replace(/\s+/g, "-");       // Replace spaces with "-"
+  const normalizeKey = (key) =>
+    key
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "") // Remove non-alphanumeric characters
+      .replace(/\s+/g, "-"); // Replace spaces with "-"
 
   const formattedBlogTitle = blogTitle
     .toLowerCase()
@@ -224,7 +221,9 @@ function parseUseCases(content, blogTitle) {
         summary: "",
         exampleIntro: "",
         codeExample: "",
-        useCaseLink: `/Notes/${formattedBlogTitle}#${normalizeKey(structureType)}-use-case-${normalizeKey(useCaseTitle)}`,
+        useCaseLink: `/Notes/${formattedBlogTitle}#${normalizeKey(structureType)}-use-case-${normalizeKey(
+          useCaseTitle
+        )}`,
         blog: blogTitle,
       };
       return;
@@ -287,97 +286,139 @@ function organizeSolutions(inputPath, outputPath) {
   fs.writeFileSync(outputPath, JSON.stringify(organizedData, null, 2));
 }
 
+// Function to parse LeetCode stats from content files
+function parseLeetcodeStats(filePaths) {
+  const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
+  const topicMap = {};
+  const questionsMap = {};
+  const useCasesMap = {};
+  const solutionsMap = {};
+
+  filePaths.forEach((relativePath) => {
+    try {
+      const filePath = path.join(process.cwd(), relativePath);
+      const content = fs.readFileSync(filePath, "utf-8");
+
+      // Extract blog title from frontmatter or fallback
+      const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
+      const blogTitle = titleMatch ? titleMatch[1] : "unknown-blog";
+
+      // Parse questions separately
+      const { questionStats: qs, topicMap: tm, questionsMap: qm } = parseQuestions(content, blogTitle);
+
+      // Merge question data
+      questionStats.total += qs.total;
+      questionStats.easy += qs.easy;
+      questionStats.medium += qs.medium;
+      questionStats.hard += qs.hard;
+
+      Object.entries(tm).forEach(([k, v]) => {
+        if (!topicMap[k]) topicMap[k] = [];
+        topicMap[k].push(...v.filter((num) => !topicMap[k].includes(num)));
+      });
+
+      Object.entries(qm).forEach(([k, v]) => {
+        questionsMap[k] = v;
+      });
+
+      // Parse use cases separately
+      const uc = parseUseCases(content, blogTitle);
+      Object.entries(uc).forEach(([k, arr]) => {
+        if (!useCasesMap[k]) useCasesMap[k] = [];
+        useCasesMap[k].push(...arr);
+      });
+
+      const solutions = parseSolutions(content, blogTitle);
+      Object.entries(solutions).forEach(([typeKey, appMap]) => {
+        if (!solutionsMap[typeKey]) solutionsMap[typeKey] = {};
+
+        Object.entries(appMap).forEach(([appKey, solutionArr]) => {
+          if (!solutionsMap[typeKey][appKey]) solutionsMap[typeKey][appKey] = [];
+          solutionsMap[typeKey][appKey].push(...solutionArr);
+        });
+      });
+    } catch (error) {
+      console.error(`Error processing ${relativePath}`, error);
+    }
+  });
+
+  return {
+    questionStats,
+    topicMap,
+    questionsMap,
+    useCasesMap,
+    solutionsMap,
+  };
+}
+
+
+// Function to create a mapping for search
+function createQuestionMapping(filePath) {
+  const mapping = {};
+
+  try {
+    // Read and parse the JSON file
+    const fileContent = fs.readFileSync(path.resolve(filePath), "utf-8");
+    const allQuestions = JSON.parse(fileContent);
+
+    // Build the mapping
+    Object.values(allQuestions).forEach(({ questionNum, questionTitle }) => {
+      const searchKey = `${questionNum}. ${questionTitle}`;
+      mapping[searchKey] = questionNum;
+    });
+  } catch (error) {
+    console.error("Error parsing the file:", error);
+  }
+
+  return mapping;
+}
+
 const nextConfig = {
   webpack(config, { isServer }) {
     if (isServer) {
-      const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
-      const topicMap = {};
-      const questionsMap = {};
-      const useCasesMap = {};
-      const solutionsMap = {};
-
-      filePaths.forEach((relativePath) => {
-        try {
-          const filePath = path.join(process.cwd(), relativePath);
-          const content = fs.readFileSync(filePath, "utf-8");
-
-          // Extract blog title from frontmatter or fallback
-          const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
-          const blogTitle = titleMatch ? titleMatch[1] : "unknown-blog";
-
-          // Parse questions separately
-          const {
-            questionStats: qs,
-            topicMap: tm,
-            questionsMap: qm,
-          } = parseQuestions(content, blogTitle);
-
-          // Merge question data
-          questionStats.total += qs.total;
-          questionStats.easy += qs.easy;
-          questionStats.medium += qs.medium;
-          questionStats.hard += qs.hard;
-
-          Object.entries(tm).forEach(([k, v]) => {
-            if (!topicMap[k]) topicMap[k] = [];
-            topicMap[k].push(...v.filter((num) => !topicMap[k].includes(num)));
-          });
-
-          Object.entries(qm).forEach(([k, v]) => {
-            questionsMap[k] = v;
-          });
-
-          // Parse use cases separately
-          const uc = parseUseCases(content, blogTitle);
-          Object.entries(uc).forEach(([k, arr]) => {
-            if (!useCasesMap[k]) useCasesMap[k] = [];
-            useCasesMap[k].push(...arr);
-          });
-
-          const solutions = parseSolutions(content, blogTitle);
-          Object.entries(solutions).forEach(([typeKey, appMap]) => {
-            if (!solutionsMap[typeKey]) solutionsMap[typeKey] = {};
-
-            Object.entries(appMap).forEach(([appKey, solutionArr]) => {
-              if (!solutionsMap[typeKey][appKey]) solutionsMap[typeKey][appKey] = [];
-              solutionsMap[typeKey][appKey].push(...solutionArr);
-            });
-          });
-
-        } catch (error) {
-          console.error(`Error processing ${relativePath}`, error);
-        }
-      });
+      const {
+        questionStats,
+        topicMap,
+        questionsMap,
+        useCasesMap,
+        solutionsMap,
+      } = parseLeetcodeStats(filePaths);
 
       fs.writeFileSync(
-        path.join(process.cwd(), "public", "leetcodeStats.json"),
+        path.join(process.cwd(), "public/generatedDB", "leetcodeStats.json"),
         JSON.stringify(questionStats, null, 2)
       );
       fs.writeFileSync(
-        path.join(process.cwd(), "public", "topicQuestions.json"),
+        path.join(process.cwd(), "public/generatedDB", "topicQuestionNums.json"),
         JSON.stringify(topicMap, null, 2)
       );
       fs.writeFileSync(
-        path.join(process.cwd(), "public", "questions.json"),
+        path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json"),
         JSON.stringify(questionsMap, null, 2)
       );
       fs.writeFileSync(
-        path.join(process.cwd(), "public", "useCases.json"),
+        path.join(process.cwd(), "public/generatedDB", "topicApplications.json"),
         JSON.stringify(useCasesMap, null, 2)
       );
       fs.writeFileSync(
-        path.join(process.cwd(), "public", "solutions.json"),
+        path.join(process.cwd(), "public/generatedDB", "topicApplicationSolutions.json"),
         JSON.stringify(solutionsMap, null, 2)
       );
 
-
-      const solutionsPath = path.join(process.cwd(), "public", "solutions.json");
-      fs.writeFileSync(solutionsPath, JSON.stringify(solutionsMap, null, 2));
-
-      // Call organizeSolutions after writing solutions.json
+      const solutionsPath = path.join(process.cwd(), "public/generatedDB", "topicApplicationSolutions.json");
       organizeSolutions(
         solutionsPath,
-        path.join(process.cwd(), "public", "organizedSolutions.json")
+        path.join(process.cwd(), "public/generatedDB", "questionNumAllSolutions.json")
+      );
+
+      // Adding the logic for allQuestionNum.js parsing
+      const allQuestionsPath = path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json");
+      const questionMapping = createQuestionMapping(allQuestionsPath);
+
+      // Write the mapping to a new file
+      fs.writeFileSync(
+        path.join(process.cwd(), "public/generatedDB", "queryQuestionNumString.json"),
+        JSON.stringify(questionMapping, null, 2)
       );
     }
     return config;

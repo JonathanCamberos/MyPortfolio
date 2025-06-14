@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import UseCases from "./ApplicationButton";  // Buttons
-import UseCase from "./UseCase";    // Card display
+import UseCase from "./Application";    // Card display
 import Link from "next/link";
 
 const ApplicationSection = () => {
@@ -14,13 +14,13 @@ const ApplicationSection = () => {
   const [currentCategory, setCurrentCategory] = useState(null);
 
   useEffect(() => {
-    fetch("/useCases.json")
+    fetch("/generatedDB/topicApplications.json")
       .then((res) => res.json())
       .then((data) => {
         setUseCasesData(data);
         setFilteredUseCases([]); // empty until user selects a category
       })
-      .catch((err) => console.error("Failed to fetch useCases data:", err));
+      .catch((err) => console.error("Failed to fetch topicApplications data:", err));
   }, []);
 
   const handleCategoryChange = (category) => {

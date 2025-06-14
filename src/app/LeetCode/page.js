@@ -2,7 +2,7 @@ import { allBlogs } from "../../../.contentlayer/generated";
 import GithubSlugger, { slug } from "github-slugger"
 import QuestionSection from "../../components/LeetCode/QuestionSection";
 import DifficultySection from "../../components/LeetCode/Difficulty/DifficultySection";
-import UseCasesSection from "../../components/LeetCode/Application/ApplicationSection";
+import ApplicationSection from "../../components/LeetCode/Application/ApplicationSection";
 import SolutionSection from "../../components/LeetCode/Solutions/SolutionSection";
 
 const slugger = new GithubSlugger();
@@ -31,10 +31,10 @@ const LeetCodePage = ({params}) => {
 
   return (
     <article className="mt-20 flex flex-col text-dark dark:text-light">
-      <QuestionSection />
-      <UseCasesSection />
-      <DifficultySection />
       <SolutionSection />
+      <ApplicationSection />
+      <QuestionSection />
+      <DifficultySection />
     </article>
   );
 };

@@ -2,9 +2,9 @@ import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-const UseCase = ({ useCase }) => {
+const Application = ({ useCase }) => {
   return (
-    <div className="group border p-4 rounded-md shadow-md hover:scale-105 transition-all ease duration-200">
+    <div className="group border p-4 rounded-md shadow-md hover:scale-100 transition-all ease duration-200">
       <h2 className="font-bold text-lg sm:text-xl">
         <span
           className="bg-gradient-to-r from-accent/50 to-accent/50 dark:from-accentDark/50
@@ -45,4 +45,4 @@ const UseCase = ({ useCase }) => {
   );
 };
 
-export default UseCase;
+export default Application;

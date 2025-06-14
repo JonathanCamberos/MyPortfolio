@@ -13,7 +13,7 @@ const DifficultySection = () => {
 
   useEffect(() => {
     // Fetch questions data from your source
-    fetch("/questions.json")
+    fetch("/generatedDB/questions.json")
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);

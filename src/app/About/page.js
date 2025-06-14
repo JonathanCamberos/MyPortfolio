@@ -142,7 +142,7 @@ export default function About() {
               {skills.map(skill => (
                   <div className="inline-block py-1.5 px-4 bg-accent dark:bg-accentDark 
                       text-light dark:text-dark rounded-full capitalize font-semibold 
-                      border-2 border-solid border-light dark:border-dark hover:scale-105 transition-all 
+                      border-2 border-solid border-light dark:border-dark hover:scale-100 transition-all 
                       ease duration-200 text-sm">
                     {skill}
                   </div>

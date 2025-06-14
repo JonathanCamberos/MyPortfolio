@@ -13,8 +13,8 @@ const QuestionSection = () => {
 
   useEffect(() => {
     Promise.all([
-      fetch("/topicQuestions.json").then((res) => res.json()),
-      fetch("/questions.json").then((res) => res.json()),
+      fetch("/generatedDB/topicQuestionNums.json").then((res) => res.json()),
+      fetch("/generatedDB/allQuestionNum.json").then((res) => res.json()),
     ])
       .then(([topicsData, questionsData]) => {
         setTopics(["all", ...Object.keys(topicsData)]);
@@ -37,7 +37,7 @@ const QuestionSection = () => {
         );
         setFilteredQuestions(sortedQuestions);
       } else {
-        fetch("/topicQuestions.json")
+        fetch("/generatedDB/topicQuestionNums.json")
           .then((res) => res.json())
           .then((topicsData) => {
             const questionNums = topicsData[topic] || [];
