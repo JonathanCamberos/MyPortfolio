@@ -13,13 +13,13 @@ const DifficultySection = () => {
 
   useEffect(() => {
     // Fetch questions data from your source
-    fetch("/generatedDB/questions.json")
+    fetch("/generatedDB/allQuestionNum.json")
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);
         setFilteredQuestions([]); // Initially empty until a difficulty is selected
       })
-      .catch((err) => console.error("Failed to fetch questions data:", err));
+      .catch((err) => console.error("Failed to fetch allQuestionNum data:", err));
   }, []);
 
   const handleDifficultyChange = (difficulty) => {

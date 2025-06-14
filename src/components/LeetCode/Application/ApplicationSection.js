@@ -50,10 +50,10 @@ const ApplicationSection = () => {
     <article className="mt-10 flex flex-col text-dark dark:text-light">
       <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
         <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
-          DSA Use Cases
+          DSA Application
         </h1>
         <span className="mt-2 inline-block">
-          Filter use cases by category.
+          Possible applications for a data structure.
         </span>
       </div>
 
