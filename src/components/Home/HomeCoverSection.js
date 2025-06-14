@@ -1,10 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
 import { sortBlogs } from '../../utils'
-import Link from 'next/link';
-import Tag from '../Elements/Tag';
-import { slug } from 'github-slugger';
-import { format } from 'date-fns';
 import LeetCodeStats from "./../../components/Home/LeetCodeStats"; 
 
 // passing blog objects from page.js (which imports from content folder)
@@ -14,17 +9,13 @@ const HomeCoverSection = ( {blogs} ) => {
     const sortedBlogs = sortBlogs(blogs)
     const blog = sortedBlogs[0]
 
-    
     return (
       <div>
        {/* <div className="md:w-11/12 w-full inline-block"> */}
-
-      
-
         {/* Stats Section (50:50 Split) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-10 items-center min-h-[60vh]">
   <div className="flex flex-col items-center text-center p-6 sm:p-10">
-    <h2 className="text-2xl font-bold dark:text-light">
+    <h2 className="text-3xl font-bold dark:text-light">
       Hola!
     </h2>
     <p className="text-lg dark:text-light leading-relaxed max-w-3xl">

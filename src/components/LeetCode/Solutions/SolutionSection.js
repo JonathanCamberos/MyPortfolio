@@ -55,12 +55,45 @@ const SolutionCard = ({ solution }) => (
   </div>
 );
 
+const HorizontalQuestionCard = ({ question }) => (
+  <div className="flex flex-col md:flex-row items-center md:items-start border p-4 rounded-md shadow-md bg-light dark:bg-dark border-dark dark:border-light">
+    <div className="flex-grow">
+      <h2 className="font-bold text-lg sm:text-xl">
+        {question.questionNum}. {question.questionTitle}
+      </h2>
+      <p className="text-sm text-gray-500 mt-2">
+        <span className="text-accent dark:text-accentDark font-semibold text-xs sm:text-sm">
+          Difficulty:
+        </span>{" "}
+        {question.questionDifficulty}
+      </p>
+      <p className="text-sm text-gray-500 mt-2">
+        <span className="text-accent dark:text-accentDark font-semibold text-xs sm:text-sm">
+          Topics:
+        </span>{" "}
+        {question.questionTopics?.join(", ") || "N/A"}
+      </p>
+      <p className="mt-2">{question.questionBlurb || "No description available."}</p>
+      <a
+        href={question.questionLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline text-blue-600 hover:text-blue-800"
+      >
+        View Full Question
+      </a>
+    </div>
+  </div>
+);
+
 const SolutionSection = () => {
   const [questionMapping, setQuestionMapping] = useState({});
   const [allSolutions, setAllSolutions] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSolutions, setSelectedSolutions] = useState([]);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
+  // Fetch question mappings and solutions
   useEffect(() => {
     fetch("/generatedDB/queryQuestionNumString.json")
       .then((res) => res.json())
@@ -77,45 +110,57 @@ const SolutionSection = () => {
       );
   }, []);
 
-  // Clear selected solutions if search is empty
   useEffect(() => {
     if (searchQuery === "") {
       setSelectedSolutions([]);
+      setSelectedQuestion(null);
     }
   }, [searchQuery]);
 
-  // Filter question titles by search
   const filteredQuestions = Object.keys(questionMapping).filter((key) =>
     key.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const fetchQuestionDetails = (questionNumber) => {
+    fetch(`/generatedDB/allQuestionNum.json`)
+      .then((res) => res.json())
+      .then((data) => {
+        const questionDetails = data[questionNumber];
+        if (questionDetails) {
+          setSelectedQuestion(questionDetails);
+        }
+      })
+      .catch((err) =>
+        console.error(`Failed to fetch details for question ${questionNumber}:`, err)
+      );
+  };
 
   const handleButtonClick = (questionTitle) => {
     const questionNumber = questionMapping[questionTitle];
     if (!questionNumber) return;
 
-    // Toggle behavior: if already selected, deselect
     if (
       selectedSolutions.length > 0 &&
       selectedSolutions[0].questionNumber === questionNumber
     ) {
       setSelectedSolutions([]);
+      setSelectedQuestion(null);
     } else {
-      // Show all solutions for this question number
       const solutions = allSolutions[questionNumber] || [];
       setSelectedSolutions(solutions);
+      fetchQuestionDetails(questionNumber);
     }
   };
 
   return (
     <article className="mt-10 flex flex-col text-dark dark:text-light">
       <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
-        <h1 className="mt-6 font-semibold text-2xl md:text-4xl lg:text-5xl">
+        <h1 className="mt-6 font-semibold text-2xl md:text-3xl lg:text-3xl">
           Search LeetCode Questions
         </h1>
         <span className="mt-2 inline-block">Find questions by title or number. Compare Solutions.</span>
       </div>
 
-      {/* Search input */}
       <div className="mt-5 px-5 sm:px-10 md:px-24 sxl:px-32">
         <input
           type="text"
@@ -126,7 +171,6 @@ const SolutionSection = () => {
         />
       </div>
 
-      {/* Buttons container with border lines - always visible */}
       <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10 min-h-[60px]">
         {searchQuery !== "" ? (
           filteredQuestions.length > 0 ? (
@@ -150,13 +194,16 @@ const SolutionSection = () => {
             </p>
           )
         ) : (
-          // Empty placeholder to maintain height so borders don't collapse
           <div className="w-full h-10"></div>
         )}
       </div>
 
+      {selectedQuestion && (
+        <div className="mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
+          <HorizontalQuestionCard question={selectedQuestion} />
+        </div>
+      )}
 
-      {/* Display all selected solutions */}
       {selectedSolutions.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
           {selectedSolutions.map((solution, idx) => (

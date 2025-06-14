@@ -1,5 +1,5 @@
 import { allBlogs } from "../../.contentlayer/generated";
-import FeaturedPosts from "../components/Home/FeaturedPosts";
+import FeaturedPosts from "../components/Home/CurrentlyWorkingOk";
 import HomeCoverSection from "../components/Home/HomeCoverSection";
 import Head from "next/head";
 
