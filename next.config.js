@@ -9,6 +9,8 @@ const filePaths = [
   'content/leetcode-stacks/index.mdx',
   'content/leetcode-two-pointers/index.mdx',
 ];
+
+
 // Function to parse solutions from content
 function parseSolutions(content, blogTitle) {
   const solutionsMap = {};
@@ -85,6 +87,10 @@ function parseSolutions(content, blogTitle) {
       const type = normalizeKey(typeRaw);
       const application = normalizeKey(applicationRaw);
 
+      // Append ---{type}{application} to the solutionLink
+      const baseLink = `/Notes/${formattedBlogTitle}#solution-${current.number}-${normalizeKey(current.name)}`;
+      const solutionLink = `${baseLink}---${type}${application}`;
+
       const solutionObj = {
         number: current.number,
         name: current.name,
@@ -92,7 +98,7 @@ function parseSolutions(content, blogTitle) {
         application,
         code,
         questionNumber,
-        solutionLink: `/Notes/${formattedBlogTitle}#solution-${current.number}-${normalizeKey(current.name)}`,
+        solutionLink,
         blog: blogTitle,
       };
 
@@ -105,6 +111,7 @@ function parseSolutions(content, blogTitle) {
 
   return solutionsMap;
 }
+
 
 // Function to parse questions from content
 function parseQuestions(content, blogTitle) {
@@ -239,7 +246,8 @@ function parseUseCases(content, blogTitle) {
         summary: "",
         exampleIntro: "",
         codeExample: "",
-        useCaseLink: `/Notes/${formattedBlogTitle}#${normalizeKey(structureType)}-use-case-${normalizeKey(
+        // changed here: use-case => application
+        useCaseLink: `/Notes/${formattedBlogTitle}#${normalizeKey(structureType)}-application-${normalizeKey(
           useCaseTitle
         )}`,
         blog: blogTitle,
