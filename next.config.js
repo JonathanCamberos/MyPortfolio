@@ -16,8 +16,8 @@ function parseSolutions(content, blogTitle) {
   // Regex to match the question number and title
   const questionHeaderRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
 
-  // Regex to match solution headers, capturing number, name, type, application
-  const solutionHeaderRegex = /^### Solution (\d+): (.+?) - ([^\/]+)\/(.+)$/gm;
+  // Updated regex to capture solution number, name, and all pairs after first ' - '
+  const solutionHeaderRegex = /^### Solution (\d+): (.+?) - (.+)$/gm;
 
   // Normalize keys (for use as object keys and URLs)
   const normalizeKey = (key) =>
@@ -47,8 +47,7 @@ function parseSolutions(content, blogTitle) {
       index: match.index,
       number: parseInt(match[1], 10),
       name: match[2].trim(),
-      typeRaw: match[3].trim(),
-      applicationRaw: match[4].trim(),
+      typeApplicationsRaw: match[3].trim(), // everything after first ' - '
     });
   }
 
@@ -73,31 +72,40 @@ function parseSolutions(content, blogTitle) {
     const codeMatch = codeBlockRegex.exec(section);
     const code = codeMatch ? codeMatch[1].trim() : "";
 
-    // Normalize keys
-    const type = normalizeKey(current.typeRaw);
-    const application = normalizeKey(current.applicationRaw);
+    // Split the type/application pairs by ' - '
+    const typeApplicationPairs = current.typeApplicationsRaw.split(/\s-\s/);
 
-    // Construct solution object
-    const solutionObj = {
-      number: current.number,
-      name: current.name,
-      type,
-      application,
-      code,
-      questionNumber, // Add the question number here
-      solutionLink: `/Notes/${formattedBlogTitle}#solution-${current.number}-${normalizeKey(current.name)}`,
-      blog: blogTitle,
-    };
+    for (const pair of typeApplicationPairs) {
+      const [typeRaw, applicationRaw] = pair.split("/").map((str) => str.trim());
 
-    // Initialize nested maps if needed
-    if (!solutionsMap[type]) solutionsMap[type] = {};
-    if (!solutionsMap[type][application]) solutionsMap[type][application] = [];
+      if (!typeRaw || !applicationRaw) {
+        throw new Error(`Invalid type/application pair '${pair}' in solution header.`);
+      }
 
-    solutionsMap[type][application].push(solutionObj);
+      const type = normalizeKey(typeRaw);
+      const application = normalizeKey(applicationRaw);
+
+      const solutionObj = {
+        number: current.number,
+        name: current.name,
+        type,
+        application,
+        code,
+        questionNumber,
+        solutionLink: `/Notes/${formattedBlogTitle}#solution-${current.number}-${normalizeKey(current.name)}`,
+        blog: blogTitle,
+      };
+
+      if (!solutionsMap[type]) solutionsMap[type] = {};
+      if (!solutionsMap[type][application]) solutionsMap[type][application] = [];
+
+      solutionsMap[type][application].push(solutionObj);
+    }
   }
 
   return solutionsMap;
 }
+
 
 // Function to parse questions from content
 function parseQuestions(content, blogTitle) {
