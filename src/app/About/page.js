@@ -36,7 +36,7 @@ export default function About() {
     >
       <div className="max-w-5xl w-full">
 
-        <div className="py-10"></div>
+        <div className="py-5"></div>
 
         {/* Introduction Section */}
         <div className="mb-12 text-center">
