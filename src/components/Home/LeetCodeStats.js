@@ -20,7 +20,7 @@ const LeetCodeStats = () => {
   const [sanity, setSanity] = useState("95.00%;");
 
   useEffect(() => {
-    fetch("/LeetCodeStats.json")
+    fetch("/generatedDB/leetcodeStats.json")
       .then((res) => res.json())
       .then((data) => setStats(data))
       .catch((err) => console.error("Failed to fetch stats:", err));
