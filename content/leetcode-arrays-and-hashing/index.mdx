@@ -255,6 +255,26 @@ Ex: Map complements to indices for quick lookup:
         return []
 ```
 
+### HashMap Application: Algorithm
+Case where a problem that seems to require a HashMap is easily solved by an algorithm specifically made for that problem
+
+Ex: Boyer-Moore Voting Algorithm
+```python
+def majorityElement(nums: List[int]) -> int:
+    candidate = None
+    count = 0
+
+    # Phase 1: Find a candidate for the majority element
+    for num in nums:
+        if count == 0:  # Reset candidate
+            candidate = num
+        count += (1 if num == candidate else -1)
+
+    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)
+    return candidate
+```
+
+
 ## 217. Contains Duplicate - Easy
 
 Topics:  Array, Hash Table, Sorting 
@@ -443,15 +463,15 @@ Given a list of elements, we need to check if any of those elements are duplicat
     def containsDuplicate(sef, nums: List[int]) -> bool:
 
         # space complexity: dictionary of O(n)
-        seen = defaultdict(int)
+        count = defaultdict(int)
 
         # time complexity: iteration over list of n length O(n)
         for num in nums:
 
             # time complexity: lookup operation in constant O(1)
-            if seen[num] >= 1:
+            if count[num] >= 1:
                 return True
-            seen[num] += 1
+            count[num] += 1
 
         # overall: time complexity  O(n) 
         # overall: space complexity O(n)
@@ -519,16 +539,12 @@ Characters: s and t consist of lowercase English letters
 Given a string, we represent its character count as a Hashmap.
 We then validate it to the second string character count.
 
-Time Lower Bound: We are required to traverse both strings to peak at every element at least once, best possible time complexity is O(n).
-
-Space Upper Bound: If we want to track every element, best space complexity is O(n)
-
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Merge Sort) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
-| Hashmap | O(n) | O(n) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
-| Hashmap (array of 26) | O(n) | O(n) | Same as logic as Hashmap | Same as logic as Hashmap |
+| Hashmap | O(n) | O(1) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
+| Hashmap (array of 26) | O(n) | O(1) | Same as logic as Hashmap | Same as logic as Hashmap |
 
 | Bug | Error |
 | --- | ----- |
@@ -647,7 +663,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
                 return False
 
         # overall: time complexity  O(n)
-        # overall: space complexity O(n)
+        # overall: space complexity O(1)
         return True
 ```
 
@@ -659,7 +675,7 @@ Space Upper Bound: If we want to track every element, best space complexity is O
 | Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | No additional memory is allocated O(1) |
 | Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Memory allocation for Hashmap dominates leading to O(n) space complexity |
 
-### Solution 2: Hashmap (array of 26) - Hashmap/Representation
+### Solution 2: Array of 26 - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
@@ -989,7 +1005,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Solution 1: Hashmap Array of 26 to Tuple Key - Hashmap/Grouping by Criteria
+### Solution 1: Hashmap of 26 to Tuple Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1038,11 +1054,11 @@ Lets see:
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-### Solution 2: Hashmap Array of 26 to String Key - Hashmap/Grouping by Criteria
+### Solution 2: Array of 26 to String Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
-        # note: using a list to build the string key is more efficient than repeatedly appending to a string, 
+        # Note: using a list to build the string key is more efficient than repeatedly appending to a string, 
         # as it avoids the overhead of creating new string objects on each append
         # list takes O(m) time vs string append which takes O(m^2)
 
@@ -1174,7 +1190,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
 
-### Solution 1: Hashmap Into Bucket Sort - Hashmap/Grouping by Criteria
+### Solution 1: Hashmap Into BucketSort - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
@@ -1232,7 +1248,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
 
-### Solution 2: MinHeap - Tree/MinHeap
+### Solution 2: MinHeap - HashMap/Algorithm
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1272,9 +1288,15 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | overall |  |  |  |  |
 
 
-### Solution 3: Quickselect (high to low) - Algorithm/Specific
+### Solution 3: Quickselect (high to low) - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+    
+        # Note: Quickselect is a modified quicksort
+        # Once the k-th smallest/largest element is placed in its correct position, everything
+        # to its right or left is already divided into the required groups based on frequency
+        # This allows us to avoid sorting the entire array and directly focuses on isolating 
+        # the elements we care about
 
         # In-place partition of array based on pivot value
         def partitionPivot(left, right, pivotIndex):
@@ -1305,11 +1327,6 @@ Now that we have the count, we just grab the top k highest occurring elements.
             unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
             return partitionIndex
 
-        # Quickselect is a modified quicksort
-        # Once the k-th smallest/largest element is placed in its correct position, everything
-        # to its right or left is already divided into the required groups based on frequency
-        # This allows us to avoid sorting the entire array and directly focuses on isolating 
-        # the elements we care about
         # time complexity: average recursion depth O(log m)
         # space complexity: recursion stack for in place partitioning on average O(log m)
         def quickselectHelper(left, right, kSmallest):
@@ -1357,9 +1374,15 @@ Now that we have the count, we just grab the top k highest occurring elements.
         return unique[:k]
 ```
 
-### Solution 4: Quickselect (low to high) - Algorithm/Specific
+### Solution 4: Quickselect (low to high) - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+
+        # Note: Quickselect is a modified quicksort
+        # Once the k-th smallest/largest element is placed in its correct position, everything
+        # to its right or left is already divided into the required groups based on frequency
+        # This allows us to avoid sorting the entire array and directly focuses on isolating 
+        # the elements we care about
 
         # In-place partition of array based on pivot frequency (low to high sorting)
         def partitionPivot(left, right, pivotIndex):
@@ -1380,6 +1403,8 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
                 # Lower frequency -> "lower"
                 if frequency[unique[i]] < pivotFrequency:
+
+                    # swap larger element
                     unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
                     partitionIndex += 1
 
@@ -1426,6 +1451,59 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Single Partition | O(m) | O(1) | Iterates over m unique elements in portion for a single partition O(m) | No additional memory allocation for in-place partition O(1) |
 | Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
 | Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
+
+### Solution 5. Modified MergeSort Frequency Count - Hashmap/Algorithm
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        
+        def countFrequencies(nums):
+            freq_map = {}
+            for num in nums:
+                if num in freq_map:
+                    freq_map[num] += 1
+                else:
+                    freq_map[num] = 1
+            return freq_map
+        
+        def mergeFrequencies(left_freq, right_freq):
+            # Combine two frequency maps
+            for key, value in right_freq.items():
+                if key in left_freq:
+                    left_freq[key] += value
+                else:
+                    left_freq[key] = value
+            return left_freq
+        
+        def modiMergeSort(nums):
+            # Base case: Single element array
+            if len(nums) == 1:
+                return countFrequencies(nums)
+            
+            # Split the array into two halves
+            mid = len(nums) // 2
+            left_freq = modiMergeSort(nums[:mid])
+            right_freq = modiMergeSort(nums[mid:])
+            
+            # Combine frequency counts from both halves
+            return mergeFrequencies(left_freq, right_freq)
+        
+        # Step 1: Get frequency counts using divide and conquer
+        freq = modiMergeSort(nums)
+        
+        # Step 2: Find the top K frequent elements
+        # Convert the dictionary to a list of tuples and sort by frequency
+        freq_items = list(freq.items())
+        freq_items.sort(key=lambda x: x[1], reverse=True)
+        
+        # Extract the top K elements
+        return [item for item, _ in freq_items[:k]]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
 
 ## 238. Product of Array Except Self - Medium
 

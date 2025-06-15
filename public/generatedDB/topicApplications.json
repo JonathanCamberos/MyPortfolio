@@ -64,6 +64,15 @@
       "codeExample": "def twoSum(nums, target):\n        # Map to store complement -> index\n        complement_map = {}\n\n        for i, num in enumerate(nums):\n            complement = target - num\n            \n            # Check if current number is a complement of a previously seen number\n            if num in complement_map:\n                return [complement_map[num], i]\n            \n            # Store complement of current number with index for future lookup\n            complement_map[complement] = i\n\n        return []",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-logic-mapping",
       "blog": "LeetCode: Arrays and Hashing"
+    },
+    {
+      "type": "HashMap",
+      "title": "Algorithm",
+      "summary": "Catch all case where a HashMap problem is easily solved algorithm specifically made for that problem",
+      "exampleIntro": "Boyer-Moore Voting Algorithm",
+      "codeExample": "def majorityElement(nums: List[int]) -> int:\n    candidate = None\n    count = 0\n\n    # Phase 1: Find a candidate for the majority element\n    for num in nums:\n        if count == 0:  # Reset candidate\n            candidate = num\n        count += (1 if num == candidate else -1)\n\n    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)\n    return candidate",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-algorithm",
+      "blog": "LeetCode: Arrays and Hashing"
     }
   ],
   "stack": [

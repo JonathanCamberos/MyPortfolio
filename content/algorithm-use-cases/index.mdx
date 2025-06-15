@@ -35,4 +35,33 @@ Leetcode: 150. Evaluate Reverse Polish Notation
 
 ### Intro
 
+
+## Boyer-Moore Voting Algorithm
+
+### Intro 
+Given an array nums, find the majority element.
+
+At first glance, it appears you need to use a hashmap to count the frequency of all elements to find the majority element efficiently.
+
+The Boyer-Moore Voting Algorithm,
+takes advantage of the guarantee that the majority element appears more than half the time.
+
+It uses a single pass through the array to identify a candidate majority element by "canceling out" non-majority elements.
+
+No explicit counting or storage of frequencies is needed, making it an elegant solution.
+
+```python
+def majorityVote(nums: List[int]) -> int:
+    candidate = None
+    count = 0
+
+    # Phase 1: Find a candidate for the majority element
+    for num in nums:
+        if count == 0:  # Reset candidate
+            candidate = num
+        count += (1 if num == candidate else -1)
+
+    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)
+    return candidate
+```
 ## more algos...
