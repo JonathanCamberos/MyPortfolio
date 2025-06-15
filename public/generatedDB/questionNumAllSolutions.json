@@ -13,13 +13,99 @@
   ],
   "11": [
     {
+      "number": 2,
+      "name": "Greedy",
+      "type": "two-pointers",
+      "application": "algorithm",
+      "code": "def trap(self, height: List[int]) -> int:\n        n = len(height)\n        water = 0\n\n        # time complexity: iterate over list of n length o(n)\n        for i in range(n):\n\n            # Use two pointers to calculate leftMax and rightMax\n            leftMax, left = 0, i\n            rightMax, right = 0, i\n\n            # time complexity: iterate over left hand side of list n length per outer iteration O(n^2)\n            while left >= 0:\n                leftMax = max(leftMax, height[left])\n                left -= 1\n\n            # time complexity: iterate over right hand side of list n length per outer iteration O(n^2)\n            while right < n:\n                rightMax = max(rightMax, height[right])\n                right += 1\n\n            # curr water trapped for curr bar i\n            water += min(leftMax, rightMax) - height[i]\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(1)\n        return water",
+      "questionNumber": 11,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-greedy---two-pointersalgorithm",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
       "number": 1,
       "name": "Two Pointer Early Break",
-      "type": "two-pointer",
+      "type": "two-pointers",
       "application": "partitioning",
       "code": "def maxArea(self, height: List[int]) -> int:\n        \n        L, R = 0, len(height)-1\n        maxWater = 0 \n\n        # time complexity: iterate over list of n length with two pointers O(n)\n        while L < R:\n\n            # grabbing weak link\n            smallerHeight = min(height[L], height[R])\n\n            # calculate curr water = (smallerHeight * width)\n            currWater = smallerHeight * (R-L)\n            \n            # compare to max\n            maxWater = max(maxWater, currWater)\n\n            # grabbing weak link, continue past it\n            # time complexity: continue iterating over list n length with two pointers O(n)\n            if height[L] < height[R]:\n                L += 1\n\n                # early break: eliminate redundant comparisons\n                # by skipping heights guaranteed to be suboptimal\n                while height[L] < smallerHeight:\n                    L += 1 \n            \n            else:\n                R -= 1\n\n                # early break: eliminate redundant comparisons\n                # by skipping heights guaranteed to be suboptimal \n                while height[R] < smallerHeight:\n                    R -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return maxWater",
       "questionNumber": 11,
-      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-two-pointer-early-break---two-pointerpartitioning",
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-two-pointer-early-break---two-pointerspartitioning",
+      "blog": "LeetCode: Two Pointers"
+    }
+  ],
+  "15": [
+    {
+      "number": 1,
+      "name": "Three Pointers Early Break (Sorting)",
+      "type": "two-pointers",
+      "application": "k-pointer-variants",
+      "code": "def threeSum(self, nums: List[int]) -> List[List[int]]:\n\n        # space complexity:\n        results = set()\n        n = len(nums)\n\n        # time complexity:\n        nums.sort()\n\n        # time complexity\n        for i in range(n - 2):\n\n            #\n            if i > 0 and nums[i] == nums[i - 1]:\n                continue\n\n            # early break: eliminate redundant comparisons\n            # can't get to 0 without negative number\n            if nums[i] > 0:\n                break\n\n            left, right = i + 1, n - 1\n            while left < right:\n                curr_sum = nums[i] + nums[left] + nums[right]\n\n                if curr_sum == 0:\n                    results.add((nums[i], nums[left], nums[right]))\n                    while left < right and nums[left] == nums[left + 1]:\n                        left += 1\n                    while left < right and nums[right] == nums[right - 1]:\n                        right -= 1\n                    left += 1\n                    right -= 1\n                elif curr_sum < 0:\n                    left += 1\n                else:\n                    right -= 1\n\n        # Time Complexity: O(n^2) for two-pointer traversal + O(n^2) for manual sorting.\n        # Space Complexity: O(k), where k is the number of unique triplets.\n        return [list(triplet) for triplet in results]",
+      "questionNumber": 15,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-three-pointers-early-break-sorting---two-pointersk-pointer-variants",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "number": 2,
+      "name": "Grouping By Parity (No Sorting)",
+      "type": "two-pointers",
+      "application": "algorithm",
+      "code": "def threeSum(self, nums: List[int]) -> List[List[int]]:\n        p, n, z = [], [], []\n        res = set()\n\n        for i in nums:\n            if i < 0:\n                n.append(i)\n            elif i > 0:\n                p.append(i)\n            else:\n                z.append(i)\n\n        # sets for access\n        P, N = set(p), set(n)\n\n        # 1. (0, num, -num) if at least one 0\n        if len(z) > 0:\n            for i in P:\n                n_target = -i\n                if n_target in N:\n                    res.add((n_target, 0, i ))\n\n        # 2. (0, 0, 0) if at least three 0's\n        if len(z) > 2:\n            res.add((0, 0, 0))\n\n        # 3. (-, -, +) negative pairs\n        for i in range(len(n)):\n            for j in range(i+1, len(n)):\n                p_target = -(n[i] + n[j])\n                if p_target in P:\n                    res.add(tuple(sorted([n[i], n[j], p_target])))\n        \n        # 4. (-, +, +) positive pairs\n        for i in range(len(p)):\n            for j in range(i+1, len(p)):\n                n_target = -(p[i] + p[j])\n                if n_target in N:\n                    res.add(tuple(sorted([p[i], p[j], n_target])))\n\n        return list(res)",
+      "questionNumber": 15,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-grouping-by-parity-no-sorting---two-pointersalgorithm",
+      "blog": "LeetCode: Two Pointers"
+    }
+  ],
+  "36": [
+    {
+      "number": 1,
+      "name": "Defaultdict Matrix",
+      "type": "hashmap",
+      "application": "representation",
+      "code": "def isValidSudoku(self, board: List[List[str]]) -> bool:\n        \n        # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)\n        cols = defaultdict(set)\n        rows = defaultdict(set)\n        squares = defaultdict(set)\n\n        # time complexity: iterating over all cells (r * c) O(n^2)\n        for r in range(9):\n            for c in range(9):\n                \n                tmp = board[r][c]\n                if tmp != \".\":\n\n                    # indexing box sets by tuple key (r/3, c/3)\n                    boxTuple = (r // 3, c // 3)\n\n                    # time complexity: lookup operation for element to corresponding sets in constant O(1)\n                    if (tmp in rows[r] or \n                        tmp in cols[c] or \n                        tmp in squares[box] ):\n                        return False\n                    \n                    # time complexity: insert operation for new element to corresponding sets in constant O(1)\n                    cols[c].add(tmp)\n                    rows[r].add(tmp)\n                    squares[boxTuple].add(tmp)\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(n)\n        return True",
+      "questionNumber": 36,
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-defaultdict-matrix---hashmaprepresentation",
+      "blog": "LeetCode: Arrays and Hashing"
+    },
+    {
+      "number": 2,
+      "name": "[[]] Matrix",
+      "type": "hashmap",
+      "application": "representation",
+      "code": "def isValidSudoku(self, board: List[List[str]]) -> bool:\n        \n        # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)\n        rows = [[], [], [], [], [], [], [], [], []]\n        col = [[], [], [], [], [], [], [], [], []]\n        boxes = [[], [], [], [], [], [], [], [], []]\n\n        # time complexity: iterating over all cells (r * c) O(n^2)\n        for i in range(9):\n            for j in range(9):\n                \n                tmp = board[i][j]\n                if tmp != \".\":  \n\n                    # indexing box sets by unique int calculation  \n                    box = 3 * (i//3) + (j//3)\n\n                    # time complexity: lookup operation for element to corresponding sets in constant O(1)\n                    if (tmp in rows[i] or \n                        tmp in col[j]  or \n                        tmp in boxes[box]):\n                        return False\n\n                    # space complexity: lookup operation for new element to corresponding sets in constant O(1)\n                    col[j].append(tmp)\n                    rows[i].append(tmp)\n                    boxes[box].append(tmp)\n        \n        # overall: time complexity O(n^2)\n        # overall: space complexity  O(n)\n        return True",
+      "questionNumber": 36,
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-matrix---hashmaprepresentation",
+      "blog": "LeetCode: Arrays and Hashing"
+    }
+  ],
+  "42": [
+    {
+      "number": 1,
+      "name": "Two Pointers Early Break",
+      "type": "two-pointers",
+      "application": "opposite-ends",
+      "code": "def trap(self, height: List[int]) -> int:\n\n        # Set initial variables\n        L, R = 0, len(height) - 1\n        water = 0\n        leftMax, rightMax = 0, 0\n\n        # time complexity: iterate over list of n length with two pointers O(n)\n        while L <= R:\n\n            # grabbing weak link\n            if height[L] < height[R]:\n\n                # Update leftMax\n                if height[L] >= leftMax:\n                    leftMax = height[L]\n\n                # outer if/else implies right is taller, so simply add to water count\n                else:\n                    water += leftMax - height[L]\n\n                # shifting pointer after calculation\n                L += 1\n\n            # grabbing weak link\n            else:\n                # Update rightMax\n                if height[R] >= rightMax:\n                    rightMax = height[R]\n\n                # outer if/else implies left is taller, so simply add to water count\n                else:\n                    water += rightMax - height[R]\n\n                # shifting pointer after calculation\n                R -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return water",
+      "questionNumber": 42,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-two-pointers-early-break---two-pointersopposite-ends",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "number": 2,
+      "name": "Monotonic Stack",
+      "type": "two-pointers",
+      "application": "algorithm",
+      "code": "def trap(self, height: List[int]) -> int:\n        stack = []  # Monotonic stack to store indices\n        water = 0\n        n = len(height)\n\n        # Traverse the height array\n        for i in range(n):\n            # While current height > height at stack top (possible water trap)\n            while stack and height[i] > height[stack[-1]]:\n                top = stack.pop()  # Index of the bottom of the trapped water\n\n                # No water can be trapped without both left and right walls\n                if not stack:\n                    break\n\n                # Calculate the distance and bounded height\n                distance = i - stack[-1] - 1\n                bounded_height = min(height[i], height[stack[-1]]) - height[top]\n                water += distance * bounded_height\n\n            stack.append(i)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (due to the stack)\n        return water",
+      "questionNumber": 42,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-monotonic-stack---two-pointersalgorithm",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "number": 3,
+      "name": "Dynamic Programming",
+      "type": "two-pointers",
+      "application": "algorithm",
+      "code": "def trap(self, height: List[int]) -> int:\n        n = len(height)\n        if n == 0:\n            return 0\n\n        # Arrays to store max heights from the left and right\n        left_max = [0] * n\n        right_max = [0] * n\n        water = 0\n\n        # Calculate left max for each bar\n        left_max[0] = height[0]\n        for i in range(1, n):\n            left_max[i] = max(left_max[i - 1], height[i])\n\n        # Calculate right max for each bar\n        right_max[n - 1] = height[n - 1]\n        for i in range(n - 2, -1, -1):\n            right_max[i] = max(right_max[i + 1], height[i])\n\n        # Calculate trapped water for each bar\n        for i in range(n):\n            water += min(left_max[i], right_max[i]) - height[i]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (for left_max and right_max arrays)\n        return water",
+      "questionNumber": 42,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-3-dynamic-programming---two-pointersalgorithm",
       "blog": "LeetCode: Two Pointers"
     }
   ],
@@ -43,6 +129,28 @@
       "questionNumber": 49,
       "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-hashmap-array-of-26-to-string-key---hashmapgrouping-by-criteria",
       "blog": "LeetCode: Arrays and Hashing"
+    }
+  ],
+  "125": [
+    {
+      "number": 1,
+      "name": "Two Pointers",
+      "type": "two-pointers",
+      "application": "opposite-ends",
+      "code": "def isPalindrome(self, s: str) -> bool:\n        \n        # space complexity: list to store cleaned string of n length O(n)\n        cleaned = []\n\n        # simple way for alphaNum check\n        def alphaNum(c):\n            return (ord('A') <= ord(c) <= ord('Z') or \n                    ord('a') <= ord(c) <= ord('z') or \n                    ord('0') <= ord(c) <= ord('9'))\n\n        # time complexity: iterate over string of n length O(n)\n        for c in s:\n            # Check if character is alphanumeric\n            if isAlphaNum(c):\n                # Convert uppercase to lowercase\n                if 'A' <= c <= 'Z':\n                    cleaned.append(chr(ord(c) + 32))\n                else:\n                    cleaned.append(c)\n\n        # time complexity: two-pointer traversal of cleaned string O(n)\n        left, right = 0, len(cleaned) - 1\n        while left < right:\n            if cleaned[left] != cleaned[right]:\n                return False\n            left += 1\n            right -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return True",
+      "questionNumber": 125,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-two-pointers---two-pointersopposite-ends",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "number": 2,
+      "name": "Two Pointers In Place",
+      "type": "two-pointers",
+      "application": "opposite-ends",
+      "code": "def isPalindrome(self, s: str) -> bool:\n        # space complexity: no additional space used for storage O(1)\n        left, right = 0, len(s) - 1\n\n        # simple way for alphaNum check\n        def alphaNum(c):\n            return (ord('A') <= ord(c) <= ord('Z') or \n                    ord('a') <= ord(c) <= ord('z') or \n                    ord('0') <= ord(c) <= ord('9'))\n\n        # time complexity: iteration over string of n length O(n)\n        while left < right:\n            # time complexity: moving left pointer to next alphanumeric character O(n)\n            while left < right and not isAlphaNum(s[left]):\n                left += 1\n\n            # time complexity: moving right pointer to previous alphanumeric character O(n)\n            while left < right and not isAlphaNum(s[right]):\n                right -= 1\n\n            # Convert characters to lowercase\n            leftChar = s[left]\n            if 'A' <= left_char <= 'Z':\n                left_char = chr(ord(leftChar) + 32)\n\n            rightChar = s[right]\n            if 'A' <= right_char <= 'Z':\n                rightChar = chr(ord(rightChar) + 32)\n\n            # Compare characters\n            if leftChar != rightChar:\n                return False\n\n            left += 1\n            right -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return True",
+      "questionNumber": 125,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-two-pointers-in-place---two-pointersopposite-ends",
+      "blog": "LeetCode: Two Pointers"
     }
   ],
   "128": [
@@ -75,6 +183,28 @@
       "questionNumber": 128,
       "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-3-union-find-tree---treeunion-find",
       "blog": "LeetCode: Arrays and Hashing"
+    }
+  ],
+  "167": [
+    {
+      "number": 2,
+      "name": "Pointer Sum Shift",
+      "type": "two-pointers",
+      "application": "opposite-ends",
+      "code": "def twoSumII(self, numbers: List[int], target: int) -> List[int]:\n\n        # space complexity: l and r pointers constant O(1)\n        left, right = 0, len(numbers) - 1  \n\n        # time complexity: iterate over list of n length until l and r pointers meet O(n)\n        while left < right:\n\n            # check current pointer values\n            currSum = numbers[left] + numbers[right]  \n\n            if currSum == target:\n                # convert to 1-indexed array\n                return [left + 1, right + 1]\n\n            # increase left pointer to increase currSum\n            elif currSum < target:\n                left += 1\n\n            # decrease right pointer to decrease currSum\n            else:\n                right -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return []",
+      "questionNumber": 167,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-pointer-sum-shift---two-pointersopposite-ends",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "number": 1,
+      "name": "Binary Search for Complement",
+      "type": "two-pointers",
+      "application": "one-pointer-with-auxiliary-state",
+      "code": "def twoSumII(self, numbers: List[int], target: int) -> List[int]:\n        \n        # time complexity: iteration over list of n length O(n)\n        for i in range(len(numbers)): \n\n            complement = target - numbers[i]\n            \n            # Binary search: O(log n)\n            left, right = i + 1, len(numbers) - 1\n            while left <= right:\n                mid = (left + right) // 2\n                if numbers[mid] == complement:\n\n                    # Convert to 1-indexed array\n                    return [i + 1, mid + 1]  \n                elif numbers[mid] < complement:\n                    left = mid + 1\n                else:\n                    right = mid - 1\n\n        # overall: time complexity O(n log n)\n        # overall: space complexity O(1)\n        return []",
+      "questionNumber": 167,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-binary-search-for-complement---two-pointersone-pointer-with-auxiliary-state",
+      "blog": "LeetCode: Two Pointers"
     }
   ],
   "217": [
@@ -143,6 +273,18 @@
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],
+  "271": [
+    {
+      "number": 1,
+      "name": "One Pointer Length Delimiter",
+      "type": "two-pointers",
+      "application": "one-pointer-with-auxiliary-state",
+      "code": "def encode(self, strs: List[str]) -> str:\n\n        # python strings are immutable so concatenation creates new string time complexity o(n^2)\n        # python list allows us to add encoded strings in O(n)\n        # space complexity: storage for encoding all strings in a list O(n)\n        encoded = []\n\n        # time complexity: iterate over list of strings n length O(n)\n        for s in strings:\n            \n            # time complexity: iterate over all chars in string O(n)\n\n            # lenDelim = len + delim\n            left = 0\n            lenDelim = str(len(s)) + \"#\"\n\n            # append each char of (length + delimiter) O(n)\n            while left < len(lenDelim):\n                encoded.append(lenDelim[left])\n                left += 1\n            \n            # append each char of string itself O(n)\n            left = 0\n            while left < len(s):\n                encoded.append(s[left])\n                left += 1\n        \n        # overall: time complexity O(n^2)\n        # overall: space complexity O(n^2)\n        return ''.join(res)\n\n\n    def decode(self, s: str) -> List[str]:\n\n        # space complexity:\n        decoded = []\n        left = 0\n\n        # time complexity: iterate over list of n chars O(n)\n        while left < len(encoded):\n\n            # time complexity: \n            currLen = 0\n            while encoded[left] != \"#\":\n\n                # grabbing value ensuring base 10\n                currLen = currLen * 10 + int(encoded[i]) \n                left += 1\n\n            # skip delimiter, point to string\n            left += 1  \n\n            # grabbing currLen many chars to form string\n            # time complexity: \n            substring = \"\"\n            while left < range(currLen)\n\n                # forming string\n                substring += encoded[left]\n                left += 1\n            \n            # added string to decoded list of strings\n            decoded.append(substring)\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(n^2)\n        return decoded",
+      "questionNumber": 271,
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-one-pointer-length-delimiter---two-pointersone-pointer-with-auxiliary-state",
+      "blog": "LeetCode: Two Pointers"
+    }
+  ],
   "347": [
     {
       "number": 1,
@@ -155,13 +297,13 @@
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
-      "number": 1,
-      "name": "Hashmap Into Bucket Sort",
-      "type": "algorithm",
-      "application": "specific",
-      "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n            \n        # space complexity: frequency count for unique integers O(m) \n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n integers O(n)\n        for key in nums:\n\n            # time complexity: insertion operation takes constant O(1)\n            count[key] += 1\n\n        # numBuckets equal to length to account for max possible frequency count\n        # the case where list is full of only 1 element O(n)\n        # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1\n        numBuckets = len(nums) + 1\n\n        # time complexity: iterating to set empty list for each bucket\n        # space complexity: creating O(n) bucket lists\n        freqBuckets = [[] for i in range(numBuckets)]\n\n        # time complexity: iterate over frequency list for m unique integer tuples (int, occurrences) O(m) \n        for int, occurrences in count.items():\n\n            # time complexity: insert operation takes constant O(1)\n            freqBuckets[occurrences].append(int)\n\n        # space complexity: grabbing top k integers O(k)\n        res = []\n\n        # time complexity: iterate over n buckets O(n)\n        for i in range(len(freqBuckets) - 1, 0, -1):\n            \n            # time complexity: iterate over all entries in current bucket O(n)\n            for num in freqBuckets[i]:\n                \n                # time complexity: insert operation takes constant O(1)\n                res.append(num)\n                \n                # time complexity: continue while less than k integers have been grabbed O(k)\n                if len(res) == k:\n                    return res\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
+      "number": 2,
+      "name": "MinHeap",
+      "type": "tree",
+      "application": "minheap",
+      "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n\n        # space complexity: frequency map of m unique integers o(m)\n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n length O(n)\n        for num in nums: \n            count[num] += 1\n\n        # space complexity: minHeap tracks k most frequent elements O(k)\n        minHeap = []\n\n        # time complexity: iterate over frequency map of m unique int O(m)\n        for num, freq in count.items(): \n\n            # manage the heap manually, Push current element\n            heapq.heappush(minHeap, (freq, num)) \n            \n            # heap grows beyond size k, remove smallest frequent element\n            if len(minHeap) > k:\n\n                # time complexity: # O(log k)\n                heapq.heappop(minHeap) \n        \n        # Step 4: Extract the elements from the heap\n        result = [num for freq, num in minHeap]  # O(k)\n\n        return result",
       "questionNumber": 347,
-      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap-into-bucket-sort---algorithmspecific",
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-minheap---treeminheap",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
@@ -182,16 +324,6 @@
       "code": "def topKFrequent(self, nums: List[int], k: int) -> List[int]:\n\n        # In-place partition of array based on pivot frequency (low to high sorting)\n        def partitionPivot(left, right, pivotIndex):\n            \n            # Frequency of pivot element\n            pivotFrequency = frequency[unique[pivotIndex]]\n\n            # Move pivot to end\n            # tuple unpacking in python, allows to swap two variables in a single line\n            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]\n            \n            # Index to place smaller elements\n            partitionIndex = left\n\n            # Partition elements with freq less than pivotFrequency to left\n            # time complexity: iterates over unique elements between left and right segment O(m)\n            for i in range(left, right):\n\n                # Lower frequency -> \"lower\"\n                if frequency[unique[i]] < pivotFrequency:\n                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]\n                    partitionIndex += 1\n\n            # swap pivot to its final correct partitioned index\n            # now elements to the right and left follow the conditions according to pivot element\n            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]\n            return partitionIndex\n\n        # Quickselect helper for low to high sorting\n        # Avg recursion depth: O(log m), space: O(log m)\n        def quickselectHelper(left, right, kSmallest):\n            if left == right:\n                return\n\n            pivotIndex = random.randint(left, right)\n            pivotIndex = partitionPivot(left, right, pivotIndex)\n\n            # If pivot is at the kth smallest position, done\n            if kSmallest == pivotIndex:\n                return\n            elif kSmallest < pivotIndex:\n                quickselectHelper(left, pivotIndex - 1, kSmallest)\n            else:\n                quickselectHelper(pivotIndex + 1, right, kSmallest)\n\n        # Count frequencies O(n)\n        frequency = defaultdict(int)\n        for num in nums:\n            frequency[num] += 1\n\n        unique = list(frequency.keys())\n        n = len(unique)\n\n        # For low-to-high sorting, k-th smallest corresponds to index n - k\n        quickselectHelper(0, n - 1, n - k)\n\n        # Now top k frequent are the last k elements\n        return unique[n - k:]",
       "questionNumber": 347,
       "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-4-quickselect-low-to-high---algorithmspecific",
-      "blog": "LeetCode: Arrays and Hashing"
-    },
-    {
-      "number": 2,
-      "name": "MinHeap",
-      "type": "tree",
-      "application": "minheap",
-      "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n\n        # space complexity: frequency map of m unique integers o(m)\n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n length O(n)\n        for num in nums: \n            count[num] += 1\n\n        # space complexity: minHeap tracks k most frequent elements O(k)\n        minHeap = []\n\n        # time complexity: iterate over frequency map of m unique int O(m)\n        for num, freq in count.items(): \n\n            # manage the heap manually, Push current element\n            heapq.heappush(minHeap, (freq, num)) \n            \n            # heap grows beyond size k, remove smallest frequent element\n            if len(minHeap) > k:\n\n                # time complexity: # O(log k)\n                heapq.heappop(minHeap) \n        \n        # Step 4: Extract the elements from the heap\n        result = [num for freq, num in minHeap]  # O(k)\n\n        return result",
-      "questionNumber": 347,
-      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-minheap---treeminheap",
       "blog": "LeetCode: Arrays and Hashing"
     }
   ]

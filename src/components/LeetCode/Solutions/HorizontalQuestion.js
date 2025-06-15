@@ -6,8 +6,6 @@ const HorizontalQuestion = ({ question }) => (
       <h2 className="font-bold text-lg sm:text-xl">
         <a
           href={question.questionLink}
-          target="_blank"
-          rel="noopener noreferrer"
           className="hover:text-orange-500 dark:hover:text-accentDark transition-colors duration-300"
         >
           {question.questionNum}. {question.questionTitle}

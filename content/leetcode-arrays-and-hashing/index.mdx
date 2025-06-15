@@ -1174,8 +1174,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
 
-### Solution 1: Hashmap Into Bucket Sort - Hashmap/Grouping by Criteria - Algorithm/Specific
-Application: Grouping by Criteria
+### Solution 1: Hashmap Into Bucket Sort - Hashmap/Grouping by Criteria
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
@@ -1433,11 +1432,11 @@ Application: Grouping by Criteria
 Topics:  Array, Prefx Sum
 
 ### Intro
->Given an integer array nums, return an array answer such that answer[i] is 
->equal to the product of all the elements of nums except nums[i].
->The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
->You must write an algorithm that runs in O(n) time and without using the division 
->operation.
+> Given an integer array nums, return an array answer such that answer[i] is 
+> equal to the product of all the elements of nums except nums[i].
+> The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+> You must write an algorithm that runs in O(n) time and without using the division 
+> operation.
 
 |  Input         | Output          |  
 | -------------- | --------------- | 
@@ -1680,7 +1679,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-### Solution 1.1: Defaultdict Matrix - Hashmap/Representation
+### Solution 1: Defaultdict Matrix - Hashmap/Representation
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1715,7 +1714,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-### Solution 1.2: [[]] Matrix - Hashmap/Representation
+### Solution 2: [[]] Matrix - Hashmap/Representation
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         

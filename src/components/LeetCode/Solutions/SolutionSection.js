@@ -68,7 +68,10 @@ const SolutionSection = () => {
       setSelectedQuestion(null);
     } else {
       const solutions = allSolutions[questionNumber] || [];
-      setSelectedSolutions(solutions);
+
+      const sortedSolutions = solutions.sort(
+        (a, b) => a.number - b.number);
+      setSelectedSolutions(sortedSolutions);
       fetchQuestionDetails(questionNumber);
     }
   };
@@ -125,7 +128,6 @@ const SolutionSection = () => {
           <HorizontalQuestion question={selectedQuestion} />
         </div>
       )}
-
       {selectedSolutions.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
           {selectedSolutions.map((solution, idx) => (

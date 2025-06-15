@@ -159,7 +159,7 @@ Ex: Merge two sorted arrays into one sorted array
     print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]
 ```
 
-### Two Pointers Application: K-Pointer Variants 
+### Two Pointers Application: K Pointer Variants 
 We can extend the two pointer case to track k pointers simultaneously.
 These pointers can traverse the same list, different lists, or freeze while moving
 other pointers.
@@ -274,8 +274,7 @@ traverse using pointers comparing characters on the start and end of the string.
 | Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
 | Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
-### Solution 1: Two Pointers
-Application: Opposite Ends
+### Solution 1: Two Pointers - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -318,8 +317,7 @@ Application: Opposite Ends
 | Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
 
 
-### Solution 2: Two Pointers In Place
-Application: Opposite Ends
+### Solution 2: Two Pointers In Place - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
         # space complexity: no additional space used for storage O(1)
@@ -395,7 +393,7 @@ as well as its length.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Two Pointers Length Delimiter |  |  |  |  |
 
-### Solution 1: One Pointer Length Delimiter
+### Solution 1: One Pointer Length Delimiter - Two Pointers/One Pointer with Auxiliary State
 ```python
     def encode(self, strs: List[str]) -> str:
 
@@ -472,7 +470,7 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-## 167. Two Sum II - Input Array Is Sorted - Medium
+## 167. Two Sum II Input Array Is Sorted - Medium
 
 Topics:  Array, Two Pointers, Binary Search
 
@@ -534,7 +532,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity | No additional memory was allocated leading to constant O(1) space complexity. |
 
 
-### Solution 1: Binary Search for Complement
+### Solution 1: Binary Search for Complement - Two Pointers/One Pointer with Auxiliary State
 ```python 
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
         
@@ -567,7 +565,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-### Solution 2: Two Pointers
+### Solution 2: Pointer Sum Shift - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
@@ -671,7 +669,7 @@ Let see:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1. Hashmap Two Sum I Approach (No Sorting)
+### Brute Force Hashmap Two Sum I Approach (No Sorting)
 ```python    
     def threeSum(self, nums: List[int]) -> List[List[int]]:
        
@@ -714,7 +712,7 @@ Let see:
 |  |  |  |  |  | 
 
 
-### Solution 2: Two Pointers Early Break (Sorting)
+### Solution 1: Three Pointers Early Break (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -769,7 +767,7 @@ while this is arguably cleaner and more satisfying than the mini twoSum solution
 not utilziing two pointers. But its still a cool approach to the problem.
 
 
-### Solution 3: Grouping By Parity (No Sorting)
+### Solution 2: Grouping By Parity (No Sorting) - Two Pointers/Algorithm
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         p, n, z = [], [], []
@@ -885,7 +883,7 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) | 
 | Overall | O(n<sup>2</sup>) | O(1) | Inner loop dominates leading to O(n<sup>2</sup>) | No additional memory allocation leading to O(1) | 
 
-### Solution 1: Two Pointer Early Break - Two Pointer/Partitioning 
+### Solution 1: Two Pointer Early Break - Two Pointers/Partitioning 
 ```python
     def maxArea(self, height: List[int]) -> int:
         
@@ -933,7 +931,7 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) |
 | Overall | O(n) | O(1) | Iteration over list of n length dominates leading to O(n) | No additional memory allocation O(1) | 
 
-### Solution 2: Greedy 
+### Solution 2: Greedy - Two Pointers/Algorithm
 
 ## 42. Trapping Rain Water - Hard
 
@@ -1051,7 +1049,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 
 
-### Solution 1: Two Pointers Early Break
+### Solution 1: Two Pointers Early Break - Two Pointers/Opposite Ends
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -1101,7 +1099,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 |  |  |  |  |  | 
 
 
-### Solution 2: Monotonic Stack
+### Solution 2: Monotonic Stack - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
         stack = []  # Monotonic stack to store indices
@@ -1135,7 +1133,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 3: Dynamic Programming
+### Solution 3: Dynamic Programming - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
         n = len(height)

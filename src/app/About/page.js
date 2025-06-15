@@ -16,17 +16,19 @@ export default function About() {
   const pastExperience = [
     {
       title: "Software Engineer",
-      company: "Bank of America Network Security",
+      company: "Bank of America",
+      team: "Network Security",
       date: "2023",
       description: "Network Security",
       link: "https://business.bofa.com/en-us/content/fraud-prevention-and-cyber-security-solutions.html"
     },
     {
       title: "Software Engineer",
-      company: "PwC Web Applications Consulting",
+      company: "PwC",
+      team: "Cybersecurity Applications Consulting",
       date: "2022",
-      description: "Developed web applications Consulting",
-      link: "https://www.pwc.com/us/en.html"
+      description: "Developed secure web applications Consulting",
+      link: "https://www.pwc.com/us/en/services/consulting/cybersecurity-risk-regulatory.html"
     },
   ];
 
@@ -67,7 +69,7 @@ export default function About() {
                   href={exp.link}
                   className="text-accent dark:text-accentDark no-underline hover:underline hover:text-accentLight"
                 >
-                  {exp.company}
+                  {exp.company} - {exp.team}
                 </Link>
               </li>
             ))}
