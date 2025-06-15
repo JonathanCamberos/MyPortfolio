@@ -10,11 +10,12 @@ tags:
 - data structures and algorithms
 ---
 
-## Two Pointer Intro
+## Two Pointers Intro
 Leetcode problems with elegant solutions using two pointers. 
 
-### L + R
-Two Pointers is the strategy of using L and R pointers to solve logic problems.
+### What are Two Pointers
+Two Pointers is the strategy of using a Left and Right pointer to iterate over 
+a data structure, usually an array, to solve a problem.
 
 ### Two Pointers Application: One Pointer with Auxiliary State
 Use a single pointer to scan linearly and keep track of additional state 
@@ -202,6 +203,16 @@ Ex: Given an integer array nums, return all the unique triplets [nums[i], nums[j
     print(threeSum(nums))  # Output: [[-1, -1, 2], [-1, 0, 1]]
 ```
 
+### Two Pointers Application: Algorithm
+Case where a problem that seems to require Two Pointers is easily solved by 
+an algorithm specifically made for that problem
+
+Ex:
+```python
+todo :)
+```
+
+
 
 ## 125. Valid Palindrome - Easy
 
@@ -274,7 +285,7 @@ traverse using pointers comparing characters on the start and end of the string.
 | Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
 | Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
-### Solution 1: Two Pointers - Two Pointers/Opposite Ends
+### Solution 1: Compare Ends Pre Clean - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -317,7 +328,7 @@ traverse using pointers comparing characters on the start and end of the string.
 | Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
 
 
-### Solution 2: Two Pointers In Place - Two Pointers/Opposite Ends
+### Solution 2: Compare Ends In Place - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
         # space complexity: no additional space used for storage O(1)
@@ -565,7 +576,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-### Solution 2: Pointer Sum Shift - Two Pointers/Opposite Ends
+### Solution 2: Shift Pointer Ends Based on Sum - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
@@ -712,7 +723,7 @@ Let see:
 |  |  |  |  |  | 
 
 
-### Solution 1: Three Pointers Early Break (Sorting) - Two Pointers/K Pointer Variants
+### Solution 1: Frozen Pointer with Two Pointers Early Break (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 

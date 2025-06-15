@@ -290,10 +290,20 @@
       "number": 1,
       "name": "Hashmap Into BucketSort",
       "type": "hashmap",
-      "application": "grouping-by-criteria",
+      "application": "algorithm",
       "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n            \n        # space complexity: frequency count for unique integers O(m) \n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n integers O(n)\n        for key in nums:\n\n            # time complexity: insertion operation takes constant O(1)\n            count[key] += 1\n\n        # numBuckets equal to length to account for max possible frequency count\n        # the case where list is full of only 1 element O(n)\n        # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1\n        numBuckets = len(nums) + 1\n\n        # time complexity: iterating to set empty list for each bucket\n        # space complexity: creating O(n) bucket lists\n        freqBuckets = [[] for i in range(numBuckets)]\n\n        # time complexity: iterate over frequency list for m unique integer tuples (int, occurrences) O(m) \n        for int, occurrences in count.items():\n\n            # time complexity: insert operation takes constant O(1)\n            freqBuckets[occurrences].append(int)\n\n        # space complexity: grabbing top k integers O(k)\n        res = []\n\n        # time complexity: iterate over n buckets O(n)\n        for i in range(len(freqBuckets) - 1, 0, -1):\n            \n            # time complexity: iterate over all entries in current bucket O(n)\n            for num in freqBuckets[i]:\n                \n                # time complexity: insert operation takes constant O(1)\n                res.append(num)\n                \n                # time complexity: continue while less than k integers have been grabbed O(k)\n                if len(res) == k:\n                    return res\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
       "questionNumber": 347,
-      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap-into-bucketsort---hashmapgrouping-by-criteria",
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-hashmap-into-bucketsort---hashmapalgorithm",
+      "blog": "LeetCode: Arrays and Hashing"
+    },
+    {
+      "number": 2,
+      "name": "MinHeap",
+      "type": "hashmap",
+      "application": "algorithm",
+      "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n\n        # space complexity: frequency map of m unique integers o(m)\n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n length O(n)\n        for num in nums: \n            count[num] += 1\n\n        # space complexity: minHeap tracks k most frequent elements O(k)\n        minHeap = []\n\n        # time complexity: iterate over frequency map of m unique int O(m)\n        for num, freq in count.items(): \n\n            # manage the heap manually, Push current element\n            heapq.heappush(minHeap, (freq, num)) \n            \n            # heap grows beyond size k, remove smallest frequent element\n            if len(minHeap) > k:\n\n                # time complexity: # O(log k)\n                heapq.heappop(minHeap) \n        \n        # Step 4: Extract the elements from the heap\n        result = [num for freq, num in minHeap]  # O(k)\n\n        return result",
+      "questionNumber": 347,
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-minheap---hashmapalgorithm",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
@@ -317,13 +327,13 @@
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
-      "number": 2,
-      "name": "MinHeap",
-      "type": "tree",
-      "application": "minheap",
-      "code": "def topKFrequent(self, nums: List[int], k:int) -> List[int]:\n\n        # space complexity: frequency map of m unique integers o(m)\n        count = defaultdict(int)\n\n        # time complexity: iterate over list of n length O(n)\n        for num in nums: \n            count[num] += 1\n\n        # space complexity: minHeap tracks k most frequent elements O(k)\n        minHeap = []\n\n        # time complexity: iterate over frequency map of m unique int O(m)\n        for num, freq in count.items(): \n\n            # manage the heap manually, Push current element\n            heapq.heappush(minHeap, (freq, num)) \n            \n            # heap grows beyond size k, remove smallest frequent element\n            if len(minHeap) > k:\n\n                # time complexity: # O(log k)\n                heapq.heappop(minHeap) \n        \n        # Step 4: Extract the elements from the heap\n        result = [num for freq, num in minHeap]  # O(k)\n\n        return result",
+      "number": 5,
+      "name": "Modified MergeSort Frequency Count",
+      "type": "hashmap",
+      "application": "algorithm",
+      "code": "def topKFrequent(self, nums: List[int], k: int) -> List[int]:\n        \n        def countFrequencies(nums):\n            freq_map = {}\n            for num in nums:\n                if num in freq_map:\n                    freq_map[num] += 1\n                else:\n                    freq_map[num] = 1\n            return freq_map\n        \n        def mergeFrequencies(left_freq, right_freq):\n            # Combine two frequency maps\n            for key, value in right_freq.items():\n                if key in left_freq:\n                    left_freq[key] += value\n                else:\n                    left_freq[key] = value\n            return left_freq\n        \n        def modiMergeSort(nums):\n            # Base case: Single element array\n            if len(nums) == 1:\n                return countFrequencies(nums)\n            \n            # Split the array into two halves\n            mid = len(nums) // 2\n            left_freq = modiMergeSort(nums[:mid])\n            right_freq = modiMergeSort(nums[mid:])\n            \n            # Combine frequency counts from both halves\n            return mergeFrequencies(left_freq, right_freq)\n        \n        # Step 1: Get frequency counts using divide and conquer\n        freq = modiMergeSort(nums)\n        \n        # Step 2: Find the top K frequent elements\n        # Convert the dictionary to a list of tuples and sort by frequency\n        freq_items = list(freq.items())\n        freq_items.sort(key=lambda x: x[1], reverse=True)\n        \n        # Extract the top K elements\n        return [item for item, _ in freq_items[:k]]",
       "questionNumber": 347,
-      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-minheap---treeminheap",
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-5-modified-mergesort-frequency-count---hashmapalgorithm",
       "blog": "LeetCode: Arrays and Hashing"
     }
   ]

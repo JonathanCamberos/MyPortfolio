@@ -68,7 +68,7 @@
     {
       "type": "HashMap",
       "title": "Algorithm",
-      "summary": "Catch all case where a HashMap problem is easily solved algorithm specifically made for that problem",
+      "summary": "Case where a problem that seems to require a HashMap is easily solved by an algorithm specifically made for that problem",
       "exampleIntro": "Boyer-Moore Voting Algorithm",
       "codeExample": "def majorityElement(nums: List[int]) -> int:\n    candidate = None\n    count = 0\n\n    # Phase 1: Find a candidate for the majority element\n    for num in nums:\n        if count == 0:  # Reset candidate\n            candidate = num\n        count += (1 if num == candidate else -1)\n\n    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)\n    return candidate",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-algorithm",

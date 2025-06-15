@@ -256,7 +256,8 @@ Ex: Map complements to indices for quick lookup:
 ```
 
 ### HashMap Application: Algorithm
-Case where a problem that seems to require a HashMap is easily solved by an algorithm specifically made for that problem
+Case where a problem that seems to require a HashMap is easily solved by 
+an algorithm specifically made for that problem
 
 Ex: Boyer-Moore Voting Algorithm
 ```python
@@ -1452,7 +1453,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
 | Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
 
-### Solution 5. Modified MergeSort Frequency Count - Hashmap/Algorithm
+### Solution 5: Modified MergeSort Frequency Count - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
@@ -1593,7 +1594,7 @@ Now lets see how we can do it in O(1) for space.
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notescommon-formulas#brute-case-double-for-loop). | Memory allocation for array to store n result elements O(n) |
 
 
-### Solution 1:  Prefix & Postfix 3 arrays O(n) - Array/In-place Transformations
+### Solution 1:  Prefix and Postfix O(n) - Array/In Place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
@@ -1640,7 +1641,7 @@ Now lets see how we can do it in O(1) for space.
 | Overall | O(n) | O(n) | Iteration over list of n length takes linear time leading to O(n) | Memory allocation for list of n length leading to O(n) | 
 
 
-### Solution 2: Prefix & Postfix Optimal O(1) space - Array/In-place Transformations
+### Solution 2: Prefix and Postfix Optimal O(1) - Array/In Place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
@@ -1907,7 +1908,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | Overall | O(n<sup>3</sup>) | O(1) | Iterating * Iterating * Lookup dominate leading to O(n<sup>3</sup>) | No additional memory allocation O(1) |
 
 
-### Solution 1: Hashmap Boundaries - Hashmap/Representation
+### Solution 1: HashMap Boundaries - HashMap/Representation
 ```python
     def longestConsecutive(nums: List[int]) -> int:
         
@@ -1989,7 +1990,7 @@ def longestConsecutive(self, nums: List[int]) -> int:
 
 
 
-### Solution 3: Union Find Tree - Tree/Union Find
+### Solution 3: Union Find Tree - HashMap/Algorithm
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
         
