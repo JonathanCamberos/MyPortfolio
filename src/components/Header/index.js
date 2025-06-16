@@ -114,7 +114,10 @@ const Header = () => {
             About
           </Link>
           <button
-            onClick={() => setMode(mode === "light" ? "dark" : "light")}
+            onClick={() => {
+              setMode(mode === "light" ? "dark" : "light");
+              document.dispatchEvent(new Event("darkModeToggled"));
+            }}
             className={cx(
               "w-6 h-6 ease ml-2 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200",
               mode === "light" ? "bg-dark text-light" : "bg-light text-dark"
@@ -199,6 +202,7 @@ const Header = () => {
             onClick={() => {
               setMode(mode === "light" ? "dark" : "light");
               toggle();
+              document.dispatchEvent(new Event("darkModeToggled"));
             }}
             className={`w-6 h-6 ease mb-4 flex items-center justify-center rounded-full p-1 hover:scale-125 transition-all ease duration-200 ${
               mode === "light" ? "bg-dark text-light" : "bg-light text-dark"

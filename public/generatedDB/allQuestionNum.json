@@ -9,7 +9,9 @@
       "Hash Table"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i---easy",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-06-11T21:53:00",
+    "coldnessCount": 5
   },
   "5": {
     "questionNum": 5,
@@ -22,7 +24,9 @@
       "Dynamic Programming"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring---medium",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   },
   "11": {
     "questionNum": 11,
@@ -35,7 +39,9 @@
       "Greedy"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water---medium",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "15": {
     "questionNum": 15,
@@ -48,7 +54,9 @@
       "Sorting"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-two-sum-ii2---medium",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": "2025-05-15T21:53:00",
+    "coldnessCount": 32
   },
   "20": {
     "questionNum": 20,
@@ -60,7 +68,9 @@
       "Stack"
     ],
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses---easy",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-06-12T21:53:00",
+    "coldnessCount": 4
   },
   "22": {
     "questionNum": 22,
@@ -73,7 +83,9 @@
       "Backtracking"
     ],
     "questionLink": "/Notes/leetcode-stacks#22-generate-parentheses---medium",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-05-31T21:53:00",
+    "coldnessCount": 16
   },
   "36": {
     "questionNum": 36,
@@ -86,7 +98,9 @@
       "Matrix"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku---medium",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-05-20T21:53:00",
+    "coldnessCount": 27
   },
   "42": {
     "questionNum": 42,
@@ -101,7 +115,9 @@
       "Monotonic Stack"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water---hard",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": "2025-06-15T22:32:00",
+    "coldnessCount": 1
   },
   "49": {
     "questionNum": 49,
@@ -115,7 +131,9 @@
       "Sorting"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams---medium",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-06-10T21:53:00",
+    "coldnessCount": 6
   },
   "84": {
     "questionNum": 84,
@@ -128,7 +146,9 @@
       "Monotonic Stack"
     ],
     "questionLink": "/Notes/leetcode-stacks#84-largest-rectangle-in-histogram---hard",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-06-02T21:53:00",
+    "coldnessCount": 14
   },
   "125": {
     "questionNum": 125,
@@ -140,7 +160,9 @@
       "String"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome---easy",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": "2025-06-11T21:53:00",
+    "coldnessCount": 5
   },
   "128": {
     "questionNum": 128,
@@ -153,7 +175,9 @@
       "Union Find"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence---medium",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-06-08T21:53:00",
+    "coldnessCount": 8
   },
   "150": {
     "questionNum": 150,
@@ -166,7 +190,9 @@
       "Design"
     ],
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation---medium",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-06-06T21:53:00",
+    "coldnessCount": 10
   },
   "155": {
     "questionNum": 155,
@@ -178,7 +204,9 @@
       "Design"
     ],
     "questionLink": "/Notes/leetcode-stacks#155-min-stack---medium",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-05-10T21:53:00",
+    "coldnessCount": 37
   },
   "167": {
     "questionNum": 167,
@@ -191,7 +219,9 @@
       "Binary Search"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": "2025-05-21T21:53:00",
+    "coldnessCount": 26
   },
   "217": {
     "questionNum": 217,
@@ -204,7 +234,9 @@
       "Sorting"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate---easy",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-06-13T21:53:00",
+    "coldnessCount": 3
   },
   "238": {
     "questionNum": 238,
@@ -216,7 +248,9 @@
       "Prefix Sum"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self---medium",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   },
   "242": {
     "questionNum": 242,
@@ -229,7 +263,9 @@
       "Sorting"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram---easy",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": "2025-06-10T21:53:00",
+    "coldnessCount": 6
   },
   "271": {
     "questionNum": 271,
@@ -241,7 +277,9 @@
       "Design"
     ],
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode---medium",
-    "blog": "LeetCode: Two Pointers"
+    "blog": "LeetCode: Two Pointers",
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   },
   "347": {
     "questionNum": 347,
@@ -259,7 +297,9 @@
       "Quickselect"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list---medium",
-    "blog": "LeetCode: Arrays and Hashing"
+    "blog": "LeetCode: Arrays and Hashing",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "402": {
     "questionNum": 402,
@@ -273,7 +313,9 @@
       "Monotonic Stack"
     ],
     "questionLink": "/Notes/leetcode-stacks#402-remove-k-digits---medium",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-05-11T21:53:00",
+    "coldnessCount": 36
   },
   "739": {
     "questionNum": 739,
@@ -286,7 +328,9 @@
       "Monotonic Stack"
     ],
     "questionLink": "/Notes/leetcode-stacks#739-daily-temperatures---medium",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-06-11T21:53:00",
+    "coldnessCount": 5
   },
   "853": {
     "questionNum": 853,
@@ -300,6 +344,8 @@
       "Monotonic Stack"
     ],
     "questionLink": "/Notes/leetcode-stacks#853-car-fleet---medium",
-    "blog": "LeetCode: Stacks"
+    "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   }
 }

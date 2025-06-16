@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Solution from "./Solution";
 import HorizontalQuestion from "./HorizontalQuestion";
 
@@ -10,11 +8,21 @@ import HorizontalQuestion from "./HorizontalQuestion";
 const SolutionSection = () => {
   const [questionMapping, setQuestionMapping] = useState({});
   const [allSolutions, setAllSolutions] = useState({});
+  const [warmnessData, setWarmnessData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSolutions, setSelectedSolutions] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  // Fetch question mappings and solutions
+  // Dummy state to force re-render on dark mode toggle
+  const [dummy, setDummy] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setDummy((prev) => !prev);
+    document.addEventListener("darkModeToggled", handler);
+    return () => document.removeEventListener("darkModeToggled", handler);
+  }, []);
+
+  // Fetch question mappings, solutions, and warmness data
   useEffect(() => {
     fetch("/generatedDB/queryQuestionNumString.json")
       .then((res) => res.json())
@@ -29,6 +37,13 @@ const SolutionSection = () => {
       .catch((err) =>
         console.error("Failed to fetch questionNumAllSolutions data:", err)
       );
+
+    fetch("/generatedDB/allQuestionWarmness.json")
+      .then((res) => res.json())
+      .then((data) => setWarmnessData(data))
+      .catch((err) =>
+        console.error("Failed to fetch allQuestionWarmness data:", err)
+      );
   }, []);
 
   useEffect(() => {
@@ -38,12 +53,23 @@ const SolutionSection = () => {
     }
   }, [searchQuery]);
 
+  // Update isDarkMode state on dummy toggle (dark mode change)
+  const [isDarkMode, setIsDarkMode] = useState(() =>
+    typeof document !== "undefined" && document.documentElement.classList.contains("dark")
+  );
+
+  useEffect(() => {
+    setIsDarkMode(
+      typeof document !== "undefined" && document.documentElement.classList.contains("dark")
+    );
+  }, [dummy]);
+
   const filteredQuestions =
-  searchQuery.toLowerCase() === "all"
-    ? Object.keys(questionMapping) // return all questions if "all"
-    : Object.keys(questionMapping).filter((key) =>
-        key.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    searchQuery.toLowerCase() === "all"
+      ? Object.keys(questionMapping) // return all questions if "all"
+      : Object.keys(questionMapping).filter((key) =>
+          key.toLowerCase().includes(searchQuery.toLowerCase())
+        );
 
   const fetchQuestionDetails = (questionNumber) => {
     fetch(`/generatedDB/allQuestionNum.json`)
@@ -72,12 +98,33 @@ const SolutionSection = () => {
     } else {
       const solutions = allSolutions[questionNumber] || [];
 
-      const sortedSolutions = solutions.sort(
-        (a, b) => a.number - b.number);
+      const sortedSolutions = solutions.sort((a, b) => a.number - b.number);
       setSelectedSolutions(sortedSolutions);
       fetchQuestionDetails(questionNumber);
     }
   };
+
+  // Map coldnessCount to Tailwind background/text classes
+const getColdnessClass = (coldnessCount, isDark) => {
+  // White background for null, undefined, -1 (no submissions), or >30 (too cold)
+  if (!coldnessCount || coldnessCount === -1 || coldnessCount > 30) {
+    return "bg-white dark:bg-white text-gray-800 dark:text-black";
+  }
+
+  // Map coldnessCount 1-30 to 5 ranges (~6 units each, dark to light)
+  if (coldnessCount <= 6) {
+    return "bg-orange-700 dark:bg-yellow-700 text-white dark:text-black";
+  } else if (coldnessCount <= 12) {
+    return "bg-orange-600 dark:bg-yellow-600 text-white dark:text-black";
+  } else if (coldnessCount <= 18) {
+    return "bg-orange-500 dark:bg-yellow-500 text-white dark:text-black";
+  } else if (coldnessCount <= 24) {
+    return "bg-orange-300 dark:bg-yellow-300 text-gray-900 dark:text-black";
+  } else {
+    return "bg-orange-100 dark:bg-yellow-100 text-gray-900 dark:text-black";
+  }
+};
+
 
   return (
     <article className="mt-10 flex flex-col text-dark dark:text-light">
@@ -85,7 +132,9 @@ const SolutionSection = () => {
         <h1 className="mt-6 font-semibold text-2xl md:text-3xl lg:text-3xl">
           Search LeetCode Questions
         </h1>
-        <span className="mt-2 inline-block">Find questions by title or number and compare solutions.</span>
+        <span className="mt-2 inline-block">
+          Find questions by title or number and compare solutions.
+        </span>
       </div>
 
       <div className="mt-5 px-5 sm:px-10 md:px-24 sxl:px-32">
@@ -96,26 +145,32 @@ const SolutionSection = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-
       </div>
 
       <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10 min-h-[60px]">
         {searchQuery !== "" ? (
           filteredQuestions.length > 0 ? (
-            filteredQuestions.map((key, index) => (
-              <button
-                key={index}
-                className={`py-1.5 md:py-2 px-6 md:px-10 rounded-full border-2 border-solid border-dark dark:border-light transition-all ease duration-200 m-2 ${
-                  selectedSolutions.length > 0 &&
-                  questionMapping[key] === selectedSolutions[0].questionNumber
-                    ? "bg-dark text-light dark:bg-light dark:text-dark"
-                    : "bg-light text-dark dark:bg-dark dark:text-light"
-                }`}
-                onClick={() => handleButtonClick(key)}
-              >
-                {key}
-              </button>
-            ))
+            filteredQuestions.map((key, index) => {
+              const questionNumber = questionMapping[key];
+              const coldnessCount = warmnessData[questionNumber]?.coldnessCount || 0;
+              const isSelected =
+                selectedSolutions.length > 0 &&
+                questionMapping[key] === selectedSolutions[0].questionNumber;
+
+              const baseClass = isSelected
+                ? "bg-dark text-light dark:bg-light dark:text-dark"
+                : getColdnessClass(coldnessCount, isDarkMode);
+
+              return (
+                <button
+                  key={index}
+                  className={`py-1.5 md:py-2 px-6 md:px-10 rounded-full border-2 border-solid border-dark dark:border-light transition-all ease duration-200 m-2 ${baseClass}`}
+                  onClick={() => handleButtonClick(key)}
+                >
+                  {key}
+                </button>
+              );
+            })
           ) : (
             <p className="text-center text-gray-500 dark:text-gray-400 w-full m-2">
               No results found. Try a different search term.
@@ -135,8 +190,6 @@ const SolutionSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
           {selectedSolutions.map((solution, idx) => (
             <Solution key={idx} solution={solution} />
-            // <SolutionCard key={idx} solution={solution} />
-
           ))}
         </div>
       )}

@@ -11,35 +11,92 @@ const filePaths = [
 ];
 
 
+
 function syncWarmness() {
   const allQuestionsPath = path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json");
   const warmnessPath = path.join(process.cwd(), "public/generatedDB", "allQuestionWarmness.json");
 
-  // Read all questions
   const allQuestions = JSON.parse(fs.readFileSync(allQuestionsPath, "utf-8"));
 
-  // Read warmness or start empty
   let warmnessData = {};
   if (fs.existsSync(warmnessPath)) {
     warmnessData = JSON.parse(fs.readFileSync(warmnessPath, "utf-8"));
   }
 
-  let updated = false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // normalize time for comparison
 
-  Object.values(allQuestions).forEach(({ questionNum }) => {
-    if (!(questionNum in warmnessData)) {
-      // New question - initialize values
-      warmnessData[questionNum] = {
+  let updatedAllQuestions = false;
+  let updatedWarmness = false;
+
+  // Calculate days between dates and adjust for today being 1
+  const daysBetween = (d1, d2) => {
+    const msPerDay = 24 * 60 * 60 * 1000;
+    return Math.max(1, Math.floor((d1 - d2) / msPerDay) + 1); // Ensure today is 1
+  };
+
+  Object.values(allQuestions).forEach((question) => {
+    const qNum = question.questionNum.toString();
+
+    if (warmnessData[qNum]) {
+      const lastDateStr = warmnessData[qNum].lastSubmittedDate;
+      let coldnessCount = -1; // default: no submissions
+
+      if (lastDateStr) {
+        const lastDate = new Date(lastDateStr);
+        lastDate.setHours(0, 0, 0, 0);
+
+        coldnessCount = daysBetween(today, lastDate);
+      }
+
+      if (warmnessData[qNum].coldnessCount !== coldnessCount) {
+        warmnessData[qNum].coldnessCount = coldnessCount;
+        updatedWarmness = true;
+      }
+
+      if (
+        question.lastSubmittedDate !== lastDateStr ||
+        question.coldnessCount !== coldnessCount
+      ) {
+        question.lastSubmittedDate = lastDateStr;
+        question.coldnessCount = coldnessCount;
+        updatedAllQuestions = true;
+      }
+    } else {
+      // New question - no submissions
+      warmnessData[qNum] = {
         lastSubmittedDate: null,
-        warmnessCount: 0,
+        coldnessCount: -1,
       };
-      updated = true;
+      question.lastSubmittedDate = null;
+      question.coldnessCount = -1;
+      updatedWarmness = true;
+      updatedAllQuestions = true;
     }
   });
 
-  if (updated) {
+  if (updatedAllQuestions) {
+    fs.writeFileSync(allQuestionsPath, JSON.stringify(allQuestions, null, 2));
+    console.log("allQuestionNum.json updated with warmness fields and coldness counts");
+  } else {
+    console.log("No changes made to allQuestionNum.json");
+  }
+
+  // Ensure warmnessData has all questions from allQuestions
+  Object.values(allQuestions).forEach(({ questionNum }) => {
+    const qNum = questionNum.toString();
+    if (!(qNum in warmnessData)) {
+      warmnessData[qNum] = {
+        lastSubmittedDate: null,
+        coldnessCount: -1,
+      };
+      updatedWarmness = true;
+    }
+  });
+
+  if (updatedWarmness) {
     fs.writeFileSync(warmnessPath, JSON.stringify(warmnessData, null, 2));
-    console.log("allQuestionWarmness.json updated with new questions");
+    console.log("allQuestionWarmness.json updated with new questions and coldness counts");
   } else {
     console.log("No new questions to update in allQuestionWarmness.json");
   }

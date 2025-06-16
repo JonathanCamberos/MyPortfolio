@@ -1,94 +1,94 @@
 {
   "1": {
-    "lastSubmittedDate": "2025-05-31T09:08:00Z",
-    "warmnessCount": 15
+    "lastSubmittedDate": "2025-06-11T21:53:00",
+    "coldnessCount": 5
   },
   "5": {
-    "lastSubmittedDate": "2025-06-11T09:08:00Z",
-    "warmnessCount": 4
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   },
   "11": {
-    "lastSubmittedDate": "2025-06-13T09:08:00Z",
-    "warmnessCount": 2
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "15": {
-    "lastSubmittedDate": "2025-06-14T09:08:00Z",
-    "warmnessCount": 1
+    "lastSubmittedDate": "2025-05-15T21:53:00",
+    "coldnessCount": 32
   },
   "20": {
-    "lastSubmittedDate": "2025-06-15T09:08:00Z",
-    "warmnessCount": 0
+    "lastSubmittedDate": "2025-06-12T21:53:00",
+    "coldnessCount": 4
   },
   "22": {
-    "lastSubmittedDate": "2025-06-10T09:08:00Z",
-    "warmnessCount": 5
+    "lastSubmittedDate": "2025-05-31T21:53:00",
+    "coldnessCount": 16
   },
   "36": {
-    "lastSubmittedDate": "2025-06-12T09:08:00Z",
-    "warmnessCount": 3
+    "lastSubmittedDate": "2025-05-20T21:53:00",
+    "coldnessCount": 27
   },
   "42": {
-    "lastSubmittedDate": "2025-06-13T09:08:00Z",
-    "warmnessCount": 2
+    "lastSubmittedDate": "2025-06-15T22:32:00",
+    "coldnessCount": 1
   },
   "49": {
-    "lastSubmittedDate": "2025-06-15T09:08:00Z",
-    "warmnessCount": 0
+    "lastSubmittedDate": "2025-06-10T21:53:00",
+    "coldnessCount": 6
   },
   "84": {
-    "lastSubmittedDate": "2025-06-06T09:08:00Z",
-    "warmnessCount": 9
+    "lastSubmittedDate": "2025-06-02T21:53:00",
+    "coldnessCount": 14
   },
   "125": {
-    "lastSubmittedDate": "2025-06-14T09:08:00Z",
-    "warmnessCount": 1
+    "lastSubmittedDate": "2025-06-11T21:53:00",
+    "coldnessCount": 5
   },
   "128": {
-    "lastSubmittedDate": "2025-06-10T09:08:00Z",
-    "warmnessCount": 5
+    "lastSubmittedDate": "2025-06-08T21:53:00",
+    "coldnessCount": 8
   },
   "150": {
-    "lastSubmittedDate": "2025-06-13T09:08:00Z",
-    "warmnessCount": 2
+    "lastSubmittedDate": "2025-06-06T21:53:00",
+    "coldnessCount": 10
   },
   "155": {
-    "lastSubmittedDate": "2025-06-09T09:08:00Z",
-    "warmnessCount": 6
+    "lastSubmittedDate": "2025-05-10T21:53:00",
+    "coldnessCount": 37
   },
   "167": {
-    "lastSubmittedDate": "2025-06-12T09:08:00Z",
-    "warmnessCount": 3
+    "lastSubmittedDate": "2025-05-21T21:53:00",
+    "coldnessCount": 26
   },
   "217": {
-    "lastSubmittedDate": "2025-06-15T09:08:00Z",
-    "warmnessCount": 0
+    "lastSubmittedDate": "2025-06-13T21:53:00",
+    "coldnessCount": 3
   },
   "238": {
-    "lastSubmittedDate": "2025-06-13T09:08:00Z",
-    "warmnessCount": 2
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   },
   "242": {
-    "lastSubmittedDate": "2025-06-09T09:08:00Z",
-    "warmnessCount": 6
+    "lastSubmittedDate": "2025-06-10T21:53:00",
+    "coldnessCount": 6
   },
   "271": {
-    "lastSubmittedDate": "2025-06-12T09:08:00Z",
-    "warmnessCount": 3
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   },
   "347": {
-    "lastSubmittedDate": "2025-06-08T09:08:00Z",
-    "warmnessCount": 7
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "402": {
-    "lastSubmittedDate": "2025-06-15T09:08:00Z",
-    "warmnessCount": 0
+    "lastSubmittedDate": "2025-05-11T21:53:00",
+    "coldnessCount": 36
   },
   "739": {
-    "lastSubmittedDate": "2025-06-13T09:08:00Z",
-    "warmnessCount": 2
+    "lastSubmittedDate": "2025-06-11T21:53:00",
+    "coldnessCount": 5
   },
   "853": {
-    "lastSubmittedDate": "2025-06-15T09:08:00Z",
-    "warmnessCount": 0
+    "lastSubmittedDate": "2025-06-15T21:53:00",
+    "coldnessCount": 1
   }
 }
