@@ -19,7 +19,7 @@ Leetcode problems with elegant solutions using stacks.
 We can track structure while iterating over an object ensuring it maintains 
 some criteria
 
-Ex: Validate if a string containing brackets ()[]{} is properly balanced:
+Ex: Validate if a s tring containing brackets ()[]{} is properly balanced:
 ```python
     def balancedParentheses(s: str) -> bool:
         stack = []
@@ -144,36 +144,6 @@ Ex: Post and Prefix
     # Input: "3 4 + 2 * 1 +"
     # Output: 15 (Equivalent to (3 + 4) * 2 + 1)
 ```
-
-### Stack Application: Backtracking
-We can cache paths or partial solutions to prune the search space effectively.
-
-Ex: Generate all valid combinations of n pairs of parentheses
-```python 
-    def generateParentheses(n: int) -> list[str]:
-        result = []
-
-        def backtrack(current: str, open_count: int, close_count: int):
-            # Base case: If the current string is valid and complete
-            if len(current) == 2 * n:
-                result.append(current)
-                return
-            
-            # Add an open parenthesis if it's valid 
-            # (Inherently prune invalid cases where open_count >= n)            
-            if open_count < n:
-                backtrack(current + "(", open_count + 1, close_count)
-            
-            # Add a closing parenthesis if it's valid 
-            # (Inherently prune invalid cases where close_count >= open_count)            
-            if close_count < open_count:
-                backtrack(current + ")", open_count, close_count + 1)
-
-        # Start the recursion with an empty string
-        backtrack("", 0, 0)
-        return result
-```
-
 
 
 ### Stack Application: Partitioning
@@ -1620,3 +1590,52 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  | 
+
+
+## 402. Remove K Digits - Medium
+
+Topics:  String, Stack, Greedy, Monotonic Stack
+
+### Intro
+> Given string num representing a non-negative integer num, and an integer k, 
+> return the smallest possible integer after removing k digits from num.
+
+|  Input   | Output  |  
+| -------- | ------- | 
+| num = "10", k = 2 | "0" |
+| num = "10200", k = 1 | "200" |
+| num = "1432219", k = 3 | "1219" | 
+
+Constraints:
+
+1 &le; k &le; num.length &le; 10<sup>5</sup>
+
+num consists of only digits
+
+num does not have any leading zeros except for 0 itself
+
+### Abstract
+Remove k digits in a way so that resulting integer is as large as possible.
+
+### Solution 1: Optimal Stack
+```python
+    def removeKdigits(self, num: str, k: int) -> str:
+        stack = []  # Stack to hold the digits of the resulting number
+
+        for digit in num:
+            # Remove digits from the stack if the current digit is smaller
+            # and we still need to remove more digits (k > 0)
+            while stack and k > 0 and stack[-1] > digit:
+                stack.pop()
+                k -= 1
+            stack.append(digit)
+
+        # If there are still digits to remove, remove from the end of the stack
+        stack = stack[:-k] if k else stack
+
+        # Join the stack into a number and remove leading zeros
+        result = ''.join(stack).lstrip('0')
+
+        # Return "0" if the result is empty
+        return result or "0"
+```

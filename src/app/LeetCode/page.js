@@ -1,5 +1,5 @@
 import { allBlogs } from "../../../.contentlayer/generated";
-import GithubSlugger, { slug } from "github-slugger"
+import GithubSlugger from "github-slugger";
 import QuestionSection from "../../components/LeetCode/QuestionSection";
 import DifficultySection from "../../components/LeetCode/Difficulty/DifficultySection";
 import ApplicationSection from "../../components/LeetCode/Application/ApplicationSection";
@@ -26,9 +26,7 @@ export async function generateStaticParams() {
   return paths;
 }
 
-const LeetCodePage = ({params}) => {
-
-
+const LeetCodePage = ({ params }) => {
   return (
     <article className="mt-20 flex flex-col text-dark dark:text-light">
       <SolutionSection />
@@ -39,4 +37,4 @@ const LeetCodePage = ({params}) => {
   );
 };
 
-export default LeetCodePage
+export default LeetCodePage;

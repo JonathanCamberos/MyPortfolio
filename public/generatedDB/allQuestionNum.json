@@ -11,6 +11,19 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i---easy",
     "blog": "LeetCode: Arrays and Hashing"
   },
+  "5": {
+    "questionNum": 5,
+    "questionTitle": "Longest Palindromic Substring",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string s, return the longest palindromic substring in s.",
+    "questionTopics": [
+      "Two Pointers",
+      "String",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring---medium",
+    "blog": "LeetCode: Two Pointers"
+  },
   "11": {
     "questionNum": 11,
     "questionTitle": "Container With Most Water",
@@ -200,7 +213,7 @@
     "questionBlurb": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer. You must write an algorithm that runs in O(n) time and without using the division operation.",
     "questionTopics": [
       "Array",
-      "Prefx Sum"
+      "Prefix Sum"
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self---medium",
     "blog": "LeetCode: Arrays and Hashing"
@@ -247,6 +260,20 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list---medium",
     "blog": "LeetCode: Arrays and Hashing"
+  },
+  "402": {
+    "questionNum": 402,
+    "questionTitle": "Remove K Digits",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.",
+    "questionTopics": [
+      "String",
+      "Stack",
+      "Greedy",
+      "Monotonic Stack"
+    ],
+    "questionLink": "/Notes/leetcode-stacks#402-remove-k-digits---medium",
+    "blog": "LeetCode: Stacks"
   },
   "739": {
     "questionNum": 739,

@@ -1,5 +1,5 @@
 import { allBlogs } from "../../.contentlayer/generated";
-import FeaturedPosts from "../components/Home/CurrentlyWorkingOk";
+import CurrentlyWorkingOn from "../components/Home/CurrentlyWorkingOn";
 import HomeCoverSection from "../components/Home/HomeCoverSection";
 import Head from "next/head";
 
@@ -53,7 +53,7 @@ export default function Home() {
             {/* Main Content */}
             <main className="flex flex-col items-center justify-center">
                 <HomeCoverSection blogs={allBlogs} />
-                <FeaturedPosts blogs={allBlogs} />
+                <CurrentlyWorkingOn blogs={allBlogs} />
             </main>
         </>
     );

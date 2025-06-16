@@ -1191,7 +1191,290 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
 
-### Solution 1: Hashmap Into BucketSort - Hashmap/Algorithm
+
+### Solution 1: MaxHeap O(n) - HashMap/Algorithm
+```python    
+    def topKFrequent(self, nums: List[int], k:int) -> List[int]:
+
+        # Note: A heap only guarantees that the root is the max (max heap) or min (min heap).
+        # The heap data structure only allows removing the root efficiently (O(log n))
+        # The heap property says nothing about the relative order of leaves or internal nodes.
+        # The smallest element could be anywhere in the leaves or internal nodes, not necessarily a leaf.
+        # Thus for maxHeap, we need to add all of the elements to the tree
+        # since we can't removed the smallest leaf as we go
+
+        count = defaultdict(int)
+        for num in nums:
+            count[num] += 1
+
+        # space complexity: maxHeap tracks order of most frequent elements
+        maxHeap = []
+
+        # Push all elements into heap (negated frequency to simulate max heap)
+        for num, freq in count.items():
+            heapq.heappush(maxHeap, (-freq, num))
+
+        # Extract top k elements
+        result = []
+        for _ in range(k):
+            freq, num = heapq.heappop(maxHeap)
+            result.append(num)
+
+        return result
+
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+| overall |  |  |  |  |
+
+
+### Solution 2: MinHeap O(k) - HashMap/Algorithm
+```python    
+    def topKFrequent(self, nums: List[int], k:int) -> List[int]:
+
+        # Note: A heap only guarantees that the root is the min (min heap) or max (max heap).
+        # The heap data structure only allows removing the root efficiently (O(log n))
+        # The heap property says nothing about the relative order of leaves or internal nodes.
+        # The largest element could be anywhere in the leaves or internal nodes, not necessarily a leaf.
+        # Thus for a minHeap, the root always holds the smallest element.
+        # If we only remove the smallest element when heap as exceeded size k, 
+        # the heap will always contains the k largest frequencies seen so far.
+
+        # space complexity: frequency map of m unique integers o(m)
+        count = defaultdict(int)
+
+        # time complexity: iterate over list of n length O(n)
+        for num in nums: 
+            count[num] += 1
+
+        # space complexity: minHeap tracks k most frequent elements O(k)
+        minHeap = []
+
+        # time complexity: iterate over frequency map of m unique int O(m)
+        for num, freq in count.items(): 
+
+            # add new elements to minHeap
+            heapq.heappush(minHeap, (freq, num)) 
+            
+            # if heap grows to size k + 1, pop smallest element, heap will be back to size k
+            if len(minHeap) > k:
+
+                # time complexity: # O(log k)
+                heapq.heappop(minHeap) 
+        
+        # minHeap is holding top k elements, return all elements
+        result = [num for freq, num in minHeap]  # O(k)
+
+        # overall: time complexity
+        # overall: space complexity
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  | |  |
+| overall |  |  |  |  |
+
+
+### Solution 3: High K Quickselect - Hashmap/Algorithm
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+    
+        # Note: Quickselect is a modified quicksort
+        # Once the k-th smallest/largest element is placed in its correct position, elements
+        # to the left and right are guaranteed to be smaller/larger
+        # This avoids sorting the entire array and isolates the elements we need
+
+        # In-place partition of array based on pivot value
+        def partitionSection(left, right, pivotElemIndex):
+            
+            # Frequency of pivot element
+            pivotElemFreq = frequency[unique[pivotElemIndex]]
+
+            # Move pivot to end
+            # tuple unpacking in python, allows to swap two variables in a single line
+            unique[pivotElemIndex], unique[right] = unique[right], unique[pivotElemIndex]
+            
+            # Index to place larger elements
+            partitionIndex = left
+
+            # Partition elements with freq more than pivotElemFreq to left
+            # time complexity: iterates over unique elements between left and right segment O(m)
+            for i in range(left, right):
+
+                # Higher frequency -> "greater"
+                if pivotElemFreq < frequency[unique[i]]:  
+
+                    # swap smaller element
+                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
+                    partitionIndex += 1
+
+            # swap pivot to its final correct partitioned index
+            # now elements to the right and left follow the conditions according to pivot element
+            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
+            return partitionIndex
+
+        # time complexity: average recursion depth O(log m)
+        # space complexity: recursion stack for in place partitioning on average O(log m)
+        def quickselectHelper(left, right, kSmallest):
+            
+            # Base case: the list contains only one element
+            if left == right:
+                return
+
+            # Randomly choose a pivot index
+            # differs from QuickSort "median-of-three" approach
+            # random pivot is focused on finding the k-th smallest or largest
+            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
+            pivotElemIndex = random.randint(left, right)
+
+            # Partition the array
+            pivotElemIndex = partitionPivot(left, right, pivotElemIndex)
+            
+            # Base Case: k smallest element placed in correct index
+            # Grab everything to the left of it
+            if kSmallest == pivotElemIndex:
+                return 
+            
+            # Recursively selects next partition pivot
+            # Ideally we would partition starting in middle
+            # and recursively partition the left and right side
+            # until one of the pivotElemIndexes is kSmallest
+            elif kSmallest < pivotElemIndex:
+                quickselectHelper(left, pivotElemIndex - 1, kSmallest)
+            else:
+                quickselectHelper(pivotElemIndex + 1, right, kSmallest)
+
+        # time complexity: iterate over list of n length O(n)
+        frequency = defaultdict(int)
+        for num in nums:
+            frequency[num] += + 1
+
+        # Quickselect to find the k most frequent elements
+        unique = list(frequency.keys())
+        n = len(unique)
+
+        # For high-to-low sorting, k-th smallest corresponds to index k - 1
+        # 4 elements top 2
+        # 2 - 1 = 1 marker index
+        # top 2 index to the left of marker index [0, 1]
+        # 0 1 2 3    
+        quickselectHelper(0, n - 1, k - 1)
+
+        # 4 elements top 2 [0, 1]
+        # [:2]
+        # overall: time complexity
+        # overall: space complexity 
+        return unique[:k]
+```
+
+### Solution 4: Low K Quickselect - Hashmap/Algorithm
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+
+        # Note: Quickselect is a modified quicksort
+        # Once the k-th smallest/largest element is placed in its correct position, elements
+        # to the left and right are guaranteed to be smaller/larger
+        # This avoids sorting the entire array and isolates the elements we need
+
+        # In-place partition of array based on pivot frequency (low to high sorting)
+        def partitionSection(left, right, pivotElemIndex):
+            
+            # Frequency of pivot element
+            pivotElemFreq = frequency[unique[pivotElemIndex]]
+
+            # Move pivot to end
+            # tuple unpacking in python, allows to swap two variables in a single line
+            unique[pivotElemIndex], unique[right] = unique[right], unique[pivotElemIndex]
+            
+            # Index to place smaller elements
+            partitionIndex = left
+
+            # Partition elements with freq less than pivotElemFreq to left
+            # time complexity: iterates over unique elements between left and right segment O(m)
+            for i in range(left, right):
+
+                # Lower frequency -> "lower"
+                if frequency[unique[i]] < pivotElemFreq:
+
+                    # swap larger element
+                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
+                    partitionIndex += 1
+
+            # swap pivot to its final correct partitioned index
+            # now elements to the right and left follow the conditions according to pivot element
+            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
+            return partitionIndex
+
+        # Quickselect helper for low to high sorting
+        # Avg recursion depth: O(log m), space: O(log m)
+        def quickselectHelper(left, right, kSmallest):
+            
+            # Base case: the list contains only one element
+            if left == right:
+                return
+
+            # Randomly choose a pivot index
+            # differs from QuickSort "median-of-three" approach
+            # random pivot is focused on finding the k-th smallest or largest
+            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
+            pivotElemIndex = random.randint(left, right)
+            
+            # Partition the array
+            pivotElemIndex = partitionPivot(left, right, pivotElemIndex)
+
+            # Base Case: k smallest element placed in correct index
+            # Grab everything to the right of it
+            if kSmallest == pivotElemIndex:
+                return
+
+            # Recursively selects next partition pivot
+            # Ideally we would partition starting in middle
+            # and recursively partition the left and right side
+            # until one of the pivotElemIndexes is kSmallest
+            elif kSmallest < pivotElemIndex:
+                quickselectHelper(left, pivotElemIndex - 1, kSmallest)
+            else:
+                quickselectHelper(pivotElemIndex + 1, right, kSmallest)
+
+        # time complexity: iterate over list of n length O(n)        frequency = defaultdict(int)
+        frequency = defaultdict(int)
+        for num in nums:
+            frequency[num] += 1
+
+        # Quickselect to find the k most frequent elements
+        unique = list(frequency.keys())
+        n = len(unique)
+
+        # For low-to-high sorting, k-th smallest corresponds to index n - k
+        # 4 elements top 2
+        # 4 - 2 = 2 marker index
+        # top 2 index to the right of marker index [3, 4]
+        # 0 1 2 3       
+        quickselectHelper(0, n - 1, n - k)
+
+        # 4 elements top 2: [2,3]
+        # [2:]
+        # overall: time complexity
+        # overall: space complexity
+        return unique[n - k:]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Frequency Count | O(n) | O(n) | Iterate over list of n length O(n) | Frequency count for at most n keys O(n) |
+| Unique list | O(m) | O(m) | Grab unique keys from frequency map O(m) | Unique list contains m unique elements O(m) |
+| Single Partition | O(m) | O(1) | Iterates over m unique elements in portion for a single partition O(m) | No additional memory allocation for in-place partition O(1) |
+| Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
+| Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
+
+### Solution 5: BucketSort by Count - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
@@ -1209,6 +1492,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1
         numBuckets = len(nums) + 1
 
+        # below is saying [] list, with inner empty list count [] len(numBuckets) 
         # time complexity: iterating to set empty list for each bucket
         # space complexity: creating O(n) bucket lists
         freqBuckets = [[] for i in range(numBuckets)]
@@ -1249,266 +1533,10 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
 
 
-### Solution 2: MinHeap - HashMap/Algorithm
-```python    
-    def topKFrequent(self, nums: List[int], k:int) -> List[int]:
-
-        # space complexity: frequency map of m unique integers o(m)
-        count = defaultdict(int)
-
-        # time complexity: iterate over list of n length O(n)
-        for num in nums: 
-            count[num] += 1
-
-        # space complexity: minHeap tracks k most frequent elements O(k)
-        minHeap = []
-
-        # time complexity: iterate over frequency map of m unique int O(m)
-        for num, freq in count.items(): 
-
-            # manage the heap manually, Push current element
-            heapq.heappush(minHeap, (freq, num)) 
-            
-            # heap grows beyond size k, remove smallest frequent element
-            if len(minHeap) > k:
-
-                # time complexity: # O(log k)
-                heapq.heappop(minHeap) 
-        
-        # Step 4: Extract the elements from the heap
-        result = [num for freq, num in minHeap]  # O(k)
-
-        return result
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-| overall |  |  |  |  |
-
-
-### Solution 3: Quickselect (high to low) - Hashmap/Algorithm
-```python
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-    
-        # Note: Quickselect is a modified quicksort
-        # Once the k-th smallest/largest element is placed in its correct position, everything
-        # to its right or left is already divided into the required groups based on frequency
-        # This allows us to avoid sorting the entire array and directly focuses on isolating 
-        # the elements we care about
-
-        # In-place partition of array based on pivot value
-        def partitionPivot(left, right, pivotIndex):
-            
-            # Frequency of pivot element
-            pivotFrequency = frequency[unique[pivotIndex]]
-
-            # Move pivot to end
-            # tuple unpacking in python, allows to swap two variables in a single line
-            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]
-            
-            # Index to place larger elements
-            partitionIndex = left
-
-            # Partition elements with freq more than pivotFrequency to left
-            # time complexity: iterates over unique elements between left and right segment O(m)
-            for i in range(left, right):
-
-                # Higher frequency -> "greater"
-                if pivotFrequency < frequency[unique[i]]:  
-
-                    # swap smaller element
-                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
-                    partitionIndex += 1
-
-            # swap pivot to its final correct partitioned index
-            # now elements to the right and left follow the conditions according to pivot element
-            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
-            return partitionIndex
-
-        # time complexity: average recursion depth O(log m)
-        # space complexity: recursion stack for in place partitioning on average O(log m)
-        def quickselectHelper(left, right, kSmallest):
-            
-            # Base case: the list contains only one element
-            if left == right:
-                return
-
-            # Randomly choose a pivot index
-            # differs from QuickSort "median-of-three" approach
-            # random pivot is focused on finding the k-th smallest or largest
-            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
-            pivotIndex = random.randint(left, right)
-
-            # Partition the array
-            pivotIndex = partitionPivot(left, right, pivotIndex)
-            
-            # Base Case: placed the top-k element in correct index
-            # array is now partitioned
-            if kSmallest == pivotIndex:
-                return 
-            
-            # Recursively selects next partition pivot
-            elif kSmallest < pivotIndex:
-                quickselectHelper(left, pivotIndex - 1, kSmallest)
-            else:
-                quickselectHelper(pivotIndex + 1, right, kSmallest)
-
-        # time complexity: iterate over list of n length O(n)
-        frequency = defaultdict(int)
-        for num in nums:
-            frequency[num] += + 1
-
-        # grab list the unique elements
-        unique = list(frequency.keys())
-
-        # Quickselect to find the k most frequent elements
-        n = len(unique)
-
-        # time complexity:
-        quickselectHelper(0, n - 1, k - 1)
-
-        # overall: time complexity
-        # overall: space complexity 
-        return unique[:k]
-```
-
-### Solution 4: Quickselect (low to high) - Hashmap/Algorithm
-```python
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-
-        # Note: Quickselect is a modified quicksort
-        # Once the k-th smallest/largest element is placed in its correct position, everything
-        # to its right or left is already divided into the required groups based on frequency
-        # This allows us to avoid sorting the entire array and directly focuses on isolating 
-        # the elements we care about
-
-        # In-place partition of array based on pivot frequency (low to high sorting)
-        def partitionPivot(left, right, pivotIndex):
-            
-            # Frequency of pivot element
-            pivotFrequency = frequency[unique[pivotIndex]]
-
-            # Move pivot to end
-            # tuple unpacking in python, allows to swap two variables in a single line
-            unique[pivotIndex], unique[right] = unique[right], unique[pivotIndex]
-            
-            # Index to place smaller elements
-            partitionIndex = left
-
-            # Partition elements with freq less than pivotFrequency to left
-            # time complexity: iterates over unique elements between left and right segment O(m)
-            for i in range(left, right):
-
-                # Lower frequency -> "lower"
-                if frequency[unique[i]] < pivotFrequency:
-
-                    # swap larger element
-                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
-                    partitionIndex += 1
-
-            # swap pivot to its final correct partitioned index
-            # now elements to the right and left follow the conditions according to pivot element
-            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
-            return partitionIndex
-
-        # Quickselect helper for low to high sorting
-        # Avg recursion depth: O(log m), space: O(log m)
-        def quickselectHelper(left, right, kSmallest):
-            if left == right:
-                return
-
-            pivotIndex = random.randint(left, right)
-            pivotIndex = partitionPivot(left, right, pivotIndex)
-
-            # If pivot is at the kth smallest position, done
-            if kSmallest == pivotIndex:
-                return
-            elif kSmallest < pivotIndex:
-                quickselectHelper(left, pivotIndex - 1, kSmallest)
-            else:
-                quickselectHelper(pivotIndex + 1, right, kSmallest)
-
-        # Count frequencies O(n)
-        frequency = defaultdict(int)
-        for num in nums:
-            frequency[num] += 1
-
-        unique = list(frequency.keys())
-        n = len(unique)
-
-        # For low-to-high sorting, k-th smallest corresponds to index n - k
-        quickselectHelper(0, n - 1, n - k)
-
-        # Now top k frequent are the last k elements
-        return unique[n - k:]
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Frequency Count | O(n) | O(n) | Iterate over list of n length O(n) | Frequency count for at most n keys O(n) |
-| Unique list | O(m) | O(m) | Grab unique keys from frequency map O(m) | Unique list contains m unique elements O(m) |
-| Single Partition | O(m) | O(1) | Iterates over m unique elements in portion for a single partition O(m) | No additional memory allocation for in-place partition O(1) |
-| Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
-| Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
-
-### Solution 5: Modified MergeSort Frequency Count - Hashmap/Algorithm
-```python
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        
-        def countFrequencies(nums):
-            freq_map = {}
-            for num in nums:
-                if num in freq_map:
-                    freq_map[num] += 1
-                else:
-                    freq_map[num] = 1
-            return freq_map
-        
-        def mergeFrequencies(left_freq, right_freq):
-            # Combine two frequency maps
-            for key, value in right_freq.items():
-                if key in left_freq:
-                    left_freq[key] += value
-                else:
-                    left_freq[key] = value
-            return left_freq
-        
-        def modiMergeSort(nums):
-            # Base case: Single element array
-            if len(nums) == 1:
-                return countFrequencies(nums)
-            
-            # Split the array into two halves
-            mid = len(nums) // 2
-            left_freq = modiMergeSort(nums[:mid])
-            right_freq = modiMergeSort(nums[mid:])
-            
-            # Combine frequency counts from both halves
-            return mergeFrequencies(left_freq, right_freq)
-        
-        # Step 1: Get frequency counts using divide and conquer
-        freq = modiMergeSort(nums)
-        
-        # Step 2: Find the top K frequent elements
-        # Convert the dictionary to a list of tuples and sort by frequency
-        freq_items = list(freq.items())
-        freq_items.sort(key=lambda x: x[1], reverse=True)
-        
-        # Extract the top K elements
-        return [item for item, _ in freq_items[:k]]
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
 
 ## 238. Product of Array Except Self - Medium
 
-Topics:  Array, Prefx Sum
+Topics:  Array, Prefix Sum
 
 ### Intro
 > Given an integer array nums, return an array answer such that answer[i] is 

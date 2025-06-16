@@ -1,5 +1,6 @@
 {
   "1. Two Sum I": 1,
+  "5. Longest Palindromic Substring": 5,
   "11. Container With Most Water": 11,
   "15. 3Sum (Two Sum II.2)": 15,
   "20. Valid Parentheses": 20,
@@ -18,6 +19,7 @@
   "242. Valid Anagram": 242,
   "271. String Encode and Decode": 271,
   "347. Top K Elements in List": 347,
+  "402. Remove K Digits": 402,
   "739. Daily Temperatures": 739,
   "853. Car Fleet": 853
 }

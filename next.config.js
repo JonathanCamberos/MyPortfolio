@@ -11,6 +11,41 @@ const filePaths = [
 ];
 
 
+function syncWarmness() {
+  const allQuestionsPath = path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json");
+  const warmnessPath = path.join(process.cwd(), "public/generatedDB", "allQuestionWarmness.json");
+
+  // Read all questions
+  const allQuestions = JSON.parse(fs.readFileSync(allQuestionsPath, "utf-8"));
+
+  // Read warmness or start empty
+  let warmnessData = {};
+  if (fs.existsSync(warmnessPath)) {
+    warmnessData = JSON.parse(fs.readFileSync(warmnessPath, "utf-8"));
+  }
+
+  let updated = false;
+
+  Object.values(allQuestions).forEach(({ questionNum }) => {
+    if (!(questionNum in warmnessData)) {
+      // New question - initialize values
+      warmnessData[questionNum] = {
+        lastSubmittedDate: null,
+        warmnessCount: 0,
+      };
+      updated = true;
+    }
+  });
+
+  if (updated) {
+    fs.writeFileSync(warmnessPath, JSON.stringify(warmnessData, null, 2));
+    console.log("allQuestionWarmness.json updated with new questions");
+  } else {
+    console.log("No new questions to update in allQuestionWarmness.json");
+  }
+}
+
+
 // Function to parse solutions from content
 function parseSolutions(content, blogTitle) {
   const solutionsMap = {};
@@ -444,6 +479,8 @@ const nextConfig = {
         path.join(process.cwd(), "public/generatedDB", "queryQuestionNumString.json"),
         JSON.stringify(questionMapping, null, 2)
       );
+
+      syncWarmness();
     }
     return config;
   },

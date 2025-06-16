@@ -38,9 +38,12 @@ const SolutionSection = () => {
     }
   }, [searchQuery]);
 
-  const filteredQuestions = Object.keys(questionMapping).filter((key) =>
-    key.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredQuestions =
+  searchQuery.toLowerCase() === "all"
+    ? Object.keys(questionMapping) // return all questions if "all"
+    : Object.keys(questionMapping).filter((key) =>
+        key.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
   const fetchQuestionDetails = (questionNumber) => {
     fetch(`/generatedDB/allQuestionNum.json`)
@@ -88,7 +91,7 @@ const SolutionSection = () => {
       <div className="mt-5 px-5 sm:px-10 md:px-24 sxl:px-32">
         <input
           type="text"
-          placeholder="Search by title or number..."
+          placeholder="'All' or Search by title or number..."
           className="w-full p-2 border rounded-md shadow-sm bg-light dark:bg-dark text-dark dark:bg-gray-800 dark:text-light dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-yellow-500 focus:border-transparent"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
