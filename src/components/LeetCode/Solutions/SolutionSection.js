@@ -113,15 +113,15 @@ const getColdnessClass = (coldnessCount, isDark) => {
 
   // Map coldnessCount 1-30 to 5 ranges (~6 units each, dark to light)
   if (coldnessCount <= 6) {
-    return "bg-orange-700 dark:bg-yellow-700 text-white dark:text-black";
+    return "bg-orange-600 dark:bg-yellow-500 text-white dark:text-black";
   } else if (coldnessCount <= 12) {
-    return "bg-orange-600 dark:bg-yellow-600 text-white dark:text-black";
+    return "bg-orange-500 dark:bg-yellow-200 text-white dark:text-black";
   } else if (coldnessCount <= 18) {
-    return "bg-orange-500 dark:bg-yellow-500 text-white dark:text-black";
+    return "bg-orange-400 dark:bg-yellow-100 text-white dark:text-black";
   } else if (coldnessCount <= 24) {
-    return "bg-orange-300 dark:bg-yellow-300 text-gray-900 dark:text-black";
+    return "bg-orange-300 dark:bg-yellow-50 text-gray-900 dark:text-black";
   } else {
-    return "bg-orange-100 dark:bg-yellow-100 text-gray-900 dark:text-black";
+    return "bg-orange-200 dark:bg-yellow-10 text-gray-900 dark:text-black";
   }
 };
 

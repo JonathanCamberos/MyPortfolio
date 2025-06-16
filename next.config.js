@@ -10,8 +10,6 @@ const filePaths = [
   'content/leetcode-two-pointers/index.mdx',
 ];
 
-
-
 function syncWarmness() {
   const allQuestionsPath = path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json");
   const warmnessPath = path.join(process.cwd(), "public/generatedDB", "allQuestionWarmness.json");
@@ -101,7 +99,6 @@ function syncWarmness() {
     console.log("No new questions to update in allQuestionWarmness.json");
   }
 }
-
 
 // Function to parse solutions from content
 function parseSolutions(content, blogTitle) {
@@ -542,7 +539,5 @@ const nextConfig = {
     return config;
   },
 };
-
-
 
 module.exports = withContentlayer({ ...nextConfig });
