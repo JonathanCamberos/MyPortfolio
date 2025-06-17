@@ -10,68 +10,69 @@ tags:
 - data structures and algorithms
 ---
 
-## MinHeap (to-do)
+## Heap
 
 Leetcode: 347. Top K Frequent Elements
 
 ### Intro
-A MinHeap is a binary tree with the following conditions:
-1. Parent node is smaller than or equal to its children
-2. Smallest element is at the root of the tree 
-3. Operations are retrieval of the smallest element, as well as insertion and deletion
+A Heap is a binary tree with either of following conditions:
 
-MinHeaps are implemented using arrays, with the structure
-of the binary tree being represented implicitly:
+1. MinHeap: Smallest element is at the root. Parent nodes are smaller than or equal to their children. 
 
-- Parent of node at index i is stored at index: floor[(i-1)/2].
-- Left child is at index 2i+1
-- Right child is at index 2i+2
+2. MaxHeap: Largest element is at the root. Parent nodes are larger than or equal to their children.
 
-Ex:
+Heaps are nearly complete binary trees. Meaning that all levels are fully filled
+except for the last, which is filled from left to right.
+
+Heaps are implemented using arrays, either 1-indexed or 0-indexed, and use simple arithmetic to track parents and children.
+
+1-indexed heaps (more common in textbooks):
+- Parent of i: floor(i/2)
+- Left child of i: 2i
+- Right child of i: 2i + 1
+
 ```
-Array Representation: [2, 4, 7, 8, 10, 15]
+Indices:      _,  1,   2,   3,   4,   5,   6,   7
+1-indexed: [ _,  10,  20,  15,  30,  40,  50,  60 ]
 
-Heap Structure:
-         2
-       /   \
-      4     7
-     / \   /
-    8  10 15
-```
-
-Insert(7):
-```
-Insert 1 into the array: [2, 4, 7, 8, 10, 15, 1]
-
-Heap Structure Before Rebalancing:
-         2
-       /   \
-      4     7
-     / \   / \
-    8  10 15  1
-
-Perform Bubble Up Check: 1 < 7, so swap
-
-         2
-       /   \
-      4     1
-     / \   / \
-    8  10 15  7
-
-Perform Bubble Up Check: 1 < 2, so swap
-
-
-         1
-       /   \
-      4     2
-     / \   / \
-    8  10 15  7
-
-Perform Bubble Up Check: 1 is root. Reached Top 
-
-Result is: [1, 4, 2, 8, 10, 15, 7]
+                  10 (1)
+               /        \
+           20 (2)       15 (3)
+         /     \       /     \
+     30 (4)   40 (5) 50 (6)  60 (7)
 ```
 
+0-indexed heaps:
+- Parent of i: floor(i-1/2)
+- Left child of i: 2i + 1
+- Right child of i: 2i + 2
+
+```
+Indices:      0,  1,   2,   3,   4,   5,   6
+0-indexed: [ 10, 20,  15,  30,  40,  50,  60 ]
+
+                  10 (0)
+               /        \
+           20 (1)       15 (2)
+         /     \       /     \
+     30 (3)   40 (4) 50 (5)  60 (6)
+```
+
+
+Heap operations are, push(), pop(), and peek().
+In other words, insert(), remove(), and peek()
+
+Push(): O(log n)
+Adds a new elements to the bottom right end of the heap, and performs bubbleUp()
+to restore the heap property.
+This takes O(log n) which correlates with the height of the tree
+
+Pop(): O(log n)
+Removes the root, and place the bottom right end element at the root, and performs bubbleDown()
+to restore the heap property.
+
+Peek(): O(1)
+Returns the root element without modifying the heap.
 
 
 ## Monotone Stack (to-do)

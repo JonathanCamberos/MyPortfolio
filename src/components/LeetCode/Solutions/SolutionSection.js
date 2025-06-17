@@ -105,23 +105,23 @@ const SolutionSection = () => {
   };
 
   // Map coldnessCount to Tailwind background/text classes
-const getColdnessClass = (coldnessCount, isDark) => {
+const getColdnessClass = (coldnessCount, isSelected) => {
   // White background for null, undefined, -1 (no submissions), or >30 (too cold)
   if (!coldnessCount || coldnessCount === -1 || coldnessCount > 30) {
-    return "bg-white dark:bg-white text-gray-800 dark:text-black";
+      return "bg-white dark:bg-dark text-gray-800 dark:text-white";
   }
 
   // Map coldnessCount 1-30 to 5 ranges (~6 units each, dark to light)
   if (coldnessCount <= 6) {
     return "bg-orange-600 dark:bg-yellow-500 text-white dark:text-black";
   } else if (coldnessCount <= 12) {
-    return "bg-orange-500 dark:bg-yellow-200 text-white dark:text-black";
+    return "bg-orange-500 dark:bg-yellow-400 text-white dark:text-black";
   } else if (coldnessCount <= 18) {
-    return "bg-orange-400 dark:bg-yellow-100 text-white dark:text-black";
+    return "bg-orange-400 dark:bg-yellow-300 text-white dark:text-black";
   } else if (coldnessCount <= 24) {
-    return "bg-orange-300 dark:bg-yellow-50 text-gray-900 dark:text-black";
+    return "bg-orange-300 dark:bg-yellow-200 text-gray-900 dark:text-black";
   } else {
-    return "bg-orange-200 dark:bg-yellow-10 text-gray-900 dark:text-black";
+    return "bg-orange-200 dark:bg-yellow-100 text-gray-900 dark:text-black";
   }
 };
 
@@ -159,12 +159,12 @@ const getColdnessClass = (coldnessCount, isDark) => {
 
               const baseClass = isSelected
                 ? "bg-dark text-light dark:bg-light dark:text-dark"
-                : getColdnessClass(coldnessCount, isDarkMode);
+                : getColdnessClass(coldnessCount, isSelected);
 
               return (
                 <button
                   key={index}
-                  className={`py-1.5 md:py-2 px-6 md:px-10 rounded-full border-2 border-solid border-dark dark:border-light transition-all ease duration-200 m-2 ${baseClass}`}
+                  className={`${baseClass} py-1.5 md:py-2 px-6 md:px-10 rounded-full border-2 border-solid border-dark dark:border-light transition-all ease duration-200 m-2`}
                   onClick={() => handleButtonClick(key)}
                 >
                   {key}

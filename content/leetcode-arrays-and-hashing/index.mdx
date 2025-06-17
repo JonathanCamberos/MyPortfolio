@@ -461,7 +461,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 
 ### Solution 1: Hashmap - Hashmap/Representation
 ```python
-    def containsDuplicate(sef, nums: List[int]) -> bool:
+    def containsDuplicate(self, nums: List[int]) -> bool:
 
         # space complexity: dictionary of O(n)
         count = defaultdict(int)
@@ -684,7 +684,7 @@ We then validate it to the second string character count.
         # int: 97-122 -> lowercase English alphabet (a-z)
         # we can calculate any char (a-z)'s uni-code integer by subtracting uni-code of 'a'
         # '(a-z)' - 'a': returns a value of 0-25 which we can index into our array
-        # this simulates a hashing into a dictionary
+        # this simulates a hashing into our array
 
         # space complexity: array of 26 elements constant O(1)
         count = [0] * 26
@@ -981,6 +981,32 @@ Lets see:
         return list(anaGroup.values())
 ```
 
+### Find the Bug: Hashmaps are not sorted
+```python
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        
+        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)
+        groupAna = {}
+
+        # Iterating over all strings O(n)
+        for s in strs:
+            count = defaultdict(int)
+
+            for c in s:
+                count[c] += 1
+
+            tupKey = tuple(count)
+
+            # INCORRECT: hashmaps (count obj) is not sorted
+            # so tupKey will vary for "cat" vs "tac"
+            if tupKey not in groupAna:
+                groupAna[tupKey] = []
+
+            groupAna[tupKey].append(s)
+
+        return list(groupAna.values())
+```
+
 ### Find the Bug: Set to String Key (Set Frequency Count)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
@@ -1192,7 +1218,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
 
 
-### Solution 1: MaxHeap O(n) - HashMap/Algorithm
+### Solution 1: MaxHeap Track N Elements - HashMap/Algorithm
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1203,37 +1229,43 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # Thus for maxHeap, we need to add all of the elements to the tree
         # since we can't removed the smallest leaf as we go
 
+        # space complexity: worst case count for n unique elements O(n)
         count = defaultdict(int)
+
+        # time complexity: iterate over list of n length O(n)
         for num in nums:
             count[num] += 1
 
-        # space complexity: maxHeap tracks order of most frequent elements
+        # space complexity: worst case count array for n unique elements O(n)
         maxHeap = []
 
-        # Push all elements into heap (negated frequency to simulate max heap)
+        # time complexity: worst case iterate over n unique elements O(n)
         for num, freq in count.items():
+
+            # time complexity: push onto heap O(log n) leading to O(n log n) 
             heapq.heappush(maxHeap, (-freq, num))
 
-        # Extract top k elements
+        # space complexity: list of k elements O(k)
         result = []
+
+        # time complexity: iterate for k elements O(k) pop top elements O(log n) leading to O(k log n)
         for _ in range(k):
             freq, num = heapq.heappop(maxHeap)
             result.append(num)
 
-        return result
-
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(n)
         return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-| overall |  |  |  |  |
+| Counting Frequencies | O(n) | O(n) | iterate trough input array of n length O(n) | Memory allocation for frequency count for n unique elements O(n) |
+| Building MaxHeap | O(n log n) | O(n) | Push n unique elements O(n) using bubbleUp O(log n) leading to O(n log n) | Memory allocation for array representing heap O(n) |
+| Extracting K elements | O(k log n) | O(k) | Pop k elements O(k) using bubbleDown O(log n) leading to O(k log n) | Memory allocation to store k elements O(k) |
+| overall | O(n log n) | O(n) | Heap construction dominates leading to O(n log n) | Memory allocation for hashmap and heap dominate leading to O(n) |
 
 
-### Solution 2: MinHeap O(k) - HashMap/Algorithm
+### Solution 2: MinHeap Track K Elements - HashMap/Algorithm
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1245,20 +1277,20 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # If we only remove the smallest element when heap as exceeded size k, 
         # the heap will always contains the k largest frequencies seen so far.
 
-        # space complexity: frequency map of m unique integers o(m)
+        # space complexity: worst case count for n unique elements O(n)
         count = defaultdict(int)
 
         # time complexity: iterate over list of n length O(n)
         for num in nums: 
             count[num] += 1
 
-        # space complexity: minHeap tracks k most frequent elements O(k)
+        # space complexity: minHeap tracks k elements O(k)
         minHeap = []
 
-        # time complexity: iterate over frequency map of m unique int O(m)
+        # time complexity: worst case iterate over n unique elements O(n)
         for num, freq in count.items(): 
 
-            # add new elements to minHeap
+            # time complexity: push onto heap O(log n) leading to O(n log n) 
             heapq.heappush(minHeap, (freq, num)) 
             
             # if heap grows to size k + 1, pop smallest element, heap will be back to size k
@@ -1270,20 +1302,19 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # minHeap is holding top k elements, return all elements
         result = [num for freq, num in minHeap]  # O(k)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(n)
         return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  | |  |
-| overall |  |  |  |  |
+| Counting Frequencies | O(n) | O(n) | iterate trough input array of n length O(n) | Memory allocation for frequency count for n unique elements O(n) |
+| Building MinHeap | O(n log k) | O(k) | Iterates over list of n length O(n) and performs bubbleUp on heap with height k O(log k), leading to O(n log k) | Memory allocation to represent heap of k length O(k) |
+| Extracting top k | O(k) | O(k) | Iterate over heap for k elements O(k) | Memory allocation to store top k elements O(k) |
+| Overall | O(n log n) | O(n) | Worst case iterating over count for n unique elements O(n) and pushing values to heap to track n values O(log n), leading to O(n log n) | Memory allocation to track in worst case n unique element counts O(n) |
 
 
-### Solution 3: High K Quickselect - Hashmap/Algorithm
+### Solution 3: High to Low K Quickselect - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
@@ -1375,7 +1406,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         return unique[:k]
 ```
 
-### Solution 4: Low K Quickselect - Hashmap/Algorithm
+### Solution 4: Low to High K Quickselect - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
