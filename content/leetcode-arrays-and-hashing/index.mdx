@@ -1326,25 +1326,25 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | best: O(n log k) worst: O(n log n) | O(n) | Worst case iterating over count for n unique elements O(n) and pushing values to heap to track n values O(log n), leading to O(n log n) | Memory allocation to track in worst case n unique element counts O(n) |
 
 
-### Solution 3: High Low QuickSelect BinarySearch - Hashmap/Algorithm
+### Solution 3: Descending QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
         # Note: QuickSelect is a modified quicksort
-        # Once the k-th smallest/largest element is placed in its correct position, elements
-        # to the left and right are guaranteed to be smaller/larger
+        # Once the finalPartitionMarker is placed in its correct position, 
+        # elements to the left and right are guaranteed to be smaller/larger
         # This avoids sorting the entire array and isolates the elements we need
 
         # In-place partition of array based on pivot value
-        def partitionSection(left, right, pivotElemIndex):
+        def partitionSection(left, right, randPivotElemIndex):
             
             # time complexity: partition processes m elements, n in worst case O(n)
             # Frequency of pivot element
-            pivotElemFreq = frequency[unique[pivotElemIndex]]
+            pivotElemFreq = frequency[unique[randPivotElemIndex]]
 
             # Move pivot to end
             # tuple unpacking in python, allows to swap two variables in a single line
-            unique[pivotElemIndex], unique[right] = unique[right], unique[pivotElemIndex]
+            unique[randPivotElemIndex], unique[right] = unique[right], unique[randPivotElemIndex]
             
             # Index to partition larger elements to the left side of the section
             partitionIndex = left
@@ -1367,9 +1367,9 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
         # time complexity: average recursion depth O(log m)
         # space complexity: recursion stack for in place partitioning on average O(log m)
-        def quickselectHelper(left, right, kSmallest):
+        def quickSelectBinarySearchHelper(left, right, finalPartitionMarker):
             
-            # Base case: the section contains only one element
+            # Base Case: see 'For descending' below
             if left == right:
                 return
 
@@ -1377,66 +1377,70 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # differs from QuickSort "median-of-three" approach
             # random pivot is focused on finding the k-th smallest or largest
             # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
-            pivotElemIndex = random.randint(left, right)
+            randPivotElemIndex = random.randint(left, right)
 
             # Partition the array
-            sortedPivotElemIndex = partitionSection(left, right, pivotElemIndex)
+            resultPivotElemIndex = partitionSection(left, right, randPivotElemIndex)
             
-            # Base Case: k smallest element placed in correct index
-            # Grab everything to the left of it
-            if kSmallest == sortedPivotElemIndex:
+            # Base Case: see 'For descending' below
+            if finalPartitionMarker == resultPivotElemIndex:
                 return 
             
             # Binary Search Modification:
             # Selects next partition pivot
-            # Ideally we would only QuickSelect partitioned section (left or right)
-            # where kSmallest belongs to
-            elif kSmallest < sortedPivotElemIndex:
-                quickselectHelper(left, sortedPivotElemIndex - 1, kSmallest)
+            # Recursively QuickSelect on partitioned section (left or right)
+            # where finalPartitionMarker belongs to
+
+            # finalPartitionMarker is in the left partition of resultPivotElemIndex
+            elif finalPartitionMarker < resultPivotElemIndex:
+                quickSelectBinarySearchHelper(left, resultPivotElemIndex - 1, finalPartitionMarker)
+            
+            # finalPartitionMarker is in the right partition of resultPivotElemIndex
             else:
-                quickselectHelper(sortedPivotElemIndex + 1, right, kSmallest)
+                quickSelectBinarySearchHelper(resultPivotElemIndex + 1, right, finalPartitionMarker)
 
         # time complexity: iterate over list of n length O(n)
         frequency = defaultdict(int)
         for num in nums:
-            frequency[num] += + 1
+            frequency[num] += 1
 
         # QuickSelect BinarySearch to find the k most frequent elements
         unique = list(frequency.keys())
         n = len(unique)
+        finalPartition = k - 1
+        l, r = 0, n - 1
 
-        # For high-to-low sorting, k-th smallest corresponds to index k - 1
-        # 4 elements top 2
-        # 2 - 1 = 1 marker index
-        # top 2 index to the left of marker index [0, 1]
-        # 0 1 2 3    
-        quickselectHelper(0, n - 1, k - 1)
+        # For descending:
+        # say we have a list of 6 elements, we are trying to grab the largest 2 elements
+        # if we do 2 - 1 we get 1.
+        # so if we find we have partitioned and set index 1
+        # we know that the elements 0 and 1 are the 2 largest elements
+        # so we splice [:2] = [0, 1]
+        quickSelectBinarySearchHelper(l, r, finalPartition)
 
-        # 4 elements top 2 [0, 1]
-        # [:2]
         # overall: time complexity
         # overall: space complexity 
         return unique[:k]
 ```
 
-### Solution 4: Low High QuickSelect BinarySearch - Hashmap/Algorithm
+### Solution 4: Ascending QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
         # Note: QuickSelect is a modified quicksort
-        # Once the k-th smallest/largest element is placed in its correct position, elements
-        # to the left and right are guaranteed to be smaller/larger
+        # Once the finalPartitionMarker is placed in its correct position, 
+        # elements to the left and right are guaranteed to be smaller/larger
         # This avoids sorting the entire array and isolates the elements we need
 
         # In-place partition of array based on pivot frequency (low to high sorting)
-        def partitionSection(left, right, pivotElemIndex):
+        def partitionSection(left, right, randPivotElemIndex):
             
             # Frequency of pivot element
-            pivotElemFreq = frequency[unique[pivotElemIndex]]
+            pivotElemFreq = frequency[unique[randPivotElemIndex]]
 
             # Move pivot to end
             # tuple unpacking in python, allows to swap two variables in a single line
-            unique[pivotElemIndex], unique[right] = unique[right], unique[pivotElemIndex]
+            unique[randPivotElemIndex], unique[right] = unique[right], unique[randPivotElemIndex]
             
             # Index to place smaller elements
             partitionIndex = left
@@ -1459,9 +1463,9 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
         # QuickSelect helper for low to high sorting
         # Avg recursion depth: O(log m), space: O(log m)
-        def quickselectHelper(left, right, kSmallest):
+        def quickSelectBinarySearchHelper(left, right, finalPartitionMarker):
             
-            # Base case: the list contains only one element
+            # Base Case: see 'For ascending' below
             if left == right:
                 return
 
@@ -1469,24 +1473,27 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # differs from QuickSort "median-of-three" approach
             # random pivot is focused on finding the k-th smallest or largest
             # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
-            pivotElemIndex = random.randint(left, right)
+            partitionElemIndex = random.randint(left, right)
             
             # Partition the array
-            pivotElemIndex = partitionPivot(left, right, pivotElemIndex)
+            finalPartitionElemIndex = partitionPivot(left, right, partitionElemIndex)
 
-            # Base Case: k smallest element placed in correct index
-            # Grab everything to the right of it
-            if kSmallest == pivotElemIndex:
+            # Base Case: see 'For ascending' below
+            if finalPartitionMarker == finalPartitionElemIndex:
                 return
 
             # Binary Search Modification:
             # Selects next partition pivot
-            # Ideally we would only QuickSelect partitioned section (left or right)
-            # where kSmallest belongs to
-            elif kSmallest < pivotElemIndex:
-                quickselectHelper(left, pivotElemIndex - 1, kSmallest)
+            # Recursively QuickSelect on partitioned section (left or right)
+            # where finalPartitionMarker belongs to
+
+            # finalPartitionMarker is in the left partition of resultPivotElemIndex
+            elif finalPartitionMarker < finalPartitionElemIndex:
+                quickSelectBinarySearchHelper(left, finalPartitionElemIndex - 1, finalPartitionMarker)
+            
+            # finalPartitionMarker is in the right partition of resultPivotElemIndex
             else:
-                quickselectHelper(pivotElemIndex + 1, right, kSmallest)
+                quickSelectBinarySearchHelper(finalPartitionElemIndex + 1, right, finalPartitionMarker)
 
         # time complexity: iterate over list of n length O(n)        
         frequency = defaultdict(int)
@@ -1496,16 +1503,18 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # Quickselect to find the k most frequent elements
         unique = list(frequency.keys())
         n = len(unique)
+        finalPartition = n - k
+        l, r = 0, n - 1
 
-        # For low-to-high sorting, k-th smallest corresponds to index n - k
-        # 4 elements top 2
-        # 4 - 2 = 2 marker index
-        # top 2 index to the right of marker index [3, 4]
-        # 0 1 2 3       
-        quickselectHelper(0, n - 1, n - k)
+        # For ascending:
+        # say we have a list of 6 elements, we are trying to grab the largest 2 elements
+        # if we do 6 - 2 we get 4.
+        # so if we find we have partitioned and set index 4
+        # we know that the elements 4 and 5 are the 2 largest elements
+        # so we splice [6-2:] = [4:] = [4, 5]
+        # quickSelectBinarySearchHelper(left, right, finalPartitionMarker)
+        quickSelectBinarySearchHelper(l, r, finalPartition)
 
-        # 4 elements top 2: [2,3]
-        # [2:]
         # overall: time complexity
         # overall: space complexity
         return unique[n - k:]
@@ -1523,9 +1532,8 @@ Now that we have the count, we just grab the top k highest occurring elements.
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
         # space complexity: frequency count for unique integers O(m) 
-        count = defaultdict(int)
-
         # time complexity: iterate over list of n integers O(n)
+        count = defaultdict(int)
         for key in nums:
 
             # time complexity: insertion operation takes constant O(1)
@@ -1536,7 +1544,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1
         numBuckets = len(nums) + 1
 
-        # below is saying [] list, with inner empty list count [] len(numBuckets) 
+        # below is saying: create a list of empty lists numBuckets amount of times 
         # time complexity: iterating to set empty list for each bucket
         # space complexity: creating O(n) bucket lists
         freqBuckets = [[] for i in range(numBuckets)]
