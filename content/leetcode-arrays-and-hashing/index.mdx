@@ -981,7 +981,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Find the Bug: Hashmaps are not sorted
+### Find the Bug: Hashmap Item Order (Hashmaps are not sorted)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1229,29 +1229,35 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # Thus for maxHeap, we need to add all of the elements to the tree
         # since we can't removed the smallest leaf as we go
 
-        # space complexity: worst case count for n unique elements O(n)
+        # space complexity: count for m unique elements worst case n elements O(n)
         count = defaultdict(int)
 
         # time complexity: iterate over list of n length O(n)
         for num in nums:
             count[num] += 1
 
-        # space complexity: worst case count array for n unique elements O(n)
+        # space complexity: maxHeap must store all n elements O(n)
         maxHeap = []
 
-        # time complexity: worst case iterate over n unique elements O(n)
+        # time complexity: iteate over m unique elements worst case over n elements O(n)
         for num, freq in count.items():
 
-            # time complexity: push onto heap O(log n) leading to O(n log n) 
+            # time complexity: push onto heap O(log m) worst case O(log n) leading to best case O(m log m) worst case O(n log n) 
             heapq.heappush(maxHeap, (-freq, num))
 
-        # space complexity: list of k elements O(k)
+        # space complexity: list of k elements worst case n elements best O(k) worst O(n)
         result = []
 
-        # time complexity: iterate for k elements O(k) pop top elements O(log n) leading to O(k log n)
+        # cannot iterate over array, as order is not guaranteed left to right
+        # time complexity: iterate for k elements worst case n elements best O(k) worst O(n)
         for _ in range(k):
+
+            # time complexity: pop top element O(log n) for k elements, worst case O(log n) for n elements, best case O(k log n) worst O(n log n)
             freq, num = heapq.heappop(maxHeap)
             result.append(num)
+
+        # same as above
+        # res = [num for _, num in (heapq.heappop(maxHeap) for _ in range(k))]
 
         # overall: time complexity O(n log n)
         # overall: space complexity O(n)
@@ -1260,8 +1266,8 @@ Now that we have the count, we just grab the top k highest occurring elements.
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Counting Frequencies | O(n) | O(n) | iterate trough input array of n length O(n) | Memory allocation for frequency count for n unique elements O(n) |
-| Building MaxHeap | O(n log n) | O(n) | Push n unique elements O(n) using bubbleUp O(log n) leading to O(n log n) | Memory allocation for array representing heap O(n) |
-| Extracting K elements | O(k log n) | O(k) | Pop k elements O(k) using bubbleDown O(log n) leading to O(k log n) | Memory allocation to store k elements O(k) |
+| Building MaxHeap | O(n log n) | O(n) | Push n elements O(n) using bubbleUp O(log n) leading to O(n log n) | Memory allocation for array representing heap O(n) |
+| Extracting K elements | best: O(k log n) worst: O(n log n) | best: O(k) worst O(n) | Pop k elements O(k) using bubbleDown O(log n) leading to O(k log n) | Memory allocation to store k elements O(k) |
 | overall | O(n log n) | O(n) | Heap construction dominates leading to O(n log n) | Memory allocation for hashmap and heap dominate leading to O(n) |
 
 
@@ -1277,7 +1283,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # If we only remove the smallest element when heap as exceeded size k, 
         # the heap will always contains the k largest frequencies seen so far.
 
-        # space complexity: worst case count for n unique elements O(n)
+        # space complexity: count for m unique elements worst case n elements O(n)
         count = defaultdict(int)
 
         # time complexity: iterate over list of n length O(n)
@@ -1290,17 +1296,23 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # time complexity: worst case iterate over n unique elements O(n)
         for num, freq in count.items(): 
 
-            # time complexity: push onto heap O(log n) leading to O(n log n) 
+            # time complexity: push onto heap O(log n) for n elements, leading to O(n log n) 
             heapq.heappush(minHeap, (freq, num)) 
             
-            # if heap grows to size k + 1, pop smallest element, heap will be back to size k
+            # if heap grows to size k + 1
             if len(minHeap) > k:
 
-                # time complexity: # O(log k)
+                # pop smallest element, heap will be back to size k
+                # time complexity: # pop smallest O(log k) for worst case n elements, leading to O(n log k)
                 heapq.heappop(minHeap) 
         
-        # minHeap is holding top k elements, return all elements
-        result = [num for freq, num in minHeap]  # O(k)
+        # can iterate over heap array as only holding top k elements
+        # time complexity: grab all k elements from minHeap worst case grab n elements O(n)
+        result = [num for freq, num in minHeap]
+
+        # for _, num in minHeap:
+        #    result.append(num) 
+        # same as above
 
         # overall: time complexity O(n log n)
         # overall: space complexity O(n)
@@ -1309,16 +1321,16 @@ Now that we have the count, we just grab the top k highest occurring elements.
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Counting Frequencies | O(n) | O(n) | iterate trough input array of n length O(n) | Memory allocation for frequency count for n unique elements O(n) |
-| Building MinHeap | O(n log k) | O(k) | Iterates over list of n length O(n) and performs bubbleUp on heap with height k O(log k), leading to O(n log k) | Memory allocation to represent heap of k length O(k) |
-| Extracting top k | O(k) | O(k) | Iterate over heap for k elements O(k) | Memory allocation to store top k elements O(k) |
-| Overall | O(n log n) | O(n) | Worst case iterating over count for n unique elements O(n) and pushing values to heap to track n values O(log n), leading to O(n log n) | Memory allocation to track in worst case n unique element counts O(n) |
+| Building MinHeap | best: O(n log k) worst: O(n log n) | best: O(k) worst: O(n) | Iterates over list of n length O(n) and performs bubbleUp on heap with height k O(log k), leading to O(n log k) | Memory allocation to represent heap of k length O(k) |
+| Extracting top k | best: O(k) worst: O(n) | best: O(k) worst: O(n) | Iterate over heap for k elements O(k) | Memory allocation to store top k elements O(k) |
+| Overall | best: O(n log k) worst: O(n log n) | O(n) | Worst case iterating over count for n unique elements O(n) and pushing values to heap to track n values O(log n), leading to O(n log n) | Memory allocation to track in worst case n unique element counts O(n) |
 
 
-### Solution 3: High to Low K Quickselect - Hashmap/Algorithm
+### Solution 3: High Low QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
-        # Note: Quickselect is a modified quicksort
+        # Note: QuickSelect is a modified quicksort
         # Once the k-th smallest/largest element is placed in its correct position, elements
         # to the left and right are guaranteed to be smaller/larger
         # This avoids sorting the entire array and isolates the elements we need
@@ -1326,6 +1338,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # In-place partition of array based on pivot value
         def partitionSection(left, right, pivotElemIndex):
             
+            # time complexity: partition processes m elements, n in worst case O(n)
             # Frequency of pivot element
             pivotElemFreq = frequency[unique[pivotElemIndex]]
 
@@ -1333,7 +1346,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # tuple unpacking in python, allows to swap two variables in a single line
             unique[pivotElemIndex], unique[right] = unique[right], unique[pivotElemIndex]
             
-            # Index to place larger elements
+            # Index to partition larger elements to the left side of the section
             partitionIndex = left
 
             # Partition elements with freq more than pivotElemFreq to left
@@ -1343,7 +1356,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
                 # Higher frequency -> "greater"
                 if pivotElemFreq < frequency[unique[i]]:  
 
-                    # swap smaller element
+                    # swap larger element to left, sorting high to low
                     unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
                     partitionIndex += 1
 
@@ -1356,7 +1369,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # space complexity: recursion stack for in place partitioning on average O(log m)
         def quickselectHelper(left, right, kSmallest):
             
-            # Base case: the list contains only one element
+            # Base case: the section contains only one element
             if left == right:
                 return
 
@@ -1367,28 +1380,28 @@ Now that we have the count, we just grab the top k highest occurring elements.
             pivotElemIndex = random.randint(left, right)
 
             # Partition the array
-            pivotElemIndex = partitionPivot(left, right, pivotElemIndex)
+            sortedPivotElemIndex = partitionSection(left, right, pivotElemIndex)
             
             # Base Case: k smallest element placed in correct index
             # Grab everything to the left of it
-            if kSmallest == pivotElemIndex:
+            if kSmallest == sortedPivotElemIndex:
                 return 
             
-            # Recursively selects next partition pivot
-            # Ideally we would partition starting in middle
-            # and recursively partition the left and right side
-            # until one of the pivotElemIndexes is kSmallest
-            elif kSmallest < pivotElemIndex:
-                quickselectHelper(left, pivotElemIndex - 1, kSmallest)
+            # Binary Search Modification:
+            # Selects next partition pivot
+            # Ideally we would only QuickSelect partitioned section (left or right)
+            # where kSmallest belongs to
+            elif kSmallest < sortedPivotElemIndex:
+                quickselectHelper(left, sortedPivotElemIndex - 1, kSmallest)
             else:
-                quickselectHelper(pivotElemIndex + 1, right, kSmallest)
+                quickselectHelper(sortedPivotElemIndex + 1, right, kSmallest)
 
         # time complexity: iterate over list of n length O(n)
         frequency = defaultdict(int)
         for num in nums:
             frequency[num] += + 1
 
-        # Quickselect to find the k most frequent elements
+        # QuickSelect BinarySearch to find the k most frequent elements
         unique = list(frequency.keys())
         n = len(unique)
 
@@ -1406,11 +1419,11 @@ Now that we have the count, we just grab the top k highest occurring elements.
         return unique[:k]
 ```
 
-### Solution 4: Low to High K Quickselect - Hashmap/Algorithm
+### Solution 4: Low High QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
-        # Note: Quickselect is a modified quicksort
+        # Note: QuickSelect is a modified quicksort
         # Once the k-th smallest/largest element is placed in its correct position, elements
         # to the left and right are guaranteed to be smaller/larger
         # This avoids sorting the entire array and isolates the elements we need
@@ -1444,7 +1457,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
             unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
             return partitionIndex
 
-        # Quickselect helper for low to high sorting
+        # QuickSelect helper for low to high sorting
         # Avg recursion depth: O(log m), space: O(log m)
         def quickselectHelper(left, right, kSmallest):
             
@@ -1466,16 +1479,16 @@ Now that we have the count, we just grab the top k highest occurring elements.
             if kSmallest == pivotElemIndex:
                 return
 
-            # Recursively selects next partition pivot
-            # Ideally we would partition starting in middle
-            # and recursively partition the left and right side
-            # until one of the pivotElemIndexes is kSmallest
+            # Binary Search Modification:
+            # Selects next partition pivot
+            # Ideally we would only QuickSelect partitioned section (left or right)
+            # where kSmallest belongs to
             elif kSmallest < pivotElemIndex:
                 quickselectHelper(left, pivotElemIndex - 1, kSmallest)
             else:
                 quickselectHelper(pivotElemIndex + 1, right, kSmallest)
 
-        # time complexity: iterate over list of n length O(n)        frequency = defaultdict(int)
+        # time complexity: iterate over list of n length O(n)        
         frequency = defaultdict(int)
         for num in nums:
             frequency[num] += 1
