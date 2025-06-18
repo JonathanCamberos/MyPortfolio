@@ -1845,7 +1845,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)
         cols = defaultdict(set)
         rows = defaultdict(set)
-        squares = defaultdict(set)
+        grids = defaultdict(set)
 
         # time complexity: iterating over all cells (r * c) O(n^2)
         for r in range(9):
@@ -1855,18 +1855,18 @@ So we simply create sets for all of these groups and as we traverse the board, w
                 if tmp != ".":
 
                     # indexing box sets by tuple key (r/3, c/3)
-                    boxTuple = (r // 3, c // 3)
+                    gridTuple = (r // 3, c // 3)
 
                     # time complexity: lookup operation for element to corresponding sets in constant O(1)
                     if (tmp in rows[r] or 
                         tmp in cols[c] or 
-                        tmp in squares[box] ):
+                        tmp in grids[gridTuple] ):
                         return False
                     
                     # time complexity: insert operation for new element to corresponding sets in constant O(1)
                     cols[c].add(tmp)
                     rows[r].add(tmp)
-                    squares[boxTuple].add(tmp)
+                    grids[gridTuple].add(tmp)
 
         # overall: time complexity O(n^2)
         # overall: space complexity O(n)
@@ -1880,28 +1880,28 @@ So we simply create sets for all of these groups and as we traverse the board, w
         # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)
         rows = [[], [], [], [], [], [], [], [], []]
         col = [[], [], [], [], [], [], [], [], []]
-        boxes = [[], [], [], [], [], [], [], [], []]
+        grids = [[], [], [], [], [], [], [], [], []]
 
         # time complexity: iterating over all cells (r * c) O(n^2)
-        for i in range(9):
-            for j in range(9):
+        for r in range(9):
+            for c in range(9):
                 
-                tmp = board[i][j]
+                tmp = board[r][c]
                 if tmp != ".":  
 
                     # indexing box sets by unique int calculation  
-                    box = 3 * (i//3) + (j//3)
+                    gridKey = (3 * (i//3)) + (j//3)
 
                     # time complexity: lookup operation for element to corresponding sets in constant O(1)
-                    if (tmp in rows[i] or 
-                        tmp in col[j]  or 
-                        tmp in boxes[box]):
+                    if (tmp in rows[r] or 
+                        tmp in col[c]  or 
+                        tmp in grids[gridKey]):
                         return False
 
                     # space complexity: lookup operation for new element to corresponding sets in constant O(1)
-                    col[j].append(tmp)
-                    rows[i].append(tmp)
-                    boxes[box].append(tmp)
+                    col[c].append(tmp)
+                    rows[r].append(tmp)
+                    grids[gridKey].append(tmp)
         
         # overall: time complexity O(n^2)
         # overall: space complexity  O(n)
@@ -2031,7 +2031,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | Updating sequence count | O(1) | O(1) | Boundary updates for left most, curr, and right most in constant O(1) | Insert operation takes constant O(1) | 
 | Overall | O(n) | O(n) | Iterating over list of n length dominates O(n) | Memory allocation for n sequences O(n) | 
 
-### Solution 2: Set - Hashmap/Representation
+### Solution 2: Set Rummy Run - Hashmap/Representation
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
     

@@ -10,7 +10,7 @@ const siteMetadata = {
     title: 'jonathancamberos-portfolio',
     author: 'jonathancamberos',
     headerTitle: 'jonathancamberos-portfolio-header',
-    description: 'death',
+    description: 'jonathan camberos software engineer portfolio',
     language: 'en-us',
     theme: 'system', // system, dark or light
     siteUrl: 'https://jcmyportfolio-jcprojects.vercel.app/', /* update w/ final url */
