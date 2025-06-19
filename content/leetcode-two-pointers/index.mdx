@@ -448,29 +448,28 @@ as well as its length.
     def encode(self, strs: List[str]) -> str:
 
         # Note: python strings are immutable so concatenation with += "" 
-        # creates new string time complexity o(n^2)
+        # python creates new string time complexity o(n^2)
         # python list .append() modifies list in place by adding a single
         # element at end in O(1) operation
         # so doing .append() with a "".join() at the end is more efficient  
 
-        # space complexity: storage for encoding all strings in a list O(n)
+        # space complexity: for n strings O(n) store n characters O(n), leading to O(n^2)
         encoded = []
 
-        # time complexity: iterate over list of strings n length O(n)
+        # time complexity: iterate over list of n strings O(n)
         for s in strs:
             
-            # time complexity: iterate over all chars in string O(n)
-
             # lenDelim = len + delim
             lenDelim = str(len(s)) + "#"
 
-            # append each char of (length + delimiter) O(n)
+            # append length and delimiter "5#"
             left = 0
             while left < len(lenDelim):
                 encoded.append(lenDelim[left])
                 left += 1
             
-            # append each char of string itself O(n)
+            # append string itself
+            # time complexity: iterate over string of n length O(n), for n iterations, leading to O(n^2)
             left = 0
             while left < len(s):
                 encoded.append(s[left])
@@ -483,28 +482,29 @@ as well as its length.
 
     def decode(self, encoded: str) -> List[str]:
 
-        # space complexity:
+        # space complexity: list of n strings O(n) each of n length O(n), leading to O(n^2)
         decoded = []
         left = 0
 
-        # time complexity: iterate over list of n chars O(n)
+        # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
         while left < len(encoded):
 
-            # find "#" delimiter
+            # grab length prefix behind "#" delimiter
             right = left
             while encoded[right] != "#":
                 right += 1
 
-            # extracting the length of the string
+            # splicing the length of the string
             length = int(encoded[left:right])
 
-            # move pointer past "#" delimiter
+            # skip delimiter, point to start of string
             right += 1
 
-            # Extract the string of 'length' characters
+            # splicing the string of 'length' characters
+            # time complexity: splice over string n length O(n) for n iterations O(n), leading to O(n^2)
             decoded.append(encoded[right:right + length])
 
-            # Move pointer past the string
+            # skip string, point to start of next len
             left = right + length
 
         # overall: time complexity O(n^2)
@@ -522,26 +522,29 @@ as well as its length.
 ```python
     def encode(self, strs: List[str]) -> str:
 
-        # python strings are immutable so concatenation creates new string time complexity o(n^2)
-        # python list allows us to add encoded strings in O(n)
-        # space complexity: storage for encoding all strings in a list O(n)
+        # Note: python strings are immutable so concatenation with += "" 
+        # python creates new string time complexity o(n^2)
+        # python list .append() modifies list in place by adding a single
+        # element at end in O(1) operation
+        # so doing .append() with a "".join() at the end is more efficient  
+
+        # space complexity: for n strings O(n) store n characters O(n), leading to O(n^2)
         encoded = []
 
         # time complexity: iterate over list of strings n length O(n)
         for s in strs:
             
-            # time complexity: iterate over all chars in string O(n)
-
             # lenDelim = len + delim
             lenDelim = str(len(s)) + "#"
 
-            # append each char of (length + delimiter) O(n)
+            # append length and delimiter "5#"
             left = 0
             while left < len(lenDelim):
                 encoded.append(lenDelim[left])
                 left += 1
             
-            # append each char of string itself O(n)
+            # append string itself
+            # time complexity: iterate over string of n length O(n), for n iterations, leading to O(n^2)
             left = 0
             while left < len(s):
                 encoded.append(s[left])
@@ -554,26 +557,26 @@ as well as its length.
 
     def decode(self, encoded: str) -> List[str]:
 
-        # space complexity:
+        # space complexity: list of n strings O(n) each of n length O(n), leading to O(n^2)
         decoded = []
         left = 0
 
-        # time complexity: iterate over list of n chars O(n)
+        # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
         while left < len(encoded):
 
-            # time complexity: 
+            # grab length prefix behind "#" delimiter
             currLen = 0
             while encoded[left] != "#":
 
-                # grabbing value ensuring base 10
+                # grabbing value while calculating base 10 of prev
                 currLen = currLen * 10 + int(encoded[left]) 
                 left += 1
 
-            # skip delimiter, point to string
+            # skip delimiter, point to start of string
             left += 1  
 
-            # extract substring of 'length' characters
-            # time complexity: 
+            # extract substring of 'currLen' characters
+            # time complexity: iterate over string n length O(n) for n iterations O(n), leading to O(n^2)
             substring = []
             for _ in range(currLen):
 
@@ -581,8 +584,11 @@ as well as its length.
                 substring.append(encoded[left])
                 left += 1
             
-            # added string to decoded list of strings
+            # left is pointing to start of next len
+
+            # add string to decoded list of strings
             decoded.append(''.join(substring))
+
 
         # overall: time complexity O(n^2)
         # overall: space complexity O(n^2)
