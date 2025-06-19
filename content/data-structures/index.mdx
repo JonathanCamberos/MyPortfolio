@@ -96,9 +96,27 @@ used in problems involving connectivity, grouping or clustering.
 
 ### Operations
 
-1. Union(x, y)
+1. Union(x, y):
+Connects two elements by making them part of the same group,
+by giving them the same parent
 
-2. Find(elem)
+2. Find(elem):
+Finds the representative (or root) of the group containing the element
 
 
 ### Path Compression Optimization
+
+Here is our initial structure before path compression
+```
+1 → 2 → 3 → 4 → 5
+```
+
+After performing find(1) with path compression, 
+the structure becomes:
+```
+1 → 5  
+2 → 5  
+3 → 5  
+4 → 5  
+5 → 5  
+```
