@@ -518,7 +518,7 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-### Solution 2: One Pointer Arithmetic Delimiter - Two Pointers/One Pointer with Auxiliary State
+### Solution 2: One Pointer Base 10 Delimiter - Two Pointers/One Pointer with Auxiliary State
 ```python
     def encode(self, strs: List[str]) -> str:
 
@@ -600,7 +600,7 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-## 167. Two Sum II Input Array Is Sorted - Medium
+## 167. Two Sum II (Input Array Is Sorted) - Medium
 
 Topics:  Array, Two Pointers, Binary Search
 
@@ -613,7 +613,7 @@ Topics:  Array, Two Pointers, Binary Search
 > The tests are generated such that there is exactly one solution. 
 > You may not use the same element twice.
 
-|  Input List          | Input Target | Output |  
+|  Input List    | Input Target | Output |  
 | -------------- | ------ | ------ | 
 | [2, 7, 11, 15] | 9      | [1,2]  |
 | [2, 3, 4]      | 6      | [1,3]  |
@@ -662,24 +662,35 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity | No additional memory was allocated leading to constant O(1) space complexity. |
 
 
-### Solution 1: Binary Search for Complement - Two Pointers/One Pointer with Auxiliary State
+### Solution 1: BinarySearch Per Element for Complement - Two Pointers/One Pointer with Auxiliary State
 ```python 
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
         
         # time complexity: iteration over list of n length O(n)
         for i in range(len(numbers)): 
 
-            complement = target - numbers[i]
+            # grab curr search item for BinarySearch
+            comp = target - numbers[i]
             
-            # Binary search: O(log n)
+            # given constraint index1 < index2, we can BinarySearch on the
+            # right side section of the array after the left element
+            # time complexity: binarySearch O(log n) for each iteration O(n), leading to O(n log n)
             left, right = i + 1, len(numbers) - 1
+            
+            # Base Case: no more array remaining to search, element not present
             while left <= right:
+                
+                # middle element
                 mid = (left + right) // 2
-                if numbers[mid] == complement:
+                midNum = numbers[mid]
 
-                    # Convert to 1-indexed array
+                # found complement
+                if midNum == comp:
+                    # convert to 1-indexed array, per input/output example
                     return [i + 1, mid + 1]  
-                elif numbers[mid] < complement:
+
+                # Recursively BinarySearch relevant left or right section
+                elif midNum < comp:
                     left = mid + 1
                 else:
                     right = mid - 1
@@ -695,28 +706,29 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-### Solution 2: Shift Pointer Ends Based on Sum - Two Pointers/Opposite Ends
+### Solution 2: Shift Ends Based On BinarySearch Modification - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
-        # space complexity: l and r pointers constant O(1)
+        # initialize outer pointers
+        # space complexity: left and right pointers constant O(1)
         left, right = 0, len(numbers) - 1  
 
-        # time complexity: iterate over list of n length until l and r pointers meet O(n)
+        # time complexity: iterate over list of n length O(n)
         while left < right:
 
-            # check current pointer values
+            # grab current sum
             currSum = numbers[left] + numbers[right]  
 
+            # found target sum
             if currSum == target:
-                # convert to 1-indexed array
+                # convert to 1-indexed array, per input/output example
                 return [left + 1, right + 1]
 
-            # increase left pointer to increase currSum
+            # "BinarySearch" on relevant half
+            # via increasing left or decreasing right pointer
             elif currSum < target:
                 left += 1
-
-            # decrease right pointer to decrease currSum
             else:
                 right -= 1
 

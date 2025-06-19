@@ -200,22 +200,22 @@
   "167": [
     {
       "number": 2,
-      "name": "Shift Pointer Ends Based on Sum",
+      "name": "Shift Ends Based On BinarySearch Modification",
       "type": "two-pointers",
       "application": "opposite-ends",
-      "code": "def twoSumII(self, numbers: List[int], target: int) -> List[int]:\n\n        # space complexity: l and r pointers constant O(1)\n        left, right = 0, len(numbers) - 1  \n\n        # time complexity: iterate over list of n length until l and r pointers meet O(n)\n        while left < right:\n\n            # check current pointer values\n            currSum = numbers[left] + numbers[right]  \n\n            if currSum == target:\n                # convert to 1-indexed array\n                return [left + 1, right + 1]\n\n            # increase left pointer to increase currSum\n            elif currSum < target:\n                left += 1\n\n            # decrease right pointer to decrease currSum\n            else:\n                right -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return []",
+      "code": "def twoSumII(self, numbers: List[int], target: int) -> List[int]:\n\n        # initialize outer pointers\n        # space complexity: left and right pointers constant O(1)\n        left, right = 0, len(numbers) - 1  \n\n        # time complexity: iterate over list of n length O(n)\n        while left < right:\n\n            # grab current sum\n            currSum = numbers[left] + numbers[right]  \n\n            # found target sum\n            if currSum == target:\n                # convert to 1-indexed array, per input/output example\n                return [left + 1, right + 1]\n\n            # \"BinarySearch\" on relevant half\n            # via increasing left or decreasing right pointer\n            elif currSum < target:\n                left += 1\n            else:\n                right -= 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return []",
       "questionNumber": 167,
-      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-shift-pointer-ends-based-on-sum---two-pointersopposite-ends",
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-shift-ends-based-on-binarysearch-modification---two-pointersopposite-ends",
       "blog": "LeetCode: Two Pointers"
     },
     {
       "number": 1,
-      "name": "Binary Search for Complement",
+      "name": "BinarySearch Per Element for Complement",
       "type": "two-pointers",
       "application": "one-pointer-with-auxiliary-state",
-      "code": "def twoSumII(self, numbers: List[int], target: int) -> List[int]:\n        \n        # time complexity: iteration over list of n length O(n)\n        for i in range(len(numbers)): \n\n            complement = target - numbers[i]\n            \n            # Binary search: O(log n)\n            left, right = i + 1, len(numbers) - 1\n            while left <= right:\n                mid = (left + right) // 2\n                if numbers[mid] == complement:\n\n                    # Convert to 1-indexed array\n                    return [i + 1, mid + 1]  \n                elif numbers[mid] < complement:\n                    left = mid + 1\n                else:\n                    right = mid - 1\n\n        # overall: time complexity O(n log n)\n        # overall: space complexity O(1)\n        return []",
+      "code": "def twoSumII(self, numbers: List[int], target: int) -> List[int]:\n        \n        # time complexity: iteration over list of n length O(n)\n        for i in range(len(numbers)): \n\n            complement = target - numbers[i]\n            \n            # given constraint index1 < index2, we can BinarySearch on the\n            # right side section of the array after the left element\n            # time complexity: binarySearch O(log n) for each iteration O(n), leading to O(n log n)\n            left, right = i + 1, len(numbers) - 1\n            \n            # Base Case: no more array remaining to search, element not present\n            while left <= right:\n                \n                # middle element\n                mid = (left + right) // 2\n\n                # found complement\n                if numbers[mid] == complement:\n                    # convert to 1-indexed array, per input/output example\n                    return [i + 1, mid + 1]  \n\n                # Recursively BinarySearch relevant half\n                elif numbers[mid] < complement:\n                    left = mid + 1\n                else:\n                    right = mid - 1\n\n        # overall: time complexity O(n log n)\n        # overall: space complexity O(1)\n        return []",
       "questionNumber": 167,
-      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-binary-search-for-complement---two-pointersone-pointer-with-auxiliary-state",
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-binarysearch-per-element-for-complement---two-pointersone-pointer-with-auxiliary-state",
       "blog": "LeetCode: Two Pointers"
     }
   ],
@@ -298,12 +298,12 @@
     },
     {
       "number": 2,
-      "name": "One Pointer Arithmetic Delimiter",
+      "name": "One Pointer Base 10 Delimiter",
       "type": "two-pointers",
       "application": "one-pointer-with-auxiliary-state",
       "code": "def encode(self, strs: List[str]) -> str:\n\n        # Note: python strings are immutable so concatenation with += \"\" \n        # python creates new string time complexity o(n^2)\n        # python list .append() modifies list in place by adding a single\n        # element at end in O(1) operation\n        # so doing .append() with a \"\".join() at the end is more efficient  \n\n        # space complexity: for n strings O(n) store n characters O(n), leading to O(n^2)\n        encoded = []\n\n        # time complexity: iterate over list of strings n length O(n)\n        for s in strs:\n            \n            # lenDelim = len + delim\n            lenDelim = str(len(s)) + \"#\"\n\n            # append length and delimiter \"5#\"\n            left = 0\n            while left < len(lenDelim):\n                encoded.append(lenDelim[left])\n                left += 1\n            \n            # append string itself\n            # time complexity: iterate over string of n length O(n), for n iterations, leading to O(n^2)\n            left = 0\n            while left < len(s):\n                encoded.append(s[left])\n                left += 1\n        \n        # overall: time complexity O(n^2)\n        # overall: space complexity O(n^2)\n        return ''.join(encoded)\n\n\n    def decode(self, encoded: str) -> List[str]:\n\n        # space complexity: list of n strings O(n) each of n length O(n), leading to O(n^2)\n        decoded = []\n        left = 0\n\n        # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)\n        while left < len(encoded):\n\n            # grab length prefix behind \"#\" delimiter\n            currLen = 0\n            while encoded[left] != \"#\":\n\n                # grabbing value while calculating base 10 of prev\n                currLen = currLen * 10 + int(encoded[left]) \n                left += 1\n\n            # skip delimiter, point to start of string\n            left += 1  \n\n            # extract substring of 'currLen' characters\n            # time complexity: iterate over string n length O(n) for n iterations O(n), leading to O(n^2)\n            substring = []\n            for _ in range(currLen):\n\n                # forming string\n                substring.append(encoded[left])\n                left += 1\n            \n            # left is pointing to start of next len\n\n            # add string to decoded list of strings\n            decoded.append(''.join(substring))\n\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(n^2)\n        return decoded",
       "questionNumber": 271,
-      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-one-pointer-arithmetic-delimiter---two-pointersone-pointer-with-auxiliary-state",
+      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-one-pointer-base-10-delimiter---two-pointersone-pointer-with-auxiliary-state",
       "blog": "LeetCode: Two Pointers"
     }
   ],

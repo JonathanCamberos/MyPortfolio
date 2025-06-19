@@ -1,14 +1,14 @@
 {
   "1": {
     "questionNum": 1,
-    "questionTitle": "Two Sum I",
+    "questionTitle": "Two Sum I (Input Array Is Not Sorted)",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.",
     "questionTopics": [
       "Array",
       "Hash Table"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-16T08:32:00",
     "coldnessCount": 3
@@ -161,8 +161,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome---easy",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-17T07:26:00",
-    "coldnessCount": 2
+    "lastSubmittedDate": "2025-06-18T07:26:00",
+    "coldnessCount": 1
   },
   "128": {
     "questionNum": 128,
@@ -176,8 +176,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-17T07:00:00",
-    "coldnessCount": 2
+    "lastSubmittedDate": "2025-06-18T07:00:00",
+    "coldnessCount": 1
   },
   "150": {
     "questionNum": 150,
@@ -210,7 +210,7 @@
   },
   "167": {
     "questionNum": 167,
-    "questionTitle": "Two Sum II Input Array Is Sorted",
+    "questionTitle": "Two Sum II (Input Array Is Sorted)",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length. Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2. The tests are generated such that there is exactly one solution. You may not use the same element twice.",
     "questionTopics": [
@@ -278,8 +278,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-06-18T09:59:00",
+    "coldnessCount": 1
   },
   "347": {
     "questionNum": 347,
