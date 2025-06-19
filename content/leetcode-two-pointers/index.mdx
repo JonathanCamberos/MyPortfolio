@@ -316,10 +316,10 @@ traverse using pointers comparing characters on the start and end of the string.
 ```python
     def isPalindrome(self, s: str) -> bool:
         
-        # space complexity: list to store cleaned string of n length O(n)
+        # space complexity: cleaned version string of n length O(n)
         cleaned = []
 
-        # simple way for alphaNum check
+        # alphaNum check using ord()
         def alphaNum(c):
             return (ord('A') <= ord(c) <= ord('Z') or 
                     ord('a') <= ord(c) <= ord('z') or 
@@ -327,15 +327,19 @@ traverse using pointers comparing characters on the start and end of the string.
 
         # time complexity: iterate over string of n length O(n)
         for c in s:
-            # Check if character is alphanumeric
+
+            # skip until alphaNum char
             if isAlphaNum(c):
-                # Convert uppercase to lowercase
+                
+                # Convert to lowercase char
                 if 'A' <= c <= 'Z':
                     cleaned.append(chr(ord(c) + 32))
                 else:
                     cleaned.append(c)
 
-        # time complexity: two-pointer traversal of cleaned string O(n)
+        # clean is now lowercase alphaNum
+        # compare using left and right pointers
+        # time complexity: iterate over list of n length O(n)
         left, right = 0, len(cleaned) - 1
         while left < right:
             if cleaned[left] != cleaned[right]:
@@ -361,7 +365,7 @@ traverse using pointers comparing characters on the start and end of the string.
         # space complexity: no additional space used for storage O(1)
         left, right = 0, len(s) - 1
 
-        # simple way for alphaNum check
+        # alphaNum check using ord()
         def alphaNum(c):
             return (ord('A') <= ord(c) <= ord('Z') or 
                     ord('a') <= ord(c) <= ord('z') or 
@@ -369,24 +373,22 @@ traverse using pointers comparing characters on the start and end of the string.
 
         # time complexity: iteration over string of n length O(n)
         while left < right:
-            # time complexity: moving left pointer to next alphanumeric character O(n)
+            
+            # time complexity: move left and right to alphaNum char O(n)
             while left < right and not isAlphaNum(s[left]):
                 left += 1
-
-            # time complexity: moving right pointer to previous alphanumeric character O(n)
             while left < right and not isAlphaNum(s[right]):
                 right -= 1
 
-            # Convert characters to lowercase
+            # Convert left and right to lowercase char
             leftChar = s[left]
-            if 'A' <= left_char <= 'Z':
-                left_char = chr(ord(leftChar) + 32)
-
+            if 'A' <= leftChar <= 'Z':
+                leftChar = chr(ord(leftChar) + 32)
             rightChar = s[right]
-            if 'A' <= right_char <= 'Z':
+            if 'A' <= rightChar <= 'Z':
                 rightChar = chr(ord(rightChar) + 32)
 
-            # Compare characters
+            # Compare left and right char
             if leftChar != rightChar:
                 return False
 
