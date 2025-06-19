@@ -161,8 +161,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome---easy",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-06-17T07:26:00",
+    "coldnessCount": 2
   },
   "128": {
     "questionNum": 128,
@@ -271,7 +271,7 @@
     "questionNum": 271,
     "questionTitle": "String Encode and Decode",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings Please implement encode and decode",
+    "questionBlurb": "Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings Please implement encode and decode. strs[i] contains only UTF-8 characters.",
     "questionTopics": [
       "Two Pointers",
       "Design"

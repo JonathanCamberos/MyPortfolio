@@ -160,6 +160,15 @@ Ex: Merge two sorted arrays into one sorted array
     print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]
 ```
 
+### Two Pointer Application: Catchup
+We have two pointers traversing one array. One remains frozen, but catches up
+to the other after logic is complete on a subsection.
+
+Ex: Decode Two Pointer Splicing
+```python
+
+```
+
 ### Two Pointers Application: K Pointer Variants 
 We can extend the two pointer case to track k pointers simultaneously.
 These pointers can traverse the same list, different lists, or freeze while moving
@@ -415,7 +424,8 @@ Topics:  Two Pointers, Design
 
 > Design an algorithm to encode a list of strings to a single string.
 > The encoded string is then decoded back to the original list of strings
-> Please implement encode and decode
+> Please implement encode and decode.
+> strs[i] contains only UTF-8 characters.
 
 |  Input                           | Output                              |  
 | -------------------------------- | ----------------------------------- | 
@@ -433,25 +443,29 @@ as well as its length.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Two Pointers Length Delimiter |  |  |  |  |
 
-### Solution 1: One Pointer Length Delimiter - Two Pointers/One Pointer with Auxiliary State
+### Solution 1: Two Pointer Splicing Delimiter - Two Pointers/Catchup
 ```python
     def encode(self, strs: List[str]) -> str:
 
-        # python strings are immutable so concatenation creates new string time complexity o(n^2)
-        # python list allows us to add encoded strings in O(n)
+        # Note: python strings are immutable so concatenation with += "" 
+        # creates new string time complexity o(n^2)
+        # python list .append() modifies list in place by adding a single
+        # element at end in O(1) operation
+        # so doing .append() with a "".join() at the end is more efficient  
+
         # space complexity: storage for encoding all strings in a list O(n)
         encoded = []
 
         # time complexity: iterate over list of strings n length O(n)
-        for s in strings:
+        for s in strs:
             
             # time complexity: iterate over all chars in string O(n)
 
             # lenDelim = len + delim
-            left = 0
             lenDelim = str(len(s)) + "#"
 
             # append each char of (length + delimiter) O(n)
+            left = 0
             while left < len(lenDelim):
                 encoded.append(lenDelim[left])
                 left += 1
@@ -464,10 +478,81 @@ as well as its length.
         
         # overall: time complexity O(n^2)
         # overall: space complexity O(n^2)
-        return ''.join(res)
+        return ''.join(encoded)
 
 
-    def decode(self, s: str) -> List[str]:
+    def decode(self, encoded: str) -> List[str]:
+
+        # space complexity:
+        decoded = []
+        left = 0
+
+        # time complexity: iterate over list of n chars O(n)
+        while left < len(encoded):
+
+            # find "#" delimiter
+            right = left
+            while encoded[right] != "#":
+                right += 1
+
+            # extracting the length of the string
+            length = int(encoded[left:right])
+
+            # move pointer past "#" delimiter
+            right += 1
+
+            # Extract the string of 'length' characters
+            decoded.append(encoded[right:right + length])
+
+            # Move pointer past the string
+            left = right + length
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n^2)
+        return decoded
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of n strings of n n length O(n) | Memory allocation for encoded string of length O(n)  |
+| Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
+
+
+### Solution 2: One Pointer Arithmetic Delimiter - Two Pointers/One Pointer with Auxiliary State
+```python
+    def encode(self, strs: List[str]) -> str:
+
+        # python strings are immutable so concatenation creates new string time complexity o(n^2)
+        # python list allows us to add encoded strings in O(n)
+        # space complexity: storage for encoding all strings in a list O(n)
+        encoded = []
+
+        # time complexity: iterate over list of strings n length O(n)
+        for s in strs:
+            
+            # time complexity: iterate over all chars in string O(n)
+
+            # lenDelim = len + delim
+            lenDelim = str(len(s)) + "#"
+
+            # append each char of (length + delimiter) O(n)
+            left = 0
+            while left < len(lenDelim):
+                encoded.append(lenDelim[left])
+                left += 1
+            
+            # append each char of string itself O(n)
+            left = 0
+            while left < len(s):
+                encoded.append(s[left])
+                left += 1
+        
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n^2)
+        return ''.join(encoded)
+
+
+    def decode(self, encoded: str) -> List[str]:
 
         # space complexity:
         decoded = []
@@ -481,29 +566,28 @@ as well as its length.
             while encoded[left] != "#":
 
                 # grabbing value ensuring base 10
-                currLen = currLen * 10 + int(encoded[i]) 
+                currLen = currLen * 10 + int(encoded[left]) 
                 left += 1
 
             # skip delimiter, point to string
             left += 1  
 
-            # grabbing currLen many chars to form string
+            # extract substring of 'length' characters
             # time complexity: 
-            substring = ""
-            while left < range(currLen)
+            substring = []
+            for _ in range(currLen):
 
                 # forming string
-                substring += encoded[left]
+                substring.append(encoded[left])
                 left += 1
             
             # added string to decoded list of strings
-            decoded.append(substring)
+            decoded.append(''.join(substring))
 
         # overall: time complexity O(n^2)
         # overall: space complexity O(n^2)
         return decoded
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of n strings of n n length O(n) | Memory allocation for encoded string of length O(n)  |

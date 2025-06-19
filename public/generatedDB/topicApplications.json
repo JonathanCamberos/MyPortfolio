@@ -204,5 +204,16 @@
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-algorithm",
       "blog": "LeetCode: Two Pointers"
     }
+  ],
+  "two-pointer": [
+    {
+      "type": "Two Pointer",
+      "title": "Catchup",
+      "summary": "We have two pointers traversing one array. One remains frozen, but catches up",
+      "exampleIntro": "Decode Two Pointer Splicing",
+      "codeExample": "",
+      "useCaseLink": "/Notes/leetcode-two-pointers#two-pointer-application-catchup",
+      "blog": "LeetCode: Two Pointers"
+    }
   ]
 }
