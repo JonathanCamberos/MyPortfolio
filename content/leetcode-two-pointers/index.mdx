@@ -669,31 +669,38 @@ the given array is sorted, we can make assumptions about our traversal using l a
         # time complexity: iteration over list of n length O(n)
         for i in range(len(numbers)): 
 
-            # grab curr search item for BinarySearch
-            comp = target - numbers[i]
+            # search for complement
+            currComplementSearch = target - numbers[i]
             
-            # given constraint index1 < index2, we can BinarySearch on the
-            # right side section of the array after the left element
+            # Set up BinarySearch
+            # set new left boundary for iteration BinarySearch
+            # reset right boundary for iteration BinarySearch
+            # given constraint index1 < index2
+            # BinarySearch on right section of array after left element
             # time complexity: binarySearch O(log n) for each iteration O(n), leading to O(n log n)
             left, right = i + 1, len(numbers) - 1
             
-            # Base Case: no more array remaining to search, element not present
+            # BinarySearch
+            # "<=": working within subarray [i+1, j] separate from i, 
+            # so must evaluate num at left == right, as might be currComplementSearch
+            # Base Case: no more array remaining to search
+            # complement for numbers[i] was not found, continue iteration
             while left <= right:
                 
                 # middle element
-                mid = (left + right) // 2
-                midNum = numbers[mid]
+                midIndex = (left + right) // 2
+                midNum = numbers[midIndex]
 
-                # found complement
-                if midNum == comp:
+                # found target complement
+                if midNum == currComplementSearch:
                     # convert to 1-indexed array, per input/output example
-                    return [i + 1, mid + 1]  
+                    return [i + 1, midIndex + 1]  
 
-                # Recursively BinarySearch relevant left or right section
-                elif midNum < comp:
-                    left = mid + 1
+                # Search left or right section
+                elif midNum < currComplementSearch:
+                    left = midIndex + 1
                 else:
-                    right = mid - 1
+                    right = midIndex - 1
 
         # overall: time complexity O(n log n)
         # overall: space complexity O(1)
@@ -706,14 +713,19 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-### Solution 2: Shift Ends Based On BinarySearch Modification - Two Pointers/Opposite Ends
+### Solution 2: Shift Opposite Ends Based On BinarySearch Modification - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
+        # Set up BinarySearch Modification
         # initialize outer pointers
         # space complexity: left and right pointers constant O(1)
         left, right = 0, len(numbers) - 1  
 
+        # BinarySearch Modification
+        # "<": working within subarray containing left and right
+        # cannot evaluate num at left == right, breaks constraints of index1 < index2
+        # Base Case: no more array remaining to search, return []
         # time complexity: iterate over list of n length O(n)
         while left < right:
 
@@ -725,8 +737,8 @@ the given array is sorted, we can make assumptions about our traversal using l a
                 # convert to 1-indexed array, per input/output example
                 return [left + 1, right + 1]
 
-            # "BinarySearch" on relevant half
-            # via increasing left or decreasing right pointer
+            # "BinarySearch" on relevant subsection
+            # update left or right pointer
             elif currSum < target:
                 left += 1
             else:
@@ -742,7 +754,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Comparison | O(1) | O(1) | Sum and comparison operations take constant O(1) | No additional memory allocation for sum and comparison operations O(1) |
 | Overall | O(n) | O(1) | Iterating with left and right pointers over list of n length dominates leading to O(n) | No additional memory allocation leading to constant O(1) | 
 
-## 15. 3Sum (Two Sum II.2) - Medium
+## 15. 3Sum - Medium
 
 Topics:  Array, Two Pointers, Sorting
 
