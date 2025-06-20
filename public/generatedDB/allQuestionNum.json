@@ -45,15 +45,16 @@
   },
   "15": {
     "questionNum": 15,
-    "questionTitle": "3Sum (Two Sum II.2)",
+    "questionTitle": "3Sum",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0. Notice that the solution set must not contain duplicate triplets.",
     "questionTopics": [
       "Array",
       "Two Pointers",
-      "Sorting"
+      "Sorting",
+      "Binary Search"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#15-3sum-two-sum-ii2---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#15-3sum---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -220,8 +221,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-06-19T03:55:00",
+    "coldnessCount": 1
   },
   "217": {
     "questionNum": 217,

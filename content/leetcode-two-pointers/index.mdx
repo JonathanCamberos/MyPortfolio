@@ -443,6 +443,43 @@ as well as its length.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Two Pointers Length Delimiter |  |  |  |  |
 
+### Find the Bug: (did not convert len using int())
+```python
+    def decode(self, encoded: str) -> List[str]:
+
+        # space complexity: list of n strings O(n) each of n length O(n), leading to O(n^2)
+        decoded = []
+        left = 0
+
+        # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
+        while left < len(encoded):
+
+            # grab length prefix behind "#" delimiter
+            right = left
+            while encoded[right] != "#":
+                right += 1
+
+            # splicing the length of the string
+            # INCORRECT: 
+            # length is a string, cannot use it to index or add
+            # need to use int()
+            length = encoded[left:right]
+
+            # skip delimiter, point to start of string
+            right += 1
+
+            # splicing the string of 'length' characters
+            # time complexity: splice over string n length O(n) for n iterations O(n), leading to O(n^2)
+            decoded.append(encoded[right:right + length])
+
+            # skip string, point to start of next len
+            left = right + length
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n^2)
+        return decoded
+```
+
 ### Solution 1: Two Pointer Splicing Delimiter - Two Pointers/Catchup
 ```python
     def encode(self, strs: List[str]) -> str:
@@ -696,7 +733,8 @@ the given array is sorted, we can make assumptions about our traversal using l a
                     # convert to 1-indexed array, per input/output example
                     return [i + 1, midIndex + 1]  
 
-                # Search left or right section
+                # "BinarySearch" on relevant subsection
+                # update left or right pointer
                 elif midNum < currComplementSearch:
                     left = midIndex + 1
                 else:
@@ -713,7 +751,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-### Solution 2: Shift Opposite Ends Based On BinarySearch Modification - Two Pointers/Opposite Ends
+### Solution 2: Shift Opposite Ends BinarySearch Modification for Target - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
@@ -725,7 +763,8 @@ the given array is sorted, we can make assumptions about our traversal using l a
         # BinarySearch Modification
         # "<": working within subarray containing left and right
         # cannot evaluate num at left == right, breaks constraints of index1 < index2
-        # Base Case: no more array remaining to search, return []
+        # Base Case: no more array remaining to search, 
+        # return []
         # time complexity: iterate over list of n length O(n)
         while left < right:
 
@@ -756,7 +795,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 
 ## 15. 3Sum - Medium
 
-Topics:  Array, Two Pointers, Sorting
+Topics:  Array, Two Pointers, Sorting, Binary Search
 
 ### Intro
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] 
@@ -866,49 +905,166 @@ Let see:
 |  |  |  |  |  | 
 
 
-### Solution 1: Frozen Pointer with Two Pointers Early Break (Sorting) - Two Pointers/K Pointer Variants
+### Find the Bug: List is unHashable
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        # Note: Two Sum vs 3Sum
+        # Two sum, finding two numbers whose sum equals a target is simple
+        # with hashmaps or two pointer approaches being efficient
+        # 3Sum adds complexity with a third variable.
+        # Grouping techniques aim to narrow and organize the solution space
+        # reducing redundant checks while finding valid triplets
+
+        # positive, negative, and zero sets
+        # space complexity: 
+        p, n, z = [], [], []
+        
+        # set ensures no duplicate triplets
+        # space complexity: 
+        res = set()
+
+        # time complexity: iterate over list of n length O(n)
+        for i in nums:
+            if i < 0:
+                n.append(i)
+            elif i > 0:
+                p.append(i)
+            else:
+                z.append(i)
+
+        # sets for unique groups
+        # time complexity: convert list into set O(n)
+        P, N = set(p), set(n)
+
+        # (0, num, -num)
+        # time complexity: iterate over positive numbers list n length O(n)
+        if len(z) > 0:
+            for i in P:                
+                # time complexity: negative target lookup in constant O(1)
+                nTarget = -i
+                if nTarget in N:
+                    res.add((nTarget, 0, i ))
+
+        # (0, 0, 0)
+        # time complexity: len operation constant O(1)
+        if len(z) >= 3:
+            res.add((0, 0, 0))
+
+        # (-, -, +) negative pairs
+        # time complexity: iterate over list of negative numbers n length O(n)
+        for i in range(len(n)):
+            # time complexity: iterate over list of negative numbers n length O(n) per outer iteration O(n), leading to O(n^2)
+            for j in range(i+1, len(n)):
+                # time complexity: lookup operation constant O(1)
+                pTarget = -(n[i] + n[j])
+                if pTarget in P:
+                    # INCORRECT:
+                    # sorted() -> List[int]
+                    # cannot hash list into set()
+                    # must use tuple(sorted())
+                    res.add((sorted([n[i], n[j], pTarget])))
+        
+        # (-, +, +) positive pairs
+        # time complexity: iterate over list of positive numbers n length O(n)
+        for i in range(len(p)):
+            # time complexity: iterate over list of positive numbers n length O(n) per outer iteration O(n), leading to O(n^2)
+            for j in range(i+1, len(p)):
+                # time complexity: lookup operation constant O(1)
+                nTarget = -(p[i] + p[j])
+                if nTarget in n:
+                    # INCORRECT:
+                    # sorted() -> List[int]
+                    # cannot hash list into set()
+                    # must use tuple(sorted())
+                    res.add(tuple(sorted([p[i], p[j], nTarget])))
+
+        # convert valid set of tuple triplets into valid list of tuple triplets
+
+        # overall: time complexity O(n^2) 
+        # overall: space complexity O(n)
+        return list(res)  
+```
+
+### Solution 1: Shift Opposite Ends BinarySearch Modification Per Element for 0 (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
-        # space complexity:
+        # Note: Two Sum vs 3Sum
+        # Two sum, finding two numbers whose sum equals a target is simple
+        # with hashmaps or two pointer solutions being efficient
+        # 3Sum adds complexity with a third variable,
+        # but converting 3Sum into a two sum problem allows
+        # the use of hashmap or two pointer solutions again
+
+        # set ensures no duplicate triplets
+        # space complexity: 
         results = set()
         n = len(nums)
 
-        # time complexity:
+        # time complexity: default python sorting TimSort, O(n log n)
         nums.sort()
 
         # time complexity
         for i in range(n - 2):
 
-            #
+            # skip iteration:
+            # i should only "BinarySearch" through any number once 
             if i > 0 and nums[i] == nums[i - 1]:
                 continue
 
-            # early break: eliminate redundant comparisons
-            # can't get to 0 without negative number
+            # early break: 
+            # only allow negative numbers for i in (i, j, k)
             if nums[i] > 0:
                 break
 
+            # Set up "BinarySearch" modification:          
+            # set new left boundary for iteration BinarySearch
+            # reset right boundary for iteration BinarySearch  
             left, right = i + 1, n - 1
-            while left < right:
-                curr_sum = nums[i] + nums[left] + nums[right]
 
-                if curr_sum == 0:
+            # "BinarySearch" modification: 
+            # "<": working within subarray separate from i
+            # cannot evaluate num at left == right given constraint i != j, i != k, j != k
+            # Base case: no more array remaining to search
+            # complement for numbers[i] was not found, 
+            # continue iteration for i
+            # time complexity: BinarySearch on subarray of n elements O(log n) for n iterations, leading to O(n log n)
+            while left < right:
+                
+                # grab current sum (i, j, k)
+                currSum = nums[i] + nums[left] + nums[right]
+
+                # found target sum
+                if currSum == 0:
+                    
+                    # add triplet to result set
                     results.add((nums[i], nums[left], nums[right]))
-                    while left < right and nums[left] == nums[left + 1]:
-                        left += 1
-                    while left < right and nums[right] == nums[right - 1]:
-                        right -= 1
+
+                    # skip iteration:
+                    # j and k should only "BinarySearch" through any number once 
                     left += 1
                     right -= 1
-                elif curr_sum < 0:
+
+                    # skip iteration:
+                    # j and k should only "BinarySearch" through any number once 
+                    while left < right and nums[left] == nums[left - 1]:
+                        left += 1
+                    while left < right and nums[right] == nums[right + 1]:
+                        right -= 1
+
+                # "BinarySearch" on relevant subsection
+                # update left or right pointer
+                elif currSum < 0:
                     left += 1
                 else:
                     right -= 1
 
+        # convert valid set of tuple triplets into valid list of tuple triplets
+
         # Time Complexity: O(n^2) for two-pointer traversal + O(n^2) for manual sorting.
-        # Space Complexity: O(k), where k is the number of unique triplets.
-        return [list(triplet) for triplet in results]
+        # Space Complexity: O(n)
+        return list(results)
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -924,9 +1080,23 @@ not utilziing two pointers. But its still a cool approach to the problem.
 ### Solution 2: Grouping By Parity (No Sorting) - Two Pointers/Algorithm
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        # Note: Two Sum vs 3Sum
+        # Two sum, finding two numbers whose sum equals a target is simple
+        # with hashmaps or two pointer approaches being efficient
+        # 3Sum adds complexity with a third variable.
+        # Grouping techniques aim to narrow and organize the solution space
+        # reducing redundant checks while finding valid triplets
+
+        # positive, negative, and zero sets
+        # space complexity: 
         p, n, z = [], [], []
+        
+        # set ensures no duplicate triplets
+        # space complexity: 
         res = set()
 
+        # time complexity: iterate over list of n length O(n)
         for i in nums:
             if i < 0:
                 n.append(i)
@@ -935,34 +1105,48 @@ not utilziing two pointers. But its still a cool approach to the problem.
             else:
                 z.append(i)
 
-        # sets for access
+        # sets for unique groups
+        # time complexity: convert list into set O(n)
         P, N = set(p), set(n)
 
-        # 1. (0, num, -num) if at least one 0
+        # (0, num, -num)
+        # time complexity: iterate over positive numbers list n length O(n)
         if len(z) > 0:
-            for i in P:
-                n_target = -i
-                if n_target in N:
-                    res.add((n_target, 0, i ))
+            for i in P:                
+                # time complexity: negative target lookup in constant O(1)
+                nTarget = -i
+                if nTarget in N:
+                    res.add((nTarget, 0, i ))
 
-        # 2. (0, 0, 0) if at least three 0's
-        if len(z) > 2:
+        # (0, 0, 0)
+        # time complexity: len operation constant O(1)
+        if len(z) >= 3:
             res.add((0, 0, 0))
 
-        # 3. (-, -, +) negative pairs
+        # (-, -, +) negative pairs
+        # time complexity: iterate over list of negative numbers n length O(n)
         for i in range(len(n)):
+            # time complexity: iterate over list of negative numbers n length O(n) per outer iteration O(n), leading to O(n^2)
             for j in range(i+1, len(n)):
-                p_target = -(n[i] + n[j])
-                if p_target in P:
-                    res.add(tuple(sorted([n[i], n[j], p_target])))
+                # time complexity: lookup operation constant O(1)
+                pTarget = -(n[i] + n[j])
+                if pTarget in P:
+                    res.add(tuple(sorted([n[i], n[j], pTarget])))
         
-        # 4. (-, +, +) positive pairs
+        # (-, +, +) positive pairs
+        # time complexity: iterate over list of positive numbers n length O(n)
         for i in range(len(p)):
+            # time complexity: iterate over list of positive numbers n length O(n) per outer iteration O(n), leading to O(n^2)
             for j in range(i+1, len(p)):
-                n_target = -(p[i] + p[j])
-                if n_target in N:
-                    res.add(tuple(sorted([p[i], p[j], n_target])))
+                # time complexity: lookup operation constant O(1)
+                nTarget = -(p[i] + p[j])
+                if nTarget in n:
+                    res.add(tuple(sorted([p[i], p[j], nTarget])))
 
+        # convert valid set of tuple triplets into valid list of tuple triplets
+
+        # overall: time complexity O(n^2) 
+        # overall: space complexity O(n)
         return list(res)  
 ```
 
