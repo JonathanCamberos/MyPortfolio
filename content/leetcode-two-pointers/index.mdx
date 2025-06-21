@@ -986,6 +986,87 @@ Let see:
         return list(res)  
 ```
 
+### Find the Bug: Index Into Wrong Array [im half asleep rn ok? :) cut me some slack]
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        # Note: Two Sum vs 3Sum
+        # Two sum, finding two numbers whose sum equals a target is simple
+        # with hashmaps or two pointer approaches being efficient
+        # 3Sum adds complexity with a third variable.
+        # Grouping techniques aim to narrow and organize the solution space
+        # reducing redundant checks while finding valid triplets
+
+        # positive, negative, and zero sets
+        # space complexity: 
+        p, n, z = [], [], []
+        
+        # set ensures no duplicate triplets
+        # space complexity: 
+        res = set()
+
+        # time complexity: iterate over list of n length O(n)
+        for i in nums:
+            if i < 0:
+                n.append(i)
+            elif i > 0:
+                p.append(i)
+            else:
+                z.append(i)
+
+        # sets for unique groups
+        # time complexity: convert list into set O(n)
+        P, N = set(p), set(n)
+
+        # (0, num, -num)
+        # time complexity: iterate over positive numbers list n length O(n)
+        if len(z) > 0:
+            for i in P:                
+                # time complexity: negative target lookup in constant O(1)
+                nTarget = -i
+                if nTarget in N:
+                    res.add((nTarget, 0, i ))
+
+        # (0, 0, 0)
+        # time complexity: len operation constant O(1)
+        if len(z) >= 3:
+            res.add((0, 0, 0))
+
+        # (-, -, +) negative pairs
+        # time complexity: iterate over list of negative numbers n length O(n)
+        for i in range(len(n)):
+            # time complexity: iterate over list of negative numbers n length O(n) per outer iteration O(n), leading to O(n^2)
+            for j in range(i+1, len(n)):
+                # time complexity: lookup operation constant O(1)
+                # INCORRECT:
+                # stop being half asleep, index into the correct array
+                pTarget = -(nums[i] + nums[j])
+                if pTarget in P:
+                    # INCORRECT:
+                    # stop being half asleep, index into the correct array
+                    res.add(tuple(sorted([nums[i], nums[j], pTarget])))
+        
+        # (-, +, +) positive pairs
+        # time complexity: iterate over list of positive numbers n length O(n)
+        for i in range(len(p)):
+            # time complexity: iterate over list of positive numbers n length O(n) per outer iteration O(n), leading to O(n^2)
+            for j in range(i+1, len(p)):
+                # time complexity: lookup operation constant O(1)
+                # INCORRECT:
+                # stop being half asleep, index into the correct array
+                nTarget = -(nums[i] + nums[j])
+                if nTarget in n:
+                    # INCORRECT:
+                    # stop being half asleep, index into the correct array
+                    res.add(tuple(sorted([nums[i], nums[j], nTarget])))
+
+        # convert valid set of tuple triplets into valid list of tuple triplets
+
+        # overall: time complexity O(n^2) 
+        # overall: space complexity O(n)
+        return list(res)  
+```
+
 ### Solution 1: Two Sum Mimic by Opposite Ends Pointer Shift by BinarySearch Modification Per Element for 0 (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
@@ -1063,20 +1144,18 @@ Let see:
 
         # convert valid set of tuple triplets into valid list of tuple triplets
 
-        # Time Complexity: O(n^2) for two-pointer traversal + O(n^2) for manual sorting.
+        # Time Complexity: O(n^2)
         # Space Complexity: O(n)
         return list(results)
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-while this is arguably cleaner and more satisfying than the mini twoSum solution, this is again 
-not utilziing two pointers. But its still a cool approach to the problem.
-
+| Sorting | O(n log n) | O(1) | Sorting array using TimSort in O(n log n) | No additional memory allocation for in place sorting |
+| Outer Loop | O(n) | O(1) | Iterate over n elements O(n) | No additional memory allocation for iteration constant O(1) |
+| Inner Loop | O(n<sup>2</sup>) | O(1) | Two pointer traversal for subarray search over n elements O(n) per outer iteration n O(n), leading to O(n<sup>2</sup>)  | No additional memory allocation for pointer traversal | 
+| Result Storage | O(1) | O(n) | Insert takes constant O(1) | Stores k unique triplets O(k) which in worst case is just O(n) | 
+| Overall | O(n<sup>2</sup>) | O(n) | Two pointer traversal for n elements dominates, leading to O(n<sup>2</sup>) | Worst case of n/3 valid triplets O(n/3), which leads to O(n) | 
 
 ### Solution 2: Grouping By Parity (No Sorting) - Two Pointers/Algorithm
 ```python
@@ -1153,9 +1232,13 @@ not utilziing two pointers. But its still a cool approach to the problem.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Grouping Iteration | O(n) | O(n) | Iterate over list of n length to group into positive, negative, and zero lists O(n) | Grouping list of n length into three groups O(n) |
+| Conversion to Sets | O(n) | O(n) | Convert list of positive and negative numbers into sets O(n) | Convert list of n length O(n) |
+| Inverse Check | O(n) | O(1) | Iterate over positive list n length O(n) and lookup inverse in negative set O(1), leading to O(n) | No additional memory allocation for iteration O(1) | 
+| Zero Check | O(1) | O(1) | Zero list len check in constant O(1) | No additional memory allocation for len check O(1) | 
+| Negative Pairs | O(n<sup>2</sup>) | O(n) | Outer/Inner iteration over list of negative numbers O(n<sup>2</sup>) with inverse positive lookup O(1), leading to O(n<sup>2</sup>) | Adding n/3 triplets to result O(n/3), leading to O(n) | 
+| Positive Pairs | O(n<sup>2</sup>) | O(n) | Outer/Inner iteration over list of positive numbers O(n<sup>2</sup>) with inverse positive lookup O(1), leading to O(n<sup>2</sup>) | Adding n/3 triplets to result O(n/3), leading to O(n) | 
+| Overall | O(n<sup>2</sup>) | O(n) | Negative and positive iterations dominate leading to O(n<sup>2</sup>) | Memory allocation for n/3 valid triplets, leading to O(n) | 
 
 
 ## 11. Container With Most Water - Medium
@@ -1222,42 +1305,39 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) | 
 | Overall | O(n<sup>2</sup>) | O(1) | Inner loop dominates leading to O(n<sup>2</sup>) | No additional memory allocation leading to O(1) | 
 
-### Solution 1: Two Pointer Early Break - Two Pointers/Partitioning 
+### Solution 1: Greedy Opposite Ends Pointer Shift by BinarySearch Modification - Two Pointers/Opposite Ends 
 ```python
     def maxArea(self, height: List[int]) -> int:
         
-        L, R = 0, len(height)-1
+        # set up "BinarySearch" modification
+        left, right = 0, len(height)-1
         maxWater = 0 
 
-        # time complexity: iterate over list of n length with two pointers O(n)
-        while L < R:
+        # time complexity: two pointer iteration over list of n length O(n)
+        while left < right:
 
-            # grabbing weak link
-            smallerHeight = min(height[L], height[R])
+            # grab smaller height between outside pointers
+            smallerHeight = min(height[left], height[right])
 
-            # calculate curr water = (smallerHeight * width)
-            currWater = smallerHeight * (R-L)
+            # calculate curr water between outside pointers, (smallerHeight * width)
+            currWater = smallerHeight * (right-left)
             
-            # compare to max
+            # compare to global max
             maxWater = max(maxWater, currWater)
 
-            # grabbing weak link, continue past it
-            # time complexity: continue iterating over list n length with two pointers O(n)
-            if height[L] < height[R]:
-                L += 1
-
-                # early break: eliminate redundant comparisons
-                # by skipping heights guaranteed to be suboptimal
-                while height[L] < smallerHeight:
-                    L += 1 
-            
+            # Greedy:
+            # As we move pointers inwards, width is guaranteed to get shrink
+            # Thus, we can continue to move our pointers,
+            # until we hit a bigger height than our current smaller height
+            # time complexity: two pointer iteration over list of n length O(n)
+            if height[left] < height[right]:
+                left += 1
+                while left < right and height[left] < smallerHeight:
+                    left += 1 
             else:
-                R -= 1
-
-                # early break: eliminate redundant comparisons
-                # by skipping heights guaranteed to be suboptimal 
-                while height[R] < smallerHeight:
-                    R -= 1
+                right -= 1
+                while left < right and height[right] < smallerHeight:
+                    right -= 1
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
@@ -1269,8 +1349,6 @@ give us the most water.
 | Iteration | O(n) | O(1) | Iteration over list of n length with two pointers O(n) | No additional memory allocation for iteration O(1) |
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) |
 | Overall | O(n) | O(1) | Iteration over list of n length dominates leading to O(n) | No additional memory allocation O(1) | 
-
-### Solution 2: Greedy - Two Pointers/Algorithm
 
 ## 42. Trapping Rain Water - Hard
 
