@@ -1466,44 +1466,67 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 
 
-### Solution 1: Two Pointers Early Break - Two Pointers/Opposite Ends
+### Solution 1: 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def trap(self, height: List[int]) -> int:
 
-        # Set initial variables
-        L, R = 0, len(height) - 1
+        # Note: 
+        # Outer Pointers: act as wall/side to bound inner pointers
+        # Inner Pointers: traverse inward from both ends to track height for current position
+        # Water Trapping: compare inner pointer to outer pointers wall/side to determine 
+        # if theres enough depth to trap water
+
+        # Set up "BinarySearch" modification
+        # outer pointers
+        outerLeftMax, outerRightMax = 0, 0
+        # inner pointers
+        left, right = 0, len(height) - 1
         water = 0
-        leftMax, rightMax = 0, 0
 
-        # time complexity: iterate over list of n length with two pointers O(n)
-        while L <= R:
+        # "BinarySearch" modification
+        # time complexity: two pointer iteration over list of n length O(n)
+        while left < right:
 
-            # grabbing weak link
-            if height[L] < height[R]:
+            # "BinarySearch" on relevant subsection
+            # implies: height[left] < height[right]
+            if height[left] < height[right]:
 
-                # Update leftMax
-                if height[L] >= leftMax:
-                    leftMax = height[L]
+                # implies: outerLeftMax < height[left] < height[right]
+                # inner pointer taller than max, 
+                # thus no wall/side to the left of inner left pointer 
+                # so no water is able to be caught 
+                # update max                
+                if height[left] >= outerLeftMax:
+                    outerLeftMax = height[left]
 
-                # outer if/else implies right is taller, so simply add to water count
+                # implies: height[left] < outerLeftMax < height[right]
+                # bounded by outerLeftMax for water calculation
+                # water is able to be caught
                 else:
-                    water += leftMax - height[L]
+                    water += outerLeftMax - height[left]
 
-                # shifting pointer after calculation
-                L += 1
+                # shift pointer
+                left += 1
 
-            # grabbing weak link
+            # implies: height[right] < height[left]
             else:
-                # Update rightMax
-                if height[R] >= rightMax:
-                    rightMax = height[R]
+                
+                # implies: outerRightMax < height[right] < height[left]
+                # inner pointer taller than max, 
+                # thus no wall/side to the right of inner right pointer 
+                # so no water is able to be caught 
+                # update max      
+                if height[right] >= outerRightMax:
+                    outerRightMax = height[right]
 
-                # outer if/else implies left is taller, so simply add to water count
+                # implies: height[right] < outerRightMax < height[left]
+                # bounded by outerRightMax for water calculation
+                # water is able to be caught
                 else:
-                    water += rightMax - height[R]
+                    water += outerRightMax - height[right]
 
-                # shifting pointer after calculation
-                R -= 1
+                # shift pointer
+                right -= 1
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
@@ -1511,33 +1534,65 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iteration | O(n) | O(1) | Two pointer iteration over list of n length O(n) | No additional memory allocation required for iteration O(1) |
+| Comparing Heights | O(1) | O(1) | Height lookup and comparison in constant O(1) | No additional memory allocation for lookup or comparison O(1) |
+| Water Calculation | O(1) | O(1) | Water calculation and sum in constant O(1) | No additional memory allocation for water calculation or sum O(1) | 
+| Overall | O(n) | O(1) | Two pointer iteration over list of n length dominates, leading to O(n) | No additional memory allocation required, leading to O(1) | 
 
 
 ### Solution 2: Monotonic Stack - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
-        stack = []  # Monotonic stack to store indices
+
+        # Note: 2 concepts here: 
+        # Monotonic Stack: A stack that maintains indices of heights 
+        # in a non-increasing order. As soon as a height greater than 
+        # the height at the top of the stack is encountered, water trapping is calculated.
+
+        # Monotonic stack to store indices
+        stack = []  
         water = 0
         n = len(height)
 
-        # Traverse the height array
+        # push and pop each bar at most once
+        # time complexity: iterate over list of n length O(n)
         for i in range(n):
-            # While current height > height at stack top (possible water trap)
-            while stack and height[i] > height[stack[-1]]:
-                top = stack.pop()  # Index of the bottom of the trapped water
 
-                # No water can be trapped without both left and right walls
+            # Check: stack is non empty
+            # Check: current height[i] can act as a right wall
+            # height[i]: right wall
+            # stack[-1]: depth candidate
+            # implies: skipping and pushing right walls until a valid 
+            # depth candidate is found
+            # implies: only pop when it can serve as a depth candidate,
+            # otherwise use as a left wall
+            # implies: due to skipped and pushed right walls, 
+            # stack is in monotonic non-increasing order
+            while stack and height[i] > height[stack[-1]]:
+
+                # implies: stack.pop() is valid depth candidate 
+                depthCandidate = stack.pop() 
+
+                # If the stack becomes empty after popping, no left wall exists
+                # implies: cannot form a valid trap in this case
                 if not stack:
                     break
 
-                # Calculate the distance and bounded height
+                # After stack.pop():
+                # stack[-1] is a new element
+                # previous implication: stack is in non-increasing order
+                # implies: any item on stack after pop can serve as left wall
+                # implies: stack[-1] < depthCandidate < height[i]
                 distance = i - stack[-1] - 1
-                bounded_height = min(height[i], height[stack[-1]]) - height[top]
-                water += distance * bounded_height
 
+                # Subtract the height of the bottom (depth candidate) to get water depth
+                boundedHeight = min(height[i], height[stack[-1]]) - height[depthCandidate]
+
+                # Add the trapped water for the current segment 
+                water += distance * boundedHeight
+
+            # index i is the position of the bar being processed in the array height
+            # allows us to calculate distance between current bar and left wall
             stack.append(i)
 
         # overall: time complexity O(n)
