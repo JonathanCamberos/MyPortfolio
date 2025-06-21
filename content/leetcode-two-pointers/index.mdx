@@ -1466,7 +1466,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 
 
-### Solution 1: 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
+### Solution 1: Monotonic Traversal 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -1483,25 +1483,28 @@ Now we need a way to traverse the array that allows us to take advantage of this
         left, right = 0, len(height) - 1
         water = 0
 
-        # "BinarySearch" modification
+        # Monotonic "BinarySearch" modification
         # time complexity: two pointer iteration over list of n length O(n)
         while left < right:
 
-            # "BinarySearch" on relevant subsection
+            # Monotonic "BinarySearch" on relevant subsection
             # implies: height[left] < height[right]
+            # case 1: [5, 0, 3, 2, 4, 6], left < right for entire array 
+            # case 2: [5, 0, 3, 9, 4, 6], left < right broken at some point
+            # case 1 implies: while height[left] < height[right] 
+            # and while height[left] < outerLeftMax
+            # then: water is limited by outerLeft/outerRight 
+            # as water will eventually be caught by right
             if height[left] < height[right]:
 
-                # implies: outerLeftMax < height[left] < height[right]
-                # inner pointer taller than max, 
-                # thus no wall/side to the left of inner left pointer 
-                # so no water is able to be caught 
-                # update max                
+                # case 1: implication broken
+                # implies: outerLeftMax < height[left] < height[right] 
+                # then: update outerLeftMax             
                 if height[left] >= outerLeftMax:
                     outerLeftMax = height[left]
 
+                # case 1: implication applies
                 # implies: height[left] < outerLeftMax < height[right]
-                # bounded by outerLeftMax for water calculation
-                # water is able to be caught
                 else:
                     water += outerLeftMax - height[left]
 
@@ -1511,17 +1514,14 @@ Now we need a way to traverse the array that allows us to take advantage of this
             # implies: height[right] < height[left]
             else:
                 
-                # implies: outerRightMax < height[right] < height[left]
-                # inner pointer taller than max, 
-                # thus no wall/side to the right of inner right pointer 
-                # so no water is able to be caught 
-                # update max      
+                # case 1: implication broken
+                # implies: outerRightMax < height[right] < height[left]     
+                # then: update outerRightMax
                 if height[right] >= outerRightMax:
                     outerRightMax = height[right]
 
+                # case 1: implication applies
                 # implies: height[right] < outerRightMax < height[left]
-                # bounded by outerRightMax for water calculation
-                # water is able to be caught
                 else:
                     water += outerRightMax - height[right]
 
@@ -1583,6 +1583,8 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # previous implication: stack is in non-increasing order
                 # implies: any item on stack after pop can serve as left wall
                 # implies: stack[-1] < depthCandidate < height[i]
+                # distance = (index of right wall) - (index of left wall) - (exclude left wall itself, leaving only space in between)
+                # [0, 1, 2, 3, 4, 5] = 4 - 1 = 3 - 1 = 2 space in between 4 an 1
                 distance = i - stack[-1] - 1
 
                 # Subtract the height of the bottom (depth candidate) to get water depth
@@ -1608,38 +1610,54 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ### Solution 3: Dynamic Programming - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
+        
+        # Note:
+        # Dynamic Programming Concept:
+        # Left Maximum Array: Stores the maximum height encountered from the start up to each index i.
+        # Right Maximum Array: Stores the maximum height encountered from the end up to each index i.
+        # Avoid recomputing maximum heights repeatedly.
+
         n = len(height)
         if n == 0:
             return 0
 
         # Arrays to store max heights from the left and right
-        left_max = [0] * n
-        right_max = [0] * n
+        # leftMax[i]: Maximum height from 0 to index i
+        # rightMax[i]: Maximum height from index i to (n-1)
+        leftMax = [0] * n
+        rightMax = [0] * n
         water = 0
 
-        # Calculate left max for each bar
-        left_max[0] = height[0]
+        # calculate left max for each bar
+        # time complexity: iterate over list of n length O(n)
+        leftMax[0] = height[0]
         for i in range(1, n):
-            left_max[i] = max(left_max[i - 1], height[i])
+            leftMax[i] = max(leftMax[i - 1], height[i])
 
-        # Calculate right max for each bar
-        right_max[n - 1] = height[n - 1]
+        # calculate right max for each bar
+        # time complexity: iterate over list of n length O(n)
+        rightMax[n - 1] = height[n - 1]
         for i in range(n - 2, -1, -1):
-            right_max[i] = max(right_max[i + 1], height[i])
+            rightMax[i] = max(rightMax[i + 1], height[i])
 
-        # Calculate trapped water for each bar
+        # calculate trapped water for each bar
+        # time complexity: iterate over list of n length O(n)
         for i in range(n):
-            water += min(left_max[i], right_max[i]) - height[i]
+
+            # The water trapped above bar i is determined by the minimum between
+            # leftMax[i] and rightMax[i] minus the curr bar height
+            water += min(leftMax[i], rightMax[i]) - height[i]
 
         # overall: time complexity O(n)
-        # overall: space complexity O(n) (for left_max and right_max arrays)
+        # overall: space complexity O(n)
         return water
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| LeftMax Calculation | O(n) | O(1) | Iterate over height list of n length O(n) | Stores max height for current index for list of n length O(n) |
+| RightMax Calculation | O(n) | O(n) | Iterate over height list of n length O(n) | Store max height for current index for list of n length O(n) |
+| Water Calculation | O(n) | o(1) | Iterate over max height list of n length O(n) | No additional memory allocation for water calculation O(n) | 
+| Overall | O(n) | O(n) | Iterating over height list dominates, leading to O(n) | Memory allocation for leftMax and rightMax arrays dominates, leading to O(n) | 
 
 
 ## 5. Longest Palindromic Substring - Medium
