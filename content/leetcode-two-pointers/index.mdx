@@ -751,7 +751,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-### Solution 2: Shift Opposite Ends BinarySearch Modification for Target - Two Pointers/Opposite Ends
+### Solution 2: Opposite Ends Pointer Shift by BinarySearch Modification for Target - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
@@ -944,7 +944,7 @@ Let see:
                 # time complexity: negative target lookup in constant O(1)
                 nTarget = -i
                 if nTarget in N:
-                    res.add((nTarget, 0, i ))
+                    res.add((nTarget, 0, i))
 
         # (0, 0, 0)
         # time complexity: len operation constant O(1)
@@ -986,7 +986,7 @@ Let see:
         return list(res)  
 ```
 
-### Solution 1: Shift Opposite Ends BinarySearch Modification Per Element for 0 (Sorting) - Two Pointers/K Pointer Variants
+### Solution 1: Two Sum Mimic by Opposite Ends Pointer Shift by BinarySearch Modification Per Element for 0 (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -1005,6 +1005,7 @@ Let see:
         # time complexity: default python sorting TimSort, O(n log n)
         nums.sort()
 
+        # mimic 
         # time complexity
         for i in range(n - 2):
 
