@@ -1626,9 +1626,11 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iteration | O(n) | O(1) | Iterate over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Stack Operations | O(n) | O(n) | Each push() and pop() operation in constant O(1) but for n elements leading to O(1) * n, leading to O(n) | Stack holding n elements O(n) |
+| Heights comparisons | O(1) | O(1) | Each comparison in while loop in constant O(1) | No additional memory allocation for comparison O(1) | 
+| Water Calculation | O(1) | O(1) | Calculating distance and bounded height in constant O(1) | No additional memory for distant or bounded height operations O(1) | 
+| Overall | O(n) | O(n) | Iterating over list of n length dominates, leading to O(n) | Stack growing for n elements dominates, leading to O(n) | 
 
 ### Solution 3: Dynamic Programming - Two Pointers/Algorithm
 ```python
