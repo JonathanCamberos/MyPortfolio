@@ -1562,11 +1562,10 @@ Now we need a way to traverse the array that allows us to take advantage of this
         # Monotonic stack to store indices
         stack = []  
         water = 0
-        n = len(height)
 
         # push and pop each bar at most once
         # time complexity: iterate over list of n length O(n)
-        for i in range(n):
+        for i in range(len(height)):
 
             # Check: stack is non empty, depth candidate exists
             # Check: if current height[i] breaks non-increasing order,
@@ -1576,15 +1575,15 @@ Now we need a way to traverse the array that allows us to take advantage of this
             # implies: when monotonic non-increasing breaks, we have found right wall
             while stack and height[i] > height[stack[-1]]:
                 
+                # curr while loop iteration:
                 # height[i]: right wall
-                # stack[-1]: depth candidate
-                # stack[-2]: left wall
+                # pop stack[-1]: depth candidate
+                # peak stack[-2]: left wall
 
-                # stack.pop(): stack[-1] depth candidate
                 # while stack is non-empty:
-                # keep grabbing new depth candidates and new left walls
-                # we essentially drag the right wall over the monotonic stack, 
-                # checking all: left wall + depth candidates
+                # stack.pop() will iterate depth candidate and left wall
+                # essentially dragging the right wall over the monotonic stack, 
+                # adding all possible water, with all combinations of left wall and depth candidate
                 # until a depth candidate is taller than the current right wall
                 # then we just add the right wall to the stack maintaining monotonic order
                 depthCandidate = stack.pop() 
@@ -1599,9 +1598,10 @@ Now we need a way to traverse the array that allows us to take advantage of this
 
                 # After stack.pop():
                 # height[i]: right wall
-                # depthCandidate: depth
-                # stack[-1]: left wall
-                # implies: depthCandidate < stack[-1] && depthCandidate < height[i]
+                # popped depthCandidate: depth
+                # peak stack[-1]: left wall
+                # while loop check implies: depthCandidate < height[i]
+                # monotonic stack check implies: depthCandidate < stack[-1]
                 rightWall = i
                 leftWall = stack[-1]
                 distance = rightWall - leftWall - 1
