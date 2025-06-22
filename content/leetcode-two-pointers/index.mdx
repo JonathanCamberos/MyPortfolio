@@ -1689,7 +1689,6 @@ Now we need a way to traverse the array that allows us to take advantage of this
 
 Topics: Two Pointers, String, Dynamic Programming
 
-
 ### Intro
 > Given a string s, return the longest palindromic substring in s. 
 
@@ -1758,25 +1757,29 @@ Find the longest palindrome in a string.
             # this mirror is the symmetric counterpart of i
             mirror = 2 * center - i 
 
-            # initializing palindrome radius:
-            # right: rightmost boundary of the palindrome centered at 'center'
-            # i < right: means index i lies inside the palindrome that
-            # extends from center to right
+            # checking if the current center, list within the
+            # current longest palindromic substring
             if i < right:
+                
+                # we know that:
+                # curr longest palindrome is centered at 'center'
+                # curr longest palindrome extends to 'right'
+                # i is within this palindromes boundaries
+                # implies: palindrome centered at i, as long as minimum between:
+                # - palindrome radius at mirror (the symmetric position around the current center)
+                # - distance from i to right (because palindrome centered at i can't extend beyond current longest palindromic substring)
                 p[i] = min(right - i, p[mirror])
 
-            # expanding around current center i while a valid palindrome exists
+            # peak: check if next radius is valid palindrome, if so increase radius
             while t[i + p[i] + 1] == t[i - p[i] - 1]:
                 p[i] += 1
 
-            # i: current center for substring
-            # p[i]: radius of the longest palindrome centered at i
-            # right: right edge index of palindrome that currently extends farthest to the right
-            # center: center index of palindrome that currently extends farthest to the right
+            # we know that:
+            # p[i]: radius for longest possible palindrome at i
+            # center, right: represent center and edge of current longest palindrome
+            # if center + radius (of i palindrome), extends past edge of current longest palindrome
+            # then we have found new longest palindrome
             if i + p[i] > right:
-                # if for current center i + radius, extends farther than the previous
-                # right boundary for previous longest palindromic substring, 
-                # we have found a new longest palindromic substring, update center and right
                 center = i
                 right = i + p[i]
 
