@@ -66,16 +66,16 @@ Ex: Find the length of the longest substring without repeating characters.
     def longest_unique_substring(s: str) -> int:
         char_set = set()
         left = 0
-        max_length = 0
+        maxLength = 0
 
         for right in range(len(s)):
             while s[right] in char_set:
                 char_set.remove(s[left])
                 left += 1
             char_set.add(s[right])
-            max_length = max(max_length, right - left + 1)
+            maxLength = max(maxLength, right - left + 1)
         
-        return max_length
+        return maxLength
 
     # Example:
     print(longest_unique_substring("abcabcbb"))  # Output: 3
@@ -243,9 +243,9 @@ Ex: Manacher's Algorithm, find the longest palindromic substring
                 right = i + p[i]
 
         # Find the maximum length palindrome
-        max_len, center_index = max((n, i) for i, n in enumerate(p))
-        start = (center_index - max_len) // 2  # Convert index back to original string
-        return s[start: start + max_len]
+        maxLen, centerIndex = max((n, i) for i, n in enumerate(p))
+        start = (centerIndex - maxLen) // 2  # Convert index back to original string
+        return s[start: start + maxLen]
 ```
 
 
@@ -1733,43 +1733,47 @@ Find the longest palindrome in a string.
 
         # index 3 palindrome: "#"
         # just the center by itself, no expansion, etc...
+        
         t = "#".join(f"^{s}$")
         n = len(t)
 
         # p[i]: radius of the palindrome centered at index i in the preprocessed string
         p = [0] * n
 
-        # center: index of the center of the rightmost palindrome found so far 
-        # that expands the farthest to the right in the preprocessed string
+        # center: index of the center of the palindrome with the right most boundary 
         center = 0 
 
-        # right: right boundary of the rightmost palindrome found so far
-        # that expands the farthest to the right in the preprocessed string
+        # right: right boundary of the palindrome with the right most boundary
         right = 0
+
+        # iteration tracks the farthest right boundary, in order to
+        # take advantage of the mirror radii trick 
 
         # i: represents a potential palindrome center
         # iterate over all character positions to test each palindrome center
         # time complexity: iterate over list of n length O(n)
         for i in range(1, n - 1):
 
-            # for some palindrome centered at 'center'
-            # there exists a mirror position on the opposite side of 'center'
-            # this mirror is the symmetric counterpart of i
-            mirror = 2 * center - i 
+            # finds 'mirror' index for i in current longest palindromic substring: 
+            # i is index being processed on the right side of 'center'
+            # the 'mirror' index is on the left side of 'center'
+            # (Distance from 'mirror' to 'center') = (Distance from i to center)
+            # ex: center = 6, i = 7  => mirror = (2 * 6) - 7 = 5
+            mirror = (2 * center) - i 
 
-            # checking if the current center, list within the
-            # current longest palindromic substring
+            # check if i index being processed lies within current longest palindromic substring
+            # if within boundaries, the mirrors information can be used
             if i < right:
                 
-                # we know that:
-                # curr longest palindrome is centered at 'center'
-                # curr longest palindrome extends to 'right'
-                # i is within this palindromes boundaries
-                # implies: palindrome centered at i, as long as minimum between:
-                # - palindrome radius at mirror (the symmetric position around the current center)
-                # - distance from i to right (because palindrome centered at i can't extend beyond current longest palindromic substring)
+                # if the radii of the mirror lies within the boundaries
+                # of right when applied to the current index i
+                # since we know that center + right, guarantees that the right side
+                # is equal to the left side, we can just copy the radii at the mirror
+                # since we know its a copy of the right side, up until the border of right
                 p[i] = min(right - i, p[mirror])
 
+            # assumption: if valid mirror radii exists, we have pre-set it to p[i]
+            # now: just extend until palindromic status is broken
             # peak: check if next radius is valid palindrome, if so increase radius
             while t[i + p[i] + 1] == t[i - p[i] - 1]:
                 p[i] += 1
@@ -1783,10 +1787,19 @@ Find the longest palindrome in a string.
                 center = i
                 right = i + p[i]
 
-        # Find the maximum length palindrome
-        max_len, center_index = max((n, i) for i, n in enumerate(p))
-        start = (center_index - max_len) // 2  # Convert index back to original string
-        return s[start: start + max_len]
+        # after processing entire string and building p array which stores 
+        # radii of palindrome centered at each index in the process string
+
+        # scan through p to find the maximum palindrome radius and its center
+        maxLen, centerIndex = max((n, i) for i, n in enumerate(p))
+        # grab left boundary start for splicing
+        start = (centerIndex - maxLen) // 2
+        
+        # splice longest substring
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return s[start: start + maxLen]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
