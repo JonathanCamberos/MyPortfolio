@@ -1808,10 +1808,11 @@ Find the longest palindrome in a string.
         # index and radius are both in context of expandable string, not the original string
         # thus, we need a formula to translate to original string
 
-        # grab left boundary start for splicing
+        # grab left index boundary in expandedStr (centerIndex - maxRadius)
+        # map back to original string, divide by 2, to account for added '#'
         start = (centerIndex - maxRadius) // 2
         
-        # splice longest substringe
+        # splice longest substring
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
