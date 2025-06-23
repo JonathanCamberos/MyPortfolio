@@ -1810,9 +1810,17 @@ Find the longest palindrome in a string.
 
         # grab left index boundary in expandedStr (centerIndex - maxRadius)
         # map back to original string, divide by 2, to account for added '#'
+        # Ex: 'a' = '^ # a # $'  | center 2, radius = 1
+        #      0     0 1 2 3 4   | start = (2 - 1) // 2 = 0
+
+        # Ex: 'a b b a' = '^ # a # b # b # a # $'   |  center = 5, radius = 4
+        #      0 1 2 3     0 1 2 3 4 5 6 7 8 9 10   |  start = (5 - 4) // 2 = 0
+        
         start = (centerIndex - maxRadius) // 2
         
         # splice longest substring
+        # Ex: 'a'    | start = 0, radius 1, [0,1] = 'a'
+        # Ex: 'abba' | start = 0, radius 4, [0, 4] = 'abba'
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
