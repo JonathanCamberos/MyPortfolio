@@ -1708,98 +1708,114 @@ s consists of only digits and English letters.
 
 Find the longest palindrome in a string.
 
-### Solution 1: Manacher's Algorithm - Two Pointers/Algorithm
+### Solution 1: Manacher's Algorithm (iterate, expand, and mirror radius via rightmost) - Two Pointers/Algorithm
 ```python
     def longestPalindrome(self, s: str) -> str:
 
         # Note: 
-        # Preprocessing with #, ^, and $, we ensure that:
-        # Each potential palindrome has a clearly defined middle point, 
-        # called the "center", around which it is symmetric.
-        # The center can either be: 
+        # Preprocessing with #, ^, and $:
+        # '#': ensures uniform expansion, for both odd and even length palindromes
+        # '^' and '$': sentinel characters that don't match valid characters
+        # in the input string, serve as true start and end markers
+        
+        # Boundary expansion: 
+        # For any index i, center of palindrome at i can either be: 
         # - a character from the original string
         # - a placeholder '#''
-        # which allows even length palindromes to have a single middle point
-        # so we can use our expanding logic
+        # Center definition allows even length palindromes such as "abba", see below,
+        # to have a single middle point, allowing the same expanding logic 
+        # for even and odd strings for palindrome validation
 
-        # ^ # a # b # b # a # $    || palindromes centered at each index:
-        # 0 1 2 3 4 5 6 7 8 9 10   ||
+        # Ex:
+        # ^ # a # b # b # a # $    || new string len 11,
+        # 0 1 2 3 4 5 6 7 8 9 10   || with palindromes centered at each index:
 
         # index 1 palindrome: "#"
-        # just the center by itself, no expansion
-
         # index 2 palindrome: "#a#"
-        # symmetry includes # on both sides
+        # index 3 palindrome: "#" 
+        # etc...
+        # index 5 palindrome: "#"
+        # etc...
 
-        # index 3 palindrome: "#"
-        # just the center by itself, no expansion, etc...
-        
-        t = "#".join(f"^{s}$")
-        n = len(t)
+        expandableStr = "#".join(f"^{s}$")
+        n = len(expandableStr)
 
-        # p[i]: radius of the palindrome centered at index i in the preprocessed string
+        # Note: 
+        # Iteration tracks the right boundary for the current farthest right palindromic substring, 
+        # This allows us to take advantage of the mirror radius trick
+        # to calculate the radius of any index i more efficiently
+
+        # p[i]: radius of the palindrome centered at index i
+        # n instead of (n-1), because we ignore sentinel indexes 0 and (n-1)
         p = [0] * n
 
-        # center: index of the center of the palindrome with the right most boundary 
-        center = 0 
-
+        # mirror radius validation: tracking right boundary via right
         # right: right boundary of the palindrome with the right most boundary
         right = 0
 
-        # iteration tracks the farthest right boundary, in order to
-        # take advantage of the mirror radii trick 
+        # mirror radius validation: calculating mirror index via center
+        # center: index of the center of the palindrome with the right most boundary 
+        center = 0 
 
-        # i: represents a potential palindrome center
-        # iterate over all character positions to test each palindrome center
+        # range skips sentinel indexes 0 and (n-1), ^ and $
+        # i: center of current palindrome
         # time complexity: iterate over list of n length O(n)
         for i in range(1, n - 1):
 
-            # finds 'mirror' index for i in current longest palindromic substring: 
-            # i is index being processed on the right side of 'center'
-            # the 'mirror' index is on the left side of 'center'
-            # (Distance from 'mirror' to 'center') = (Distance from i to center)
-            # ex: center = 6, i = 7  => mirror = (2 * 6) - 7 = 5
+            # mirror:
+            # i is current index being processed
+            # i is to the right of center and has a mirror to the left of center
+            # ex: center = 6, i = 7 => mirror = (2 * 6) - 7 = 5
             mirror = (2 * center) - i 
 
-            # check if i index being processed lies within current longest palindromic substring
-            # if within boundaries, the mirrors information can be used
+            # mirror radius validation:
+            # if i lies within bounds of the right most palindrome,
+            # the right most palindrome itself guarantees that the palindrome radius
+            # for the mirror of i, is applicable to i as well
+            # since mirror and i are by definition mirrors/identical to each other
             if i < right:
+
+                # mirror radius is either:
+                # - less than the distance between i and right bound,
+                #   in which case all of the radius is valid
+                # - exceeds bounds and is farther than right bound,
+                #   in which case only the radius up until the right bound is valid
                 
-                # if the radii of the mirror lies within the boundaries
-                # of right when applied to the current index i
-                # since we know that center + right, guarantees that the right side
-                # is equal to the left side, we can just copy the radii at the mirror
-                # since we know its a copy of the right side, up until the border of right
+                # i radius is thus, bounded by minimum between: 
+                # - mirror radius
+                # - distance from i to the right bound
                 p[i] = min(right - i, p[mirror])
 
-            # assumption: if valid mirror radii exists, we have pre-set it to p[i]
-            # now: just extend until palindromic status is broken
-            # peak: check if next radius is valid palindrome, if so increase radius
-            while t[i + p[i] + 1] == t[i - p[i] - 1]:
+            # assumption: if valid case, we have pre-set p[i] to p[mirror]
+            # now explore: extend radius p[i] until palindromic status is broken
+            while expandableStr[i + p[i] + 1] == expandableStr[i - p[i] - 1]:
                 p[i] += 1
 
-            # we know that:
-            # p[i]: radius for longest possible palindrome at i
-            # center, right: represent center and edge of current longest palindrome
-            # if center + radius (of i palindrome), extends past edge of current longest palindrome
-            # then we have found new longest palindrome
+            # p[i]: radius for palindrome at i
+            # i: center for palindrome at i
+            # check: if we have a new right most boundary, update center and right 
             if i + p[i] > right:
-                center = i
                 right = i + p[i]
+                center = i
 
-        # after processing entire string and building p array which stores 
-        # radii of palindrome centered at each index in the process string
+        # iteration complete:
+        # p[] stores radius of palindrome centered at each index
 
-        # scan through p to find the maximum palindrome radius and its center
-        maxLen, centerIndex = max((n, i) for i, n in enumerate(p))
+        # scan through p[] to find the maximum palindrome radius and its center
+        maxRadius, centerIndex = max((n, i) for (i, n) in enumerate(p))
+
+        # Note:
+        # index and radius are both in context of expandable string, not the original string
+        # thus, we need a formula to translate to original string
+
         # grab left boundary start for splicing
-        start = (centerIndex - maxLen) // 2
+        start = (centerIndex - maxRadius) // 2
         
-        # splice longest substring
+        # splice longest substringe
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
-        return s[start: start + maxLen]
+        return s[start: start + maxRadius]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
