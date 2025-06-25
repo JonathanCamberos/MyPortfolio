@@ -1717,7 +1717,10 @@ Find the longest palindrome in a string.
         # '#': ensures uniform expansion, for both odd and even length palindromes
         # '^' and '$': sentinel characters that don't match valid characters
         # in the input string, serve as true start and end markers
-        
+        # '^': ensures all '#' are on odd characters, and since all palindromes 
+        # will have a start and end character of '#', it makes it easy to map from
+        # the expandedStr to the original string
+
         # Boundary expansion: 
         # For any index i, center of palindrome at i can either be: 
         # - a character from the original string
@@ -1808,19 +1811,24 @@ Find the longest palindrome in a string.
         # index and radius are both in context of expandable string, not the original string
         # thus, we need a formula to translate to original string
 
-        # grab left index boundary in expandedStr (centerIndex - maxRadius)
-        # map back to original string, divide by 2, to account for added '#'
-        # Ex: 'a' = '^ # a # $'  | center 2, radius = 1
-        #      0     0 1 2 3 4   | start = (2 - 1) // 2 = 0
+        # Notice, how in the expanded string, 
+        #  - all original characters are on even index
+        #  - all original characters have matching # on the left odd index
 
-        # Ex: 'a b b a' = '^ # a # b # b # a # $'   |  center = 5, radius = 4
-        #      0 1 2 3     0 1 2 3 4 5 6 7 8 9 10   |  start = (5 - 4) // 2 = 0
-        
+        # abba =>  ^ # a # b # b # a # $   | a=2, b=4, b=6, a=8
+        # 0123 =>  0 1 2 3 4 5 6 7 8 9 10  | #=1, #=3, #=5, #=7
+
+        # aba =>   ^ # a # b # a # $       | a=2, b=4, a=6
+        # 012 =>   0 1 2 3 4 5 6 7 8       | #=1, #=3, #=5
+
+        # any palindrome will always end with a '#'.
+        # so if we divide the starting odd position by 2, it will always map
+        # to an original character.
+        # so an easy translation formula is:
+
         start = (centerIndex - maxRadius) // 2
         
         # splice longest substring
-        # Ex: 'a'    | start = 0, radius 1, [0,1] = 'a'
-        # Ex: 'abba' | start = 0, radius 4, [0, 4] = 'abba'
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
