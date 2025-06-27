@@ -1,7 +1,7 @@
 {
   "1": {
     "questionNum": 1,
-    "questionTitle": "Two Sum I, Input Array Is Not Sorted <1>",
+    "questionTitle": "Two Sum I (Input Array Is Not Sorted) [1]",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.",
     "questionTopics": [
@@ -90,7 +90,7 @@
   },
   "36": {
     "questionNum": 36,
-    "questionTitle": "Valid Sudoku <2>",
+    "questionTitle": "Valid Sudoku [2]",
     "questionDifficulty": "Medium",
     "questionBlurb": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules: Each row must contain the digits 1-9 without repetition. Each column must contain the digits 1-9 without repetition. Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.",
     "questionTopics": [
@@ -122,7 +122,7 @@
   },
   "49": {
     "questionNum": 49,
-    "questionTitle": "Group Anagrams <2>",
+    "questionTitle": "Group Anagrams [2]",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
     "questionTopics": [
@@ -167,7 +167,7 @@
   },
   "128": {
     "questionNum": 128,
-    "questionTitle": "Longest Consecutive Sequence <3>",
+    "questionTitle": "Longest Consecutive Sequence [3]",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of integers nums, return the length of the longest consecutive sequence of elements. A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than the previous element You must wrtie an algorithm that runs in O(n) time.",
     "questionTopics": [
@@ -226,7 +226,7 @@
   },
   "217": {
     "questionNum": 217,
-    "questionTitle": "Contains Duplicate <2>",
+    "questionTitle": "Contains Duplicate [2]",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given an integer array nums, return true if any value appears at least twice in the array, return false if every element is distinct.",
     "questionTopics": [
@@ -241,7 +241,7 @@
   },
   "238": {
     "questionNum": 238,
-    "questionTitle": "Product of Array Except Self <2>",
+    "questionTitle": "Product of Array Except Self [2]",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer. You must write an algorithm that runs in O(n) time and without using the division operation.",
     "questionTopics": [
@@ -255,7 +255,7 @@
   },
   "242": {
     "questionNum": 242,
-    "questionTitle": "Valid Anagram <2>",
+    "questionTitle": "Valid Anagram [2]",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given two strings s and t, return true if t is an anagram of s, and false otherwise.",
     "questionTopics": [
@@ -284,7 +284,7 @@
   },
   "347": {
     "questionNum": 347,
-    "questionTitle": "Top K Elements in List <3>",
+    "questionTitle": "Top K Elements in List [3]",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums and an integer k, return the k most frequent element within the array. Test cases are generated such that the answer is always unique. You may return the output in any order",
     "questionTopics": [
