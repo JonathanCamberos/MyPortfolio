@@ -955,7 +955,7 @@ Lets see:
 
 
 
-### Find the Bug: Hashmap Key (Unhashable type)
+### Find the Bug: Hashmap Key for Hashmap (Unhashable type)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -981,7 +981,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Find the Bug: Hashmap Item Order (Hashmaps are not sorted)
+### Find the Bug: Hashmap Key Order (Hashmaps are not sorted)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1032,7 +1032,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-### Solution 1: Hashmap of 26 to Tuple Key - Hashmap/Grouping by Criteria
+### Solution 1: Array of 26 to Tuple Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1889,7 +1889,14 @@ So we simply create sets for all of these groups and as we traverse the board, w
                 tmp = board[r][c]
                 if tmp != ".":  
 
-                    # indexing box sets by unique int calculation  
+                    # indexing box sets by unique int calculation 
+                    #  (j//3) = 0, 1, 2
+                    #  (3 * (i//3)) = 0, 3, 6
+                    #    0 1 2
+                    # 0  0 1 2
+                    # 3  3 4 5
+                    # 6  6 7 8
+                    # leads to 0-8 index indexing
                     gridKey = (3 * (i//3)) + (j//3)
 
                     # time complexity: lookup operation for element to corresponding sets in constant O(1)

@@ -12,7 +12,7 @@ const siteMetadata = {
     headerTitle: 'jonathancamberos-portfolio-header',
     description: 'jonathan camberos software engineer portfolio',
     language: 'en-us',
-    theme: 'system', // system, dark or light
+    theme: 'dark', // system, dark or light
     siteUrl: 'https://jcmyportfolio-jcprojects.vercel.app/', /* update w/ final url */
     siteLogo: '/logo/cat30.png',
     socialBanner: '/social-banner.png', // add social banner in the public folder
