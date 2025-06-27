@@ -1,17 +1,17 @@
 {
   "1": {
     "questionNum": 1,
-    "questionTitle": "Two Sum I (Input Array Is Not Sorted)",
+    "questionTitle": "Two Sum I, Input Array Is Not Sorted <1>",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.",
     "questionTopics": [
       "Array",
       "Hash Table"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-16T08:32:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-06-26T08:20:00",
+    "coldnessCount": 2
   },
   "5": {
     "questionNum": 5,
@@ -41,7 +41,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-20T07:13:00",
-    "coldnessCount": 5
+    "coldnessCount": 8
   },
   "15": {
     "questionNum": 15,
@@ -57,7 +57,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-20T06:07:00",
-    "coldnessCount": 5
+    "coldnessCount": 8
   },
   "20": {
     "questionNum": 20,
@@ -90,7 +90,7 @@
   },
   "36": {
     "questionNum": 36,
-    "questionTitle": "Valid Sudoku",
+    "questionTitle": "Valid Sudoku <2>",
     "questionDifficulty": "Medium",
     "questionBlurb": "Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules: Each row must contain the digits 1-9 without repetition. Each column must contain the digits 1-9 without repetition. Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.",
     "questionTopics": [
@@ -98,10 +98,10 @@
       "Hash Table",
       "Matrix"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-17T09:28:00",
-    "coldnessCount": 8
+    "lastSubmittedDate": "2025-06-26T08:45:00",
+    "coldnessCount": 2
   },
   "42": {
     "questionNum": 42,
@@ -118,11 +118,11 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-21T06:30:00",
-    "coldnessCount": 4
+    "coldnessCount": 7
   },
   "49": {
     "questionNum": 49,
-    "questionTitle": "Group Anagrams",
+    "questionTitle": "Group Anagrams <2>",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of strings strs, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
     "questionTopics": [
@@ -131,10 +131,10 @@
       "String",
       "Sorting"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-16T09:07:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-06-26T08:25:00",
+    "coldnessCount": 2
   },
   "84": {
     "questionNum": 84,
@@ -163,11 +163,11 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-18T07:26:00",
-    "coldnessCount": 7
+    "coldnessCount": 10
   },
   "128": {
     "questionNum": 128,
-    "questionTitle": "Longest Consecutive Sequence",
+    "questionTitle": "Longest Consecutive Sequence <3>",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of integers nums, return the length of the longest consecutive sequence of elements. A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than the previous element You must wrtie an algorithm that runs in O(n) time.",
     "questionTopics": [
@@ -175,10 +175,10 @@
       "Hash Table",
       "Union Find"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-18T07:00:00",
-    "coldnessCount": 7
+    "lastSubmittedDate": "2025-06-26T08:55:00",
+    "coldnessCount": 2
   },
   "150": {
     "questionNum": 150,
@@ -222,11 +222,11 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-19T03:55:00",
-    "coldnessCount": 6
+    "coldnessCount": 9
   },
   "217": {
     "questionNum": 217,
-    "questionTitle": "Contains Duplicate",
+    "questionTitle": "Contains Duplicate <2>",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given an integer array nums, return true if any value appears at least twice in the array, return false if every element is distinct.",
     "questionTopics": [
@@ -234,28 +234,28 @@
       "Hash Table",
       "Sorting"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-16T08:03:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-06-26T08:05:00",
+    "coldnessCount": 2
   },
   "238": {
     "questionNum": 238,
-    "questionTitle": "Product of Array Except Self",
+    "questionTitle": "Product of Array Except Self <2>",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer. You must write an algorithm that runs in O(n) time and without using the division operation.",
     "questionTopics": [
       "Array",
       "Prefix Sum"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-17T09:09:00",
-    "coldnessCount": 8
+    "lastSubmittedDate": "2025-06-26T08:35:00",
+    "coldnessCount": 2
   },
   "242": {
     "questionNum": 242,
-    "questionTitle": "Valid Anagram",
+    "questionTitle": "Valid Anagram <2>",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given two strings s and t, return true if t is an anagram of s, and false otherwise.",
     "questionTopics": [
@@ -263,10 +263,10 @@
       "String",
       "Sorting"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram---easy",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-16T08:15:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-06-26T08:15:00",
+    "coldnessCount": 2
   },
   "271": {
     "questionNum": 271,
@@ -280,11 +280,11 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-18T10:51:00",
-    "coldnessCount": 7
+    "coldnessCount": 10
   },
   "347": {
     "questionNum": 347,
-    "questionTitle": "Top K Elements in List",
+    "questionTitle": "Top K Elements in List <3>",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums and an integer k, return the k most frequent element within the array. Test cases are generated such that the answer is always unique. You may return the output in any order",
     "questionTopics": [
@@ -297,10 +297,10 @@
       "Counting",
       "Quickselect"
     ],
-    "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list---medium",
+    "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-17T08:50:00",
-    "coldnessCount": 8
+    "lastSubmittedDate": "2025-06-26T08:30:00",
+    "coldnessCount": 2
   },
   "402": {
     "questionNum": 402,
