@@ -321,28 +321,34 @@ traverse using pointers comparing characters on the start and end of the string.
 | Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
 | Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
-### Solution 1: Compare Ends Pre Clean - Two Pointers/Opposite Ends
+### Solution 1: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
         # space complexity: cleaned version string of n length O(n)
         cleaned = []
 
-        # alphaNum check using ord()
-        def alphaNum(c):
+        # isAlphaNum check using ord()
+        def isAlphaNum(c):
             return (ord('A') <= ord(c) <= ord('Z') or 
                     ord('a') <= ord(c) <= ord('z') or 
                     ord('0') <= ord(c) <= ord('9'))
 
+        def isUpper(c):
+            return ord('A') <= ord(c) <= ord('Z')
+
+        def toLower(c):
+            return chr(ord(c) + 32)
+
         # time complexity: iterate over string of n length O(n)
         for c in s:
 
-            # skip until alphaNum char
+            # skip until isAlphaNum char
             if isAlphaNum(c):
                 
                 # Convert to lowercase char
-                if 'A' <= c <= 'Z':
-                    cleaned.append(chr(ord(c) + 32))
+                if isUpper(c):
+                    cleaned.append(toLower(c))
                 else:
                     cleaned.append(c)
 
@@ -368,22 +374,28 @@ traverse using pointers comparing characters on the start and end of the string.
 | Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
 
 
-### Solution 2: Compare Ends In Place - Two Pointers/Opposite Ends
+### Solution 2: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
         # space complexity: no additional space used for storage O(1)
         left, right = 0, len(s) - 1
 
-        # alphaNum check using ord()
-        def alphaNum(c):
+        # isAlphaNum check using ord()
+        def isAlphaNum(c):
             return (ord('A') <= ord(c) <= ord('Z') or 
                     ord('a') <= ord(c) <= ord('z') or 
                     ord('0') <= ord(c) <= ord('9'))
 
+        def isUpper(c):
+            return ord('A') <= ord(c) <= ord('Z')
+
+        def toLower(c):
+            return chr(ord(c) + 32)
+
         # time complexity: iteration over string of n length O(n)
         while left < right:
             
-            # time complexity: move left and right to alphaNum char O(n)
+            # time complexity: move left and right to isAlphaNum char O(n)
             while left < right and not isAlphaNum(s[left]):
                 left += 1
             while left < right and not isAlphaNum(s[right]):
@@ -391,11 +403,11 @@ traverse using pointers comparing characters on the start and end of the string.
 
             # Convert left and right to lowercase char
             leftChar = s[left]
-            if 'A' <= leftChar <= 'Z':
-                leftChar = chr(ord(leftChar) + 32)
+            if isUpper(leftChar):
+                leftChar = toLower(leftChar)
             rightChar = s[right]
-            if 'A' <= rightChar <= 'Z':
-                rightChar = chr(ord(rightChar) + 32)
+            if isUpper(rightChar):
+                rightChar = toLower(rightChar)
 
             # Compare left and right char
             if leftChar != rightChar:
@@ -407,7 +419,6 @@ traverse using pointers comparing characters on the start and end of the string.
         # overall: time complexity O(n)
         # overall: space complexity O(1)
         return True
-            
 ``` 
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
