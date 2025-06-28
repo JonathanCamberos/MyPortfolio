@@ -650,8 +650,14 @@ as well as its length.
         # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
         while left < len(encoded):
 
-            # grab length prefix behind "#" delimiter
+            # update right pointer to start of next (delim + string) group
             right = left
+
+            # right is now pointing at delim
+            # [ 2 # h i ... ]
+            #   ^ ^
+            #   l r 
+            # [l:r] will grab value
             while encoded[right] != "#":
                 right += 1
 
@@ -659,13 +665,25 @@ as well as its length.
             length = int(encoded[left:right])
 
             # skip delimiter, point to start of string
+            # [ 2 # h i ... ]
+            #   ^   ^
+            #   l   r 
             right += 1
 
             # splicing the string of 'length' characters
+            # [ 2 # h i 4 # ...]
+            # [ 0 1 2 3 4 5 6 ...]
+            #   ^   ^   ^
+            #   l   r   r'
+            # 2 + 2 = 4, start of length in next delimiter group
             # time complexity: splice over string n length O(n) for n iterations O(n), leading to O(n^2)
             decoded.append(encoded[right:right + length])
 
             # skip string, point to start of next len
+            # [ 2 # h i 4 # ...]
+            # [ 0 1 2 3 4 5 6 ...]
+            #       ^   ^
+            #       r   l
             left = right + length
 
         # overall: time complexity O(n^2)
