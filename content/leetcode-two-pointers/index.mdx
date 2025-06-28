@@ -250,7 +250,7 @@ Ex: Manacher's Algorithm, find the longest palindromic substring
 
 
 
-## 125. Valid Palindrome - Easy
+## 125. Valid Palindrome ::2:: - Easy
 
 Topics:  Two Pointers, String 
 
@@ -403,9 +403,10 @@ traverse using pointers comparing characters on the start and end of the string.
 
             # Convert left and right to lowercase char
             leftChar = s[left]
+            rightChar = s[right]
+
             if isUpper(leftChar):
                 leftChar = toLower(leftChar)
-            rightChar = s[right]
             if isUpper(rightChar):
                 rightChar = toLower(rightChar)
 
@@ -413,6 +414,7 @@ traverse using pointers comparing characters on the start and end of the string.
             if leftChar != rightChar:
                 return False
 
+            # move pointers
             left += 1
             right -= 1
 
@@ -427,7 +429,7 @@ traverse using pointers comparing characters on the start and end of the string.
 | Overall | O(n) | O(1) | Iterating over string n length dominates leading to O(n) | No additional memory allocation O(1) |
 
 
-## 271. String Encode and Decode - Medium
+## 271. String Encode and Decode ::2:: - Medium
 
 Topics:  Two Pointers, Design
 
@@ -454,7 +456,7 @@ as well as its length.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Two Pointers Length Delimiter |  |  |  |  |
 
-### Find the Bug: (did not convert len using int())
+### Find the Bug: Decoded Length + Delimiter (Grabbed str(len) instead int(len))
 ```python
     def decode(self, encoded: str) -> List[str]:
 
@@ -491,7 +493,7 @@ as well as its length.
         return decoded
 ```
 
-### Solution 1: Two Pointer Splicing Delimiter - Two Pointers/Catchup
+### Solution 1: Splicing Delimiter with Catchup 2 pointers - Two Pointers/Catchup
 ```python
     def encode(self, strs: List[str]) -> str:
 
@@ -566,7 +568,7 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-### Solution 2: One Pointer Base 10 Delimiter - Two Pointers/One Pointer with Auxiliary State
+### Solution 2: Base 10 Auxiliary Length Delimiter with 1 pointer - Two Pointers/One Pointer with Auxiliary State
 ```python
     def encode(self, strs: List[str]) -> str:
 
@@ -648,7 +650,7 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-## 167. Two Sum II (Input Array Is Sorted) - Medium
+## 167. Two Sum II (Input Array Is Sorted) ::2:: - Medium
 
 Topics:  Array, Two Pointers, Binary Search
 
