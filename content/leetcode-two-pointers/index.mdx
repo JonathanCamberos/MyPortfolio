@@ -315,13 +315,124 @@ traverse using pointers comparing characters on the start and end of the string.
         return True
 ```
 
+### Find the Bug: Not Moving Pointers (thinking we are)
+```python
+    def isPalindrome(self, s: str) -> bool:
+
+        def isAlphaNum(c):
+            return (ord('a') <= ord(c) <= ord('z') or
+                    ord('A') <= ord(c) <= ord('Z') or
+                    ord('0') <= ord(c) <= ord('9'))
+
+        def isUpper(c):
+            return ord('A') <= ord(c) <= ord('Z')
+
+        def toLower(c):
+            return chr(ord(c) + 32)
+
+        l, r = 0, len(s)-1
+
+        while l < r:
+
+            # INCORRECT:
+            # 2nd iteration, if s[l] or s[r] is AlphaNum
+            # pointers will not enter loop and will not += or -=
+            while l < r and not isAlphaNum(s[l]):
+                l += 1
+            while l < r and not isAlphaNum(s[r]):
+                r -= 1
+        
+            leftChar = s[l]
+            rightChar = s[r]
+
+            if isUpper(leftChar):
+                leftChar = toLower(leftChar)
+            if isUpper(rightChar):
+                rightChar = toLower(rightChar)
+
+            if leftChar != rightChar:
+                return False
+
+            # INCORRECT: we are missing 
+            # l += 1
+            # r -= 1
+            # we are assuming that the inner 2 while loops will do the job,
+            # but the pointers never iterate.
+            # Instead, we will keep grabbing the current iteration
+            # and get into an infinite loop
+        return True
+```
+
+### Find the Bug: Missing Char Palindrome Comparison (again, im half asleep, my bad :) ]
+```python
+    def isPalindrome(self, s: str) -> bool:
+
+        def isAlphaNum(c):
+            return (ord('a') <= ord(c) <= ord('z') or
+                    ord('A') <= ord(c) <= ord('Z') or
+                    ord('0') <= ord(c) <= ord('9'))
+
+        def isUpper(c):
+            return ord('A') <= ord(c) <= ord('Z')
+
+        def toLower(c):
+            return chr(ord(c) + 32)
+
+        l, r = 0, len(s)-1
+
+        while l < r:
+            while l < r and not isAlphaNum(s[l]):
+                l += 1
+            while l < r and not isAlphaNum(s[r]):
+                r -= 1
+        
+            leftChar = s[l]
+            rightChar = s[r]
+
+            if isUpper(leftChar):
+                leftChar = toLower(leftChar)
+            if isUpper(rightChar):
+                rightChar = toLower(rightChar)
+
+            # INCORRECT:
+            # missing char comparison
+
+            l += 1
+            r -= 1
+        return True
+```
+
+### Solution 1: Slicing Traversing in Reverse Order
+```python
+    def isPalindrome(self, s: str) -> bool:
+        
+        # space complexity: cleaned version of string of n length O(n)
+        phrase = ""
+
+        # time complexity: iterate over string of n length O(n)
+        for c in s:
+            if c.isalnum():
+                phrase += c.lower()
+        
+        # slicing
+        # [start:stop:step]
+        # [::-1]
+        # here start and stop are omitted, so the slice includes the entire sequence
+        # step is -1, which indicates that sequences should be traversed in reverse order
+
+        # phrase is traversed left to right
+        # phrase[::-1] is traversed right to left
+        return phrase == phrase[::-1]
+```
+
+
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Cleaned list | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation to store clean string of n length O(n) |
 | Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
 | Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
-### Solution 1: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
+### Solution 2: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -374,7 +485,7 @@ traverse using pointers comparing characters on the start and end of the string.
 | Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
 
 
-### Solution 2: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
+### Solution 3: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
         # space complexity: no additional space used for storage O(1)
@@ -711,6 +822,35 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Comparison | O(1) | O(1) | Sum and comparison operations in constant O(1) | No additional memory allocation for sum or comparison O(1) | 
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity | No additional memory was allocated leading to constant O(1) space complexity. |
 
+### Find the Bug: Binary Search updates left and right pointer by midValue instead of midIndex
+```python
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+       
+        for i in range(len(numbers)):
+            currComplementTarget = target - numbers[i]
+
+            left, right = i + 1, len(numbers) - 1
+            
+            while left <= right:
+
+                midIndex = (left + right)//2
+                midInt = numbers[midIndex]
+
+                if currComplementTarget == midInt:
+                    return [i + 1, mid + 1]
+                
+                # INCORRECT:
+                # moving pointer based on int value, instead of index
+                elif currComplementTarget < midInt:
+                    right = midInt - 1
+
+                # INCORRECT:
+                # moving pointer based on int value, instead of index
+                else:
+                    left = midInt + 1
+        
+        return []
+```
 
 ### Solution 1: BinarySearch Per Element for Complement - Two Pointers/One Pointer with Auxiliary State
 ```python 

@@ -11,11 +11,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "5": {
     "questionNum": 5,
-    "questionTitle": "Longest Palindromic Substring",
+    "questionTitle": "Longest Palindromic Substring ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a string s, return the longest palindromic substring in s.",
     "questionTopics": [
@@ -23,14 +23,14 @@
       "String",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
   "11": {
     "questionNum": 11,
-    "questionTitle": "Container With Most Water",
+    "questionTitle": "Container With Most Water ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container, such that the container contains the most water. Return the maximum amount of water a container can store",
     "questionTopics": [
@@ -38,14 +38,14 @@
       "Two Pointers",
       "Greedy"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-20T07:13:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "15": {
     "questionNum": 15,
-    "questionTitle": "3Sum",
+    "questionTitle": "3Sum ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0. Notice that the solution set must not contain duplicate triplets.",
     "questionTopics": [
@@ -54,10 +54,10 @@
       "Sorting",
       "Binary Search"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#15-3sum---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-20T06:07:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "20": {
     "questionNum": 20,
@@ -101,11 +101,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:45:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "42": {
     "questionNum": 42,
-    "questionTitle": "Trapping Rain Water",
+    "questionTitle": "Trapping Rain Water ::3::",
     "questionDifficulty": "Hard",
     "questionBlurb": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
     "questionTopics": [
@@ -115,10 +115,10 @@
       "Stack",
       "Monotonic Stack"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water---hard",
+    "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-21T06:30:00",
-    "coldnessCount": 7
+    "coldnessCount": 8
   },
   "49": {
     "questionNum": 49,
@@ -134,7 +134,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:25:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "84": {
     "questionNum": 84,
@@ -163,7 +163,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-2---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-27T07:13:00",
-    "coldnessCount": 1
+    "coldnessCount": 2
   },
   "128": {
     "questionNum": 128,
@@ -178,7 +178,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:55:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "150": {
     "questionNum": 150,
@@ -222,7 +222,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-27T08:19:00",
-    "coldnessCount": 1
+    "coldnessCount": 2
   },
   "217": {
     "questionNum": 217,
@@ -237,7 +237,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:05:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "238": {
     "questionNum": 238,
@@ -251,7 +251,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:35:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "242": {
     "questionNum": 242,
@@ -266,7 +266,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:15:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "271": {
     "questionNum": 271,
@@ -280,7 +280,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-27T07:40:00",
-    "coldnessCount": 1
+    "coldnessCount": 2
   },
   "347": {
     "questionNum": 347,
@@ -300,7 +300,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-06-26T08:30:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "402": {
     "questionNum": 402,
