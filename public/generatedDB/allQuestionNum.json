@@ -153,17 +153,17 @@
   },
   "125": {
     "questionNum": 125,
-    "questionTitle": "Valid Palindrome",
+    "questionTitle": "Valid Palindrome ::2::",
     "questionDifficulty": "Easy",
     "questionBlurb": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.",
     "questionTopics": [
       "Two Pointers",
       "String"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome---easy",
+    "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-2---easy",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-18T07:26:00",
-    "coldnessCount": 10
+    "lastSubmittedDate": "2025-06-27T07:13:00",
+    "coldnessCount": 1
   },
   "128": {
     "questionNum": 128,
@@ -211,7 +211,7 @@
   },
   "167": {
     "questionNum": 167,
-    "questionTitle": "Two Sum II (Input Array Is Sorted)",
+    "questionTitle": "Two Sum II (Input Array Is Sorted) ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length. Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2. The tests are generated such that there is exactly one solution. You may not use the same element twice.",
     "questionTopics": [
@@ -219,10 +219,10 @@
       "Two Pointers",
       "Binary Search"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-19T03:55:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-06-27T08:19:00",
+    "coldnessCount": 1
   },
   "217": {
     "questionNum": 217,
@@ -270,17 +270,17 @@
   },
   "271": {
     "questionNum": 271,
-    "questionTitle": "String Encode and Decode",
+    "questionTitle": "String Encode and Decode ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings Please implement encode and decode. strs[i] contains only UTF-8 characters.",
     "questionTopics": [
       "Two Pointers",
       "Design"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-18T10:51:00",
-    "coldnessCount": 10
+    "lastSubmittedDate": "2025-06-27T07:40:00",
+    "coldnessCount": 1
   },
   "347": {
     "questionNum": 347,

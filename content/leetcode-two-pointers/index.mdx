@@ -806,7 +806,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Comparison | O(1) | O(1) | Sum and comparison operations take constant O(1) | No additional memory allocation for sum and comparison operations O(1) |
 | Overall | O(n) | O(1) | Iterating with left and right pointers over list of n length dominates leading to O(n) | No additional memory allocation leading to constant O(1) | 
 
-## 15. 3Sum - Medium
+## 15. 3Sum ::2:: - Medium
 
 Topics:  Array, Two Pointers, Sorting, Binary Search
 
@@ -1080,7 +1080,7 @@ Let see:
         return list(res)  
 ```
 
-### Solution 1: Two Sum Mimic by Opposite Ends Pointer Shift by BinarySearch Modification Per Element for 0 (Sorting) - Two Pointers/K Pointer Variants
+### Solution 1: Mimicking Two Sum by doing Per Element Opposite Ends Pointer Shift by BinarySearch Modification for 0 (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -1170,7 +1170,7 @@ Let see:
 | Result Storage | O(1) | O(n) | Insert takes constant O(1) | Stores k unique triplets O(k) which in worst case is just O(n) | 
 | Overall | O(n<sup>2</sup>) | O(n) | Two pointer traversal for n elements dominates, leading to O(n<sup>2</sup>) | Worst case of n/3 valid triplets O(n/3), which leads to O(n) | 
 
-### Solution 2: Grouping By Parity (No Sorting) - Two Pointers/Algorithm
+### Solution 2: Grouping By Parity 4 Triplet Combinations (No Sorting) - Two Pointers/Algorithm
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1254,7 +1254,7 @@ Let see:
 | Overall | O(n<sup>2</sup>) | O(n) | Negative and positive iterations dominate leading to O(n<sup>2</sup>) | Memory allocation for n/3 valid triplets, leading to O(n) | 
 
 
-## 11. Container With Most Water - Medium
+## 11. Container With Most Water ::1:: - Medium
 
 Topics:  Array, Two Pointers, Greedy
 
@@ -1370,7 +1370,7 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) |
 | Overall | O(n) | O(1) | Iteration over list of n length dominates leading to O(n) | No additional memory allocation O(1) | 
 
-## 42. Trapping Rain Water - Hard
+## 42. Trapping Rain Water ::3:: - Hard
 
 Topics:  Array, Two Pointers, Dynamic Programming, Stack, Monotonic Stack
 
@@ -1698,7 +1698,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Overall | O(n) | O(n) | Iterating over height list dominates, leading to O(n) | Memory allocation for leftMax and rightMax arrays dominates, leading to O(n) | 
 
 
-## 5. Longest Palindromic Substring - Medium
+## 5. Longest Palindromic Substring ::1:: - Medium
 
 Topics: Two Pointers, String, Dynamic Programming
 
