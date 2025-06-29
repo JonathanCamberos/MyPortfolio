@@ -2266,9 +2266,11 @@ Find the longest palindrome in a string.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Preprocessing | O(n) | O(n) | Building expanded string | Memory allocation for processed string O(n) |
+| Iterating | O(n) | O(1) | Iterate over processed string of n length O(n) | No additional memory allocation for iteration O(1) |
+| Expanding radii | O(n) | O(n) | Radius expansion over processed string of n length O(n) | Radius array to store radii for each index for string of n length O(n) |
+| Updating mirror bounds | O(1) | O(1) | Updating center and right for right most palindrome in constant O(1) | No additional memory allocation for center and right variables O(1) |
+| Overall | O(n) | O(n) | Iterating over expanded string dominates, leading to O(n) time complexity. | Expanding string dominates, leading to O(n) space complexity. |
 
 
 ### Solution 2: Expand Around Center (constant space) - Two Pointers/Algorithm
@@ -2305,6 +2307,8 @@ Find the longest palindrome in a string.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Iterating | O(n) | O(1) | Iterating over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Odd expansion | O(n^2) | O(1) | For each center, expands outward for odd length palindromes n length O(n), for each outer iteration O(n), leading to O(n^2) | No additional memory allocation needed during expansion O(1) |
+| Even expansion | O(n^2) | O(1) | For each center, expands outward for even length palindromes n length O(n), for each outer iteration O(n), leading to O(n^2) | No additional memory allocation needed during expansion O(1) |
+| Updating longest | O(1) | O(1) | Comparing odd and even length palindrome to current max in constant O(1) | No additional memory allocation needed for comparison to current max O(1) |
+| Overall | O(n^2) | O(1) | Even and odd expansion per outer iteration dominate, leading to O(n<sup>2</sup>) | No additional memory allocation required for in place expansion or iteration, leading to constant O(1) |

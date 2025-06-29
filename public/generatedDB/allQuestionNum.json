@@ -15,7 +15,7 @@
   },
   "5": {
     "questionNum": 5,
-    "questionTitle": "Longest Palindromic Substring ::1::",
+    "questionTitle": "Longest Palindromic Substring ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a string s, return the longest palindromic substring in s.",
     "questionTopics": [
@@ -23,7 +23,7 @@
       "String",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-1---medium",
+    "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": null,
     "coldnessCount": -1
