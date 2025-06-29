@@ -1272,6 +1272,116 @@ Let see:
         return list(res)  
 ```
 
+
+### Find the Bug: Giving Sorted() 3 arguments instead of 1 [i dont know python syntax, YET :)]
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        res = set()
+        p, n, z = [], [], []
+
+        for num in nums:
+            if num > 0:
+                p.append(num)
+            elif num < 0:
+                n.append(num)
+            else:
+                z.append(num)
+
+        P, N = set(p), set(n)
+
+        # (0, -k, k)
+        if len(z) >= 1:
+            for neg in N:
+                pos = (-neg)
+                if pos in P:
+                    res.add((neg, 0, pos))
+
+        # (0, 0, 0)
+        if len(z) >= 3:
+            res.add((0, 0, 0))
+
+        # (-a, -b, c)
+        for i in range(len(n)):
+            for j in range (i+1, len(n)):
+                pos = -1 * (n[i] + n[j])
+                if pos in P:
+                    # INCORRECT:
+                    # sorted takes 1 argument list of ints,
+                    # not 3 arguments
+                    res.add(tuple(sorted(n[i], n[j], pos)))
+
+        # (a, b, -c)
+        for i in range(len(p)):
+            for j in range(i+1, len(p)):
+                neg = -1 * (p[i] + p[j])
+                if neg in N:
+                    # INCORRECT:
+                    # sorted takes 1 argument list of ints,
+                    # not 3 arguments
+                    res.add(tuple(sorted(p[i], p[j], neg)))
+
+        return res
+```
+
+### Find the Bug: Adding Set to Set, cannot because set is un-hashable type [again, syntax]
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        res = set()
+        p, n, z = [], [], []
+
+        for num in nums:
+            if num > 0:
+                p.append(num)
+            elif num < 0:
+                n.append(num)
+            else:
+                z.append(num)
+
+        P, N = set(p), set(n)
+
+        # (0, -k, k)
+        if len(z) >= 1:
+            for neg in N:
+                pos = (-neg)
+                if pos in P:
+                    res.add((neg, 0, pos))
+
+        # (0, 0, 0)
+        if len(z) >= 3:
+            res.add((0, 0, 0))
+
+        # (-a, -b, c)
+        for i in range(len(n)):
+            for j in range (i+1, len(n)):
+                pos = -1 * (n[i] + n[j])
+                if pos in P:
+                    # INCORRECT:
+                    # TypeError: un-hashable type: 'set'
+                    # as sets are mutable
+                    # instead do
+                    # tuple(sorted([p[i], p[j], neg]))
+                    # as tuples are not mutable, and thus hashable
+                    res.add(set(sorted([n[i], n[j], pos])))
+
+        # (a, b, -c)
+        for i in range(len(p)):
+            for j in range(i+1, len(p)):
+                neg = -1 * (p[i] + p[j])
+                if neg in N:
+                    # INCORRECT:
+                    # TypeError: un-hashable type: 'set'
+                    # as sets are mutable
+                    # instead do
+                    # tuple(sorted([p[i], p[j], neg]))
+                    # as tuples are not mutable, and thus hashable
+                    res.add(set(sorted([p[i], p[j], neg])))
+
+        return list(res)
+```
+
+
 ### Solution 1: Mimicking Two Sum by doing Per Element Opposite Ends Pointer Shift by BinarySearch Modification for 0 (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
