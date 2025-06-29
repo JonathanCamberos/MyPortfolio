@@ -1790,6 +1790,78 @@ Now we need a way to traverse the array that allows us to take advantage of this
         return water
 ```
 
+### Find the Bug: Not checking if left wall exists after pop
+```python
+    def trap(self, height: List[int]) -> int:
+
+        stack = []  
+        water = 0
+
+        for i in range(len(height)):
+
+            while stack and height[i] > height[stack[-1]]:
+
+                depthCandidateIndex = stack.pop() 
+
+                # INCORRECT:
+                # we are assuming a left wall exists,
+                # when the stack might just be 1 element which we just popped
+                # so it could be empty
+                # missing:
+                # if not stack:
+                #   break 
+
+                rightWallIndex = i
+                leftWallIndex = stack[-1]
+                distance = rightWallIndex - leftWallIndex - 1
+
+                rightHeight = height[rightWallIndex]
+                depthHeight = height[depthCandidateIndex]
+                leftHeight = height[leftWallIndex]
+
+                boundedHeight = min(rightHeight, leftHeight) - depthHeight
+                water += distance * boundedHeight
+
+            stack.append(i)
+
+        return water
+```
+
+### Find the Bug: Overwriting variables accidentally
+```python
+    def trap(self, height: List[int]) -> int:
+        stack = []  
+        water = 0
+
+        for i in range(len(height)):
+
+            while stack and height[i] > height[stack[-1]]:
+
+                depthCandidate = stack.pop() 
+
+                if not stack:
+                    break
+
+                leftIndex = stack[-1]
+                rightIndex = i
+                distance = rightIndex - leftIndex - 1
+
+                leftHeight = height[leftIndex]
+                rightHeight = height[rightIndex]
+                depthHeight = height[depthCandidate]
+
+                # INCORRECT:
+                # TypeError: 'int' object is not subscriptable
+                # because are overwriting 'height'
+                # instead use boundedHeight 
+                height = min(leftHeight, rightHeight) - depthHeight
+
+                water += distance * height
+            
+            stack.append(i)
+
+        return water
+```
 
 ### Solution 1: Monotonic Traversal 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
 ```python
@@ -1901,7 +1973,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # adding all possible water, with all combinations of left wall and depth candidate
                 # until a depth candidate is taller than the current right wall
                 # then we just add the right wall to the stack maintaining monotonic order
-                depthCandidate = stack.pop() 
+                depthCandidateIndex = stack.pop() 
 
                 # Check: if stack empty after pop, no left wall exists
                 # implies: cannot trap water, end while loop, add item to stack
@@ -1917,13 +1989,13 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # peak stack[-1]: left wall
                 # while loop check implies: depthCandidate < height[i]
                 # monotonic stack check implies: depthCandidate < stack[-1]
-                rightWall = i
-                leftWall = stack[-1]
-                distance = rightWall - leftWall - 1
+                rightWallIndex = i
+                leftWallIndex = stack[-1]
+                distance = rightWallIndex - leftWallIndex - 1
 
-                rightHeight = height[i]
-                depthHeight = height[depthCandidate]
-                leftHeight = height[leftWall]
+                rightHeight = height[rightWallIndex]
+                depthHeight = height[depthCandidateIndex]
+                leftHeight = height[leftWallIndex]
 
                 # subtract the depth minus smaller height to get water depth
                 boundedHeight = min(rightHeight, leftHeight) - depthHeight
