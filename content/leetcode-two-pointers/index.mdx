@@ -1929,6 +1929,16 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 boundedHeight = min(rightHeight, leftHeight) - depthHeight
 
                 # add the trapped water for the current segment 
+                # [5, 0, 0, 2]
+                # in this case, (0, 0, 2)
+                # would return with the left wall being 0
+                # so no water captured
+                # but then, (5, 0, 2)
+                # would return with the right wall being 5
+                # in which case we would need the distance.
+                
+                # so distance will always be 1
+                # unless we have a run of identical heights
                 water += distance * boundedHeight
 
             # implies: monotonic non-increasing is still valid
