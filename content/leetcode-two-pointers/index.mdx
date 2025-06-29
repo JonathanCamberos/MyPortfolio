@@ -1863,6 +1863,35 @@ Now we need a way to traverse the array that allows us to take advantage of this
         return water
 ```
 
+### Find the Bug: Bad For Loop syntax
+```python
+    def trap(self, height: List[int]) -> int:
+        
+        n = len(height)
+        water = 0
+        
+        leftMax = [0] * n
+        rightMax = [0] * n
+
+        leftMax[0] = height[0]
+        for i in range(1, n):
+            leftMax[i] = max(leftMax[i - 1], height[i])
+        
+        rightMax[n - 1] = height[n - 1]
+        # INCORRECT:
+        # missing ',' between -1
+        # for loop says to go till -2
+        # for loop says: for i in range(n - 2, -2)
+        for i in range(n - 2, -1 -1):
+            rightMax[i] = max(rightMax[i + 1], height[i])
+
+        for i in range(n):
+            water += min(rightMax[i], leftMax[i]) - height[i]
+
+        return water
+```
+
+
 ### Solution 1: Monotonic Traversal 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def trap(self, height: List[int]) -> int:
@@ -2051,12 +2080,16 @@ Now we need a way to traverse the array that allows us to take advantage of this
         water = 0
 
         # calculate left max for each bar
+        # compare previous max, with current bar height,
+        # as curr may be new max, for the curr index
         # time complexity: iterate over list of n length O(n)
         leftMax[0] = height[0]
         for i in range(1, n):
             leftMax[i] = max(leftMax[i - 1], height[i])
 
         # calculate right max for each bar
+        # compare previous max, with current bar height,
+        # as curr may be new max, for the curr index
         # time complexity: iterate over list of n length O(n)
         rightMax[n - 1] = height[n - 1]
         for i in range(n - 2, -1, -1):
@@ -2082,7 +2115,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Overall | O(n) | O(n) | Iterating over height list dominates, leading to O(n) | Memory allocation for leftMax and rightMax arrays dominates, leading to O(n) | 
 
 
-## 5. Longest Palindromic Substring ::1:: - Medium
+## 5. Longest Palindromic Substring ::2:: - Medium
 
 Topics: Two Pointers, String, Dynamic Programming
 
@@ -2105,7 +2138,7 @@ s consists of only digits and English letters.
 
 Find the longest palindrome in a string.
 
-### Solution 1: Manacher's Algorithm (iterate, expand, and mirror radius via rightmost) - Two Pointers/Algorithm
+### Solution 1: Manacher's Algorithm (iterate, mirror radius optimization, and expand) - Two Pointers/Algorithm
 ```python
     def longestPalindrome(self, s: str) -> str:
 
@@ -2137,8 +2170,8 @@ Find the longest palindrome in a string.
         # index 5 palindrome: "#"
         # etc...
 
-        expandableStr = "#".join(f"^{s}$")
-        n = len(expandableStr)
+        expandedStr = "#".join(f"^{s}$")
+        n = len(expandedStr)
 
         # Note: 
         # Iteration tracks the right boundary for the current farthest right palindromic substring, 
@@ -2188,7 +2221,7 @@ Find the longest palindrome in a string.
 
             # assumption: if valid case, we have pre-set p[i] to p[mirror]
             # now explore: extend radius p[i] until palindromic status is broken
-            while expandableStr[i + p[i] + 1] == expandableStr[i - p[i] - 1]:
+            while expandedStr[i + p[i] + 1] == expandedStr[i - p[i] - 1]:
                 p[i] += 1
 
             # p[i]: radius for palindrome at i
@@ -2235,6 +2268,43 @@ Find the longest palindrome in a string.
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
-|  |  |  |  |  | 
+|  |  |  |  |  |
 
 
+### Solution 2: Expand Around Center (constant space) - Two Pointers/Algorithm
+```python
+    def longestPalindrome(self, s: str) -> str:
+
+        # expand from a given left and right while 
+        # maintaining palindrome property
+        def expandAroundCenter(left, right):
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return s[left+1:right] 
+         
+        n = len(s)
+        maxPalindrome = ""
+
+        # time complexity: iterate over list of n length O(n)
+        for i in range(n):
+            # odd expansion, centered at i
+            oddPalindrome = expandAroundCenter(i, i)      
+            # even expansion, centered at i and i + 1
+            evenPalindrome = expandAroundCenter(i, i+1)
+
+            # update longest
+            if len(oddPalindrome) > len(maxPalindrome):
+                maxPalindrome = oddPalindrome
+            if len(evenPalindrome) > len(maxPalindrome):
+                maxPalindrome = evenPalindrome
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
+        return maxPalindrome
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
