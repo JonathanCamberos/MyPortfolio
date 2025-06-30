@@ -1165,7 +1165,6 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Quickselect |  |  |  |  |
 
 ### Brute Force (Insertion sort)
-
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
@@ -1207,7 +1206,6 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # overall: space complexity O(m)
         return result
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Iteration + Insertion | O(n) | O(m) | Iterating over array of n integers O(n) | Hashmap with m unique elements results in O(m) memory allocation with O(n) in worst case |
@@ -1216,6 +1214,69 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Grabbing top-k elements | O(k) | O(k) | Iterating over sorted list for k elements O(k) | Storing top k elements into result array O(k) | 
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
+### Find the Bug: Inverted Binary Search if statement:
+```python
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        
+        def partitionSection(left, right, randIndex):
+            freqPartition = frequency[unique[randIndex]]
+            leftPartition = left
+            unique[randIndex], unique[right] = unique[right], unique[randIndex]
+
+            for i in range (left, right):
+                if frequency[unique[i]] > freqPartition:
+                    unique[i], unique[leftPartition] = unique[leftPartition], unique[i]
+                    leftPartition += 1
+            
+            unique[right], unique[leftPartition] = unique[leftPartition], unique[right]
+
+            return leftPartition
+
+        def quickSelectBinarySearchHelper(left, right, finalMarker):
+            
+            # ran out of space
+            if left == right:
+                return
+
+            randIndex = random.randint(left, right)
+            resIndex = partitionSection(left, right, randIndex)
+
+            if resIndex == finalMarker:
+                return
+
+            # INCORRECT:
+            # this format is confusing
+            # we are searching for the finalMarker, so always have that on the left
+            # it should be, if the finalMarker is less than the result, then we shift right
+            # current we are doing the reverse
+            # should be:
+            # elif finalMarker < resIndex 
+            #   quickSelectBinarySearchHelper(left, resIndex-1, finalMarker)
+            elif resIndex < finalMarker:
+                quickSelectBinarySearchHelper(left, resIndex-1, finalMarker)
+            else:
+                quickSelectBinarySearchHelper(resIndex+1, right, finalMarker)
+
+        # generate frequencies
+        frequency = defaultdict(int)
+        for n in nums:
+            frequency[n] += 1
+        
+        # unique for keys
+        unique = list(frequency.keys())
+        n = len(unique)
+
+        # start binarySearch
+        l, r = 0, n-1
+
+        # final index
+        finalIndex = k-1
+
+
+        quickSelectBinarySearchHelper(l, r, finalIndex)
+
+        return unique[:k]
+```
 
 
 ### Solution 1: MaxHeap Track N Elements - HashMap/Algorithm
