@@ -2138,6 +2138,74 @@ s consists of only digits and English letters.
 
 Find the longest palindrome in a string.
 
+### Find the Bug: Did not create Expanded String
+```python
+    def longestPalindrome(self, s: str) -> str:
+        
+        # INCORRECT:
+        # did not create expandedStr
+        # did not solve odd vs even palindrome problem
+        # missing:
+        # expandedStr = "#".join(f"^{s}$")
+        
+        center = 0
+        right = 0
+        n = len(s)
+        p = [0] * n
+
+        for i in range(1, n-1):
+            
+            # 1 
+            mirror = (2*center) - i
+
+            # 2 
+            if i < right:
+                p[i] = min(right-i, p[mirror])
+
+            # 3
+            while s[i + p[i] + 1] == s[i - p[i] - 1]:
+                p[i] += 1
+
+            # 4
+            if i + p[i] > right:
+                center = i
+                right = i + p[i]
+        
+        (maxRadius, center) = max((maxRadius, i) for (i, maxRadius) in enumerate(p))
+        start = (center-maxRadius) // 2 
+
+        return s[start:start+maxRadius]
+```
+
+### Find the Bug: Defined List instead of Slicing
+```python
+    def longestPalindrome(self, s: str) -> str:
+        
+        def expandAroundCenter(left, right):
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+
+            # INCORRECT:
+            # defined list instead of slicing
+            # should be: s[left+1:right]
+            return s[left+1, right]
+        
+        n = len(s)
+        maxPalin = ""
+
+        for i in range(n):
+            oddPalin = expandAroundCenter(i, i)
+            evenPalin = expandAroundCenter(i, i+1)
+
+            if len(oddPalin) > len(maxPalin):
+                maxPalin = oddPalin
+            if len(evenPalin) > len(maxPalin):
+                maxPalin = evenPalin
+                
+        return maxPalin
+```
+
 ### Solution 1: Manacher's Algorithm (iterate, mirror radius optimization, and expand) - Two Pointers/Algorithm
 ```python
     def longestPalindrome(self, s: str) -> str:
@@ -2286,6 +2354,10 @@ Find the longest palindrome in a string.
             while left >= 0 and right < n and s[left] == s[right]:
                 left -= 1
                 right += 1
+
+            # curr iteration is not valid:
+            # ignore left: incrementing index
+            # ignore right: noninclusive right slicing
             return s[left+1:right] 
          
         n = len(s)
