@@ -345,12 +345,12 @@
       },
       {
         "number": 2,
-        "name": "Expand Around Center (constant space)",
+        "name": "Expand Around Center checking for Odd and Even palindromes (constant space)",
         "type": "two-pointers",
         "application": "algorithm",
         "code": "def longestPalindrome(self, s: str) -> str:\n\n        # expand from a given left and right while \n        # maintaining palindrome property\n        def expandAroundCenter(left, right):\n            while left >= 0 and right < n and s[left] == s[right]:\n                left -= 1\n                right += 1\n            return s[left+1:right] \n         \n        n = len(s)\n        maxPalindrome = \"\"\n\n        # time complexity: iterate over list of n length O(n)\n        for i in range(n):\n            # odd expansion, centered at i\n            oddPalindrome = expandAroundCenter(i, i)      \n            # even expansion, centered at i and i + 1\n            evenPalindrome = expandAroundCenter(i, i+1)\n\n            # update longest\n            if len(oddPalindrome) > len(maxPalindrome):\n                maxPalindrome = oddPalindrome\n            if len(evenPalindrome) > len(maxPalindrome):\n                maxPalindrome = evenPalindrome\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(1)\n        return maxPalindrome",
         "questionNumber": 5,
-        "solutionLink": "/Notes/leetcode-two-pointers#solution-2-expand-around-center-constant-space---two-pointersalgorithm",
+        "solutionLink": "/Notes/leetcode-two-pointers#solution-2-expand-around-center-checking-for-odd-and-even-palindromes-constant-space---two-pointersalgorithm",
         "blog": "LeetCode: Two Pointers"
       }
     ]
