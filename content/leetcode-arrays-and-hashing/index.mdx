@@ -1214,6 +1214,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Grabbing top-k elements | O(k) | O(k) | Iterating over sorted list for k elements O(k) | Storing top k elements into result array O(k) | 
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
+
 ### Find the Bug: Inverted Binary Search if statement:
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
