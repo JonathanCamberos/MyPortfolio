@@ -402,7 +402,7 @@ traverse using pointers comparing characters on the start and end of the string.
         return True
 ```
 
-### Solution 1: Slicing Traversing in Reverse Order
+### Solution 1: Slicing Traversing in Reverse Order - Two Pointers/Algorithm
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -488,8 +488,6 @@ traverse using pointers comparing characters on the start and end of the string.
 ### Solution 3: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
-        # space complexity: no additional space used for storage O(1)
-        left, right = 0, len(s) - 1
 
         # isAlphaNum check using ord()
         def isAlphaNum(c):
@@ -502,6 +500,9 @@ traverse using pointers comparing characters on the start and end of the string.
 
         def toLower(c):
             return chr(ord(c) + 32)
+
+        # space complexity: no additional space used for storage O(1)
+        left, right = 0, len(s) - 1
 
         # time complexity: iteration over string of n length O(n)
         while left < right:

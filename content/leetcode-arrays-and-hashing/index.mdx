@@ -1930,7 +1930,6 @@ So we simply create sets for all of these groups and as we traverse the board, w
                     rows[r].add(tmp)
                     cols[c].add(tmp)
                     boxs[boxKey].add(tmp)
-
         return True
 ```
 
@@ -2127,6 +2126,56 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | List lookup | O(n) | O(1) | Lookup in list takes O(n) | No additional memory allocation for list lookup O(1) |
 | Overall | O(n<sup>3</sup>) | O(1) | Iterating * Iterating * Lookup dominate leading to O(n<sup>3</sup>) | No additional memory allocation O(1) |
 
+### Find the Bug: Empty list for Union tree leads to fail
+```python
+    def longestConsecutive(self, nums: List[int]) -> int:
+
+        # INCORRECT:
+        # need to account for empty list case
+        # or else max(size.values()) will return error
+        # should be:
+        # if len(nums) == 0
+        #   return 0
+
+        parent = {}
+        size = {}
+
+        def find(x):
+
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+
+            return parent[x]
+
+
+        def union(x, y):
+            root_x = find(x)
+            root_y = find(y)
+
+            if root_x != root_y:
+
+                size_x = size[root_x]
+                size_y = size[root_y]
+
+                if size_x < size_y:
+                    parent[root_x] = root_y
+                    size[root_y] += size[root_x]
+                else:
+                    parent[root_y] = root_x
+                    size[root_x] += size[root_y]
+
+        setNum = set(nums)
+        for n in setNum:
+            parent[n] = n
+            size[n] = 1
+
+        for n in setNum:
+            if (n+1) in parent:
+                union(n, n+1)
+
+        return max(size.values())
+        
+```
 
 ### Solution 1: HashMap Continent Boundaries - HashMap/Representation
 ```python
