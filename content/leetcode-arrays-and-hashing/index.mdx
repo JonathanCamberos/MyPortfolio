@@ -1214,7 +1214,6 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Grabbing top-k elements | O(k) | O(k) | Iterating over sorted list for k elements O(k) | Storing top k elements into result array O(k) | 
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
-
 ### Find the Bug: Inverted Binary Search if statement:
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -1897,6 +1896,78 @@ So we simply create sets for all of these groups and as we traverse the board, w
 
         # overall: time complexity O(n^2) = (3 * n^2)
         # overall: space complexity O(1)
+        return True
+```
+
+### Find the bug: Creating defaultdict of sets incorrectly
+```python
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+
+        # INCORRECT:
+        # first argument must be callable or None
+        # should be: defaultdict(set)
+        # [] vs list vs set
+        # [] is an instance of the list
+        # list is the class that creates a new list object when called
+        # set is the class that creates a new list object when called
+        rows = defaultdict([])
+        cols = defaultdict([])
+        boxs = defaultdict([])
+
+        for r in range(9):
+            for c in range(9):
+                tmp = board[r][c]
+
+                if tmp != ".":
+
+                    boxKey = (r//3, c//3)
+
+                    if (tmp in rows[r] or
+                        tmp in cols[c] or
+                        tmp in boxs[boxKey]):
+                        return False
+
+                    rows[r].add(tmp)
+                    cols[c].add(tmp)
+                    boxs[boxKey].add(tmp)
+
+        return True
+```
+
+### Find the bug: Did not index into 9 boxes correctly
+```python
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        rows = defaultdict(set)
+        cols = defaultdict(set)
+        boxs = defaultdict(set)
+
+
+        for r in range(9):
+            for c in range(9):
+                tmp = board[r][c]
+
+                if tmp != ".":
+
+                    # INCORRECT:
+                    # this will create 81 possible boxes
+                    # since 9 possible rows and columns
+                    # 9 possible, 9 possible = 81 possibilities
+                    # should have been:
+                    # boxKey = tuple((r//3, c//3))
+                    # we want 9 boxes
+                    # (9//3), (9//3) = 
+                    # 3 possible, 3 possible = 9 possibilities
+                    boxKey = tuple((r, c))
+
+                    if (tmp in rows[r] or
+                        tmp in cols[c] or
+                        tmp in boxs[boxKey]):
+                        return False
+
+                    rows[r].add(tmp)
+                    cols[c].add(tmp)
+                    boxs[boxKey].add(tmp)
+
         return True
 ```
 

@@ -1,19 +1,19 @@
 {
   "1": {
     "lastSubmittedDate": "2025-06-26T08:20:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "5": {
     "lastSubmittedDate": "2025-06-29T08:57:00",
-    "coldnessCount": -1
+    "coldnessCount": 2
   },
   "11": {
     "lastSubmittedDate": "2025-06-20T07:13:00",
-    "coldnessCount": 10
+    "coldnessCount": 11
   },
   "15": {
     "lastSubmittedDate": "2025-06-20T06:07:00",
-    "coldnessCount": 10
+    "coldnessCount": 11
   },
   "20": {
     "lastSubmittedDate": null,
@@ -25,15 +25,15 @@
   },
   "36": {
     "lastSubmittedDate": "2025-06-26T08:45:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "42": {
     "lastSubmittedDate": "2025-06-29T07:24:00",
-    "coldnessCount": 9
+    "coldnessCount": 2
   },
   "49": {
     "lastSubmittedDate": "2025-06-26T08:25:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "84": {
     "lastSubmittedDate": null,
@@ -41,11 +41,11 @@
   },
   "125": {
     "lastSubmittedDate": "2025-06-27T07:13:00",
-    "coldnessCount": 3
+    "coldnessCount": 4
   },
   "128": {
     "lastSubmittedDate": "2025-06-26T08:55:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "150": {
     "lastSubmittedDate": null,
@@ -57,27 +57,27 @@
   },
   "167": {
     "lastSubmittedDate": "2025-06-27T08:19:00",
-    "coldnessCount": 3
+    "coldnessCount": 4
   },
   "217": {
     "lastSubmittedDate": "2025-06-26T08:05:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "238": {
     "lastSubmittedDate": "2025-06-26T08:35:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "242": {
     "lastSubmittedDate": "2025-06-26T08:15:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "271": {
     "lastSubmittedDate": "2025-06-27T07:40:00",
-    "coldnessCount": 3
+    "coldnessCount": 4
   },
   "347": {
     "lastSubmittedDate": "2025-06-26T08:30:00",
-    "coldnessCount": 4
+    "coldnessCount": 5
   },
   "402": {
     "lastSubmittedDate": null,
