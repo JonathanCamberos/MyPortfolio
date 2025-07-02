@@ -153,14 +153,14 @@
   },
   "125": {
     "questionNum": 125,
-    "questionTitle": "Valid Palindrome ::2::",
+    "questionTitle": "Valid Palindrome ::3::",
     "questionDifficulty": "Easy",
     "questionBlurb": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.",
     "questionTopics": [
       "Two Pointers",
       "String"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-2---easy",
+    "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-06-27T07:13:00",
     "coldnessCount": 5

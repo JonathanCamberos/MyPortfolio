@@ -12,7 +12,7 @@ tags:
 
 ## Stack Intro
 
-Leetcode problems with elegant solutions using stacks.
+LeetCode problems with elegant solutions using stacks.
 
 ### Stack Application: Tracking Nested or Hierarchical Structures
 
@@ -213,17 +213,21 @@ in the correct order.
 | Stack (redundant operations) |  |  |  |  |
 | Stack |  |  |  |  |
 
-### Brute Force: (replace with empty)
+### Brute Force: Replace Pairs with empty
 ```python
     def isValid(self, s: str) -> bool:
         
-        # note: in python, an empty string "" is falsy evaluating to false
+        # note: 
+        # in python, an empty string "" is falsy evaluating to false
         # not "" -> true
 
+        # each iterate removes at least one pair 
+        # there are at most n/2 pairs so O(n/2) iterations O(n/2)
+        # each iteration takes O(n)
+        # leading to: O(n) * O(n/2) = O(n^2)
         # time complexity: iterate over string of n length O(n)
-        # each iterate removes at least one pair, and there are at most n/2 pairs so O(n/2) iterations O(n/2)
-        # O(n) * O(n/2) = O(n^2)
         while '()' in s or '{}' in s or '[]' in s:
+            # time complexity: n/2 replacements O(n/2), per total outer iterations O(n), leading to O(n^2)
             s = s.replace('()', '').replace('{}', '').replace('[]', '')
         
         # overall: time complexity O(n^2)
@@ -232,11 +236,11 @@ in the correct order.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iterate over string | O(n) | O(1) |  |  |
-| Total Iterations | O(n/2) | O(1) |  |  |
-| Overall | O(n<sup>2</sup>) | O(1) |  |  | 
+| Iterate over string | O(n) | O(1) | Iterate over array of n length O(n) | No additional memory allocation for iteration O(1) |
+| Total Iterations | O(n/2) | O(1) | At most n/2 pairs and thus n/2 removals O(n/2) | No additional memory allocation for iteration O(1) |
+| Overall | O(n<sup>2</sup>) | O(1) | Single iteration in O(n) for total iterations n/2 O(n/2), leading to O(n<sup>2</sup>) time complexity | No additional memory allocation for iteration, leading to constant O(1) | 
 
-### Find the Bug: (Hashmap)
+### Find the Bug: Hashmap (does not track order)
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -283,33 +287,35 @@ in the correct order.
 | Overall |  |  |  |  | 
 
 
-### Solution 1: Stack (redundant operations - Stack/ Tracking Nested or Hierarchical Structures 
+### Solution 1: Manual Condition Stack Check - Stack/ Tracking Nested or Hierarchical Structures 
 ```python
     def isValid(self, s: str) -> bool:
 
         # note: in python, an empty list [] is falsy evaluating to false
         # not [] -> true
 
-        # space complexity: 
+        # space complexity: stack stores opening brackets for string n length O(n)
         stack = []
 
-        # time complexity:
+        # time complexity: iterate over list of n length O(n)
         for c in s:
 
-            # add opening parenthesis
+            # if c is opening type, push to stack
             if c in '([{':
                 stack.append(c)
 
-            # validate closing parenthesis
+            # if c is a closing type, peek top of stack for matching opening 
             elif c in ')]}':
                 if not stack or (c == ')' and stack[-1] != '(') or \
                                 (c == '}' and stack[-1] != '{') or \
                                 (c == ']' and stack[-1] != '['):
                     return False
+
+                # matching opening has been found, remove from top of stack
                 stack.pop()
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return not stack
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -319,19 +325,25 @@ in the correct order.
 |  |  |  |  |  | 
 
 
-### Solution 2: Stack - Stack/ Tracking Nested or Hierarchical Structures
+### Solution 2: Stack with Hashmap lookup - Stack/ Tracking Nested or Hierarchical Structures
 ```python
     def isValid(self, s: str) -> bool:
 
-        # space complexity: 
+        # space complexity: stack stores opening brackets for string n length O(n)
         stack = []
+
+        # space complexity: closed -> open mapping in constant O(1)
         mapping = {')': '(', '}': '{', ']': '['}
 
-        # time complexity: iterate over list of n length O(n)
+        # time complexity: iterate over string of n length O(n)
         for c in s:
             
-            # validate closing parenthesis
-            if c in mapping:  
+            # if c is valid opening 
+            if c not in mapping:
+                stack.append(c)
+            
+            # validate closing 
+            else:   
                 
                 # pop top element if stack is non-empty
                 topElem = stack.pop() if stack else '#'
@@ -339,9 +351,6 @@ in the correct order.
                 if mapping[c] != topElem:
                     return False
 
-            # append opening bracket
-            else:
-                stack.append(c)
 
         # overall: time complexity
         # overall: space complexity
@@ -352,7 +361,6 @@ in the correct order.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  | 
-
 
 
 

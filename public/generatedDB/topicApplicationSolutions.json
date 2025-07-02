@@ -203,6 +203,210 @@
       }
     ]
   },
+  "stack": {
+    "tracking-nested-or-hierarchical-structures": [
+      {
+        "number": 1,
+        "name": "Stack (redundant operations",
+        "type": "stack",
+        "application": "tracking-nested-or-hierarchical-structures",
+        "code": "def isValid(self, s: str) -> bool:\n\n        # note: in python, an empty list [] is falsy evaluating to false\n        # not [] -> true\n\n        # space complexity: \n        stack = []\n\n        # time complexity:\n        for c in s:\n\n            # add opening parenthesis\n            if c in '([{':\n                stack.append(c)\n\n            # validate closing parenthesis\n            elif c in ')]}':\n                if not stack or (c == ')' and stack[-1] != '(') or \\\n                                (c == '}' and stack[-1] != '{') or \\\n                                (c == ']' and stack[-1] != '['):\n                    return False\n                stack.pop()\n\n        # overall: time complexity\n        # overall: space complexity\n        return not stack",
+        "questionNumber": 20,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-stack-redundant-operations---stacktracking-nested-or-hierarchical-structures",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "Stack",
+        "type": "stack",
+        "application": "tracking-nested-or-hierarchical-structures",
+        "code": "def isValid(self, s: str) -> bool:\n\n        # space complexity: \n        stack = []\n        mapping = {')': '(', '}': '{', ']': '['}\n\n        # time complexity: iterate over list of n length O(n)\n        for c in s:\n            \n            # validate closing parenthesis\n            if c in mapping:  \n                \n                # pop top element if stack is non-empty\n                topElem = stack.pop() if stack else '#'\n\n                if mapping[c] != topElem:\n                    return False\n\n            # append opening bracket\n            else:\n                stack.append(c)\n\n        # overall: time complexity\n        # overall: space complexity\n        return not stack",
+        "questionNumber": 20,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-stack---stacktracking-nested-or-hierarchical-structures",
+        "blog": "LeetCode: Stacks"
+      }
+    ],
+    "dynamic-programming-state-compression": [
+      {
+        "number": 1,
+        "name": "Main Stack + Min Tracker",
+        "type": "stack",
+        "application": "dynamic-programming-state-compression",
+        "code": "def __init__(self):\n\n        # using a minTracker stack, we track the min value at each\n        # level of the main stack. Ensures when we pop a top value\n        # we can instantly know the min value at that point\n\n        # space complexity:\n        self.mainStack = []\n        self.minTracker = []\n        self.mainSize = 0\n\n    def push(self, val: int):\n\n        # logical size vs physical size\n        if self.mainSize < len(self.mainStack):\n            self.mainStack[self.mainSize] = val\n        else:\n            self.mainStack.append(val)\n\n        # logical size vs physical size\n        if self.mainSize < len(self.minTracker)\n            \n            # compares new value with previous level of minTracker\n            self.minTracker[self.mainSize] = min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val)\n        else:\n            self.minTracker.append(min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val))\n        \n        # increases logical size\n        self.mainSize += 1\n\n    def pop(self):\n        # time complexity: \n        if self.mainSize == 0:\n            raise IndexError(\"Pop from empty stack\")\n        \n        self.mainSize -= 1\n\n    def top(self):\n        # time complexity:\n        if self.mainSize == 0:\n            raise IndexError(\"Stack is empty\")\n        return self.mainStack[self.mainSize - 1]\n\n    def getMin(self):\n        # time complexity:\n        if self.mainSize == 0:\n            raise IndexError(\"Stack is empty\")\n\n        return self.minTracker[self.mainSize - 1]\n\n    # overall: time complexity\n    # overall: time complexity",
+        "questionNumber": 155,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-main-stack-min-tracker---stackdynamic-programming-state-compression",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "Tuple Stack",
+        "type": "stack",
+        "application": "dynamic-programming-state-compression",
+        "code": "def __init__(self):\n\n        # using of having a separate minTracker stack, we track the min value\n        # at each level of the main stack using tuples (val, min).\n        # Ensures when we pop a top value we can instantly know \n        # the min value at that level of the stack \n\n        # space complexity:\n        self.stack = []\n        self.size = 0\n\n    def push(self, val: int):\n\n        # compares val with previous level tuple minValue\n        # sets new (val, minValue) to lower value\n        currMin = min(val, self.stack[self.size - 1][1] if self.size > 0 else val)\n        \n        # logical size vs physical size\n        if self.size < len(self.stack):\n            self.stack[self.size] = (val, currMin)\n        else:\n            self.stack.append((val, currMin))\n\n        # increases logical size\n        self.size += 1\n\n    def pop(self):\n        # time complexity:\n        if self.size == 0:\n            raise IndexError(\"Pop from empty stack\")\n        self.size -= 1\n\n    def top(self):\n        # time complexity:\n        if self.size == 0:\n            raise IndexError(\"Stack is empty\")\n        \n        return self.stack[self.size - 1][0]\n\n    def getMin(self):\n        # time complexity:\n        if self.size == 0:\n            raise IndexError(\"Stack is empty\")\n\n        return self.stack[self.size - 1][1]\n\n    # overall: time complexity\n    # overall: time complexity",
+        "questionNumber": 155,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-tuple-stack---stackdynamic-programming-state-compression",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 4,
+        "name": "Dynamic Programming",
+        "type": "stack",
+        "application": "dynamic-programming-state-compression",
+        "code": "def generateParenthesis(self, n: int) -> List[str]:\n        \n        # Initialize a list to store DP results\n        dp = [[] for _ in range(n + 1)]\n        \n        # Base case: valid combination for n = 0\n        dp[0] = [\"\"]  \n        \n        # dp for 1 to n\n        # time complexity: iterate over list of n length O(n) \n        for i in range(1, n + 1): \n\n            # Partition parentheses into two parts: \n            # dp[j]: iterates from 0 -> i - 1\n            # dp[i - 1 - j]: iterates from i - 1 -> 0\n            # grabbing dp 0 + dp (i - 1) + parenthesis in (f\"({left}){right}\")\n            # allows us to generate a valid combination for dp i\n            for j in range(i):  \n\n                # iterate over combinations from 0 parentheses pair, to i parentheses pairs\n                for left in dp[j]:\n\n                    # iterate over combinations from (i - 1) parentheses pairs dp[0]\n                    for right in dp[i - 1 - j]:\n\n                        # Add new permutation to list\n                        # Since we are starting from a valid base case, if our formula builds a valid parentheses combination \n                        # any combination of parentheses will guarantee a new valid permutation \n                        # ({left}){right} or {left}({right}) are both valid formulas\n                        dp[i].append(f\"({left}){right}\")\n\n        # overall: time complexity\n        # overall: space complexity \n        return dp[n]",
+        "questionNumber": 22,
+        "solutionLink": "/Notes/leetcode-stacks#solution-4-dynamic-programming---stackdynamic-programming-state-compression",
+        "blog": "LeetCode: Stacks"
+      }
+    ],
+    "expression-evaluation-and-parsing": [
+      {
+        "number": 1,
+        "name": "Manual Operator Handling",
+        "type": "stack",
+        "application": "expression-evaluation-and-parsing",
+        "code": "def evalRPN(self, tokens: List[str]) -> int:\n        stack = []\n\n        for token in tokens:\n            if token not in \"+-*/\":\n                stack.append(int(token))\n            else:\n                b = stack.pop()\n                a = stack.pop()\n\n                match token:\n                    case \"+\":\n                        stack.append(a + b)\n                    case \"-\":\n                        stack.append(a - b)\n                    case \"*\":\n                        stack.append(a * b)\n                    case \"/\":\n                        stack.append(int(a / b))  # Explicit truncation towards zero\n\n        return stack[-1]",
+        "questionNumber": 150,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-manual-operator-handling---stackexpression-evaluation-and-parsing",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "Operator Module Dispatch",
+        "type": "stack",
+        "application": "expression-evaluation-and-parsing",
+        "code": "from operator import add, sub, mul, floordiv\n\n    def evalRPN(self, tokens: List[str]) -> int:\n        stack = []\n        operations = {\"+\": add, \"-\": sub, \"*\": mul, \"/\": lambda a, b: int(a / b)}\n\n        for token in tokens:\n            if token not in operations:\n                stack.append(int(token))\n            else:\n                b = stack.pop()\n                a = stack.pop()\n                stack.append(operations[token](a, b))\n\n        return stack[-1]",
+        "questionNumber": 150,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-operator-module-dispatch---stackexpression-evaluation-and-parsing",
+        "blog": "LeetCode: Stacks"
+      }
+    ],
+    "backtracking-by-tracking-history-or-state": [
+      {
+        "number": 1,
+        "name": "Iterative Stack (State Tracking)",
+        "type": "stack",
+        "application": "backtracking-by-tracking-history-or-state",
+        "code": "def generateParenthesis(self, n: int) -> List[str]:\n\n        # stack initial state\n        stack = [(\"\", 0, 0)] \n\n        # store valid parentheses\n        result = []\n\n        # \n        while stack:\n\n            # grab the current state of the stack\n            currentStr, openCount, closeCount = stack.pop()\n\n            # base case: if we have used all open and close parentheses\n            if openCount == n and closeCount == n:\n\n                # add valid combination  \n                result.append(currentStr)\n                continue\n\n            # push new state with '(' added\n            if openCount < n:\n                stack.append((currentStr + \"(\", openCount + 1, closeCount))\n\n            # push new state with '(' added\n            if closeCount < openCount:\n                stack.append((currentStr + \")\", openCount, closeCount + 1))\n\n        # overall: time complexity\n        # overall: space complexity\n        return result",
+        "questionNumber": 22,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-iterative-stack-state-tracking---stackbacktracking-by-tracking-history-or-state",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "BackTracking (String)",
+        "type": "stack",
+        "application": "backtracking-by-tracking-history-or-state",
+        "code": "def generateParenthesis(self, n: int) -> List[str]:\n\n        res = []\n\n        # Backtracking        \n        def helper(current: List[str], num_open: int, num_closed: int):\n            \n            # Base case: If the length of the current combination is 2 * n, it's complete\n            if len(current) == n * 2:\n                # convert list to string and add to res\n                res.append(\"\".join(current))\n                return\n\n            # Recursive case 1: Add '(' if the number of '(' used is less than n\n            if num_open < n: \n                current.append('(')\n                helper(current, num_open + 1, num_closed)\n\n                # Backtrack by removing the last added '('\n                current.pop()  \n            \n            # Recursive case 2: Add ')' if the number of ')' used is less than the number of '('\n            if num_closed < num_open:\n                current.append(')')\n                helper(current, num_open, num_closed + 1)\n\n                # Backtrack by removing the last added ')'\n                current.pop()\n\n        # Start Backtracking process with an empty list and counts at 0\n        helper([], 0, 0)\n\n        # overall: time complexity\n        # overall: space complexity\n        return res",
+        "questionNumber": 22,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-backtracking-string---stackbacktracking-by-tracking-history-or-state",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 3,
+        "name": "BackTracking (Mutable List)",
+        "type": "stack",
+        "application": "backtracking-by-tracking-history-or-state",
+        "code": "def generateParenthesis(self, n: int) -> List[str]:\n        \n        res = []\n        \n        # Backtracking\n        def backtrack(current, openCount, closeCount):\n\n            # Base case: if we have used all open and close parentheses\n            if openCount == n and closeCount == n:\n                # add valid combination to res\n                res.append(current)\n                return\n            \n            # Recursive case 1: Add '(' if the number of '(' used is less than n\n            if openCount < n: \n\n                # Backtrack by adding '(' to curr string, and incrementing openCount by 1\n                # recursive call explores all combinations starting from this new state\n                backtrack(current + \"(\", openCount + 1, closeCount)\n            \n            # recursive case: Add ')' if the number of ')' used is less than the number of '('\n            if closeCount < openCount:\n\n                # Backtrack by adding ')' to the curr string, and incrementing closeCount by 1\n                # recursive call explores all combinations starting from this new state\n                backtrack(current + \")\", openCount, closeCount + 1)\n        \n        # starts recursion with an empty string and zero counts\n        # backtracking process builds strings by choosing '(' or ')' at each step\n        # and checking a possible valid paths through the recursion tree\n        backtrack(\"\", 0, 0)\n\n        # overall: time complexity\n        # overall: space complexity\n        return res",
+        "questionNumber": 22,
+        "solutionLink": "/Notes/leetcode-stacks#solution-3-backtracking-mutable-list---stackbacktracking-by-tracking-history-or-state",
+        "blog": "LeetCode: Stacks"
+      }
+    ],
+    "monotonic-property-maintenance": [
+      {
+        "number": 1,
+        "name": "Monotonic Stack",
+        "type": "stack",
+        "application": "monotonic-property-maintenance",
+        "code": "def dailyTemperatures(self, temperatures: List[int]) -> List[int]:\n        \n        # space complexity:\n        n = len(temperatures)\n        res = [0] * n\n        stack = []  # Indices of temperatures\n\n        # time complexity:\n        for i in range(n):\n\n            # compares curr temp with top of stack\n            while stack and temperatures[i] > temperatures[stack[-1]]:\n                idx = stack.pop()\n\n                # Days until a warmer temperature\n                res[idx] = i - idx  \n\n            # Push current index\n            stack.append(i)  \n        \n        return res",
+        "questionNumber": 739,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-monotonic-stack---stackmonotonic-property-maintenance",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "Reverse Traversal",
+        "type": "stack",
+        "application": "monotonic-property-maintenance",
+        "code": "def dailyTemperatures(self, temperatures: List[int]) -> List[int]:\n        st = []\n        res = [0] * len(temperatures)\n\n        for i in range(len(temperatures)):\n            while st and temperatures[i] > temperatures[st[-1]]:\n                idx = st.pop()\n                res[idx] = i - idx\n            st.append(i)\n        \n        return res",
+        "questionNumber": 739,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-reverse-traversal---stackmonotonic-property-maintenance",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 1,
+        "name": "Stack",
+        "type": "stack",
+        "application": "monotonic-property-maintenance",
+        "code": "def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:\n        # Sort cars by position in descending order\n        cars = sorted(zip(position, speed), reverse=True)\n        \n        # Stack to store the time each fleet takes to reach the target\n        stack = []  \n\n        # time complexity\n        for pos, spd in cars:\n            time_to_target = (target - pos) / spd  # Time for current car to reach target\n            \n            # Push the current car's time only if it doesn't merge with the fleet at the top\n            if not stack or time_to_target > stack[-1]:\n                stack.append(time_to_target)\n        \n        # overall\n        # overall\n        return len(stack)",
+        "questionNumber": 853,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-stack---stackmonotonic-property-maintenance",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 1,
+        "name": "Optimal Stack",
+        "type": "stack",
+        "application": "monotonic-property-maintenance",
+        "code": "def largestRectangleArea(self, heights: List[int]) -> int:\n        stack = []\n        max_area = 0\n\n        for i, h in enumerate(heights + [0]):  # Add a sentinel height of 0\n            while stack and heights[stack[-1]] > h:\n                height = heights[stack.pop()]\n                width = i if not stack else i - stack[-1] - 1\n                max_area = max(max_area, height * width)\n            stack.append(i)\n\n        return max_area",
+        "questionNumber": 84,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-optimal-stack---stackmonotonic-property-maintenance",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 1,
+        "name": "Optimal Stack",
+        "type": "stack",
+        "application": "monotonic-property-maintenance",
+        "code": "def removeKdigits(self, num: str, k: int) -> str:\n        stack = []  # Stack to hold the digits of the resulting number\n\n        for digit in num:\n            # Remove digits from the stack if the current digit is smaller\n            # and we still need to remove more digits (k > 0)\n            while stack and k > 0 and stack[-1] > digit:\n                stack.pop()\n                k -= 1\n            stack.append(digit)\n\n        # If there are still digits to remove, remove from the end of the stack\n        stack = stack[:-k] if k else stack\n\n        # Join the stack into a number and remove leading zeros\n        result = ''.join(stack).lstrip('0')\n\n        # Return \"0\" if the result is empty\n        return result or \"0\"",
+        "questionNumber": 402,
+        "solutionLink": "/Notes/leetcode-stacks#solution-1-optimal-stack---stackmonotonic-property-maintenance",
+        "blog": "LeetCode: Stacks"
+      }
+    ],
+    "algorithm": [
+      {
+        "number": 3,
+        "name": "Two-Pointer Sliding Window",
+        "type": "stack",
+        "application": "algorithm",
+        "code": "def dailyTemperatures(self, temperatures: List[int]) -> List[int]:\n        n = len(temperatures)\n        res = [0] * n\n        hottest_day = n - 1  # Track the hottest day from the end of the list\n\n        for i in range(n - 2, -1, -1):  # Start from the second last element\n            if temperatures[i] >= temperatures[hottest_day]:\n                hottest_day = i  # Update the hottest day\n            else:\n                j = i + 1\n                while temperatures[j] <= temperatures[i]:\n                    j += res[j]  # Jump to the next warmer day\n                res[i] = j - i  # Calculate days to next warmer temperature\n\n        return res",
+        "questionNumber": 739,
+        "solutionLink": "/Notes/leetcode-stacks#solution-3-two-pointer-sliding-window---stackalgorithm",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "Greedy",
+        "type": "stack",
+        "application": "algorithm",
+        "code": "def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:\n        ans = prev = 0\n        for pp, ss in sorted(zip(position, speed), reverse=True): \n            tt = (target - pp)/ss # time to arrive at target \n            if prev < tt: \n                ans += 1\n                prev = tt\n        return ans",
+        "questionNumber": 853,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-greedy---stackalgorithm",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 2,
+        "name": "Divide and Conquer",
+        "type": "stack",
+        "application": "algorithm",
+        "code": "def calculate_area(start, end):\n        if start > end:\n            return 0\n        \n        min_index = start\n        for i in range(start, end + 1):\n            if heights[i] < heights[min_index]:\n                min_index = i\n        \n        left_area = calculate_area(start, min_index - 1)\n        right_area = calculate_area(min_index + 1, end)\n        current_area = heights[min_index] * (end - start + 1)\n        \n        return max(left_area, right_area, current_area)\n\n    return calculate_area(0, len(heights) - 1)",
+        "questionNumber": 84,
+        "solutionLink": "/Notes/leetcode-stacks#solution-2-divide-and-conquer---stackalgorithm",
+        "blog": "LeetCode: Stacks"
+      },
+      {
+        "number": 3,
+        "name": "Non Stack",
+        "type": "stack",
+        "application": "algorithm",
+        "code": "class SegmentTree:\n        def __init__(self, heights):\n            self.n = len(heights)\n            self.tree = [0] * (4 * self.n)\n            self.build(heights, 0, 0, self.n - 1)\n\n        def build(self, heights, node, start, end):\n            if start == end:  # Leaf node\n                self.tree[node] = start\n            else:\n                mid = (start + end) // 2\n                left = 2 * node + 1\n                right = 2 * node + 2\n\n                self.build(heights, left, start, mid)\n                self.build(heights, right, mid + 1, end)\n\n                # Combine the results of the children\n                if heights[self.tree[left]] < heights[self.tree[right]]:\n                    self.tree[node] = self.tree[left]\n                else:\n                    self.tree[node] = self.tree[right]\n\n        def query(self, heights, node, start, end, l, r):\n            if start > r or end < l:  # Range outside query bounds\n                return -1\n            if l <= start and end <= r:  # Range completely within query bounds\n                return self.tree[node]\n\n            mid = (start + end) // 2\n            left = self.query(heights, 2 * node + 1, start, mid, l, r)\n            right = self.query(heights, 2 * node + 2, mid + 1, end, l, r)\n\n            if left == -1:  # If left part is out of range\n                return right\n            if right == -1:  # If right part is out of range\n                return left\n            return left if heights[left] < heights[right] else right\n\n    \n    def largestRectangleArea(self, heights: List[int]) -> int:\n        def calculate_area(start, end):\n                if start > end:\n                    return 0\n                min_index = tree.query(heights, 0, 0, len(heights) - 1, start, end)\n                left_area = calculate_area(start, min_index - 1)\n                right_area = calculate_area(min_index + 1, end)\n                current_area = heights[min_index] * (end - start + 1)\n                return max(left_area, right_area, current_area)\n\n        tree = SegmentTree(heights)\n        return calculate_area(0, len(heights) - 1)",
+        "questionNumber": 84,
+        "solutionLink": "/Notes/leetcode-stacks#solution-3-non-stack---stackalgorithm",
+        "blog": "LeetCode: Stacks"
+      }
+    ]
+  },
   "two-pointers": {
     "algorithm": [
       {
