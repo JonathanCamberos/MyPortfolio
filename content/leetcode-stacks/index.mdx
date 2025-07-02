@@ -19,7 +19,7 @@ Leetcode problems with elegant solutions using stacks.
 We can track structure while iterating over an object ensuring it maintains 
 some criteria
 
-Ex: Validate if a s tring containing brackets ()[]{} is properly balanced:
+Ex: Validate if a string containing brackets ()[]{} is properly balanced:
 ```python
     def balancedParentheses(s: str) -> bool:
         stack = []
@@ -146,9 +146,11 @@ Ex: Post and Prefix
 ```
 
 
-### Stack Application: Partitioning
-We can use a stack to partition or segment a sequence into meaningful parts 
-by tracking boundaries or "cut points" as we iterate through the input.
+### Stack Application: Dynamic Programming State Compression
+We can use a stack to compress the necessary state while scanning through data,
+especially when enforcing a specific constraint or invariant like monotonicity.
+Instead of storing the entire history, we prune irrelevant elements from the stack
+to keep only the most useful summary of the past
 
 Ex: Given an array, partition it into the minimum number of strictly 
 increasing subsequences
@@ -281,7 +283,7 @@ in the correct order.
 | Overall |  |  |  |  | 
 
 
-### Solution 1: Stack (redundant operations)
+### Solution 1: Stack (redundant operations - Stack/ Tracking Nested or Hierarchical Structures 
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -317,7 +319,7 @@ in the correct order.
 |  |  |  |  |  | 
 
 
-### Solution 2: Stack
+### Solution 2: Stack - Stack/ Tracking Nested or Hierarchical Structures
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -511,7 +513,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-### Solution 1: Main Stack + Min Tracker
+### Solution 1: Main Stack + Min Tracker - Stack/Dynamic Programming State Compression
 ```python
     def __init__(self):
 
@@ -573,7 +575,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-### Solution 2: Tuple Stack
+### Solution 2: Tuple Stack - Stack/Dynamic Programming State Compression
 ```python
     def __init__(self):
 
@@ -631,7 +633,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-
+ 
 ## 150. Evaluate Reverse Polish Notation - Medium
 
 Topics:  Array, Math, Design
@@ -737,7 +739,7 @@ operations in reverse polish notation.
 |  |  |  |  |  | 
 
 
-### Solution 1: 
+### Solution 1: Manual Operator Handling - Stack/Expression Evaluation and Parsing 
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
         stack = []
@@ -768,7 +770,7 @@ operations in reverse polish notation.
 |  |  |  |  |  | 
 
 
-### Solution 2:
+### Solution 2: Operator Module Dispatch - Stack/Expression Evaluation and Parsing
 ```python
     from operator import add, sub, mul, floordiv
 
@@ -918,7 +920,7 @@ Given a number, generate all possible combinations of parentheses.
 |  |  |  |  |  | 
 
 
-### Solution 1: Iterative Stack (State Tracking)
+### Solution 1: Iterative Stack (State Tracking) - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1009,7 +1011,7 @@ in the number of valid states it generates.
 Note: the stack is used for state tracking (tracking open and cloes counts),
 not for memoization or subproblem reuse.
 
-### Solution 2: BackTracking (String)
+### Solution 2: BackTracking (String) - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1053,7 +1055,7 @@ not for memoization or subproblem reuse.
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 3: BackTracking (Mutable List)
+### Solution 3: BackTracking (Mutable List) - Stack/Backtracking by Tracking History or State
 
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
@@ -1099,7 +1101,7 @@ not for memoization or subproblem reuse.
 |  |  |  |  |  | 
 
 
-### Solution 4: Dynamic Programming
+### Solution 4: Dynamic Programming - Stack/Dynamic Programming State Compression
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1231,7 +1233,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1: Monotonic Stack
+### Solution 1: Monotonic Stack - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1262,7 +1264,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Extra Solution 1: Reverse Traversal
+### Solution 2: Reverse Traversal - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         st = []
@@ -1282,7 +1284,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Extra Solution 2: Two-Pointer Sliding Window
+### Solution 3: Two-Pointer Sliding Window - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         n = len(temperatures)
@@ -1368,26 +1370,7 @@ All of values of position are unique
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution Semi Optimal 1: Stack
-```python
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-
-### Solution Optimal 2: Stack
-```python
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-### Solution 1: Stack
+### Solution 1: Stack - Stack/Monotonic Property Maintenance
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         # Sort cars by position in descending order
@@ -1409,7 +1392,7 @@ All of values of position are unique
         return len(stack)
 ```
 
-### Extra Solution 1: Greedy
+### Solution 2: Greedy - Stack/Algorithm
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         ans = prev = 0
@@ -1489,7 +1472,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1: Optimal Stack
+### Solution 1: Optimal Stack - Stack/Monotonic Property Maintenance
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         stack = []
@@ -1505,7 +1488,7 @@ Constraints:
         return max_area
 ```
 
-### Extra Optimal Solution 1: Divide and Conquer
+### Solution 2: Divide and Conquer - Stack/Algorithm
 ```python
     def calculate_area(start, end):
         if start > end:
@@ -1530,7 +1513,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Extra Optimal Solution 2: Non Stack
+### Solution 3: Non Stack - Stack/Algorithm
 ```python
     class SegmentTree:
         def __init__(self, heights):
@@ -1617,7 +1600,7 @@ num does not have any leading zeros except for 0 itself
 ### Abstract
 Remove k digits in a way so that resulting integer is as large as possible.
 
-### Solution 1: Optimal Stack
+### Solution 1: Optimal Stack - Stack/Monotonic Property Maintenance
 ```python
     def removeKdigits(self, num: str, k: int) -> str:
         stack = []  # Stack to hold the digits of the resulting number

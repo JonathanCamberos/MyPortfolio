@@ -250,7 +250,7 @@ Ex: Manacher's Algorithm, find the longest palindromic substring
 
 
 
-## 125. Valid Palindrome ::2:: - Easy
+## 125. Valid Palindrome ::3:: - Easy
 
 Topics:  Two Pointers, String 
 
@@ -1192,7 +1192,7 @@ Let see:
         return list(res)  
 ```
 
-### Find the Bug: Index Into Wrong Array [im half asleep rn ok? :) cut me some slack]
+### Find the Bug: Index Into Wrong Array (2x) [im half asleep rn ok? :) cut me some slack]
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1380,6 +1380,50 @@ Let see:
                     res.add(set(sorted([p[i], p[j], neg])))
 
         return list(res)
+```
+
+### Find the Bug: Did not increment pointers if res == 0 case
+```python
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        res = set()
+        n = len(nums)
+        nums.sort()
+
+        for i in range(n - 2):
+
+
+            # only iterate over 1 number once
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+
+            # only allow negative numbers
+            if nums[i] > 0:
+                break
+
+
+            left, right = i + 1, n-1
+
+            # '<' becuase left != right
+            while left < right:
+                currSum = nums[i] + nums[left] + nums[right]
+
+                if currSum == 0:
+                    
+                    res.add((nums[i], nums[left], nums[right]))
+                
+                    # INCORRECT:
+                    # forgot to iterate both left and right
+                    # should have been:
+                    # left += 1
+                    # right -= 1
+
+                elif currSum < 0:
+                    left += 1
+                else:
+                    right -= 1
+            
+        return res
 ```
 
 
