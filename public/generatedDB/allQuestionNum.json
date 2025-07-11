@@ -10,8 +10,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:20:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "5": {
     "questionNum": 5,
@@ -25,8 +25,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-29T08:57:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "11": {
     "questionNum": 11,
@@ -40,8 +40,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-20T07:13:00",
-    "coldnessCount": 18
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "15": {
     "questionNum": 15,
@@ -56,8 +56,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-20T06:07:00",
-    "coldnessCount": 18
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "20": {
     "questionNum": 20,
@@ -100,8 +100,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:45:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "42": {
     "questionNum": 42,
@@ -117,8 +117,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-29T07:24:00",
-    "coldnessCount": 9
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "49": {
     "questionNum": 49,
@@ -133,8 +133,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:25:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "84": {
     "questionNum": 84,
@@ -162,8 +162,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-27T07:13:00",
-    "coldnessCount": 11
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "128": {
     "questionNum": 128,
@@ -177,8 +177,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:55:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "150": {
     "questionNum": 150,
@@ -221,8 +221,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-27T08:19:00",
-    "coldnessCount": 11
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "217": {
     "questionNum": 217,
@@ -236,8 +236,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:05:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "238": {
     "questionNum": 238,
@@ -250,8 +250,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:35:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "242": {
     "questionNum": 242,
@@ -265,8 +265,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:15:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "271": {
     "questionNum": 271,
@@ -279,8 +279,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-06-27T07:40:00",
-    "coldnessCount": 11
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "347": {
     "questionNum": 347,
@@ -299,8 +299,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-06-26T08:30:00",
-    "coldnessCount": 12
+    "lastSubmittedDate": "2025-07-10T08:20:00",
+    "coldnessCount": 2
   },
   "402": {
     "questionNum": 402,

@@ -240,7 +240,7 @@ in the correct order.
 | Total Iterations | O(n/2) | O(1) | At most n/2 pairs and thus n/2 removals O(n/2) | No additional memory allocation for iteration O(1) |
 | Overall | O(n<sup>2</sup>) | O(1) | Single iteration in O(n) for total iterations n/2 O(n/2), leading to O(n<sup>2</sup>) time complexity | No additional memory allocation for iteration, leading to constant O(1) | 
 
-### Find the Bug: Hashmap (does not track order)
+### Find the Bug: Hashmap Count (does not track order)
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -286,8 +286,71 @@ in the correct order.
 | Verify |  |  |  |  |
 | Overall |  |  |  |  | 
 
+### Find the Bug: Forgot to append to stack
+```python
+    def isValid(self, s: str) -> bool:
 
-### Solution 1: Manual Condition Stack Check - Stack/ Tracking Nested or Hierarchical Structures 
+        stack = []
+        mapping = {
+            ')' : '(',
+            ']' : '[',
+            '}' : '{'
+        }
+
+        for c in s:
+
+            if c in mapping:
+
+                if not stack:
+                    return False
+
+                topElem = stack.pop()
+
+                if mapping[c] != topElem:
+                    return False 
+
+            # INCORRECT:
+            # missing else clause to append char to stack
+            # should be:
+            # else:
+            #   stack.append(c)
+
+        return not stack
+```
+
+
+### Find the Bug: Did not check for empty Stack
+```python
+    def isValid(self, s: str) -> bool:
+
+        stack = []
+
+        mapping = {
+            ')' : '(',
+            ']' : '[',
+            '}' : '{'
+        }
+
+        for c in s:
+            
+            if c in mapping:
+
+                if not stack:
+                    return False
+
+                topElem = stack.pop()
+
+                if mapping[c] != topElem:
+                    return False
+            else:
+                stack.append(c)
+        
+        # INCORRECT:
+        # stack could still have elements and be invalid
+        return True
+```
+
+### Solution 1: Manual Condition Stack Check - Stack/Tracking Nested or Hierarchical Structures 
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -306,14 +369,20 @@ in the correct order.
 
             # if c is a closing type, peek top of stack for matching opening 
             elif c in ')]}':
-                if not stack or (c == ')' and stack[-1] != '(') or \
-                                (c == '}' and stack[-1] != '{') or \
-                                (c == ']' and stack[-1] != '['):
+
+                # stack is empty, no matching opening available
+                if not stack:
                     return False
 
-                # matching opening has been found, remove from top of stack
-                stack.pop()
+                # grab current potential matching from stack
+                topElem = stack.pop()
 
+                # stack does not have valid matching queued up
+                if  ((c == ')' and topElem != '(') or
+                     (c == '}' and topElem != '{') or
+                     (c == ']' and topElem != '[')):
+                    return False
+                
         # overall: time complexity O(n)
         # overall: space complexity O(n)
         return not stack
@@ -325,7 +394,7 @@ in the correct order.
 |  |  |  |  |  | 
 
 
-### Solution 2: Stack with Hashmap lookup - Stack/ Tracking Nested or Hierarchical Structures
+### Solution 2: Stack with Hashmap lookup - Stack/Tracking Nested or Hierarchical Structures
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -333,23 +402,34 @@ in the correct order.
         stack = []
 
         # space complexity: closed -> open mapping in constant O(1)
-        mapping = {')': '(', '}': '{', ']': '['}
+        mapping = { 
+                    ')': '(', 
+                    '}': '{', 
+                    ']': '[' 
+                  }
 
         # time complexity: iterate over string of n length O(n)
         for c in s:
             
-            # if c is valid opening 
-            if c not in mapping:
-                stack.append(c)
-            
-            # validate closing 
-            else:   
-        
-                # pop top element if stack is non-empty
-                topElem = stack.pop() if stack else '#'
+            # found and validate closing 
+            if c in mapping:
 
+                # if empty stack, no matching opening
+                if not stack:
+                    return False
+
+                # pop top element if stack non empty
+                topElem = stack.pop()
+
+                # check if opening matches closing
                 if mapping[c] != topElem:
                     return False
+            
+            # if valid opening 
+            else:   
+                stack.append(c)
+                
+        # if stack is empty, success
 
         # overall: time complexity O(n)
         # overall: space complexity
@@ -360,7 +440,6 @@ in the correct order.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  | 
-
 
 
 ## 155. Min Stack - Medium
