@@ -315,6 +315,48 @@ traverse using pointers comparing characters on the start and end of the string.
         return True
 ```
 
+### Find the Bug: Less than instead of Less than or equal to
+```python
+def isPalindrome(self, s: str) -> bool:
+
+        # INCORRECT:
+        # not including outer characters
+        def isAlphaNum(c):
+            return (ord('a') < ord(c) < ord('z') or
+                    ord('A') < ord(c) < ord('Z') or
+                    ord('0') < ord(c) < ord('9'))
+
+        # INCORRECT:
+        # not including outer characters
+        def isUpper(c):
+            return (ord('A') < ord(c) < ord('Z'))
+
+        def toLower(c):
+            return chr(ord(c) + 32)
+
+
+        cleaned = []
+
+        for c in s:
+            if isAlphaNum(c):
+                if isUpper(c):
+                    cleaned.append(toLower(c))
+                else:
+                    cleaned.append(c)
+
+        
+        left, right = 0, len(cleaned)-1
+
+        while left < right:
+            if cleaned[left] != cleaned[right]:
+                return False
+
+            left += 1
+            right -=1 
+
+        return True
+```
+
 ### Find the Bug: Not Moving Pointers (thinking we are)
 ```python
     def isPalindrome(self, s: str) -> bool:
@@ -1787,13 +1829,46 @@ Now we need a way to traverse the array that allows us to take advantage of this
         # overall: space complexity O(1)
         return water
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Iterate |  |  |  |  |
 | Left/Right max |  |  |  |  |
 | Curr Water |  |  |  |  | 
 | Overall | | | | |
+
+### Find the Bug: Complete misunderstanding of water heights (haha)
+```python
+    def trap(self, height: List[int]) -> int:
+        
+        # dynamic programming
+        n = len(height)
+
+        leftMax = [0] * n
+        rightMax = [0] * n
+        water = 0
+
+        # INCORRECT:
+        # what are you deranged?!?!?
+        # why do you need a separate max!
+        # its just the previous max vs the current height
+        left = 0
+        for i in range(1, n):
+            left = max(left, height[i-1])
+            leftMax[i] = left
+
+        # INCORRECT:
+        # again! only a deranged person would create a separate 
+        # max variable to compare against a max array
+        right = 0
+        for i in range(n-2, -1, -1):
+            right = max(right, height[i+1])
+            rightMax[i] = right
+
+        for i in range(n):
+            water += min(rightMax[i], leftMax[i]) - height[i]
+
+        return water
+```
 
 ### Find the Bug: Two Pointers Early Break
 ```python 
