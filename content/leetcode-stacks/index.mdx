@@ -357,7 +357,7 @@ in the correct order.
         # note: in python, an empty list [] is falsy evaluating to false
         # not [] -> true
 
-        # space complexity: stack stores opening brackets for string n length O(n)
+        # space complexity: stack stores up to n opening brackets O(n)
         stack = []
 
         # time complexity: iterate over list of n length O(n)
@@ -371,10 +371,12 @@ in the correct order.
             elif c in ')]}':
 
                 # stack is empty, no matching opening available
+                # time complexity: size check in constant O(1)
                 if not stack:
                     return False
 
                 # grab current potential matching from stack
+                # time complexity: pop in constant O(1)
                 topElem = stack.pop()
 
                 # stack does not have valid matching queued up
@@ -383,15 +385,17 @@ in the correct order.
                      (c == ']' and topElem != '[')):
                     return False
                 
+        # time complexity: size check in constant O(1)
+
         # overall: time complexity O(n)
         # overall: space complexity O(n)
         return not stack
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iteration | O(n) | O(n) | Iteration string of n length O(n)| Memory allocation for n opening brackets O(n) |
+| Validation | O(1) | O(1) | Pop in constant O(1) and char comparison in constant O(1) | No additional memory allocation for pop or comparison O(1) |
+| Overall | O(n) | O(n) | Iteration over string of n length dominates, leading to O(n) | Memory allocation for stack with n opening brackets dominates, leading to O(n) | 
 
 
 ### Solution 2: Stack with Hashmap lookup - Stack/Tracking Nested or Hierarchical Structures
@@ -437,9 +441,9 @@ in the correct order.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Iteration | O(n) | O(n) | Iteration over string of n length O(n) | Memory allocation for stack for n opening brackets O(n) |
+| Validation | O(1) | O(1) | Pop in constant O(1) and char comparison in constant O(1) | No additional memory allocation for pop or comparison O(1) |
+| Overall | O(n) | O(n) | Iteration over string of n length dominates, leading to O(n) | Memory allocation for stack for n opening brackets dominates, leading to O(n) | 
 
 
 ## 155. Min Stack - Medium
@@ -599,31 +603,37 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-### Solution 1: Main Stack + Min Tracker - Stack/Dynamic Programming State Compression
+### Solution 1: 2 Stacks for main and min - Stack/Dynamic Programming State Compression
 ```python
+class MinStack:
+
+    # overall: space complexity O(n)
     def __init__(self):
 
-        # using a minTracker stack, we track the min value at each
-        # level of the main stack. Ensures when we pop a top value
-        # we can instantly know the min value at that point
+        # Note:
+        # minTracker stack tracks the min value at each level of the main stack. 
 
-        # space complexity:
+        # space complexity: two stacks for n elements O(n)
+
+        # stores all pushed values
         self.mainStack = []
+        # for each level, stores minimum value
         self.minTracker = []
+        # logical size
         self.mainSize = 0
 
+    # overall: time complexity O(1)
     def push(self, val: int):
 
-        # logical size vs physical size
+        # update array at index, or append
         if self.mainSize < len(self.mainStack):
             self.mainStack[self.mainSize] = val
         else:
             self.mainStack.append(val)
 
-        # logical size vs physical size
-        if self.mainSize < len(self.minTracker)
-            
-            # compares new value with previous level of minTracker
+        # update min at index, or append
+        if self.mainSize < len(self.minTracker):
+            # min between (new value, previous level of min stack)
             self.minTracker[self.mainSize] = min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val)
         else:
             self.minTracker.append(min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val))
@@ -631,56 +641,59 @@ We need to design a stack that runs in O(1) time complexity for each main functi
         # increases logical size
         self.mainSize += 1
 
+    # overall: time complexity O(1)
     def pop(self):
-        # time complexity: 
+        # validate non empty, decrease logical length
         if self.mainSize == 0:
-            raise IndexError("Pop from empty stack")
-        
+            raise IndexError("Invalid pop, stack is empty")
         self.mainSize -= 1
 
+    # overall: time complexity O(1)
     def top(self):
-        # time complexity:
+        # validate non empty, return elem
         if self.mainSize == 0:
-            raise IndexError("Stack is empty")
+            raise IndexError("Invalid top, stack is empty")
         return self.mainStack[self.mainSize - 1]
 
+    # overall: time complexity O(1)
     def getMin(self):
-        # time complexity:
+        # validate non empty, return min
         if self.mainSize == 0:
-            raise IndexError("Stack is empty")
+            raise IndexError("Invalid getMin, stack is empty")
 
         return self.minTracker[self.mainSize - 1]
 
-    # overall: time complexity
-    # overall: time complexity 
+    # overall: time complexity O(1)
+    # overall: space complexity O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Push | O(1) | O(1) | Insert to main and min stack in constant O(1) | No additional memory allocation for push operation O(1) |
+| Pop | O(1) | O(1) | Decrease logical length in constant O(1) | No additional memory allocation for logical length decrease O(1) |
+| Top | O(1) | O(1) | Indexing into main array in constant O(1) | No additional memory allocation for indexing array O(1) | 
+| getMin | O(1) | O(1) | Indexing into min array in constant O(1) | No additional memory allocation for indexing array O(1) | 
+| Overall | O(1) | O(n) | Each individual operation takes constant O(1) | MainStack and minTracker memory allocation dominate for n values, leading to O(n) | 
 
 
 ### Solution 2: Tuple Stack - Stack/Dynamic Programming State Compression
 ```python
     def __init__(self):
 
-        # using of having a separate minTracker stack, we track the min value
-        # at each level of the main stack using tuples (val, min).
-        # Ensures when we pop a top value we can instantly know 
-        # the min value at that level of the stack 
+        # Note: 
+        # We combine the main and minTracker stack vua a tuple,  separate minTracker stack, we track the min value
+        # to track the min at each level of the stack (val, min).
 
-        # space complexity:
+        # space complexity: stores all pushed (val, min) tuples O(n)
         self.stack = []
         self.size = 0
 
+    # overall: time complexity O(1)
     def push(self, val: int):
 
-        # compares val with previous level tuple minValue
-        # sets new (val, minValue) to lower value
+        # min between (new value, previous level of stack)
         currMin = min(val, self.stack[self.size - 1][1] if self.size > 0 else val)
         
-        # logical size vs physical size
+        # update min at index, or append
         if self.size < len(self.stack):
             self.stack[self.size] = (val, currMin)
         else:
@@ -689,34 +702,35 @@ We need to design a stack that runs in O(1) time complexity for each main functi
         # increases logical size
         self.size += 1
 
+    # overall: time complexity O(1)
     def pop(self):
-        # time complexity:
         if self.size == 0:
-            raise IndexError("Pop from empty stack")
+            raise IndexError("Invalid pop, stack is empty")
         self.size -= 1
 
+    # overall: time complexity O(1)
     def top(self):
-        # time complexity:
         if self.size == 0:
-            raise IndexError("Stack is empty")
-        
+            raise IndexError("Invalid top, stack is empty")
+    
         return self.stack[self.size - 1][0]
 
+    # overall: time complexity O(1)
     def getMin(self):
-        # time complexity:
         if self.size == 0:
-            raise IndexError("Stack is empty")
-
+            raise IndexError("Invalid getMin, stack is empty")
         return self.stack[self.size - 1][1]
 
-    # overall: time complexity
-    # overall: time complexity 
+    # overall: time complexity O(1)
+    # overall: space complexity O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Push | O(1) | O(1) | Insert into stack in constant O(1) | No additional memory allocation for insert O(1) |
+| Pop | O(1) | O(1) | Decrease logical length in constant O(1) | No additional memory allocation for decreasing logical length O(1) |
+| Top | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
+| getMin | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
+| Overall | O(1) | O(n) | Each individual operation takes constant O(1) | Stack memory allocation dominates for n values, leading to O(n) | 
 
 
  
