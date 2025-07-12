@@ -176,8 +176,33 @@ increasing subsequences
     print(min_partitions(nums))  # Output: 2
 ```
 
+### Stack Application: Interval and Range Processing
+We can use stacks to efficiently process intervals or ranges,
+such as merging overlapping intervals, calculating spans,
+or finding next/previous smaller or larger elements within a range.
 
-## 20. Valid Parentheses - Easy
+Ex: Largest Rectangle in Histogram
+```python
+    def largestRectangleArea(heights):
+        stack = []  # stores indices of bars
+        max_area = 0
+        
+        for i, h in enumerate(heights + [0]):  # Add sentinel to flush stack
+            while stack and heights[stack[-1]] > h:
+                height = heights[stack.pop()]
+                left = stack[-1] if stack else -1
+                width = i - left - 1
+                max_area = max(max_area, height * width)
+            stack.append(i)
+        
+        return max_area
+
+    # Example:
+    # Input: [2, 1, 5, 6, 2, 3]
+    # Output: 10  (largest rectangle is formed by heights 5 and 6)
+```
+
+## 20. Valid Parentheses ::2:: - Easy
 
 Topics:  String, Stack  
 
@@ -363,29 +388,27 @@ in the correct order.
         # time complexity: iterate over list of n length O(n)
         for c in s:
 
-            # if c is opening type, push to stack
-            if c in '([{':
-                stack.append(c)
+            # found closing bracket, match with opening bracket
+            if c in ')]}':
 
-            # if c is a closing type, peek top of stack for matching opening 
-            elif c in ')]}':
-
-                # stack is empty, no matching opening available
-                # time complexity: size check in constant O(1)
+                # check stack is empty, no matching opening available
                 if not stack:
                     return False
 
-                # grab current potential matching from stack
                 # time complexity: pop in constant O(1)
                 topElem = stack.pop()
 
-                # stack does not have valid matching queued up
+                # check if opening matches closing
                 if  ((c == ')' and topElem != '(') or
                      (c == '}' and topElem != '{') or
                      (c == ']' and topElem != '[')):
                     return False
-                
-        # time complexity: size check in constant O(1)
+
+            # found opening bracket, push to stack
+            if c in '([{':
+                stack.append(c)
+                               
+        # if stack is empty, success
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
@@ -406,30 +429,30 @@ in the correct order.
         stack = []
 
         # space complexity: closed -> open mapping in constant O(1)
-        mapping = { 
-                    ')': '(', 
-                    '}': '{', 
-                    ']': '[' 
-                  }
+        mapping = {
+            ')' : '(',
+            ']' : '[',
+            '}' : '{'
+        }
 
         # time complexity: iterate over string of n length O(n)
         for c in s:
             
-            # found and validate closing 
+            # found closing bracket, match with opening bracket
             if c in mapping:
 
-                # if empty stack, no matching opening
+                # check stack is empty, no matching opening available
                 if not stack:
                     return False
 
-                # pop top element if stack non empty
+                # time complexity: pop in constant O(1)
                 topElem = stack.pop()
 
                 # check if opening matches closing
                 if mapping[c] != topElem:
                     return False
             
-            # if valid opening 
+            # found opening bracket, push to stack
             else:   
                 stack.append(c)
                 
@@ -446,7 +469,7 @@ in the correct order.
 | Overall | O(n) | O(n) | Iteration over string of n length dominates, leading to O(n) | Memory allocation for stack for n opening brackets dominates, leading to O(n) | 
 
 
-## 155. Min Stack - Medium
+## 155. Min Stack ::2:: - Medium
 
 Topics:  Stack, Design
 
@@ -622,22 +645,24 @@ class MinStack:
         # logical size
         self.mainSize = 0
 
-
     def _validateNotEmpty(self, errMsg: str):
         if self.mainSize == 0:
             raise IndexError(errMsg)
 
+    def _compressStack(self, stack):
+        return self.mainSize < len(stack)
+            
     # overall: time complexity O(1)
     def push(self, val: int):
 
         # add new val at index or append
-        if self.mainSize < len(self.mainStack):
+        if self._compressStack(self.mainStack):
             self.mainStack[self.mainSize] = val
         else:
             self.mainStack.append(val)
 
         # add new min at index or append
-        if self.mainSize < len(self.minTracker):
+        if self._compressStack(self.minTracker):
             # min between (new value, previous level of min stack)
             self.minTracker[self.mainSize] = min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val)
         else:
@@ -695,6 +720,9 @@ class MinStack:
         if self.size == 0:
             raise IndexError(errMsg)
 
+    def _compressStack(self):
+        return self.size < len(self.stack)
+
     # overall: time complexity O(1)
     def push(self, val: int):
 
@@ -702,7 +730,7 @@ class MinStack:
         currMin = min(val, self.stack[self.size - 1][1] if self.size > 0 else val)
         
         # update min at index, or append
-        if self.size < len(self.stack):
+        if self._compressStack():
             self.stack[self.size] = (val, currMin)
         else:
             self.stack.append((val, currMin))
@@ -736,7 +764,7 @@ class MinStack:
 | getMin | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
 | Overall | O(1) | O(n) | Each individual operation takes constant O(1) | Stack memory allocation dominates for n values, leading to O(n) | 
  
-## 150. Evaluate Reverse Polish Notation - Medium
+## 150. Evaluate Reverse Polish Notation ::1:: - Medium
 
 Topics:  Array, Math, Design
 
@@ -841,18 +869,36 @@ operations in reverse polish notation.
 |  |  |  |  |  | 
 
 
-### Solution 1: Manual Operator Handling - Stack/Expression Evaluation and Parsing 
+### Solution 1: Postfix Expression Evaluation Algorithm - Stack/Expression Evaluation and Parsing 
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
+        # space complexity: stack holds up to n/2 intermediate results O(n)
         stack = []
 
+        # time complexity: iterate over tokens array of n length O(n)
         for token in tokens:
+
+            # found operand, cast to int and push to stack
             if token not in "+-*/":
                 stack.append(int(token))
+            
+            # found operator, grab operands and compute
             else:
+                # time complexity: pop two operands from stack O(1)
+                # input:    ["4","13","5","/","+"]
+                # expected: 4 + (13 / 5) = 6
+                # "4"    -> [4]
+                # "13"   -> [4, 13]
+                # "5"    -> [4, 13, 5]
+                # "/"    -> [4, 2]         # a = 13, b = 5 → int(13 / 5) = 2
+                # "+"    -> [6]            # a = 4, b = 2 → 4 + 2 = 6
+
+                # 5
                 b = stack.pop()
+                # 13
                 a = stack.pop()
 
+                # apply operator manually and push result
                 match token:
                     case "+":
                         stack.append(a + b)
@@ -861,45 +907,30 @@ operations in reverse polish notation.
                     case "*":
                         stack.append(a * b)
                     case "/":
-                        stack.append(int(a / b))  # Explicit truncation towards zero
+                        # a / b
+                        # 13 / 5
 
+                        # Explicit truncation towards zero
+                        # -7 / 3         # -2.333  division:        leaves remainder
+                        # -7 // 3        # -3      floor division:  rounds down "towards infinity"
+                        # int(-7 / 3)    # -2      int(division):   truncates "toward 0", as required by RPN
+                        stack.append(int(a / b))
+
+        # return top of stack
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return stack[-1]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Operands Stack | O(1) | O(n) | Insert into operands stack in constant O(1) | Stack will store at most n/2 operands, leading to O(n) | 
+| Token iteration | O(n) | O(1) | Iteration over tokens array of n length O(n) | No additional memory allocation for iteration O(1) |
+| Stack operations | O(1) | O(1) | Push and pop from stack in constant O(1) | No additional memory allocation for stack operations O(1) |
+| Stack operations | O(1) | O(1) | Add, sub, multi, and div all in constant O(1) | No additional memory allocation for operations |
+| Overall | O(n) | O(n) | Iterating over tokens array dominates, leading to O(n) | Operands stack for token array of n length dominates, leading to O(n) | 
 
-
-### Solution 2: Operator Module Dispatch - Stack/Expression Evaluation and Parsing
-```python
-    from operator import add, sub, mul, floordiv
-
-    def evalRPN(self, tokens: List[str]) -> int:
-        stack = []
-        operations = {"+": add, "-": sub, "*": mul, "/": lambda a, b: int(a / b)}
-
-        for token in tokens:
-            if token not in operations:
-                stack.append(int(token))
-            else:
-                b = stack.pop()
-                a = stack.pop()
-                stack.append(operations[token](a, b))
-
-        return stack[-1]
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-
-
-
-## 22. Generate Parentheses - Medium
+## 22. Generate Parentheses ::4:: - Medium
 
 Topics:  String, Dynamic Programming, Backtracking
 
@@ -1022,9 +1053,121 @@ Given a number, generate all possible combinations of parentheses.
 |  |  |  |  |  | 
 
 
-### Solution 1: Iterative Stack (State Tracking) - Stack/Backtracking by Tracking History or State
+
+### Solution 1: BackTracking with String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
+
+        # Note:
+        # This approach uses backtracking to explore all valid sequences of well-formed parentheses.
+        # A new string is created on each recursive call using string concatenation (e.g., current + "(").
+        # This incurs additional time cost, as each concatenation creates a new string (not in-place).
+        # Since each valid sequence has length 2n, and this concatenation happens at each level,
+        # the time overhead accumulates across all recursive paths.
+        # This makes the overall complexity O(Catalan(n) * n^2) in the worst case.
+        # O(k) string concatenation overhead occurs with immutable strings.
+
+        res = []
+
+        # Backtracking        
+        def helper(current: List[str], num_open: int, num_closed: int):
+            
+            # Base case: If the length of the current combination is 2 * n, it's complete
+            if len(current) == n * 2:
+                # convert list to string and add to res
+                res.append("".join(current))
+                return
+
+            # Recursive case 1: Add '(' if the number of '(' used is less than n
+            if num_open < n: 
+                current.append('(')
+                helper(current, num_open + 1, num_closed)
+
+                # Backtrack by removing the last added '('
+                current.pop()  
+            
+            # Recursive case 2: Add ')' if the number of ')' used is less than the number of '('
+            if num_closed < num_open:
+                current.append(')')
+                helper(current, num_open, num_closed + 1)
+
+                # Backtrack by removing the last added ')'
+                current.pop()
+
+        # Start Backtracking process with an empty list and counts at 0
+        helper([], 0, 0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Solution 2: BackTracking with Mutable List - Stack/Backtracking by Tracking History or State
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+        
+        # Note:
+        # This approach uses backtracking to explore all valid sequences of well-formed parentheses.
+        # This avoids the O(k) string concatenation overhead that occurs with immutable strings,
+        # by instead using a mutable list is used to efficiently build the current string in O(1) time per operation.
+        # Only when a complete sequence is found (length == 2 * n), we convert the list to a string.
+        # Compared to the string-based backtracking version, this method reduces overall string building cost.
+        # Time complexity improves from O(Catalan(n) * n^2) to O(Catalan(n) * n) due to efficient append/pop.
+
+        res = []
+        
+        # Backtracking
+        def backtrack(current, openCount, closeCount):
+
+            # Base case: if we have used all open and close parentheses
+            if openCount == n and closeCount == n:
+                # add valid combination to res
+                res.append(current)
+                return
+            
+            # Recursive case 1: Add '(' if the number of '(' used is less than n
+            if openCount < n: 
+
+                # Backtrack by adding '(' to curr string, and incrementing openCount by 1
+                # recursive call explores all combinations starting from this new state
+                backtrack(current + "(", openCount + 1, closeCount)
+            
+            # recursive case: Add ')' if the number of ')' used is less than the number of '('
+            if closeCount < openCount:
+
+                # Backtrack by adding ')' to the curr string, and incrementing closeCount by 1
+                # recursive call explores all combinations starting from this new state
+                backtrack(current + ")", openCount, closeCount + 1)
+        
+        # starts recursion with an empty string and zero counts
+        # backtracking process builds strings by choosing '(' or ')' at each step
+        # and checking a possible valid paths through the recursion tree
+        backtrack("", 0, 0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
+
+### Solution 3: Iterative Stack with State Tracking - Stack/Backtracking by Tracking History or State
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        # Note:
+        # This solution uses an explicit stack to simulate the backtracking process iteratively.
+        # Each stack element stores the current string and counts of open and closed parentheses,
+        # enabling state tracking without recursion.
+        # String concatenation cost is similar to recursive solutions.
 
         # stack initial state
         stack = [("", 0, 0)] 
@@ -1112,101 +1255,21 @@ in the number of valid states it generates.
 
 Note: the stack is used for state tracking (tracking open and cloes counts),
 not for memoization or subproblem reuse.
-
-### Solution 2: BackTracking (String) - Stack/Backtracking by Tracking History or State
-```python
-    def generateParenthesis(self, n: int) -> List[str]:
-
-        res = []
-
-        # Backtracking        
-        def helper(current: List[str], num_open: int, num_closed: int):
-            
-            # Base case: If the length of the current combination is 2 * n, it's complete
-            if len(current) == n * 2:
-                # convert list to string and add to res
-                res.append("".join(current))
-                return
-
-            # Recursive case 1: Add '(' if the number of '(' used is less than n
-            if num_open < n: 
-                current.append('(')
-                helper(current, num_open + 1, num_closed)
-
-                # Backtrack by removing the last added '('
-                current.pop()  
-            
-            # Recursive case 2: Add ')' if the number of ')' used is less than the number of '('
-            if num_closed < num_open:
-                current.append(')')
-                helper(current, num_open, num_closed + 1)
-
-                # Backtrack by removing the last added ')'
-                current.pop()
-
-        # Start Backtracking process with an empty list and counts at 0
-        helper([], 0, 0)
-
-        # overall: time complexity
-        # overall: space complexity
-        return res
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-### Solution 3: BackTracking (Mutable List) - Stack/Backtracking by Tracking History or State
-
-```python
-    def generateParenthesis(self, n: int) -> List[str]:
-        
-        res = []
-        
-        # Backtracking
-        def backtrack(current, openCount, closeCount):
-
-            # Base case: if we have used all open and close parentheses
-            if openCount == n and closeCount == n:
-                # add valid combination to res
-                res.append(current)
-                return
-            
-            # Recursive case 1: Add '(' if the number of '(' used is less than n
-            if openCount < n: 
-
-                # Backtrack by adding '(' to curr string, and incrementing openCount by 1
-                # recursive call explores all combinations starting from this new state
-                backtrack(current + "(", openCount + 1, closeCount)
-            
-            # recursive case: Add ')' if the number of ')' used is less than the number of '('
-            if closeCount < openCount:
-
-                # Backtrack by adding ')' to the curr string, and incrementing closeCount by 1
-                # recursive call explores all combinations starting from this new state
-                backtrack(current + ")", openCount, closeCount + 1)
-        
-        # starts recursion with an empty string and zero counts
-        # backtracking process builds strings by choosing '(' or ')' at each step
-        # and checking a possible valid paths through the recursion tree
-        backtrack("", 0, 0)
-
-        # overall: time complexity
-        # overall: space complexity
-        return res
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+ 
 
 
 ### Solution 4: Dynamic Programming - Stack/Dynamic Programming State Compression
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
+        # Note:
+        # This dynamic programming approach builds the result bottom-up,
+        # constructing valid parentheses combinations by combining smaller subproblems.
+        # It uses the mathematical structure of the problem (Catalan numbers),
+        # assembling sequences with a formula based on previously computed results.
+        # This avoids recursion but incurs overhead from nested loops and string concatenation.
+
+
         # Initialize a list to store DP results
         dp = [[] for _ in range(n + 1)]
         
@@ -1246,7 +1309,7 @@ not for memoization or subproblem reuse.
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-## 739. Daily Temperatures - Medium
+## 739. Daily Temperatures ::3:: - Medium
 
 Topics:  Array, Stack, Monotonic Stack
 
@@ -1413,7 +1476,7 @@ Constraints:
 
 
 
-## 853. Car Fleet - Medium
+## 853. Car Fleet ::2:: - Medium
 
 Topics:  Array, Stack, Sorting, Monotonic Stack
 
@@ -1514,7 +1577,7 @@ All of values of position are unique
 
 
 
-## 84. Largest Rectangle in Histogram - Hard
+## 84. Largest Rectangle in Histogram ::3:: - Hard
 
 Topics:  Array, Stack, Monotonic Stack
 
@@ -1677,7 +1740,7 @@ Constraints:
 |  |  |  |  |  | 
 
 
-## 402. Remove K Digits - Medium
+## 402. Remove K Digits ::1:: - Medium
 
 Topics:  String, Stack, Greedy, Monotonic Stack
 
