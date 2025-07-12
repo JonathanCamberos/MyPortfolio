@@ -129,6 +129,15 @@
       "codeExample": "def min_partitions(nums):\n        stacks = []  # Each element represents the last number in a subsequence\n        \n        for num in nums:\n            placed = False\n            for i in range(len(stacks)):\n                # If we can append to subsequence i\n                if stacks[i] < num:\n                    stacks[i] = num\n                    placed = True\n                    break\n            if not placed:\n                # Start a new subsequence (partition)\n                stacks.append(num)\n        return len(stacks)\n\n    # Example usage:\n    nums = [1, 3, 2, 4, 6, 5]\n    print(min_partitions(nums))  # Output: 2",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-dynamic-programming-state-compression",
       "blog": "LeetCode: Stacks"
+    },
+    {
+      "type": "Stack",
+      "title": "Interval and Range Processing",
+      "summary": "We can use stacks to efficiently process intervals or ranges,",
+      "exampleIntro": "Largest Rectangle in Histogram",
+      "codeExample": "def largestRectangleArea(heights):\n        stack = []  # stores indices of bars\n        max_area = 0\n        \n        for i, h in enumerate(heights + [0]):  # Add sentinel to flush stack\n            while stack and heights[stack[-1]] > h:\n                height = heights[stack.pop()]\n                left = stack[-1] if stack else -1\n                width = i - left - 1\n                max_area = max(max_area, height * width)\n            stack.append(i)\n        \n        return max_area\n\n    # Example:\n    # Input: [2, 1, 5, 6, 2, 3]\n    # Output: 10  (largest rectangle is formed by heights 5 and 6)",
+      "useCaseLink": "/Notes/leetcode-stacks#stack-application-interval-and-range-processing",
+      "blog": "LeetCode: Stacks"
     }
   ],
   "two-pointers": [

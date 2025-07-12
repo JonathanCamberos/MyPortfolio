@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "5": {
     "questionNum": 5,
@@ -26,7 +26,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "11": {
     "questionNum": 11,
@@ -41,7 +41,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "15": {
     "questionNum": 15,
@@ -57,25 +57,25 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "20": {
     "questionNum": 20,
-    "questionTitle": "Valid Parentheses",
+    "questionTitle": "Valid Parentheses ::2::",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given a string s containing: ( ) [ ] \\{ \\}, determine if the input string is valid. An input string is valid if: 1. Open brackets must be closed by the same type of brackets 2. Open brackets must be closed in the correct order. 3. Every close bracket has a corresponding open bracket of the same type.",
     "questionTopics": [
       "String",
       "Stack"
     ],
-    "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses---easy",
+    "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
-    "lastSubmittedDate": "2025-07-11T04:01:00",
+    "lastSubmittedDate": "2025-07-12T12:01:00",
     "coldnessCount": 1
   },
   "22": {
     "questionNum": 22,
-    "questionTitle": "Generate Parentheses",
+    "questionTitle": "Generate Parentheses ::4::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.",
     "questionTopics": [
@@ -83,7 +83,7 @@
       "Dynamic Programming",
       "Backtracking"
     ],
-    "questionLink": "/Notes/leetcode-stacks#22-generate-parentheses---medium",
+    "questionLink": "/Notes/leetcode-stacks#22-generate-parentheses-4---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -101,7 +101,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "42": {
     "questionNum": 42,
@@ -118,7 +118,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "49": {
     "questionNum": 49,
@@ -134,11 +134,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "84": {
     "questionNum": 84,
-    "questionTitle": "Largest Rectangle in Histogram",
+    "questionTitle": "Largest Rectangle in Histogram ::3::",
     "questionDifficulty": "Hard",
     "questionBlurb": "Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.",
     "questionTopics": [
@@ -146,7 +146,7 @@
       "Stack",
       "Monotonic Stack"
     ],
-    "questionLink": "/Notes/leetcode-stacks#84-largest-rectangle-in-histogram---hard",
+    "questionLink": "/Notes/leetcode-stacks#84-largest-rectangle-in-histogram-3---hard",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -163,7 +163,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "128": {
     "questionNum": 128,
@@ -178,11 +178,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "150": {
     "questionNum": 150,
-    "questionTitle": "Evaluate Reverse Polish Notation",
+    "questionTitle": "Evaluate Reverse Polish Notation ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation. Evaluate the expression. Return an integer that represents the value of the expression. Note that: The valid operators are '+', '-', '*', and '/'. Each operand may be an integer or another expression. The division between two integers always truncates toward zero. There will not be any division by zero. The input represents a valid arithmetic expression in a reverse polish notation. The answer and all the intermediate calculations can be represented in a 32-bit integer.",
     "questionTopics": [
@@ -190,24 +190,24 @@
       "Math",
       "Design"
     ],
-    "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation---medium",
+    "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-12T01:00:00",
+    "coldnessCount": 1
   },
   "155": {
     "questionNum": 155,
-    "questionTitle": "Min Stack",
+    "questionTitle": "Min Stack ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time. Implement the MinStack class: MinStack() initializes the stack object. void push(int val) pushes the element val onto the stack. void pop() removes the element on the top of the stack. int top() gets the top element of the stack. int getMin() retrieves the minimum element in the stack. You must implement a solution with O(1) time complexity for each function.",
     "questionTopics": [
       "Stack",
       "Design"
     ],
-    "questionLink": "/Notes/leetcode-stacks#155-min-stack---medium",
+    "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-12T12:10:00",
+    "coldnessCount": 1
   },
   "167": {
     "questionNum": 167,
@@ -222,7 +222,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "217": {
     "questionNum": 217,
@@ -237,7 +237,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "238": {
     "questionNum": 238,
@@ -251,7 +251,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "242": {
     "questionNum": 242,
@@ -266,7 +266,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "271": {
     "questionNum": 271,
@@ -280,7 +280,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "347": {
     "questionNum": 347,
@@ -300,11 +300,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 2
+    "coldnessCount": 3
   },
   "402": {
     "questionNum": 402,
-    "questionTitle": "Remove K Digits",
+    "questionTitle": "Remove K Digits ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.",
     "questionTopics": [
@@ -313,14 +313,14 @@
       "Greedy",
       "Monotonic Stack"
     ],
-    "questionLink": "/Notes/leetcode-stacks#402-remove-k-digits---medium",
+    "questionLink": "/Notes/leetcode-stacks#402-remove-k-digits-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
   "739": {
     "questionNum": 739,
-    "questionTitle": "Daily Temperatures",
+    "questionTitle": "Daily Temperatures ::3::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.",
     "questionTopics": [
@@ -328,14 +328,14 @@
       "Stack",
       "Monotonic Stack"
     ],
-    "questionLink": "/Notes/leetcode-stacks#739-daily-temperatures---medium",
+    "questionLink": "/Notes/leetcode-stacks#739-daily-temperatures-3---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
   "853": {
     "questionNum": 853,
-    "questionTitle": "Car Fleet",
+    "questionTitle": "Car Fleet ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "There are n cars at given miles away from the starting mile 0, traveling to reach the mile target. You are given two integer array position and speed, both of length n, where position[i] is the starting mile of the ith car and speed[i] is the speed of the ith car in miles per hour. A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car. A car fleet is a car or cars driving next to each other. The speed of the car fleet is the minimum speed of any car in the fleet. If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet. Return the number of car fleets that will arrive at the destination.",
     "questionTopics": [
@@ -344,7 +344,7 @@
       "Sorting",
       "Monotonic Stack"
     ],
-    "questionLink": "/Notes/leetcode-stacks#853-car-fleet---medium",
+    "questionLink": "/Notes/leetcode-stacks#853-car-fleet-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": null,
     "coldnessCount": -1

@@ -1071,41 +1071,34 @@ Given a number, generate all possible combinations of parentheses.
 
         # Backtracking        
         def helper(current: List[str], num_open: int, num_closed: int):
-            
-            # Base case: If the length of the current combination is 2 * n, it's complete
+            # space complexity: call stack depth is O(n), string copying adds O(n) per leaf path, leading to O(n^2)
+
+            # Base case: if the length of the current combination is 2 * n, it's complete
             if len(current) == n * 2:
                 # convert list to string and add to res
-                res.append("".join(current))
+                res.append(current)
                 return
 
-            # Recursive case 1: Add '(' if the number of '(' used is less than n
+            # Recursive case 1: add '(' if the number of '(' used is less than n
             if num_open < n: 
-                current.append('(')
-                helper(current, num_open + 1, num_closed)
-
-                # Backtrack by removing the last added '('
-                current.pop()  
+                helper(current + "(", num_open + 1, num_closed)
             
-            # Recursive case 2: Add ')' if the number of ')' used is less than the number of '('
+            # Recursive case 2: add ')' if the number of ')' used is less than the number of '(', thus no unbalance
             if num_closed < num_open:
-                current.append(')')
-                helper(current, num_open, num_closed + 1)
-
-                # Backtrack by removing the last added ')'
-                current.pop()
+                helper(current + ")", num_open, num_closed + 1)
 
         # Start Backtracking process with an empty list and counts at 0
-        helper([], 0, 0)
+        helper("", 0, 0)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(Catalan(n) * n^2)
+        # overall: space complexity O(Catalan(n) * n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Recursive Paths | O(Catalan(n)) | O(n) |  |  |
+| String concatenation | O(n) per path | O(n) per result |  |  |
+| Overall | O(Catalan(n) * n<sup>2</sup>) | O(Catalan(n) * n) |  |  | 
 
 ### Solution 2: BackTracking with Mutable List - Stack/Backtracking by Tracking History or State
 ```python
@@ -1123,41 +1116,51 @@ Given a number, generate all possible combinations of parentheses.
         
         # Backtracking
         def backtrack(current, openCount, closeCount):
+            # time complexity: each recursion explores a state; only leaf call does ''.join(), leading to O(n)
+            # space complexity: call stack depth O(n), current list holds up to 2n
 
             # Base case: if we have used all open and close parentheses
             if openCount == n and closeCount == n:
-                # add valid combination to res
-                res.append(current)
+                # time complexity: convert once at leaf O(n)
+                res.append("".join(current))
                 return
             
-            # Recursive case 1: Add '(' if the number of '(' used is less than n
+            # Recursive case 1: add '(' if the number of '(' used is less than n
             if openCount < n: 
+                
+                # Backtrack by adding '(' to current string, incrementing openCount by 1
+                current.append('(')
+                # Recursive call explores all combinations starting from this new state
+                helper(current, openCount + 1, closeCount)
 
-                # Backtrack by adding '(' to curr string, and incrementing openCount by 1
-                # recursive call explores all combinations starting from this new state
-                backtrack(current + "(", openCount + 1, closeCount)
+                # Backtrack by removing the last added '('
+                current.pop()
             
             # recursive case: Add ')' if the number of ')' used is less than the number of '('
             if closeCount < openCount:
 
                 # Backtrack by adding ')' to the curr string, and incrementing closeCount by 1
-                # recursive call explores all combinations starting from this new state
-                backtrack(current + ")", openCount, closeCount + 1)
-        
+                current.append(')')
+                # Recursive call explores all combinations starting from this new state
+                helper(current, openCount, closeCount + 1)
+
+                # Backtrack by removing the last added ')'
+                current.pop()
+
         # starts recursion with an empty string and zero counts
         # backtracking process builds strings by choosing '(' or ')' at each step
         # and checking a possible valid paths through the recursion tree
-        backtrack("", 0, 0)
+        backtrack([], 0, 0)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(Catalan(n) * n)
+        # overall: space complexity O(Catalan(n) * n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Recursive paths | O(Catalan(n)) | O(n) | Exponential branching | Stack depth of 2n  |
+| String creation | O(n) per complete path | O(n) per result | Only joined once per result | Each string result is size 2n |
+| Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | Avoids repeated copies | Stores all valid combinations | 
 
 ### Solution 3: Iterative Stack with State Tracking - Stack/Backtracking by Tracking History or State
 ```python
@@ -1169,110 +1172,58 @@ Given a number, generate all possible combinations of parentheses.
         # enabling state tracking without recursion.
         # String concatenation cost is similar to recursive solutions.
 
-        # stack initial state
-        stack = [("", 0, 0)] 
-
         # store valid parentheses
         result = []
+        # tracks state (current_string, open_count, closed_count)
+        stack = [([], 0, 0)] 
 
-        # 
+        # time complexity: each state processed once, building up to O(Catalan(n)) strings
+        # space complexity: stack can grow to O(Catalan(n)), result stores O(Catalan(n)) strings
         while stack:
 
-            # grab the current state of the stack
-            currentStr, openCount, closeCount = stack.pop()
+            # grab current state, explored once
+            curr, openCount, closeCount = stack.pop()
 
-            # base case: if we have used all open and close parentheses
+            # Base case: reached valid string
             if openCount == n and closeCount == n:
-
-                # add valid combination  
-                result.append(currentStr)
+                # add valid string  
+                result.append("".join(curr))
                 continue
 
-            # push new state with '(' added
+            # create new state by adding '('
             if openCount < n:
-                stack.append((currentStr + "(", openCount + 1, closeCount))
+                stack.append((curr.append('('), openCount + 1, closeCount))
 
-            # push new state with '(' added
+            # create new state by adding '('
             if closeCount < openCount:
-                stack.append((currentStr + ")", openCount, closeCount + 1))
+                stack.append((curr.append(')'), openCount, closeCount + 1))
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(Catalan(n) * n)
+        # overall: space complexity O(Catalan(n) * n)
         return result
 ```
-```
-    ("")  (0, 0)
-    ├── ("(", 1, 0)
-    │   ├── ("((", 2, 0)
-    │   │   ├── ("(((", 3, 0)
-    │   │   │   ├── ("((()", 3, 1)
-    │   │   │   │   ├── ("((())", 3, 2)
-    │   │   │   │   │   └── ("((()))", 3, 3)  <-- Add to Result
-    │   │   │   └── ("(()", 2, 1)
-    │   │   │       ├── ("(()(", 3, 1)
-    │   │   │       │   ├── ("(()()", 3, 2)
-    │   │   │       │   │   └── ("(()())", 3, 3)  <-- Add to Result
-    │   │   │       └── ("(())", 2, 2)
-    │   │   │           ├── ("(())(", 3, 2)
-    │   │   │           │   └── ("(())()", 3, 3)  <-- Add to Result
-    │   │   └── ("()", 1, 1)
-    │   │       ├── ("()(", 2, 1)
-    │   │       │   ├── ("()((", 3, 1)
-    │   │       │   │   ├── ("()(()", 3, 2)
-    │   │       │   │   │   └── ("()(())", 3, 3)  <-- Add to Result
-    │   │       │   └── ("()()", 2, 2)
-    │   │       │       ├── ("()()(", 3, 2)
-    │   │       │       │   └── ("()()()", 3, 3)  <-- Add to Result
-    
-```
-
-Note: 
-
-State Driven Exploration:
-
-Each state (currentStr, openCount, closeCount) is unique and represents
-a specific configuration of valid or potentially parentheses at that point
-
-Constraints: 
-
-The constraints in the algorithm ensure valid parentheses combinations by:
-
-- openCount &leq; n -> We can’t add more open parentheses than allowed by n.
-
-- closeCount &leq; openCount -> We can’t close more parentheses than have been opened.
-
-Linear Growth:
-
-Single Entry and Exit per state. Each state is added to the stack.
-Since stack processes each state exactly once, the algorithm has linear growth
-in the number of valid states it generates.
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-Note: the stack is used for state tracking (tracking open and cloes counts),
-not for memoization or subproblem reuse.
- 
-
+| States explored | O(Catalan(n)) | O(n) per path | One entry and exit per valid state | Stack holds up to O(Catalan(n)) intermediate states |
+| Mutable list ops | O(1) per op | O(n) per path | Append and pop are in-place (no copies) | Each state contains up to 2n |
+| Final string join | O(n) per result | O(n) per result | Each completed list is joined into a string once | Output list contains O(Catalan(n)) strings, each of length O(n) | 
+| Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | One entry and exit per valid state exploring ? | Final output dominates space; stack and temp lists also contribute O(n) each | 
 
 ### Solution 4: Dynamic Programming - Stack/Dynamic Programming State Compression
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
         # Note:
-        # This dynamic programming approach builds the result bottom-up,
-        # constructing valid parentheses combinations by combining smaller subproblems.
-        # It uses the mathematical structure of the problem (Catalan numbers),
-        # assembling sequences with a formula based on previously computed results.
-        # This avoids recursion but incurs overhead from nested loops and string concatenation.
+        # This dynamic programming solution builds results from smaller subproblems.
+        # dp[i] contains all valid combinations for i pairs of parentheses.
+        # For each i, we build dp[i] from all combinations of dp[j] and dp[i - j - 1],
+        # wrapped like: "(" + left + ")" + right.
+        # This exploits the recursive structure of Catalan numbers.
+        # Although recursive calls are avoided, nested loops and string combinations incur cost.
 
 
         # Initialize a list to store DP results
         dp = [[] for _ in range(n + 1)]
-        
         # Base case: valid combination for n = 0
         dp[0] = [""]  
         
@@ -1299,15 +1250,15 @@ not for memoization or subproblem reuse.
                         # ({left}){right} or {left}({right}) are both valid formulas
                         dp[i].append(f"({left}){right}")
 
-        # overall: time complexity
-        # overall: space complexity 
+        # overall: time complexity O(Catalan(n) * n)
+        # overall: space complexity O(Catalan(n) * n)
         return dp[n]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| DP State build | O(Catalan(n)) | O(Catalan(n)) | Combines all previous results | dp[0] to dp[n] built cumulatively |
+| String construction | O(n) per combination | O(n) per result | Each result takes O(n) to form | Final dp[n] holds all combinations |
+| Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | No recursion but same asymptotic bound | Store all intermediate and final results | 
 
 ## 739. Daily Temperatures ::3:: - Medium
 
