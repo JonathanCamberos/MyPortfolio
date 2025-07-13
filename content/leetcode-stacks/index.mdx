@@ -1387,23 +1387,23 @@ Constraints:
                 # calculating all the tempWaitDays, until a temperature is higher than
                 # the current right temperature,
                 # then we just add the right wall to the stack maintaining monotonic order
-                tempWaitDays = stack.pop()
-
+                tempWaitDaysCandidateIndex = stack.pop()
+                
                 # After stack.pop():
                 # height[i]: right temperature
                 # tempWaitDays: tempWaitDaysCandidateIndex
 
                 # Distance from right temperature to current tempWaitDaysCandidate
                 # is the days until a warmer temperature for the current candidate
-                res[tempWaitDays] = i - tempWaitDays  
+                res[tempWaitDaysCandidateIndex] = i - tempWaitDaysCandidateIndex  
 
             # monotonic decreasing has been re-enabled
             # add right temperature to monotonic stack
             # push right temperature index
             stack.append(i)  
         
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1470,15 +1470,18 @@ Constraints:
             # Means:     iterating in reverse, 
             stack.append(i)        
         
-        # overall: time complexity 
-        # overall: space complexity 
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Result list | O(n) | O(n) | Stores wait day for n temperatures O(n) | Stores wait day for n temperatures O(n) |
+| Reverse Iteration | O(n) | O(1) | Iteration over list of n temperatures O(n) | No additional memory allocation for iteration O(n) |
+| Stack operations | Amortized O(n) | O(n) | Each element is pushed and popped at most once in for n elements Amortized O(n) | Stack holds unresolved future warmer day indices for up to n temperatures O(n) | 
+| Temperature comparison | O(1) | O(1) | Comparison in constant O(1) | No additional memory allocation for comparison O(1) | 
+| Overall | O(n) | O(n) | Iteration over list of n temperatures dominates, leading to O(n) | Efficient pruning of colder temperatures often leads to smaller stack than forward pass but still for n elements O(n) |  
+
 
 ### Solution 3: Dynamic Programming Jump Traversal using Memoized Future Warm Temperatures - Stack/Algorithm
 ```python
@@ -1604,24 +1607,51 @@ All of values of position are unique
 ### Solution 1: Stack - Stack/Monotonic Property Maintenance
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
-        # Sort cars by position in descending order
-        cars = sorted(zip(position, speed), reverse=True)
-        
-        # Stack to store the time each fleet takes to reach the target
-        stack = []  
+        # Note: 
+        # Each car is represented by its position and speed
+        # We calculate the the time required for each car to reach the target.
+        # We sort the cars by starting position descending (farthest from target first)
+        # so we can process cars in the order of "approaching the target".
 
-        # time complexity
-        for pos, spd in cars:
-            time_to_target = (target - pos) / spd  # Time for current car to reach target
+        # Note:
+        # Monotonic stack: maintains a monotonic decreasing stack of times to target (top = closest to end)
+
+        # Sort cars by position in descending order
+        # space complexity:
+        cars = []
+        for i in range(len(position)):
+            cars.append((position[i], speed[i]))
+        cars.sort(key=lambda x: x[0], reverse=True)
+
+        # space complexity: stack tracks arrival time
+        stack = []
+
+        # time complexity: iterate over n cars O(n) 
+        for (pos, spd) in cars.items():
+            # current car time
+            currCarTimeToTarget = (target - pos) / spd 
             
             # Push the current car's time only if it doesn't merge with the fleet at the top
-            if not stack or time_to_target > stack[-1]:
+            # If current car's time is <= stack top, it merges with that fleet
+            # If current car's time is > stack top, it forms a new fleet.
+            # Check: stack is not empty
+            # Invariant: stack[-1] represents the arrival time of the right most 
+            # (nearest to target) car fleet we have seen so far as we iterate from right to left
+            # right being car farthest from end goal and left being car closest to end goal
+            if not stack or currCarTimeToTarget > stack[-1]:
                 stack.append(time_to_target)
+
+            # Otherwise, it joins the fleet in front (we do nothing)
         
         # overall
         # overall
         return len(stack)
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  | 
 
 ### Solution 2: Greedy - Stack/Algorithm
 ```python

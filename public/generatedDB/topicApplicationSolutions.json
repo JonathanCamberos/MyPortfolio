@@ -357,12 +357,12 @@
     "algorithm": [
       {
         "number": 3,
-        "name": "Two-Pointer Sliding Window",
+        "name": "Dynamic Programming Jump Traversal using Memoized Future Warm Temperatures",
         "type": "stack",
         "application": "algorithm",
         "code": "def dailyTemperatures(self, temperatures: List[int]) -> List[int]:\n        \n        # Note:\n        # This solution uses a jump-based approach via leveraging \n        # results from previously computed indices.\n        # It avoids an explicit stack by simulating the search for \n        # the next warmer temperature using a two-pointer like mechanism,\n        # jumping ahead using previously filled results.\n        # This effectively builds a \"path\" toward the next warmer day\n\n        # Key Insight:\n        # Once we know the next warmer day for some index j, we can skip\n        # forward using res[j] to find the next warmer day for earlier indices i.\n        \n        # space complexity: result list for storing wait times o(n)\n        n = len(temperatures)\n        res = [0] * n\n\n        # tracking index of hottest day seen so far right to left\n        # set hottest day to last element\n        hottest_day = n - 1\n\n        # time complexity: reverse iterate through temperatures from second last to first O(n)\n        for i in range(n - 2, -1, -1):\n\n            # found new hottest day\n            # Iterating: right to left\n            # Check: if current temperature is >= hottest_day temp,\n            # there is no warmer future day to the right of the current temperature\n            if temperatures[i] >= temperatures[hottest_day]:\n                # update hottest day index\n                hottest_day = i\n\n            # current day is less than hottest day\n            # current day is to the left of the hottest day\n            else:\n                # hotter day candidate j starts at day after current day\n                j = i + 1\n\n                # while hotter day candidate j is less than current day temperature\n                while temperatures[j] <= temperatures[i]:\n                    # jump to the hottest day candidate's hottest day\n                    j += res[j]\n\n                # hotter day candidate is hotter than current day\n                # calculate days from current day to hottest day candidate\n                res[i] = j - i \n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
         "questionNumber": 739,
-        "solutionLink": "/Notes/leetcode-stacks#solution-3-two-pointer-sliding-window---stackalgorithm",
+        "solutionLink": "/Notes/leetcode-stacks#solution-3-dynamic-programming-jump-traversal-using-memoized-future-warm-temperatures---stackalgorithm",
         "blog": "LeetCode: Stacks"
       },
       {
