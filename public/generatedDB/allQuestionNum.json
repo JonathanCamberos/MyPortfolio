@@ -328,7 +328,8 @@
     "questionTopics": [
       "Array",
       "Stack",
-      "Monotonic Stack"
+      "Monotonic Stack",
+      "Two Pointer"
     ],
     "questionLink": "/Notes/leetcode-stacks#739-daily-temperatures-3---medium",
     "blog": "LeetCode: Stacks",

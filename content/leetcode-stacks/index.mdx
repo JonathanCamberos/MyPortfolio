@@ -1349,7 +1349,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1: Monotonic Decreasing Stack via Store Cold Temps - Stack/Monotonic Property Maintenance
+### Solution 1: Forward Iteration Monotonic Decreasing Stack of Past Cold Temperatures - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1414,7 +1414,7 @@ Constraints:
 | Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
 | Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-### Solution 2: Reverse Iteration Monotonic Decreasing Stack via Store Hot Temps - Stack/Monotonic Property Maintenance
+### Solution 2: Reverse Iteration Monotonic Decreasing Stack of Future Warm Temperatures - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
