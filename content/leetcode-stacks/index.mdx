@@ -766,7 +766,7 @@ class MinStack:
  
 ## 150. Evaluate Reverse Polish Notation ::1:: - Medium
 
-Topics:  Array, Math, Design
+Topics:  Array, Stack, Math, Design
 
 ### Intro
 > You are given an array of strings tokens that represents an arithmetic 
@@ -932,7 +932,7 @@ operations in reverse polish notation.
 
 ## 22. Generate Parentheses ::4:: - Medium
 
-Topics:  String, Dynamic Programming, Backtracking
+Topics:  String, Stack, Dynamic Programming, Backtracking
 
 ### Intro
 > Given n pairs of parentheses, write a function to generate all 
@@ -1262,7 +1262,7 @@ Given a number, generate all possible combinations of parentheses.
 
 ## 739. Daily Temperatures ::3:: - Medium
 
-Topics:  Array, Stack, Monotonic Stack
+Topics:  Array, Stack, Monotonic Stack, Two Pointer
 
 ### Intro
 > Given an array of integers temperatures represents the daily 
@@ -1349,49 +1349,129 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1: Monotonic Stack - Stack/Monotonic Property Maintenance
+### Solution 1: Monotonic Decreasing Stack via Store Cold Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
-        # space complexity:
+        # Note:
+        # Monotonic Stack: A stack that maintains monotonic decreasing temperatures 
+        # When monotonic decreasing rule breaks, the current temperature will serve as new higher temperature,
+        # and if stack is non empty, wait days distance for top of stack 
+        # while monotonic decreasing rule breaks 
+
+        # space complexity: list wait days for n temperatures O(n)
         n = len(temperatures)
         res = [0] * n
-        stack = []  # Indices of temperatures
 
-        # time complexity:
+        # space complexity: stores indices for up to n unresolved temperatures O(n)
+        stack = []
+
+        # time complexity: iterate over list of n length O(n)
         for i in range(n):
 
-            # compares curr temp with top of stack
-            while stack and temperatures[i] > temperatures[stack[-1]]:
-                idx = stack.pop()
+            # Check: stack is non empty, unresolved temperature exists
+            # Check: if current temperature[i] breaks monotonic decreasing order,
+            # will be viable to act as right temperature
+            # implies: we keep appending while monotonic decreasing stays valid
+            # implies: stack is kept in monotonic decreasing order
+            # implies: when monotonic decreasing breaks, we have found right temperature
+            while stack and temperatures[stack[-1]] < temperatures[i]:
+                
+                # curr while loop iteration:
+                # temperatures[i]: right temperature
+                # pop stack[-1]: tempWaitDaysCandidateIndex
 
-                # Days until a warmer temperature
-                res[idx] = i - idx  
+                # while stack is non-empty:
+                # stack.pop() will iterate tempWaitDays candidate
+                # essentially dragging the right temperature over the monotonic stack,
+                # calculating all the tempWaitDays, until a temperature is higher than
+                # the current right temperature,
+                # then we just add the right wall to the stack maintaining monotonic order
+                tempWaitDays = stack.pop()
 
-            # Push current index
+                # After stack.pop():
+                # height[i]: right temperature
+                # tempWaitDays: tempWaitDaysCandidateIndex
+
+                # Distance from right temperature to current tempWaitDaysCandidate
+                # is the days until a warmer temperature for the current candidate
+                res[tempWaitDays] = i - tempWaitDays  
+
+            # monotonic decreasing has been re-enabled
+            # add right temperature to monotonic stack
+            # push right temperature index
             stack.append(i)  
         
+        # overall: time complexity
+        # overall: space complexity
         return res
-
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+| Result List | O(n) | O(n) | Initialization of list for n temperature wait days O(n) | Stores wait time for n temperatures O(n) | 
+| Iteration | O(n) | O(1) | Iteration over list of temperatures n length O(n) | No additional memory allocation for iteration O(1) |
+| Stack operations | O(n) | O(n) | Each index is pushed and popped at most once for n length O(n) | Monotonic stack stores at most n indices O(n) |
+| Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
+| Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-### Solution 2: Reverse Traversal - Stack/Monotonic Property Maintenance
+### Solution 2: Reverse Iteration Monotonic Decreasing Stack via Store Hot Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        st = []
-        res = [0] * len(temperatures)
-
-        for i in range(len(temperatures)):
-            while st and temperatures[i] > temperatures[st[-1]]:
-                idx = st.pop()
-                res[idx] = i - idx
-            st.append(i)
         
+        # Note:
+        # Solution 2 tends to use less actual in memory due to more 
+        # aggressive pruning of colder temperatures during reverse traversal
+
+        # Note:
+        # Brain exercise to do monotonic stack in reverse
+        
+        # sanity diagram:
+        # index: 0  1  2  3  4  5  6
+        # temp:[ 1, 4, 6, 8, 5, 3, 2]
+        
+        # Stack Diagram
+        # [2]
+        # Pop 2 -> [3]
+        # Pop 3 -> [5]
+        # Pop 8 -> [8]
+        # 6 does not trigger pop -> calculate res[i] = stack[-1] - i 
+        # append 6 
+        # [8, 6]
+        # Since we are popping everything the new element is greater than the stack?
+
+        
+        # space complexity: 
+        n = len(temperatures)
+        stack = []
+
+        # space complexity:
+        res = [0] * n
+
+        # time complexity: iterate over list of n temperatures O(n)
+        for i in range(n-1, -1, -1):
+            
+            # Check: stack is non empty
+            # Check: if current temperature[i] breaks monotonic increasint,
+            # will be viable to 
+            # Implies: we have discarded elements increasing in reverse order 
+            # Means:   we have discarded elements decreasing in forward order
+            # Ex:      [8, 6] comes from [1, 2, 6, 8, 5, 3, 1] 
+            while stack and temperatures[stack[-1]] <= temperatures[i]:
+                stack.pop()
+
+            # we have found a element that is less than the top of the stack
+            # check: is stack non empty
+            if stack:
+                # found element less than top of stack, 
+                # calculate wait days for found element
+                res[i] = stack[-1] - i
+
+            # Invariant: ensures that temperature appended to stack in monotonic decreasing 
+            # Means:     iterating in reverse, 
+            stack.append(i)        
+        
+        # overall: time complexity 
+        # overall: space complexity 
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1403,28 +1483,63 @@ Constraints:
 ### Solution 3: Two-Pointer Sliding Window - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        
+        # Note:
+        # This solution uses a jump-based approach via leveraging 
+        # results from previously computed indices.
+        # It avoids an explicit stack by simulating the search for 
+        # the next warmer temperature using a two-pointer like mechanism,
+        # jumping ahead using previously filled results.
+        # This effectively builds a "path" toward the next warmer day
+
+        # Key Insight:
+        # Once we know the next warmer day for some index j, we can skip
+        # forward using res[j] to find the next warmer day for earlier indices i.
+        
+        # space complexity: result list for storing wait times o(n)
         n = len(temperatures)
         res = [0] * n
-        hottest_day = n - 1  # Track the hottest day from the end of the list
 
-        for i in range(n - 2, -1, -1):  # Start from the second last element
+        # tracking index of hottest day seen so far right to left
+        # set hottest day to last element
+        hottest_day = n - 1
+
+        # time complexity: reverse iterate through temperatures from second last to first O(n)
+        for i in range(n - 2, -1, -1):
+
+            # found new hottest day
+            # Iterating: right to left
+            # Check: if current temperature is >= hottest_day temp,
+            # there is no warmer future day to the right of the current temperature
             if temperatures[i] >= temperatures[hottest_day]:
-                hottest_day = i  # Update the hottest day
-            else:
-                j = i + 1
-                while temperatures[j] <= temperatures[i]:
-                    j += res[j]  # Jump to the next warmer day
-                res[i] = j - i  # Calculate days to next warmer temperature
+                # update hottest day index
+                hottest_day = i
 
+            # current day is less than hottest day
+            # current day is to the left of the hottest day
+            else:
+                # hotter day candidate j starts at day after current day
+                j = i + 1
+
+                # while hotter day candidate j is less than current day temperature
+                while temperatures[j] <= temperatures[i]:
+                    # jump to the hottest day candidate's hottest day
+                    j += res[j]
+
+                # hotter day candidate is hotter than current day
+                # calculate days from current day to hottest day candidate
+                res[i] = j - i 
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
-
-
+| Result list | O(n) | O(n) | Storing next hottest day distance for n temperatures O(n) | Storing next hottest day distance for n temperatures O(n) |
+| Hottest day tracker | O(1) | O(1) | Single variable used to track hottest future day O(1) | Constant memory allocation O(1) |
+| Jump pointer search | Amortized O(n) | O(1) |  |  | 
+| Overall | O(n) | O(n) | Iteration over list of temperatures n length dominates, leading to O(n) |  | 
 
 
 ## 853. Car Fleet ::2:: - Medium

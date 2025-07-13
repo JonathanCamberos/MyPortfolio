@@ -2090,10 +2090,11 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```python
     def trap(self, height: List[int]) -> int:
 
-        # Note: 2 concepts here: 
-        # Monotonic Stack: A stack that maintains non-increasing heights 
-        # When non-increasing breaks: curr height will serve as right wall,
-        # top of stack will serve as depth, and top of stack - 1 will serve as left wall
+        # Note: 
+        # Monotonic Stack: A stack that maintains monotonic decreasing heights 
+        # When monotonic decreasing rule breaks, curr height will serve as right wall,
+        # and if stack is non empty, top of stack will serve as depth, 
+        # and top of stack - 1 will serve as left wall
 
         # Monotonic stack to store indices
         stack = []  
@@ -2104,11 +2105,11 @@ Now we need a way to traverse the array that allows us to take advantage of this
         for i in range(len(height)):
 
             # Check: stack is non empty, depth candidate exists
-            # Check: if current height[i] breaks non-increasing order,
+            # Check: if current height[i] breaks monotonic decreasing order,
             # will be viable to act as a right wall
-            # implies: we keep appending while monotonic non-increasing stays valid
-            # implies: stack is kept in monotonic non-increasing order
-            # implies: when monotonic non-increasing breaks, we have found right wall
+            # implies: we keep appending while monotonic decreasing stays valid
+            # implies: stack is kept in monotonic decreasing order
+            # implies: when monotonic decreasing breaks, we have found right wall
             while stack and height[i] > height[stack[-1]]:
                 
                 # curr while loop iteration:
@@ -2162,7 +2163,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # unless we have a run of identical heights
                 water += distance * boundedHeight
 
-            # implies: monotonic non-increasing is still valid
+            # implies: monotonic decreasing is still valid
             # implies: append height to stack
             stack.append(i)
 
