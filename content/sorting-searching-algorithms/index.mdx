@@ -465,6 +465,52 @@ It halves the search space in each iteration.
 
 ### Dynamic Programming (to-do)
 
+### Catalan Numbers
+
+#### Code
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+       
+        res = []
+
+        def helper(currStr, num_open, num_closed):
+
+            if num_open + num_closed == 2*n:
+                res.append(currStr)
+                return
+
+            if num_open < n:
+                helper(currStr + "(", num_open + 1, num_closed)
+
+            if num_closed < num_open:
+                helper(currStr + ")", num_open, num_closed + 1)
+
+        helper("", 0, 0)
+
+        return res 
+```
+
+#### Time Complexity Derivation
+A Catalan number is a specific sequence that arises in counting problems
+where objects must follow a balanced-structure rule.
+
+The sequence starts for n:
+C<sub>0</sub> = 1, C<sub>1</sub> = 1, C<sub>2</sub> = 2, 
+C<sub>3</sub> = 5, C<sub>4</sub> = 14, C<sub>5</sub> = 42
+
+1. Closed-form formula:
+
+For n &geq; 0
+
+C<sub>n</sub> = (1/n+1) * (2n choose n)
+
+| Structure counted by C<sub>n</sub> | Description | 
+| - | - |
+| Parenthesis strings | Valid ways to write n pairs of parentheses | 
+| Binary Search Trees | Number of distinct BST shapes with n notes keys by 1 - n  | 
+| Non-crossing handshakes | Ways 2n points on a circle can shake hands in pairs with no arms crossing |
+
+
 ### Double For Loop
 
 #### Code

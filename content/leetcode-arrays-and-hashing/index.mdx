@@ -338,7 +338,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Outer Loop | O(n) | O(1) | Iteration over the list takes linear time O(n) | No additional memory is allocated O(1) |
-| Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, the inner loop iterates through all subsequent elements with Big(O) is O(n<sup>2</sup>). Derivation [here](/Notes/common-formulas#brute-case-double-for-loop) | No additional memory is allocated O(1) |
+| Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, the inner loop iterates through all subsequent elements with Big(O) is O(n<sup>2</sup>). Derivation [here](/Notes/sorting-searching-algorithms#double-for-loop) | No additional memory is allocated O(1) |
 | Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional memory is needed for comparisons O(1) |
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity.| No additional memory was allocated leading to constant O(1) space complexity. | 
 
@@ -777,7 +777,7 @@ and return their indexes.
 | Outer Loop | O(n) | O(1) | Iterates over the array once for each element O(n) | No additional memory is allocated O(1) |
 | Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
 | Summation + Comparison | O(1) | O(1) | Summing two numbers takes constant time O(1) and comparison to target takes constant time O(1) | No additional space is needed for summation O(1), no additional space is needed for comparison O(1)  |
-| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notes/common-formulas#brute-case-double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
+| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notes/sorting-searching-algorithms#double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
 
 
 ### Find the Bug: (overwriting duplicates)
