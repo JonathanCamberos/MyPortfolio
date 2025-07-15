@@ -1055,7 +1055,7 @@ Given a number, generate all possible combinations of parentheses.
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug:
+### Find the Bug: Adding Closing Parentheses Before Opening
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1086,13 +1086,201 @@ Given a number, generate all possible combinations of parentheses.
         # overall: space complexity
         return result
 ```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+
+### Find the Bug: Else clause instead of Adding Closed Parentheses based on Open Count
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+       
+        res = []
+
+        def helper(curr, open_count, close_count):
+
+            if open_count + close_count == (2*n):
+                res.append("".join(curr))
+                return
+
+            if open_count < n:
+                curr.append('(')
+                helper(curr, open_count + 1, close_count)
+                curr.pop()
+            
+            # INCORRECT:
+            # we only want to add a closing parentheses if the closed count 
+            # is less than the opening parentheses count
+            # to ensure that every closed has a matching open
+            # Instead:
+            # if close_count < open_
+            else:
+                curr.append(')')
+                helper(curr, open_count, close_count + 1)
+                curr.pop()
+
+            
+        helper([], 0, 0)
+
+        return res
+```
+
+### Find the Bug: Mutually exclusive if and if instead of if and elif
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+       
+        res = []
+
+        def helper(curr, open_paren, close_paren):
+
+            if open_paren == n and close_paren == n:
+                res.append("".join(curr))
+                return
+
+            if open_paren < n:
+                curr.append('(')
+                helper(curr, open_paren + 1, close_paren)
+                curr.pop()
+            
+            # INCORRECT:
+            # the two if statements should be mutually exclusive
+            # we do not one to skip the elif, when the if is true
+            # Instead:
+            # if close_paren < open_paren
+            elif close_paren < open_paren:
+                curr.append(')')
+                helper(curr, open_paren, close_paren + 1)
+                curr.pop()
+
+        helper([], 0, 0)
+
+        return res
+```
 
 
+### Find the Bug: list.append() modifies in place and returns None
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+       
+        res = []
+
+        def helper(curr, open_count, close_count):
+
+            if open_count + close_count == (2*n):
+                res.append("".join(curr))
+                return
+
+            if open_count < n:
+                # INCORRECT:
+                # treating list as string
+                # list.append() modifies the list in-place and returns None.
+                # So curr.append('(') does append the character, but returns None
+                # instead:
+                # curr.append()
+                # helper(curr, open_count + 1, close_count)
+                # curr.pop()
+                helper(curr.append('('), open_count + 1, close_count)
+
+            if close_count < open_count:
+                # INCORRECT:
+                # treating list as string
+                # list.append() modifies the list in-place and returns None.
+                # So curr.append('(') does append the character, but returns None
+                # instead:
+                # curr.append()
+                # helper(curr, open_count + 1, close_count)
+                # curr.pop()
+                helper(curr.append(')'), open_count, close_count + 1)
+
+        stack = []
+        helper(stack, 0, 0)
+
+        return res
+```
+
+### Find the Bug: Iterative Affects Other Branches Instead of Recursive
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        # Note:
+        # Explicit stack simulates backtracking process iteratively.
+        # Each stack element stores the current string and counts of open and closed parentheses.
+        # Allows state tracking without recursion.
+
+        # Store valid parentheses
+        result = []
+
+        # Tracks state (current_string, open_count, closed_count)
+        stack = [([], 0, 0)] 
+
+        # Simulate backtracking
+        # time complexity: each state processed once, building up to O(Catalan(n)) strings
+        # space complexity: stack can grow to O(Catalan(n)), result stores O(Catalan(n)) strings
+        while stack:
+
+            # Pop current state, current state is explored only once
+            curr, openCount, closeCount = stack.pop()
+
+            # Base case: reached valid string
+            if openCount == n and closeCount == n:
+                result.append("".join(curr))
+                continue
+
+            # Check: open count is less than total expected
+            # Ensures: string is always valid, with total number of parens being valid
+            # Iterative step 1: add '('
+            if openCount < n:
+                
+                # INCORRECT:
+                # since there is only 1 curr,
+                # appending will affect all branches
+                # Instead:
+                # make a copy
+                # new_curr = curr + ['(']
+                curr.append('(')
+                stack.append((curr, openCount + 1, closeCount))
+
+            # Check: closed count is less than open count
+            # Ensures: string is always valid, with each open having a matching close
+            # Iterative step 2: add '('
+            if closeCount < openCount:
+                # INCORRECT:
+                # since there is only 1 curr,
+                # appending will affect all branches
+                # Instead:
+                # make a copy
+                # new_curr = curr + ['(']
+                curr.append(')')
+                stack.append((curr, openCount, closeCount + 1))
+
+        # overall: time complexity O(Catalan(n) * n)
+        # overall: space complexity O(Catalan(n) * n)
+        return result
+
+```
+
+### Find the Bug: Forgot to initialize 0th level of DP
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        dp = [[] for i in range (n+1)]
+
+        # INCORRECT:
+        # dp is never initialized, so it can never be built upon
+        # Instead:
+        # dp[0] = [""]
+
+        # generate for level i pairs
+        for i in range(n+1):
+
+            # iterate over created lists up to i
+            for j in range(i):
+
+                # forward iteration
+                for left in dp[j]:
+                    # backward iteration
+                    for right in dp[i - 1 - j]:
+                        dp[i].append(f"({left}){right}")
+
+
+        return dp[n]
+```
 
 ### Solution 1: BackTracking with String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
@@ -1234,13 +1422,17 @@ Given a number, generate all possible combinations of parentheses.
             # Ensures: string is always valid, with total number of parens being valid
             # Iterative step 1: add '('
             if openCount < n:
-                stack.append((curr.append('('), openCount + 1, closeCount))
+                
+                # copy list to avoid mutating other branches
+                new_curr = curr + ['(']
+                stack.append((new_curr, openCount + 1, closeCount))
 
             # Check: closed count is less than open count
             # Ensures: string is always valid, with each open having a matching close
             # Iterative step 2: add '('
             if closeCount < openCount:
-                stack.append((curr.append(')'), openCount, closeCount + 1))
+                new_curr = curr + [')']
+                stack.append((new_curr, openCount, closeCount + 1))
 
         # overall: time complexity O(Catalan(n) * n)
         # overall: space complexity O(Catalan(n) * n)
@@ -1261,8 +1453,8 @@ Given a number, generate all possible combinations of parentheses.
         # We exploit the recursive structure of Catalan numbers
         # by building a list of all valid parentheses combinations for each level n
 
-        # dp is a list of lists, 
-        # where dp[n] is the list of all valid parenthesis combinations for some n pairs
+        # dp:    list of list of parentheses combinations 
+        # dp[n]: list containing all valid parenthesis combinations for n pairs
         dp = [[] for i in range(n + 1)]
         
         # Base case: valid combination for n = 0
@@ -1273,17 +1465,17 @@ Given a number, generate all possible combinations of parentheses.
         # time complexity: iterate over list of n length O(n) 
         for i in range(1, n + 1): 
 
-            # grab saved list of valid parentheses for 0 -> i
+            # iterate over stored lists up to now
             for j in range(i):  
 
                 # Setup: Two Pointer Variation: Opposite Ends
 
-                # forward iteration over valid combination of parentheses for level j
-                # start: 0 parentheses pairs
+                # forward iteration: over each valid string of parentheses for level j
+                # start: first parentheses pairs level (0) pairs
                 for left in dp[j]:
 
-                    # reverse iteration over valid combination of parentheses for level (i - 1 - j)
-                    # start: i-1 parentheses pairs
+                    # reverse iteration: over each valid string of parentheses for level (i - 1 - j)
+                    # start: last parentheses pairs level (i-1) pairs
                     for right in dp[i - 1 - j]:
 
                         # Two Pointer Variation: Opposite Ends
@@ -1292,7 +1484,7 @@ Given a number, generate all possible combinations of parentheses.
 
                         # Why:
                         # ({left}){right} or {left}({right}) are both valid formulas
-                        # Since we are doing Opposite Ends
+                        # Since we are doing Opposite Ends and left and right will cross over each other,
                         # left and right will both individually use all values
                         # which means with these 2 iterations
                         # we are eventually doing both ({left}){right} and {left}({right})
@@ -1532,7 +1724,7 @@ Constraints:
 | Overall | O(n) | O(n) | Iteration over list of n temperatures dominates, leading to O(n) | Efficient pruning of colder temperatures often leads to smaller stack than forward pass but still for n elements O(n) |  
 
 
-### Solution 3: Dynamic Programming Jump Traversal using Memoized Future Warm Temperatures - Stack/Algorithm
+### Solution 3: Dynamic Programming Jump Traversal using Future Warm Temperatures - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
