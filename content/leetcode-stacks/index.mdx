@@ -1282,6 +1282,39 @@ Given a number, generate all possible combinations of parentheses.
         return dp[n]
 ```
 
+### Find the Bug: Forgot to update Parentheses count
+```python
+    def generateParenthesis(self, n: int) -> List[str]:
+
+        res = []
+
+        def helper(currList, openCount, closedCount):
+
+            if openCount + closedCount == (2*n):
+                res.append("".join(currList))
+                return
+
+            if openCount < n:
+                currList.append("(")
+                helper(currList, openCount+1, closedCount)
+                currList.pop()
+
+            if closedCount < openCount:
+                currList.append(")")
+                
+                # INCORRECT:
+                # closed count was not updated
+                # Instead:
+                # helper(currList, openCount, closedCount + 1)
+                helper(currList, openCount, closedCount)
+                currList.pop()
+
+        
+        helper([], 0, 0)
+
+        return res
+```
+
 ### Solution 1: BackTracking with String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
@@ -1563,7 +1596,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Stack 
+### Find the Bug: Forgot to Push onto Stack 
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1582,13 +1615,87 @@ Constraints:
             # INCORRECT: current day i is never pushed 
 
         return res
+```
+
+### Find the Bug: Comparing Indexes to Temperatures, instead of Temp to Temp
+```python
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]: 
+
+        # foward track colder days
+        # monotonic decreasing
+        stack = []
+
+        res = [0] * len(temperatures)
+
+        # time complexity: iterate over index temperatures
+        for i in range(len(temperatures)):
+
+            # Check: stack is non empty
+            # Check: if current breaks monotonic decreasing
+            # Implies: have found higher temperature
+            # Then: pop and calculate
+
+            # INCORRECT:
+            # stack[-1] is an index of a temperature
+            # and we are comparing it to a temperature
+            # Instead:
+            # while stack and temperature[stack[-1]] < temperatures[i]:
+            while stack and stack[-1] < temperatures[i]:
+
+                #   0  1  2  3
+                # [ 8, 6, 3, 9]
+                # 9 pops ever element
+                # index of lower temperature
+                lowerTempIndex = stack.pop()
+
+                # calculate distance between higher temp and curr low temp
+                res[lowerTempIndex] = i - lowerTempIndex
+
+            stack.append(i)
+
+        return res
 
 ```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+
+### Find the Bug: Pop with If Statement instead of a While Loop
+```python
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:  
+
+        # foward track colder days
+        # monotonic decreasing
+        stack = []
+
+        res = [0] * len(temperatures)
+
+        # time complexity: iterate over index temperatures
+        for i in range(len(temperatures)):
+
+            # Check: stack is non empty
+            # Check: if current breaks monotonic decreasing
+            # Implies: have found higher temperature
+            # Then: pop and calculate
+
+            # INCORRECT:
+            # using if statement to pop()
+            # which i\
+            # instead of using while loop to pop
+            # while monotonic property is broken
+            # 
+            if stack and temperatures[stack[-1]] < temperatures[i]:
+
+                #   0  1  2  3
+                # [ 8, 6, 3, 9]
+                # 9 pops ever element
+                # index of lower temperature
+                lowerTempIndex = stack.pop()
+
+                # calculate distance between higher temp and curr low temp
+                res[lowerTempIndex] = i - lowerTempIndex
+
+            stack.append(i)
+
+        return res
+```
 
 ### Solution 1: Forward Iteration Monotonic Decreasing Stack of Past Cold Temperatures - Stack/Monotonic Property Maintenance
 ```python
