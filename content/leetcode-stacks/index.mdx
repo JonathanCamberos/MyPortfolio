@@ -1697,7 +1697,7 @@ Constraints:
         return res
 ```
 
-### Solution 1: Forward Iteration Monotonic Decreasing Stack of Past Cold Temperatures - Stack/Monotonic Property Maintenance
+### Solution 1: Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1762,7 +1762,7 @@ Constraints:
 | Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
 | Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-### Solution 2: Reverse Iteration Monotonic Decreasing Stack of Future Warm Temperatures - Stack/Monotonic Property Maintenance
+### Solution 2: Reverse Iteration Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1770,52 +1770,39 @@ Constraints:
         # Solution 2 tends to use less actual in memory due to more 
         # aggressive pruning of colder temperatures during reverse traversal
 
-        # Note:
-        # Brain exercise to do monotonic stack in reverse
-        
-        # sanity diagram:
+        # iterating reverse: why monotonic decreasing?
         # index: 0  1  2  3  4  5  6
         # temp:[ 1, 4, 6, 8, 5, 3, 2]
-        
-        # Stack Diagram
-        # [2]
-        # Pop 2 -> [3]
-        # Pop 3 -> [5]
-        # Pop 8 -> [8]
-        # 6 does not trigger pop -> calculate res[i] = stack[-1] - i 
-        # append 6 
-        # [8, 6]
-        # Since we are popping everything the new element is greater than the stack?
 
+        # a monotonic increasing (iterating backwards) would be [2, 3, 5, 8]
+        # but we don't care about decreasing cold values, but increasing hot values
+        # so we still want a monotonic decreasing (backwards) [8, 6, 4, 1]
         
-        # space complexity: 
+        # difference from forward iteration is that we are tracking the hot values
+        # rather than tracking the cold values 
+        
+        # space complexity: storing up to n indexes O(n)
         n = len(temperatures)
         stack = []
 
-        # space complexity:
+        # space complexity: storing wait days for n temperatures
         res = [0] * n
 
         # time complexity: iterate over list of n temperatures O(n)
         for i in range(n-1, -1, -1):
             
             # Check: stack is non empty
-            # Check: if current temperature[i] breaks monotonic increasint,
-            # will be viable to 
-            # Implies: we have discarded elements increasing in reverse order 
-            # Means:   we have discarded elements decreasing in forward order
-            # Ex:      [8, 6] comes from [1, 2, 6, 8, 5, 3, 1] 
+            # Check: if current temperature[i] breaks monotonic decreasing, 
+            # we have found a cold temperature
             while stack and temperatures[stack[-1]] <= temperatures[i]:
                 stack.pop()
 
-            # we have found a element that is less than the top of the stack
-            # check: is stack non empty
+            # check: monotonic decreasing kept with stack (backwards)
+            # which means top of stack has a hotter temperature, calculate distance
             if stack:
-                # found element less than top of stack, 
-                # calculate wait days for found element
                 res[i] = stack[-1] - i
 
-            # Invariant: ensures that temperature appended to stack in monotonic decreasing 
-            # Means:     iterating in reverse, 
+            # Invariant: monotonic decreasing, append to list 
             stack.append(i)        
         
         # overall: time complexity O(n)
@@ -1849,7 +1836,7 @@ Constraints:
         
         # space complexity: result list for storing wait times o(n)
         n = len(temperatures)
-        res = [0] * n
+        dp = [0] * n
 
         # tracking index of hottest day seen so far right to left
         # set hottest day to last element
@@ -1858,32 +1845,32 @@ Constraints:
         # time complexity: reverse iterate through temperatures from second last to first O(n)
         for i in range(n - 2, -1, -1):
 
-            # found new hottest day
-            # Iterating: right to left
+            # found new hottest day, 
+            # then ignore wait days calculation
             # Check: if current temperature is >= hottest_day temp,
-            # there is no warmer future day to the right of the current temperature
+            # Implies: found new hottest day, 
+            # and since we are iterating right to left, 
+            # then no hotter day can be to the right of new hottest
             if temperatures[i] >= temperatures[hottest_day]:
-                # update hottest day index
+                # new hottest day index
                 hottest_day = i
 
-            # current day is less than hottest day
-            # current day is to the left of the hottest day
+            # find hottest day
             else:
-                # hotter day candidate j starts at day after current day
+                # check hotter day for next index
                 j = i + 1
 
-                # while hotter day candidate j is less than current day temperature
+                # while hotter day not found
                 while temperatures[j] <= temperatures[i]:
-                    # jump to the hottest day candidate's hottest day
-                    j += res[j]
+                    # jump to hottest day candidate's hottest day
+                    j += dp[j]
 
-                # hotter day candidate is hotter than current day
-                # calculate days from current day to hottest day candidate
-                res[i] = j - i 
+                # found hotter day
+                dp[i] = j - i 
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
-        return res
+        return dp
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1952,59 +1939,55 @@ All of values of position are unique
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1: Stack - Stack/Monotonic Property Maintenance
+### Solution 1: Monotonic Increasing Stack of Slower/Higher Fleet Times - Stack/Monotonic Property Maintenance
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         # Note: 
         # Each car is represented by its position and speed
-        # We calculate the the time required for each car to reach the target mile.
+        # We calculate the the time for each car to reach the target mile.
         # We sort the cars by highest distance first (higher value closer to target, smaller farther),
-        # so that we can process the cars in closer to target -> farther to target,
-        # in order to calculate the generation of fleets
+        # so that we can process the cars in order from target to start (closer to farther),
+        # to check the generation of fleets
 
         # Note:
-        # Monotonic stack: maintains a monotonic decreasing stack of times to target
+        # Monotonic stack: maintains a monotonic increasing stack of times to target
         
-        # space complexity: monotonic decreasing stack of times to target
+        # space complexity: stores times for up to n fleets O(n)
         stack = []
-
-        # space complexity: store cars for list of n length O(n)
-        cars = []
 
         # Sort cars by position in descending order
         # time complexity: timSort cars by starting position distance descending O(n log n)
-        for i in range(len(position)):
-            cars.append((position[i], speed[i]))
-        cars.sort(key=lambda x: x[0], reverse=True)
-
-        # generate fleets by going iterating over closest to target -> farthest to target
+        # generate fleets by going iterating over closest to target -> farthest to target        
         # time complexity: iterate over n cars O(n) 
-        for (pos, spd) in cars:
+        for pos, spd in sorted(zip(position, speed), reverse=True): 
             
             # current car time to target
-            currCarTimeToTarget = (target - pos) / spd 
+            currTimeToTarget = (target - pos) / spd 
             
-            # Why: A fleet means if a farther car has a lower time to target than a closer car
-            # as it will 'catch up' to the slower car and create a fleet
+            # A new fleet means if a farther car has a higher time to target than closer car
+            # then this car will never catch up to the fleet and instead will form a new fleet
 
-            # Why: 
-            # The stack will have the current lowest time to target value
-            # Thus, is a father car has a time lower than the current lowest,
-            # it will catch up and join the fleet
+            # A fleet means if a farther car has a lower time to target than a closer car
+            # it will catch up to the current fleet
+
+            # stack[-1]: will have the current lowest time to target value for some fleet
+            # For each new car we check its time to target relative to the current fleet 
 
             # Thus:
             # If current car is faster (time to target <= stack top), it will catch up with fleet and merge
             # If current car is slower (time to target > stack top), it will never catch up and thus form a new fleet
             
             # Check: stack is empty, create first fleet
-            # Check: is farther car slower than current fleet
-            if not stack or currCarTimeToTarget > stack[-1]:
-                stack.append(currCarTimeToTarget)
+            # Check: is farther car slower than current fleet, create new fleet
+            if not stack or currTimeToTarget > stack[-1]:
 
-            # Otherwise, it joins the fleet in front (we do nothing)
+                # Create new fleet at top of stack
+                stack.append(currTimeToTarget)
+
+            # Otherwise, catches up to the fleet in front (we do nothing)
         
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(n)
         return len(stack)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2013,7 +1996,7 @@ All of values of position are unique
 | Fleet generation | O(n) | O(n) | Iterate over list of cars n length O(n) | Stack tracks time to target for up to n fleets O(n) |
 | Overall | O(n log n) | O(n) | TimSort cars by descending position dominates, leading to O(n log n) | Cars and stack dominate, leading to O(n) | 
 
-### Solution 2: Greedy - Stack/Algorithm
+### Solution 2: Greedy Tracking One Slowest/Higher Fleet - Stack/Algorithm
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         
@@ -2023,18 +2006,18 @@ All of values of position are unique
         # since if current car cannot catch up with current fleet,
         # it cannot catch up with previously created fleets
 
-        num_fleets, curr_fleet = 0
-        for pp, ss in sorted(zip(position, speed), reverse=True): 
+        num_fleets, slowest_fleet_time = 0
+        for pos, spe in sorted(zip(position, speed), reverse=True): 
             
             # current car time to target
-            currCarTimeToTarget = (target - pp)/ss 
+            currCarTimeToTarget = (target - pos)/spe 
 
             # Check: current car has higher time to target than current fleet
-            if curr_fleet < currCarTimeToTarget: 
+            if currCarTimeToTarget > slowest_fleet_time: 
 
                 # update tracking fleet and total num of fleets
                 num_fleets += 1
-                curr_fleet = currCarTimeToTarget
+                slowest_fleet_time = currCarTimeToTarget
 
         # overall: time complexity O(n log n)
         # overall space complexity O(n)
@@ -2047,7 +2030,7 @@ All of values of position are unique
 | Overall | O(n log n) | O(n) | TimSort cars by descending position dominates, leading to O(n log n) | Storing cars for list of n length dominates, leading to O(n) | 
 
 
-## 84. Largest Rectangle in Histogram ::1:: - Hard
+## 84. Largest Rectangle in Histogram ::2:: - Hard
 
 Topics:  Array, Stack, Monotonic Stack
 
@@ -2107,7 +2090,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Solution 1: Monotonic Increasing Bar Height Index - Stack/Monotonic Property Maintenance
+### Solution 1: Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
 
@@ -2122,12 +2105,16 @@ Constraints:
         # The width of the rectangle is determined by the distance 
         # to the previous smaller bar, the left boundary 
 
+        # If the monotonic increasing height is valid again, it means nothing covers the current
+        # height candidate so we add it to the stack
+
         stack = []
         max_area = 0
+        heights.append(0)
 
         # Sentinel: 0-height bar to ensure all taller bars are eventually popped
         # time complexity: iterate over list of n length O(n)
-        for i, h in enumerate(heights + [0]):
+        for i in range(len(heights)):
 
             # Check: if current bar breaks monotonic increasing order
             # Implies: tallest bar found so far is on stack[-1]
@@ -2135,11 +2122,11 @@ Constraints:
             # that is greater than or equal to the current right wall
             # Ensures: only calculating area if the left wall can equal or
             # cover the entire height of the right wall
-            while stack and heights[stack[-1]] > h:
+            while stack and heights[stack[-1]] > height[i]:
                 
                 # Before pop
                 # h: height candidate
-                # stack[-1]: tallest height (covers height candidate)
+                # stack[-1]: tallest height (guaranteed covers height candidate)
                 # stack[-2]: extending check
 
                 # grab tallest bar index and height
@@ -2168,11 +2155,12 @@ Constraints:
                 # current area if right wall and left wall
                 max_area = max(max_area, tallestHeight * width)
 
-            # monotonic increasing is maintained, add to stack
+            # monotonic increasing is maintained, curr height is no longer 
+            # covered by the tall bars, add to stack 
             stack.append(i)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return max_area
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2180,7 +2168,55 @@ Constraints:
 | Stack operations | O(n) | O(n) | Each index is pushed and popped at most once O(n) | Stack can contain up to n indexes O(n) |
 | Sentinel | O(1) | O(1) | Ensures all heights are processed O(1) | No additional memory allocation for sentinel O(1) |
 | Area calculation | O(1) | O(1) | Height calculation in constant O(1) | No additional memory allocation for calculation O(1) |
-| Overall | O(n) | O(1) | Iterate over list of n length dominates, leading to O(n) | Stack index storage dominates, leading to O(n) |
+| Overall | O(n) | O(n) | Iterate over list of n length dominates, leading to O(n) | Stack index storage dominates, leading to O(n) |
+
+
+### Solution 2: Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
+```python
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        
+        n = len(heights)
+        max_area = 0
+
+        # We process from right to left, so we reverse the indices
+        stack = []
+
+        # time complexity: iterate over list of n length O(n)
+        for i in range(n-1, -2, -1):
+
+            # append a sentinel to flush stack at the end 
+            # height of left wall
+            curr_height = -1 if i == -1 else heights[i]
+
+            # maintain monotonic increasing height
+            while stack and heights[stack[-1]] > curr_height:
+
+                # monotonic increasing broken, pop until true again
+                index = stack.pop()
+                height = heights[index]
+
+                # If stack is empty, then current height is the smallest encountered so far
+                # and has popped all taller walls
+                # this implies all taller walls cover its height
+                # so current height goes from 
+                if not stack:
+                    width = (n - 1) - i
+                else:
+                    width = (stack[-1] - 1) - i
+
+                max_area = max(max_area, height * width)
+
+            if i >= 0:
+                stack.append(i)
+        return max_area
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 
 ## 402. Remove K Digits ::1:: - Medium
@@ -2208,7 +2244,7 @@ num does not have any leading zeros except for 0 itself
 ### Abstract
 Remove k digits in a way so that resulting integer is as large as possible.
 
-### Solution 1: Optimal Stack - Stack/Monotonic Property Maintenance
+### Solution 1: Forward Iteration Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
 ```python
     def removeKdigits(self, num: str, k: int) -> str:
 
@@ -2217,10 +2253,12 @@ Remove k digits in a way so that resulting integer is as large as possible.
 
         # Note:
         # Monotonic stack: a stack that maintains increasing digits
-        # Greedy: remove from left is a higher digit is followed by a smaller one
-        # Inverse: cannot remove smaller digit if higher digit follows as this would increase value 
+        # Greedy: remove from top of stack if higher digit at top of stack 
+        # is followed by a smaller one, as this lowers value
+        # Inverse Greedy: don't remove smaller digit if higher digit follows, as this increases value 
 
-        stack = []  # Stack to hold the digits of the resulting number
+        # space complexity: stack holds increasing digits up to n digits O(n)
+        stack = []
 
         # time complexity: iterate over list of n length O(n)
         for digit in num:
@@ -2228,11 +2266,10 @@ Remove k digits in a way so that resulting integer is as large as possible.
             # Check: non empty stack
             # Check: we still need to remove more digits (k > 0)
             # Check: if monotonic increasing broken
-            # Implies: found smaller digits in front of larger
-            # Then: Remove digits from the stack if the current digit is smaller
+            # Implies: found smaller digits in front of larger, replace larger value at top of stack
             while stack and k > 0 and stack[-1] > digit:
                 
-                # remove higher digit and decrease k
+                # remove higher digit at top of stack
                 stack.pop()
                 k -= 1
 
@@ -2240,21 +2277,23 @@ Remove k digits in a way so that resulting integer is as large as possible.
             stack.append(digit)
 
         # monotonic stack is valid
-        # larger numbers are on the left, 
-        # so splice and grab digits from the left side
-        # if there are still digits to remove
+
+        # Check: if we still need to remove digits k
+        # ignore larger digits on right side, 
+        # splice and grab digits from the left side
 
         # "12345" [:3] -> "123"
         # "12345" [:-3] -> "12"
+        # -3 removes 3 digits
         stack = stack[:-k] if k else stack
 
-        # Join the stack into a number and remove leading zeros "10200"
+        # Join the stack into a number and remove leading zeros "0200" -> "200" 
         result = ''.join(stack).lstrip('0')
 
         # Return "0" if the result is empty
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return result or "0"
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
