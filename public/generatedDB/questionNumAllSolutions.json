@@ -210,12 +210,22 @@
   "74": [
     {
       "number": 1,
-      "name": "Something",
-      "type": "hashmap",
-      "application": "representation",
-      "code": "def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:\n        \n        # Note:\n        # Matrix is sorted row-wise and each row starts with value > last of previous row\n        # Treat entire matrix as a single sorted list, and apply binary search\n\n        if not matrix or not matrix[0]:\n            return False\n\n        m, n = len(matrix), len(matrix[0])\n        left, right = 0, m * n - 1\n\n        # time complexity: binary search over m*n elements, O(log(m*n))\n        # space complexity: constant pointers and vars, O(1)\n        while left <= right:\n            mid = (left + right) // 2\n\n            # map 1D index to 2D coordinates\n            row, col = divmod(mid, n)\n            mid_val = matrix[row][col]\n\n            if mid_val == target:\n                return True\n            elif mid_val < target:\n                left = mid + 1\n            else:\n                right = mid - 1\n\n        # overall: time complexity O(log(m * n))\n        # overall: space complexity O(1)\n        return False",
+      "name": "Two Phase Binary Search Row and Column",
+      "type": "binary-search",
+      "application": "searching",
+      "code": "def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:\n        if not matrix or not matrix[0]:\n            return False\n\n        rows, cols = len(matrix), len(matrix[0])\n\n        # Binary search to find the candidate row\n        top, bottom = 0, rows - 1\n        while top <= bottom:\n            mid_row = (top + bottom) // 2\n            if matrix[mid_row][0] <= target <= matrix[mid_row][-1]:\n                # Target must be in this row, break to search within it\n                break\n            elif matrix[mid_row][0] > target:\n                bottom = mid_row - 1\n            else:\n                top = mid_row + 1\n        else:\n            # Target is not within the range of any row\n            return False\n\n        # Binary search within the found row\n        row = mid_row\n        left, right = 0, cols - 1\n        while left <= right:\n            mid_col = (left + right) // 2\n            if matrix[row][mid_col] == target:\n                return True\n            elif matrix[row][mid_col] < target:\n                left = mid_col + 1\n            else:\n                right = mid_col - 1\n\n        return False",
       "questionNumber": 74,
-      "solutionLink": "/Notes/leetcode-binary-search#solution-1-something---hashmaprepresentation",
+      "solutionLink": "/Notes/leetcode-binary-search#solution-1-two-phase-binary-search-row-and-column---binary-searchsearching",
+      "blog": "LeetCode: Binary Search"
+    },
+    {
+      "number": 2,
+      "name": "Flattened Matrix Binary Search",
+      "type": "binary-search",
+      "application": "searching",
+      "code": "def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:\n        \n        # Note:\n        # This solution treats the 2D matrix as a sorted 1D array by \n        # flattening the indices. It uses binary search on the 1D index space,\n        # then converts indices back to 2D coordinates with the helper function.\n        # This approach runs in O(log(m * n)) time and O(1) space.\n        \n        def index_to_coords(index: int, cols: int) -> tuple[int, int]:\n            # Convert 1D index to 2D matrix coordinates (row, col)\n            row = index // cols\n            col = index % cols\n            return row, col\n\n        if not matrix or not matrix[0]:\n            return False\n\n        rows, cols = len(matrix), len(matrix[0])\n        left, right = 0, rows * cols - 1\n\n        # time complexity: binary search on [0, m*n - 1] takes O(log(m*n))\n        # space complexity: only constant extra space for variables O(1)\n        while left <= right:\n            mid = (left + right) // 2\n            row, col = index_to_coords(mid, cols)\n            mid_value = matrix[row][col]\n\n            if mid_value == target:\n                return True\n            elif mid_value < target:\n                left = mid + 1\n            else:\n                right = mid - 1\n\n        # overall time complexity: O(log(m*n))\n        # overall space complexity: O(1)\n        return False",
+      "questionNumber": 74,
+      "solutionLink": "/Notes/leetcode-binary-search#solution-2-flattened-matrix-binary-search---binary-searchsearching",
       "blog": "LeetCode: Binary Search"
     }
   ],
@@ -515,16 +525,6 @@
   ],
   "704": [
     {
-      "number": 2,
-      "name": "Iterative Binary Search",
-      "type": "hashmap",
-      "application": "representation",
-      "code": "def search(self, nums: List[int], target: int) -> int:\n        \n        # Note:\n        # simple binary search\n\n        # space complexity: simple variables in constant O(1)\n        left, right = 0, len(nums)-1\n\n        # time complexity: split search area per iteration O(log n)\n        # space complexity: iterative search, no call stack, O(1)\n        while left <= right:\n            \n            mid = (left+right)//2\n            \n            # found target, return\n            if nums[mid] == target:\n                return mid\n\n            # search right side of subsection\n            elif nums[mid] < target:\n                left = mid + 1\n            \n            # search left side of subsection\n            else: \n                right = mid - 1\n\n        # overall: time complexity O(log n)\n        # overall: space complexity O(1)\n        return -1",
-      "questionNumber": 704,
-      "solutionLink": "/Notes/leetcode-binary-search#solution-2-iterative-binary-search---hashmaprepresentation",
-      "blog": "LeetCode: Binary Search"
-    },
-    {
       "number": 1,
       "name": "Recursive Binary Search",
       "type": "binary-search",
@@ -532,6 +532,16 @@
       "code": "def search(self, nums: List[int], target: int) -> int:\n        \n        # Note:\n        # Recursive binary search calls itself with smaller range\n\n        def helper(left: int, right: int) -> int:\n            # base case: target not found\n            if left > right:\n                return -1\n\n            mid = (left + right) // 2\n\n            if nums[mid] == target:\n                return mid\n            elif nums[mid] < target:\n                return helper(mid + 1, right)\n            else:\n                return helper(left, mid - 1)\n\n        # time complexity: each call halves the search space O(log n)\n        # space complexity: call stack grows with depth O(log n)\n        result = helper(0, len(nums) - 1)\n\n        # overall: time complexity O(log n)\n        # overall: space complexity O(log n)\n        return result",
       "questionNumber": 704,
       "solutionLink": "/Notes/leetcode-binary-search#solution-1-recursive-binary-search---binary-searchsearching",
+      "blog": "LeetCode: Binary Search"
+    },
+    {
+      "number": 2,
+      "name": "Iterative Binary Search",
+      "type": "binary-search",
+      "application": "searching",
+      "code": "def search(self, nums: List[int], target: int) -> int:\n        \n        # Note:\n        # simple binary search\n\n        # space complexity: simple variables in constant O(1)\n        left, right = 0, len(nums)-1\n\n        # time complexity: split search area per iteration O(log n)\n        # space complexity: iterative search, no call stack, O(1)\n        while left <= right:\n            \n            mid = (left+right)//2\n            \n            # found target, return\n            if nums[mid] == target:\n                return mid\n\n            # search right side of subsection\n            elif nums[mid] < target:\n                left = mid + 1\n            \n            # search left side of subsection\n            else: \n                right = mid - 1\n\n        # overall: time complexity O(log n)\n        # overall: space complexity O(1)\n        return -1",
+      "questionNumber": 704,
+      "solutionLink": "/Notes/leetcode-binary-search#solution-2-iterative-binary-search---binary-searchsearching",
       "blog": "LeetCode: Binary Search"
     }
   ],

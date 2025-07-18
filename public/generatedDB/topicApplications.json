@@ -197,6 +197,15 @@
     },
     {
       "type": "Two Pointers",
+      "title": "Catchup",
+      "summary": "We have two pointers traversing one array. One remains frozen, but catches up",
+      "exampleIntro": "Decode Two Pointer Splicing",
+      "codeExample": "",
+      "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-catchup",
+      "blog": "LeetCode: Two Pointers"
+    },
+    {
+      "type": "Two Pointers",
       "title": "K Pointer Variants",
       "summary": "We can extend the two pointer case to track k pointers simultaneously.",
       "exampleIntro": "Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] that sum to 0.",
@@ -214,17 +223,6 @@
       "blog": "LeetCode: Two Pointers"
     }
   ],
-  "two-pointer": [
-    {
-      "type": "Two Pointer",
-      "title": "Catchup",
-      "summary": "We have two pointers traversing one array. One remains frozen, but catches up",
-      "exampleIntro": "Decode Two Pointer Splicing",
-      "codeExample": "",
-      "useCaseLink": "/Notes/leetcode-two-pointers#two-pointer-application-catchup",
-      "blog": "LeetCode: Two Pointers"
-    }
-  ],
   "binary-search": [
     {
       "type": "Binary Search",
@@ -233,6 +231,15 @@
       "exampleIntro": "Searching for a target number in a sorted array.",
       "codeExample": "def binarySearch(nums, target):\n    left, right = 0, len(nums) - 1\n\n    while left <= right:\n        mid = (left + right) // 2\n\n        if nums[mid] == target:\n            return mid  # Target found\n        elif nums[mid] < target:\n            left = mid + 1  # Search right half\n        else:\n            right = mid - 1  # Search left half\n\n    return -1  # Target not found",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-searching",
+      "blog": "LeetCode: Binary Search"
+    },
+    {
+      "type": "Binary Search",
+      "title": "Layered Binary Search",
+      "summary": "Applying binary search in multiple stages or layers, typically to",
+      "exampleIntro": "Searching for a target in a sorted 2D matrix",
+      "codeExample": "def searchMatrix(matrix: List[List[int]], target: int) -> bool:\n        if not matrix or not matrix[0]:\n            return False\n\n        rows, cols = len(matrix), len(matrix[0])\n\n        # First layer: Binary search over rows to find candidate row\n        top, bottom = 0, rows - 1\n        while top <= bottom:\n            mid_row = (top + bottom) // 2\n            if matrix[mid_row][0] <= target <= matrix[mid_row][-1]:\n                break\n            elif matrix[mid_row][0] > target:\n                bottom = mid_row - 1\n            else:\n                top = mid_row + 1\n        else:\n            return False  # Target is outside all row ranges\n\n        # Second layer: Binary search within the found row\n        row = mid_row\n        left, right = 0, cols - 1\n        while left <= right:\n            mid_col = (left + right) // 2\n            if matrix[row][mid_col] == target:\n                return True\n            elif matrix[row][mid_col] < target:\n                left = mid_col + 1\n            else:\n                right = mid_col - 1\n\n        return False",
+      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-layered-binary-search",
       "blog": "LeetCode: Binary Search"
     }
   ]
