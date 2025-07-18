@@ -8,6 +8,7 @@
   "36. Valid Sudoku ::2::": 36,
   "42. Trapping Rain Water ::3::": 42,
   "49. Group Anagrams ::2::": 49,
+  "74. Search a 2D Matrix ::1::": 74,
   "84. Largest Rectangle in Histogram ::2::": 84,
   "125. Valid Palindrome ::3::": 125,
   "128. Longest Consecutive Sequence ::3::": 128,
@@ -20,6 +21,7 @@
   "271. String Encode and Decode ::2::": 271,
   "347. Top K Elements in List ::3::": 347,
   "402. Remove K Digits ::1::": 402,
+  "704. Binary Search ::2::": 704,
   "739. Daily Temperatures ::3::": 739,
   "853. Car Fleet ::2::": 853
 }

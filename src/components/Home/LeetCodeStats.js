@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { TypeAnimation } from "react-type-animation";
 
 const LeetCodeStats = () => {
-  const [stats, setStats] = useState({ total: 0, easy: 0, medium: 0, hard: 0 });
+  const [stats, setStats] = useState({ total: 0, totalSolutions: 0, easy: 0, medium: 0, hard: 0 });
   const sanityOptions = [
     "15.00%;", "20.00%;", "25.00%;", "30.00%;", "35.00%;", "40.00%;", "45.00%;",
     "50.00%;", "55.00%;", "60.00%;", "65.00%;", "70.00%;", "75.00%;", "80.00%;",
@@ -51,6 +51,10 @@ const LeetCodeStats = () => {
       <p className="ml-4">
         <span className="text-red-600 dark:text-red-400">hard</span>:{" "}
         <span className="text-blue-500 dark:text-blue-300">{stats.hard};</span>
+      </p>
+        <p className="ml-4">
+        <span className="text-orange-500 dark:text-orange-400">solutions</span>:{" "}
+        <span className="text-blue-500 dark:text-blue-300">{stats.totalSolutions};</span>
       </p>
       <p className="ml-4">
         <span className="text-purple-600 dark:text-purple-400">sanity</span>:{" "}

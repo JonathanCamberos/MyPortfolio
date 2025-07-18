@@ -224,5 +224,16 @@
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointer-application-catchup",
       "blog": "LeetCode: Two Pointers"
     }
+  ],
+  "binary-search": [
+    {
+      "type": "Binary Search",
+      "title": "Searching",
+      "summary": "Using Binary Search to locate the position of a target element",
+      "exampleIntro": "Searching for a target number in a sorted array.",
+      "codeExample": "def binarySearch(nums, target):\n    left, right = 0, len(nums) - 1\n\n    while left <= right:\n        mid = (left + right) // 2\n\n        if nums[mid] == target:\n            return mid  # Target found\n        elif nums[mid] < target:\n            left = mid + 1  # Search right half\n        else:\n            right = mid - 1  # Search left half\n\n    return -1  # Target not found",
+      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-searching",
+      "blog": "LeetCode: Binary Search"
+    }
   ]
 }

@@ -1315,7 +1315,29 @@ Given a number, generate all possible combinations of parentheses.
         return res
 ```
 
-### Solution 1: BackTracking with String Concatenation - Stack/Backtracking by Tracking History or State
+### Find the Bug: Cannot initialize empty list with multiplication, use bucket sort method
+```python
+def generateParenthesis(self, n: int) -> List[str]:
+
+        # INCORRECT:
+        # Instead:
+        # dp = [[] for i in range(n+1)]
+        dp = [] * (n+1)
+
+        dp[0] = [""]
+
+        for i in range(n+1):
+
+            for j in range(i):
+
+                for left in dp[j]:
+                    for right in dp[i-1-j]:
+                        dp[i].append(f"({left}){right}")
+
+        return dp[n]
+```
+
+### Solution 1: BackTracking Recursive with String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1363,7 +1385,7 @@ Given a number, generate all possible combinations of parentheses.
 | String concatenation | O(n) per path | O(n) per result | Explanation of total O(n<sup>2</sup>) is the same as the double for loop [derivation](/Notes/sorting-searching-algorithms#double-for-loop) |  |
 | Overall | O(Catalan(n) * n<sup>2</sup>) | O(Catalan(n) * n) | Catalan(n) unique strings with copy cost dominates as string grows O(n<sup>2</sup>) per solution dominates, leading to O(Catalan(n) * n<sup>2</sup>) | Catalan(n) valid strings each of length 2n dominates, leading to O(Catalan(n) * n) | 
 
-### Solution 2: BackTracking with Mutable List - Stack/Backtracking by Tracking History or State
+### Solution 2: BackTracking Recursive with Mutable List - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1423,7 +1445,7 @@ Given a number, generate all possible combinations of parentheses.
 | String creation | O(n) per complete path | O(n) per result | Only joined once per result | Each string result is size 2n |
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | Avoids repeated copies | Stores all valid combinations | 
 
-### Solution 3: Iterative Stack with State Tracking - Stack/Backtracking by Tracking History or State
+### Solution 3: Iterative State Tracking Stack - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1478,7 +1500,7 @@ Given a number, generate all possible combinations of parentheses.
 | Final string join | O(n) per result | O(n) per result | Each completed list is joined into a string once | Output list contains O(Catalan(n)) strings, each of length O(n) | 
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | One entry and exit per valid state exploring ? | Final output dominates space; stack and temp lists also contribute O(n) each | 
 
-### Solution 4: Dynamic Programming - Stack/Dynamic Programming State Compression
+### Solution 4: Dynamic Programming Building Parentheses Combinations - Stack/Dynamic Programming State Compression
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1697,6 +1719,101 @@ Constraints:
         return res
 ```
 
+### Find the Bug: Added extra if else statement during day calculation
+```python
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+
+        dp = [0] * len(temperatures)
+
+        hottest_day = temperatures[len(temperatures)-1]
+
+        for i in range(len(temperatures)-2, -1, -1):
+
+            if temperatures[i] >= hottest_day:
+                hottest_day = temperatures[i]
+            else:
+                
+                j = i+1
+                # INCORRECT:
+                # no need for if else statement,
+                # as hottest_day check + while loop guarantees
+                # there to be a hotter day eventually
+                # Instead:
+                # remove if else, leave while loop:
+                # j = i+1
+                # while temperatures[i] >= temperatures[j]:
+                #   j += dp[j]
+                # dp[i] = j - i
+                if temperatures[i] < temperatures[j]:
+                    dp[i] = j-i
+
+                else:
+                    while temperatures[i] >= temperatures[j]:
+                        j += dp[j]
+                    dp[i] = j - i
+        return dp
+```
+
+### Find the Bug: Reverse Iteration, forgot to pop matching old hot Temperatures
+```python
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+
+        # monotonic decreasing 
+        stack = []
+        res = [0] * len(temperatures)
+
+
+        for i in range(len(temperatures)-1, -1, -1):
+
+            # monotonic decreasing broken
+            # INCORRECT:
+            # only popping index if temperature is greater than
+            # however, we also want to pop if new hot temperature
+            # matches old ho temperature as we want to track 
+            # more recent days 
+            # Instead:
+            # while stack and temperatures[stack[-1]] <= temperatures[i]
+            while stack and temperatures[stack[-1]] < temperatures[i]:
+                stack.pop()
+
+            # there is a hotter temperature left
+            if stack:
+                res[i] = stack[-1] - i
+
+            stack.append(i)
+
+        return res
+```
+
+### Find the Bug: Dynamic, forgot to replace hottest_day with equal temperatures
+```python
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+
+        n = len(temperatures)
+        dp = [0] * n
+
+        hottest_day = temperatures[n-1]
+
+        for i in range(n-2, -1, -1):
+
+            # INCORRECT:
+            # need to remove to equal hot day as well
+            # Instead:
+            # if temperatures[i] >= hottest_day:
+            if temperatures[i] > hottest_day:
+                hottest_day = temperatures[i]
+
+            else:
+                j = i + 1
+
+                while temperatures[i] >= temperatures[j]:
+                    j += dp[j]
+
+                dp[i] = j-i
+
+        return dp
+```
+
 ### Solution 1: Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
@@ -1790,16 +1907,18 @@ Constraints:
 
         # time complexity: iterate over list of n temperatures O(n)
         for i in range(n-1, -1, -1):
-            
-            # Check: stack is non empty
-            # Check: if current temperature[i] breaks monotonic decreasing, 
-            # we have found a cold temperature
+
+            # maintain decreasing temp of hot temps by:
+            # prevent equal or hotter temp from being added
+            # which will remove older hot temps
+            # and replacing with newer hot temps
             while stack and temperatures[stack[-1]] <= temperatures[i]:
                 stack.pop()
 
             # check: monotonic decreasing kept with stack (backwards)
             # which means top of stack has a hotter temperature, calculate distance
             if stack:
+                # stack[-1]: previous hot temperature
                 res[i] = stack[-1] - i
 
             # Invariant: monotonic decreasing, append to list 
@@ -1930,14 +2049,30 @@ All of values of position are unique
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Stack 
+### Find the Bug: Base Case Add if Stack Empty or New Fleet 
 ```python
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        stack = []
+
+        stack
+
+        for (pos,spd) in sorted(zip(position, speed), reverse=True):
+            timeToTarg = (target-pos)/spd
+
+            # new fleet
+            # INCORRECT:
+            # fleet is never added to fleet stack,
+            # here, we only need to check if a fleet exists
+            # if grab, else initialize first fleet
+            # Instead:
+            # if not stack or timeToTarg > stack[-1]
+            if stack and timeToTarg > stack[-1]:
+                stack.append(timeToTarg)
+
+        return len(stack)
 ```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+
+
 
 ### Solution 1: Monotonic Increasing Stack of Slower/Higher Fleet Times - Stack/Monotonic Property Maintenance
 ```python
@@ -2081,22 +2216,64 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Stack 
+### Find the Bug: Did not append to stack correctly  
 ```python
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  | 
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        
+        # monotonic increasing
+        stack = []
+        maxArea = 0
 
-### Solution 1: Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
+        # INCORRECT:
+        # this creates a copy of the heights
+        # does not append in place
+        # Instead:
+        # heights.append(0)
+        heights + [0]
+
+        for i in range(len(heights)):
+
+            # monotonic is broken
+            while stack and heights[stack[-1]] > heights[i]:
+                
+                # monotonic is broken
+                # 
+                heightIndex = stack.pop()
+                tallHeight = heights[heightIndex]
+
+                # entire stack was pop goes from 0->i
+                if not stack:
+                    width = i
+
+                # left wall exists, bounded by left wall and tall
+                else:
+                    leftWallIndex = stack[-1]
+                    width = i - leftWallIndex - 1
+
+                currArea = tallHeight * width
+                maxArea = max(maxArea, currArea)
+
+            stack.append(i)
+
+        return maxArea
+```
+
+
+
+### Solution 1: Double Dragging Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
 
-        # "we keep popping as long as the current height candidate
-        #  is still covered by the taller bars before it"
-
+        # "we keep popping as long as the current small height candidate
+        #  is still covered by the taller bars before it,
+        #  which means that either:
+        #  1. the stack gets completely popped, which means the small height candidate
+        #     is the smallest height encountered, so it spans from 0 -> i, which is
+        #     a width of i
+        #  2. there is a left height on the stack, a tall wall which we can drag up until
+        #     the small height candidate, since we know all popped walls were taller than
+        #     this current left height, so we can do i - left index - 1
+        
         # Note:
         # Monotonic stack: A stack that maintains monotonic increasing heights
         # When monotonic increasing rule breaks, curr height will serve as right boundary
@@ -2105,58 +2282,51 @@ Constraints:
         # The width of the rectangle is determined by the distance 
         # to the previous smaller bar, the left boundary 
 
-        # If the monotonic increasing height is valid again, it means nothing covers the current
-        # height candidate so we add it to the stack
+        # Note: 
+        # Sentinel: 
+        # Given that are trigger for the area check is that we have found the tallest wall
+        # when the monotonic increasing rule has broken
+        # we need to add a height wall of 0 at the end of the heights array as a sentinel
+        # so that it triggers and checks the last valid height
 
+        # Space complexity: stores heights for up to n heights O(n)
         stack = []
         max_area = 0
+
+        # Sentinel: 0-height bar to trigger monotonic increasing rule break
         heights.append(0)
 
-        # Sentinel: 0-height bar to ensure all taller bars are eventually popped
         # time complexity: iterate over list of n length O(n)
         for i in range(len(heights)):
 
             # Check: if current bar breaks monotonic increasing order
-            # Implies: tallest bar found so far is on stack[-1]
-            # Implies: we are popping while there is height on the stack
-            # that is greater than or equal to the current right wall
-            # Ensures: only calculating area if the left wall can equal or
-            # cover the entire height of the right wall
+            # First Implies: First time this triggers, tallest bar found so far is on stack[-1]
+            # Invariant Implies: There is a tall wall at stack[-1], which is covered by 
+            #  previously popped tall walls
             while stack and heights[stack[-1]] > height[i]:
                 
-                # Before pop
-                # h: height candidate
-                # stack[-1]: tallest height (guaranteed covers height candidate)
-                # stack[-2]: extending check
+                # grab tall bar index and height
+                tallWallIndex = stack.pop()
+                tallWall = heights[tallWallIndex]
 
-                # grab tallest bar index and height
-                tallestHeightIndex = stack.pop()
-                tallestHeight = heights[tallestHeightIndex]
-
-                # After pop case 1: stack is empty
-                # height[i] was the smallest height so far and 
-                # caused the entire stack to get cleared
-                # index:   0 1 2 3 4 5 6 
-                # height: [1 3 5 0 9 9 9 ]
-                # here, height 0 will never pop, 
-                # so we are guaranteed width of 0 -> i if stack is empty
+                # if stack is empty
+                # smallest height popped off all other heights
+                # so we are guaranteed width of 0 through i, width length of i
                 if not stack:
                     width = i
 
-                # After pop case 2: Stack is not empty
-                # stack[-1]: left wall index
-                # width = distance between right and left wall (excluding left wall index)
-                # width = i - stack[-1] - 1
-                # so popped bar is bounded on th left by stack[-1] + 1
+                # stack is not empty
+                # current tallWall is bounded by the left wall in distance
+                # -1 is to account for the left wall
                 else:
-                    extendingCheck = stack[-1]
-                    width = i - extendingCheck - 1
+                    leftWallIndex = stack[-1]
+                    width = i - leftWallIndex - 1
 
-                # current area if right wall and left wall
-                max_area = max(max_area, tallestHeight * width)
+                # check new max area
+                max_area = max(max_area, tallWall * width)
 
-            # monotonic increasing is maintained, curr height is no longer 
-            # covered by the tall bars, add to stack 
+            # monotonic increasing is maintained: 
+            # curr height is no longer covered by the tall bars, add to stack 
             stack.append(i)
 
         # overall: time complexity O(n)
@@ -2171,7 +2341,7 @@ Constraints:
 | Overall | O(n) | O(n) | Iterate over list of n length dominates, leading to O(n) | Stack index storage dominates, leading to O(n) |
 
 
-### Solution 2: Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
+### Solution 2: Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         
@@ -2181,12 +2351,12 @@ Constraints:
         # We process from right to left, so we reverse the indices
         stack = []
 
+        # Sentinel: iteration through -1
         # time complexity: iterate over list of n length O(n)
         for i in range(n-1, -2, -1):
 
-            # append a sentinel to flush stack at the end 
-            # height of left wall
-            curr_height = -1 if i == -1 else heights[i]
+            # Sentinel: append a sentinel index of -1, height of 0
+            curr_height = 0 if i == -1 else heights[i]
 
             # maintain monotonic increasing height
             while stack and heights[stack[-1]] > curr_height:
@@ -2195,28 +2365,38 @@ Constraints:
                 index = stack.pop()
                 height = heights[index]
 
-                # If stack is empty, then current height is the smallest encountered so far
-                # and has popped all taller walls
-                # this implies all taller walls cover its height
-                # so current height goes from 
+                # if stack is empty
+                # small height popped all taller walls
+                # so current height extends from i to (n-1)
                 if not stack:
                     width = (n - 1) - i
+                
+                # if stack is not empty
+                # the width is bounded from i to the right wall
+                # right wall is currently on the stack on stack[-1]
+                # -1 is to account for the right wall
                 else:
-                    width = (stack[-1] - 1) - i
+                    rightWall = stack[-1]
+                    width = (rightWall - 1) - i
 
+                # check new area
                 max_area = max(max_area, height * width)
 
+            # if non-sentinel index, append
             if i >= 0:
                 stack.append(i)
+
+        # overall: time complexity 
+        # overall: space complexity
         return max_area
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Iteration | O(n) | O(1) | Iterate over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Stack operations | O(n) | O(n) | Each index is push and popped at most once for n indexes O(n) | Stack can hold up to n indexes O(n) |
+| Sentinel | Final iteration i = -1 triggers processing remaining stack, constant value O(1) | No additional memory allocation for sentinel O(1) |  |  |
+| Area Calculation | O(1) | O(1) | Rectangle area computed in constant time per pop O(1) | No additional memory allocation for area calculation O(1) |
+| Overall | O(n) | O(n) | Iteration over list dominates, leading to O(n) | Stack storage dominates, leading to O(n) |
 
 
 ## 402. Remove K Digits ::1:: - Medium
@@ -2285,7 +2465,8 @@ Remove k digits in a way so that resulting integer is as large as possible.
         # "12345" [:3] -> "123"
         # "12345" [:-3] -> "12"
         # -3 removes 3 digits
-        stack = stack[:-k] if k else stack
+        if k > 0:
+            stack = stack[:-k]
 
         # Join the stack into a number and remove leading zeros "0200" -> "200" 
         result = ''.join(stack).lstrip('0')

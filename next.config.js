@@ -8,6 +8,7 @@ const filePaths = [
   'content/leetcode-arrays-and-hashing/index.mdx',
   'content/leetcode-stacks/index.mdx',
   'content/leetcode-two-pointers/index.mdx',
+  'content/leetcode-binary-search/index.mdx'
 ];
 
 function syncWarmness() {
@@ -402,7 +403,7 @@ function organizeSolutions(inputPath, outputPath) {
 
 // Function to parse LeetCode stats from content files
 function parseLeetcodeStats(filePaths) {
-  const questionStats = { total: 0, easy: 0, medium: 0, hard: 0 };
+  const questionStats = { total: 0, totalSolutions: 0, easy: 0, medium: 0, hard: 0 };
   const topicMap = {};
   const questionsMap = {};
   const useCasesMap = {};
@@ -463,6 +464,31 @@ function parseLeetcodeStats(filePaths) {
     useCasesMap,
     solutionsMap,
   };
+}
+
+function updateTotalSolutions(folderPath, solutionsFileName, statsFileName) {
+  const solutionsPath = path.join(process.cwd(), folderPath, solutionsFileName);
+  const statsPath = path.join(process.cwd(), folderPath, statsFileName);
+
+  // Read existing stats file (leetcodeStats.json)
+  const questionStats = JSON.parse(fs.readFileSync(statsPath, "utf-8"));
+
+  // Read solutions file
+  const questionSolutions = JSON.parse(fs.readFileSync(solutionsPath, "utf-8"));
+
+  // Calculate total solutions count
+  let totalSolutions = 0;
+  Object.values(questionSolutions).forEach((solutionsArray) => {
+    totalSolutions += solutionsArray.length;
+  });
+
+  // Update questionStats
+  questionStats.totalSolutions = totalSolutions;
+
+  // Write back the updated stats file
+  fs.writeFileSync(statsPath, JSON.stringify(questionStats, null, 2));
+
+  return totalSolutions;
 }
 
 // Function to create a mapping for search
@@ -527,6 +553,8 @@ const nextConfig = {
       // Adding the logic for allQuestionNum.js parsing
       const allQuestionsPath = path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json");
       const questionMapping = createQuestionMapping(allQuestionsPath);
+      
+      updateTotalSolutions("public/generatedDB", "questionNumAllSolutions.json", "leetcodeStats.json");
 
       // Write the mapping to a new file
       fs.writeFileSync(
