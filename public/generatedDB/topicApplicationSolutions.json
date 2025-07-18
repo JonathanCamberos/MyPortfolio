@@ -96,7 +96,7 @@
         "name": "Something",
         "type": "hashmap",
         "application": "representation",
-        "code": "",
+        "code": "def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:\n        \n        # Note:\n        # Matrix is sorted row-wise and each row starts with value > last of previous row\n        # Treat entire matrix as a single sorted list, and apply binary search\n\n        if not matrix or not matrix[0]:\n            return False\n\n        m, n = len(matrix), len(matrix[0])\n        left, right = 0, m * n - 1\n\n        # time complexity: binary search over m*n elements, O(log(m*n))\n        # space complexity: constant pointers and vars, O(1)\n        while left <= right:\n            mid = (left + right) // 2\n\n            # map 1D index to 2D coordinates\n            row, col = divmod(mid, n)\n            mid_val = matrix[row][col]\n\n            if mid_val == target:\n                return True\n            elif mid_val < target:\n                left = mid + 1\n            else:\n                right = mid - 1\n\n        # overall: time complexity O(log(m * n))\n        # overall: space complexity O(1)\n        return False",
         "questionNumber": 74,
         "solutionLink": "/Notes/leetcode-binary-search#solution-1-something---hashmaprepresentation",
         "blog": "LeetCode: Binary Search"
