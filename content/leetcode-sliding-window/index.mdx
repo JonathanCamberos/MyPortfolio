@@ -2,12 +2,197 @@
 title: "LeetCode: Sliding Window"
 description: "sliding window"
 image: "../../public/Notes/sliding-window-2.png"
-publishedAt: "2025-05-03"
-updatedAt: "2025-05-03"
+publishedAt: "2025-07-18"
+updatedAt: "2025-07-18"
 author: "jonathancamberos"
 isPublished: true
 tags:
 - data structures and algorithms
 ---
 
-Hello! Todo 
+## Sliding Intro:
+
+Leetcode problems with elegant solutions using the sliding window technique. 
+
+### What is Sliding Window
+Sliding Window is a technique used for iterating over a subset of data
+within a larger structure (like arrays or strings) by maintaining 
+a moving window that can expand, contract, or shift across the input.
+
+There are two main types of sliding windows:
+1. Fixed size (constant length) window
+2. Variable size (dynamic length) window
+
+Sliding window often replaces nested loops by reusing computation 
+from the previous window to achieve better efficiency.
+
+### Why Use Sliding Window
+Sliding Window is ideal for problems that involve:
+- Finding optimal subarray/substring
+- Summation or counting within a range
+- Tracking a condition inside a window
+
+It typically reduces time complexity from O(n<sup>2</sup>) (naive nested loops) 
+to O(n) since each element is processed at most twice (entering/exiting the window).
+
+### Binary Search Application: Fixed Size Window
+Fixed size windows help maintain a constant window of k elements 
+while scanning through a sequence.
+
+Ex: Maximum sum of any subarray of size k
+```python
+    def maxSumSubarray(nums, k):
+        window_sum = sum(nums[:k])
+        max_sum = window_sum
+        
+        for i in range(k, len(nums)):
+            window_sum += nums[i] - nums[i - k]
+            max_sum = max(max_sum, window_sum)
+        
+        return max_sum
+
+    # maxSumSubarray([1, 4, 2, 10, 2, 3, 1, 0, 20], 4) = 24
+```
+
+### Sliding Window Application: Variable Size Window
+Variable size windows expand and shrink dynamically depending on 
+whether some condition or constraint is met (e.g., substring uniqueness, 
+sum ≤ target).
+
+Ex: Longest substring without repeating characters
+```python
+    def lengthOfLongestSubstring(s: str) -> int:
+        char_index = {}
+        left = max_len = 0
+        
+        for right in range(len(s)):
+            if s[right] in char_index and char_index[s[right]] >= left:
+                left = char_index[s[right]] + 1
+            
+            char_index[s[right]] = right
+            max_len = max(max_len, right - left + 1)
+        
+        return max_len
+
+    # "abcabcbb" → lengthOfLongestSubstring = 3
+```
+
+## 121. Best Time to Buy and Sell Stock ::1:: - Easy
+
+Topics:  Array, Dynamic Programming, Sliding Window
+
+### Intro
+> You are given an array prices where prices[i] is the price of a given 
+> stock on the ith day.
+> You want to maximize your profit by choosing a single day to buy one stock and 
+> choosing a different day in the future to sell that stock.
+> Return the maximum profit you can achieve from this transaction. 
+> If you cannot achieve any profit, return 0.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| prices = [7,1,5,3,6,4] | 5 |
+| prices = [7,6,4,3,1] | 0 |  
+ 
+Constraints:
+
+1 &leq; prices.length &leq; 10<sup>5</sup>
+
+0 &le; prices[i] &le; 10<sup>4</sup>
+
+### Abstraction
+Given an array of stock values, find the highest profit possible.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+```python
+    def maxProfit(prices: List[int]) -> int:
+
+        # Note:
+        # 
+
+        # Left pointer marks the buy day
+        left = 0
+        # Right pointer traverses future sell days
+        right = 1
+        max_profit = 0
+
+        while right < len(prices):
+            if prices[right] > prices[left]:
+                # If profit is possible, calculate it
+                profit = prices[right] - prices[left]
+                max_profit = max(max_profit, profit)
+            else:
+                # No profit — move buy day to current day
+                left = right
+            # Move to next sell day
+            right += 1
+
+        # overall: time complexity
+        # overall: space complexity
+        return max_profit
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: Implicit Sliding Window Tracking Min Buy Price - Sliding Window/Variable Size Window
+```python
+    def maxProfit(prices: List[int]) -> int:
+        
+        # Note:
+        #
+        
+        # Track the minimum price seen so far (buy candidate)
+        min_price = float('inf')
+        # Track the best profit found
+        max_profit = 0
+
+        for price in prices:
+            if price < min_price:
+                # Update the min_price if a better buy is found
+                min_price = price
+            else:
+                # Calculate profit if sold today and update max_profit
+                max_profit = max(max_profit, price - min_price)
+
+        # overall: time complexity
+        # overall: space complexity
+        return max_profit
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+
+

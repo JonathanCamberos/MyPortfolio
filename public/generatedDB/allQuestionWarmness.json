@@ -51,6 +51,10 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "121": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "125": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 9
@@ -101,7 +105,7 @@
   },
   "704": {
     "lastSubmittedDate": "2025-07-18T08:02:00",
-    "coldnessCount": -1
+    "coldnessCount": 1
   },
   "739": {
     "lastSubmittedDate": null,

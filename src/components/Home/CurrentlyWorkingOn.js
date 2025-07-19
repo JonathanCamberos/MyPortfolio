@@ -27,7 +27,7 @@ const CurrentlyWorkingOn = ({ blogs }) => {
           <NotesDisplayOne blog={sortedBlogs[4]} />
         </article>
         <article className="relative">
-          <NotesDisplayOne blog={sortedBlogs[9]} />
+          <NotesDisplayOne blog={sortedBlogs[5]} />
         </article>
       </div>
     </section>;

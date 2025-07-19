@@ -196,6 +196,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "121": {
+    "questionNum": 121,
+    "questionTitle": "Best Time to Buy and Sell Stock ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "You are given an array prices where prices[i] is the price of a given stock on the ith day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Sliding Window"
+    ],
+    "questionLink": "/Notes/leetcode-sliding-window#121-best-time-to-buy-and-sell-stock-1---easy",
+    "blog": "LeetCode: Sliding Window",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "125": {
     "questionNum": 125,
     "questionTitle": "Valid Palindrome ::3::",
@@ -389,8 +404,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-18T08:02:00",
+    "coldnessCount": 1
   },
   "739": {
     "questionNum": 739,

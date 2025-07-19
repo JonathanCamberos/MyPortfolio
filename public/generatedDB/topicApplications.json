@@ -259,6 +259,26 @@
       "codeExample": "def findMin(nums: List[int]) -> int:\n        left, right = 0, len(nums) - 1\n\n        # If array is not rotated (fully sorted ascending)\n        if nums[left] < nums[right]:\n            return nums[left]\n\n        # Modified binary search with parameter-based decision\n        while left < right:\n            mid = (left + right) // 2\n            \n            # Decision based on comparing mid and right elements\n            if nums[mid] > nums[right]:\n                left = mid + 1\n            else:\n                right = mid\n\n        # left == right points to minimum element\n        return nums[left]",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-condition-adapted-binary-search",
       "blog": "LeetCode: Binary Search"
+    },
+    {
+      "type": "Binary Search",
+      "title": "Fixed Size Window",
+      "summary": "Fixed size windows help maintain a constant window of k elements",
+      "exampleIntro": "Maximum sum of any subarray of size k",
+      "codeExample": "def maxSumSubarray(nums, k):\n        window_sum = sum(nums[:k])\n        max_sum = window_sum\n        \n        for i in range(k, len(nums)):\n            window_sum += nums[i] - nums[i - k]\n            max_sum = max(max_sum, window_sum)\n        \n        return max_sum\n\n    # maxSumSubarray([1, 4, 2, 10, 2, 3, 1, 0, 20], 4) = 24",
+      "useCaseLink": "/Notes/leetcode-sliding-window#binary-search-application-fixed-size-window",
+      "blog": "LeetCode: Sliding Window"
+    }
+  ],
+  "sliding-window": [
+    {
+      "type": "Sliding Window",
+      "title": "Variable Size Window",
+      "summary": "Variable size windows expand and shrink dynamically depending on",
+      "exampleIntro": "Longest substring without repeating characters",
+      "codeExample": "def lengthOfLongestSubstring(s: str) -> int:\n        char_index = {}\n        left = max_len = 0\n        \n        for right in range(len(s)):\n            if s[right] in char_index and char_index[s[right]] >= left:\n                left = char_index[s[right]] + 1\n            \n            char_index[s[right]] = right\n            max_len = max(max_len, right - left + 1)\n        \n        return max_len\n\n    # \"abcabcbb\" → lengthOfLongestSubstring = 3",
+      "useCaseLink": "/Notes/leetcode-sliding-window#sliding-window-application-variable-size-window",
+      "blog": "LeetCode: Sliding Window"
     }
   ]
 }

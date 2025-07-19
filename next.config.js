@@ -8,7 +8,8 @@ const filePaths = [
   'content/leetcode-arrays-and-hashing/index.mdx',
   'content/leetcode-stacks/index.mdx',
   'content/leetcode-two-pointers/index.mdx',
-  'content/leetcode-binary-search/index.mdx'
+  'content/leetcode-binary-search/index.mdx',
+  'content/leetcode-sliding-window/index.mdx'
 ];
 
 function syncWarmness() {
