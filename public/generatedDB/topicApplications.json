@@ -226,11 +226,11 @@
   "binary-search": [
     {
       "type": "Binary Search",
-      "title": "Searching",
+      "title": "Targeted Search",
       "summary": "Using Binary Search to locate the position of a target element",
       "exampleIntro": "Searching for a target number in a sorted array.",
       "codeExample": "def binarySearch(nums, target):\n    left, right = 0, len(nums) - 1\n\n    while left <= right:\n        mid = (left + right) // 2\n\n        if nums[mid] == target:\n            return mid  # Target found\n        elif nums[mid] < target:\n            left = mid + 1  # Search right half\n        else:\n            right = mid - 1  # Search left half\n\n    return -1  # Target not found",
-      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-searching",
+      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-targeted-search",
       "blog": "LeetCode: Binary Search"
     },
     {
@@ -240,6 +240,24 @@
       "exampleIntro": "Searching for a target in a sorted 2D matrix",
       "codeExample": "def searchMatrix(matrix: List[List[int]], target: int) -> bool:\n        if not matrix or not matrix[0]:\n            return False\n\n        rows, cols = len(matrix), len(matrix[0])\n\n        # First layer: Binary search over rows to find candidate row\n        top, bottom = 0, rows - 1\n        while top <= bottom:\n            mid_row = (top + bottom) // 2\n            if matrix[mid_row][0] <= target <= matrix[mid_row][-1]:\n                break\n            elif matrix[mid_row][0] > target:\n                bottom = mid_row - 1\n            else:\n                top = mid_row + 1\n        else:\n            return False  # Target is outside all row ranges\n\n        # Second layer: Binary search within the found row\n        row = mid_row\n        left, right = 0, cols - 1\n        while left <= right:\n            mid_col = (left + right) // 2\n            if matrix[row][mid_col] == target:\n                return True\n            elif matrix[row][mid_col] < target:\n                left = mid_col + 1\n            else:\n                right = mid_col - 1\n\n        return False",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-layered-binary-search",
+      "blog": "LeetCode: Binary Search"
+    },
+    {
+      "type": "Binary Search",
+      "title": "Optimization Search Min Max",
+      "summary": "Using binary search to find the smallest or largest valid value",
+      "exampleIntro": "Find the minimum eating speed to finish all bananas within h hours",
+      "codeExample": "def minEatingSpeed(piles: List[int], h: int) -> int:\n        def hours_needed(speed):\n            return sum((pile + speed - 1) // speed for pile in piles)  # ceil\n\n        left, right = 1, max(piles)\n\n        # Optimization Search\n        while left < right:\n            mid = (left + right) // 2\n\n            # Try slower (minimization)\n            if hours_needed(mid) <= h:\n                right = mid  \n            \n            # Need faster\n            else:\n                left = mid + 1 \n\n        # Note:\n        # there is no case where left > right breaks the loop,\n        # because the condition is < and not <=,\n        # so trigger will always be:\n        # left == right\n        \n        # Smallest k that works\n        return left",
+      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-optimization-search-min-max-",
+      "blog": "LeetCode: Binary Search"
+    },
+    {
+      "type": "Binary Search",
+      "title": "Condition Adapted Binary Search",
+      "summary": "Adapting search conditions of binary search to account for special",
+      "exampleIntro": "Finding the minimum element in a rotated sorted array",
+      "codeExample": "def findMin(nums: List[int]) -> int:\n        left, right = 0, len(nums) - 1\n\n        # If array is not rotated (fully sorted ascending)\n        if nums[left] < nums[right]:\n            return nums[left]\n\n        # Modified binary search with parameter-based decision\n        while left < right:\n            mid = (left + right) // 2\n            \n            # Decision based on comparing mid and right elements\n            if nums[mid] > nums[right]:\n                left = mid + 1\n            else:\n                right = mid\n\n        # left == right points to minimum element\n        return nums[left]",
+      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-condition-adapted-binary-search",
       "blog": "LeetCode: Binary Search"
     }
   ]

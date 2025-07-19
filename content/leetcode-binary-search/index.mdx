@@ -263,6 +263,7 @@ Given a sorted list of elements, find the target
         # space complexity: simple variables in constant O(1)
         left, right = 0, len(nums)-1
 
+        # target binary search with '<='
         # time complexity: split search area per iteration O(log n)
         # space complexity: iterative search, no call stack, O(1)
         while left <= right:
@@ -562,7 +563,7 @@ Find minimum bananas per hour so that all are eaten in time.
             # hours
             return total_hours
         
-        # Binary search over eating speed k
+        # binary optimization search with '<' for k
         while left < right:
             mid = (left + right) // 2
             
@@ -653,7 +654,7 @@ Find smallest number in an array that has been rotated some amount of times.
 ```python
 ```
 
-### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
+### Solution 1: Binary Search - Binary Search/Condition Adapted Binary Search
 ```python
     def findMin(self, nums: List[int]) -> int:
 
@@ -670,7 +671,7 @@ Find smallest number in an array that has been rotated some amount of times.
             # min number
             return nums[left]
         
-        # Optimization Search
+        # binary optimization search with '<'
         while left < right:
             mid = (left + right) // 2
             
@@ -757,15 +758,27 @@ Find target in an array that has been rotated some amount of times.
 ```python
 ```
 
-### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
+### Solution 1: Binary Search - Binary Search/Condition Adapted Binary Search
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
+        # Note:
+        # Modified Binary Search for rotated property
+        # first we check which half is sorted, 
+        # then grab the sorted half, 
+        # and we will be able to tell if the target is in this 
+        # sorted half due to the sorted half boundaries, 
+        # and by inverse if it isn't in the sorted half
+        # we know its in the unsorted half.
+        # We do this because if we use the unsorted half, 
+        # we cannot discern any information whether or not 
+        # the target is in this unsorted half or not because 
+        # there are no boundaries
+
         # outer boundaries
         left, right = 0, len(nums) - 1
 
-
-        # target binary search
+        # target binary search with '<='
         while left <= right:
 
             mid = (left + right) // 2 
@@ -774,25 +787,323 @@ Find target in an array that has been rotated some amount of times.
             if nums[mid] == target:
                 return mid
 
-            # Case 1: Left half is sorted, 
+            # left half is sorted, 
             if nums[left] <= nums[mid]:
+                # target lies in sorted half
                 if nums[left] <= target < nums[mid]:
-                    # Target lies in sorted left half
                     right = mid - 1
+                # target lies in non sorted half
                 else:
-                    # Target lies in right half
                     left = mid + 1
 
-            # Case 2: Right half is sorted
+            # right half is sorted
             else:
+                # target lies in sorted half
                 if nums[mid] < target <= nums[right]:
-                    # Target lies in sorted right half
                     left = mid + 1
+                # target lies in non sorted half
                 else:
-                    # Target lies in left half
                     right = mid - 1
 
-        return -1  # Target not found
+        # no target found
+
+        # overall: time complexity
+        # overall: space complexity
+        return -1
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Binary search loop | O(log n) | O(1) | Search space halved each iteration O(log n) | No additional memory allocation for iterative binary search O(1) |
+| One target comparison | O(1) | O(1) | Mid comparison in constant O(1) | No additional memory allocation for comparison O(1) |
+| Overall | O(log n) | O(1) | Binary search over n elements dominates, leading to O(log n) | No additional memory allocation O(1) |
+
+## 981. Time Based Key Value Store ::2:: - Medium
+
+Topics:  Hash Table, String, Binary Search, Design
+
+### Intro
+> Design a time-based key-value data structure that can store multiple values for
+> the same key at different time stamps and retrieve the key's value at a certain timestamp.
+> Implement the TimeMap class:
+> TimeMap() Initializes the object of the data structure.
+> void set(String key, String value, int timestamp) Stores the key key with the value value at the given time timestamp.
+> String get(String key, int timestamp) Returns a value such that set 
+> was called previously, with timestamp_prev &leq; timestamp. If there are 
+> multiple such values, it returns the value associated with the largest 
+> timestamp_prev. If there are no values, it returns "".
+
+|  Example Input   | Output |  
+| ---------------- | ------ | 
+| ["TimeMap", "set", "get", "get", "set", "get", "get"] [[], ["foo", "bar", 1], ["foo", 1], ["foo", 3], ["foo", "bar2", 4], ["foo", 4], ["foo", 5]] | [null, null, "bar", "bar", null, "bar2", "bar2"] |
+
+Constraints:
+
+1 &leq; keys.length, values.length &leq; 100 
+
+key and value consist of lowercase English letters and digits.
+
+1 &leq; timestamp &leq; 10<sup>7</sup>
+
+All the timestamps timestamp of set are strictly increasing.
+
+At most 2 * 10<sup>5</sup> calls will be made to set and get.
+
+### Abstraction
+Find target in an array that has been rotated some amount of times.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug: (iterating element-wise)
+```python
+```
+
+### Solution 1: Reverse Linear Scan - Binary Search/Condition Adapted Binary Search
+```python
+    class TimeMap:
+
+        # Note:
+        # Stores multiple (value, timestamp) tuples per key in insertion order
+        # The 'get' function performs a reverse linear scan to find 
+        # the latest time <= the query timestamp.
+        # 'get' can be slow if many timestamps per key O(m)
+
+        # space complexity: n is the total set calls across all keys O(n)
+        def __init__(self):
+            # key -> (value, timestamp)
+            self.store = {}
+
+        # overall: time complexity O(1) amortized
+        def set(self, key: str, value: str, timestamp: int) -> None:
+            if key not in self.store:
+                self.store[key] = []
+            self.store[key].append((value, timestamp))
+
+        # overall: time complexity where m is number of timestamps for this key O(m)
+        def get(self, key: str, timestamp: int) -> str:
+            if key not in self.store:
+                return ''
+            
+            values = self.store[key]
+            i = len(values) - 1
+            
+            # Reverse linear scan to find largest timestamp <= query
+            while i >= 0 and values[i][1] > timestamp:
+                i -= 1
+
+            return values[i][0] if i >= 0 else ''
+
+        # overall: time complexity 
+        # overall: space complexity
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| set | O(1) | O(1) | Amortized constant time append O(1) | One tuples stored per call |
+| get | O(m) | O(1) | Linear scan backward through at most m timestamps | No additional memory allocation |
+| Overall | O(m) | O(n) | get scaling linearly with timestamps count dominates, leading to O(m) | Storage is proportional to total number of sets O(n) |
+
+
+### Solution 2: Binary Search on Timestamps - Binary Search/Condition Adapted Binary Search
+```python
+    class TimeMap:
+
+        # Note:
+        # Stores (value, timestamp) tuples per key in insertion order (sorted by timestamp)
+        # 'get' uses binary search to find the largest timestamp <= the query timestamp.
+        # 'get' more efficient O(log m)
+
+        # space complexity: n is the total set calls across all keys O(n)
+        def __init__(self):
+            # key -> (value, timestamp)
+            self.store = {}
+
+        # overall: time complexity amortized O(1)
+        def set(self, key: str, value: str, timestamp: int) -> None:
+            if key not in self.store:
+                self.store[key] = []
+            self.store[key].append((value, timestamp))
+
+        # overall: time complexity where m is number of timestamps for this key O(log m)
+        def get(self, key: str, timestamp: int) -> str:
+            if key not in self.store:
+                return ""
+            
+            values = self.store[key]
+            left, right = 0, len(values) - 1
+            res = ""
+
+            # Binary search: find latest value with timestamp <= given timestamp
+            while left <= right:
+                mid = (left + right) // 2
+                if values[mid][1] <= timestamp:
+                    res = values[mid][0]
+                    left = mid + 1
+                else:
+                    right = mid - 1
+            return res
+
+        
+        # overall: time complexity O(log m)
+        # overall: space complexity O(n)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| set | O(1) | O(1) | Amortized constant time append O(1) | One tuple stored per call O(1) |
+| get | O(log m) | Binary search over m timestamps O(log m) | No additional memory allocation for binary search O(1) |  |
+| Overall | O(log m) | O(n) | Binary search retrieval dominates, leading to O(log m) | Storage proportional to total number of sets O(n) |
+
+## 4. Median of Two Sorted Arrays ::2:: - Medium
+
+Topics:  Array, Binary Search, Divide and Conquer
+
+### Intro
+> Given two sorted arrays nums1 and nums2 of size m and n 
+> respectively, return the median of the two sorted arrays.
+> The overall run time complexity should be O(log (m+n)).
+
+
+|  Example Input   | Output |  
+| ---------------- | ------ | 
+| nums1 = [1,3], nums2 = [2] | 2.00000 |
+| nums1 = [1,2], nums2 = [3,4] | 2.50000 |
+
+
+Constraints:
+
+nums1.length == m 
+
+nums2.length == n 
+
+0 &leq; m &leq; 1000 
+
+0 &leq; n &leq; 1000
+
+1 &leq; m + n &leq; 2000
+
+-10<sup>6</sup> nums1[i], nums2[i] &leq; 10<sup>6</sup>
+
+### Abstraction
+Find median between two sorted arrays.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug: (iterating element-wise)
+```python
+```
+
+### Solution 1: Two Pointer Merge Until Median - Binary Search/Condition Adapted Binary Search
+```python
+    def findMedianSortedArrays(self, nums1, nums2):
+        
+        # Note:
+        # 
+        
+        m, n = len(nums1), len(nums2)
+        p1, p2 = 0, 0
+
+        # Helper function to get the smaller of the next available values
+        def get_min():
+            nonlocal p1, p2
+            if p1 < m and p2 < n:
+                if nums1[p1] < nums2[p2]:
+                    ans = nums1[p1]
+                    p1 += 1
+                else:
+                    ans = nums2[p2]
+                    p2 += 1
+            elif p2 == n:
+                ans = nums1[p1]
+                p1 += 1
+            else:
+                ans = nums2[p2]
+                p2 += 1
+            return ans
+
+        # Calculate median depending on total length parity
+        if (m + n) % 2 == 0:
+            for _ in range((m + n) // 2 - 1):
+                _ = get_min()
+            return (get_min() + get_min()) / 2
+        else:
+            for _ in range((m + n) // 2):
+                _ = get_min()
+            return get_min()
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: Binary Search Partition - Binary Search/Condition Adapted Binary Search
+```python
+   def findMedianSortedArrays(self, nums1, nums2):
+
+        # Note:
+        # 
+
+        # Ensure nums1 is the smaller array
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+
+        m, n = len(nums1), len(nums2)
+        low, high = 0, m
+
+        while low <= high:
+            partitionX = (low + high) // 2
+            partitionY = (m + n + 1) // 2 - partitionX
+
+            # Edge cases for partitions
+            maxLeftX = float('-inf') if partitionX == 0 else nums1[partitionX - 1]
+            minRightX = float('inf') if partitionX == m else nums1[partitionX]
+
+            maxLeftY = float('-inf') if partitionY == 0 else nums2[partitionY - 1]
+            minRightY = float('inf') if partitionY == n else nums2[partitionY]
+
+            # Check for correct partition
+            if maxLeftX <= minRightY and maxLeftY <= minRightX:
+                if (m + n) % 2 == 0:
+                    return (max(maxLeftX, maxLeftY) + min(minRightX, minRightY)) / 2
+                else:
+                    return max(maxLeftX, maxLeftY)
+            elif maxLeftX > minRightY:
+                high = partitionX - 1
+            else:
+                low = partitionX + 1 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |

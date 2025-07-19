@@ -5,14 +5,16 @@
   "15. 3Sum ::2::": 15,
   "20. Valid Parentheses ::2::": 20,
   "22. Generate Parentheses ::4::": 22,
+  "33. Search in Rotated Sorted Array ::1::": 33,
   "36. Valid Sudoku ::2::": 36,
   "42. Trapping Rain Water ::3::": 42,
   "49. Group Anagrams ::2::": 49,
-  "74. Search a 2D Matrix ::1::": 74,
+  "74. Search a 2D Matrix ::2::": 74,
   "84. Largest Rectangle in Histogram ::2::": 84,
   "125. Valid Palindrome ::3::": 125,
   "128. Longest Consecutive Sequence ::3::": 128,
   "150. Evaluate Reverse Polish Notation ::1::": 150,
+  "153. Find Minimum in Rotated Sorted Array ::1::": 153,
   "155. Min Stack ::2::": 155,
   "167. Two Sum II (Input Array Is Sorted) ::2::": 167,
   "217. Contains Duplicate ::2::": 217,
@@ -23,5 +25,6 @@
   "402. Remove K Digits ::1::": 402,
   "704. Binary Search ::2::": 704,
   "739. Daily Temperatures ::3::": 739,
-  "853. Car Fleet ::2::": 853
+  "853. Car Fleet ::2::": 853,
+  "875. Koko Eating Bananas ::1::": 875
 }

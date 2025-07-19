@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "5": {
     "questionNum": 5,
@@ -26,7 +26,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "11": {
     "questionNum": 11,
@@ -41,7 +41,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "15": {
     "questionNum": 15,
@@ -57,7 +57,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "20": {
     "questionNum": 20,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 5
+    "coldnessCount": 6
   },
   "22": {
     "questionNum": 22,
@@ -89,6 +89,20 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "33": {
+    "questionNum": 33,
+    "questionTitle": "Search in Rotated Sorted Array ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There is an integer array nums sorted in ascending order (with distinct values). Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 &leq; k &le; nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2]. Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums. You must write an algorithm with O(log n) runtime complexity.",
+    "questionTopics": [
+      "Array",
+      "Binary Search"
+    ],
+    "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
+    "blog": "LeetCode: Binary Search",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "36": {
     "questionNum": 36,
     "questionTitle": "Valid Sudoku ::2::",
@@ -102,7 +116,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "42": {
     "questionNum": 42,
@@ -119,7 +133,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "49": {
     "questionNum": 49,
@@ -135,19 +149,19 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "74": {
     "questionNum": 74,
-    "questionTitle": "Search a 2D Matrix ::1::",
-    "questionDifficulty": "Easy",
+    "questionTitle": "Search a 2D Matrix ::2::",
+    "questionDifficulty": "Medium",
     "questionBlurb": "You are given an m x n integer matrix matrix with the following two properties: Each row is sorted in non-decreasing order. The first integer of each row is greater than the last integer of the previous row. Given an integer target, return true if target is in matrix or false otherwise. You must write a solution in O(log(m * n)) time complexity.",
     "questionTopics": [
       "Array",
       "Binary Search",
       "Matrix"
     ],
-    "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-1---easy",
+    "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -179,7 +193,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "128": {
     "questionNum": 128,
@@ -194,7 +208,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "150": {
     "questionNum": 150,
@@ -210,7 +224,21 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 6
+    "coldnessCount": 7
+  },
+  "153": {
+    "questionNum": 153,
+    "questionTitle": "Find Minimum in Rotated Sorted Array ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Suppose an array of length n sorted in ascending order s rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become: [4,5,6,7,0,1,2] if it was rotated 4 times. [0,1,2,4,5,6,7] if it was rotated 7 times. Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time results in the array [a[n-1], a[0], a[1], a[2], ..., a[n-2]]. Given the sorted rotated array nums of unique elements, return the minimum element of this array. You must write an algorithm that runs in O(log n) time.",
+    "questionTopics": [
+      "Array",
+      "Binary Search"
+    ],
+    "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
+    "blog": "LeetCode: Binary Search",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "155": {
     "questionNum": 155,
@@ -224,7 +252,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 5
+    "coldnessCount": 6
   },
   "167": {
     "questionNum": 167,
@@ -239,7 +267,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "217": {
     "questionNum": 217,
@@ -254,7 +282,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "238": {
     "questionNum": 238,
@@ -268,7 +296,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "242": {
     "questionNum": 242,
@@ -283,7 +311,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "271": {
     "questionNum": 271,
@@ -297,7 +325,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "347": {
     "questionNum": 347,
@@ -317,7 +345,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "402": {
     "questionNum": 402,
@@ -379,6 +407,20 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#853-car-fleet-2---medium",
     "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "875": {
+    "questionNum": 875,
+    "questionTitle": "Koko Eating Bananas ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours. Koko can decide her bananas-per-hour eating speed of k. Each hour, she chooses some pile of bananas and eats k bananas from that pile. If the pile has less than k bananas, she eats all of them instead and will not eat any more bananas during this hour. Koko likes to eat slowly but still wants to finish eating all the bananas before the guards return. Return the minimum integer k such that she can eat all the bananas within h hours.",
+    "questionTopics": [
+      "Array",
+      "Binary Search"
+    ],
+    "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-1---medium",
+    "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }
