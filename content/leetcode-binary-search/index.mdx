@@ -30,7 +30,7 @@ and O(log n) for recursive due to the call stack.
 This is an improvement from linear search which takes O(n) time.
 
 
-### Binary Search Application: Searching
+### Binary Search Application: Targeted Search
 Using Binary Search to locate the position of a target element 
 in a sorted list by repeatedly dividing the search interval in half.
 
@@ -93,6 +93,74 @@ Ex: Searching for a target in a sorted 2D matrix
                 right = mid_col - 1
 
         return False
+```
+
+### Binary Search Application: Optimization Search Min Max 
+Using binary search to find the smallest or largest valid value 
+that satisfies a given constraint (e.g., minimum speed, minimum time, maximum capacity)
+
+Searches over a numeric range, not for a target, 
+and typically uses while left < right (left == right, as a trigger)
+to fin the min or max boundary.
+
+Ex: Find the minimum eating speed to finish all bananas within h hours
+```python
+    def minEatingSpeed(piles: List[int], h: int) -> int:
+        def hours_needed(speed):
+            return sum((pile + speed - 1) // speed for pile in piles)  # ceil
+
+        left, right = 1, max(piles)
+
+        # Optimization Search
+        while left < right:
+            mid = (left + right) // 2
+
+            # Try slower (minimization)
+            if hours_needed(mid) <= h:
+                right = mid  
+            
+            # Need faster
+            else:
+                left = mid + 1 
+
+        # Note:
+        # there is no case where left > right breaks the loop,
+        # because the condition is < and not <=,
+        # so trigger will always be:
+        # left == right
+        
+        # Smallest k that works
+        return left  
+```
+
+### Binary Search Application: Condition Adapted Binary Search
+Adapting search conditions of binary search to account for special
+problem parameters or constraints (e.g., rotated array, duplicates, bounded search).
+
+Covers problems where binary search is applied, but the standard algorithm
+is modified.
+
+Ex: Finding the minimum element in a rotated sorted array
+```python
+    def findMin(nums: List[int]) -> int:
+        left, right = 0, len(nums) - 1
+
+        # If array is not rotated (fully sorted ascending)
+        if nums[left] < nums[right]:
+            return nums[left]
+
+        # Modified binary search with parameter-based decision
+        while left < right:
+            mid = (left + right) // 2
+            
+            # Decision based on comparing mid and right elements
+            if nums[mid] > nums[right]:
+                left = mid + 1
+            else:
+                right = mid
+
+        # left == right points to minimum element
+        return nums[left]
 ```
 
 ## 704. Binary Search ::2:: - Easy
@@ -230,7 +298,7 @@ Given a sorted list of elements, find the target
 
 
 
-## 74. Search a 2D Matrix ::1:: - Easy
+## 74. Search a 2D Matrix ::2:: - Medium
 
 Topics:  Array, Binary Search, Matrix
 
@@ -410,3 +478,324 @@ Given a sorted matrix, check if target is in matrix
 | Overall | O(log m + log n) = O(log (m*n)) | O(1) | Sum of two binary searches dominates, leading to O(log m + log n) | No additional memory allocation, leading to O(1)  |
 
 
+
+## 875. Koko Eating Bananas ::1:: - Medium
+
+Topics:  Array, Binary Search
+
+### Intro
+> Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas.
+> The guards have gone and will come back in h hours.
+> Koko can decide her bananas-per-hour eating speed of k.
+> Each hour, she chooses some pile of bananas and eats k bananas from that pile.
+> If the pile has less than k bananas, she eats all of them instead and will not eat any more bananas during this hour.
+> Koko likes to eat slowly but still wants to finish eating all the bananas before the guards return.
+> Return the minimum integer k such that she can eat all the bananas within h hours.
+
+|  Example Input   | Output |  
+| ---------------- | ------ | 
+| piles = [3,6,7,11], h = 8 | 4 |
+| piles = [30,11,23,4,20], h = 5 | 30 |  
+| piles = [30,11,23,4,20], h = 6 | 23 |
+ 
+Constraints:
+
+1 &leq; piles.length &leq; 10<sup>4</sup>
+
+piles.length &leq; h &leq; 10<sup>9</sup>
+
+1 &leq; piles[i] &leq; 10<sup>9</sup>
+
+### Abstraction
+Find minimum bananas per hour so that all are eaten in time.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug: (iterating element-wise)
+```python
+```
+
+### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
+```python
+    import math
+
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        
+        # Note:
+        # Find minimum int k such that Koko can eat all bananas within h hours
+        # Number of hours decreases monotonically as k increases, binary search is optimal
+        # For each speed k, we calculate how many hours it would take
+        # Outer binary search over k, inner calculation per pile
+        
+        # Minimum speed can be 1 banana per hour
+        left = 1
+        
+        # Maximum speed is the largest pile size, ie. eat the largest pile in one hour
+        # anything above the largest pile size is a waste
+        right = max(piles)
+        
+        # Calculate total hours needed to eat all bananas at speed k
+        def hours_needed(speed: int) -> int:
+            total_hours = 0
+            for pile in piles:
+
+                # Hours to eat this pile = ceil(pile / speed)
+                total_hours += math.ceil(pile / speed)
+
+            # hours
+            return total_hours
+        
+        # Binary search over eating speed k
+        while left < right:
+            mid = (left + right) // 2
+            
+            # Calculate hours needed at speed mid
+            required_hours = hours_needed(mid)
+            
+            # Notice: 
+            # we are not finding a target,
+            # but instead are finding a minimum k
+            # so we do not need to check for a target
+
+            if required_hours <= h:
+                # Can finish in time; try slower speed (lower k)
+                right = mid
+            else:
+                # Cannot finish in time; need faster speed (higher k)
+                left = mid + 1
+        
+        # left == right is the minimal k to finish in time
+
+        # overall: time complexity
+        # overall: space complexity
+        return left
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Outer Binary Search | O(log(max(piles))) | O(1) | Binary search over range of possible speeds from 1 to max files size O(log(max(piles))) | No additional memory allocation for binary search O(1) |
+| Hours calculation | O(n) | O(1) | Iterate over all piles to calculate if piles are eaten O(n) | No additional memory allocation for calculation O(1) |
+| Overall | O(n * log(max(piles))) | O(1) | Binary search over range alongside hours calculation per candidate dominates, leading to O(n * log(max(piles))) | No additional memory allocation O(1) |
+
+
+
+## 153. Find Minimum in Rotated Sorted Array ::1:: - Medium
+
+Topics:  Array, Binary Search
+
+### Intro
+> Suppose an array of length n sorted in ascending order
+> s rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
+> [4,5,6,7,0,1,2] if it was rotated 4 times.
+> [0,1,2,4,5,6,7] if it was rotated 7 times.
+> Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]]
+> 1 time results in the array [a[n-1], a[0], a[1], a[2], ..., a[n-2]].
+> Given the sorted rotated array nums of unique elements, return the minimum element of this array.
+> You must write an algorithm that runs in O(log n) time.
+
+|  Example Input   | Output |  
+| ---------------- | ------ | 
+| nums = [3,4,5,1,2] | 1 |
+| nums = [4,5,6,7,0,1,2] | 0 |  
+| nums = [11,13,15,17] | 11 |
+ 
+Constraints:
+
+n == nums.length 
+
+1 &leq; n &leq; 5000
+
+-5000 &leq; nums[i] &leq; 5000
+
+All of the integers of nums are unique 
+
+nums is sorted and rotated between 1 and n times
+
+### Abstraction
+Find smallest number in an array that has been rotated some amount of times.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug: (iterating element-wise)
+```python
+```
+
+### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
+```python
+    def findMin(self, nums: List[int]) -> int:
+
+        # Note:
+        # Modified Binary Search: accounting for rotated property
+        # Optimization Search: finding the min element
+        # We are finding the min element, so we just need to compare mid against right most element
+
+        # outer elements
+        left, right = 0, len(nums) - 1
+        
+        # Check: If array is not rotated (sorted ascending)
+        if nums[left] < nums[right]:
+            # min number
+            return nums[left]
+        
+        # Optimization Search
+        while left < right:
+            mid = (left + right) // 2
+            
+            # need to find min value, not a specific target
+            # use property of rotated sorted array
+            # min lies in the unsorted half
+            # 
+            # If mid element is greater than the rightmost element,
+            # higher elements are on the left of mid
+            # smaller elements are on the right of mid (excluding mid)
+            if nums[mid] > nums[right]:
+                left = mid + 1
+
+            # Otherwise, minimum is at mid or in the left half
+            else:
+                right = mid
+        
+        # left == right is the minimum element index
+        
+        # overall: time complexity
+        # overall: space complexity
+        return nums[left]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Binary Search Loop | O(log n) | O(1) | Binary search iteration halves search space due to sorted and rotated property O(log n) | No additional memory allocation O(1) |
+| No explicit target | O(1) | O(1) | We are optimizing loop to converge to min O(1) | No additional memory allocation O(1) |
+| Overall | O(log n) | O(1) | Binary search over array of n length dominates, leading to O(log n) | No additional memory allocation for binary search |
+
+## 33. Search in Rotated Sorted Array ::1:: - Medium
+
+Topics:  Array, Binary Search
+
+### Intro
+> There is an integer array nums sorted in ascending order (with distinct values).
+> Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 &leq; k &le; nums.length)
+> such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed).
+> For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+> Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]]
+> Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+> You must write an algorithm with O(log n) runtime complexity.
+
+|  Example Input   | Output |  
+| ---------------- | ------ | 
+| nums = [4,5,6,7,0,1,2], target = 0 | 4 |
+| nums = [4,5,6,7,0,1,2], target = 3 | -1 |  
+| nums = [1], target = 0 | -1 |
+ 
+Constraints:
+
+1 &leq; nums.length &leq; 5000
+
+-10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
+
+All values of nums are unique.
+
+nums is an ascending array that is possibly rotated.
+
+-10<sup>4</sup> &leq; target &leq; 10<sup>4</sup>
+
+### Abstraction
+Find target in an array that has been rotated some amount of times.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug: (iterating element-wise)
+```python
+```
+
+### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
+```python
+    def search(self, nums: List[int], target: int) -> int:
+        
+        # outer boundaries
+        left, right = 0, len(nums) - 1
+
+
+        # target binary search
+        while left <= right:
+
+            mid = (left + right) // 2 
+
+            # Check: found target
+            if nums[mid] == target:
+                return mid
+
+            # Case 1: Left half is sorted, 
+            if nums[left] <= nums[mid]:
+                if nums[left] <= target < nums[mid]:
+                    # Target lies in sorted left half
+                    right = mid - 1
+                else:
+                    # Target lies in right half
+                    left = mid + 1
+
+            # Case 2: Right half is sorted
+            else:
+                if nums[mid] < target <= nums[right]:
+                    # Target lies in sorted right half
+                    left = mid + 1
+                else:
+                    # Target lies in left half
+                    right = mid - 1
+
+        return -1  # Target not found
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
