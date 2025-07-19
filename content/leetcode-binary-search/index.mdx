@@ -213,8 +213,41 @@ Given a sorted list of elements, find the target
 |  |  |  |  |  |
 
 
-### Find the Bug: (iterating element-wise)
+### Find the Bug: Missing return value
 ```python
+    def search(self, nums: List[int], target: int) -> int:
+        
+        def helper(left, right):
+            
+            # base case: target not found
+            if left > right:
+                return -1
+
+            mid = (left+right)//2
+
+            # base case target found
+            if nums[mid] == target:
+                return mid
+
+            # search right
+            elif nums[mid] < target:
+
+                # INCORRECT:
+                # no return value
+                # Instead:
+                # return helper(mid+1, right)
+                helper(mid+1, right)
+            
+            # search left
+            else:
+                # INCORRECT:
+                # no return value
+                # Instead: 
+                # return helper(left, mid-1)
+                helper(left, mid-1)
+
+        res = helper(0, len(nums)-1)
+        return res
 ```
 
 ### Solution 1: Recursive Binary Search - Binary Search/Searching
@@ -222,19 +255,24 @@ Given a sorted list of elements, find the target
     def search(self, nums: List[int], target: int) -> int:
         
         # Note:
-        # Recursive binary search calls itself with smaller range
+        # Recursive binary search calls itself with smaller range,
+        # and leads to call stack of O(log n)
 
-        def helper(left: int, right: int) -> int:
+        def helper(left, right):
             # base case: target not found
             if left > right:
                 return -1
 
             mid = (left + right) // 2
 
+            # base case: target found
             if nums[mid] == target:
                 return mid
+
+            # search right side
             elif nums[mid] < target:
                 return helper(mid + 1, right)
+            # search left side
             else:
                 return helper(left, mid - 1)
 

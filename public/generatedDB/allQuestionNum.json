@@ -13,6 +13,21 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 9
   },
+  "4": {
+    "questionNum": 4,
+    "questionTitle": "Median of Two Sorted Arrays ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Divide and Conquer"
+    ],
+    "questionLink": "/Notes/leetcode-binary-search#4-median-of-two-sorted-arrays-2---medium",
+    "blog": "LeetCode: Binary Search",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "5": {
     "questionNum": 5,
     "questionTitle": "Longest Palindromic Substring ::2::",
@@ -420,6 +435,22 @@
       "Binary Search"
     ],
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-1---medium",
+    "blog": "LeetCode: Binary Search",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "981": {
+    "questionNum": 981,
+    "questionTitle": "Time Based Key Value Store ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Design a time-based key-value data structure that can store multiple values for the same key at different time stamps and retrieve the key's value at a certain timestamp. Implement the TimeMap class: TimeMap() Initializes the object of the data structure. void set(String key, String value, int timestamp) Stores the key key with the value value at the given time timestamp. String get(String key, int timestamp) Returns a value such that set was called previously, with timestamp_prev &leq; timestamp. If there are multiple such values, it returns the value associated with the largest timestamp_prev. If there are no values, it returns \"\".",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Binary Search",
+      "Design"
+    ],
+    "questionLink": "/Notes/leetcode-binary-search#981-time-based-key-value-store-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": null,
     "coldnessCount": -1
