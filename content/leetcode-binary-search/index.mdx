@@ -29,6 +29,51 @@ and O(log n) for recursive due to the call stack.
 
 This is an improvement from linear search which takes O(n) time.
 
+### Understanding Optimization Search: Min vs Max
+In optimization style binary search, we're not finding a specific value,
+but rather are finding the smallest or largest values that satisfies a condition.
+
+1. Finding the Minimum Valid Value 
+```python
+    if condition(mid):
+        right = mid        # mid might be the answer, keep it
+    else:
+        left = mid + 1     # mid is invalid, discard it
+```
+2. Finding the Maximum Valid Value
+```python
+    if condition(mid):
+        left = mid         # mid might be the answer, keep it
+    else:
+        right = mid - 1    # mid is invalid, discard it`
+```
+
+### Why Binary Search Can Find < and > but Not < and > or equal to
+Binary Search splits the space at mid and decides whether
+to include or exclude it.
+
+This means it works best with strict boundaries.
+
+Its easy to shrink towards a point where the transition happens
+on < or >.
+
+However, it struggles with ambiguous boundaries like < and > or equal to.
+As you don't know which direction to move in.
+
+Ex: first element < or equal to target
+```python
+# When:
+    arr[mid] == target
+
+# Should you go left or right?
+# If you go right, you might miss an earlier match
+# If you go left, you might go too far and miss it entirely
+```
+
+So binary search prefers to work with 
+< for upper bound, > for lower bound.
+And shift answer manually to get < and > or equal to.
+
 ### Insight on Pointer Updates
 A basic but easily overlooked principle in binary search is that 
 the search space must shrink with every iteration.
@@ -107,7 +152,7 @@ def find_min_with_duplicates(nums):
 ```
 
 
-### Binary Search Application: Targeted Search
+### Binary Search Application: Target Binary Search
 Using Binary Search to locate the position of a target element 
 in a sorted list by repeatedly dividing the search interval in half.
 
@@ -172,7 +217,7 @@ Ex: Searching for a target in a sorted 2D matrix
         return False
 ```
 
-### Binary Search Application: Optimization Search Min Max 
+### Binary Search Application: Optimization Search Min Max Binary Search 
 Using binary search to find the smallest or largest valid value 
 that satisfies a given constraint (e.g., minimum speed, minimum time, maximum capacity)
 
@@ -240,12 +285,12 @@ Ex: Finding the minimum element in a rotated sorted array
         return nums[left]
 ```
 
-### Binary Search Application: Optimization Based on Target Upper Bound or Lower Bound Binary Search
+### Binary Search Application: Upper Ceiling or Lower Floor Trick Based on Target Binary Search
 Binary search cannot directly find the largest element less than or equal to a target
-or similarly find the smallest elements greater than or equal to a target.
+(or similarly find the smallest elements greater than or equal to a target)
+in one step.
 
-Instead of directly searching for largest element less than or equal to target 
-we search for the first element greater than the target and then simply 
+Instead we search for the first element greater than the target and then simply 
 shift one position left to get the largest element less than or equal. 
 
 Ex: Find the first element less than or equal to target
@@ -262,7 +307,7 @@ Ex: Find the first element less than or equal to target
 
         # left is now the index of first element > target
         # so the answer is at left - 1 (if valid)
-        return nums[left - 1] if left > 0 else None
+        return nums[left - 1] if left > 0 else ""
 ```
 
 ## 704. Binary Search ::2:: - Easy
@@ -1086,38 +1131,36 @@ Find target in an array that has been rotated some amount of times.
 
         # space complexity: n is the total set calls across all keys O(n)
         def __init__(self):
-            # key -> tuple: (value, timestamp)
+            # key -> [(value, timestamp)]
             self.store = {}
 
         # overall: time complexity O(1) amortized
         def set(self, key: str, value: str, timestamp: int) -> None:
             
-            # add to corresponding list
+            # append to key list:  (value, timestamp)
             if key not in self.store:
                 self.store[key] = []
-
-            # tuple: (value, timestamp)
             self.store[key].append((value, timestamp))
 
         # overall: time complexity where m is number of timestamps for this key O(m)
         def get(self, key: str, timestamp: int) -> str:
             
-            # if list does not exist
+            # if key list does not exist
             if key not in self.store:
                 return ''
             
-            # grab list of tuples: (value, timestamp)
+            # grab key list: [(value, timestamp)]
             values = self.store[key]
 
             # outer boundaries
             i = len(values) - 1
             
-            # Reverse linear scan to grab
-            # the largest timestamp <= query
+            # Reverse linear scan:
+            # grab first valid highest timestamp <= query
             while 0 <= i and values[i][1] > timestamp:
                 i -= 1
 
-            # not found case index -1
+            # not found case: index -1
             # or
             # timestamp is now <= query
             return values[i][0] if i != -1 else ''
@@ -1132,9 +1175,16 @@ Find target in an array that has been rotated some amount of times.
 | Overall | O(m) | O(n) | get scaling linearly with timestamps count dominates, leading to O(m) | Storage is proportional to total number of sets O(n) |
 
 
-### Solution 2: Binary Search on Timestamps - Binary Search/Condition Adapted Binary Search
+### Solution 2: Upper Ceiling to Find Highest Timestamp Closest to Query Request - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
 ```python
     class TimeMap:
+
+        # Note:
+        # Upper Ceiling Trick:
+        # We cannot directly optimize for 'timestamp <= target' using '<=' via this binary search.
+        # Instead, optimize for the condition 'timestamp < target' (strictly greater than).
+        # The search finds the index of the first timestamp greater than the target.
+        # After, we shift the pointer by one (left - 1) to get the largest timestamp <= target.
 
         # Note:
         # Stores (value, timestamp) tuples per key in insertion order (sorted by timestamp)
@@ -1143,58 +1193,55 @@ Find target in an array that has been rotated some amount of times.
 
         # space complexity: n is the total set calls across all keys O(n)
         def __init__(self):
-            # key -> tuple: (value, timestamp)
+            # key -> [(value, timestamp)]
             self.store = {}
 
         # overall: time complexity amortized O(1)
         def set(self, key: str, value: str, timestamp: int) -> None:
             
-            # add to corresponding list
+            # append to key list:  (value, timestamp)
             if key not in self.store:
                 self.store[key] = []
-            
-            # tuple: (value, timestamp)
             self.store[key].append((value, timestamp))
 
         # overall: time complexity where m is number of timestamps for this key O(log m)
         def get(self, key: str, timestamp: int) -> str:
 
-            # Note:
-            # We cannot directly optimize for 'timestamp <= target' using '<=' in this binary search loop,
-            # because that would complicate pointer movement and termination.
-            # Instead, we optimize for the condition 'timestamp < target' (strictly less than).
-            # This way, the search finds the index of the first timestamp greater than the target.
-            # After the loop, we shift the pointer by one (left - 1) to get the largest timestamp <= target.
-
             # if list does not exist
             if key not in self.store:
                 return ''
             
-            # grab list of tuples: (value, timestamp)
+            # grab key list: [(value, timestamp)]
             values = self.store[key]
 
             # outer boundaries
             left, right = 0, len(values)
             
-            # Binary search: find the first index with timestamp > query timestamp
-            # time complexity: binary search over time stamps
+            # Upper Ceiling Binary Search Shift Trick: 
+            # In order to find: highest timestamp <= query
+            # First first: query < min timestamp 
+            # Then shift index: find highest timestamp <= query
+            
+            
+            # find: query < min timestamp
+            # time complexity: binary search over time stamps O(m)
             while left < right:
                 
                 mid = (left + right) // 2
 
                 # If the timestamp at mid is less than or equal to the query timestamp,
-                # then the current mid could still be a valid candidate,
+                # then current mid is a valid candidate for '<=',
+                # however, we want '<', so we increase mid by 1 
                 if values[mid][1] <= timestamp:
                     left = mid + 1
-
+        
+                # Todo: ended here
                 # Otherwise, the current timestamp is too large,
                 else:
                     right = mid
 
-            # not found case
-            # or 
-            # timestamp is now <= query
-            return values[left - 1][0] if left > 0 else ''      
+            # shift index: find highest timestamp <= query 
+            return values[left - 1][0] if left != 0 else ''      
 
         # overall: time complexity O(log m)
         # overall: space complexity O(n)

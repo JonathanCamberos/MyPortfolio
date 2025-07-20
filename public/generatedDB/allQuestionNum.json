@@ -16,14 +16,14 @@
   "4": {
     "questionNum": 4,
     "questionTitle": "Median of Two Sorted Arrays ::2::",
-    "questionDifficulty": "Medium",
+    "questionDifficulty": "Hard",
     "questionBlurb": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).",
     "questionTopics": [
       "Array",
       "Binary Search",
       "Divide and Conquer"
     ],
-    "questionLink": "/Notes/leetcode-binary-search#4-median-of-two-sorted-arrays-2---medium",
+    "questionLink": "/Notes/leetcode-binary-search#4-median-of-two-sorted-arrays-2---hard",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -458,7 +458,7 @@
     "questionNum": 981,
     "questionTitle": "Time Based Key Value Store ::2::",
     "questionDifficulty": "Medium",
-    "questionBlurb": "Design a time-based key-value data structure that can store multiple values for the same key at different time stamps and retrieve the key's value at a certain timestamp. Implement the TimeMap class: TimeMap() Initializes the object of the data structure. void set(String key, String value, int timestamp) Stores the key key with the value value at the given time timestamp. String get(String key, int timestamp) Returns a value such that set was called previously, with timestamp_prev &leq; timestamp. If there are multiple such values, it returns the value associated with the largest timestamp_prev. If there are no values, it returns \"\".",
+    "questionBlurb": "Design a time based key value data structure that can store multiple values for the same key at different time stamps and retrieve the key's value at a certain timestamp. Implement the TimeMap class: TimeMap(): Initializes the object of the data structure. void set(String key, String value, int timestamp): Stores the key key with the value value at the given time timestamp. String get(String key, int timestamp): Returns a value such that set was called previously, with timestamp_prev &leq; timestamp. If there are multiple such values, it returns the value associated with the largest timestamp_prev. If there are no values, it returns \"\".",
     "questionTopics": [
       "Hash Table",
       "String",
