@@ -133,34 +133,45 @@ Given an array of stock values, find the highest profit possible.
     def maxProfit(prices: List[int]) -> int:
 
         # Note:
-        # 
+        # Sliding Window
+        # left points to day we buy (lowest price so far candidate)
+        # right scans forward for a day to sell
 
-        # Left pointer marks the buy day
-        left = 0
-        # Right pointer traverses future sell days
-        right = 1
+        # If  prices[left] < prices[right], calculate profit and update max
+        # Else prices[left] > prices[right], move left to right as lower buy price found
+        # Tracks low buy and max profit in a single pass
+
+        # Low Buy Day, Right Sell Day
+        left, right = 0, 1
+
+        # profit
         max_profit = 0
 
+        # while sell days available and not out of potential lower buy days
         while right < len(prices):
-            if prices[right] > prices[left]:
-                # If profit is possible, calculate it
+
+            # if possible profit
+            if prices[left] < prices[right]:
+                # compare profit with max
                 profit = prices[right] - prices[left]
                 max_profit = max(max_profit, profit)
+
+            # lower buy day found, update buy day
             else:
-                # No profit — move buy day to current day
                 left = right
-            # Move to next sell day
+
+            # traverse sell days
             right += 1
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return max_profit
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Iteration | O(n) | O(1) | Iterate over array of n prices O(n) | No additional memory allocation for iteration O(1) |
+| Profit check | O(1) | O(1) | Profit calculation in constant O(1) | No additional memory allocation for calculation O(1) |
+| Overall | O(n) | O(1) | Iteration over array dominates O(n) | No additional memory allocation O(1) |
 
 
 ### Solution 2: Implicit Sliding Window Tracking Min Buy Price - Sliding Window/Variable Size Window
@@ -168,30 +179,36 @@ Given an array of stock values, find the highest profit possible.
     def maxProfit(prices: List[int]) -> int:
         
         # Note:
-        #
+        # Tracks buy and sell day in pointers
+        # Calculates profit is profit possible
+        # Updates buy day if lower prices possible
         
-        # Track the minimum price seen so far (buy candidate)
+        # Track min buy day so far
         min_price = float('inf')
-        # Track the best profit found
+        # Track max profit so far
         max_profit = 0
 
+        # time complexity: iterate over list of n prices O(n)
         for price in prices:
-            if price < min_price:
-                # Update the min_price if a better buy is found
-                min_price = price
-            else:
-                # Calculate profit if sold today and update max_profit
+
+            # profit possible
+            if min_price < price:
                 max_profit = max(max_profit, price - min_price)
 
-        # overall: time complexity
-        # overall: space complexity
+            # new min day found
+            else:
+                min_price = price
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return max_profit
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Iteration | O(n) | O(1) | Iteration over list of n prices O(n) | No additional memory allocation for iteration O(1) |
+| Profit Update | O(1) | O(1) | Calculation or update in constant O(1) | No additional memory allocation for calculation or update O(1) |
+| Overall | O(n) | O(1) | Iteration over list dominates, leading to O(n) | No additional memory allocation, leading to O(1) |
+
 
 
 

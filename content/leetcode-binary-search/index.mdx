@@ -16,18 +16,144 @@ Leetcode problems with elegant solutions using binary search.
 
 ### What is Binary Search
 Binary Search is a divide and conquer algorithm for searching 
-sorted lists.
+sorted lists or ranges effectively.
 
 It works by creating a middle value, comparing middle value to the target
-in order to split the search space in half, then searching the 
-left or right side accordingly
+or evaluating a condition, and halving the search space 
+based on that comparison.
 
 ### Why Use Binary Search
-Since binary search eliminates half the search space each step it each 
-O(log n) time complexity as well as O(1) space complexity for iterative 
-and O(log n) for recursive due to the call stack. 
+Binary search reduces the search space by half on each iteration.
 
-This is an improvement from linear search which takes O(n) time.
+|  Technique  | Time Complexity | Space Complexity | 
+| -------- | --------------- | ---------------- | 
+| Linear Search | O(n) | O(1) |
+| Binary Search (Recursive) | O(log n) | O(log n) |
+| Binary Search (Iterative) | O(log n) | O(1) |
+
+### Target Binary Search
+Used to search for a specific value or index.
+
+```python
+    def binary_search(nums, target):
+        left, right = 0, len(nums) - 1
+
+        # Note 1:
+        # Target Binary Search: uses '<='
+        while left <= right:
+            mid = (left + right) // 2
+
+            # Note 2:
+            # 3 parts during iteration
+            # target check, remove left half, remove right half
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] < target:
+                left = mid + 1
+            else:
+                right = mid - 1
+
+        # Note 3:
+        # Exit: left > right triggers ends
+        # Return value if not found
+        return -1 
+```
+
+### Monotonic Optimization Min/Max Binary Search
+Used to find the smallest or largest value that satisfies a condition.
+
+1. Find the min element greater than or equal to the target:
+
+In ceiling search, the goal is to locate the minimal number in a sorted 
+```python
+    def find_min_valid_value():
+        left, right = 0, N-1
+
+        # Note 1:
+        # Optimization Binary Search: uses '<'
+        while left < right:
+            mid = (left + right) // 2
+
+            # Note 2:
+            # Check if condition is satisfied
+            # If so, include mid with left or right half
+            if condition(mid):
+                # or left = mid, depending on which half we are checking
+                right = mid      
+            else:
+                # or right = mid + 1, depending on which half we are removing
+                left = mid + 1 
+
+        # Note: 3
+        # Exit: left == right, triggers the exit
+        # we have found the optimized solution
+
+        # or right
+        return left 
+```
+
+### Optimization Ceiling and Floor Style Binary Search 
+Variant of Optimization Binary Search:
+
+The rule is that we can search directly for ceilings, 
+but not for floors.
+
+You can search directly for the ceiling (smallest element >= target)
+with binary search because the loop naturally stops at that boundary.
+```python
+    def find_ceiling(nums, target):
+        left, right = 0, len(nums)
+
+        # Loop condition: left < right
+        while left < right:
+            mid = (left + right) // 2
+            
+            # If mid element is less than target,
+            # the ceiling must be to the right of mid (exclude mid)
+            if nums[mid] < target:
+                left = mid + 1
+            else:
+                # nums[mid] >= target, potential ceiling candidate
+                # Keep mid in search space by moving right boundary to mid
+                right = mid
+        
+        # At the end, left == right, points to the smallest element >= target if exists
+        # If left == len(nums), no ceiling found
+        if left == len(nums):
+            return None
+        return nums[left]
+```
+
+You cannot search directly for the floor (largest element < = target)
+with binary search
+```python
+def find_floor_wrong(nums, target):
+    left, right = 0, len(nums)
+
+    # Loop condition: left < right
+    while left < right:
+        mid = (left + right) // 2
+
+        # Attempt: 
+        # mid element <= target:
+        # move left boundary up to mid (include mid)
+        if nums[mid] <= target:
+            
+            # PROBLEM: 
+            # left might not move forward when left == mid, causing infinite loop
+            left = mid 
+            
+        else:
+            # mid element > target:
+            # move right boundary down (exclude mid)
+            right = mid
+
+    # When loop ends, left == right, but it may not point to floor directly
+    # Without shifting left or checking bounds, this is unreliable
+    if left == 0 and nums[left] > target:
+        return None
+    return nums[left]
+```
 
 ### Understanding Optimization Search: Min vs Max
 In optimization style binary search, we're not finding a specific value,
@@ -48,7 +174,7 @@ but rather are finding the smallest or largest values that satisfies a condition
         right = mid - 1    # mid is invalid, discard it`
 ```
 
-### Why Binary Search Can Find < and > but Not < and > or equal to
+### Why Binary Search Can Find < or > but Not < or > equal to 
 Binary Search splits the space at mid and decides whether
 to include or exclude it.
 
@@ -68,6 +194,7 @@ Ex: first element < or equal to target
 # Should you go left or right?
 # If you go right, you might miss an earlier match
 # If you go left, you might go too far and miss it entirely
+# If you don't reduce the search space and include mid, the loop may never terminate 
 ```
 
 So binary search prefers to work with 
@@ -174,7 +301,7 @@ Ex: Searching for a target number in a sorted array.
     return -1  # Target not found
 ```
 
-### Binary Search Application: Layered Binary Search
+### Binary Search Application: Multiple Layers Binary Search
 Applying binary search in multiple stages or layers, typically to 
 first narrow down a substructure (i.e., row, segment, or time range), 
 and then again within that substructure
@@ -301,7 +428,7 @@ Ex: Find the first element less than or equal to target
         while left < right:
             mid = (left + right) // 2
             if nums[mid] <= target:
-                left = mid + 1  # move right since mid ≤ target
+                left = mid + 1  # move right since mid less to target
             else:
                 right = mid     # mid > target, shrink right side
 
@@ -525,9 +652,58 @@ Given a sorted matrix, check if target is in matrix
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-
-### Find the Bug: 
+### Find the Bug: Did not follow Binary Search 
 ```python
+```
+
+### Find the Bug: Forgot to break
+```python
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        
+        if len(matrix) == 0 or len(matrix[0]) == 0:
+            return False
+
+        rows, cols = len(matrix), len(matrix[0])
+        top, bottom = 0, rows-1
+        rowCand = 0
+
+        # first binary search
+        while top <= bottom:
+
+            mid = (top+bottom)//2
+
+            if matrix[mid][0] <= target <= matrix[mid][-1]:
+                # INCORRECT:
+                # never exiting the while loop
+                # Instead:
+                # break
+                rowCand = mid
+
+            elif matrix[mid][-1] < target:
+                top = mid+1
+            else:
+                bottom = mid-1
+        
+        else:
+            return False
+
+        left, right = 0, len(matrix[rowCand])-1
+
+        while left <= right:
+
+            mid = (left+right)//2
+            val = matrix[rowCand][mid]
+
+            if val == target:
+                return True
+
+            elif val < target:
+                left = mid + 1
+            
+            else: 
+                right = mid - 1
+        else:
+            return False
 ```
 
 ### Solution 1: Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
@@ -778,6 +954,7 @@ Find minimum bananas per hour so that all are eaten in time.
         # binary optimization search with '<' for min k
         # time complexity: binary search over k speeds where k is the max(piles) O(log(max(piles)))
         while left < right:
+
             mid = (left + right) // 2
             
             # hours needed at speed k = mid
@@ -916,7 +1093,7 @@ Find smallest number in an array that has been rotated some amount of times.
             # smaller elements are on the left of mid (including mid)
             # Implies: min is either on mid or to the left
             if nums[mid] < nums[right]:
-                left = mid
+                right = mid
 
             # lower elements on right
             # implies left half is sorted
@@ -927,7 +1104,7 @@ Find smallest number in an array that has been rotated some amount of times.
             # smaller elements are on the right of mid (excluding mid)
             # Implies: min is on the right side
             else:
-                right = mid
+                left = mid+1
         
         # left == right is the minimum element index
         
@@ -984,7 +1161,7 @@ Find target in an array that has been rotated some amount of times.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: (iterative)
+### Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -994,7 +1171,7 @@ Find target in an array that has been rotated some amount of times.
 |  |  |  |  |  |
 
 
-### Find the Bug: (iterating element-wise)
+### Find the Bug: 
 ```python
 ```
 
