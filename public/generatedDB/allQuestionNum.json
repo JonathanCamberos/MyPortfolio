@@ -13,6 +13,21 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 11
   },
+  "3": {
+    "questionNum": 3,
+    "questionTitle": "Longest Substring Without Repeating Characters ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string s, find the length of the longest without duplicate characters.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ],
+    "questionLink": "/Notes/leetcode-sliding-window#3-longest-substring-without-repeating-characters-1---medium",
+    "blog": "LeetCode: Sliding Window",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "4": {
     "questionNum": 4,
     "questionTitle": "Median of Two Sorted Arrays ::2::",
@@ -181,6 +196,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "76": {
+    "questionNum": 76,
+    "questionTitle": "Minimum Window Substring ::2::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "Given two strings s and t of lengths m and n respectively, return the minimum window of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string \"\". The testcases will be generated such that the answer is unique.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ],
+    "questionLink": "/Notes/leetcode-sliding-window#76-minimum-window-substring-2---hard",
+    "blog": "LeetCode: Sliding Window",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "84": {
     "questionNum": 84,
     "questionTitle": "Largest Rectangle in Histogram ::2::",
@@ -198,7 +228,7 @@
   },
   "121": {
     "questionNum": 121,
-    "questionTitle": "Best Time to Buy and Sell Stock ::1::",
+    "questionTitle": "Best Time to Buy and Sell Stock ::4::",
     "questionDifficulty": "Easy",
     "questionBlurb": "You are given an array prices where prices[i] is the price of a given stock on the ith day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.",
     "questionTopics": [
@@ -206,7 +236,7 @@
       "Dynamic Programming",
       "Sliding Window"
     ],
-    "questionLink": "/Notes/leetcode-sliding-window#121-best-time-to-buy-and-sell-stock-1---easy",
+    "questionLink": "/Notes/leetcode-sliding-window#121-best-time-to-buy-and-sell-stock-4---easy",
     "blog": "LeetCode: Sliding Window",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -328,6 +358,23 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 11
   },
+  "239": {
+    "questionNum": 239,
+    "questionTitle": "Sliding Window Maximum ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.",
+    "questionTopics": [
+      "Array",
+      "Queue",
+      "Sliding Window",
+      "Heap (Priority Queue)",
+      "Monotonic Queue"
+    ],
+    "questionLink": "/Notes/leetcode-sliding-window#239-sliding-window-maximum-1---hard",
+    "blog": "LeetCode: Sliding Window",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "242": {
     "questionNum": 242,
     "questionTitle": "Valid Anagram ::2::",
@@ -390,6 +437,36 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#402-remove-k-digits-1---medium",
     "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "424": {
+    "questionNum": 424,
+    "questionTitle": "Longest Repeating Character Replacement ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times. Return the length of the longest substring containing the same letter you can get after performing the above operations.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ],
+    "questionLink": "/Notes/leetcode-sliding-window#424-longest-repeating-character-replacement-1---medium",
+    "blog": "LeetCode: Sliding Window",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "567": {
+    "questionNum": 567,
+    "questionTitle": "Permutation in String ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise. In other words, return true if one of s1's permutations is the substring of s2.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ],
+    "questionLink": "/Notes/leetcode-sliding-window#567-permutation-in-string-1---medium",
+    "blog": "LeetCode: Sliding Window",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },

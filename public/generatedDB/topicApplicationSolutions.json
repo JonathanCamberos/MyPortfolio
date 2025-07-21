@@ -690,6 +690,106 @@
         "questionNumber": 121,
         "solutionLink": "/Notes/leetcode-sliding-window#solution-2-implicit-sliding-window-tracking-min-buy-price---sliding-windowvariable-size-window",
         "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 3,
+        "name": "Dynamic Programming O(n)",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def maxProfit(self, prices: List[int]) -> int:\n        if not prices:\n            return 0\n\n        n = len(prices)\n        dp = [[0]*2 for _ in range(n)]\n\n        dp[0][0] = 0            # no stock held\n        dp[0][1] = -prices[0]   # bought stock on day 0\n\n        for i in range(1, n):\n            dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])\n            dp[i][1] = max(dp[i-1][1], -prices[i])\n\n        return dp[-1][0]",
+        "questionNumber": 121,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-3-dynamic-programming-o-n---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 4,
+        "name": "Dynamic Programming 2 O(1)",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def maxProfit(self, prices: List[int]) -> int:\n        if not prices:\n            return 0\n\n        dp_i_0 = 0\n        dp_i_1 = -prices[0]\n\n        for i in range(1, len(prices)):\n            dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])\n            dp_i_1 = max(dp_i_1, -prices[i])\n\n        return dp_i_0",
+        "questionNumber": 121,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-4-dynamic-programming-2-o-1---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 1,
+        "name": "Explicit Two Pointer Sliding Window",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def lengthOfLongestSubstring(self, s: str) -> int:\n        # Note:\n        # Start and End pointers define a sliding window.\n        # Hashmap tracks most recent index of each character.\n        # Move 'end' pointer forward while no duplicates, \n        # If duplicate found, move 'start' pointer to\n        # one after the oldest duplicate\n        # Update max length after processing each character.\n        \n        # char last seen index\n        char_index_map = {} \n        # left pointer, start of window\n        start = 0\n\n        max_length = 0\n\n        # right pointer, end of window\n        # time complexity: iterate end pointer over string n length O(n)\n        for end, char in enumerate(s):\n\n            # duplicate found:\n            if char in char_index_map and char_index_map[char] >= start:\n                \n                # move start pointer 1 index after oldest duplicate\n                start = char_index_map[char] + 1\n            \n            # update index for char\n            char_index_map[char] = end\n\n            # check string length\n            max_length = max(max_length, end - start + 1)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return max_length",
+        "questionNumber": 3,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-1-explicit-two-pointer-sliding-window---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 1,
+        "name": "Explicit Two Pointer Sliding Window",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def characterReplacement(self, s: str, k: int) -> int:\n        \n        # Note:\n        # Start and End pointers define a sliding window.\n        # Hashmap tracks most recent index of each character.\n\n        # Note:\n        # Key: If the count of characters that need to be replaced\n        # (window size - count of most frequent char in window) > j,\n        # then we shrink the window from the left\n        # Shrinking the window only happens when excess chars > k.\n\n\n        # Frequency map for characters in current window\n        count = {}\n\n        # max_freq keeps max across all strings seen so far\n        max_freq = 0  \n\n        # window start\n        left = 0\n\n        # res\n        max_len = 0\n\n        # time complexity: iterate right pointer over string n length O(n)\n        for right in range(len(s)):\n\n            # increasing char count\n            count[s[right]] = count.get(s[right], 0) + 1\n\n            # increasing count on right\n            max_freq = max(max_freq, count[s[right]])\n\n            # Check if we need to shrink window\n            # (window_size - max_freq) is the # of replacements needed\n            if (right - left + 1) - max_freq > k:\n\n                # decreasing count on left\n                # shrink window\n                count[s[left]] -= 1\n                left += 1  \n\n            # check max_len\n            max_len = max(max_len, right - left + 1)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return max_len",
+        "questionNumber": 424,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-1-explicit-two-pointer-sliding-window---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 1,
+        "name": "Explicit Two Pointer Sliding Window",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def checkInclusion(s1: str, s2: str) -> bool:\n\n        # Note:\n        # Left and Right pointers maintain fixed size (len s1) sliding window\n        # The right pointer move forward every iteration to expand the windo\n        # If window exceeds len(s1) left pointer moves as well\n        # Two Hashmaps track frequency of characters in s1 and compare\n        # it to the sliding window\n        # If frequencies match, a permutation exist \n\n        # check if permutation not possible\n        len_s1, len_s2 = len(s1), len(s2)\n        if len_s1 > len_s2:\n            return False\n\n        # Frequency map for s1\n        freq_s1 = {}\n        for ch in s1:\n            freq_s1[ch] = freq_s1.get(ch, 0) + 1\n\n        # Frequency map for current window in s2\n        window_freq = {}\n        left = 0\n\n        # time complexity: iterate right pointer over string n length O(n)\n        for right in range(len_s2):\n\n            # Add current character to window_freq\n            window_freq[s2[right]] = window_freq.get(s2[right], 0) + 1\n\n            # iterate left pointer if window size exceeds s1\n            if right - left + 1 > len_s1:\n\n                # grab and decrease frequency count\n                left_char = s2[left]\n                window_freq[left_char] -= 1\n\n                # remove if frequency reaches 0\n                if window_freq[left_char] == 0:\n                    del window_freq[left_char]\n\n                # iterate left pointer\n                left += 1\n\n            # check for frequency permutation\n            if window_freq == freq_s1:\n                return True\n\n        # no permutation found\n\n        # overall: time complexity O(n) \n        # overall: space complexity O(n)\n        return False",
+        "questionNumber": 567,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-1-explicit-two-pointer-sliding-window---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 1,
+        "name": "Classic Sliding Window with Two Hashmaps",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def checkInclusion(self, s1: str, s2: str) -> bool:\n\n        # Manual edge case\n        if len(s) < len(t):\n            return \"\"\n\n        # Frequency map of characters required from t\n        target_freq = defaultdict(int)\n        for char in t:\n            target_freq[char] += 1\n\n        # Tracks current window character frequencies\n        window_freq = defaultdict(int)\n        have = 0                            # Number of characters that meet the required count\n        need = len(target_freq)            # Number of unique characters needed\n\n        min_len = float(\"inf\")\n        res_start = 0\n        left = 0\n\n        for right in range(len(s)):\n            char = s[right]\n            window_freq[char] += 1\n\n            # Check if this character satisfies the required frequency\n            if char in target_freq and window_freq[char] == target_freq[char]:\n                have += 1\n\n            # Contract the window while it satisfies all character requirements\n            while have == need:\n                # Update minimum window\n                window_len = right - left + 1\n                if window_len < min_len:\n                    min_len = window_len\n                    res_start = left\n\n                # Shrink window\n                left_char = s[left]\n                window_freq[left_char] -= 1\n                if left_char in target_freq and window_freq[left_char] < target_freq[left_char]:\n                    have -= 1\n\n                left += 1\n\n        return s[res_start:res_start + min_len] if min_len != float(\"inf\") else \"\"",
+        "questionNumber": 76,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-1-classic-sliding-window-with-two-hashmaps---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 2,
+        "name": "Single Hashmap + Remaining Required Tracker",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def checkInclusion(self, s1: str, s2: str) -> bool:\n\n        # If t is longer than s, impossible\n        if len(s) < len(t):\n            return \"\"\n\n        # Build target count map\n        char_count = defaultdict(int)\n        for ch in t:\n            char_count[ch] += 1\n\n        target_chars_remaining = len(t)         # Number of characters (with duplicates) still needed\n        min_window = (0, float(\"inf\"))          # (start_index, end_index)\n        start_index = 0                         # Left pointer\n\n        for end_index, ch in enumerate(s):      # Expand right\n            if char_count[ch] > 0:\n                target_chars_remaining -= 1     # One needed character matched\n            char_count[ch] -= 1                 # Always decrement (can go negative)\n\n            # Once we have matched all characters\n            if target_chars_remaining == 0:\n                # Shrink from left as much as possible\n                while True:\n                    char_at_start = s[start_index]\n                    if char_count[char_at_start] == 0:\n                        break                   # Cannot remove this char without breaking\n                    char_count[char_at_start] += 1\n                    start_index += 1\n\n                # Check if current window is smaller\n                if end_index - start_index < min_window[1] - min_window[0]:\n                    min_window = (start_index, end_index)\n\n                # Shrink window by 1 to move forward\n                char_count[s[start_index]] += 1\n                target_chars_remaining += 1\n                start_index += 1\n\n        # Extract window if found\n        return \"\" if min_window[1] > len(s) else s[min_window[0]:min_window[1]+1]",
+        "questionNumber": 76,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-2-single-hashmap-remaining-required-tracker---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 1,
+        "name": "Heap (Priority Queue) Approach",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:\n        if not nums or k == 0:\n            return []\n\n        result = []\n        heap = []  # Max-heap implemented as min-heap with negative values\n\n        # Initialize the first window\n        for i in range(k):\n            heapq.heappush(heap, (-nums[i], i))\n\n        result.append(-heap[0][0])\n\n        for i in range(k, len(nums)):\n            # Push new element\n            heapq.heappush(heap, (-nums[i], i))\n\n            # Pop elements out of the current window range\n            while heap[0][1] <= i - k:\n                heapq.heappop(heap)\n\n            # The current max is at the heap top\n            result.append(-heap[0][0])\n\n        return result",
+        "questionNumber": 239,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-1-heap-priority-queue-approach---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 2,
+        "name": "Sliding Window + Monotonic Queue",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:\n        n = len(nums)\n        if not nums or k == 0:\n            return []\n\n        result = []\n        dq = deque()  # Stores indices of elements, maintaining decreasing order of values\n\n        for i in range(n):\n            # Remove indices of elements smaller than current from the back\n            while dq and nums[i] >= nums[dq[-1]]:\n                dq.pop()\n\n            # Add current element index\n            dq.append(i)\n\n            # Remove front if it's out of current window\n            if dq[0] <= i - k:\n                dq.popleft()\n\n            # Once first window is processed, append max (front of deque)\n            if i >= k - 1:\n                result.append(nums[dq[0]])\n\n        return result",
+        "questionNumber": 239,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-2-sliding-window-monotonic-queue---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
+      },
+      {
+        "number": 3,
+        "name": "black magic",
+        "type": "sliding-window",
+        "application": "variable-size-window",
+        "code": "def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:\n        q = deque()\n        it = iter(nums)\n        for v in islice(it, k):\n            while q and q[-1] < v: q.pop()\n            q.append(v)\n        ans = [q[0]]\n        for i, v in enumerate(it):\n            if q[0] == nums[i]: q.popleft()\n            while q and q[-1] < v: q.pop()\n            q.append(v)\n            ans.append(q[0])\n        return ans",
+        "questionNumber": 239,
+        "solutionLink": "/Notes/leetcode-sliding-window#solution-3-black-magic---sliding-windowvariable-size-window",
+        "blog": "LeetCode: Sliding Window"
       }
     ]
   }

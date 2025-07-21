@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const ApplicationSection = () => {
   // useCase categories
-  const useCaseCategories = ["all", "array", "hashmap", "stack", "two-pointers", "binary-search"];
+  const useCaseCategories = ["all", "array", "hashmap", "stack", "two-pointers", "binary-search", "sliding-window"];
 
   const [useCasesData, setUseCasesData] = useState({});
   const [filteredUseCases, setFilteredUseCases] = useState([]);
