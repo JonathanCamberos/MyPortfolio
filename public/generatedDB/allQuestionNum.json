@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "3": {
     "questionNum": 3,
@@ -56,7 +56,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "11": {
     "questionNum": 11,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "15": {
     "questionNum": 15,
@@ -87,7 +87,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "20": {
     "questionNum": 20,
@@ -101,7 +101,21 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
+  },
+  "21": {
+    "questionNum": 21,
+    "questionTitle": "Merge Two Sorted Lists ::3::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "You are given the heads of two sorted linked lists list1 and list2. Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists. Return the head of the merged linked list.",
+    "questionTopics": [
+      "Linked List",
+      "Recursion"
+    ],
+    "questionLink": "/Notes/leetcode-linked-list#21-merge-two-sorted-lists-3---easy",
+    "blog": "LeetCode: Linked List",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "22": {
     "questionNum": 22,
@@ -146,7 +160,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "42": {
     "questionNum": 42,
@@ -163,7 +177,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "49": {
     "questionNum": 49,
@@ -179,7 +193,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "74": {
     "questionNum": 74,
@@ -253,7 +267,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "128": {
     "questionNum": 128,
@@ -268,7 +282,22 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
+  },
+  "141": {
+    "questionNum": 141,
+    "questionTitle": "Linked List Cycle ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given head, the head of a linked list, determine if the linked list has a cycle in it. There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter. Return true if there is a cycle in the linked list. Otherwise, return false. Follow up: Can you solve it using O(1) (i.e. constant) memory?",
+    "questionTopics": [
+      "Hash Table",
+      "Linked List",
+      "Two Pointers"
+    ],
+    "questionLink": "/Notes/leetcode-linked-list#141-linked-list-cycle-1---easy",
+    "blog": "LeetCode: Linked List",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "150": {
     "questionNum": 150,
@@ -284,7 +313,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 9
+    "coldnessCount": 10
   },
   "153": {
     "questionNum": 153,
@@ -312,7 +341,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 8
+    "coldnessCount": 9
   },
   "167": {
     "questionNum": 167,
@@ -327,7 +356,21 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
+  },
+  "206": {
+    "questionNum": 206,
+    "questionTitle": "Reverse Linked List ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given the head of a singly linked list, reverse the list, and return the reversed list. A linked list can be reversed either iteratively or recursively. Could you implement both?",
+    "questionTopics": [
+      "Linked List",
+      "Recursion"
+    ],
+    "questionLink": "/Notes/leetcode-linked-list#206-reverse-linked-list-2---easy",
+    "blog": "LeetCode: Linked List",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "217": {
     "questionNum": 217,
@@ -342,7 +385,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "238": {
     "questionNum": 238,
@@ -356,11 +399,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "239": {
     "questionNum": 239,
-    "questionTitle": "Sliding Window Maximum ::1::",
+    "questionTitle": "Sliding Window Maximum ::3::",
     "questionDifficulty": "Hard",
     "questionBlurb": "You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.",
     "questionTopics": [
@@ -370,7 +413,7 @@
       "Heap (Priority Queue)",
       "Monotonic Queue"
     ],
-    "questionLink": "/Notes/leetcode-sliding-window#239-sliding-window-maximum-1---hard",
+    "questionLink": "/Notes/leetcode-sliding-window#239-sliding-window-maximum-3---hard",
     "blog": "LeetCode: Sliding Window",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -388,7 +431,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "271": {
     "questionNum": 271,
@@ -402,7 +445,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "347": {
     "questionNum": 347,
@@ -422,7 +465,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 11
+    "coldnessCount": 12
   },
   "402": {
     "questionNum": 402,
@@ -482,7 +525,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-18T08:02:00",
-    "coldnessCount": 3
+    "coldnessCount": 4
   },
   "739": {
     "questionNum": 739,
