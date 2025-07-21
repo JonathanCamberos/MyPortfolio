@@ -229,17 +229,17 @@
       "title": "Target Binary Search",
       "summary": "Using Binary Search to locate the position of a target element",
       "exampleIntro": "Searching for a target number in a sorted array.",
-      "codeExample": "if condition(mid):\n        right = mid        # mid might be the answer, keep it\n    else:\n        left = mid + 1     # mid is invalid, discard it",
+      "codeExample": "def binary_search(nums, target):\n        left, right = 0, len(nums) - 1\n\n        # Note 1:\n        # Target Binary Search: uses '<='\n        while left <= right:\n            mid = (left + right) // 2\n\n            # Note 2:\n            # 3 parts during iteration\n            # target check, remove left half, remove right half\n            if nums[mid] == target:\n                return mid\n            elif nums[mid] < target:\n                left = mid + 1\n            else:\n                right = mid - 1\n\n        # Note 3:\n        # Exit: left > right triggers ends\n        # Return value if not found\n        return -1",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-target-binary-search",
       "blog": "LeetCode: Binary Search"
     },
     {
       "type": "Binary Search",
-      "title": "Layered Binary Search",
+      "title": "Multiple Layers Binary Search",
       "summary": "Applying binary search in multiple stages or layers, typically to",
       "exampleIntro": "Searching for a target in a sorted 2D matrix",
-      "codeExample": "if condition(mid):\n        left = mid         # mid might be the answer, keep it\n    else:\n        right = mid - 1    # mid is invalid, discard it`",
-      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-layered-binary-search",
+      "codeExample": "def find_min_valid_value():\n        left, right = 0, N-1\n\n        # Note 1:\n        # Optimization Binary Search: uses '<'\n        while left < right:\n            mid = (left + right) // 2\n\n            # Note 2:\n            # Check if condition is satisfied\n            # If so, include mid with left or right half\n            if condition(mid):\n                # or left = mid, depending on which half we are checking\n                right = mid      \n            else:\n                # or right = mid + 1, depending on which half we are removing\n                left = mid + 1 \n\n        # Note: 3\n        # Exit: left == right, triggers the exit\n        # we have found the optimized solution\n\n        # or right\n        return left",
+      "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-multiple-layers-binary-search",
       "blog": "LeetCode: Binary Search"
     },
     {
@@ -247,7 +247,7 @@
       "title": "Optimization Search Min Max Binary Search",
       "summary": "Using binary search to find the smallest or largest valid value",
       "exampleIntro": "Find the minimum eating speed to finish all bananas within h hours",
-      "codeExample": "# When:\n    arr[mid] == target\n\n# Should you go left or right?\n# If you go right, you might miss an earlier match\n# If you go left, you might go too far and miss it entirely",
+      "codeExample": "def find_ceiling(nums, target):\n        left, right = 0, len(nums)\n\n        # Loop condition: left < right\n        while left < right:\n            mid = (left + right) // 2\n            \n            # If mid element is less than target,\n            # the ceiling must be to the right of mid (exclude mid)\n            if nums[mid] < target:\n                left = mid + 1\n            else:\n                # nums[mid] >= target, potential ceiling candidate\n                # Keep mid in search space by moving right boundary to mid\n                right = mid\n        \n        # At the end, left == right, points to the smallest element >= target if exists\n        # If left == len(nums), no ceiling found\n        if left == len(nums):\n            return None\n        return nums[left]",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-optimization-search-min-max-binary-search-",
       "blog": "LeetCode: Binary Search"
     },
@@ -256,7 +256,7 @@
       "title": "Condition Adapted Binary Search",
       "summary": "Adapting search conditions of binary search to account for special",
       "exampleIntro": "Finding the minimum element in a rotated sorted array",
-      "codeExample": "nums = [4, 5, 6, 7, 0, 1, 2]\n\ndef find_min_no_duplicates(nums):\n    left, right = 0, len(nums) - 1\n    \n    while left < right:\n        mid = (left + right) // 2\n        \n        if nums[mid] > nums[right]:\n            # Min must be in the right half (excluding mid)\n            left = mid + 1\n        else:\n            # Min is at mid or in the left half\n            right = mid\n            \n    return nums[left]",
+      "codeExample": "def find_floor_wrong(nums, target):\n    left, right = 0, len(nums)\n\n    # Loop condition: left < right\n    while left < right:\n        mid = (left + right) // 2\n\n        # Attempt: \n        # mid element <= target:\n        # move left boundary up to mid (include mid)\n        if nums[mid] <= target:\n            \n            # PROBLEM: \n            # left might not move forward when left == mid, causing infinite loop\n            left = mid \n            \n        else:\n            # mid element > target:\n            # move right boundary down (exclude mid)\n            right = mid\n\n    # When loop ends, left == right, but it may not point to floor directly\n    # Without shifting left or checking bounds, this is unreliable\n    if left == 0 and nums[left] > target:\n        return None\n    return nums[left]",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-condition-adapted-binary-search",
       "blog": "LeetCode: Binary Search"
     },
@@ -265,7 +265,7 @@
       "title": "Upper Ceiling or Lower Floor Trick Based on Target Binary Search",
       "summary": "Binary search cannot directly find the largest element less than or equal to a target",
       "exampleIntro": "Find the first element less than or equal to target",
-      "codeExample": "nums = [2, 2, 2, 0, 1, 2]\n\ndef find_min_with_duplicates(nums):\n    left, right = 0, len(nums) - 1\n\n    while left < right:\n        mid = (left + right) // 2\n        \n        if nums[mid] > nums[right]:\n            left = mid + 1\n        elif nums[mid] < nums[right]:\n            right = mid\n        else:\n            # nums[mid] == nums[right], can't determine side, shrink range\n            right -= 1\n\n    return nums[left]",
+      "codeExample": "if condition(mid):\n        right = mid        # mid might be the answer, keep it\n    else:\n        left = mid + 1     # mid is invalid, discard it",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-upper-ceiling-or-lower-floor-trick-based-on-target-binary-search",
       "blog": "LeetCode: Binary Search"
     },

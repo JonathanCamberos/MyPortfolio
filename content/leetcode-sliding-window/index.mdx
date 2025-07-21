@@ -77,7 +77,7 @@ Ex: Longest substring without repeating characters
     # "abcabcbb" → lengthOfLongestSubstring = 3
 ```
 
-## 121. Best Time to Buy and Sell Stock ::1:: - Easy
+## 121. Best Time to Buy and Sell Stock ::4:: - Easy
 
 Topics:  Array, Dynamic Programming, Sliding Window
 
@@ -210,6 +210,673 @@ Given an array of stock values, find the highest profit possible.
 | Overall | O(n) | O(1) | Iteration over list dominates, leading to O(n) | No additional memory allocation, leading to O(1) |
 
 
+### Solution 3: Dynamic Programming O(n) - Sliding Window/Variable Size Window
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+
+        n = len(prices)
+        dp = [[0]*2 for _ in range(n)]
+
+        dp[0][0] = 0            # no stock held
+        dp[0][1] = -prices[0]   # bought stock on day 0
+
+        for i in range(1, n):
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+            dp[i][1] = max(dp[i-1][1], -prices[i])
+
+        return dp[-1][0]
+```
+
+### Solution 4: Dynamic Programming 2 O(1) - Sliding Window/Variable Size Window
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+
+        dp_i_0 = 0
+        dp_i_1 = -prices[0]
+
+        for i in range(1, len(prices)):
+            dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
+            dp_i_1 = max(dp_i_1, -prices[i])
+
+        return dp_i_0
+```
 
 
 
+
+## 3. Longest Substring Without Repeating Characters ::1:: - Medium
+
+Topics:  Hash Table, String, Sliding Window
+
+### Intro
+> Given a string s, find the length of the longest without duplicate characters.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "abcabcbb" | 3 |
+| s = "bbbbb" | 1 |  
+| s = "pwwkew" | 3 |
+ 
+Constraints:
+
+0 &leq; s.length &leq; 5 * 10<sup>4</sup>
+
+s consists of English letters, digits, symbols and spaces.
+
+### Abstraction
+Given a string, find longest substring without duplicates
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+```python
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # Note:
+        # Start and End pointers define a sliding window.
+        # Hashmap tracks most recent index of each character.
+        # Move 'end' pointer forward while no duplicates, 
+        # If duplicate found, move 'start' pointer to
+        # one after the oldest duplicate
+        # Update max length after processing each character.
+        
+        # char last seen index
+        char_index_map = {} 
+        # left pointer, start of window
+        start = 0
+
+        max_length = 0
+
+        # right pointer, end of window
+        # time complexity: iterate end pointer over string n length O(n)
+        for end, char in enumerate(s):
+
+            # duplicate found:
+            if char in char_index_map and char_index_map[char] >= start:
+                
+                # move start pointer 1 index after oldest duplicate
+                start = char_index_map[char] + 1
+            
+            # update index for char
+            char_index_map[char] = end
+
+            # check string length
+            max_length = max(max_length, end - start + 1)
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return max_length
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iteration | O(n) | O(1) | Iteration over string visited once by end pointer O(n) | No additional memory allocation for end pointer iteration O(1) |
+| Hashmap operations | O(1) | O(1) | Lookup and insertion in constant O(1) | Constant length for 128-258 ascii characters O(1) |
+| Window shifting | O(n) | O(1) | Iteration over string visited at most once by start pointer O(n) | No additional memory allocation for start pointer iteration O(1) |
+| Overall | O(n) | O(1) | Iteration over string for start and end pointer dominates, leading to O(n) | Constant space for hashmap char indexes dominates, leading to O(n) |
+
+
+## 424. Longest Repeating Character Replacement ::1:: - Medium
+
+Topics:  Hash Table, String, Sliding Window
+
+### Intro
+> You are given a string s and an integer k. 
+> You can choose any character of the string and change it to
+> any other uppercase English character. 
+> You can perform this operation at most k times.
+> Return the length of the longest substring containing the same
+> letter you can get after performing the above operations.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "ABAB", k = 2 | 4 |
+| s = "AABABBA", k = 1 | 4 |  
+ 
+Constraints:
+
+1 &leq; s.length &leq; 10<sup>5</sup>
+
+s consists of only uppercase English letters.
+
+0 &leq; k &leq; s.length
+
+### Abstraction
+Given a string, and count k, return the longest substring of 
+matching characters you can get after replacing k or less characters.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+```python
+    def characterReplacement(self, s: str, k: int) -> int:
+        
+        # Note:
+        # Start and End pointers define a sliding window.
+        # Hashmap tracks most recent index of each character.
+
+        # Note:
+        # Key: If the count of characters that need to be replaced
+        # (window size - count of most frequent char in window) > j,
+        # then we shrink the window from the left
+        # Shrinking the window only happens when excess chars > k.
+
+
+        # Frequency map for characters in current window
+        count = {}
+
+        # max_freq keeps max across all strings seen so far
+        max_freq = 0  
+
+        # window start
+        left = 0
+
+        # res
+        max_len = 0
+
+        # time complexity: iterate right pointer over string n length O(n)
+        for right in range(len(s)):
+
+            # increasing char count
+            count[s[right]] = count.get(s[right], 0) + 1
+
+            # increasing count on right
+            max_freq = max(max_freq, count[s[right]])
+
+            # Check if we need to shrink window
+            # (window_size - max_freq) is the # of replacements needed
+            if (right - left + 1) - max_freq > k:
+
+                # decreasing count on left
+                # shrink window
+                count[s[left]] -= 1
+                left += 1  
+
+            # check max_len
+            max_len = max(max_len, right - left + 1)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return max_len
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iteration | O(n) | O(1) | Iterate right pointer over each character at least once for n length O(n) | No additional memory allocation for iteration O(1) |
+| Frequency map operations | O(1) | O(1) | Insert in constant O(1) | Constant frequency map size for 26 uppercase O(1) |
+| Window expansion and shrinking | O(n) | O(1) | Each character added and removed at most once from window O(n) | No additional memory allocation for virtual window O(1) |
+| Overall | O(n) | O(1) | Iteration over string of n length dominates, leading to O(n) | Constant space frequency map dominates, leading to O(1) |
+
+
+
+## 567. Permutation in String ::1:: - Medium
+
+Topics:  Hash Table, String, Sliding Window
+
+### Intro
+> Given two strings s1 and s2, return true if s2 contains 
+> a permutation of s1, or false otherwise.
+> In other words, return true if one of s1's permutations is the substring of s2.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s1 = "ab", s2 = "eidbaooo" | true |
+| s1 = "ab", s2 = "eidboaoo" | false |  
+ 
+Constraints:
+
+1 &leq; s1.length, s2.length &leq; 10<sup>4</sup>
+
+s1 and s2 consist of lowercase English letters.
+
+### Abstraction
+Given a string 1 and string 2, return true of string 1 is 
+a permutation within string 2.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: 
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+```python
+    def checkInclusion(s1: str, s2: str) -> bool:
+
+        # Note:
+        # Left and Right pointers maintain fixed size (len s1) sliding window
+        # The right pointer move forward every iteration to expand the windo
+        # If window exceeds len(s1) left pointer moves as well
+        # Two Hashmaps track frequency of characters in s1 and compare
+        # it to the sliding window
+        # If frequencies match, a permutation exist 
+
+        # check if permutation not possible
+        len_s1, len_s2 = len(s1), len(s2)
+        if len_s1 > len_s2:
+            return False
+
+        # Frequency map for s1
+        freq_s1 = {}
+        for ch in s1:
+            freq_s1[ch] = freq_s1.get(ch, 0) + 1
+
+        # Frequency map for current window in s2
+        window_freq = {}
+        left = 0
+
+        # time complexity: iterate right pointer over string n length O(n)
+        for right in range(len_s2):
+
+            # Add current character to window_freq
+            window_freq[s2[right]] = window_freq.get(s2[right], 0) + 1
+
+            # iterate left pointer if window size exceeds s1
+            if right - left + 1 > len_s1:
+
+                # grab and decrease frequency count
+                left_char = s2[left]
+                window_freq[left_char] -= 1
+
+                # remove if frequency reaches 0
+                if window_freq[left_char] == 0:
+                    del window_freq[left_char]
+
+                # iterate left pointer
+                left += 1
+
+            # check for frequency permutation
+            if window_freq == freq_s1:
+                return True
+
+        # no permutation found
+
+        # overall: time complexity O(n) 
+        # overall: space complexity O(n)
+        return False
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| s1 Frequency | O(m) | O(1) | Iterate over s1 to generate frequency count O(m) | Constant frequency count up to 26 characters O(1) |
+| Iteration | O(n) | O(1) | Iterate over s2 to generate sliding window frequency count O(n) | Constant frequency count up to 26 characters O(1) |
+| Hashmap | O(1) | O(1) | Comparison in constant O(1) | No additional memory allocation for hashmap comparison O(1) |
+| Overall | O(n + m) | O(1) | Iteration over s1 and s2 dominate, leading to O(n + m) | Constant frequency count for s1 and sliding window O(1) |
+
+
+## 76. Minimum Window Substring ::2:: - Hard
+
+Topics:  Hash Table, String, Sliding Window
+
+### Intro
+> Given two strings s and t of lengths m and n respectively, 
+> return the minimum window of s such that 
+> every character in t (including duplicates) is included in
+> the window. If there is no such substring, return the empty string "".
+> The testcases will be generated such that the answer is unique.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "ADOBECODEBANC", t = "ABC" | "BANC" |
+| s = "a", t = "a" | "a" |  
+| s = "a", t = "aa" | "" |
+ 
+Constraints:
+
+m == s.length
+
+n == t.length
+
+1 &leq; m, n &leq; 10<sup>5</sup>
+
+s and t consist of uppercase and lowercase English letters.
+
+### Abstraction
+Given two strings s1 and s2, of lengths m and n,
+return the minimum substring of s, such that every character 
+including duplicates is in the window.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: 
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Classic Sliding Window with Two Hashmaps - Sliding Window/Variable Size Window
+```python
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+
+        # Manual edge case
+        if len(s) < len(t):
+            return ""
+
+        # Frequency map of characters required from t
+        target_freq = defaultdict(int)
+        for char in t:
+            target_freq[char] += 1
+
+        # Tracks current window character frequencies
+        window_freq = defaultdict(int)
+        have = 0                            # Number of characters that meet the required count
+        need = len(target_freq)            # Number of unique characters needed
+
+        min_len = float("inf")
+        res_start = 0
+        left = 0
+
+        for right in range(len(s)):
+            char = s[right]
+            window_freq[char] += 1
+
+            # Check if this character satisfies the required frequency
+            if char in target_freq and window_freq[char] == target_freq[char]:
+                have += 1
+
+            # Contract the window while it satisfies all character requirements
+            while have == need:
+                # Update minimum window
+                window_len = right - left + 1
+                if window_len < min_len:
+                    min_len = window_len
+                    res_start = left
+
+                # Shrink window
+                left_char = s[left]
+                window_freq[left_char] -= 1
+                if left_char in target_freq and window_freq[left_char] < target_freq[left_char]:
+                    have -= 1
+
+                left += 1
+
+        return s[res_start:res_start + min_len] if min_len != float("inf") else ""
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 2: Single Hashmap + Remaining Required Tracker - Sliding Window/Variable Size Window
+```python
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+
+        # If t is longer than s, impossible
+        if len(s) < len(t):
+            return ""
+
+        # Build target count map
+        char_count = defaultdict(int)
+        for ch in t:
+            char_count[ch] += 1
+
+        target_chars_remaining = len(t)         # Number of characters (with duplicates) still needed
+        min_window = (0, float("inf"))          # (start_index, end_index)
+        start_index = 0                         # Left pointer
+
+        for end_index, ch in enumerate(s):      # Expand right
+            if char_count[ch] > 0:
+                target_chars_remaining -= 1     # One needed character matched
+            char_count[ch] -= 1                 # Always decrement (can go negative)
+
+            # Once we have matched all characters
+            if target_chars_remaining == 0:
+                # Shrink from left as much as possible
+                while True:
+                    char_at_start = s[start_index]
+                    if char_count[char_at_start] == 0:
+                        break                   # Cannot remove this char without breaking
+                    char_count[char_at_start] += 1
+                    start_index += 1
+
+                # Check if current window is smaller
+                if end_index - start_index < min_window[1] - min_window[0]:
+                    min_window = (start_index, end_index)
+
+                # Shrink window by 1 to move forward
+                char_count[s[start_index]] += 1
+                target_chars_remaining += 1
+                start_index += 1
+
+        # Extract window if found
+        return "" if min_window[1] > len(s) else s[min_window[0]:min_window[1]+1]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+
+## 239. Sliding Window Maximum ::1:: - Hard
+
+Topics:  Array, Queue, Sliding Window, Heap (Priority Queue), Monotonic Queue
+
+### Intro
+> You are given an array of integers nums, there is a sliding window 
+> of size k which is moving from the very left of the array to the very
+> right. You can only see the k numbers in the window. Each time 
+> the sliding window moves right by one position.
+> Return the max sliding window.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,3,-1,-3,5,3,6,7], k = 3 | Output: [3,3,5,5,6,7] |
+| nums = [1], k = 1 | [1] |  
+ 
+Constraints:
+
+1 &leq; nums.length &leq; 10<sup>5</sup>
+
+-10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
+
+1 &leq; k &leq; nums.length
+
+### Abstraction
+Given list of nums and sliding window size k, return array of 
+largest sum for every window within the list.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: 
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Heap (Priority Queue) Approach - Sliding Window/Variable Size Window
+```python
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        if not nums or k == 0:
+            return []
+
+        result = []
+        heap = []  # Max-heap implemented as min-heap with negative values
+
+        # Initialize the first window
+        for i in range(k):
+            heapq.heappush(heap, (-nums[i], i))
+
+        result.append(-heap[0][0])
+
+        for i in range(k, len(nums)):
+            # Push new element
+            heapq.heappush(heap, (-nums[i], i))
+
+            # Pop elements out of the current window range
+            while heap[0][1] <= i - k:
+                heapq.heappop(heap)
+
+            # The current max is at the heap top
+            result.append(-heap[0][0])
+
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 2: Sliding Window + Monotonic Queue - Sliding Window/Variable Size Window
+```python
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        n = len(nums)
+        if not nums or k == 0:
+            return []
+
+        result = []
+        dq = deque()  # Stores indices of elements, maintaining decreasing order of values
+
+        for i in range(n):
+            # Remove indices of elements smaller than current from the back
+            while dq and nums[i] >= nums[dq[-1]]:
+                dq.pop()
+
+            # Add current element index
+            dq.append(i)
+
+            # Remove front if it's out of current window
+            if dq[0] <= i - k:
+                dq.popleft()
+
+            # Once first window is processed, append max (front of deque)
+            if i >= k - 1:
+                result.append(nums[dq[0]])
+
+        return result
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 3: black magic - Sliding Window/Variable Size Window
+```python
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        q = deque()
+        it = iter(nums)
+        for v in islice(it, k):
+            while q and q[-1] < v: q.pop()
+            q.append(v)
+        ans = [q[0]]
+        for i, v in enumerate(it):
+            if q[0] == nums[i]: q.popleft()
+            while q and q[-1] < v: q.pop()
+            q.append(v)
+            ans.append(q[0])
+        return ans
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
