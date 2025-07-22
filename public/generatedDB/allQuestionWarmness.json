@@ -3,6 +3,10 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 12
   },
+  "2": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "3": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -23,6 +27,10 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 12
   },
+  "19": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "20": {
     "lastSubmittedDate": "2025-07-13T04:46:00",
     "coldnessCount": 9
@@ -32,6 +40,14 @@
     "coldnessCount": -1
   },
   "22": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "23": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "25": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -75,7 +91,19 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 12
   },
+  "138": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "141": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "143": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "146": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -118,6 +146,10 @@
   "271": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 12
+  },
+  "287": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "347": {
     "lastSubmittedDate": "2025-07-10T08:20:00",

@@ -868,9 +868,9 @@ Given a sorted matrix, check if target is in matrix
 | Overall | O(log m + log n) = O(log (m*n)) | O(1) | Sum of two binary searches dominates, leading to O(log m + log n) | No additional memory allocation, leading to O(1)  |
 
 
-## 875. Koko Eating Bananas ::1:: - Medium
+## 875. Koko Eating Bananas ::2:: - Medium
 
-Topics:  Array, Binary Search
+Topics:  Array, Binary Search, Network Packet Routing
 
 ### Intro
 > Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas.
@@ -987,6 +987,144 @@ Find minimum bananas per hour so that all are eaten in time.
 | Hours calculation | O(n) | O(1) | Iterate over all piles to calculate if piles are eaten O(n) | No additional memory allocation for calculation O(1) |
 | Overall | O(n * log(max(piles))) | O(1) | Binary search over range alongside hours calculation per candidate dominates, leading to O(n * log(max(piles))) | No additional memory allocation O(1) |
 
+### Solution 2: Networking Router Analogy, Greedy Heuristic Guided Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
+```python
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+
+        # Network Router Analogy:
+        # Think of Koko as a router, banana piles as incoming data packets,
+        # and h as the deadline (max allowable latency in seconds).
+
+        # Note:
+        # Greedy Start:
+        # Start speed k from a heuristic lower bound.
+
+        # Note:
+        # Greedy search: 
+        # If total eating time exceeds h by a large margin:
+        # speeds up eating speed k aggressively (double the speed).
+
+        # If total eating time is close to h:
+        # increment eating speed k slowly by 1 util valid minimum k is found.
+
+        # Pros:
+        # Can outperform binary search in practice for some inputs
+        
+        # Cons: 
+        # Lacks worst case guarantees, (binary search guarantees O(log n) worst case)
+
+        # Note
+        # Heuristics:
+        # 3 heuristic lower bound k starting speed close to min eating speed:
+        # 1. Total bananas: Throughput 
+        # 2. Smallest Pile: Fair Time Sharing
+        # 3. Largest Pile: Bottleneck detection
+
+        # Note:
+        # Good Heuristics by Constraints:
+        # Must be lower bounds, must never overestimate
+        # Close to the real answer, to minimize search time
+        # Must be computable in O(n) time, to be scalable
+        # Compete between different system perspectives
+        
+        # Three represent system level perspectives:
+        # 1. Global Bandwidth
+        # 2. Fair time allocation
+        # 3. Single queue congestion
+
+        # Other discarded Heuristics:
+        
+        # Discard 1. Average between piles:
+        # Does not factor time constraint, assumes infinite time
+
+        # Discard 2. Max pile divided over h hours
+        # high router k speed wasted on smaller piles
+
+        # Heuristics Take away :
+
+        # A good heuristic must take into account:
+        # Data size (bananas)
+        # Time Constrain (h)
+
+        # And follow:
+        # True lower bound
+        # Reflect some system constrain (throughput, fairness, bottleneck)
+
+        # A poor heuristic fails due to:
+        # Ignoring time constraint
+        # Assume uniform work across piles (ignoring context of small and large piles)
+        # Fails to be guided and modeled by real world issues (congestion, fairness)
+    
+        # -----------------------------------------------------
+        # Solution:
+
+        # total piles
+        numPiles = len(piles)
+
+        # ------------
+        # Heuristic 1: All Bananas (Throughput Constraint)
+        # Spread all bananas evenly over h available hours
+        # All bananas / hours -> baseline average k speed
+
+        # Lower Bound: No matter how she distributes her time across piles,
+        # if her speed is less than totalBananas/h, 
+        # there is not enough total capacity to eat all bananas in h hours
+        totalBananas = sum(piles)
+        speedCheck1 = math.ceil(totalBananas / h)
+
+        # ------------
+        # Heuristic 2: Smallest Bananas (Fair time sharing Constraint)
+        # Total hours / num of piles -> = equal time allocated per pile 
+        # Find speed k needed to eat smallest pile
+
+        # Lower Bound: min speed required to avoid falling behind schedule 
+        # (exceeding per pile time budget) on the easiest pile
+        maxEatsForMinElem = int(h/numPiles)
+        speedCheck2 = math.ceil(min(piles) / maxEatsForMinElem)
+
+        # ------------
+        # Heuristic 3: Largest Bananas (Bottleneck preparing detection Constraint)
+        # Allocate Koko 1 hour per pile, excluding the largest one
+        # and then spend the remaining time on largest pile.
+
+        # Lower Bound: If her speed is less than this,
+        # there is no way to finish the largest pile
+        # in the remaining time after handling all other piles
+        speedCheck3 = math.ceil(max(piles) / (h - (numPiles - 1)))
+        
+        # ------------
+        # Greedy Starting Speed: Pick the highest lower bound
+        speed = max(speedCheck1, speedCheck2, speedCheck3)
+        
+        # Greedy Search:
+        # If totalTime is too large compare to h constraint, double eating k speed
+        # If totalTime is close to h constraint, increment speed k by 1
+        # search only increases k, never decreases
+        while (True):
+
+            # Grab hours needed for current speed
+            smallKTotalTime = 0
+            for pile in piles:
+                smallKTotalTime += math.ceil(pile / speed)
+
+            # Greedy Search: designed to search from lower bound eating speed k
+            # Implies: first valid speed we encounter is the smallest one
+            if smallKTotalTime <= h:
+                return speed
+
+            # if totalTime is too large, double the speed
+            elif smallKTotalTime >= 2 * h:
+                speed *= 2
+
+            # if close but still too large, we increment the speed by 1
+            else:
+                speed += 1
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 
 ## 153. Find Minimum in Rotated Sorted Array ::1:: - Medium
