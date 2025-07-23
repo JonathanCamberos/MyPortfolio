@@ -907,7 +907,7 @@ Find minimum bananas per hour so that all are eaten in time.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: (iterative)
+### Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -917,10 +917,88 @@ Find minimum bananas per hour so that all are eaten in time.
 |  |  |  |  |  |
 
 
-### Find the Bug: (iterating element-wise)
+### Find the Bug: Hours For Speed k Is Always Rounding Down 
 ```python
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+
+        left, right = 1, max(piles)
+
+        while left < right:
+            speed = (left+right)//2
+            hours = 0
+            for pile in piles:
+
+                # INCORRECT:
+                # division is rounding down (floor)
+                # Instead:
+                # (pile/speed) -> leaves remainder to be picked up by ceiling
+                hours += math.ceil(pile//speed)
+
+            if hours <= h:
+                right = speed
+            else:
+                left = speed+1
+
+        return left  
 ```
 
+### Find the Bug: Floor Caused K Starting Speed at 0, Leading to Division By 0 Error
+```python
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+
+        # INCORRECT:
+        # Division could lead to remainder 0.1
+        # that rounds to 0.
+        # Safer to round up
+        # Instead:
+        # speedCheck1 = math.ceil(totalBananas / h)
+        totalBananas = sum(piles)
+        speedCheck1 = math.floor(totalBananas / h)
+
+        # INCORRECT:
+        # Division could lead to remainder 0.1
+        # that rounds to 0.
+        # Safer to round up
+        # Instead:
+        # speedCheck2 = math.ceil(min(piles) / evenTime)
+        numPiles = len(piles)
+        evenTime = int(h/numPiles)
+        speedCheck2 = math.floor(min(piles) / evenTime)
+
+        # INCORRECT:
+        # Division could lead to remainder 0.1
+        # that rounds to 0.
+        # Safer to round up
+        # Instead:
+        # speedCheck2 = math.ceil(max(piles) / (h - (numPiles - 1)))
+        speedCheck3 = math.floor(max(piles) / (h - (numPiles - 1)))
+        
+        speed = max(speedCheck1, speedCheck2, speedCheck3)
+        
+        while (True):
+
+            # Grab hours needed for current speed
+            smallKTotalTime = 0
+            for pile in piles:
+                smallKTotalTime += math.ceil(pile / speed)
+
+            # Greedy Search: designed to search from lower bound eating speed k
+            # Implies: first valid speed we encounter is the smallest one
+            if smallKTotalTime <= h:
+                return speed
+
+            # if totalTime is too large, double the speed
+            elif smallKTotalTime >= 2 * h:
+                speed *= 2
+
+            # if close but still too large, we increment the speed by 1
+            else:
+                speed += 1
+```
+
+### Find the Bug: This House No Roof
+```python
+```
 ### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
 ```python
     import math
@@ -991,109 +1069,108 @@ Find minimum bananas per hour so that all are eaten in time.
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
+        # -----------------------------------------------------
+        # Explanation:
+
         # Network Router Analogy:
-        # Think of Koko as a router, banana piles as incoming data packets,
-        # and h as the deadline (max allowable latency in seconds).
+        # Think of Koko as a router, 
+        # banana piles as incoming data packets,
+        # banana in pile as amount of data to be processed for packet p,
+        # h as the deadline (maximum allowable latency in seconds),
+        # and speed as the throughput (packets processed per second).
 
         # Note:
         # Greedy Start:
-        # Start speed k from a heuristic lower bound.
+        # Start speed k from the highest heuristic lower bound between three choices.
 
         # Note:
         # Greedy search: 
-        # If total eating time exceeds h by a large margin:
-        # speeds up eating speed k aggressively (double the speed).
-
+        # If total eating time exceeds h by double allowed time:
+        # increase speed k aggressively by doubling.
         # If total eating time is close to h:
-        # increment eating speed k slowly by 1 util valid minimum k is found.
+        # increment speed k slowly by 1.
 
         # Pros:
-        # Can outperform binary search in practice for some inputs
+        # Can outperform binary search in practice for some input with high k speeds.
         
         # Cons: 
         # Lacks worst case guarantees, (binary search guarantees O(log n) worst case)
 
-        # Note
-        # Heuristics:
-        # 3 heuristic lower bound k starting speed close to min eating speed:
-        # 1. Total bananas: Throughput 
-        # 2. Smallest Pile: Fair Time Sharing
-        # 3. Largest Pile: Bottleneck detection
-
         # Note:
+        # Choosing Heuristics -> System Level Perspective:
+        # 1. Total bananas: Throughput -> Global Bandwidth
+        # 2. Smallest Pile: Fair Time Allocation + Small Packet -> Quick Packet Burst
+        # 3. Largest Pile: Unfair Time Allocation + Big Packet -> Bottleneck Prevention
+
         # Good Heuristics by Constraints:
-        # Must be lower bounds, must never overestimate
-        # Close to the real answer, to minimize search time
-        # Must be computable in O(n) time, to be scalable
-        # Compete between different system perspectives
-        
-        # Three represent system level perspectives:
-        # 1. Global Bandwidth
-        # 2. Fair time allocation
-        # 3. Single queue congestion
+        # Must be lower bound -> never overestimate
+        # Close to real answer -> to minimize search time
+        # Computable in O(n) time -> scalable
+        # Multiple heuristics -> different system perspectives
 
-        # Other discarded Heuristics:
-        
-        # Discard 1. Average between piles:
-        # Does not factor time constraint, assumes infinite time
+        # Discarding Heuristics -> Bad Choices:
+        # 1. Average between piles: Does not factor time constraint, assumes infinite time
+        # 2. Max pile divided over h hours: Does not factor rest of piles, high router k speed wasted on small piles
 
-        # Discard 2. Max pile divided over h hours
-        # high router k speed wasted on smaller piles
-
-        # Heuristics Take away :
-
-        # A good heuristic must take into account:
-        # Data size (bananas)
-        # Time Constrain (h)
-
-        # And follow:
-        # True lower bound
-        # Reflect some system constrain (throughput, fairness, bottleneck)
-
-        # A poor heuristic fails due to:
-        # Ignoring time constraint
-        # Assume uniform work across piles (ignoring context of small and large piles)
-        # Fails to be guided and modeled by real world issues (congestion, fairness)
+        # Choosing Heuristics Take away :
+        # Should respect at least two (or all three) key constraints, to generate a good lower bound k
+        # Packets (piles)
+        # Data size (bananas in pile)
+        # Time Constraint (h)
     
         # -----------------------------------------------------
         # Solution:
 
-        # total piles
-        numPiles = len(piles)
-
         # ------------
-        # Heuristic 1: All Bananas (Throughput Constraint)
+        # Heuristic 1: Banana Based Average (Throughput Constraint)
         # Spread all bananas evenly over h available hours
         # All bananas / hours -> baseline average k speed
 
-        # Lower Bound: No matter how she distributes her time across piles,
-        # if her speed is less than totalBananas/h, 
-        # there is not enough total capacity to eat all bananas in h hours
+        # Lower Bound: No matter how time is spent between small or large piles,
+        # if k is less than totalBananas/h, all bananas will not get finished
+        # Produces small k:
+        # Underestimates when bananas are skewed into a few large piles
+        # by assuming bananas are even across piles
         totalBananas = sum(piles)
         speedCheck1 = math.ceil(totalBananas / h)
 
         # ------------
-        # Heuristic 2: Smallest Bananas (Fair time sharing Constraint)
-        # Total hours / num of piles -> = equal time allocated per pile 
-        # Find speed k needed to eat smallest pile
+        # Heuristic 2: Hour Per Pile Based Average, Split Time Evenly (Fair time Sharing For Each Pile Constraint)
+        # Heuristic 2: Minimum Speed to Finish Smallest Pile within Split Even Time
+        # Total hours / num of piles -> equal time allocated per pile 
+        # Smallest Pile / Allocated Time -> speed k needed to eat smallest pile within allocated time
 
-        # Lower Bound: min speed required to avoid falling behind schedule 
-        # (exceeding per pile time budget) on the easiest pile
-        maxEatsForMinElem = int(h/numPiles)
-        speedCheck2 = math.ceil(min(piles) / maxEatsForMinElem)
+        # Lower Bound: If each pile gets equal time, this is the minimum speed 
+        # required to finished the smallest pile without exceeding time budget
+        # Produces small k:
+        # Dividing h across numPiles, regardless of pile size, 
+        # giving each pile generous time budget,
+        # and since we are testing it on the smallest pile, 
+        # which doesn't need much time, makes k small
+        numPiles = len(piles)
+        evenTime = int(h/numPiles)
+        speedCheck2 = math.ceil(min(piles) / evenTime)
 
         # ------------
-        # Heuristic 3: Largest Bananas (Bottleneck preparing detection Constraint)
-        # Allocate Koko 1 hour per pile, excluding the largest one
-        # and then spend the remaining time on largest pile.
+        # Heuristic 3: Biggest Pile Based Speed (Bottleneck preparing detection Constraint)
+        # Give Koko 1 hour per pile, excluding the largest one,
+        # spend the remaining time on largest pile.
 
-        # Lower Bound: If her speed is less than this,
-        # there is no way to finish the largest pile
-        # in the remaining time after handling all other piles
-        speedCheck3 = math.ceil(max(piles) / (h - (numPiles - 1)))
+        # Lower Bound: Assume speed k is high enough to finish every pile in just 1 hour.
+        # That takes (numPiles - 1) hours, leaving (h - (numPiles-1)) hours.
+        # To finish the largest pile in this remaining time,
+        # k must be at least maxPile / remaining time.
+        # Otherwise, the final pile will not get finished.
+        # Produces small k:
+        # since we have many h hours remaining.
+        remainingTime = h - (numPiles - 1)
+        speedCheck3 = math.ceil(max(piles) / remainingTime)
         
         # ------------
         # Greedy Starting Speed: Pick the highest lower bound
+        # avoids testing extremely high speeds unnecessarily
+        # by choosing realistic starting speed
+        # and only incrementing speed
         speed = max(speedCheck1, speedCheck2, speedCheck3)
         
         # Greedy Search:
@@ -1112,13 +1189,21 @@ Find minimum bananas per hour so that all are eaten in time.
             if smallKTotalTime <= h:
                 return speed
 
-            # if totalTime is too large, double the speed
+            # if totalTime is twice as large as required time,
+            # double the speed
+            # time complexity: exponential time O(log max(piles))
             elif smallKTotalTime >= 2 * h:
                 speed *= 2
 
-            # if close but still too large, we increment the speed by 1
+            # if totalTime is closer than twice as large,
+            # increment speed by 1
+            # time complexity: linear time O(max(piles))
             else:
                 speed += 1
+
+
+        # overall: time complexity O(n * log (max(piles)))
+        # overall: space complexity O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
