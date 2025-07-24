@@ -1102,8 +1102,6 @@ Find minimum bananas per hour so that all are eaten in time.
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
         # -----------------------------------------------------
-        # Explanation:
-
         # Network Router Analogy:
         # Think of Koko as a router, 
         # banana piles as incoming data packets,
@@ -1151,7 +1149,7 @@ Find minimum bananas per hour so that all are eaten in time.
         # Time Constraint (h)
     
         # -----------------------------------------------------
-        # Solution:
+        # 3 Heuristics -> Greedy Lower Bound Starting Speed:
 
         # ------------
         # Heuristic 1: Banana Based Average (Throughput Constraint)
@@ -1198,6 +1196,7 @@ Find minimum bananas per hour so that all are eaten in time.
         remainingTime = h - (numPiles - 1)
         speedCheck3 = math.ceil(max(piles) / remainingTime)
         
+            
         # ------------
         # Greedy Starting Speed: Pick the highest lower bound
         # avoids testing extremely high speeds unnecessarily
@@ -1205,34 +1204,49 @@ Find minimum bananas per hour so that all are eaten in time.
         # and only incrementing speed
         speed = max(speedCheck1, speedCheck2, speedCheck3)
         
+
+        # -----------------------------------------------------
+        # Conditions:
+
+        # Preconditions:
+        # piles is a non empty list of positive integers
+        # h >= len(piles), h is the number of hours 
+
+        # Postconditions:
+        # Returns min speed k such that koko can eat all bananas within h hours
+
+        # Invariant:
+        # variable 'speed' starts with speed k that is a valid lower bound based on heuristics
+        # min valid speed k lies in [speed, +inf]
+        # speed is monotonically increasing during search
+        # first total time <= h, speed is guaranteed to be min due to greedy search strategy
+
         # Greedy Search:
         # If totalTime is too large compare to h constraint, double eating k speed
         # If totalTime is close to h constraint, increment speed k by 1
-        # search only increases k, never decreases
+        # monotonically increase k search speed
         while (True):
 
-            # Grab hours needed for current speed
+            # Grab hours for current speed
             smallKTotalTime = 0
             for pile in piles:
                 smallKTotalTime += math.ceil(pile / speed)
 
-            # Greedy Search: designed to search from lower bound eating speed k
             # Implies: first valid speed we encounter is the smallest one
             if smallKTotalTime <= h:
                 return speed
 
-            # if totalTime is twice as large as required time,
-            # double the speed
+            # totalTime is twice required time -> double speed k
+            # new search interval: [speed*2, +inf]
             # time complexity: exponential time O(log max(piles))
             elif smallKTotalTime >= 2 * h:
                 speed *= 2
 
-            # if totalTime is closer than twice as large,
-            # increment speed by 1
+            # totalTime close to required time -> increment speed by 1
+            # new search interval: [speed+1, +inf]
             # time complexity: linear time O(max(piles))
             else:
                 speed += 1
-
 
         # overall: time complexity O(n * log (max(piles)))
         # overall: space complexity O(1)
