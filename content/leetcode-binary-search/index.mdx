@@ -572,25 +572,35 @@ Given a sorted list of elements, find the target
         # Note:
         # simple binary search
 
+        # Precondition: 
+        # nums is sorted in ascending order
+
+        # Invariant:
+        # Subarray nums[left:right+1] contains the target if it exists
+        # Search space halves on each iteration
+
         # space complexity: simple variables in constant O(1)
         left, right = 0, len(nums)-1
 
-        # target binary search with '<='
-        # time complexity: split search area per iteration O(log n)
-        # space complexity: iterative search, no call stack, O(1)
+        # target binary search: '<='
+        # time complexity: search space halves each iteration O(log n)
         while left <= right:
             
             mid = (left+right)//2
             
-            # found target, return
+            # Check Mid
             if nums[mid] == target:
                 return mid
 
-            # search right side of subsection
+            # mid is less than target:
+            # discard left side of [left, mid, right]
+            # new search interval: [mid+1, right]
             elif nums[mid] < target:
                 left = mid + 1
             
-            # search left side of subsection
+            # mid is greater than target:
+            # discard right side of [left, mid, right]
+            # new search interval: [left, mid-1]
             else: 
                 right = mid - 1
 
@@ -716,6 +726,10 @@ Given a sorted matrix, check if target is in matrix
         # and converts indices to 2D coordinates with the helper function.
         # This approach runs in O(log(m * n)) time and O(1) space.
         
+        # Precondition:
+        # Each row is sorted in ascending order,
+        # and first element of each row is greater than the last of the previous row
+
         # diagram:
         # matrix = [
         # col 0   1   2
@@ -724,46 +738,52 @@ Given a sorted matrix, check if target is in matrix
         #   [13, 15, 17],   # row 2
         # ] 
 
+        # Invariant:
+        # Target, if it exists, lies within subarray [left, right]
+        # Search space is reduced by half on each iteration.
+
         # Helper: Convert 1D index to 2D matrix coordinates (row, col)
-        # index 4 -> (4//3, 4%3) -> (1, 1) = 9
-        # index 5 -> (5//3, 5%3) -> (1, 2) = 11
+        # index 4 -> (4//3, 4%3) -> (1, 1) = 9, index 5 -> (5//3, 5%3) -> (1, 2) = 11
         def index_to_coords(index, cols) -> tuple[int, int]:
             row = index // cols
             col = index % cols
             return (row, col)
 
-        # check if 0 rows or 0 columns
+        # Empty Check
         if not matrix or not matrix[0]:
             return False
 
-        # initialize rows and columns
-        rows, cols = len(matrix), len(matrix[0])
-
         # calculate 2D matrix representation
-        left, right = 0, rows * cols - 1
+        rows, cols = len(matrix), len(matrix[0])
+        left, right = 0, (rows * cols) - 1
 
-        # binary target search with '<='
+        # binary target search: '<='
         # time complexity: binary search on flattened 2D matrix [0,(m*n)-1] O(log(m*n))
         while left <= right:
             
-            # getting relative 2D mid index, converting, and grabbing value from matrix
+            # calculating mid
             mid = (left + right) // 2
             (row, col) = index_to_coords(mid, cols)
             mid_value = matrix[row][col]
 
-            # check if target
+            # Check Mid
             if mid_value == target:
                 return True
             
-            # check right space
+            # mid is less than target:
+            # discard left side of [left, mid, right]
+            # new search interval: [mid+1, right]
             elif mid_value < target:
                 left = mid + 1
             
-            # check left space
+            # mid is greater than target:
+            # discard the right side of [left, mid, right]
+            # new search interval: [left, mid-1]
             else:
                 right = mid - 1
 
-        # target does not exist
+        # left > right: searched entire array
+        # target not found and does not exist
 
         # overall time complexity: O(log (m * n))
         # overall space complexity: O(1)
@@ -783,6 +803,10 @@ Given a sorted matrix, check if target is in matrix
         # 1. Binary Search over rows to locate potential row
         # 2. Binary Search within that row to find the target
         
+        # Precondition:
+        # Each row is sorted in ascending order,
+        # and the first element of each row is greater than the last of the previous row
+
         # diagram:
         # matrix = [
         # col 0   1   2
@@ -791,71 +815,76 @@ Given a sorted matrix, check if target is in matrix
         #   [13, 15, 17],   # row 2
         # ]
 
-        # check if 0 rows or 0 columns
+        # Invariant (First Binary Search):
+        # Target must lie within range of candidate row window [top, bottom] (if it exists)
+
+        # Empty Check
         if not matrix or not matrix[0]:
             return False
 
-        # initialize rows and columns
-        rows, cols = len(matrix), len(matrix[0])
-
-        # First layer: 
-        # Binary search over row range to find candidate row
-        
         # top and bottom rows (refer to diagram)
+        rows, cols = len(matrix), len(matrix[0])
         top, bottom = 0, rows - 1
 
-        # binary target search with '<='
-        # time complexity: binary search over range rows for n rows O(log n)
+        # binary target search: '<='
+        # time complexity: binary search over n rows O(log n)
         while top <= bottom:
 
-            # grab mid row
+            # get mid
             mid_row = (top + bottom) // 2
 
-            # check if target is potentially within row
+            # Check Mid
             if matrix[mid_row][0] <= target <= matrix[mid_row][-1]:
                 break
 
-            # Note:
-            # top is 0, bottom is n-1,
-            # so update cases accordingly
-
-            # search above rows (lower rows, see diagram)
+            # mid_row smallest value is greater than target:
+            # discard upper rows
+            # new search interval: [top, mid_row - 1]
             elif matrix[mid_row][0] > target:
                 bottom = mid_row - 1
 
-            # search below rows (upper rows, see diagram)
+            # mid_row smallest value is less than target:
+            # discard lower rows
+            # new search interval: [mid_row + 1, bottom]
             else:
                 top = mid_row + 1
 
-        # Target is outside all row ranges
+        # No break triggered:
+        # top > bottom: all row ranges checked
+        # no target exists
         else:
             return False
             
-        # Second layer: 
-        # Found row candidate, binary search within row to check if target exists
+        # row boundaries
         row = mid_row
-
-        # outer boundaries
         left, right = 0, cols - 1
 
-        # binary target search with '<='
-        # time complexity: binary search in row for m columns O(log m)
+        # binary target search: '<='
+        # time complexity: binary search across m columns in row O(log m)
         while left <= right:
 
             # mid of row
             mid_col = (left + right) // 2
             
-            # target found
+            # Check mid
             if matrix[row][mid_col] == target:
                 return True
             
-            # search right of row
+            # mid is less than target:
+            # discard left side of [left, mid, right]
+            # new search interval: [mid + 1, right]
             elif matrix[row][mid_col] < target:
                 left = mid_col + 1
             
-            # search left of row
+            # mid is greater than target:
+            # discard right side of [left, mid, right]
+            # new search interval: [left, mid - 1]
             else:
                 right = mid_col - 1
+
+
+        # left > right: all columns in candidate row checked
+        # no target exists
 
         # overall: time complexity O(log (m * n)) 
         # overall: space complexity O(1)
@@ -870,7 +899,7 @@ Given a sorted matrix, check if target is in matrix
 
 ## 875. Koko Eating Bananas ::2:: - Medium
 
-Topics:  Array, Binary Search, Network Packet Routing
+Topics:  Array, Binary Search, Network Packet Routing, Design, System Level Design
 
 ### Intro
 > Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas.
@@ -999,6 +1028,7 @@ Find minimum bananas per hour so that all are eaten in time.
 ### Find the Bug: This House No Roof
 ```python
 ```
+
 ### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
 ```python
     import math
@@ -1007,52 +1037,54 @@ Find minimum bananas per hour so that all are eaten in time.
         
         # Note:
         # Find minimum int k such that Koko can eat all bananas within h hours
-        # Number of hours decreases monotonically as k increases, binary search is optimal
-        # For each speed k, we calculate how many hours it would take
-        # Outer binary search over k, inner calculation per pile
         
-        # Minimum speed: 1 banana per hour        
-        # Maximum speed: largest pile size, anything above the largest pile size is a waste
+        # Preconditions:
+        # piles is a non empty list of positive integers
+        # h >= len(piles), h is the number of hours 
+
+        # Invariant:
+        # The correct k min speed is in the interval [left, right]
+        # Search space halves each iteration
+
+        # Search Space:
+        # Min speed: 1 banana per hour (slowest possible)       
+        # Max speed: max(piles), no pile would need > max(piles) per hour
         left, right = 1, max(piles)
         
-        # total hours needed to eat all piles at speed k
         # time complexity: iterate over n piles O(n)
         def hours_needed(speed):
             total_hours = 0
             for pile in piles:
-
                 # Koko has fixed eating speed k
                 # if she has pile bananas and eats at k bananas/hr
-                # she will she ciel(pile/k) becuase she won't stop in the middle of an hour
-                # if there are 3 bananas with eating speed 5, it will still take a full hour
+                # she will take ceil(pile/k) (cannot stop in middle of hour)
+                # 3 bananas with speed 9, will still take 1 full hour
                 total_hours += math.ceil(pile / speed)
-            
             return total_hours
         
-        # binary optimization search with '<' for min k
-        # time complexity: binary search over k speeds where k is the max(piles) O(log(max(piles)))
+        # binary optimization search: '<' for min k
+        # time complexity: binary search over k speeds O(log(max(piles)))
         while left < right:
 
+            # mid speed and time
             mid = (left + right) // 2
-            
-            # hours needed at speed k = mid
             required_hours = hours_needed(mid)
             
-            # Notice: 
-            # we are not finding a target,
-            # but instead are finding a minimum k
-            # so we do not need to check for a target
+            # No target check: finding min k
 
-            # current time works
-            # try shorter times, including current mid time (lower k)
+            # time is valid -> speed is valid
+            # discard faster speed right half of [left, mid, right]
+            # new search interval: [left, mid]
             if required_hours <= h:
                 right = mid
             
-            # current time does not work
-            # try longer times, not including current mid time (higher k)
+            # time is invalid -> speed is invalid
+            # discard slower speed left half of [left, mid, right]
+            # new search interval: [mid + 1, right]
             else:
                 left = mid + 1
         
+        # Via invariant: the correct k min speed is in the interval [left, right]
         # left == right is the min k
 
         # overall: time complexity O(n * log(max(piles)))
@@ -1394,8 +1426,26 @@ Find target in an array that has been rotated some amount of times.
 |  |  |  |  |  |
 
 
-### Find the Bug: 
+### Find the Bug: Returned Index Instead of Value
 ```python
+    def findMin(self, nums: List[int]) -> int:
+
+        left, right = 0, len(nums)-1 
+
+        while left < right:
+            mid = (left+right)//2
+
+            if nums[mid] < nums[right]:
+                right = mid
+            else:
+                left = mid + 1
+    
+        # INCORRECT:
+        # returning index of min
+        # instead of actual min value
+        # Instead:
+        # return nums[left]
+        return left
 ```
 
 ### Solution 1: Inequality Boundaries Discard Mid Binary Search - Binary Search/Condition Adapted Binary Search
@@ -1529,10 +1579,12 @@ Find target in an array that has been rotated some amount of times.
         # the latest time <= the query timestamp.
         # 'get' can be slow if many timestamps per key O(m)
 
+
         # space complexity: n is the total set calls across all keys O(n)
         def __init__(self):
             # key -> [(value, timestamp)]
             self.store = {}
+
 
         # overall: time complexity O(1) amortized
         def set(self, key: str, value: str, timestamp: int) -> None:
@@ -1541,6 +1593,8 @@ Find target in an array that has been rotated some amount of times.
             if key not in self.store:
                 self.store[key] = []
             self.store[key].append((value, timestamp))
+
+
 
         # overall: time complexity where m is number of timestamps for this key O(m)
         def get(self, key: str, timestamp: int) -> str:
@@ -1565,6 +1619,7 @@ Find target in an array that has been rotated some amount of times.
             # timestamp is now <= query
             return values[i][0] if i != -1 else ''
 
+
         # overall: time complexity O(m)
         # overall: space complexity O(n)
 ```
@@ -1575,7 +1630,7 @@ Find target in an array that has been rotated some amount of times.
 | Overall | O(m) | O(n) | get scaling linearly with timestamps count dominates, leading to O(m) | Storage is proportional to total number of sets O(n) |
 
 
-### Solution 2: Upper Ceiling to Find Highest Timestamp Closest to Query Request - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
+### Solution 2: Upper Ceiling to Find First Invalid TimeStamp - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
 ```python
     class TimeMap:
 
@@ -1607,40 +1662,59 @@ Find target in an array that has been rotated some amount of times.
         # overall: time complexity where m is number of timestamps for this key O(log m)
         def get(self, key: str, timestamp: int) -> str:
 
-            # if list does not exist
+            # Precondition:
+            # self.store[key] contains (value, timestamp) pairs sorted ascending by timestamp
+            # timestamp is an integer >= 1
+
+            # Postcondition:
+            # returns value with largest timestamp <= given timestamp
+            # returns '' if none exists
+
+            # Empty Check
             if key not in self.store:
                 return ''
             
-            # grab key list: [(value, timestamp)]
             values = self.store[key]
-
-            # outer boundaries
-            left, right = 0, len(values)
             
+
             # Upper Ceiling Binary Search Shift Trick: 
             # In order to find: highest timestamp <= query
             # First first: query < min timestamp 
             # Then shift index: find highest timestamp <= query
             
+            # outer boundaries
+            # intentionally start right at len(values)
+            left, right = 0, len(values)
             
-            # find: query < min timestamp
-            # time complexity: binary search over time stamps O(m)
+            # Loop invariant:
+            # 1. 0 <= left <= right <= len(values)
+            # 2. forall i :: 0 <= i < left ==> values[i][1] <= timestamp
+            # 3. forall j :: right <= j < len(values) ==> values[j][1] > timestamp
+            
+            # Interpretation:
+            # all indices before 'left' are valid timestamps <= query
+            # all indices after 'right' are invalid timestamps > query
+
+            # When loop exits (left == right)
+            # left points to first invalid timestamp > query (if any)
+            # left-1 points to largest valid timestamp <= query or -1 if none exists
+
+            # time complexity: binary search over time stamps O(log(m))
             while left < right:
                 
                 mid = (left + right) // 2
 
-                # If the timestamp at mid is less than or equal to the query timestamp,
-                # then current mid is a valid candidate for '<=',
-                # however, we want '<', so we increase mid by 1 
-                if values[mid][1] <= timestamp:
-                    left = mid + 1
-        
-                # Todo: ended here
-                # Otherwise, the current timestamp is too large,
-                else:
+                # If timestamp is greater than query timestamp -> valid
+                if values[mid][1] > timestamp:
                     right = mid
+                
+                # If timestamp is less than or equal to query timestamp -> invalid
+                else:
+                    left = mid + 1
 
-            # shift index: find highest timestamp <= query 
+            # Found smallest timestamp > query:
+            # If we shift index by 1 -> largest timestamp <= query:
+            # Or ''
             return values[left - 1][0] if left != 0 else ''      
 
         # overall: time complexity O(log m)
@@ -1651,6 +1725,178 @@ Find target in an array that has been rotated some amount of times.
 | set | O(1) | O(1) | Amortized constant time append O(1) | One tuple stored per call O(1) |
 | get | O(log m) | Binary search over m timestamps O(log m) | No additional memory allocation for binary search O(1) |  |
 | Overall | O(log m) | O(n) | Binary search retrieval dominates, leading to O(log m) | Storage proportional to total number of sets O(n) |
+
+### Solution 3: Floor Search Tracking Largest Valid Index With Right Pointer - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
+```python
+    class TimeMap:
+
+        def __init__(self):
+            self.mp = {}
+            
+
+        def set(self, key: str, value: str, timestamp: int) -> None:
+            # put a key: val -> to a timestamp
+            item = (timestamp, value)
+            if key not in self.mp:
+                self.mp[key] = []
+            
+            self.mp[key].append(item)
+
+
+        def get(self, key: str, timestamp: int) -> str:
+            
+            # Precondition:
+            # self.map[key] contains sorted (timestamp, value) pairs by ascending timestamp
+            # timestamp is an int >= 1
+
+            # Postcondition:
+            # returns value with largest timestamp <= given timestamp
+            # returns empty string if no such timestamp exists
+
+            # Empty Case
+            if key not in self.mp:
+                return ''
+
+            values = self.mp[key]
+            
+            # Edge Case:
+            # If timestamp >= end of array timestamp, return last value
+            if timestamp >= values[-1][0]:
+                return values[-1][1]
+
+            left, right = 0, len(values)-1
+
+            # Loop invariant:
+            # 1. 0 <= left <= right + 1 <= len(values)
+            # 2. All values before 'left' have timestamp <= query timestamp
+            # 3. All values after 'right' have timestamp > query timestamp
+
+            # Ensures:
+            # When left > right, right points to 
+            # the largest timestamp <= query or -1 if none exists            
+            while left <= right:
+                mid = (left + right) // 2
+                time, val = values[mid]
+
+                # found target
+                if time == timestamp:
+                    return val
+
+                # if time larger than query: reduce right side
+                elif time > timestamp:
+                    right = mid - 1
+
+                # if time smaller than request: reduce left side
+                else:
+                    left = mid + 1
+                    
+            # refer to postcondition
+            return value_list[right][1] if right != -1 else ''
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+## 162. Find Peak Element ::1:: - Medium
+
+Topics:  Array, Binary Search
+
+### Intro
+> A peak element is an element that is strictly greater than its neighbors.
+> Given a 0-indexed integer array nums, find a peak element, and return
+> its index. If the array contains multiple peaks, return the index to any of 
+> the peaks.
+> You may imagine that nums[-1] = nums[n] = -inf. In other words, an 
+> element is always considered to be strictly greater than a neighbor that 
+> is outside the array.
+> You must write an algorithm that runs in O(log n) time.
+
+|  Example Input   | Output |  
+| ---------------- | ------ | 
+| nums = [1,2,3,1] | 2 |
+| nums = [1,2,1,3,5,6,4] | 5 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 1000
+
+-2<sup>31</sup> &leq; nums[i] &leq; 2<sup>31</sup> - 1 
+
+nums[i] != nums[i + 1] for all valid i.target in an array that has been rotated some amount of time
+
+### Abstraction
+Find the peak elements in an array, where peak elements are defined as 
+a height that is greater than both of their neighbors.
+Multiple peaks can exist per array.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+### Brute Force: 
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug: 
+```python
+```
+
+### Solution 1: Reverse Linear Scan - Binary Search/Condition Adapted Binary Search
+```python
+    def findPeakElement(self, nums: List[int]) -> int:
+        
+        # Precondition:
+        # len(nums) >= 1
+        # nums[i] != nums[i+1] for all valid i
+
+        # Postcondition:
+        # returns index i such that nums[i] is a peak:
+        # nums[i] > nums[i-1] (if i > 0)
+        # nums[i] > nums[i+1] (if i < n-1)
+
+        left, right = 0, len(nums) - 1
+
+        # Loop invariant:
+        # At least one peak exists within [left, right]
+        # At each step, we eliminate half of the range while preserving at least one peak
+        while left < right:
+            mid = (left + right) // 2
+
+            # If mid is increasing towards the right, peak must lie to the right
+            # because nums[mid] < nums[mid + 1]
+            if nums[mid] < nums[mid + 1]:
+                left = mid + 1
+            else:
+                # If nums[mid] > nums[mid + 1], the slope is decreasing,
+                # so a peak must exist in [left, mid]
+                right = mid
+
+        # At this point, left == right, and the loop invariant guarantees it's a peak
+        
+        # overall: time complexity O(log n)
+        # overall: space complexity O(1)
+        return left
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
 
 ## 4. Median of Two Sorted Arrays ::2:: - Hard
 
