@@ -576,7 +576,7 @@ Given a sorted list of elements, find the target
         # nums is sorted in ascending order
 
         # Invariant:
-        # Subarray nums[left:right+1] contains the target if it exists
+        # Subarray nums[left:right] contains the target if it exists
         # Search space halves on each iteration
 
         # space complexity: simple variables in constant O(1)
@@ -588,11 +588,11 @@ Given a sorted list of elements, find the target
             
             mid = (left+right)//2
             
-            # Check Mid
+            # Discard Mid
             if nums[mid] == target:
                 return mid
 
-            # mid is less than target:
+            # Mid is less than target:
             # discard left side of [left, mid, right]
             # new search interval: [mid+1, right]
             elif nums[mid] < target:
@@ -1025,8 +1025,82 @@ Find minimum bananas per hour so that all are eaten in time.
                 speed += 1
 ```
 
-### Find the Bug: This House No Roof
+### Find the Bug: Wait a minute, This House Has No Roof
 ```python
+def minEatingSpeed(self, piles: List[int], h: int) -> int:
+
+        # INCORRECT:
+        # speed will have remainder, not valid speed
+        # Instead:
+        # speed1 = math.ceil(allBananas/h)
+        allBananas = sum(piles)
+        speed1 = allBananas/h
+
+        # INCORRECT:
+        # speed will have remainder, not valid speed
+        # Instead:
+        # speed2 = math.ceil(min(piles)/evenTime)
+        evenTime = int(h/len(piles))
+        speed2 = min(piles)/evenTime
+
+        # INCORRECT:
+        # speed will have remainder, not valid speed
+        # Instead:
+        # speed3 = math.ceil(max(piles)/unEvenTime)
+        unEvenTime = h - (len(piles)-1)
+        speed3 = max(piles)/unEvenTime
+
+        speed = max(speed1, speed2, speed3)
+
+        while (True):
+            requiredHours = 0
+            for pile in piles:
+                requiredHours += math.ceil(pile/speed)
+
+            if requiredHours <= h:
+                return speed
+
+            elif requiredHours >= 2*h:
+                speed *= 2
+            else:
+                speed += 1
+
+        
+```
+
+### Find the Bug: Cannot Bananas Divided By Hour, with Remainder
+```python
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+
+        allBananas = sum(piles)
+        speed1 = math.ceil(allBananas/h)
+
+        # INCORRECT:
+        # evenTime will have a remained, leading to error in divisions
+        # Instead:
+        # evenTime = int(h/len(piles))
+        evenTime = h/len(piles)
+        speed2 = math.ceil(min(piles)/evenTime)
+
+        unEvenTime = h - (len(piles)-1)
+        speed3 = math.ceil(max(piles)/unEvenTime)
+
+        speed = max(speed1, speed2, speed3)
+
+        while (True):
+            requiredHours = 0
+            for pile in piles:
+                requiredHours += math.ceil(pile/speed)
+
+            if requiredHours <= h:
+                return speed
+
+            elif requiredHours >= 2*h:
+                speed *= 2
+            else:
+                speed += 1
+
+        
 ```
 
 ### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
@@ -1043,7 +1117,7 @@ Find minimum bananas per hour so that all are eaten in time.
         # h >= len(piles), h is the number of hours 
 
         # Invariant:
-        # The correct k min speed is in the interval [left, right]
+        # k min speed is in the interval [left, right]
         # Search space halves each iteration
 
         # Search Space:
@@ -1066,26 +1140,33 @@ Find minimum bananas per hour so that all are eaten in time.
         # time complexity: binary search over k speeds O(log(max(piles)))
         while left < right:
 
-            # mid speed and time
+            # mid speed
             mid = (left + right) // 2
             required_hours = hours_needed(mid)
             
-            # No target check: finding min k
-
-            # time is valid -> speed is valid
-            # discard faster speed right half of [left, mid, right]
+            # Zoom In Including Mid:
+            # Mid is valid speed: can finish in h hours
+            # Discard faster speeds on right side of [left, mid, right]
+            # Include current mid in slower speed search
             # new search interval: [left, mid]
             if required_hours <= h:
                 right = mid
             
-            # time is invalid -> speed is invalid
-            # discard slower speed left half of [left, mid, right]
+            # Zoom In Excluding Mid:
+            # Mid is invalid speed: cannot finish in h hours
+            # Discard slower speeds on lef side of [left, mid, right]
+            # Exclude current mid from faster speed search
             # new search interval: [mid + 1, right]
             else:
                 left = mid + 1
         
-        # Via invariant: the correct k min speed is in the interval [left, right]
-        # left == right is the min k
+        # Invariant:        
+        # k min speed is in the interval [left, right]
+
+        # Loop Terminates:
+        # left == right 
+        # Valid [left, right] has been reduced to one point
+        # Both left and right point to min valid k speed
 
         # overall: time complexity O(n * log(max(piles)))
         # overall: space complexity O(1)
@@ -1097,7 +1178,7 @@ Find minimum bananas per hour so that all are eaten in time.
 | Hours calculation | O(n) | O(1) | Iterate over all piles to calculate if piles are eaten O(n) | No additional memory allocation for calculation O(1) |
 | Overall | O(n * log(max(piles))) | O(1) | Binary search over range alongside hours calculation per candidate dominates, leading to O(n * log(max(piles))) | No additional memory allocation O(1) |
 
-### Solution 2: Networking Router Analogy, Greedy Heuristic Guided Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
+### Solution 2: Networking Router Analogy, Greedy Heuristic Hybrid Target Optimization Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -1211,20 +1292,24 @@ Find minimum bananas per hour so that all are eaten in time.
         # Preconditions:
         # piles is a non empty list of positive integers
         # h >= len(piles), h is the number of hours 
+        # variable 'speed' starts with speed k that is a valid lower bound based on heuristics
+
 
         # Postconditions:
         # Returns min speed k such that koko can eat all bananas within h hours
 
         # Invariant:
-        # variable 'speed' starts with speed k that is a valid lower bound based on heuristics
         # min valid speed k lies in [speed, +inf]
         # speed is monotonically increasing during search
-        # first total time <= h, speed is guaranteed to be min due to greedy search strategy
+        # first valid time <= h: speed is guaranteed to be min due to greedy monotonic increasing search strategy
 
         # Greedy Search:
         # If totalTime is too large compare to h constraint, double eating k speed
         # If totalTime is close to h constraint, increment speed k by 1
         # monotonically increase k search speed
+
+        # phase 1 time complexity: exponential doubling O(log max(piles))
+        # phase 2 time complexity: linear scan O(max(piles))
         while (True):
 
             # Get hours for speed k
@@ -1232,20 +1317,19 @@ Find minimum bananas per hour so that all are eaten in time.
             for pile in piles:
                 smallKTotalTime += math.ceil(pile / speed)
 
-            # Check speed via target time
+            # Valid speed found
             # Implies: first valid speed we encounter is the smallest one
             if smallKTotalTime <= h:
                 return speed
 
-            # totalTime is twice required time -> double speed k
+            # speed is much too slow
+            # totalTime is twice available h -> double speed k
             # new search interval: [speed*2, +inf]
-            # time complexity: exponential time O(log max(piles))
             elif smallKTotalTime >= 2 * h:
                 speed *= 2
 
             # totalTime close to required time -> increment speed by 1
             # new search interval: [speed+1, +inf]
-            # time complexity: linear time O(max(piles))
             else:
                 speed += 1
 
@@ -1470,7 +1554,7 @@ Find target in an array that has been rotated some amount of times.
         # num is non empty list of integers
         # num is sorted in ascending order
         # num has been rotated
-        # no duplicates
+        # num has no duplicates
 
         # Postcondition:
         # Returns index of target if exists
@@ -1497,33 +1581,40 @@ Find target in an array that has been rotated some amount of times.
                 return mid
 
             # guarantees right half is sorted
+            # contains ascending range: [mid, right]
             if nums[mid] <= nums[right]:
                 
-                # check if target in right sorted half
+                # target is within range (mid, right]
+                # discard elements on left side
+                # new search interval: [mid+1, right]
                 if nums[mid] < target <= nums[right]:
                     left = mid + 1 
                 
-                # if target does not lie in sorted half,
-                # check the non sorted half
+                # target is not with range (mid, right]
+                # discard higher elements on right side
+                # new search interval: [left, mid-1]
                 else:
-                    # remember, we must discard mid, because we compared to target
                     right = mid - 1      
 
-            # if right half is not sorted,
-            # implies that left half is sorted
+            # guarantees left half is sorted
+            # contains ascending range: [left, mid]
             else:
 
-                # check if target in left sorted half
+                # target is within range [left, mid)
+                # discard on right side
+                # new search interval: [left, mid-1]
                 if nums[left] <= target < nums[mid]:
                     right = mid - 1 
                 
-                # if target does not lie in sorted half,
-                # check the non sorted half
+                # target is not within range [left, mid)
+                # discard elements on left side
+                # new search interval: [mid+1, right]
                 else:
-                    # remember, we must discard mid, because we compared to target
                     left = mid + 1
 
-        # no target found
+        # Loop exited: left > right
+        # Invariant broken: no valid [left, right] remaining
+        # Target not found -> return -1
 
         # overall: time complexity O(log n)
         # overall: space complexity O(1)
