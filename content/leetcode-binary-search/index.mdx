@@ -1227,11 +1227,12 @@ Find minimum bananas per hour so that all are eaten in time.
         # monotonically increase k search speed
         while (True):
 
-            # Grab hours for current speed
+            # Get hours for speed k
             smallKTotalTime = 0
             for pile in piles:
                 smallKTotalTime += math.ceil(pile / speed)
 
+            # Check speed via target time
             # Implies: first valid speed we encounter is the smallest one
             if smallKTotalTime <= h:
                 return speed
@@ -1320,62 +1321,61 @@ Find smallest number in an array that has been rotated some amount of times.
 ```python
     def findMin(self, nums: List[int]) -> int:
 
-        # Note:
-        # Modified Binary Search: accounting for rotated property
-        
-        # Note:
-        # Optimization Search: finding the min element
-        # We are finding the min element
-        # We just need to compare mid against right most element
+        # Preconditions:
+        # nums is a non empty list of integers
+        # nums was originally sorted in ascending order
+        # nums has been rotated
+        # no duplicates
 
-        # outer elements
+        # Postcondition:
+        # Loop terminates when left == right
+        # both left and right point to min element
+
+        # Invariant:
+        # The min value is always in the interval [left, right]
+        # At each iteration we discard half of search space
+
+        # outer boundaries
         left, right = 0, len(nums) - 1
         
-        # Check: If array is not rotated (sorted ascending)
+        # Check: Rotated into Ascending Order
         if nums[left] < nums[right]:
-            # min number
             return nums[left]
         
-        # binary optimization search with '<' for min value in array
+        # Binary Optimization Search: '<' for min
         while left < right:
+
             mid = (left + right) // 2
             
-            # taking advantage property of rotated sorted array:
-            # [4, 5, 6, 7, 0, 1, 2]
-            # 7 > 2: smaller numbers on right (excluding mid)
+            # property of rotated sorted array:
 
-            # [0, 1, 2]
-            # 1 < 3: smaller numbers on left (including mid)
+            # 1: [4, 5, 6, 7, 0, 1, 2]
+            # 7 > 2:
+            # smaller numbers on right half of mid
 
-            # [0, 1]
-            # 0 < 1: smaller numbers on left (including mid)
+            # 2: [10, 1, 2, 3, 6, 7, 8] 
+            # 3 < 8:
+            # smaller elements on left half of mid (including mid) 
 
-            # [0]
-            # return min
-
-            # lower elements on left,
-            # implies right half is sorted
-
-            # [10, 1, 2, 3, 6, 7, 8] -> 3 < 8 -> check left
-            # if mid elements is less than the rightmost element:
-            # higher elements are on the right of mid
-            # smaller elements are on the left of mid (including mid)
-            # Implies: min is either on mid or to the left
+            # mid is less than right
+            # discard higher elements on right side
+            # include lower elements on left side with mid
+            # new search interval: [left, mid]
             if nums[mid] < nums[right]:
                 right = mid
 
-            # lower elements on right
-            # implies left half is sorted
-
-            # [6, 7, 8, 10, 1, 2, 3] -> 10 > 3 -> check right
-            # if mid element is greater than the rightmost element then:
-            # higher elements are on the left of mid
-            # smaller elements are on the right of mid (excluding mid)
-            # Implies: min is on the right side
+            # mid is greater than right
+            # discard higher elements on left side with mid
+            # include lower elements on right side
+            # new search interval: [mid+1, right]
             else:
                 left = mid+1
         
+        # Loop Terminated:
         # left == right is the minimum element index
+
+        # Via Invariant:
+        # left and right point to min element
         
         # overall: time complexity O(log n)
         # overall: space complexity O(1)
@@ -1466,24 +1466,33 @@ Find target in an array that has been rotated some amount of times.
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
-        # Note:
-        # Modified Binary Search for rotated property
-        # first we check via a middle to right most number number check, 
-        # whether the right or left section of mid is sorted
+        # Precondition:
+        # num is non empty list of integers
+        # num is sorted in ascending order
+        # num has been rotated
+        # no duplicates
 
-        # with the sorted section, given its boundaries
-        # we can check if target lies within sorted range,
-        # and by inverse if target lies within the unsorted range
+        # Postcondition:
+        # Returns index of target if exists
+        # Returns -1 if target does not exist
+
+        # Invariant:
+        # target, if exists, is in interval [left, right]
+        # interval [left, right] is always either 
+        #   a) entirely sorted
+        #   b) contains a rotation
+        # search space halves each iteration
 
         # outer boundaries
         left, right = 0, len(nums) - 1
 
-        # binary target search with '<='
+        # binary target search: '<='
+        # time complexity: binary search over list n length O(log n)
         while left <= right:
 
             mid = (left + right) // 2 
 
-            # Check: found target
+            # Check Mid
             if nums[mid] == target:
                 return mid
 
