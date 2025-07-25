@@ -2021,7 +2021,6 @@ Multiple peaks can exist per array.
 |  |  |  |  |  |
 
 
-
 ## 4. Median of Two Sorted Arrays ::2:: - Hard
 
 Topics:  Array, Binary Search, Divide and Conquer
@@ -2082,38 +2081,80 @@ Find median between two sorted arrays.
 ```python
     def findMedianSortedArrays(self, nums1, nums2):
         
-        # Note:
-        # 
+        # Precondition:
+        # nums1 and nums2 are sorted in non-decreasing order
+        # 0 <= len(nums1), len(nums2) <= 10^6
+
+        # Postcondition:
+        # Returns the median value of the merged sorted array
+        # If merged length is odd: median is the middle value
+        # If merged length is even: median is the average of the two middle values
         
+        # right pointers
         m, n = len(nums1), len(nums2)
+
+        # left pointers
         p1, p2 = 0, 0
 
-        # Helper function to get the smaller of the next available values
+        # Invariant:
+        # After i steps, we have discarded i smallest values from the combined stream
+        # get_min() always returns the next smallest remaining element
+
+        # Helper function: simulate one step of merge
         def get_min():
             nonlocal p1, p2
+
+            # Case 1: both pointers in bounds
+            # Iterate over smaller value
             if p1 < m and p2 < n:
+
+                # p1 smaller than p2
                 if nums1[p1] < nums2[p2]:
                     ans = nums1[p1]
                     p1 += 1
+
+                # p2 smaller than p1
                 else:
                     ans = nums2[p2]
                     p2 += 1
+
+            # Case 2: One of the pointers is exhausted
+
+            # nums2 exhausted: move nums1 
             elif p2 == n:
                 ans = nums1[p1]
                 p1 += 1
+
+            # nums1 exhausted: move nums2
             else:
                 ans = nums2[p2]
                 p2 += 1
+
             return ans
 
-        # Calculate median depending on total length parity
+        # Note:
+        # Simulate merge up to median index
+        # For length k = m + n, median is:
+        # If Odd: get k//2-th element
+        # If Even: average (k//2 - 1)-th, k//2-th)
+
+        # even length merged array
         if (m + n) % 2 == 0:
+
+            # Discard stopping at (k//2 - 1) elements
             for _ in range((m + n) // 2 - 1):
                 _ = get_min()
+
+            # Grab (k//2-1) and (k//2) and get average
             return (get_min() + get_min()) / 2
+
+        # odd length merged array
         else:
+
+            # Discard stopping at k//2 elements
             for _ in range((m + n) // 2):
                 _ = get_min()
+            # Take next one as median
             return get_min()
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2127,7 +2168,8 @@ Find median between two sorted arrays.
 ```python
    def findMedianSortedArrays(self, nums1, nums2):
 
-        # Note:
+        # Precondition:
+        # nums1 and nums2 are sorting in ascending order
         # 
 
         # Ensure nums1 is the smaller array
