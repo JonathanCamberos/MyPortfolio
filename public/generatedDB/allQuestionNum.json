@@ -203,8 +203,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-24T09:01:00",
+    "coldnessCount": 1
   },
   "36": {
     "questionNum": 36,
@@ -266,8 +266,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-24T09:01:00",
+    "coldnessCount": 1
   },
   "76": {
     "questionNum": 76,
@@ -431,8 +431,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-24T09:01:00",
+    "coldnessCount": 1
   },
   "155": {
     "questionNum": 155,
@@ -659,8 +659,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": "2025-07-18T08:02:00",
-    "coldnessCount": 7
+    "lastSubmittedDate": "2025-07-24T09:01:00",
+    "coldnessCount": 1
   },
   "739": {
     "questionNum": 739,
@@ -709,8 +709,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
+    "lastSubmittedDate": "2025-07-24T09:01:00",
+    "coldnessCount": 1
   },
   "981": {
     "questionNum": 981,

@@ -1968,7 +1968,7 @@ Multiple peaks can exist per array.
 ```python
 ```
 
-### Solution 1: Reverse Linear Scan - Binary Search/Condition Adapted Binary Search
+### Solution 1: Modified Binary Search over Towards Higher Slope - Binary Search/Condition Adapted Binary Search
 ```python
     def findPeakElement(self, nums: List[int]) -> int:
         
@@ -1983,23 +1983,33 @@ Multiple peaks can exist per array.
 
         left, right = 0, len(nums) - 1
 
-        # Loop invariant:
-        # At least one peak exists within [left, right]
-        # At each step, we eliminate half of the range while preserving at least one peak
+        # Invariant:
+        # At least one peak exists within interval [left, right]
+        # Half of search space removed per iteration
+        # Binary Search Optimization: '<'
         while left < right:
+            
+            # mid
             mid = (left + right) // 2
 
-            # If mid is increasing towards the right, peak must lie to the right
-            # because nums[mid] < nums[mid + 1]
+            # Zoom In Excluding Mid:
+            # Peak towards right
+            # Discard left half of [left, mid, right]
+            # new search interval: [mid+1, right]
             if nums[mid] < nums[mid + 1]:
                 left = mid + 1
+
+            # Zoom Including Mid:
+            # Peak towards left
+            # Discard right half of [left, mid, right] including Mid
+            # new search interval: [left, mid]
             else:
-                # If nums[mid] > nums[mid + 1], the slope is decreasing,
-                # so a peak must exist in [left, mid]
                 right = mid
 
-        # At this point, left == right, and the loop invariant guarantees it's a peak
-        
+        # Loop Exits: left == right
+        # Invariant: peak exists within interval [left, right]
+        # both left and right are pointing to peak 
+         
         # overall: time complexity O(log n)
         # overall: space complexity O(1)
         return left
