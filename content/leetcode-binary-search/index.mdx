@@ -2170,17 +2170,33 @@ Find median between two sorted arrays.
 
         # Precondition:
         # nums1 and nums2 are sorting in ascending order
-        # 
+        # 0 <= len(nums1), len(nums2) <= 10^6
 
-        # Ensure nums1 is the smaller array
+        # Postcondition:
+        # returns the median of the merged sorted array:
+        # If Odd: middle value of total length
+        # If Even: average of two middle values
+
+        # Invariant:
+        # At 
+
+        # Set nums1 as the smaller array
         if len(nums1) > len(nums2):
             nums1, nums2 = nums2, nums1
 
+        # pointers
+        # [low, high, m, n]
         m, n = len(nums1), len(nums2)
         low, high = 0, m
 
+        # binary search over smaller array
         while low <= high:
+
+            # Partition nums1 at index partitionX
             partitionX = (low + high) // 2
+
+            # We want the total number of elements in the left half to be
+            # ()
             partitionY = (m + n + 1) // 2 - partitionX
 
             # Edge cases for partitions
