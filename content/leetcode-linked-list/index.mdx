@@ -67,18 +67,27 @@ Given a linked list, reverse it iteratively and recursively.
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
-        # Base case: if head is None or only one node left
+        # Base case: 
+        # List is empty or has only one node -> found new head
         if not head or not head.next:
             return head
 
-        # Recursively reverse the rest of the list
+        # Receiving base case: new head
         new_head = self.reverseList(head.next)
 
-        # Reverse the current pointer
+        # Reverse:
+        # head -> next pointer: 
+        # head <- next
         head.next.next = head
+
+        # Detach current head from linked list
         head.next = None
 
-        return new_head  # Return new head from the deepest recursive call
+        # Continue passing back new head from the deepest recursive call
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return new_head 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -88,32 +97,39 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-
 ### Solution 2: Iterative - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
-        # prev initially points to None (end of reversed list)
+        # Setting prev pointing to None (end of reversed list)
         prev = None
+
+        # Starting at head
         curr = head
 
+        # while _ is not None
         # time complexity: iterate over list of n length O(n)
         while curr:
 
-            # Temporarily store next node
+            # Grab next node, before disconnecting
             next_node = curr.next  
-            # Reverse current node's pointer
+
+            # Disconnect and Reverse Flow: 
+            # <- prev    curr -> next 
+            # <- prev <- curr    next 
             curr.next = prev      
 
-            # Move prev one step forward
+            # Advance both prev and curr
             prev = curr            
-            # Move curr one step forward
             curr = next_node       
 
-        # prev is the new head after reversal
 
-        # overall: time complexity
-        # overall: space complexity
+        # Loop exits: 
+        # val: (val)  (None)
+        # node: prev -> curr
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return prev  
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

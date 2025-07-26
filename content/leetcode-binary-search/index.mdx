@@ -2229,13 +2229,29 @@ Find median between two sorted arrays.
             # so once you choose how many elements from nums1 go left (partitionX),
             # you know how many elements from nums2 must go left (partitionY),
             # in order to keep the two half of all elements balanced
+
+            # (5+1)//2 -> 3, (6+1)//2 -> 3
             partitionY = (m + n + 1) // 2 - partitionX
 
-            # Edge cases for indexing values via partitions
+            # Grab values for partitions
+            # Allow for our invariant condition to be possible
+            # after reaching out of bounds of array
+            # if maxLeftX <= minRightY and maxLeftY <= minRightX:
+
+            # If the left part of nums1 is empty (partitionX == 0), then the maximum of an empty set should not restrict the comparison.
+            # Setting maxLeftX = -inf ensures the condition maxLeftX <= minRightY is always satisfied in this case.
             maxLeftX = float('-inf') if partitionX == 0 else nums1[partitionX - 1]
+            
+            # If the right part of nums1 is empty (partitionX == m), then there are no values to compare in the right half.
+            # Setting minRightX = +inf ensures the condition maxLeftY <= minRightX is always satisfied in this case.
             minRightX = float('inf') if partitionX == m else nums1[partitionX]
 
+            # If the left part of nums2 is empty (partitionY == 0), then the maximum of an empty set should not restrict the comparison.
+            # Setting maxLeftY = -inf ensures the condition maxLeftY <= minRightX is always satisfied in this case.
             maxLeftY = float('-inf') if partitionY == 0 else nums2[partitionY - 1]
+            
+            # If the right part of nums2 is empty (partitionY == n), then the minimum of an empty set should not restrict the comparison.
+            # Setting minRightY = inf ensures the condition maxLeftX <= minRightY is always satisfied in this case.
             minRightY = float('inf') if partitionY == n else nums2[partitionY]
 
             # Discard Mid via Partitions Rule:
