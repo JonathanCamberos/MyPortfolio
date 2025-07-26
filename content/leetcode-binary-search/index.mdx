@@ -2090,72 +2090,88 @@ Find median between two sorted arrays.
         # If merged length is odd: median is the middle value
         # If merged length is even: median is the average of the two middle values
         
-        # right pointers
+        # Lengths of the two arrays
         m, n = len(nums1), len(nums2)
 
-        # left pointers
+        # Pointers to the current index in nums1 and nums2
         p1, p2 = 0, 0
 
-        # Invariant:
-        # After i steps, we have discarded i smallest values from the combined stream
-        # get_min() always returns the next smallest remaining element
-
-        # Helper function: simulate one step of merge
+        # Helper function:
+        # simulating one step of merge by returning the smallest
+        # of the current elements pointed to by p1 and p2
         def get_min():
             nonlocal p1, p2
 
-            # Case 1: both pointers in bounds
-            # Iterate over smaller value
+            # Case 1: Both pointers in bounds
+            # Return the smaller element and advance the pointer
             if p1 < m and p2 < n:
 
-                # p1 smaller than p2
+                # p1 smaller
                 if nums1[p1] < nums2[p2]:
                     ans = nums1[p1]
                     p1 += 1
-
-                # p2 smaller than p1
+                # p2 smaller
                 else:
                     ans = nums2[p2]
                     p2 += 1
 
-            # Case 2: One of the pointers is exhausted
-
-            # nums2 exhausted: move nums1 
+            # Case 2: One of the pointers is out of range
+            # Return the smaller element in the other pointer and advance
+            
+            # p2 out of bounds
             elif p2 == n:
                 ans = nums1[p1]
                 p1 += 1
-
-            # nums1 exhausted: move nums2
+            # p1 out of bounds
             else:
                 ans = nums2[p2]
                 p2 += 1
 
+            # current smallest value between p1 and p2
             return ans
 
+        # Invariant:
+        # At call i to get_min() (0 based indexing):
+        #   Returns (i+1)th smallest element
+        # After i calls to get_min():
+        #   i smallest elements have been discarded
+
         # Note:
-        # Simulate merge up to median index
-        # For length k = m + n, median is:
-        # If Odd: get k//2-th element
-        # If Even: average (k//2 - 1)-th, k//2-th)
+        # Instead of merging the arrays fully, 
+        # simulate merge only up to the median index.
 
-        # even length merged array
-        if (m + n) % 2 == 0:
+        # Note:
+        # For length k = m + n:
+        # If Odd: median is the k//2 element
+        #   k = 5 -> k // 2 = 2 (3rd smallest)
 
-            # Discard stopping at (k//2 - 1) elements
-            for _ in range((m + n) // 2 - 1):
-                _ = get_min()
+        # If Even: median is average of (k//2)-1 and k//2
+        #   k = 6 -> (k // 2)-1 = 2   k//2 = 3  (3rd and 4th smallest)
 
-            # Grab (k//2-1) and (k//2) and get average
-            return (get_min() + get_min()) / 2
+        # For odd length merged array
+        if (m+n)%2 == 1:
 
-        # odd length merged array
+            # Discard the first k//2 smallest elements
+            for i in range((m + n) // 2):
+                get_min()
+
+            # Return the k//2 smallest element
+            return get_min()
+
+        # For even length merged array
         else:
 
-            # Discard stopping at k//2 elements
-            for _ in range((m + n) // 2):
-                _ = get_min()
-            # Take next one as median
-            return get_min()
+            # Discard the first (k//2 - 1) elements 
+            for i in range((m + n) // 2 - 1):
+                get_min()
+
+            # Grab (k//2)-1
+            # Grab (k//2) 
+            # Return average
+            return (get_min() + get_min()) / 2
+
+    # overall: time complexity O(m + n)
+    # overall: space complexity O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2169,7 +2185,7 @@ Find median between two sorted arrays.
    def findMedianSortedArrays(self, nums1, nums2):
 
         # Precondition:
-        # nums1 and nums2 are sorting in ascending order
+        # nums1 and nums2 are sorted in ascending order
         # 0 <= len(nums1), len(nums2) <= 10^6
 
         # Postcondition:
@@ -2178,44 +2194,95 @@ Find median between two sorted arrays.
         # If Even: average of two middle values
 
         # Invariant:
-        # At 
-
-        # Set nums1 as the smaller array
+        # At each iteration, we maintain a partition (cut point) in nums1 (partitionX)
+        # and implicit partition (cut point) in nums2 (partitionY) such that:
+        # 1. Total count of elements between both left partitions = 
+        # Total count of elements between both right partitions
+        # 2. maxLeftX <= minRightY and maxLeftY <= minRightX:
+        # means the partition correctly divides arrays so  
+        # 3. all elements in left partitions are less than or equal to all elements in right partitions.
+        
+        # sanity check smaller array
         if len(nums1) > len(nums2):
             nums1, nums2 = nums2, nums1
 
-        # pointers
-        # [low, high, m, n]
+        # lens of the two arrays        
         m, n = len(nums1), len(nums2)
+
+        # search space for the cut point in nums1
+        # range between [0, m]
+        # can put anywhere from no elements to all elements on left
         low, high = 0, m
 
-        # binary search over smaller array
+        # Target Binary Search: "<=" in smaller array
+        # Each iteration is "guess" a cut across the smaller array 
+        # (and implicitly the larger array) such that the Partition Rule is true
         while low <= high:
 
-            # Partition nums1 at index partitionX
+            # Guess cut point for nums1
+            # current nums1 search interval: [low, high]
+            
+            # we guess partitionX in nums1, and computer partitionY in nums2 accordingly
             partitionX = (low + high) // 2
 
-            # We want the total number of elements in the left half to be
-            # ()
+            # Total count left half is fixed (half of all elements),
+            # so once you choose how many elements from nums1 go left (partitionX),
+            # you know how many elements from nums2 must go left (partitionY),
+            # in order to keep the two half of all elements balanced
             partitionY = (m + n + 1) // 2 - partitionX
 
-            # Edge cases for partitions
+            # Edge cases for indexing values via partitions
             maxLeftX = float('-inf') if partitionX == 0 else nums1[partitionX - 1]
             minRightX = float('inf') if partitionX == m else nums1[partitionX]
 
             maxLeftY = float('-inf') if partitionY == 0 else nums2[partitionY - 1]
             minRightY = float('inf') if partitionY == n else nums2[partitionY]
 
-            # Check for correct partition
+            # Discard Mid via Partitions Rule:
+            # max of left partition nums1 < min of right partition of nums2
+            # max of left partition nums2 < min of right partition of nums1
+            # we have successfully split 'merged' array into halves
             if maxLeftX <= minRightY and maxLeftY <= minRightX:
+
+                # Even Merged Array
                 if (m + n) % 2 == 0:
                     return (max(maxLeftX, maxLeftY) + min(minRightX, minRightY)) / 2
+                
+                # Odd Merged Array:
                 else:
                     return max(maxLeftX, maxLeftY)
+            
+            # Continue Split Monotonic Increasing Shift
+
+            # If maxLeftX > minRightY:
+            # Means largest element on the left side of nums1 partition is greater
+            # than the smallest element on the right side of nums2 partition
+            # Implies: our partitionX is too far right -> too many elements from nums1
+            # are in the left half
+
+            # Condition Breaks Invariant: maxLeftX <= minRightY
+
+            # Discard right half of [low, partitionX, high]
+            # new search interval: [low, partitionX - 1]
             elif maxLeftX > minRightY:
                 high = partitionX - 1
-            else:
+
+            # If maxLeftY > minRightX
+            # Means largest element on the left side of nums2 partition is greater
+            # than the smallest element on the right side of nums1 partition
+            # Implies: our partitionX is too far left -> not enough elements from nums1
+            # are in the left half
+
+            # Condition Breaks Invariant: maxLeftY <= minRIghtX
+
+            # Discard left half of [low, partitionX, high]
+            # new search interval: [partition + 1, high] 
+            elif maxLeftY > minRightX:
                 low = partitionX + 1 
+
+
+        # overall: time complexity O(log (min(m, n)))
+        # overall: space complexity O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
