@@ -69,7 +69,7 @@ Given a linked list, reverse it iteratively and recursively.
         
         # Base case: 
         # List is empty or has only one node -> found new head
-        if not head or not head.next:
+        if head == None or head.next == None:
             return head
 
         # Receiving base case: new head
@@ -109,7 +109,7 @@ Given a linked list, reverse it iteratively and recursively.
 
         # while _ is not None
         # time complexity: iterate over list of n length O(n)
-        while curr:
+        while curr != None:
 
             # Grab next node, before disconnecting
             next_node = curr.next  
