@@ -890,7 +890,7 @@
         "name": "Track Visited Notes",
         "type": "linked-list",
         "application": "simple-traversal",
-        "code": "def hasCycle(self, head: Optional[ListNode]) -> bool:\n        visited = set()\n        curr = head\n        \n        while curr:\n            if curr in visited:\n                return True\n            visited.add(curr)\n            curr = curr.next\n        \n        return False",
+        "code": "def hasCycle(self, head: Optional[ListNode]) -> bool:\n        \n        # Note:\n        # Track visited nodes to check for repeats (cycles)\n        \n        # Nodes are stored by obj reference,\n        # perfect for cycle detection\n        visited = set()\n\n        # start of iteration\n        curr = head\n        \n        # time complexity: iterate over list of n length O(n)\n        while curr:\n\n            # repeated node: (cycle detected)\n            if curr in visited:\n                return True\n\n            # add and continue iteration\n            visited.add(curr)\n            curr = curr.next\n        \n        # no repeat nodes (no cycles)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return False",
         "questionNumber": 141,
         "solutionLink": "/Notes/leetcode-linked-list#solution-1-track-visited-notes---linked-listsimple-traversal",
         "blog": "LeetCode: Linked List"
@@ -900,7 +900,7 @@
         "name": "Floyd Cycle Detection Tortoise and Hare",
         "type": "linked-list",
         "application": "simple-traversal",
-        "code": "def hasCycle(self, head: Optional[ListNode]) -> bool:\n        slow = fast = head\n        \n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n            \n            if slow == fast:\n                return True\n        \n        return False",
+        "code": "def hasCycle(self, head: Optional[ListNode]) -> bool:\n        \n        # Note:\n        # If no cycle: fast pointer will hit None (end of list)\n        # If cycle: once both fast and slow pointer enter cycle of size k,\n        # fast pointer will lap and hit slow pointer within k steps\n\n        # set pointers\n        slow, fast = head, head\n        \n        # time complexity: iterate over list \n        while fast and fast.next:\n\n            # move both slow and fast pointers\n            slow = slow.next\n            fast = fast.next.next\n            \n            # check if match (cycle detected)\n            if slow == fast:\n                return True\n\n        # reached end of list (no cycle detected)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return False",
         "questionNumber": 141,
         "solutionLink": "/Notes/leetcode-linked-list#solution-2-floyd-cycle-detection-tortoise-and-hare---linked-listsimple-traversal",
         "blog": "LeetCode: Linked List"

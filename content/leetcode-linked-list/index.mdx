@@ -525,26 +525,51 @@ Given a linked list, order it in values tending towards middle.
 ### Solution 1: Stack - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
+
+        # Note:
+        # Store all nodes in a stack to allow reverse access
+        # Iteratively link first node, last, second, second last, etc
+
+        # Empty list case
         if not head or not head.next:
             return
 
+        # space complexity: store list of n length O(n)
         stack = []
+
+        # iteration pointer
         curr = head
+        
+        # time complexity: iterate over list of n length O(n)
         while curr:
             stack.append(curr)
             curr = curr.next
 
+        # forward iteration over list 
         n = len(stack)
         curr = head
+
+        # time complexity: iterate over stack O(n)
         for _ in range(n // 2):
+
+            # backwards iteration over stack
             tail = stack.pop()
+
+            # split curr from curr.next
             tail.next = curr.next
+
+            # chain tail between curr and curr.next
             curr.next = tail
+
+            # iterate to curr.next
             curr = tail.next
 
-        # Set final node to point to None
+        # Set tail to None
         if curr:
             curr.next = None
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -557,34 +582,52 @@ Given a linked list, order it in values tending towards middle.
 ### Solution 2: Two Pointer - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
+
+        # Note:
+        # 1. Use Tortoise Hare to find the middle
+        # 2. Reverse second half of list in place
+        # 3. Merges first half and reverse second half alternating
+        # Thus: Fully in place no extra space
+
+        # Empty list case
         if not head or not head.next:
             return
 
-        # Step 1: Find middle
+        # Slow will point at middle
         slow, fast = head, head
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
 
-        # Step 2: Reverse second half
+        # Curr set to start of second half
         prev = None
         curr = slow.next
-        slow.next = None  # split the list
+
+        # Disconnect last element from first half from second half        
+        slow.next = None 
+
+        # Reverse direction of second half of list
         while curr:
-            nxt = curr.next
+            next_node = curr.next
             curr.next = prev
             prev = curr
-            curr = nxt
+            curr = next_node
 
-        # Step 3: Merge two halves
-        first, second = head, prev
-        while second:
-            tmp1 = first.next
-            tmp2 = second.next
-            first.next = second
-            second.next = tmp1
-            first = tmp1
-            second = tmp2
+        # prev now points to start of reversed second half
+        # merge left half and right half alternating
+        left_half, right_half = head, prev
+        while right_half:
+
+            next_node1 = left_half.next
+            next_node2 = right_half.next
+            left_half.next = right_half
+            right_half.next = next_node1
+            left_half = next_node1
+            right_half = next_node2
+
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -597,6 +640,10 @@ Given a linked list, order it in values tending towards middle.
 ### Solution 3: Optimal Two Pointer - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
+
+        # Note:
+        #
+
         # Finding the middle of linked list
         slow = fast = head
 
@@ -626,7 +673,15 @@ Given a linked list, order it in values tending towards middle.
             s_half.next = tmp1
             f_half, s_half = tmp1, tmp2
 
+        # overall: time complexity
+        # overall: space complexity
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 ## 19. Remove Nth Node From End of List ::2:: - Medium
 
