@@ -522,7 +522,7 @@ Given a linked list, order it in values tending towards middle.
 ```python
 ```
 
-### Solution 1: Slow.next Explicit Two Way Disconnect Iteration Reversal - Linked List/Simple Traversal
+### Solution 1: Slow.next Explicit Set Tail of Final List Two Way Disconnect Iteration Reversal - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -547,7 +547,8 @@ Given a linked list, order it in values tending towards middle.
         curr = slow.next
 
         # Explicit Disconnect:
-        # Mid slow points to None
+        # Set tail for final merged list: slow -> None
+        # Invariant: Now due to slow, left will always be equal or longer than right
         slow.next = None 
 
         # Reverse second half of list
@@ -561,17 +562,17 @@ Given a linked list, order it in values tending towards middle.
             curr = next_node
 
         # iterate over left half and reversed right half
-        left_half, right_half = head, prev
+        left, right = head, prev
 
         # right half is always equal or shorter than the left half (by 1 node at most)
-        while right_half:
+        while right:
             # grab next before disconnect
-            next_node1, next_node2 = left_half.next, right_half.next
+            next_left, next_right = left.next, right.next
             # alternate flow
-            left_half.next = right_half
-            right_half.next = next_node1
+            left.next = right
+            right.next = next_left
             # iterate left and right half -> connect next_nodes
-            left_half, right_half = next_node1, next_node2
+            left, right = next_left, next_right
 
         
         # overall: time complexity O(n)
@@ -584,7 +585,7 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: Slow One Way Disconnection Reversal - Linked List/Simple Traversal
+### Solution 2: Extra Slow Brainteaser in Right List One Way Disconnection Reversal - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -605,14 +606,14 @@ Given a linked list, order it in values tending towards middle.
         # Prepare prev to be tail of reversed right half:
         prev = None
 
-        # Implicit disconnect:
-        # Mid slow will point to None during reversal
-        # both curr/slow reference same node in memory
+        # One Way Disconnect:
+        # Set tail for final merged list: slow -> None
+        # Set extra slow for right list: <- slow <- right first element
         curr = slow
 
         # while curr != last element
         # Reverse second half of list:
-        while curr.next:
+        while curr:
             # grab next before disconnect
             next_node = curr.next
             # reverse flow
@@ -620,21 +621,20 @@ Given a linked list, order it in values tending towards middle.
             # iterate reference in memory
             prev = curr
             curr = next_node
-        
-        # point last element to second to last element
-        curr.next = prev
 
         # Notice: 
-        # curr has extra element slow (should ony be on left half
-        # but is on both left and right half)
         # Thus: to avoid double add slow: while curr != slow:
+        left, right = head, prev
 
+        # exit when we hit extra slow in right list,
+        # slow in left list is aligned with last elem in right list
+        # None <- Slow <- Last elem
         # iterate over right list
-        while curr != slow:
-            left_next, right_next = head.next, curr.next
-            head.next = curr
-            curr.next = left_next
-            head, curr = left_next, right_next
+        while right != slow:
+            next_left, next_right = left.next, right.next
+            left.next = right
+            right.next = next_left
+            left, right = next_left, next_right
 
         # Notice:
         # curr.next impedes slow to be hit from the right hand list,
