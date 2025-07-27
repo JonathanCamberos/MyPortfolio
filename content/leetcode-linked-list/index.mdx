@@ -67,23 +67,31 @@ Given a linked list, reverse it iteratively and recursively.
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
+        # Note:
+        # With recursive Linked Lists:
+        # A good way to think about the problem, is that you have access
+        # to the list in reverse order, so what actions do you need to
+        # take in order to reverse the list, while traversing the list
+        # from back to front
+
         # Base case: 
-        # List is empty or has only one node -> found new head
+        # If current list is empty or has only one node -> this node becomes the new head
         if head == None or head.next == None:
             return head
 
-        # Receiving base case: new head
+        # Recursion: reverse the rest of the list (head.next to end)
+        # After Recursion: new_head is new head of reverse list (tail of original list)
         new_head = self.reverseList(head.next)
 
-        # Reverse:
-        # head -> next pointer: 
-        # head <- next
+        # Recursion Part 1: Reverse Flow of next element (by adding head <- head.next)
+        # After recursion: Point second Element to Original Head
         head.next.next = head
 
-        # Detach current head from linked list
+        # Recursion Part 2: Reverse Flow of curr element (by adding None <- head), as current head may be first element in original list
+        # After recursion: point first element in original list to None
         head.next = None
 
-        # Continue passing back new head from the deepest recursive call
+        # Continue passing back new head (last element from original list), from the deepest recursive call
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
