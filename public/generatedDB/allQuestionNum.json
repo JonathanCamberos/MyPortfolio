@@ -479,14 +479,14 @@
   },
   "206": {
     "questionNum": 206,
-    "questionTitle": "Reverse Linked List ::2::",
+    "questionTitle": "Reverse Linked List ::4::",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given the head of a singly linked list, reverse the list, and return the reversed list. A linked list can be reversed either iteratively or recursively. Could you implement both?",
     "questionTopics": [
       "Linked List",
       "Recursion"
     ],
-    "questionLink": "/Notes/leetcode-linked-list#206-reverse-linked-list-2---easy",
+    "questionLink": "/Notes/leetcode-linked-list#206-reverse-linked-list-4---easy",
     "blog": "LeetCode: Linked List",
     "lastSubmittedDate": null,
     "coldnessCount": -1

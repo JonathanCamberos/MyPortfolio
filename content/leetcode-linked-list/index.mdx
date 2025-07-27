@@ -398,15 +398,32 @@ Given a linked list, reverse it iteratively and recursively.
 ### Solution 1: Track Visited Notes - Linked List/Simple Traversal
 ```python
     def hasCycle(self, head: Optional[ListNode]) -> bool:
+        
+        # Note:
+        # Track visited nodes to check for repeats (cycles)
+        
+        # Nodes are stored by obj reference,
+        # perfect for cycle detection
         visited = set()
+
+        # start of iteration
         curr = head
         
+        # time complexity: iterate over list of n length O(n)
         while curr:
+
+            # repeated node: (cycle detected)
             if curr in visited:
                 return True
+
+            # add and continue iteration
             visited.add(curr)
             curr = curr.next
         
+        # no repeat nodes (no cycles)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -417,19 +434,33 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-
 ### Solution 2: Floyd Cycle Detection Tortoise and Hare - Linked List/Simple Traversal
 ```python
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        slow = fast = head
         
+        # Note:
+        # If no cycle: fast pointer will hit None (end of list)
+        # If cycle: once both fast and slow pointer enter cycle of size k,
+        # fast pointer will lap and hit slow pointer within k steps
+
+        # set pointers
+        slow, fast = head, head
+        
+        # time complexity: iterate over list 
         while fast and fast.next:
+
+            # move both slow and fast pointers
             slow = slow.next
             fast = fast.next.next
             
+            # check if match (cycle detected)
             if slow == fast:
                 return True
+
+        # reached end of list (no cycle detected)
         
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
