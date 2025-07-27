@@ -104,8 +104,30 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
+### Solution 2: Recursive Clean (Learning Not) - Linked List/Simple Traversal
+```python
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        
+        if not head or not head.next:
+            return head
 
-### Solution 2: Iterative - Linked List/Simple Traversal
+        new_head = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return new_head 
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 3: Iterative - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -146,6 +168,35 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
+
+### Solution 4: Iterative Clean (Learning Not) - Linked List/Simple Traversal
+```python
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        
+        prev = None
+        curr = head
+
+        while curr:
+
+            next_node = curr.next  
+
+            curr.next = prev      
+
+            prev = curr            
+            curr = next_node       
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return prev  
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
 
 
 ## 21. Merge Two Sorted Lists ::3:: - Easy
