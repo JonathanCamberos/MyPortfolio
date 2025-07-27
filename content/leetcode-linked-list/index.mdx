@@ -14,7 +14,7 @@ tags:
 
 Leetcode problems with elegant solutions using a linked list.
 
-## 206. Reverse Linked List ::2:: - Easy
+## 206. Reverse Linked List ::4:: - Easy
 
 Topics:  Linked List, Recursion
 
@@ -112,6 +112,7 @@ Given a linked list, reverse it iteratively and recursively.
             return head
 
         new_head = self.reverseList(head.next)
+        
         head.next.next = head
         head.next = None
 
@@ -254,19 +255,30 @@ Given two sorted linked lists, merge and return head of merged list.
 ### Solution 1: Recursive - Linked List/Simple Traversal
 ```python
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        # Base case: one of the lists is empty
+        
+        # Note:
+        # Building merged list from right to left,
+        # connecting current node and passing back as we go
+        
+        # Base case: 
+        # One of the lists is empty,
+        # return second list for the .next
         if not list1:
             return list2
         if not list2:
             return list1
 
-        # Pick smaller head node and recurse
+        # Recursive Call:
+        # Point smaller val -> rest of list
         if list1.val < list2.val:
             list1.next = self.mergeTwoLists(list1.next, list2)
             return list1
         else:
             list2.next = self.mergeTwoLists(list1, list2.next)
             return list2
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -276,57 +288,51 @@ Given two sorted linked lists, merge and return head of merged list.
 |  |  |  |  |  |
 
 
-### Solution 2: Iterative - Linked List/Simple Traversal
+### Solution 2: Iterative Sentinel Anchor - Linked List/Simple Traversal
 ```python
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        dummy = ListNode(-1)  # Dummy node to simplify edge cases
-        tail = dummy          # Tail pointer to build result list
+        
+        # Note:
+        # DummyHead is used to enter the iterative loop cleanly
+        # without handling first node assigning case
+        
+        # sentinel anchor for real head
+        dummyHead = ListNode(-1)  
+
+        # curr node of list
+        tail = dummy          
 
         # Traverse both lists while both have nodes
+        # time complexity: iterate over both lists O(m + n)
         while list1 and list2:
+
+            # grab smaller value between list1 and list2
             if list1.val < list2.val:
-                tail.next = list1     # Append smaller node
-                list1 = list1.next    # Advance list1
+                
+                # append and iterate list1
+                tail.next = list1     
+                list1 = list1.next   
             else:
+                # append and iterate list2
                 tail.next = list2
-                list2 = list2.next    # Advance list2
-            tail = tail.next          # Move tail
+                list2 = list2.next    
 
-        # At most one of list1 or list2 is non-empty at this point
-        tail.next = list1 if list1 else list2
+            # 1st iteration: dummyHead/tail no longer point to same obj
+            # nth iteration: iterate tail to whatever the next_node is
+            tail = tail.next          
 
-        return dummy.next  # Skip dummy and return actual merged head
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+        # At least one list is non empty at this point:
+        # point tail to rest of list
+        if list1:
+            tail.next = list1
+        else 
+            tail.next = list2
 
-### Solution 3: Iterative - Linked List/Simple Traversal
-```python
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        dummy = ListNode(-101) # the next of this will start off the new list
-        cur = dummy
+        # Jump to merged head using dummyHead
 
-        while list1 and list2:
-            if list1.val <= list2.val:
-                cur.next = list1
-                cur = list1
-                list1 = list1.next
-            else:
-                cur.next = list2
-                cur = list2
-                list2 = list2.next
-        
-        if not list1:
-            cur.next = list2
-        else:
-            cur.next = list1
-        
-
-        return dummy.next
+        # overall: time complexity O(m + n)
+        # overall: space complexity O(1)
+        return dummyHead.next
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |

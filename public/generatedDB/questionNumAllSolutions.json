@@ -756,12 +756,32 @@
     },
     {
       "number": 2,
+      "name": "Recursive Clean (Learning Not)",
+      "type": "linked-list",
+      "application": "simple-traversal",
+      "code": "def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:\n        \n        if not head or not head.next:\n            return head\n\n        new_head = self.reverseList(head.next)\n        head.next.next = head\n        head.next = None\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return new_head",
+      "questionNumber": 206,
+      "solutionLink": "/Notes/leetcode-linked-list#solution-2-recursive-clean-learning-not---linked-listsimple-traversal",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "number": 3,
       "name": "Iterative",
       "type": "linked-list",
       "application": "simple-traversal",
       "code": "def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:\n        \n        # Setting prev pointing to None (end of reversed list)\n        prev = None\n\n        # Starting at head\n        curr = head\n\n        # while _ is not None\n        # time complexity: iterate over list of n length O(n)\n        while curr != None:\n\n            # Grab next node, before disconnecting\n            next_node = curr.next  \n\n            # Disconnect and Reverse Flow: \n            # <- prev    curr -> next \n            # <- prev <- curr    next \n            curr.next = prev      \n\n            # Advance both prev and curr\n            prev = curr            \n            curr = next_node       \n\n\n        # Loop exits: \n        # val: (val)  (None)\n        # node: prev -> curr\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return prev",
       "questionNumber": 206,
-      "solutionLink": "/Notes/leetcode-linked-list#solution-2-iterative---linked-listsimple-traversal",
+      "solutionLink": "/Notes/leetcode-linked-list#solution-3-iterative---linked-listsimple-traversal",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "number": 4,
+      "name": "Iterative Clean (Learning Not)",
+      "type": "linked-list",
+      "application": "simple-traversal",
+      "code": "def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:\n        \n        prev = None\n        curr = head\n\n        while curr:\n\n            next_node = curr.next  \n\n            curr.next = prev      \n\n            prev = curr            \n            curr = next_node       \n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return prev",
+      "questionNumber": 206,
+      "solutionLink": "/Notes/leetcode-linked-list#solution-4-iterative-clean-learning-not---linked-listsimple-traversal",
       "blog": "LeetCode: Linked List"
     }
   ],
