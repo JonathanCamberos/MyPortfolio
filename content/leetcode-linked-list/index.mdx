@@ -522,7 +522,112 @@ Given a linked list, order it in values tending towards middle.
 ```python
 ```
 
-### Solution 1: Stack - Linked List/Simple Traversal
+### Solution 1: Reversal and Merge - Linked List/Simple Traversal
+```python
+    def reorderList(self, head: Optional[ListNode]) -> None:
+
+        # Note:
+        # 1. Use Tortoise Hare to find the middle
+        # 2. Reverse second half of list in place
+        # 3. Merges first half and reverse second half alternating
+        # Result: Fully in place reordering
+
+        # Slow will point at middle
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # Prepare for iterative list reversal
+        prev = None
+
+        # head of second half
+        curr = slow.next
+
+        # Disconnect left half from right half,
+        # by pointing last element from first half -> None
+        # instead of -> head of second half        
+        slow.next = None 
+
+        # Reverse second half of list
+        while curr:
+            next_node = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_node
+
+        # prev now points to start of reversed second half
+
+        # alternating merge between left half and reversed right half
+        left_half, right_half = head, prev
+
+        # right half is always equal or shorter than the left half (by 1 node at most)
+        while right_half:
+
+            next_node1, next_node2 = left_half.next, right_half.next
+            left_half.next = right_half
+            right_half.next = next_node1
+            left_half, right_half = next_node1, next_node2
+
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 2: Advanced Reversal and Merge - Linked List/Simple Traversal
+```python
+    def reorderList(self, head: Optional[ListNode]) -> None:
+
+        # Note
+        # 1. Use Tortoise and Hare to find midpoint.
+        # 2. Reverse the second half in place (without disconnecting manually)
+        # 3. Merge first and reversed second half alternating nodes
+        # Optimization: avoids slow.next = None
+        # by leveraging final reversal pointer
+
+        # mid point
+        slow, fast = head, head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+        
+        # 2nd half list reversal (starting from 'slow')
+        curr = slow
+        prev = None
+        while curr.next:
+            tmp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = tmp
+        
+        # last node: null
+        # last node points to head of list
+        curr.next = prev
+
+        # alternating join
+        while curr.next:
+            tmp, tmp2 = head.next, curr.next
+            head.next = curr
+            curr.next = tmp
+            curr, head = tmp2, tmp
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 3: Stack - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -578,104 +683,6 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-
-### Solution 2: Reversal and Merge - Linked List/Simple Traversal
-```python
-    def reorderList(self, head: Optional[ListNode]) -> None:
-
-        # Note:
-        # 1. Use Tortoise Hare to find the middle
-        # 2. Reverse second half of list in place
-        # 3. Merges first half and reverse second half alternating
-        # Result: Fully in place reordering
-
-        # Empty list case
-        if not head or not head.next:
-            return
-
-        # Slow will point at middle
-        slow, fast = head, head
-        while fast and fast.next:
-            slow = slow.next
-            fast = fast.next.next
-
-        # Prepare for iterative list reversal
-        prev = None
-
-        # head of second half
-        curr = slow.next
-
-        # Disconnect left half from right half,
-        # by pointing last element from first half -> None
-        # instead of -> head of second half        
-        slow.next = None 
-
-        # Reverse second half of list
-        while curr:
-            next_node = curr.next
-            curr.next = prev
-            prev = curr
-            curr = next_node
-
-        # prev now points to start of reversed second half
-
-        # alternating merge between left half and reversed right half
-        left_half, right_half = head, prev
-
-        # right half is always equal or shorter than the left half (by 1 node at most)
-        while right_half:
-
-            next_node1, next_node2 = left_half.next, right_half.next
-            left_half.next = right_half
-            right_half.next = next_node1
-            left_half, right_half = next_node1, next_node2
-
-        
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-### Solution 3: Advanced Reversal and Merge - Linked List/Simple Traversal
-```python
-    def reorderList(self, head: Optional[ListNode]) -> None:
-
-        fast = slow = head
-
-        while fast and fast.next:
-            fast = fast.next.next
-            slow = slow.next
-        
-        curr = slow
-        prev = None
-        while curr.next:
-            tmp = curr.next
-            curr.next = prev
-            prev = curr
-            curr = tmp
-        curr.next = prev
-
-        while curr.next:
-            tmp, tmp2 = head.next, curr.next
-            head.next = curr
-            curr.next = tmp
-            curr, head = tmp2, tmp
-
-        
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
 
 
 ## 19. Remove Nth Node From End of List ::2:: - Medium

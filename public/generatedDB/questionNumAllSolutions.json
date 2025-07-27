@@ -602,22 +602,32 @@
   "143": [
     {
       "number": 1,
+      "name": "Reversal and Merge",
+      "type": "linked-list",
+      "application": "simple-traversal",
+      "code": "def reorderList(self, head: Optional[ListNode]) -> None:\n\n        # Note:\n        # 1. Use Tortoise Hare to find the middle\n        # 2. Reverse second half of list in place\n        # 3. Merges first half and reverse second half alternating\n        # Result: Fully in place reordering\n\n        # Empty list case\n        if not head or not head.next:\n            return\n\n        # Slow will point at middle\n        slow, fast = head, head\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        # Prepare for iterative list reversal\n        prev = None\n\n        # head of second half\n        curr = slow.next\n\n        # Disconnect left half from right half,\n        # by pointing last element from first half -> None\n        # instead of -> head of second half        \n        slow.next = None \n\n        # Reverse second half of list\n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n\n        # prev now points to start of reversed second half\n\n        # alternating merge between left half and reversed right half\n        left_half, right_half = head, prev\n\n        # right half is always equal or shorter than the left half (by 1 node at most)\n        while right_half:\n\n            next_node1, next_node2 = left_half.next, right_half.next\n            left_half.next = right_half\n            right_half.next = next_node1\n            left_half, right_half = next_node1, next_node2\n\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(1)",
+      "questionNumber": 143,
+      "solutionLink": "/Notes/leetcode-linked-list#solution-1-reversal-and-merge---linked-listsimple-traversal",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "number": 2,
+      "name": "Advanced Reversal and Merge",
+      "type": "linked-list",
+      "application": "simple-traversal",
+      "code": "def reorderList(self, head: Optional[ListNode]) -> None:\n\n        # Note\n        # 1. Use Tortoise and Hare to find midpoint.\n        # 2. Reverse the second half in place (without disconnecting manually)\n        # 3. Merge first and reversed second half alternating nodes\n        # Optimization: avoids slow.next = None\n        # by leveraging final reversal pointer\n\n        # mid point\n        slow, fast = head, head\n        while fast and fast.next:\n            fast = fast.next.next\n            slow = slow.next\n        \n        # 2nd half list reversal (starting from 'slow')\n        curr = slow\n        prev = None\n        while curr.next:\n            tmp = curr.next\n            curr.next = prev\n            prev = curr\n            curr = tmp\n        \n        # last node: null\n        # last node points to head of list\n        curr.next = prev\n\n        # alternating join\n        while curr.next:\n            tmp, tmp2 = head.next, curr.next\n            head.next = curr\n            curr.next = tmp\n            curr, head = tmp2, tmp\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(1)",
+      "questionNumber": 143,
+      "solutionLink": "/Notes/leetcode-linked-list#solution-2-advanced-reversal-and-merge---linked-listsimple-traversal",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "number": 3,
       "name": "Stack",
       "type": "linked-list",
       "application": "simple-traversal",
       "code": "def reorderList(self, head: Optional[ListNode]) -> None:\n\n        # Note:\n        # Store all nodes in a stack to allow reverse access\n        # Iteratively link first node, last, second, second last, etc\n\n        # Empty list case\n        if not head or not head.next:\n            return\n\n        # space complexity: store list of n length O(n)\n        stack = []\n\n        # iteration pointer\n        curr = head\n        \n        # time complexity: iterate over list of n length O(n)\n        while curr:\n            stack.append(curr)\n            curr = curr.next\n\n        # forward iteration over list \n        n = len(stack)\n        curr = head\n\n        # time complexity: iterate over stack O(n)\n        for _ in range(n // 2):\n\n            # backwards iteration over stack\n            tail = stack.pop()\n\n            # split curr from curr.next\n            tail.next = curr.next\n\n            # chain tail between curr and curr.next\n            curr.next = tail\n\n            # iterate to curr.next\n            curr = tail.next\n\n        # Set tail to None\n        if curr:\n            curr.next = None\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)",
       "questionNumber": 143,
-      "solutionLink": "/Notes/leetcode-linked-list#solution-1-stack---linked-listsimple-traversal",
-      "blog": "LeetCode: Linked List"
-    },
-    {
-      "number": 2,
-      "name": "Two Pointer",
-      "type": "linked-list",
-      "application": "simple-traversal",
-      "code": "def reorderList(self, head: Optional[ListNode]) -> None:\n\n        # Note:\n        # 1. Use Tortoise Hare to find the middle\n        # 2. Reverse second half of list in place\n        # 3. Merges first half and reverse second half alternating\n        # Result: Fully in place reordering\n\n        # Empty list case\n        if not head or not head.next:\n            return\n\n        # Slow will point at middle\n        slow, fast = head, head\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        # Prepare for iterative list reversal\n        prev = None\n\n        # head of second half\n        curr = slow.next\n\n        # Disconnect left half from right half,\n        # by pointing last element from first half -> None\n        # instead of -> head of second half        \n        slow.next = None \n\n        # Reverse second half of list\n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n\n        # prev now points to start of reversed second half\n\n        # alternating merge between left half and reversed right half\n        left_half, right_half = head, prev\n\n        # right half is always equal or shorter than the left half (by 1 node at most)\n        while right_half:\n\n            next_node1, next_node2 = left_half.next, right_half.next\n            left_half.next = right_half\n            right_half.next = next_node1\n            left_half, right_half = next_node1, next_node2\n\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(1)",
-      "questionNumber": 143,
-      "solutionLink": "/Notes/leetcode-linked-list#solution-2-two-pointer---linked-listsimple-traversal",
+      "solutionLink": "/Notes/leetcode-linked-list#solution-3-stack---linked-listsimple-traversal",
       "blog": "LeetCode: Linked List"
     }
   ],
