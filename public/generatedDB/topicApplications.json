@@ -302,6 +302,15 @@
     },
     {
       "type": "Linked List",
+      "title": "Dummy Head Trick",
+      "summary": "Using a dummy (sentinel) node simplifies edge cases in linked list operations,",
+      "exampleIntro": "Remove nth node from end of a list using dummy head",
+      "codeExample": "def removeNthFromEnd(head: Optional[ListNode], n: int) -> Optional[ListNode]:\n    \n    # dummy (sentinel) node used to point to the head\n    dummy = ListNode(0, head)\n    fast = slow = dummy\n\n    # Move fast pointer n+1 steps ahead to keep gap\n    for _ in range(n + 1):\n        fast = fast.next\n\n    # Move both pointers until fast reaches end\n    while fast:\n        fast = fast.next\n        slow = slow.next\n\n    # Remove the nth node (slow.next)\n    slow.next = slow.next.next\n\n    # Return head dummy is pointing to (may be different from original)\n    return dummy.next",
+      "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-dummy-head-trick",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "type": "Linked List",
       "title": "Tortoise and Hare",
       "summary": "We can represent fast and slow pointers to traverse the list.",
       "exampleIntro": "Return middle node in list",

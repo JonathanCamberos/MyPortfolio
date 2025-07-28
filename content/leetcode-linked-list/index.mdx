@@ -1014,73 +1014,111 @@ Given a linked list where each node has an additional random node pointers, crea
 ```python
 ```
 
-### Solution 1: Hash table - Linked List/Simple Traversal
+### Solution 1: Two Pass Hashmap - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        
+        # Note:
+        # 1. Traverse once: create all nodes (no wiring of next/random yet)
+        # 2. Use a dictionary to map old nodes -> new nodes
+        # 3. Traverse Twice: wire up both next and random using the map
+        # 4. Deep copy of head
+
+        # Empty Check
         if not head:
             return None
 
-        # Dictionary to hold old node -> new node mapping
-        old_to_new = {}
+        # Orig node -> deep node copy
+        orig_to_deepCopy = {}
 
-        # Step 1: Copy all nodes (without wiring next/random yet)
+        # Step 1: 
+        # Copy all nodes values (no next/random pointers yet)
         curr = head
         while curr:
             copy = Node(curr.val)
-            old_to_new[curr] = copy
+            orig_to_deepCopy[curr] = copy
             curr = curr.next
 
-        # Step 2: Assign next and random pointers
+        # Step 2: 
+        # All nodes created, now assign next and random pointers
         curr = head
         while curr:
-            copy = old_to_new[curr]
-            copy.next = old_to_new.get(curr.next)
-            copy.random = old_to_new.get(curr.random)
+            copy = orig_to_deepCopy[curr]
+            copy.next = orig_to_deepCopy.get(curr.next)
+            copy.random = orig_to_deepCopy.get(curr.random)
             curr = curr.next
 
         # Return the deep copy of the head node
-        return old_to_new[head]
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return orig_to_deepCopy[head]
 ```
 
-### Solution 2: Memoize Hashmap - Linked List/Simple Traversal
+### Solution 2: One Pass Memoization Hashmap with Lazy Construction - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
-        copyList = Node(0)
-        pointer = copyList
+        
+        # Note:
+        # 1. Maintain a memo dictionary to store mapping on the fly
+        # 2. Iterate once through original list while building the copy
+        # 3. Create each copy node only whe first encountered (lazy construction)
+        # 4. Maintain a pointer to build out the next chain
+
+        if not head:
+            return None
+        
+        # Dummy node to simplify linking process
+        dummy = Node(0)
+        copy_tail = dummy
+        
+        # Dictionary to store original node -> copied node
         memo = {}
-
+        
+        # Step 1: Traverse original list
         while head:
-            # Get or create the copy of the current node
-            node = memo.get(head)
-            if not node:
-                node = Node(head.val)
-                memo[head] = node
-
-            # Get or create the copy of the random node
+            
+            # Step 1A: Copy current node if not already created
+            if head not in memo:
+                memo[head] = Node(head.val)
+            copy_node = memo[head]
+            
+            # Step 1B: Copy random pointer if exists
             if head.random:
-                random = memo.get(head.random)
-                if not random:
-                    random = Node(head.random.val)
-                    memo[head.random] = random
-                node.random = random
-
-            # Link the new node to the copied list
-            copyList.next = node
-
-            # Move forward
+                if head.random not in memo:
+                    memo[head.random] = Node(head.random.val)
+                copy_node.random = memo[head.random]
+            
+            # Step 1C: Link copied node to result list
+            copy_tail.next = copy_node
+            copy_tail = copy_tail.next
+            
+            # Step 1D: Move forward in original list
             head = head.next
-            copyList = copyList.next
+        
+        # Return deep-copied head (dummy.next skips placeholder node)
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return dummy.next
 
-        return pointer.next
 ``` 
 
-### Solution 3: In Place Interleaving Technique - Linked List/Simple Traversal
+### Solution 3: In Place Interleaving Technique O(1) - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        
+        # Note:
+        # 1. First interleave copy and paste nodes between original nodes O(1) space
+        #  A -> B -> C ==> A -> A' -> B -> B' -> C -> C'
+        # 2. Assign random pointers to the copy nodes using original's .random
+        # 3. Detach copy list from original (restoring original)
+        # 4. Constant space, but requires 3 passes 
+        
         if not head:
             return None
 
-        # Step 1: Interleave original and copied nodes
+        # Step 1: interleave copy nodes
         curr = head
         while curr:
             copy = Node(curr.val)
@@ -1088,14 +1126,14 @@ Given a linked list where each node has an additional random node pointers, crea
             curr.next = copy
             curr = copy.next
 
-        # Step 2: Assign random pointers to copied nodes
+        # Step 2: assign random pointers
         curr = head
         while curr:
             if curr.random:
                 curr.next.random = curr.random.next
             curr = curr.next.next
 
-        # Step 3: Separate the copied list from the original
+        # Step 3: split into original and copied lists
         curr = head
         copy_head = head.next
         while curr:
@@ -1105,6 +1143,8 @@ Given a linked list where each node has an additional random node pointers, crea
                 copy.next = copy.next.next
             curr = curr.next
 
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return copy_head
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
