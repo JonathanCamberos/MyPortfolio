@@ -1048,7 +1048,7 @@ Given a linked list where each node has an additional random node pointers, crea
         while curr:
             # grab
             copy = orig_to_deepCopy[curr]
-            # assign
+            # grab deepCopy node (may be None, so use .get() in case)
             copy.next = orig_to_deepCopy.get(curr.next)
             copy.random = orig_to_deepCopy.get(curr.random)
             # iterate
@@ -1085,21 +1085,27 @@ Given a linked list where each node has an additional random node pointers, crea
         # Iteration 1:
         while head:
             
-            # Step 1A: grab or create current node
+            # Step 1A: 
+            # grab or create and grab current node
             if head not in memo:
                 memo[head] = Node(head.val)
             copy_node = memo[head]
             
-            # Step 1B: grab or create random node
+            # Step 1B: 
+            # grab or create and grab random node
             if head.random:
                 if head.random not in memo:
                     memo[head.random] = Node(head.random.val)
                 copy_node.random = memo[head.random]
             
-            # Step 1C: build new copy list during iteration
+            # Step 1C: 
+            # connect elements of new deep copy list during iteration,
+            # dummy is now pointing to head of new deep copy list
             prev.next = copy_node
 
-            # Step 1D: iterate
+            # Step 1D: 
+            # iterate to connect next node
+            # iterate over original list
             prev = prev.next
             head = head.next
         
@@ -1108,7 +1114,6 @@ Given a linked list where each node has an additional random node pointers, crea
         # overall: time complexity O(n)
         # overall: space complexity O(n)
         return dummy.next
-
 ``` 
 
 ### Solution 3: Three Pass In Place Interleaving Technique - Linked List/Simple Traversal
