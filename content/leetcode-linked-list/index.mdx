@@ -41,6 +41,36 @@ Ex: Count number of nodes in the list
         return count
 ```
 
+### Linked List Application: Dummy Head Trick
+Using a dummy (sentinel) node simplifies edge cases in linked list operations,
+especially when manipulating the head node.
+Dummy node precedes the head, providing the uniform way to handle
+deletions, insertions, or merges without adding logic to handle the head.
+
+Ex: Remove nth node from end of a list using dummy head
+```python
+def removeNthFromEnd(head: Optional[ListNode], n: int) -> Optional[ListNode]:
+    
+    # dummy (sentinel) node used to point to the head
+    dummy = ListNode(0, head)
+    fast = slow = dummy
+
+    # Move fast pointer n+1 steps ahead to keep gap
+    for _ in range(n + 1):
+        fast = fast.next
+
+    # Move both pointers until fast reaches end
+    while fast:
+        fast = fast.next
+        slow = slow.next
+
+    # Remove the nth node (slow.next)
+    slow.next = slow.next.next
+
+    # Return head dummy is pointing to (may be different from original)
+    return dummy.next 
+```
+
 ### Linked List Application: Tortoise and Hare
 We can represent fast and slow pointers to traverse the list.
 Useful for splitting lists in half for sorting or palindrome checks 
@@ -835,22 +865,37 @@ Given a linked list, remove nth node and return head of list.
 ### Solution 1: Two Pass Solution - Linked List/Simple Traversal
 ```python
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        # First pass: get length
-        length = 0
-        current = head
-        while current:
-            length += 1
-            current = current.next
         
-        # Second pass: remove (length - n)th node from beginning
-        dummy = ListNode(0, head)
-        current = dummy
-        for _ in range(length - n):
-            current = current.next
-        
-        current.next = current.next.next
-        return dummy.next
+        # Note:
+        # 1. Traverse list once to calculate total length
+        # 2. Use a dummy node to handle edge cases (like removing head)
+        # 3. Traverse again to node just before the one to remove
+        # 4. Adjust pointers to skip the nth node from the end
 
+        # First pass: get length of list
+        len = 0
+        curr = head
+        while curr:
+            len += 1
+            curr = curr.next
+        
+        # Second pass: find the node behind target
+        dummy = ListNode(0, head)
+        curr = dummy
+
+        # stop at (len - n) - 1
+        # -1 due to dummy, stops at node behind target
+        for _ in range(len - n):
+            curr = curr.next
+        
+        # remove nth node from end by skipping it
+        curr.next = curr.next.next
+
+        # Return head dummy is pointing to (may be different from original)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return dummy.next
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -862,20 +907,36 @@ Given a linked list, remove nth node and return head of list.
 ### Solution 2: One Pass Solution - Linked List/Simple Traversal
 ```python
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        dummy = ListNode(0, head)
-        fast = slow = dummy
         
-        # Move fast n + 1 steps to maintain gap between fast and slow
+        # Note:
+        # 1. Use two pointers spaced n+1 apart (fast and slow)
+        # 2. Move both pointers until fast hits end
+        # 3. Slow pointer will be right before the node to remove
+        # 4. Remove node by skipping it
+       
+        dummy = ListNode(0, head)
+        slow = fast = dummy
+        
+        # Set fast pointer: 
+        # head start of n + 1 step,
+        # in order to create a gap of n between fast and slow
+        # (taking dummy node into account)
         for _ in range(n + 1):
             fast = fast.next
         
-        # Move both pointers until fast reaches the end
+        # When fast reaches end:
+        # n + 1 gap between slow (within list) and fast (end of list)
         while fast:
             fast = fast.next
             slow = slow.next
         
-        # Remove the nth node
+        # skip nth node
         slow.next = slow.next.next
+
+        # Return head dummy is pointing to (may be different from original)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return dummy.next 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

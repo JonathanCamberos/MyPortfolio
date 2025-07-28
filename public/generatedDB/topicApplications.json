@@ -289,5 +289,34 @@
       "useCaseLink": "/Notes/leetcode-sliding-window#sliding-window-application-variable-size-window",
       "blog": "LeetCode: Sliding Window"
     }
+  ],
+  "linked-list": [
+    {
+      "type": "Linked List",
+      "title": "Linear Traversal",
+      "summary": "We can traverse a linked list node by node using a single pointer.",
+      "exampleIntro": "Count number of nodes in the list",
+      "codeExample": "def countNodes(head):\n        count = 0\n        curr = head\n        \n        while curr: \n            count += 1\n            curr = curr.next\n\n        return count",
+      "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-linear-traversal",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "type": "Linked List",
+      "title": "Tortoise and Hare",
+      "summary": "We can represent fast and slow pointers to traverse the list.",
+      "exampleIntro": "Return middle node in list",
+      "codeExample": "def findMiddle(head):\n        slow = fast = head\n\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        return slow",
+      "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-tortoise-and-hare",
+      "blog": "LeetCode: Linked List"
+    },
+    {
+      "type": "Linked List",
+      "title": "In Place Modification",
+      "summary": "Iteratively manipulate linked list during traversal for",
+      "exampleIntro": "Reverse the entire list and return a new head",
+      "codeExample": "def reverseList(head):\n        prev = None\n        curr = head\n\n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n\n        return prev",
+      "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-in-place-modification",
+      "blog": "LeetCode: Linked List"
+    }
   ]
 }
