@@ -14,6 +14,71 @@ tags:
 
 Leetcode problems with elegant solutions using a linked list.
 
+### What is a Linked List
+A linked list is a linear data structure where each element (node) points to the next.
+It does not offer direct index access like arrays, as all traversal is pointer based.
+
+### Why Use a Linked List
+Linked lists are ideal for:
+- Memory efficient manipulation (no resizing like arrays)
+- Representing dynamic data structures (stacks, queues, etc)
+- Insertions and deletions in constant O(1) time (if the node is known)
+
+### Linked List Application: Linear Traversal
+We can traverse a linked list node by node using a single pointer.
+Commonly used for printing, searching, summing values, etc.
+
+Ex: Count number of nodes in the list
+```python
+    def countNodes(head):
+        count = 0
+        curr = head
+        
+        while curr: 
+            count += 1
+            curr = curr.next
+
+        return count
+```
+
+### Linked List Application: Tortoise and Hare
+We can represent fast and slow pointers to traverse the list.
+Useful for splitting lists in half for sorting or palindrome checks 
+and for checking for cycles.
+
+Ex: Return middle node in list
+```python
+    def findMiddle(head):
+        slow = fast = head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        return slow
+```
+
+### Linked List Application: In Place Modification
+Iteratively manipulate linked list during traversal for
+O(1) time and space.
+
+Ex: Reverse the entire list and return a new head
+```python
+    def reverseList(head):
+        prev = None
+        curr = head
+
+        while curr:
+            next_node = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_node
+
+        return prev
+```
+
+
+
 ## 206. Reverse Linked List ::4:: - Easy
 
 Topics:  Linked List, Recursion
