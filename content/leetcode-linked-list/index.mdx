@@ -1031,24 +1031,30 @@ Given a linked list where each node has an additional random node pointers, crea
         # Orig node -> deep node copy
         orig_to_deepCopy = {}
 
-        # Step 1: 
+        # Iteration 1: 
         # Copy all nodes values (no next/random pointers yet)
         curr = head
         while curr:
+            # create
             copy = Node(curr.val)
+            # insert
             orig_to_deepCopy[curr] = copy
+            # iterate
             curr = curr.next
 
-        # Step 2: 
+        # Iteration 2:
         # All nodes created, now assign next and random pointers
         curr = head
         while curr:
+            # grab
             copy = orig_to_deepCopy[curr]
+            # assign
             copy.next = orig_to_deepCopy.get(curr.next)
             copy.random = orig_to_deepCopy.get(curr.random)
+            # iterate
             curr = curr.next
 
-        # Return the deep copy of the head node
+        # Return deep copy of the head node
 
         # overall: time complexity O(n)
         # overall: space complexity O(n)
@@ -1065,38 +1071,39 @@ Given a linked list where each node has an additional random node pointers, crea
         # 3. Create each copy node only whe first encountered (lazy construction)
         # 4. Maintain a pointer to build out the next chain
 
+        # Empty check
         if not head:
             return None
         
         # Dummy node to simplify linking process
         dummy = Node(0)
-        copy_tail = dummy
+        prev = dummy
         
-        # Dictionary to store original node -> copied node
+        # orig node -> copied node
         memo = {}
         
-        # Step 1: Traverse original list
+        # Iteration 1:
         while head:
             
-            # Step 1A: Copy current node if not already created
+            # Step 1A: grab or create current node
             if head not in memo:
                 memo[head] = Node(head.val)
             copy_node = memo[head]
             
-            # Step 1B: Copy random pointer if exists
+            # Step 1B: grab or create random node
             if head.random:
                 if head.random not in memo:
                     memo[head.random] = Node(head.random.val)
                 copy_node.random = memo[head.random]
             
-            # Step 1C: Link copied node to result list
-            copy_tail.next = copy_node
-            copy_tail = copy_tail.next
-            
-            # Step 1D: Move forward in original list
+            # Step 1C: build new copy list during iteration
+            prev.next = copy_node
+
+            # Step 1D: iterate
+            prev = prev.next
             head = head.next
         
-        # Return deep-copied head (dummy.next skips placeholder node)
+        # Return deep copy head
         
         # overall: time complexity O(n)
         # overall: space complexity O(n)
@@ -1104,7 +1111,7 @@ Given a linked list where each node has an additional random node pointers, crea
 
 ``` 
 
-### Solution 3: In Place Interleaving Technique O(1) - Linked List/Simple Traversal
+### Solution 3: Three Pass In Place Interleaving Technique - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
@@ -1118,29 +1125,43 @@ Given a linked list where each node has an additional random node pointers, crea
         if not head:
             return None
 
-        # Step 1: interleave copy nodes
+        # Iteration 1:
+        # Interleave copy nodes
         curr = head
         while curr:
+            # create
             copy = Node(curr.val)
+            # interweave
             copy.next = curr.next
             curr.next = copy
+            # iterate
             curr = copy.next
 
-        # Step 2: assign random pointers
+        # Iteration 2:
+        # Assign random pointers
         curr = head
         while curr:
+            # grab and assign random to matching interweaved nodes
             if curr.random:
                 curr.next.random = curr.random.next
+            
+            # iterate skipping interweaved nodes
             curr = curr.next.next
 
-        # Step 3: split into original and copied lists
+        # Iteration 3:
+        # Split into original and copied lists
         curr = head
         copy_head = head.next
         while curr:
+            # interweaved node copy
             copy = curr.next
+            # disconnect original node from interweaved node
             curr.next = copy.next
+            # point interweaved copy to new interweaved copy
+            # A -> A' -> B -> B' (point A' -> B')
             if copy.next:
                 copy.next = copy.next.next
+            # iterate original
             curr = curr.next
 
         # overall: time complexity O(n)
@@ -1211,6 +1232,10 @@ Given a two linked lists representing numbers, return the sum.
 ### Solution 1: Recursive - Linked List/Simple Traversal
 ```python
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        
+        # Note:
+        #
+        
         def dfs(n1, n2, carry):
             if not n1 and not n2 and carry == 0:
                 return None
@@ -1225,6 +1250,8 @@ Given a two linked lists representing numbers, return the sum.
                             total // 10)
             return node
 
+        # overall: time complexity
+        # overall: space complexity
         return dfs(l1, l2, 0)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1237,6 +1264,10 @@ Given a two linked lists representing numbers, return the sum.
 ### Solution 2: Iterative - Linked List/Simple Traversal
 ```python
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        
+        # Note:
+        #
+        
         dummy = ListNode()
         curr = dummy
         carry = 0
@@ -1255,8 +1286,9 @@ Given a two linked lists representing numbers, return the sum.
             if l1: l1 = l1.next
             if l2: l2 = l2.next
 
+        # overall: time complexity
+        # overall: space complexity
         return dummy.next
-
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
