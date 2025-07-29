@@ -314,7 +314,7 @@
       "title": "Tortoise and Hare",
       "summary": "We can represent fast and slow pointers to traverse the list.",
       "exampleIntro": "Return middle node in list",
-      "codeExample": "def findMiddle(head):\n        slow = fast = head\n\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        return slow",
+      "codeExample": "def findMiddle(head):\n        slow = fast = head\n\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        return slow\n\n    # If F == None: Even length list\n    # S points to start of right half\n    # Left and right halves have equal length\n\n    # If F != None: Odd length list\n    # S points to middle node (belongs to left half) \n    # Left half is longer by 1 element\n\n    # None                              S: None\n    # S^F^                              F: None\n\n    # 0     None                        S: 0\n    # S^F^                              F: 0\n\n    # 0   1   None                      S: 1\n    #     S^  F^                        F: None\n\n    # 0   1   2   None                  S: 1\n    #     S^  F^                        F: 2\n\n    # 0   1   2   3   None              S: 2\n    #         S^      F^                F: None\n\n    # 0   1   2   3   4   None          S: 2\n    #         S^      F^                F: 4\n\n    # 0   1   2   3   4   5   None      S: 3\n    #             S^          F^        F: None\n\n    # 0   1   2   3   4   5   6   None  S: 3\n    #             S^          F^        F: 6",
       "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-tortoise-and-hare",
       "blog": "LeetCode: Linked List"
     },

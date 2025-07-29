@@ -666,20 +666,28 @@ Given a linked list, order it in values tending towards middle.
             slow = slow.next
             fast = fast.next.next
 
-        # Odd List Len slow -> middle element
+        # Slow result:
+
+        # Odd List Len: slow -> middle element
         # left is 1 element longer
+
         # Even List Len: mid -> 2nd middle element
         # left and right same length
 
-        # Prepare prev for reverse tail
+        # prev for reverse tail
         prev = None
         
-        # grab head of right half
+        # Set Curr:
+
         # Odd List Len: start of right list
-        # left is 1 element longer (because of mid element)
+        # setting curr to slow.next, which is saying mid.next
+        # left will be 1 element longer (keeps mid element),
+
 
         # Even List Len: second element of right list
-        # left is 2 elements longer (because it keeps 2nd mid element)
+        # setting curr to slow.next, which is saying mid2.next
+        # left is 2 elements longer (keeps 1st and 2nd mid elements)
+
         curr = slow.next
 
         # Explicit Disconnect:
@@ -745,15 +753,30 @@ Given a linked list, order it in values tending towards middle.
             fast = fast.next.next
             slow = slow.next
         
-        # Prepare prev to be tail of reversed right half:
+        # Slow result:
+
+        # Odd List Len: slow -> middle element
+        # left is 1 element longer
+
+        # Even List Len: mid -> 2nd middle element
+        # left and right same length
+
+        # prev to be tail of reversed right half:
         prev = None
+
+        # Set Curr:
+
+        # Odd List Len: start of right list
+        # left is 1 element longer (because of mid element)
+
+        # Even List Len: second element of right list
+        # left is 2 elements longer (because it keeps 2nd mid element)
+        curr = slow
 
         # One Way Disconnect:
         # Set tail for final merged list: slow -> None
         # Set extra slow for right list: <- slow <- right first element
-        curr = slow
 
-        # while curr != last element
         # Reverse second half of list:
         while curr:
             # grab next before disconnect
@@ -764,8 +787,7 @@ Given a linked list, order it in values tending towards middle.
             prev = curr
             curr = next_node
 
-        # Notice: 
-        # Thus: to avoid double add slow: while curr != slow:
+        # iterate over left and right lists
         left, right = head, prev
 
         # exit when we hit extra slow in right list,
