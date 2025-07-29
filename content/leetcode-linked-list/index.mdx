@@ -86,6 +86,38 @@ Ex: Return middle node in list
             fast = fast.next.next
 
         return slow
+
+    # If F == None: Even length list
+    # S points to start of right half
+    # Left and right halves have equal length
+
+    # If F != None: Odd length list
+    # S points to middle node (belongs to left half) 
+    # Left half is longer by 1 element
+
+    # None                              S: None
+    # S^F^                              F: None
+
+    # 0     None                        S: 0
+    # S^F^                              F: 0
+
+    # 0   1   None                      S: 1
+    #     S^  F^                        F: None
+
+    # 0   1   2   None                  S: 1
+    #     S^  F^                        F: 2
+
+    # 0   1   2   3   None              S: 2
+    #         S^      F^                F: None
+
+    # 0   1   2   3   4   None          S: 2
+    #         S^      F^                F: 4
+
+    # 0   1   2   3   4   5   None      S: 3
+    #             S^          F^        F: None
+
+    # 0   1   2   3   4   5   6   None  S: 3
+    #             S^          F^        F: 6
 ```
 
 ### Linked List Application: In Place Modification
@@ -634,16 +666,24 @@ Given a linked list, order it in values tending towards middle.
             slow = slow.next
             fast = fast.next.next
 
-        # Prepare prev to be tail of reversed right half:
-        prev = None
+        # Odd List Len slow -> middle element
+        # left is 1 element longer
+        # Even List Len: mid -> 2nd middle element
+        # left and right same length
 
-        # Explicit disconnect:
+        # Prepare prev for reverse tail
+        prev = None
+        
         # grab head of right half
+        # Odd List Len: start of right list
+        # left is 1 element longer (because of mid element)
+
+        # Even List Len: second element of right list
+        # left is 2 elements longer (because it keeps 2nd mid element)
         curr = slow.next
 
         # Explicit Disconnect:
-        # Set tail for final merged list: slow -> None
-        # Invariant: Now due to slow, left will always be equal or longer than right
+        # Set tail for left list: slow -> None
         slow.next = None 
 
         # Reverse second half of list
@@ -656,7 +696,7 @@ Given a linked list, order it in values tending towards middle.
             prev = curr
             curr = next_node
 
-        # iterate over left half and reversed right half
+        # iterate over left half and right half
         left, right = head, prev
 
         # right half is always equal or shorter than the left half (by 1 node at most)
@@ -668,7 +708,14 @@ Given a linked list, order it in values tending towards middle.
             right.next = next_left
             # iterate left and right half -> connect next_nodes
             left, right = next_left, next_right
-
+        
+        # Implicit Disconnect Trick:
+        # Even/Odd Len Case:
+        # Regardless of difference in length between right and left list,
+        # since right.next = next_left,
+        # this automatically connects the 1 or 2 extra nodes once 
+        # while right terminates (since right list is shorter)
+        # since we explicitly disconnected the left list prior (explicit disconnect)
         
         # overall: time complexity O(n)
         # overall: space complexity O(1)
