@@ -598,7 +598,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-## 143. Reorder List ::3:: - Medium
+## 143. Reorder List ::4:: - Medium
 
 Topics:  Linked List, Two Pointers, Stack, Recursion
 
@@ -735,7 +735,7 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: Extra Slow Brainteaser in Right List One Way Disconnection Reversal - Linked List/Simple Traversal
+### Solution 2: Shared Slow Between Left and Right List Implicit Disconnect - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -766,16 +766,22 @@ Given a linked list, order it in values tending towards middle.
 
         # Set Curr:
 
-        # Odd List Len: start of right list
-        # left is 1 element longer (because of mid element)
+        # Odd List Len: prev of first element of right list
+        # setting curr to slow, which is saying mid
+        # right is 1 element longer (because of mid element)
 
-        # Even List Len: second element of right list
-        # left is 2 elements longer (because it keeps 2nd mid element)
+        # Even List Len: first element of right list
+        # setting curr to slow, which is saying mid2
+        # left and right are same length (split 1st and 2nd mid elements)
         curr = slow
 
-        # One Way Disconnect:
-        # Set tail for final merged list: slow -> None
-        # Set extra slow for right list: <- slow <- right first element
+        # Implicit Two Way Disconnect:
+        # Both left and right lists have slow in their list
+        # NOTICE: during the first modification of slow, we point it to null
+        # now, both lists have a slow.next -> None
+
+        # left still is pointing to slow and first element of right list
+        # right will have slow as a last element with slow.next -> None
 
         # Reverse second half of list:
         while curr:
@@ -790,21 +796,17 @@ Given a linked list, order it in values tending towards middle.
         # iterate over left and right lists
         left, right = head, prev
 
-        # exit when we hit extra slow in right list,
-        # slow in left list is aligned with last elem in right list
-        # None <- Slow <- Last elem
-        # iterate over right list
+        # Now since:
+        # Both left and right are referencing the same slow, with slow.next -> None
+        # We know that when right == slow
+        # the previous iteration is pointing to the left's reference of slow
+        # so we can exit
         while right != slow:
             next_left, next_right = left.next, right.next
             left.next = right
             right.next = next_left
             left, right = next_left, next_right
 
-        # Notice:
-        # curr.next impedes slow to be hit from the right hand list,
-        # therefore we add slow via the left list (since prev_slow -> slow),
-        # is still pointing to slow
-        
         # overall: time complexity O(n)
         # overall: space complexity O(1)
 ```
@@ -829,14 +831,33 @@ Given a linked list, order it in values tending towards middle.
             slow = slow.next
             fast = fast.next.next
 
-        # stack for reverse access via pop()
+        # Slow result:
+
+        # Odd List Len: slow -> middle element
+        # left is 1 element longer
+
+        # Even List Len: mid -> 2nd middle element
+        # left and right same length
+        
+        # reverse access via pop()
         # space complexity: store list of n length O(n)
         stack = []
 
-        # iterate over second half of list
-        curr = slow 
-        
-        # push right half of nodes to stack
+        # Set Curr:
+
+        # Odd List Len: start of right list
+        # setting curr to slow.next, which is saying mid.next
+        # left will be 1 element longer (keeps mid element),
+
+        # Even List Len: second element of right list
+        # setting curr to slow.next, which is saying mid2.next
+        # left is 2 elements longer (keeps 1st and 2nd mid elements)
+        curr = slow.next 
+
+        # Explicit Disconnect:
+        # Set tail for left list: slow -> None        
+        slow.next = None  
+
         # time complexity: iterate over list of n length O(n)
         while curr:
             stack.append(curr)
@@ -844,6 +865,88 @@ Given a linked list, order it in values tending towards middle.
 
         # forward iteration over list 
         left = head
+
+        # time complexity: iterate over stack O(n)
+        while stack:
+
+            # iterate over right half
+            right = stack.pop()
+
+            # place right in between left and left.next
+            # left -> right -> left.next 
+            right.next = left.next
+            left.next = right
+
+            # iterate left list
+            left = right.next
+
+        # Implicit Disconnect Trick:
+        # Even/Odd Len Case:
+        # Regardless of difference in length between right nad left list,
+        # since right.next = next_left,
+        # this automatically connects the 1 or 2 extra nodes once
+        # while right list stack terminates (since right list is shorted)
+        # since we explicitly disconnected the left list prior (explicit disconnect)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 4: Stack - Linked List/Simple Traversal
+```python
+    def reorderList(self, head: Optional[ListNode]) -> None:
+
+        # Note:
+        # Store right half nodes in a stack to allow reverse access
+        # The put right half in between alternating left half nodes
+        # l1 -> r1 -> l2 -> etc..
+
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # Slow result:
+
+        # Odd List Len: slow -> middle element
+        # left is 1 element longer
+
+        # Even List Len: mid -> 2nd middle element
+        # left and right same length
+
+        # stack for reverse access via pop()
+        # space complexity: store list of n length O(n)
+        stack = []
+
+        # Set Curr:
+
+        # Odd List Len: prev of first element of right list
+        # setting curr to slow, which is saying mid
+        # right is 1 element longer (because of mid element)
+
+        # Even List Len: first element of right list
+        # setting curr to slow, which is saying mid2
+        # left and right are same length (split 1st and 2nd mid elements)
+        curr = slow 
+        
+        # time complexity: iterate over list of n length O(n)
+        while curr:
+            stack.append(curr)
+            curr = curr.next
+
+        # iterate over left list 
+        left = head
+
+        # Notice:
+        # due to curr = slow: left list is smaller than right
+        # therefore we need to terminate based on smaller left list
+        # 
 
         # time complexity: iterate over stack O(n)
         while left != slow:
@@ -859,10 +962,14 @@ Given a linked list, order it in values tending towards middle.
             # iterate left half of list
             left = right.next
 
-        # Notice:
-        # final iteration: node -> slow -> slow
 
-        # non empty list: Set last element -> None
+        # Odd/Even Case:
+        # either right list is 1 element longer
+        # or left and right are even length
+        # upon termination left = right.next
+        # so left is either a valid node, or None
+        # if it is a valid node, set the left.next -> None
+        # to terminate new list 
         if left:
             left.next = None
 
@@ -875,7 +982,6 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
-
 
 
 ## 19. Remove Nth Node From End of List ::2:: - Medium

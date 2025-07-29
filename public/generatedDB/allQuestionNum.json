@@ -374,7 +374,7 @@
   },
   "143": {
     "questionNum": 143,
-    "questionTitle": "Reorder List ::3::",
+    "questionTitle": "Reorder List ::4::",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given the head of a singly linked-list. The list can be represented as: There is a cycle in a linked list if there is some node in the list that can be L0 → L1 → … → Ln - 1 → Ln Reorder the list to be on the following form: L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → … You may not modify the values in the list's nodes. Only nodes themselves may be changed.",
     "questionTopics": [
@@ -383,7 +383,7 @@
       "Stack",
       "Recursion"
     ],
-    "questionLink": "/Notes/leetcode-linked-list#143-reorder-list-3---medium",
+    "questionLink": "/Notes/leetcode-linked-list#143-reorder-list-4---medium",
     "blog": "LeetCode: Linked List",
     "lastSubmittedDate": null,
     "coldnessCount": -1
