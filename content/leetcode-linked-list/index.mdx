@@ -1039,7 +1039,7 @@ Given a linked list, remove nth node and return head of list.
 ```python
 ```
 
-### Solution 1: Two Pass Solution - Linked List/Simple Traversal
+### Solution 1: Two Pass Get Length and Stop Prev to Removal Index - Linked List/Simple Traversal
 ```python
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         
@@ -1088,7 +1088,7 @@ Given a linked list, remove nth node and return head of list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: One Pass Solution - Linked List/Simple Traversal
+### Solution 2: One Pass Fast Slow with HeadStart of N+1 - Linked List/Simple Traversal
 ```python
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         
@@ -1205,6 +1205,10 @@ Given a linked list where each node has an additional random node pointers, crea
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
         # Note:
+        # .get() returns 'None' if nothing exists,
+        # so perfect for our use case
+
+        # Note:
         # 1. Traverse once: create all nodes (no wiring of next/random yet)
         # 2. Use a dictionary to map old nodes -> new nodes
         # 3. Traverse Twice: wire up both next and random using the map
@@ -1234,7 +1238,7 @@ Given a linked list where each node has an additional random node pointers, crea
         while curr:
             # grab curr deepCopy
             copy = orig_to_deepCopy[curr]
-            # grab and set next and random deepCopy (may be None, so use .get() in case)
+            # grab and set next and random deepCopy (value could be None, .get() returns None by default if no answer exists)
             copy.next = orig_to_deepCopy.get(curr.next)
             copy.random = orig_to_deepCopy.get(curr.random)
             # iterate
@@ -1247,7 +1251,7 @@ Given a linked list where each node has an additional random node pointers, crea
         return orig_to_deepCopy[head]
 ```
 
-### Solution 2: One Pass Memoization Hashmap Lazy Construction - Linked List/Simple Traversal
+### Solution 2: Memoization Lazy Construction One Pass Hashmap - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
@@ -1261,41 +1265,42 @@ Given a linked list where each node has an additional random node pointers, crea
         if not head:
             return None
         
-        dummy = Node(0)
+        # dummy node head trick
+        dummy = Node(-1)
+
+        # prev allows deepCopy to connect once we create them lazily
+        # for the entire deepCopy list as we go
         prev = dummy
         curr = head
 
-        # orig node -> copied node
+        # orig -> deepCopy
         memo = {}
         
-        # Iteration 1:
+        # time complexity: iterate over list of n length
         while curr:
             
-            # Step 1A: 
             # grab or create and grab curr deepCopy
             if curr not in memo:
                 memo[curr] = Node(curr.val)
-            copy_node = memo[curr]
+            currDeepCopy = memo[curr]
             
-            # Step 1B: 
             # grab or create and grab random deepCopy
             if curr.random:
                 if curr.random not in memo:
                     memo[curr.random] = Node(curr.random.val)
-                copy_node.random = memo[curr.random]
+                currDeepCopy.random = memo[curr.random]
             
-            # Step 1C: 
-            # connect elements of new deep copy list during iteration,
-            # dummy is now pointing to head of new deep copy list
-            prev.next = copy_node
+            # First iteration: dummy points to deepCopy head
+            # next iteration: previous deepCopy node points to current deepCopy node 
+            # after termination: entire deepCopy list is now connected
+            prev.next = currDeepCopy
 
-            # Step 1D: 
-            # iterate to connect next node
+            # iterate to current deepCopy node connect next node
             # iterate over original list
             prev = prev.next
             curr = curr.next
         
-        # Return deep copy head
+        # Return deepCopy head
         
         # overall: time complexity O(n)
         # overall: space complexity O(n)
@@ -1317,6 +1322,7 @@ Given a linked list where each node has an additional random node pointers, crea
         # 4. Return copy head
         # Result: constant space (within original list), but requires 3 passes 
         
+        # Empty Check
         if not head:
             return None
 
@@ -1336,11 +1342,10 @@ Given a linked list where each node has an additional random node pointers, crea
         # Assign random pointers
         curr = head
         while curr:
-            # grab deepCopy and assign random from original
-            # to matching interweaved nodes
+            # grab intertwined deepCopy, assign random from original
             if curr.random:
                 curr.next.random = curr.random.next
-            # iterate while skipping interweaved nodes
+            # iterate skipping interweaved nodes
             curr = curr.next.next
 
         # Iteration 3:
@@ -1348,7 +1353,7 @@ Given a linked list where each node has an additional random node pointers, crea
         # grab original: A -> A' -> B ... (grabbing A)
         curr = head
         # grab deepCopy: A -> A' -> B ... (grabbing A')
-        copy_head = head.next
+        deepCopyHead = head.next
 
         # time complexity: iterate over list of 2n length O(n)
         while curr:
@@ -1366,7 +1371,7 @@ Given a linked list where each node has an additional random node pointers, crea
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
-        return copy_head
+        return deepCopyHead
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1434,11 +1439,15 @@ Given a two linked lists representing numbers, return the sum.
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         
         # Note:
-        # 
+        # 1. Recursion to simulate digit addition with carry
+        # 2. Add Corresponding digits with carry passed to recursive call
+        # 3. Current node created with .next -> recursively created node
+        # 4. Base case: both lists empty and carry is 0
+        # Result: new sum list created recursively
         
         # time complexity: iterate over two lists of m and n length O(max(m, n))
         # space complexity: recursive call over two lists of m and n length O(max(m, n))
-        def dfs(n1, n2, carry):
+        def recursiveSum(n1, n2, carry):
             
             # Base Case:
             # All lists and carry are empty
@@ -1456,7 +1465,7 @@ Given a two linked lists representing numbers, return the sum.
             # create new node
             node = ListNode(total % 10)
             # attach new node via recursive call
-            node.next = dfs(n1.next if n1 else None,
+            node.next = recursiveSum(n1.next if n1 else None,
                             n2.next if n2 else None,
                             total // 10)
 
@@ -1467,7 +1476,7 @@ Given a two linked lists representing numbers, return the sum.
 
         # overall: time complexity O(max(m, n))
         # overall: space complexity O(max(m, n))
-        return dfs(l1, l2, 0)
+        return recursiveSum(l1, l2, 0)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
