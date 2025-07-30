@@ -1349,7 +1349,7 @@ Given a linked list where each node has an additional random node pointers, crea
         curr = head
         # grab deepCopy: A -> A' -> B ... (grabbing A')
         copy_head = head.next
-        
+
         # time complexity: iterate over list of 2n length O(n)
         while curr:
             # interweaved node copy
@@ -1429,29 +1429,44 @@ Given a two linked lists representing numbers, return the sum.
 ```python
 ```
 
-### Solution 1: Recursive - Linked List/Simple Traversal
+### Solution 1: Depth First Recursion - Linked List/Simple Traversal
 ```python
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         
         # Note:
-        #
+        # 
         
+        # time complexity: iterate over two lists of m and n length O(max(m, n))
+        # space complexity: recursive call over two lists of m and n length O(max(m, n))
         def dfs(n1, n2, carry):
+            
+            # Base Case:
+            # All lists and carry are empty
+            # Attach tail of new list -> None
             if not n1 and not n2 and carry == 0:
                 return None
 
+            # grab values if exist
             v1 = n1.val if n1 else 0
             v2 = n2.val if n2 else 0
+
+            # sum
             total = v1 + v2 + carry
 
+            # create new node
             node = ListNode(total % 10)
+            # attach new node via recursive call
             node.next = dfs(n1.next if n1 else None,
                             n2.next if n2 else None,
                             total // 10)
+
+            # return: curr node -> rest of list
             return node
 
-        # overall: time complexity
-        # overall: space complexity
+        # calculate new sum list over two lists
+
+        # overall: time complexity O(max(m, n))
+        # overall: space complexity O(max(m, n))
         return dfs(l1, l2, 0)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1466,28 +1481,39 @@ Given a two linked lists representing numbers, return the sum.
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         
         # Note:
-        #
-        
-        dummy = ListNode()
+        # 1. Dummy node to create a sum list
+        # 2. Iterate over both lists until complete
+        # 3. Added values node by node, and pass the carry
+        # Result: sum of two lists
+
+        # dummy trick to return curr head
+        dummy = ListNode(-1)
         curr = dummy
         carry = 0
 
-        # Traverse both lists and handle carry
+        # Traverse while either list or carry is non empty
         while l1 or l2 or carry:
+            
+            # grab if value exists
             v1 = l1.val if l1 else 0
             v2 = l2.val if l2 else 0
 
+            # add values and carry
             total = v1 + v2 + carry
             carry = total // 10
+
+            # create new Node for new value  
             curr.next = ListNode(total % 10)
 
-            # Move pointers
+            # iterate all three lists
             curr = curr.next
             if l1: l1 = l1.next
             if l2: l2 = l2.next
 
-        # overall: time complexity
-        # overall: space complexity
+        # return new head of sum list
+
+        # overall: time complexity O(max(m, n))
+        # overall: space complexity O(1)
         return dummy.next
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
