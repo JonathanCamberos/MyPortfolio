@@ -798,6 +798,12 @@ Given a linked list, order it in values tending towards middle.
             right.next = next_left
             left, right = next_left, next_right
 
+        # brain teaser:
+        # why does this work:
+        right.next = None
+        # but right.next.next = None 
+        # does not work
+
         # overall: time complexity O(n)
         # overall: space complexity O(1)
 ```
@@ -951,8 +957,8 @@ Given a linked list, order it in values tending towards middle.
             # iterate left half of list
             left = right.next
 
-        # Note: 
-        # Interesting case with memory .next
+        # brain teaser:
+        # why does this work:
         # Odd/Even Case:
         # left is equal or longer by 1 node
         # Odd: 
@@ -1040,23 +1046,30 @@ Given a linked list, remove nth node and return head of list.
         # Note:
         # 1. Traverse list once to calculate total length
         # 2. Use a dummy node to handle edge cases (like removing head)
-        # 3. Traverse again to node just before the one to remove
-        # 4. Adjust pointers to skip the nth node from the end
+        # 3. Traverse again, stop at node prior to removal index
+        # 4. point prior.next = prior.next.next, disconnecting removal node
+        # Result: removed node at distance n from end of list
 
         # First pass: get length of list
-        len = 0
+        listLen = 0
         curr = head
         while curr:
-            len += 1
+            listLen += 1
             curr = curr.next
-        
-        # Second pass: find the node behind target
+
+        # Second pass: find the node behind target index
+
+        remove = listLen - n
+
+        # we adding an element to the list
         dummy = ListNode(0, head)
         curr = dummy
 
-        # stop at (len - n) - 1
-        # -1 due to dummy, stops at node behind target
-        for _ in range(len - n):
+        # this stops at the Node before the target remove index
+        # thus we can disconnect it
+        index = 0
+        while index != remove:
+            index += 1
             curr = curr.next
         
         # remove nth node from end by skipping it
@@ -1085,14 +1098,16 @@ Given a linked list, remove nth node and return head of list.
         # 3. Slow pointer will be right before the node to remove
         # 4. Remove node by skipping it
        
-        dummy = ListNode(0, head)
+        dummy = ListNode(-1, head)
         slow = fast = dummy
         
         # Set fast pointer: 
         # head start of n + 1 step,
         # in order to create a gap of n between fast and slow
         # (taking dummy node into account)
-        for _ in range(n + 1):
+        index = 0
+        while index != n+1:
+            index += 1
             fast = fast.next
         
         # When fast reaches end:
@@ -1185,7 +1200,7 @@ Given a linked list where each node has an additional random node pointers, crea
 ```python
 ```
 
-### Solution 1: Two Pass Hashmap - Linked List/Simple Traversal
+### Solution 1: Two Pass Hashmap Create Nodes and Set Next and Random Deep References - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
@@ -1193,7 +1208,7 @@ Given a linked list where each node has an additional random node pointers, crea
         # 1. Traverse once: create all nodes (no wiring of next/random yet)
         # 2. Use a dictionary to map old nodes -> new nodes
         # 3. Traverse Twice: wire up both next and random using the map
-        # 4. Deep copy of head
+        # 4. Return deep copy of head
 
         # Empty Check
         if not head:
@@ -1217,9 +1232,9 @@ Given a linked list where each node has an additional random node pointers, crea
         # All nodes created, now assign next and random pointers
         curr = head
         while curr:
-            # grab
+            # grab curr deepCopy
             copy = orig_to_deepCopy[curr]
-            # grab deepCopy node (may be None, so use .get() in case)
+            # grab and set next and random deepCopy (may be None, so use .get() in case)
             copy.next = orig_to_deepCopy.get(curr.next)
             copy.random = orig_to_deepCopy.get(curr.random)
             # iterate
@@ -1246,28 +1261,28 @@ Given a linked list where each node has an additional random node pointers, crea
         if not head:
             return None
         
-        # Dummy node to simplify linking process
         dummy = Node(0)
         prev = dummy
-        
+        curr = head
+
         # orig node -> copied node
         memo = {}
         
         # Iteration 1:
-        while head:
+        while curr:
             
             # Step 1A: 
-            # grab or create and grab current node
-            if head not in memo:
-                memo[head] = Node(head.val)
-            copy_node = memo[head]
+            # grab or create and grab curr deepCopy
+            if curr not in memo:
+                memo[curr] = Node(curr.val)
+            copy_node = memo[curr]
             
             # Step 1B: 
-            # grab or create and grab random node
-            if head.random:
-                if head.random not in memo:
-                    memo[head.random] = Node(head.random.val)
-                copy_node.random = memo[head.random]
+            # grab or create and grab random deepCopy
+            if curr.random:
+                if curr.random not in memo:
+                    memo[curr.random] = Node(curr.random.val)
+                copy_node.random = memo[curr.random]
             
             # Step 1C: 
             # connect elements of new deep copy list during iteration,
@@ -1278,13 +1293,16 @@ Given a linked list where each node has an additional random node pointers, crea
             # iterate to connect next node
             # iterate over original list
             prev = prev.next
-            head = head.next
+            curr = curr.next
         
         # Return deep copy head
         
         # overall: time complexity O(n)
         # overall: space complexity O(n)
-        return dummy.next
+
+        return memo[head]
+        # or
+        # return dummy.next
 ``` 
 
 ### Solution 3: Three Pass In Place Interleaving Technique - Linked List/Simple Traversal
@@ -1293,10 +1311,11 @@ Given a linked list where each node has an additional random node pointers, crea
         
         # Note:
         # 1. First interleave copy and paste nodes between original nodes O(1) space
-        #  A -> B -> C ==> A -> A' -> B -> B' -> C -> C'
+        #  A -> B -> C ===> A -> A' -> B -> B' -> C -> C' ===> A' -> B' -> C'
         # 2. Assign random pointers to the copy nodes using original's .random
-        # 3. Detach copy list from original (restoring original)
-        # 4. Constant space, but requires 3 passes 
+        # 3. Detach copy list from original (restoring original list) + creating deepCopy list
+        # 4. Return copy head
+        # Result: constant space (within original list), but requires 3 passes 
         
         if not head:
             return None
@@ -1306,37 +1325,42 @@ Given a linked list where each node has an additional random node pointers, crea
         curr = head
         while curr:
             # create
-            copy = Node(curr.val)
+            deepCopy = Node(curr.val)
             # interweave
-            copy.next = curr.next
-            curr.next = copy
+            deepCopy.next = curr.next
+            curr.next = deepCopy
             # iterate
-            curr = copy.next
+            curr = deepCopy.next
 
         # Iteration 2:
         # Assign random pointers
         curr = head
         while curr:
-            # grab and assign random to matching interweaved nodes
+            # grab deepCopy and assign random from original
+            # to matching interweaved nodes
             if curr.random:
                 curr.next.random = curr.random.next
-            
-            # iterate skipping interweaved nodes
+            # iterate while skipping interweaved nodes
             curr = curr.next.next
 
         # Iteration 3:
         # Split into original and copied lists
+        # grab original: A -> A' -> B ... (grabbing A)
         curr = head
+        # grab deepCopy: A -> A' -> B ... (grabbing A')
         copy_head = head.next
+        
+        # time complexity: iterate over list of 2n length O(n)
         while curr:
             # interweaved node copy
-            copy = curr.next
+            deepCopy = curr.next
             # disconnect original node from interweaved node
-            curr.next = copy.next
-            # point interweaved copy to new interweaved copy
-            # A -> A' -> B -> B' (point A' -> B')
-            if copy.next:
-                copy.next = copy.next.next
+            curr.next = deepCopy.next
+            # if we have not reached end of copy list
+            # remaining: A -> A' -> B -> B' (point A' -> B')
+            # end: B -> B' -> None (B'.next == None)
+            if deepCopy.next:
+                deepCopy.next = deepCopy.next.next
             # iterate original
             curr = curr.next
 
