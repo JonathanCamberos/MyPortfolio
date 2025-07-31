@@ -1777,6 +1777,9 @@ Design an efficient LRU cache using linked lists.
 ```python
 class Node:
     def __init__(self, key: int, val: int):
+        # Note:
+        # 1. key -> value node
+        # 2. prev and next pointers to allow linking in both directions
         self.key = key
         self.val = val
         self.prev = None
@@ -1803,6 +1806,8 @@ class LRUCache:
         self.head.next = self.tail
         self.tail.prev = self.head
 
+    # time complexity: O(1)
+    # space complexity: O(1)
     def _remove(self, node):
         # Note:
         # Remove node from doubly linked list by linked neighbors
@@ -1810,6 +1815,8 @@ class LRUCache:
         prev.next = nxt
         nxt.prev = prev
 
+    # time complexity: O(1)
+    # space complexity: O(1)
     def _insert_at_front(self, node):
         # Note:
         # Insert node right after dummy head to mark as most recently used
@@ -1818,41 +1825,61 @@ class LRUCache:
         self.head.next.prev = node
         self.head.next = node
 
+    # time complexity: O(1)
+    # space complexity: O(1)
     def get(self, key: int) -> int:
         # Note:
-        # 1. If key not found, return -1
-        # 2. If key found, move the node to front to mark as recently used
+        # 1. Check if key exists in O(1) using hashmap
+        # 2. If exists, move it to the end (most recently used)
+        # 3. Return its value
+        # 4. If not exists, return -1
         if key not in self.cache:
             return -1
-        # Move the accessed node to the front
+
+        # Grab node
         node = self.cache[key]
+        # Move node to front (MRU)
         self._remove(node)
         self._insert_at_front(node)
         return node.val
 
+    # time complexity: O(1)
+    # space complexity: O(1)
     def put(self, key: int, value: int) -> None:
         # Note:
         # 1. If key exists, remove old node first
         # 2. Insert new node at front (most recently used)
         # 3. If capacity exceeded, remove LRU node from tail and delete from hashmap
+        
+        # remove if exists
         if key in self.cache:
             self._remove(self.cache[key])
+        
+        # Grab node
         node = Node(key, value)
+        # Move node to front (MRU)
         self.cache[key] = node
         self._insert_at_front(node)
 
+        # if above capacity, remove from end (least recently used)
         if len(self.cache) > self.capacity:
-            # Remove the LRU node from the list and map
+            # Grab lru
             lru = self.tail.prev
+            # remove from doubly linked list and hashmap
             self._remove(lru)
             del self.cache[lru.key]
+
+
+    # overall: time complexity O(1)
+    # overall: space complexity O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| remove | O(1) | O(1) | Linking prev and next of removed node in constant O(1) | No additional memory allocation for relinking nodes O(1) |
+| insert_at_front | O(1) | O(1) | Linking new head in between dummy head and current head in constant O(1)  | No additional memory allocation for relinking nodes O(1) |
+| get | O(1) | O(1) | Hashmap lookup O(1) with DLL remove O(1) and DLL insert_at_front O(1) all in constant O(1) | No additional memory allocation for either sub step O(1) |
+| put | O(1) | O(1) | Hashmap lookup O(1 ) with DLL remove O(1) and DLL insert_at_front O(1) all in constant O(1) | No additional memory allocation for either sub step O(1) |
+| overall | O(1) | O(capacity) | All operations in constant O(1) | Hashmap and DLL will store up to capacity O(capacity) |
 
 ### Solution 2: Automatic Doubly Linked List With Hashmap via Python Ordered Dict  - Linked List/Simple Traversal
 ```python
@@ -1869,6 +1896,8 @@ class LRUCache:
         self.cache = OrderedDict()
         self.capacity = capacity
 
+    # time complexity: O(1) 
+    # space complexity: O(1)
     def get(self, key: int) -> int:
         # Note:
         # 1. Check if key exists in O(1) using hashmap
@@ -1882,6 +1911,8 @@ class LRUCache:
         self.cache.move_to_end(key)
         return self.cache[key]
 
+    # time complexity: O(1)
+    # space complexity: O(1)
     def put(self, key: int, value: int) -> None:
         # Note:
         # 1. If key exists, update value and mark as recently used
@@ -1892,13 +1923,16 @@ class LRUCache:
         self.cache[key] = value
         if len(self.cache) > self.capacity:
             self.cache.popitem(last=False)  # Remove LRU (front of linked list)
+
+
+    # overall: time complexity O(1)
+    # overall: space complexity O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| get | O(1) | O(1) | DLL move to end and lookup in constant O(1) | No additional memory allocation O(1) |
+| put | O(1) | O(1) | DLL move to end and lookup in constant O(1) | No additional memory allocation O(1) |
+| overall | O(1) | O(capacity) | All operations in constant O(1) | Hashmap and DLL store up to capacity O(capacity) |
 
 ## 23. Merge k Sorted Lists ::3:: - Hard
 
