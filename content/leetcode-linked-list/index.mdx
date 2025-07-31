@@ -1592,59 +1592,102 @@ Given list, return which number is a duplicate.
 ### Solution 1: Bit Manipulation  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
+        
+        # Note:
+        # 1. Idea: Compare bit counts between full nums list and range [1..n]
+        # 2. Duplicate number will cause extra set bits in some positions
+        # 3. Identify bits where counts mismatch, reconstruct duplicate from bits
+
         n = len(nums) - 1
         ans = 0
+
+        # max_bits determines number of bit positions to check
         max_bit = max(num.bit_length() for num in nums)
 
+        # iterate over each bit position
         for bit in range(max_bit):
+
             mask = 1 << bit
+            # count how many numbers have this bit set
             count_nums = sum((num & mask) > 0 for num in nums)
+            # count expected set bits in range
             count_range = sum((i & mask) > 0 for i in range(1, n + 1))
 
+            # if nums count exceeds expected, duplciate has this bit set
             if count_nums > count_range:
                 ans |= mask
-
+        
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(1)
         return ans
-
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Bit Counting | O(n log n) | O(1) | log n bit positions, O(n) scan per bit | Only counters and bitmask |
+| Max Bit Calc | O(n) | O(1) | Iterate to determine max bits | No additional memory allocation for iteration O(1) |
+| Overall | O(n log n) | O(1) | Iteration for log n each with n dominates, leading to O(n log n)  | No additional memory allocation, leading to constant O(1) |
 
 ### Solution 2: Binary Search on Value Range  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
+
+        # Note:
+        # 1. Duplicate number must satisfy pigeonhole principle
+        # 2. Binary search value range [1..n]
+        # 3. Count values <= mid to determine which half contains duplicates
+        #   If count > mid -> duplicates in lower half
+        #   Else -> duplicates in upper half
+
         left, right = 1, len(nums) - 1
 
+        # Binary optimization search: '<'
         while left < right:
             mid = (left + right) // 2
+
+            # count how many numbers <= mid
             count = sum(num <= mid for num in nums)
 
+            # if too many <= mid, duplicate must be in lower half
             if count > mid:
                 right = mid
             else:
                 left = mid + 1
 
+        # Loop exit: left == right
+        # 
+
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(1)
         return left
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Binary Search | O(log n) | O(1) | Binary search in O(log n) | No additional memory allocation for binary search |
+| Counting | O(n) | O(1) | Iterate over list of n length | No additional memory allocation for iteration |
+| Overall | O(n log n) | O(1) | Binary search O(log n) each with iteration of O(n) dominates, leading to O(n log n) | No additional memory allocation O(1) |
 
 
 ### Solution 3: Floyd Tortoise and Hare - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
+
+        # Note:
+        # When slow and fast meet (cycle detected),
+        # fast has traveled exactly 2x the distance of slow.
+        # If we move slow to the beginning
+        # and move fast at the same distance of slow,
+        # both slow and fast will move the same distance slow did the first time
+        # and meet at the start of the cycle.
+
+        # Note:
+        # 1. Treat array as linked list: index -> nums[index]
+        # 2. Duplicate guarantees cycle in linked list representation
+        # 3. Phase 1: Detect cycle (slow = nums[slow], fast = nums[nums[fast]])
+        # 4. Phase 2: Move slow to head, advance both one step at a time to find cycle start (duplicate)
+
         # Phase 1: Detect the cycle
         slow = nums[0]
         fast = nums[0]
-
         while True:
             slow = nums[slow]
             fast = nums[nums[fast]]
@@ -1657,14 +1700,16 @@ Given list, return which number is a duplicate.
             slow = nums[slow]
             fast = nums[fast]
 
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return slow
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
+| Cycle Detection | O(n) | O(1) | Each pointer moves less than or equal to 2n O(n) | No additional memory allocation for iteration O(1) |
+| Finding Entry | O(n) | O(1) | Both pointers move less than or equal to n steps O(n) | No additional memory allocation for iteration O(1) |
+| Overall | O(n) | O(1) | Two iterations over list of n length dominate, leading to O(n) | No additional memory allocation, leading to O(1) |
+
 
 ## 146. LRU Cache ::2:: - Medium
 
@@ -1739,28 +1784,44 @@ class Node:
 
 class LRUCache:
     def __init__(self, capacity: int):
+        # Note:
+        # 1. Use a hashmap for O(1) lookups: key -> Node
+        # 2. Use a doubly linked list to maintain recency order
+        # 3. Dummy head/tail nodes avoid edge condition checks
+
+        # Max list size
         self.capacity = capacity
-        self.cache = {}  # key -> Node
-        # Dummy head and tail to avoid edge condition checks
+        # key -> Node
+        self.cache = {} 
+
+        # Dummy head (MRU side)
         self.head = Node(0, 0)
+        # Dummy tail (LRU side)
         self.tail = Node(0, 0)
+
+        # initialize empty doubly linked list
         self.head.next = self.tail
         self.tail.prev = self.head
 
-    # Remove a node from the list
     def _remove(self, node):
+        # Note:
+        # Remove node from doubly linked list by linked neighbors
         prev, nxt = node.prev, node.next
         prev.next = nxt
         nxt.prev = prev
 
-    # Insert a node right after the head
     def _insert_at_front(self, node):
+        # Note:
+        # Insert node right after dummy head to mark as most recently used
         node.next = self.head.next
         node.prev = self.head
         self.head.next.prev = node
         self.head.next = node
 
     def get(self, key: int) -> int:
+        # Note:
+        # 1. If key not found, return -1
+        # 2. If key found, move the node to front to mark as recently used
         if key not in self.cache:
             return -1
         # Move the accessed node to the front
@@ -1770,11 +1831,16 @@ class LRUCache:
         return node.val
 
     def put(self, key: int, value: int) -> None:
+        # Note:
+        # 1. If key exists, remove old node first
+        # 2. Insert new node at front (most recently used)
+        # 3. If capacity exceeded, remove LRU node from tail and delete from hashmap
         if key in self.cache:
             self._remove(self.cache[key])
         node = Node(key, value)
         self.cache[key] = node
         self._insert_at_front(node)
+
         if len(self.cache) > self.capacity:
             # Remove the LRU node from the list and map
             lru = self.tail.prev
@@ -1788,28 +1854,44 @@ class LRUCache:
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: Ordered Dict  - Linked List/Simple Traversal
+### Solution 2: Automatic Doubly Linked List With Hashmap via Python Ordered Dict  - Linked List/Simple Traversal
 ```python
 from collections import OrderedDict
 
 class LRUCache:
     def __init__(self, capacity: int):
+        # Note:
+        # OrderedDict in Python is implemented
+        # internally as a doubly linked list + hashmap (same as our solution):
+        # 1. Use a hashmap for O(1) lookups: key -> Node
+        # 2. Use a doubly linked list to maintain recency order
+        # 3. Dummy head/tail nodes avoid edge condition checks
         self.cache = OrderedDict()
         self.capacity = capacity
 
     def get(self, key: int) -> int:
+        # Note:
+        # 1. Check if key exists in O(1) using hashmap
+        # 2. If exists, move it to the end (most recently used)
+        # 3. Return its value
+        # 4. If not exists, return -1
         if key not in self.cache:
             return -1
+
         # Move to end to mark as recently used
         self.cache.move_to_end(key)
         return self.cache[key]
 
     def put(self, key: int, value: int) -> None:
+        # Note:
+        # 1. If key exists, update value and mark as recently used
+        # 2. If key does not exist, insert it and mark as recently used
+        # 3. If capacity exceeded, remove least recently used (first in linked list)
         if key in self.cache:
-            self.cache.move_to_end(key)
+            self.cache.move_to_end(key) # mark as recently used
         self.cache[key] = value
         if len(self.cache) > self.capacity:
-            self.cache.popitem(last=False)  # Pop least recently used
+            self.cache.popitem(last=False)  # Remove LRU (front of linked list)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1967,7 +2049,7 @@ class Solution:
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## 25. Reverse Nodes in k-Group ::3:: - Hard
+## 25. Reverse Nodes in k-Group ::2:: - Hard
 
 Topics:  Linked List, Recursion
 
