@@ -1628,8 +1628,37 @@ Given list, return which number is a duplicate.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+### Find the Bug: While True instead of While slow != fast
 ```python
+    def findDuplicate(self, nums: List[int]) -> int:
+
+        slow = nums[0]
+        fast = nums[0]
+
+        while True:
+            slow = nums[slow]
+            fast = nums[nums[fast]]
+            if slow == fast:
+                break
+
+        slow = nums[0]
+
+        # INCORRECT:
+        # we are taking a step before the while loop check
+        # (which in some edge cases will get messy)
+        # Instead:
+        # while True:
+        #    if slow == fast:
+        #        break
+        #    slow = nums[slow]
+        #    fast = nums[fast]
+        while True:
+            slow = nums[slow]
+            fast = nums[fast]
+            if slow == fast:
+                break
+
+        return slow
 ```
 
 ### Solution 1: Max Bit Length Duplicate Flips  - Linked List/Simple Traversal
@@ -1693,7 +1722,7 @@ Given list, return which number is a duplicate.
 | Max Bit Calc | O(n) | O(1) | Iterate to determine max bits | No additional memory allocation for iteration O(1) |
 | Overall | O(n log n) | O(1) | Iteration for log n each with n dominates, leading to O(n log n)  | No additional memory allocation, leading to constant O(1) |
 
-### Solution 2: Pigeonhole Binary Search  - Linked List/Simple Traversal
+### Solution 2: Pigeonhole Over Range 1 to N Then Count Array Binary Search  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
 
@@ -1710,6 +1739,8 @@ Given list, return which number is a duplicate.
         #   If count <= mid -> equal or lesser pigeons to containers -> duplicate is in upper half
         #   Else count > mid -> more pigeons than containers -> duplicate is in lower half
 
+        # smallest value 1
+        # largest value n (but we have n+1) n+1 - 1 -> n (the largest value)
         left, right = 1, len(nums) - 1
 
         # [ 1 4 3 5 2 ], for some n,
@@ -1808,12 +1839,13 @@ Given list, return which number is a duplicate.
         # The above math proves the below algorithm:
 
         # Note:
-        # 1. Treat array as linked list: index -> nums[index]
-        # 2. Duplicate guarantees cycle in linked list representation
-        # 3. Phase 1: Detect cycle (slow = nums[slow], fast = nums[nums[fast]])
-        # 4. Phase 2: Move slow to head, advance both one step at a time to find cycle start (duplicate)
+        # Idea: Treat array as linked list: index -> nums[index]
+        #    Problem set up with duplicate guarantees cycle in linked list representation
+        
+        # 1. Detect cycle (slow = nums[slow], fast = nums[nums[fast]])
+        # 2. Move slow to head, advance both one step at a time to find cycle start (duplicate)
 
-        # Phase 1: Detect the cycle
+        # Find meeting point in cycle
         slow = nums[0]
         fast = nums[0]
         while True:
@@ -1822,9 +1854,12 @@ Given list, return which number is a duplicate.
             if slow == fast:
                 break
 
-        # Phase 2: Find the entrance to the cycle
+        # Move slow to head, move fast and slow one step at time,
+        # fast and slow will meet at start of cycle
         slow = nums[0]
-        while slow != fast:
+        while True:
+            if slow == fast:
+                break
             slow = nums[slow]
             fast = nums[fast]
 
@@ -1915,29 +1950,26 @@ class Node:
 
 class LRUCache:
     def __init__(self, capacity: int):
-        # Note:
-        # 1. Use a hashmap for O(1) lookups: key -> Node
-        # 2. Use a doubly linked list to maintain recency order
-        # 3. Dummy head/tail nodes avoid edge condition checks
 
-        # Max list size
+        # list capacity
         self.capacity = capacity
+
         # key -> Node
         self.cache = {} 
 
-        # Dummy head (MRU side)
+        # MRU head
         self.head = Node(0, 0)
-        # Dummy tail (LRU side)
+        # LRU tail
         self.tail = Node(0, 0)
 
-        # initialize empty doubly linked list
+        # set dummy head and tail
         self.head.next = self.tail
         self.tail.prev = self.head
 
     # time complexity: O(1)
     # space complexity: O(1)
     def _remove_node(self, node: Node):
-        # Note:
+
         # Remove node from doubly linked list by linked neighbors
         prev, next = node.prev, node.next
         prev.next = next
@@ -1945,62 +1977,60 @@ class LRUCache:
 
     # time complexity: O(1)
     # space complexity: O(1)
-    def _new_MRU(self, node: Node):
-        # Note:
-        # Insert node right after dummy head to mark as most recently used
+    def _push_MRU(self, node: Node):
+
+        # Insert node between dummy head and MRU 
         node.next = self.head.next
         node.prev = self.head
-        self.head.next.prev = node
+
+        # Update head and 2nd MRU
         self.head.next = node
+        node.next.prev = node
 
     # time complexity: O(1)
     # space complexity: O(1)
-    def get(self, key: int) -> int:
-        # Note:
-        # 1. Check if key exists in O(1) using hashmap
-        # 2. If exists, move it to the end (most recently used)
-        # 3. Return its value
-        # 4. If not exists, return -1
-        
+    def get(self, key: int) -> int:       
+
         # if node does not exist, return -1
         if key not in self.cache:
             return -1
 
-        # Grab curr node
+        # grab node
         node = self.cache[key]
 
-        # Move curr node to front (MRU)
+        # Move node and update MRU
         self._remove_node(node)
-        self._new_MRU(node)
+        self._push_MRU(node)
+
+        # return val
         return node.val
 
     # time complexity: O(1)
     # space complexity: O(1)
     def put(self, key: int, value: int) -> None:
-        # Note:
-        # 1. If key exists, remove old node first
-        # 2. Insert new node at front (most recently used)
-        # 3. If capacity exceeded, remove LRU node from tail and delete from hashmap
-        
-        # remove if exists
+
+        # remove current if exists and update
         if key in self.cache:
-            self._remove_node(self.cache[key])
-        
-        # Create new node
-        node = Node(key, value)
+            # Remove old node
+            node = self.cache[key]
+            self._remove_node(node)
+            
+            # Update value
+            node.val = value
 
-        # Move new node to front (MRU)
-        self.cache[key] = node
-        self._new_MRU(node)
+        # create new node
+        else:
+            node = Node(key, value)
+            self.cache[key] = node
 
-        # if above capacity, remove from end of list (least recently used)
+        # Push update/new node to MRU
+        self._push_MRU(node)
+
+        # Evict LRU if list over capacity
         if len(self.cache) > self.capacity:
-            # Grab lru
-            lru = self.tail.prev
-            # remove from doubly linked list and hashmap
-            self._remove_node(lru)
-            del self.cache[lru.key]
-
+            lruNode = self.tail.prev
+            self._remove_node(lruNode)
+            del self.cache[lruNode.key]
 
     # overall: time complexity O(1)
     # overall: space complexity O(1)
@@ -2013,48 +2043,50 @@ class LRUCache:
 | put | O(1) | O(1) | Hashmap lookup O(1 ) with DLL remove O(1) and DLL insert_at_front O(1) all in constant O(1) | No additional memory allocation for either sub step O(1) |
 | overall | O(1) | O(capacity) | All operations in constant O(1) | Hashmap and DLL will store up to capacity O(capacity) |
 
-### Solution 2: Automatic Doubly Linked List With Hashmap via Python Ordered Dict  - Linked List/Simple Traversal
+### Solution 2: Python Implementation OrderedDict a Doubly Linked List with Hashmap  - Linked List/Simple Traversal
 ```python
 from collections import OrderedDict
 
 class LRUCache:
     def __init__(self, capacity: int):
         # Note:
-        # OrderedDict in Python is implemented
-        # internally as a doubly linked list + hashmap (same as our solution):
+        # OrderedDict in Python is implemented internally
+        # as a doubly linked list + hashmap (same as our solution):
         # 1. Use a hashmap for O(1) lookups: key -> Node
         # 2. Use a doubly linked list to maintain recency order
         # 3. Dummy head/tail nodes avoid edge condition checks
+        
         self.cache = OrderedDict()
         self.capacity = capacity
 
     # time complexity: O(1) 
     # space complexity: O(1)
     def get(self, key: int) -> int:
-        # Note:
-        # 1. Check if key exists in O(1) using hashmap
-        # 2. If exists, move it to the end (most recently used)
-        # 3. Return its value
-        # 4. If not exists, return -1
+
+        # Check if key exists, else return -1
         if key not in self.cache:
             return -1
 
-        # Move to end to mark as recently used
+        # Update MRU
         self.cache.move_to_end(key)
+
+        # return value
         return self.cache[key]
 
     # time complexity: O(1)
     # space complexity: O(1)
     def put(self, key: int, value: int) -> None:
-        # Note:
-        # 1. If key exists, update value and mark as recently used
-        # 2. If key does not exist, insert it and mark as recently used
-        # 3. If capacity exceeded, remove least recently used (first in linked list)
+
+        # If key exists, update value and mark as recently used
         if key in self.cache:
-            self.cache.move_to_end(key) # mark as recently used
+            self.cache.move_to_end(key)
+        
+        # If key does not exist, insert it and mark as recently used
         self.cache[key] = value
+        
+        # If capacity exceeded, remove least recently used (first in linked list)
         if len(self.cache) > self.capacity:
-            self.cache.popitem(last=False)  # Remove LRU (front of linked list)
+            self.cache.popitem(last=False)
 
     # overall: time complexity O(1)
     # overall: space complexity O(1)
