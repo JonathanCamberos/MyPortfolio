@@ -1615,7 +1615,7 @@ Given list, return which number is a duplicate.
 ```python
 ```
 
-### Solution 1: Bit Manipulation  - Linked List/Simple Traversal
+### Solution 1: Max Bit Length Duplicate Flips  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
         
@@ -1676,7 +1676,7 @@ Given list, return which number is a duplicate.
 | Max Bit Calc | O(n) | O(1) | Iterate to determine max bits | No additional memory allocation for iteration O(1) |
 | Overall | O(n log n) | O(1) | Iteration for log n each with n dominates, leading to O(n log n)  | No additional memory allocation, leading to constant O(1) |
 
-### Solution 2: Binary Search on Value Range  - Linked List/Simple Traversal
+### Solution 2: Pigeonhole Binary Search  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
 
@@ -1731,7 +1731,7 @@ Given list, return which number is a duplicate.
 | Overall | O(n log n) | O(1) | Binary search O(log n) each with iteration of O(n) dominates, leading to O(n log n) | No additional memory allocation O(1) |
 
 
-### Solution 3: Floyd Tortoise and Hare - Linked List/Simple Traversal
+### Solution 3: Head to Start of Cycle Proof Floyd Tortoise and Hare - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
 
