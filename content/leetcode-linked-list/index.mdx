@@ -1310,8 +1310,9 @@ Given a linked list where each node has an additional random node pointers, crea
                 memo[curr] = Node(curr.val)
             currDeepCopy = memo[curr]
             
-            # grab or create and grab random deepCopy
+            # validate curr.random
             if curr.random:
+                # grab or create and grab curr.random deepCopy
                 if curr.random not in memo:
                     memo[curr.random] = Node(curr.random.val)
                 currDeepCopy.random = memo[curr.random]
@@ -1342,58 +1343,71 @@ Given a linked list where each node has an additional random node pointers, crea
         
         # Note:
         # 1. First interleave copy and paste nodes between original nodes O(1) space
-        #  A -> B -> C ===> A -> A' -> B -> B' -> C -> C' ===> A' -> B' -> C'
+        #    A -> B -> C ===> A -> A' -> B -> B' -> C -> C'
+        
         # 2. Assign random pointers to the copy nodes using original's .random
-        # 3. Detach copy list from original (restoring original list) + creating deepCopy list
-        # 4. Return copy head
-        # Result: constant space (within original list), but requires 3 passes 
+
+        # 3. Detach copy list from original (restoring original list) 
+        #    and setting valid .next for deepCopy list
+        #    A -> A' -> B -> B' -> C -> C' ===> A' -> B' -> C'
+        
+        # 4. Return deepCopy head
+        # Result: constant space within original list, but requires 3 passes 
         
         # Empty Check
         if not head:
             return None
 
-        # Iteration 1:
-        # Interleave copy nodes
+        # Interleave deepCopy nodes
+        # A -> A' -> B -> B' -> C -> C'
         curr = head
         while curr:
-            # create
+            # create and interweave
             deepCopy = Node(curr.val)
-            # interweave
             deepCopy.next = curr.next
+
+            # link A -> A' and iterate to next orig
             curr.next = deepCopy
-            # iterate
             curr = deepCopy.next
 
-        # Iteration 2:
         # Assign random pointers
         curr = head
         while curr:
-            # grab intertwined deepCopy, assign random from original
-            if curr.random:
-                curr.next.random = curr.random.next
-            # iterate skipping interweaved nodes
-            curr = curr.next.next
+            # grab intertwined deepCopy
+            deepCopy = curr.next
 
-        # Iteration 3:
-        # Split into original and copied lists
-        # grab original: A -> A' -> B ... (grabbing A)
+            # assign random from orig if non None
+            if curr.random:
+                deepCopy.random = curr.random.next
+
+            # iterate to next orig
+            curr = deepCopy.next
+
+        # Split orig and deepCopy list
+        # (A) orig head: A -> A' -> B -> ...
         curr = head
-        # grab deepCopy: A -> A' -> B ... (grabbing A')
+        # (A') deepCopy head: A -> A' -> B -> ...
         deepCopyHead = head.next
 
         # time complexity: iterate over list of 2n length O(n)
         while curr:
-            # interweaved node copy
+            # grab deepCopy
             deepCopy = curr.next
-            # disconnect original node from interweaved node
+            
+            # link orig to next orig node, iterate to next orig
+            # A -> A' -> B -> ...
+            # A -> B
             curr.next = deepCopy.next
-            # if we have not reached end of copy list
-            # remaining: A -> A' -> B -> B' (point A' -> B')
-            # end: B -> B' -> None (B'.next == None)
-            if deepCopy.next:
-                deepCopy.next = deepCopy.next.next
-            # iterate original
             curr = curr.next
+
+            # if new orig is non None 
+            # (B' -> C -> ...) vs (B' -> None)
+            # there will exists a new deepCopy
+            # iterate to deepCopy
+            if curr:
+                deepCopy.next = curr.next
+
+        # return deepCopy head
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
