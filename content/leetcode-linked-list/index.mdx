@@ -18,6 +18,32 @@ Leetcode problems with elegant solutions using a linked list.
 A linked list is a linear data structure where each element (node) points to the next.
 It does not offer direct index access like arrays, as all traversal is pointer based.
 
+### Structure of a Linked List
+Every linked list falls into one of two structural forms:
+
+1. Linear (acyclic)
+
+- Nodes form a straight path that ends at None
+- No loops or repeated visits
+
+```python
+    A → B → C → D → None
+```
+
+2. Path + Cycle (Cyclic)
+
+- Initial path of nodes eventually linked back to an earlier node, forming a cycle.
+- Structure: Path (μ nodes) → Cycle (λ nodes repeating forever)
+
+```python
+    A → B → C → D → E  
+            ↑       ↓  
+            H ← G ← F
+```
+
+Overall:
+Linked lists are either just a path or a path that leads to a cycle
+
 ### Why Use a Linked List
 Linked lists are ideal for:
 - Memory efficient manipulation (no resizing like arrays)
@@ -1599,27 +1625,50 @@ Given list, return which number is a duplicate.
         # 3. Identify bits where counts mismatch, reconstruct duplicate from bits
 
         n = len(nums) - 1
-        ans = 0
+        bit_reconstruction = 0
 
-        # max_bits determines number of bit positions to check
+        # max_bits = how many binary bits needed to represent the largest number
+        # determines how many bit positions we need to check
+        # [1, 3, 4, 2, 2] -> 4 bit_length is 3 bits (100 binary) 
+        # we will check bit positions 0, 1, 2
         max_bit = max(num.bit_length() for num in nums)
 
-        # iterate over each bit position
+        # building duplicate number by iterating over each available bit position
+        # bit = 0 -> mask = 1 (binary 001)
+        # bit = 1 -> mask = 2 (binary 010)
+        # bit = 2 -> mask = 3 (binary 100)
         for bit in range(max_bit):
 
+            # current mask
+            # 0 -> 1 << 0 = 0001
+            # 1 -> 1 << 1 = 0010
+            # 2 -> 1 << 2 = 0100
+            # 3 -> 1 << 3 = 1000
             mask = 1 << bit
-            # count how many numbers have this bit set
-            count_nums = sum((num & mask) > 0 for num in nums)
-            # count expected set bits in range
-            count_range = sum((i & mask) > 0 for i in range(1, n + 1))
 
-            # if nums count exceeds expected, duplciate has this bit set
-            if count_nums > count_range:
-                ans |= mask
+            # for each num in array, count if bit is set
+            # &: bitwise AND
+            # sets current bit to 1 if both mask and bit are set to 1
+            # else sets current bit to 0,
+            # determines if current num has the bit set
+            curr_bit_set_count = sum((num & mask) > 0 for num in nums)
+
+            # across expected range [1..n], sum if bit is expected to be set
+            # &: bitwise AND
+            # checks how many numbers within range [1..n]
+            # are expected to have current bit set.
+            expected_bit_set_count = sum((i & mask) > 0 for i in range(1, n + 1))
+
+            # compare bit set to expected bit set,
+            # if bit is set more times than expected
+            # duplicate number must have that bit set:
+            # add it to bit reconstruction
+            if curr_bit_set_count > expected_bit_set_count:
+                bit_reconstruction |= mask
         
         # overall: time complexity O(n log n)
         # overall: space complexity O(1)
-        return ans
+        return bit_reconstruction
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1632,29 +1681,44 @@ Given list, return which number is a duplicate.
     def findDuplicate(self, nums: List[int]) -> int:
 
         # Note:
-        # 1. Duplicate number must satisfy pigeonhole principle
-        # 2. Binary search value range [1..n]
-        # 3. Count values <= mid to determine which half contains duplicates
-        #   If count > mid -> duplicates in lower half
-        #   Else -> duplicates in upper half
+        # Idea: Duplicate number must satisfy pigeonhole principle:
+        #   With n+1 numbers range [1..n], at least one value is duplicated
+        #  (n containers, n+1 pigeons -> at least one container has two pigeons)
+        
+        # 1. Binary search on value range [1..n]
+        # 2. For mid value:
+        #    mid = number of containers in lower half (including mid)
+        #    count = numbers of pigeons (nums <= mid) in lower half
+        # 3. Decision:
+        #   If count <= mid -> equal or lesser pigeons to containers -> duplicate is in upper half
+        #   Else count > mid -> more pigeons than containers -> duplicate is in lower half
 
         left, right = 1, len(nums) - 1
 
+        # [ 1 4 3 5 2 ], for some n,
+        # there must be n-1 numbers below:
+        # for 2, there is 1 number below
+        # for 5, there are 4 numbers below
         # Binary optimization search: '<'
         while left < right:
+            
             mid = (left + right) // 2
 
             # count how many numbers <= mid
-            count = sum(num <= mid for num in nums)
+            curr_count = sum(num <= mid for num in nums)
 
-            # if too many <= mid, duplicate must be in lower half
-            if count > mid:
-                right = mid
-            else:
+            # if count <= mid, there are no extra numbers in lower half:
+            # duplicate must be in upper half
+            if curr_count <= mid:
                 left = mid + 1
 
+            # if count > mid, there are too many numbers in lower half:
+            # duplicate must be in lower half
+            else:
+                right = mid
+
         # Loop exit: left == right
-        # 
+        # left and right are pointing at duplicate number
 
         # overall: time complexity O(n log n)
         # overall: space complexity O(1)
@@ -1672,12 +1736,59 @@ Given list, return which number is a duplicate.
     def findDuplicate(self, nums: List[int]) -> int:
 
         # Note:
-        # When slow and fast meet (cycle detected),
-        # fast has traveled exactly 2x the distance of slow.
-        # If we move slow to the beginning
-        # and move fast at the same distance of slow,
-        # both slow and fast will move the same distance slow did the first time
-        # and meet at the start of the cycle.
+        # 1. definitions
+        # L = distance from head to start of cycle
+        # C = length of the cycle (number of nodes in the cycle)
+        # x = distance from the start of the cycle to the meeting point inside the cycle
+        # k = number of full cycles the fast pointer has completed by the time of the first meeting
+
+        # 2. setup
+        # When slow and fast pointers first meet inside the cycle:
+        
+        # Slow pointer has traveled: L + x steps:
+        #    L steps to reach the start of the cycle
+        #    x steps inside the cycle to the meeting pointer
+
+        # Fast pointer has traveled L + x + (k * C) steps:
+        #    L steps to reach the start of the cycle
+        #    x steps inside the cycle to the meeting point
+        #    k full extra loops around the cycle (each length C)
+
+        # Fast Substitute:
+        # By definition, fast pointer speed is double slow pointer, so substitute
+        #     L + x + (k * C) = 2(L + x)
+        
+        # Solve for L:
+        #     L + x + kC = 2L + 2x
+        #     kX = L + x
+        #     L = kC - x 
+
+        # Rewrite Rule Context:
+        # Traveling x steps inside cycle of length C =
+        # to traveling C - x steps backwards, due to wrap around
+        # x steps forward = C - x backwards
+
+        # 3. Rearrange
+        #    L = kC - x
+        #    L = kC + (C - x)
+
+        #    L = kC + (C - x)   <-- this proves moving slow to right will cover
+
+        # once we move slow to the head:
+        # L -> distance from head to start of cycle
+
+        # fast will stay at the meeting point:
+        # kC + (C - x)
+
+        # kC -> number of cycles (we can ignore this)
+        # (C - x) -> steps remaining to get to the start (since we have traveled x steps already)
+
+        # L = (C - x)
+        # so both slow and fast will travel the same amount of steps 
+        # to get to the start of the cycle
+
+
+        # The above math proves the below algorithm:
 
         # Note:
         # 1. Treat array as linked list: index -> nums[index]
