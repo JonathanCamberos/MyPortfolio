@@ -1474,7 +1474,7 @@ Given a two linked lists representing numbers, return the sum.
 ```python
 ```
 
-### Solution 1: Depth First Recursion - Linked List/Simple Traversal
+### Solution 1: Recursive - Linked List/Simple Traversal
 ```python
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         
@@ -1487,30 +1487,31 @@ Given a two linked lists representing numbers, return the sum.
         
         # time complexity: iterate over two lists of m and n length O(max(m, n))
         # space complexity: recursive call over two lists of m and n length O(max(m, n))
-        def recursiveSum(n1, n2, carry):
+        def recursiveSum(l1, l2, carry):
             
             # Base Case:
-            # All lists and carry are empty
-            # Attach tail of new list -> None
-            if not n1 and not n2 and carry == 0:
+            # Both lists and carry are empty
+            if not l1 and not l2 and carry == 0:
                 return None
 
             # grab values if exist
-            v1 = n1.val if n1 else 0
-            v2 = n2.val if n2 else 0
+            val1 = l1.val if l1 else 0
+            val2 = l2.val if l2 else 0
 
             # sum
-            total = v1 + v2 + carry
+            sum = val1 + val2 + carry
+            carry = sum//10
 
-            # create new node
-            node = ListNode(total % 10)
-            # attach new node via recursive call
-            node.next = recursiveSum(n1.next if n1 else None,
-                            n2.next if n2 else None,
-                            total // 10)
+            # iterate lists if exist
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+
+            # new node and attach
+            newNode = ListNode(sum % 10)
+            newNode.next = recursiveSum(l1, l2, carry)
 
             # return: curr node -> rest of list
-            return node
+            return newNode
 
         # calculate new sum list over two lists
 
@@ -1537,7 +1538,7 @@ Given a two linked lists representing numbers, return the sum.
 
         # dummy trick to return curr head
         dummy = ListNode(-1)
-        curr = dummy
+        prev = dummy
         carry = 0
 
         # Traverse while either list or carry is non empty
@@ -1548,16 +1549,18 @@ Given a two linked lists representing numbers, return the sum.
             v2 = l2.val if l2 else 0
 
             # add values and carry
-            total = v1 + v2 + carry
-            carry = total // 10
+            sum = v1 + v2 + carry
+            carry = sum // 10
 
             # create new Node for new value  
-            curr.next = ListNode(total % 10)
+            newNode = ListNode(sum % 10)
+            prev.next = newNode
+            prev = prev.next
 
-            # iterate all three lists
-            curr = curr.next
-            if l1: l1 = l1.next
-            if l2: l2 = l2.next
+            # iterate list
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+
 
         # return new head of sum list
 
