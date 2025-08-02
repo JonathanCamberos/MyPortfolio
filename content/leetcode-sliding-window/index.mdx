@@ -134,14 +134,14 @@ Given an array of stock values, find the highest profit possible.
 
         # Note:
         # Sliding Window
-        # 1. left points to day we buy (lowest price so far candidate)
-        # 2. right scans forward for a day to sell (highest day possible)
+        # 1. left points to day we buy (lowest price so far)
+        # 2. right scans forward best profit day (highest sell price -> highest profit)
         # 3. Get profit:
         #    if prices[left] < prices[right]: profit possible, update max_profit
         #    if prices[left] > prices[right]: lower buy found, update left
         # Result: finds lowest buy and highest profit
 
-        # Lowest Buy Day so far, curr day price
+        # Lowest price day, curr day price
         left, right = 0, 1
 
         # max profit so far
@@ -179,12 +179,14 @@ Given an array of stock values, find the highest profit possible.
     def maxProfit(self, prices: List[int]) -> int:
         
         # Note:
-        # 1. left points to day we buy (lowest price so far candidate)
-        # 2. right scans forward for a day to sell (highest day possible)
-        # Calculates profit is profit possible
-        # Updates buy day if lower prices possible
+        # 1. left points to day we buy (lowest price so far)
+        # 2. right scans forward for best profit day (highest sell price -> highest profit)
+        # 3. Get profit:
+        #    if prices[left] < prices[right]: profit possible, update max_profit
+        #    if prices[left] > prices[right]: lower buy found, update left
+        # Result: finds lowest buy and highest profit
         
-        # Lowest Buy Day so far
+        # Lowest Buy Day so far (+inf)
         left = float('inf')
         
         # max profit so far
