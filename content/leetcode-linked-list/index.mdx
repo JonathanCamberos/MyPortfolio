@@ -1932,8 +1932,64 @@ Design an efficient LRU cache using linked lists.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+### Find the Bug: Did not add to cache when adding to linked list put()
 ```python
+class Node:
+    def __init__(self, key : int, val : int):
+        self.key = key
+        self.val = val
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    def __init__(self, capacity : int):
+        self.capacity = capacity
+        self.cache = {}
+        self.head = Node(0, 0)
+        self.tail = Node(0, 0)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove_node(self, node:Node):
+        prev, next = node.prev, node.next
+        prev.next = next
+        next.prev = prev
+
+    def _push_MRU(self, node:Node):
+        twoMRU = self.head.next
+        node.next = twoMRU
+        node.prev = self.head
+        self.head.next = node
+        twoMRU.prev = node
+
+    def get(self, key:int):
+        if key not in self.cache:
+            return -1
+
+        node = self.cache[key]
+        self._remove_node(node)
+        self._push_MRU(node)
+        return node.val
+
+    def put(self, key:int, val:int):
+        if key in self.cache:
+            node = self.cache[key]
+            self._remove_node(node)
+            node.val = val
+        else:
+
+            # INCORRECT:
+            # forgot to add new node to cache
+            # Instead:
+            # node = self.cache[key] = node
+            node = Node(key, val)
+
+        self._push_MRU(node)
+
+        if len(self.cache) > self.capacity:
+            lruNode = self.tail.prev
+            self._remove_node(lruNode)
+            self.cache.pop(lruNode.key)
 ```
 
 ### Solution 1: Doubly Linked List with Hashmap  - Linked List/Simple Traversal
@@ -2095,7 +2151,7 @@ class LRUCache:
 | put | O(1) | O(1) | DLL move to end and lookup in constant O(1) | No additional memory allocation O(1) |
 | overall | O(1) | O(capacity) | All operations in constant O(1) | Hashmap and DLL store up to capacity O(capacity) |
 
-## 23. Merge k Sorted Lists ::3:: - Hard
+## 23. Merge k Sorted Lists ::2:: - Hard
 
 Topics:  Linked List, Divide and Conquer, Heap (Priority Queue), Merge Sort
 
@@ -2154,35 +2210,46 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 
 ### Solution 1: Min Heap Priority Queue  - Linked List/Simple Traversal
 ```python
-    from heapq import heappush, heappop
-
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         
         # Note:
-        # 1. Use a min heap to always pull the smallest node across all lists
-        # 2. Heap stores (value, list_index, node) to avoid ListNode comparison errors
-        # 3. Always push the next node from the same list when one node is popped
-        # 4. Tail pointer builds the merged sorted list in O(1) append steps
+        # 1. minHeap stores current head for each sorted list
+        # 2. minHeap sorted by value, list_index breaking ties: 
+        #    (value, list_index, node)
+        # 3. smallest value across heads added to list
+        # 4. push to minHeap to replaced added node
+        # Result: merge list in O(n log k)
 
+        # minHeap of: (val, list index, node)
         min_heap = []
 
         # Push the head of each non-empty list into the heap
-        for i, node in enumerate(lists):
-            if node:
-                # i is used to break ties
-                heappush(min_heap, (node.val, i, node))  
+        for i_list, head_list in enumerate(lists):
+            if head_list:
+                # minHeap sorted by node.val,
+                # i_list index used to break ties
+                heappush(min_heap, (head_list.val, i_list, head_list))  
 
-        dummy = tail = ListNode(0)
+        dummy = ListNode(-1)
+        prev = dummy
 
-        # Pop smallest node, attach to merged list, push from same list
+        # Pop smallest node, attach to merged list, push from same list if min.next
         while min_heap:
-            val, i, node = heappop(min_heap)
-            tail.next = node
-            tail = tail.next
-            if node.next:
-                heappush(min_heap, (node.next.val, i, node.next))  # Keep i the same for this list
 
-        # overall: time complexity O(N log k)
+            # grab min value
+            minVal, i_list, node = heappop(min_heap)
+            prev.next = node
+            prev = prev.next
+
+            # valid node.next for current i_list
+            if node.next:
+                # grab next node from i_list
+                heappush(min_heap, (node.next.val, i_list, node.next))
+
+        # minHeap empty -> all lists empty
+        # return head of merged list
+
+        # overall: time complexity O(n log k)
         # overall: space complexity O(k)
         return dummy.next
 ```
@@ -2199,38 +2266,46 @@ Given a list of sorted linked lists, combine into one sorted linked list.
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         
         # Note:
-        # 1. Repeatedly merge lists in pairs to reduce total merges
-        # 2. Merge two sorted lists in O(n) time with O(1) extra space
-        # 3. Pair merging reduces number of lists by ~half each iteration
-        # 4. Overall complexity is O(N log k) from log k merge rounds
+        # 1. Merge lists in pairs with standard merge two sorted lists
+        # 2. Each round halves the total number of lists -> O(log k) rounds
+        # 3. Each round processes all nodes (across all merges) -> O(n) work per round
+        # Result: Merging k lists in place
         
+        # Empty check
         if not lists: 
             return None
-        if len(lists) == 1: 
-            return lists[0]
 
-        # time complexity: for each mergeTwo O(n)
+        # Merge two sorted linked lists
+        # time complexity: iterate over lists of n length O(n)
         def mergeTwo(l1, l2):
-            # Note:
-            # 1. Standard two pointer merge of two sorted linked lists
-            # 2. No extra arrays - relink existing nodes
-            dummy = tail = ListNode(0)
 
-            # while both lists non empty
+            # dummy node trick
+            dummy = ListNode(-1)
+            prev = dummy
+
+            # merge while both lists non empty
             while l1 and l2:
+                # grab smaller head
                 if l1.val < l2.val:
-                    tail.next, l1 = l1, l1.next
+                    prev.next = l1
+                    l1 = l1.next
                 else:
-                    tail.next, l2 = l2, l2.next
-                tail = tail.next
+                    prev.next = l2
+                    l2 = l2.next
+                # iterate
+                prev = prev.next
 
-            # fancy way to merge non empty list
-            tail.next = l1 or l2
+            # attach remaining list 
+            if not l1:
+                prev.next = l2 
+            else:
+                prev.next = l1
 
-            # return current head
+            # return merged new merged list
             return dummy.next
 
         # iteratively merge lists in pairs until one list remains
+        # time complexity: log(len(list)) total merges
         while len(lists) > 1:
             merged = []
             for i in range(0, len(lists), 2):
@@ -2239,10 +2314,9 @@ Given a list of sorted linked lists, combine into one sorted linked list.
                 merged.append(mergeTwo(l1, l2))
             lists = merged
 
-        # overall: time complexity O(N log k)
+        # overall: time complexity O(n log k)
         # overall: space complexity O(1)
         return lists[0]
-
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2251,44 +2325,6 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 3: Flatten All and Sort  - Linked List/Simple Traversal
-```python
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        
-        # Note:
-        # 1. Collect all values from all lists into a single Python array
-        # 2. Sort the array in O(N log N)
-        # 3. Build a new linked list from sorted values
-        # 4. Simpler implementation but higher complexity than 
-        #    heap or divide and conquer
-        
-        nodes = []
-
-        # extract all nodes
-        for l in lists:
-            while l:
-                nodes.append(l.val)
-                l = l.next
-
-        # sort values: python default timSort()
-        nodes.sort()
-
-        # build new sorted list
-        dummy = tail = ListNode(0)
-        for val in nodes:
-            tail.next = ListNode(val)
-            tail = tail.next
-
-        # overall: time complexity O(N log N)
-        # overall: space complexity O(N)
-        return dummy.next
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
 
 ## 25. Reverse Nodes in k-Group ::2:: - Hard
 
@@ -2355,36 +2391,43 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         
         # Note:
-        # 1. Check if there are at least k nodes ahead (otherwise leave remainder as is)
+        # 1. Check if there are at least k nodes ahead (otherwise return head)
         # 2. Reverse the first k nodes
-        # 3. Recurse on the remaining nodes
-        # 4. Connect reversed head with recursively reversed remainder
-        
-        # Check if there are at least k nodes ahead
-        count = 0
-        node = head
-        while node and count < k:
-            node = node.next
-            count += 1
+        # 3. Recurse and process sub list
+        # 4. Connect reversed head with resulting sub list
+        # Result: original lists with reversed groups of k length
 
-        # less than k nodes, return head as is
-        if count < k:
+        # Check if there are at least k nodes ahead
+        kLen = 0
+        node = head
+        while node and kLen < k:
+            kLen += 1
+            node = node.next
+
+        # less than k nodes, return head
+        if kLen < k:
             return head  
-        
+
+        # ----
+        # standard reverse linked list
+
         # Reverse first k nodes
         prev = None
-        current = head
+        curr = head
         for _ in range(k):
-            nxt = current.next
-            current.next = prev
-            prev = current
-            current = nxt
+            # grab next
+            next = curr.next
+            # reverse flow
+            curr.next = prev
+            # iterate
+            prev = curr
+            curr = next
         
-        # head is now the tail of reversed group
-        # recursively process remaining nodes starting at current
-        head.next = self.reverseKGroup(current, k)
+        # head is tail of reversed group,
+        # connect with processed sub list starting at curr
+        head.next = self.reverseKGroup(curr, k)
         
-        # prev is new head of reversed group
+        # prev is new head of reversed sub list
         
         # overall: time complexity O(n)
         # overall: space complexity O(n/k) ~ O(n) recursive stack
@@ -2403,59 +2446,74 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         
         # Note:
-        # 1. Use dummy node to handle head swaps cleanly
-        # 2. For each group:
-        #   Find the kth node
-        #   Reverse the group in place
-        #   Connect previous group's tail to head of reversed group
-        # 3. Continue until remaining nodes < k
+        # 1. Dummy node handles head swaps cleanly
+        # 2. For each sub list:
+        #    Find the kth node
+        #    Reverse the group in place
+        #    Connect previous reverse group's tail to head of new reversed group
+        # 3. Continue until remaining nodes < k, then return
         
-        # Reverse a linked list segment [start, end)
+        # Reverse sub linked list [start, end)
         # time complexity: O(k)
         def reverse(start: ListNode, end: ListNode) -> ListNode:
+            # standard reverse
             prev = None
             current = start
+            # ignore end node
             while current != end:
                 next = current.next
                 current.next = prev
                 prev = current
                 current = next
 
-            # New head of reversed segment
+            # head of reversed sub list
             return prev  
 
-        dummy = ListNode(0)
-        dummy.next = head
+        # dummy node trick
+        dummy = ListNode(0, head)
+
+        # group_prev points to tail of the previous reverse group,
+        # where group.next points to head of next list
         group_prev = dummy
 
+        # while remaining sub list is greater than k
         while True:
-            kth = group_prev
-            # Find the k-th node from group_prev
-            for _ in range(k):
-                kth = kth.next
 
-                # Less than k nodes remain, done
-                if not kth:
+            # last item in previous reversed sub list
+            kth_elem = group_prev
+            # check if k more elements exist
+            for _ in range(k):
+                kth_elem = kth_elem.next
+
+                # less than k nodes remain, return head of entire list
+                if not kth_elem:
                     return dummy.next 
 
-            group_next = kth.next
+            # group start
+            group_next = kth_elem.next
 
             # Reverse group [group_prev.next, kth]
             prev = group_next
             curr = group_prev.next
 
-            # Reverse group in place:
+            # Reverse group in place for nodes [0, k):
             for _ in range(k):
-                nxt = curr.next
+                # grab next
+                next = curr.next
+                # reverse flow
                 curr.next = prev
+                # iterate
                 prev = curr
-                curr = nxt
+                curr = next
 
-            # Connect previous group to the reversed group
+            # last node of previous group, still pointing to original head,
+            # which is now the tail 
             tail = group_prev.next
+            
+            # point last node of previous group, to new head of curr sub list
             group_prev.next = prev
+            # update last node of previous group, to last node of curr sub list
             group_prev = tail
-
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
