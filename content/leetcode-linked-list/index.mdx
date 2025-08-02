@@ -1940,11 +1940,11 @@ Design an efficient LRU cache using linked lists.
 ```python
 class Node:
     def __init__(self, key: int, val: int):
-        # Note:
-        # 1. key -> value node
-        # 2. prev and next pointers to allow linking in both directions
+
+        # key -> value node
         self.key = key
         self.val = val
+        # doubly linked prev and next
         self.prev = None
         self.next = None
 
@@ -2009,28 +2009,28 @@ class LRUCache:
     # space complexity: O(1)
     def put(self, key: int, value: int) -> None:
 
-        # remove current if exists and update
+        # If key exists, remove to avoid duplicates,
+        # need to grab node to update prev and next nodes
         if key in self.cache:
-            # Remove old node
             node = self.cache[key]
             self._remove_node(node)
-            
-            # Update value
+
+            # update existing node
             node.val = value
 
-        # create new node
+        # If key does not exist, create new node set to new value
         else:
             node = Node(key, value)
             self.cache[key] = node
 
-        # Push update/new node to MRU
+        # push updates node to top of MRU
         self._push_MRU(node)
 
-        # Evict LRU if list over capacity
+        # Remove LRU if capacity broken
         if len(self.cache) > self.capacity:
             lruNode = self.tail.prev
             self._remove_node(lruNode)
-            del self.cache[lruNode.key]
+            self.cache.pop(lruNode.key)
 
     # overall: time complexity O(1)
     # overall: space complexity O(1)
@@ -2045,17 +2045,11 @@ class LRUCache:
 
 ### Solution 2: Python Implementation OrderedDict a Doubly Linked List with Hashmap  - Linked List/Simple Traversal
 ```python
-from collections import OrderedDict
-
 class LRUCache:
     def __init__(self, capacity: int):
-        # Note:
+        
         # OrderedDict in Python is implemented internally
         # as a doubly linked list + hashmap (same as our solution):
-        # 1. Use a hashmap for O(1) lookups: key -> Node
-        # 2. Use a doubly linked list to maintain recency order
-        # 3. Dummy head/tail nodes avoid edge condition checks
-        
         self.cache = OrderedDict()
         self.capacity = capacity
 
@@ -2077,15 +2071,19 @@ class LRUCache:
     # space complexity: O(1)
     def put(self, key: int, value: int) -> None:
 
-        # If key exists, update value and mark as recently used
+        # If key exists, remove to avoid duplicates
         if key in self.cache:
-            self.cache.move_to_end(key)
+            self.cache.pop(key)
         
-        # If key does not exist, insert it and mark as recently used
+        # Insert new value, automatically updates MRU,
+        # automatically updates doubly linked list
         self.cache[key] = value
         
-        # If capacity exceeded, remove least recently used (first in linked list)
+        # capacity exceeded, remove LRU
         if len(self.cache) > self.capacity:
+            
+            # last=True -> pops MRU
+            # last=False -> pops LRU
             self.cache.popitem(last=False)
 
     # overall: time complexity O(1)
