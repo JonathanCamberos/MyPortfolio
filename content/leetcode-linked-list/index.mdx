@@ -2495,6 +2495,7 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
                 prev = curr
                 curr = next
 
+            # group_prev_tail -> (new tail) of prev sub list
             # curr -> head of next sub list
             # prev -> (new head) of curr sub list
             # group_prev_tail.next -> (new tail) of curr sub list
