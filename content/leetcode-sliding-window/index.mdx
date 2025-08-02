@@ -362,35 +362,38 @@ Given a string, find longest substring without duplicates
 ### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
 ```python
     def lengthOfLongestSubstring(self, s: str) -> int:
-        # Note:
-        # Start and End pointers define a sliding window.
-        # Hashmap tracks most recent index of each character.
-        # Move 'end' pointer forward while no duplicates, 
-        # If duplicate found, move 'start' pointer to
-        # one after the oldest duplicate
-        # Update max length after processing each character.
-        
-        # char last seen index
-        char_index_map = {} 
-        # left pointer, start of window
-        start = 0
 
+        # Note:
+        # Variable Sliding Window => [left, right]
+        # Hashmap => char -> most recent index
+        # 1. move right pointer forward while no duplicates, 
+        # 2. If duplicate found, move left to index after oldest duplicate
+        # 3. Update max length after processing each character.
+        # Result: max length without repeating characters
+
+        # char -> most recent index
+        char_MRI = {} 
+
+        # [left, right]
+        left = 0
+
+        # max length
         max_length = 0
 
-        # right pointer, end of window
-        # time complexity: iterate end pointer over string n length O(n)
-        for end, char in enumerate(s):
+        # time complexity: iterate over string n length O(n)
+        for right, char in enumerate(s):
 
-            # duplicate found:
-            if char in char_index_map and char_index_map[char] >= start:
+            # if char already found, and previous char already
+            # within bounds of sliding window -> old duplicate found
+            if char in char_MRI and char_MRI[char] >= left:
                 
-                # move start pointer 1 index after oldest duplicate
-                start = char_index_map[char] + 1
+                # move left index after oldest duplicate
+                start = char_MRI[char] + 1
             
-            # update index for char
-            char_index_map[char] = end
+            # update most recent index for curr char
+            char_MRI[char] = end
 
-            # check string length
+            # update string length
             max_length = max(max_length, end - start + 1)
         
         # overall: time complexity O(n)
