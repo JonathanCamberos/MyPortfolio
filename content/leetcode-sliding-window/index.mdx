@@ -374,11 +374,11 @@ Given a string, find longest substring without duplicates
         # char -> most recent index
         char_MRI = {} 
 
-        # [left, right]
+        # Variable Sliding window: [left, right]
         left = 0
 
         # max length
-        max_length = 0
+        max_len = 0
 
         # time complexity: iterate over string n length O(n)
         for right, char in enumerate(s):
@@ -394,11 +394,11 @@ Given a string, find longest substring without duplicates
             char_MRI[char] = end
 
             # update string length
-            max_length = max(max_length, end - start + 1)
+            max_len = max(max_len, end - start + 1)
         
         # overall: time complexity O(n)
         # overall: space complexity O(1)
-        return max_length
+        return max_len
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -467,47 +467,50 @@ matching characters you can get after replacing k or less characters.
     def characterReplacement(self, s: str, k: int) -> int:
         
         # Note:
-        # Start and End pointers define a sliding window.
-        # Hashmap tracks most recent index of each character.
+        # Variable Sliding Window => [left, right]
+        # Hashmap => char -> count
 
         # Note:
-        # Key: If the count of characters that need to be replaced
-        # (window size - count of most frequent char in window) > j,
-        # then we shrink the window from the left
-        # Shrinking the window only happens when excess chars > k.
+        # Idea: extend window via right,
+        # keep count of chars within the window,
+        # keep count of highest count char within window,
+        # shrink the window via left shift.
 
+        # needed replacements:
+        # (window size - count of most frequent char within window),
+        # is higher than available replacements: k
+        # then we shrink the window from the left.
 
-        # Frequency map for characters in current window
+        # char -> count
         count = {}
 
-        # max_freq keeps max across all strings seen so far
+        # max_freq: max count across all chars in count hashmap
         max_freq = 0  
 
-        # window start
+        # Variable Sliding window: [left, right]
         left = 0
 
-        # res
+        # max length
         max_len = 0
 
         # time complexity: iterate right pointer over string n length O(n)
         for right in range(len(s)):
 
-            # increasing char count
+            # intake new char, increase count
             count[s[right]] = count.get(s[right], 0) + 1
 
-            # increasing count on right
+            # update max_freq
             max_freq = max(max_freq, count[s[right]])
 
-            # Check if we need to shrink window
-            # (window_size - max_freq) is the # of replacements needed
+            # check if window shrink required:
+            # needed replacements > available replacements
             if (right - left + 1) - max_freq > k:
 
-                # decreasing count on left
-                # shrink window
+                # decrease char count and shrink window
                 count[s[left]] -= 1
                 left += 1  
 
-            # check max_len
+            # update max_len
             max_len = max(max_len, right - left + 1)
 
         # overall: time complexity O(n)
