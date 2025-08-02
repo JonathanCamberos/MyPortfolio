@@ -130,7 +130,7 @@ Given an array of stock values, find the highest profit possible.
 
 ### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
 ```python
-    def maxProfit(prices: List[int]) -> int:
+    def maxProfit(self, prices: List[int]) -> int:
 
         # Note:
         # Sliding Window
@@ -176,7 +176,7 @@ Given an array of stock values, find the highest profit possible.
 
 ### Solution 2: Implicit Sliding Window Tracking Min Buy Price - Sliding Window/Variable Size Window
 ```python
-    def maxProfit(prices: List[int]) -> int:
+    def maxProfit(self, prices: List[int]) -> int:
         
         # Note:
         # 1. left points to day we buy (lowest price so far candidate)
