@@ -580,37 +580,40 @@ a permutation within string 2.
     def checkInclusion(s1: str, s2: str) -> bool:
 
         # Note:
-        # Left and Right pointers maintain fixed size (len s1) sliding window
-        # The right pointer move forward every iteration to expand the windo
-        # If window exceeds len(s1) left pointer moves as well
-        # Two Hashmaps track frequency of characters in s1 and compare
-        # it to the sliding window
-        # If frequencies match, a permutation exist 
+        # Fixed Sliding Window => [left, right] of len (s1)
 
-        # check if permutation not possible
+        # Note:
+        # 1. Track char count in s1 and sliding window
+        # 2. right extends to fit len(s1)
+        # 3. shift left and right to fit len(s1)
+        # 4. If char count match, permutation exist
+
+        # s1 len > s2 len: permutation not possible
         len_s1, len_s2 = len(s1), len(s2)
         if len_s1 > len_s2:
             return False
 
-        # Frequency map for s1
+        # s1 char count
         freq_s1 = {}
         for ch in s1:
             freq_s1[ch] = freq_s1.get(ch, 0) + 1
 
-        # Frequency map for current window in s2
+        # sliding window char count
         window_freq = {}
+        
+        # Fixed sliding window [left, right]
         left = 0
 
-        # time complexity: iterate right pointer over string n length O(n)
+        # time complexity: iterate right over string s2 n length O(n)
         for right in range(len_s2):
 
-            # Add current character to window_freq
+            # extend sliding window, update char count
             window_freq[s2[right]] = window_freq.get(s2[right], 0) + 1
 
-            # iterate left pointer if window size exceeds s1
+            # reduce sliding window if size > s1
             if right - left + 1 > len_s1:
 
-                # grab and decrease frequency count
+                # decrease char count and shift left
                 left_char = s2[left]
                 window_freq[left_char] -= 1
 
@@ -621,7 +624,7 @@ a permutation within string 2.
                 # iterate left pointer
                 left += 1
 
-            # check for frequency permutation
+            # counts match, permutation exists
             if window_freq == freq_s1:
                 return True
 
@@ -700,49 +703,84 @@ including duplicates is in the window.
 ```python
     def checkInclusion(self, s1: str, s2: str) -> bool:
 
-        # Manual edge case
-        if len(s) < len(t):
+        # Note:
+        # 1. Uses two hashmaps:
+        # 2. Expands right pointer until all required chars are included
+        # 3. Shifts left pointer to shrink window while maintaining validity
+        # 4. Tracks smallest valid window found so far
+        # Result: returns smallest substring containing all chars of t or ""
+
+        # t len > s len: substring not possible
+        if len(t) > len(s):
             return ""
 
-        # Frequency map of characters required from t
+        # t char count
         target_freq = defaultdict(int)
         for char in t:
             target_freq[char] += 1
 
-        # Tracks current window character frequencies
+        # sliding window char count
         window_freq = defaultdict(int)
-        have = 0                            # Number of characters that meet the required count
-        need = len(target_freq)            # Number of unique characters needed
 
+        # Number of unique chars from t needed  
+        need = len(target_freq)     
+
+        # Number of chars from t that meet the required count
+        have = 0                          
+
+        # min substring
         min_len = float("inf")
-        res_start = 0
+
+        # Variable Sliding Window => [left, right]
         left = 0
 
+        # 
+        res_start = 0
+
+        # time complexity: iterate right over list s of n length O(n)
         for right in range(len(s)):
+
+            # extending window, update char count
             char = s[right]
             window_freq[char] += 1
 
-            # Check if this character satisfies the required frequency
+            # Check if this character satisfies the required t frequency
             if char in target_freq and window_freq[char] == target_freq[char]:
                 have += 1
 
-            # Contract the window while it satisfies all character requirements
+            # shrink window while frequencies are valid
             while have == need:
-                # Update minimum window
+                
+                # curr window
                 window_len = right - left + 1
+                
+                # update min length, mark start of min window
                 if window_len < min_len:
                     min_len = window_len
                     res_start = left
 
-                # Shrink window
+                # reduce char count and shrink window
                 left_char = s[left]
                 window_freq[left_char] -= 1
+                
+                # check if frequencies are valid
                 if left_char in target_freq and window_freq[left_char] < target_freq[left_char]:
                     have -= 1
 
+                # iterate
                 left += 1
 
-        return s[res_start:res_start + min_len] if min_len != float("inf") else ""
+        # if at least one valid sub string exists, return
+        if min_len != float("inf"):
+            res = s[res_start:res_start + min_len]
+
+        # no sub string found, return ""
+        else: 
+            res = ""
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -753,25 +791,43 @@ including duplicates is in the window.
 
 ### Solution 2: Single Hashmap + Remaining Required Tracker - Sliding Window/Variable Size Window
 ```python
-    def checkInclusion(self, s1: str, s2: str) -> bool:
+    def minWindow(self, s1: str, s2: str) -> bool:
 
-        # If t is longer than s, impossible
+        # Note:
+        # 1. Single hashmap to track remaining required chars
+        # 2. Expands right pointer while decreasing count of matched chars
+        # 3. When all chars matches, contracts left pointer
+        # 4. Tracks smallest window
+        # 5. Returns smallest substring containing all chars of t (or "" if none)
+
+        # t len > s len: substring not possible
         if len(s) < len(t):
             return ""
 
-        # Build target count map
+        # t char count
         char_count = defaultdict(int)
         for ch in t:
             char_count[ch] += 1
 
-        target_chars_remaining = len(t)         # Number of characters (with duplicates) still needed
-        min_window = (0, float("inf"))          # (start_index, end_index)
-        start_index = 0                         # Left pointer
+        # Total num of characters (with duplicates) still needed
+        target_chars_remaining = len(t)         
 
-        for end_index, ch in enumerate(s):      # Expand right
+        # (start_index, end_index)
+        min_window = (0, float("inf"))          
+
+        # Left pointer
+        start_index = 0                         
+
+        # time complexity: iterate right over s2 of n length O(n)
+        for end_index, ch in enumerate(s):
+
+            # Expand right
             if char_count[ch] > 0:
-                target_chars_remaining -= 1     # One needed character matched
-            char_count[ch] -= 1                 # Always decrement (can go negative)
+                # One needed character matched
+                target_chars_remaining -= 1     
+
+            # Always decrement (can go negative)
+            char_count[ch] -= 1                 
 
             # Once we have matched all characters
             if target_chars_remaining == 0:
@@ -793,7 +849,15 @@ including duplicates is in the window.
                 start_index += 1
 
         # Extract window if found
-        return "" if min_window[1] > len(s) else s[min_window[0]:min_window[1]+1]
+        if min_window[1] > len(s):
+            res = ""
+        else: 
+            res = s[min_window[0]:min_window[1]+1]
+
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -860,29 +924,55 @@ largest sum for every window within the list.
 ### Solution 1: Heap (Priority Queue) Approach - Sliding Window/Variable Size Window
 ```python
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+
+        # Note:
+        # 1. Use a max heap (negative value min heap), to keep track of
+        #    potential max values in the current window
+        # 2. Each heap entry is (-value, index) so max is at top
+        # 3. Before taking max from heap, pop all elements that are outside of 
+        #    of the current window (index <= i - k)
+        # 4. Append the top of the heap (largest value) to the result for each window
+
+        # Empty check
         if not nums or k == 0:
             return []
 
+        # list of max values for each window
         result = []
-        heap = []  # Max-heap implemented as min-heap with negative values
 
-        # Initialize the first window
+        # max heap (min heap with negative values)
+        # (-value, index)
+        heap = []  
+
+        # Initialize the first window:
+        # push all elements to the max heap
         for i in range(k):
             heapq.heappush(heap, (-nums[i], i))
 
-        result.append(-heap[0][0])
+        # append curr window max to result list, after k values added to queue
+        peek_max = -heap[0][0]
+        result.append(peek_max)
 
+        # time complexity: iterate over list of n length O(n)
         for i in range(k, len(nums)):
-            # Push new element
+
+            # Push new element: (-value, index)
             heapq.heappush(heap, (-nums[i], i))
 
-            # Pop elements out of the current window range
+            # we only care about elements affecting the current max
+            # so we pop the top of the heap,
+            # while elements are out of the current window range
             while heap[0][1] <= i - k:
+                # removes top stale element
                 heapq.heappop(heap)
 
-            # The current max is at the heap top
-            result.append(-heap[0][0])
+            # max is guaranteed to be within current window range
+            # append curr window max to result list
+            peek_max = -heap[0][0]
+            result.append(peek_max)
 
+        # overall: time complexity O(n log k)
+        # overall: space complexity O(k)
         return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -895,30 +985,53 @@ largest sum for every window within the list.
 ### Solution 2: Sliding Window + Monotonic Queue - Sliding Window/Variable Size Window
 ```python
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        n = len(nums)
+
+        # Note:
+        # 1. Use a dequeue to store elements in decreasing order to track max
+        # 2. Maintain the dequeue such that front has max element for current window
+        # 3. When sliding the window:
+        #    Remove elements smaller than incoming element from back of dequeue
+        #    Remove outgoing element from the front if it equals element leaving the window
+        # 4. Append the front element of the dequeue (curr max) to results after each slide
+
+        # Empty check
         if not nums or k == 0:
             return []
 
-        result = []
-        dq = deque()  # Stores indices of elements, maintaining decreasing order of values
+        res = []
 
-        for i in range(n):
-            # Remove indices of elements smaller than current from the back
-            while dq and nums[i] >= nums[dq[-1]]:
+        # stores elements in decreasing order
+        dq = deque([])
+
+        # put k element in the dequeue and make sure the max is at the front
+        for i in range(k):
+            while (dq and nums[i] > dq[-1]):
                 dq.pop()
+            dq.append(nums[i])
 
-            # Add current element index
-            dq.append(i)
+        # append current max for first window
+        res.append(dq[0])
 
-            # Remove front if it's out of current window
-            if dq[0] <= i - k:
+        # slide window from k to end
+        for i in range(k, len(nums)):
+
+            # remove element leaving the window from front if it matches
+            if (nums[i - k] == dq[0]):
                 dq.popleft()
 
-            # Once first window is processed, append max (front of deque)
-            if i >= k - 1:
-                result.append(nums[dq[0]])
+            # 
+            while (dq and nums[i] > dq[-1]):
+                dq.pop()
 
-        return result
+            # append new elem max
+            dq.append(nums[i])
+            
+            # append current max
+            res.append(dq[0])
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -927,22 +1040,48 @@ largest sum for every window within the list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-
-### Solution 3: black magic - Sliding Window/Variable Size Window
+### Solution 3: Block Partition Precomputed Maxes - Sliding Window/Variable Size Window
 ```python
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
-        q = deque()
-        it = iter(nums)
-        for v in islice(it, k):
-            while q and q[-1] < v: q.pop()
-            q.append(v)
-        ans = [q[0]]
-        for i, v in enumerate(it):
-            if q[0] == nums[i]: q.popleft()
-            while q and q[-1] < v: q.pop()
-            q.append(v)
-            ans.append(q[0])
-        return ans
+
+        # Note:
+        # 1. Precompute max in fixed-size blocks:
+        #    - left_max[i]: max from block start to i
+        #    - right_max[i]: max from block end to i (scanned backwards)
+        # 2. For window starting at i, max = max(right_max[i], left_max[i+k-1])
+        #    - right_max[i] covers block starting at i
+        #    - left_max[i+k-1] covers block ending at i+k-1
+        # 3. Eliminates need for deque by reusing block maxima
+
+        n = len(nums)
+        if not nums or k == 0:
+            return []
+
+        left_max = [0] * n
+        right_max = [0] * n
+
+        # Fill left_max: scanning forward
+        for i in range(n):
+            if i % k == 0:
+                left_max[i] = nums[i]  # Block start
+            else:
+                left_max[i] = max(left_max[i-1], nums[i])
+
+        # Fill right_max: scanning backward
+        for i in range(n-1, -1, -1):
+            if (i+1) % k == 0 or i == n-1:
+                right_max[i] = nums[i]  # Block end
+            else:
+                right_max[i] = max(right_max[i+1], nums[i])
+
+        # Compute sliding window max
+        res = []
+        for i in range(n-k+1):
+            res.append(max(right_max[i], left_max[i+k-1]))
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
