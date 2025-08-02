@@ -2261,7 +2261,7 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 |  |  |  |  |  |
 
 
-### Solution 2: Merge Sort  - Linked List/Simple Traversal
+### Solution 2: Merge Pair of List at a Time with Standard Merge Two Sorted Linked List  - Linked List/Simple Traversal
 ```python
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         
@@ -2397,21 +2397,21 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
         # 4. Connect reversed head with resulting sub list
         # Result: original lists with reversed groups of k length
 
-        # Check if there are at least k nodes ahead
+        # Base case: check if at least k nodes remain
         kLen = 0
         node = head
         while node and kLen < k:
             kLen += 1
             node = node.next
 
-        # less than k nodes, return head
+        # Base case: less than k nodes, return head
         if kLen < k:
             return head  
 
         # ----
         # standard reverse linked list
 
-        # Reverse first k nodes
+        # Reverse current sub list up to k
         prev = None
         curr = head
         for _ in range(k):
@@ -2423,11 +2423,13 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
             prev = curr
             curr = next
         
-        # head is tail of reversed group,
-        # connect with processed sub list starting at curr
+        # curr -> start of next sub list
+        # prev -> new head of curr sub list
+        # head -> new tail of curr sub list
+        # connect head (new tail) via head.next to next reversed sub list
         head.next = self.reverseKGroup(curr, k)
         
-        # prev is new head of reversed sub list
+        # return prev (new head) of curr sub list
         
         # overall: time complexity O(n)
         # overall: space complexity O(n/k) ~ O(n) recursive stack
@@ -2453,23 +2455,28 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
         #    Connect previous reverse group's tail to head of new reversed group
         # 3. Continue until remaining nodes < k, then return
         
-        # Reverse sub linked list [start, end)
+        # reverse sub list from start -> end.prev [start, end)
         # time complexity: O(k)
         def reverse(start: ListNode, end: ListNode) -> ListNode:
             # standard reverse
             prev = None
-            current = start
+            curr = start
             # ignore end node
-            while current != end:
-                next = current.next
-                current.next = prev
-                prev = current
-                current = next
+            while curr != end:
+                next = curr.next
+                curr.next = prev
+                prev = curr
+                curr = next
 
-            # head of reversed sub list
+            # end -> head of next sub list
+            # curr -> head of next sub list
+            # prev -> new head of curr sub list
+            # start -> new tail of curr sub list
+
+            # return new head of curr reversed sub list
             return prev  
 
-        # dummy node trick
+        # dummy node trick for head of overall list
         dummy = ListNode(0, head)
 
         # group_prev points to tail of the previous reverse group,
@@ -2489,8 +2496,11 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
                 if not kth_elem:
                     return dummy.next 
 
-            # group start
+            # next sub list start
             group_next = kth_elem.next
+
+            # ----
+            # standard reverse linked list
 
             # Reverse group [group_prev.next, kth]
             prev = group_next
@@ -2505,6 +2515,9 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
                 # iterate
                 prev = curr
                 curr = next
+
+            # ----
+            # connect previous reverse sub list to new reversed sub list
 
             # last node of previous group, still pointing to original head,
             # which is now the tail 

@@ -164,7 +164,7 @@
   },
   "23": {
     "questionNum": 23,
-    "questionTitle": "Merge k Sorted Lists ::3::",
+    "questionTitle": "Merge k Sorted Lists ::2::",
     "questionDifficulty": "Hard",
     "questionBlurb": "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.",
     "questionTopics": [
@@ -173,7 +173,7 @@
       "Heap (Priority Queue)",
       "Merge Sort"
     ],
-    "questionLink": "/Notes/leetcode-linked-list#23-merge-k-sorted-lists-3---hard",
+    "questionLink": "/Notes/leetcode-linked-list#23-merge-k-sorted-lists-2---hard",
     "blog": "LeetCode: Linked List",
     "lastSubmittedDate": null,
     "coldnessCount": -1
