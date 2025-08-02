@@ -2454,40 +2454,19 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
         #    Reverse the group in place
         #    Connect previous reverse group's tail to head of new reversed group
         # 3. Continue until remaining nodes < k, then return
-        
-        # reverse sub list from start -> end.prev [start, end)
-        # time complexity: O(k)
-        def reverse(start: ListNode, end: ListNode) -> ListNode:
-            # standard reverse
-            prev = None
-            curr = start
-            # ignore end node
-            while curr != end:
-                next = curr.next
-                curr.next = prev
-                prev = curr
-                curr = next
-
-            # end -> head of next sub list
-            # curr -> head of next sub list
-            # prev -> new head of curr sub list
-            # start -> new tail of curr sub list
-
-            # return new head of curr reversed sub list
-            return prev  
 
         # dummy node trick for head of overall list
         dummy = ListNode(0, head)
 
-        # group_prev points to tail of the previous reverse group,
+        # group_prev_tail points to tail of the previous reverse group,
         # where group.next points to head of next list
-        group_prev = dummy
+        group_prev_tail = dummy
 
         # while remaining sub list is greater than k
         while True:
 
             # last item in previous reversed sub list
-            kth_elem = group_prev
+            kth_elem = group_prev_tail
             # check if k more elements exist
             for _ in range(k):
                 kth_elem = kth_elem.next
@@ -2502,9 +2481,9 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
             # ----
             # standard reverse linked list
 
-            # Reverse group [group_prev.next, kth]
+            # Reverse group [group_prev_tail.next, kth]
             prev = group_next
-            curr = group_prev.next
+            curr = group_prev_tail.next
 
             # Reverse group in place for nodes [0, k):
             for _ in range(k):
@@ -2516,17 +2495,22 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
                 prev = curr
                 curr = next
 
+            # curr -> head of next sub list
+            # prev -> (new head) of curr sub list
+            # group_prev_tail.next -> (new tail) of curr sub list
+
             # ----
-            # connect previous reverse sub list to new reversed sub list
+            # connect new tail of previous sub list 
+            # to new head of curr sub list
 
             # last node of previous group, still pointing to original head,
             # which is now the tail 
-            tail = group_prev.next
+            curr_tail = group_prev_tail.next
             
             # point last node of previous group, to new head of curr sub list
-            group_prev.next = prev
+            group_prev_tail.next = prev
             # update last node of previous group, to last node of curr sub list
-            group_prev = tail
+            group_prev_tail = curr_tail
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
