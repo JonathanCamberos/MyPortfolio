@@ -134,20 +134,20 @@ Given an array of stock values, find the highest profit possible.
 
         # Note:
         # Sliding Window
-        # left points to day we buy (lowest price so far candidate)
-        # right scans forward for a day to sell
+        # 1. left points to day we buy (lowest price so far candidate)
+        # 2. right scans forward for a day to sell (highest day possible)
+        # 3. Get profit:
+        #    if prices[left] < prices[right]: profit possible, update max_profit
+        #    if prices[left] > prices[right]: lower buy found, update left
+        # Result: finds lowest buy and highest profit
 
-        # If  prices[left] < prices[right], calculate profit and update max
-        # Else prices[left] > prices[right], move left to right as lower buy price found
-        # Tracks low buy and max profit in a single pass
-
-        # Low Buy Day, Right Sell Day
+        # Lowest Buy Day so far, curr day price
         left, right = 0, 1
 
-        # profit
+        # max profit so far
         max_profit = 0
 
-        # while sell days available and not out of potential lower buy days
+        # time complexity: iterate over list of n days
         while right < len(prices):
 
             # if possible profit
@@ -156,11 +156,11 @@ Given an array of stock values, find the highest profit possible.
                 profit = prices[right] - prices[left]
                 max_profit = max(max_profit, profit)
 
-            # lower buy day found, update buy day
+            # equal or lower buy day found, update buy day
             else:
                 left = right
 
-            # traverse sell days
+            # iterate sell days
             right += 1
 
         # overall: time complexity O(n)
@@ -179,25 +179,27 @@ Given an array of stock values, find the highest profit possible.
     def maxProfit(prices: List[int]) -> int:
         
         # Note:
-        # Tracks buy and sell day in pointers
+        # 1. left points to day we buy (lowest price so far candidate)
+        # 2. right scans forward for a day to sell (highest day possible)
         # Calculates profit is profit possible
         # Updates buy day if lower prices possible
         
-        # Track min buy day so far
-        min_price = float('inf')
-        # Track max profit so far
+        # Lowest Buy Day so far
+        left = float('inf')
+        
+        # max profit so far
         max_profit = 0
 
         # time complexity: iterate over list of n prices O(n)
-        for price in prices:
+        for right in prices:
 
             # profit possible
-            if min_price < price:
-                max_profit = max(max_profit, price - min_price)
+            if left < right:
+                max_profit = max(max_profit, right - left)
 
-            # new min day found
+            # new min buy day found
             else:
-                min_price = price
+                left = right
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
@@ -213,40 +215,85 @@ Given an array of stock values, find the highest profit possible.
 ### Solution 3: Dynamic Programming O(n) - Sliding Window/Variable Size Window
 ```python
     def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # 1. DP[i][0] = highest profit so far
+        #    DP[i][1] = lowest buy price so far
+        # 2. At each day update [0] and [1]:
+        #    [0] = max(highest profit so far, profit from using lowest buy price so far against today sell price)
+        #    [1] = min(lowest buy price so far, todays buy price)
+    
+        # Empty check
         if not prices:
             return 0
 
+        # 2d array of n rows with 2 columns
         n = len(prices)
         dp = [[0]*2 for _ in range(n)]
 
-        dp[0][0] = 0            # no stock held
-        dp[0][1] = -prices[0]   # bought stock on day 0
+        # set up dynamic programming table:
 
+        # max profit up to day 0
+        dp[0][0] = 0
+        # min price up to day 0
+        dp[0][1] = -prices[0]
+
+        # time complexity: iterate across n days for prices O(n)
         for i in range(1, n):
+            
+            # update max profit
             dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+            # update min price
             dp[i][1] = max(dp[i-1][1], -prices[i])
 
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return dp[-1][0]
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
 
 ### Solution 4: Dynamic Programming 2 O(1) - Sliding Window/Variable Size Window
 ```python
     def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # 1  Optimization of DP table to O(1) space
+        # 2  dp_i_0 = max profit on current day with no stock
+        #    dp_i_1 = max profit on current day with stock
+        # 3  Transition is identical, only store previous day values
+
+        # Empty check
         if not prices:
             return 0
 
+        n = len(prices)
+
+        # set up dynamic programming table:
+        # max profit up to day 0
         dp_i_0 = 0
+        # min price up to day 0
         dp_i_1 = -prices[0]
 
-        for i in range(1, len(prices)):
+        # iterate across days
+        for i in range(1, n):
+            # store temp for transition
             dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
             dp_i_1 = max(dp_i_1, -prices[i])
 
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return dp_i_0
 ```
-
-
-
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 ## 3. Longest Substring Without Repeating Characters ::1:: - Medium
 
