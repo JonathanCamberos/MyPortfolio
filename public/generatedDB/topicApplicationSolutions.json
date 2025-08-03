@@ -1128,5 +1128,29 @@
         "blog": "LeetCode: Linked List"
       }
     ]
+  },
+  "tree": {
+    "modification": [
+      {
+        "number": 1,
+        "name": "BFS Iterative",
+        "type": "tree",
+        "application": "modification",
+        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. BFS iterative approach inverts nodes level by level\n        # 2. Queue stores nodes to process\n        # 3. For each node:\n        #    - Swap left and right children\n        #    - Add non-null children to queue\n        # 4. Continues until all levels processed\n        \n        if not root:\n            return None\n        \n        queue = deque([root])\n        \n        while queue:\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # Add children to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root",
+        "questionNumber": 226,
+        "solutionLink": "/Notes/leetcode-trees#solution-1-bfs-iterative---treemodification",
+        "blog": "LeetCode: Trees"
+      },
+      {
+        "number": 2,
+        "name": "Implicit Sliding Window Tracking Min Price and Max Profit",
+        "type": "tree",
+        "application": "modification",
+        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. BFS iterative approach inverts nodes level by level\n        # 2. Queue stores nodes to process\n        # 3. For each node:\n        #    - Swap left and right children\n        #    - Add non-null children to queue\n        # 4. Continues until all levels processed\n        \n        if not root:\n            return None\n        \n        queue = deque([root])\n        \n        while queue:\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # Add children to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root",
+        "questionNumber": 226,
+        "solutionLink": "/Notes/leetcode-trees#solution-2-implicit-sliding-window-tracking-min-price-and-max-profit---treemodification",
+        "blog": "LeetCode: Trees"
+      }
+    ]
   }
 }

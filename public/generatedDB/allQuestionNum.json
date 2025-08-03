@@ -506,6 +506,22 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 25
   },
+  "226": {
+    "questionNum": 226,
+    "questionTitle": "Invert Binary Tree ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given the root of a binary tree, invert the tree, and return its root.",
+    "questionTopics": [
+      "Tree",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#226-invert-binary-tree-1---easy",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "238": {
     "questionNum": 238,
     "questionTitle": "Product of Array Except Self ::2::",

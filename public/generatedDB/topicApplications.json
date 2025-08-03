@@ -327,5 +327,61 @@
       "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-in-place-modification",
       "blog": "LeetCode: Linked List"
     }
+  ],
+  "tree": [
+    {
+      "type": "Tree",
+      "title": "DFS Pre order Traversal",
+      "summary": "Pre order traversal visits nodes in Root -> Left -> Right order.",
+      "exampleIntro": "Serialize a Binary Tree (Recursive + Iterative)",
+      "codeExample": "1\n     / \\\n    2   3\n       / \\\n      4   5",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-pre-order-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "DFS In order Traversal",
+      "summary": "In order nodes in Left -> Root -> Right order.",
+      "exampleIntro": "Convert BST to Sorted List (Recursive) & Validate BST (Iterative)",
+      "codeExample": "# Recursive Postorder\n    def evaluateTree(root: Optional[TreeNode]) -> int:\n        if not root.left and not root.right:\n            return int(root.val)\n        left_val = evaluateTree(root.left)\n        right_val = evaluateTree(root.right)\n        if root.val == \"+\":\n            return left_val + right_val\n        elif root.val == \"-\":\n            return left_val - right_val\n        elif root.val == \"*\":\n            return left_val * right_val\n        elif root.val == \"/\":\n            return int(left_val / right_val)\n\n    # Iterative Postorder\n    def deleteTree(root: Optional[TreeNode]) -> None:\n        if not root:\n            return\n        stack, output = [root], []\n        while stack:\n            node = stack.pop()\n            output.append(node)\n            if node.left:\n                stack.append(node.left)\n            if node.right:\n                stack.append(node.right)\n        while output:\n            node = output.pop()\n            del node\n\n    # Example:\n    # Expression Tree:\n    #       \"+\"\n    #      /   \\\n    #     3     \"*\"\n    #          /   \\\n    #         2     4\n    # evaluateTree -> 11\n    #\n    # DeleteTree on:\n    #       1\n    #      / \\\n    #     2   3\n    # Deletion order: 2, 3, 1",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-in-order-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "DFS Post order Traversal",
+      "summary": "Post order visits nodes in Left → Right → Root order.",
+      "exampleIntro": "Evaluate Expression Tree (Recursive) & Delete Tree (Iterative)",
+      "codeExample": "# Recursive Preorder\n    def serializeRecursive(root: Optional[TreeNode]) -> str:\n        def dfs(node):\n            if not node:\n                vals.append(\"N\")\n                return\n            vals.append(str(node.val))\n            dfs(node.left)\n            dfs(node.right)\n        \n        vals = []\n        dfs(root)\n        return \",\".join(vals)\n\n    # Iterative Preorder (stack)\n    def serializeIterative(root: Optional[TreeNode]) -> str:\n        if not root:\n            return \"N\"\n\n        stack = [root]\n        vals = []\n        while stack:\n            node = stack.pop()\n            if node:\n                vals.append(str(node.val))\n                stack.append(node.right)\n                stack.append(node.left)\n            else:\n                vals.append(\"N\")\n        return \",\".join(vals)\n\n    # Example Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: \"1,2,N,N,3,4,N,N,5,N,N\"",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BFS Iterative Queue Based",
+      "summary": "BFS visits nodes level by level, processing all nodes at a given depth",
+      "exampleIntro": "Level order traversal of Binary Tree",
+      "codeExample": "# Recursive Inorder\n    def bstToSortedList(root: Optional[TreeNode]) -> List[int]:\n        res = []\n        def inorder(node):\n            if not node:\n                return\n            inorder(node.left)\n            res.append(node.val)\n            inorder(node.right)\n        inorder(root)\n        return res\n\n    # Iterative Inorder\n    def isValidBST(root: Optional[TreeNode]) -> bool:\n        stack = []\n        prev_val = float(\"-inf\")\n        curr = root\n        while stack or curr:\n            while curr:\n                stack.append(curr)\n                curr = curr.left\n            curr = stack.pop()\n            if curr.val <= prev_val:\n                return False\n            prev_val = curr.val\n            curr = curr.right\n        return True\n\n    # Example BST:\n    #       2\n    #      / \\\n    #     1   3\n    # bstToSortedList -> [1, 2, 3]\n    # isValidBST -> True",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-queue-based",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "Modification",
+      "summary": "Tree structure is altered by rearranging nodes or pointers,",
+      "exampleIntro": "Invert Binary Tree (DFS Recursive + BFS Iterative)",
+      "codeExample": "# Recursive Postorder\n    def evaluateTree(root: Optional[TreeNode]) -> int:\n        if not root.left and not root.right:\n            return int(root.val)\n        left_val = evaluateTree(root.left)\n        right_val = evaluateTree(root.right)\n        if root.val == \"+\":\n            return left_val + right_val\n        elif root.val == \"-\":\n            return left_val - right_val\n        elif root.val == \"*\":\n            return left_val * right_val\n        elif root.val == \"/\":\n            return int(left_val / right_val)\n\n    # Iterative Postorder\n    def deleteTree(root: Optional[TreeNode]) -> None:\n        if not root:\n            return\n        stack, output = [root], []\n        while stack:\n            node = stack.pop()\n            output.append(node)\n            if node.left:\n                stack.append(node.left)\n            if node.right:\n                stack.append(node.right)\n        while output:\n            node = output.pop()\n            del node\n\n    # Example:\n    # Expression Tree:\n    #       \"+\"\n    #      /   \\\n    #     3     \"*\"\n    #          /   \\\n    #         2     4\n    # evaluateTree -> 11\n    #\n    # DeleteTree on:\n    #       1\n    #      / \\\n    #     2   3\n    # Deletion order: 2, 3, 1",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-modification",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "MinHeap",
+      "summary": "Use a MinHeap, a type of binary tree, to maintain the smallest or",
+      "exampleIntro": "Find the Top K Frequent Elements in a List",
+      "codeExample": "def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:\n        if not root:\n            return []\n\n        result = []\n        queue = deque([root])\n\n        while queue:\n            level_size = len(queue)\n            level_nodes = []\n\n            for _ in range(level_size):\n                node = queue.popleft()\n                level_nodes.append(node.val)\n\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n\n            result.append(level_nodes)\n\n        return result\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: [[1], [2, 3], [4, 5]]",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-minheap",
+      "blog": "LeetCode: Trees"
+    }
   ]
 }
