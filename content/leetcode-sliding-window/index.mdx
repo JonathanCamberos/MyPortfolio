@@ -296,12 +296,11 @@ Given an array of stock values, find the highest profit possible.
         for i in range(1, n):
             
             # update compressed dp table, (for up to day i)
-
-            # update max profit
-            max_profit = max(max_profit, min_price + prices[i])            
+          
             # update min price
             min_price = max(min_price, -prices[i])
-
+            # update max profit
+            max_profit = max(max_profit, min_price + prices[i])  
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
@@ -313,7 +312,7 @@ Given an array of stock values, find the highest profit possible.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## 3. Longest Substring Without Repeating Characters ::1:: - Medium
+## 3. Longest Substring Without Repeating Characters ::2:: - Medium
 
 Topics:  Hash Table, String, Sliding Window
 
