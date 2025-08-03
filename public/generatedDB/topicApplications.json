@@ -268,18 +268,18 @@
       "codeExample": "if condition(mid):\n        right = mid        # mid might be the answer, keep it\n    else:\n        left = mid + 1     # mid is invalid, discard it",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-upper-ceiling-or-lower-floor-trick-based-on-target-binary-search",
       "blog": "LeetCode: Binary Search"
-    },
+    }
+  ],
+  "sliding-window": [
     {
-      "type": "Binary Search",
+      "type": "Sliding Window",
       "title": "Fixed Size Window",
       "summary": "Fixed size windows help maintain a constant window of k elements",
       "exampleIntro": "Maximum sum of any subarray of size k",
       "codeExample": "def maxSumSubarray(nums, k):\n        window_sum = sum(nums[:k])\n        max_sum = window_sum\n        \n        for i in range(k, len(nums)):\n            window_sum += nums[i] - nums[i - k]\n            max_sum = max(max_sum, window_sum)\n        \n        return max_sum\n\n    # maxSumSubarray([1, 4, 2, 10, 2, 3, 1, 0, 20], 4) = 24",
-      "useCaseLink": "/Notes/leetcode-sliding-window#binary-search-application-fixed-size-window",
+      "useCaseLink": "/Notes/leetcode-sliding-window#sliding-window-application-fixed-size-window",
       "blog": "LeetCode: Sliding Window"
-    }
-  ],
-  "sliding-window": [
+    },
     {
       "type": "Sliding Window",
       "title": "Variable Size Window",
