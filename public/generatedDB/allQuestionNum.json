@@ -30,7 +30,7 @@
   },
   "3": {
     "questionNum": 3,
-    "questionTitle": "Longest Substring Without Repeating Characters ::1::",
+    "questionTitle": "Longest Substring Without Repeating Characters ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a string s, find the length of the longest without duplicate characters.",
     "questionTopics": [
@@ -38,7 +38,7 @@
       "String",
       "Sliding Window"
     ],
-    "questionLink": "/Notes/leetcode-sliding-window#3-longest-substring-without-repeating-characters-1---medium",
+    "questionLink": "/Notes/leetcode-sliding-window#3-longest-substring-without-repeating-characters-2---medium",
     "blog": "LeetCode: Sliding Window",
     "lastSubmittedDate": null,
     "coldnessCount": -1

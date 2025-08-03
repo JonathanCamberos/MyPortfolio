@@ -543,7 +543,7 @@ matching characters you can get after replacing k or less characters.
         # then we shrink the window from the left.
 
         # char -> count
-        count = {}
+        count = defaultdict(int)
 
         # max_freq: max count across all chars in count hashmap
         max_freq = 0  
@@ -636,7 +636,7 @@ a permutation within string 2.
 ```python
 ```
 
-### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Fixed Size Window
 ```python
     def checkInclusion(s1: str, s2: str) -> bool:
 
@@ -701,6 +701,79 @@ a permutation within string 2.
 | Iteration | O(n) | O(1) | Iterate over s2 to generate sliding window frequency count O(n) | Constant frequency count up to 26 characters O(1) |
 | Hashmap | O(1) | O(1) | Comparison in constant O(1) | No additional memory allocation for hashmap comparison O(1) |
 | Overall | O(n + m) | O(1) | Iteration over s1 and s2 dominate, leading to O(n + m) | Constant frequency count for s1 and sliding window O(1) |
+
+
+### Solution 2: Explicit Two Pointer Sliding Window - Sliding Window/Fixed Size Window
+```python
+    def checkInclusion(s1: str, s2: str) -> bool:
+        
+        # Note:
+        # 1. Use fixed sliding window of length len(s1)
+        # 2. Maintain two frequency arrays (size 26) for O(1) updates
+        # 3. Maintain `matches` count to avoid full frequency comparison
+
+        # s1 len > s2 len: permutation not possible
+        len_s1, len_s2 = len(s1), len(s2)
+        if len_s1 > len_s2:
+            return False
+
+        # s1 and window counts
+        freq_s1 = [0] * 26
+        freq_window = [0] * 26
+
+        # char count for s1
+        for ch in s1:
+            freq_s1[ord(ch) - ord('a')] += 1
+        
+        # char count for first window in s2
+        for ch in s2[:len_s1]:
+            freq_window[ord(ch) - ord('a')] += 1
+
+        # Matches: 
+        # number of positions between s1 and window counts where count matches
+        matches = sum(1 for i in range(26) if freq_s1[i] == freq_window[i])
+
+        # Fixed Size Window => [left, right] for len(s1)
+        left = 0
+
+        # time complexity: iterate right over list of n length O(n)
+        for right in range(len_s1, len_s2):
+            
+            # if count arrays match between s1 and window: permutation exists
+            if matches == 26:
+                return True
+
+            # Add new char to window
+            index_add = ord(s2[right]) - ord('a')
+            freq_window[index_add] += 1
+
+            # update matches for added char
+            if freq_window[index_add] == freq_s1[index_add]:
+                matches += 1
+            elif freq_window[index_add] == freq_s1[index_add] + 1:
+                matches -= 1
+
+            # Remove char going out of window
+            index_remove = ord(s2[left]) - ord('a')
+            freq_window[index_remove] -= 1
+
+            # update matches for removed char
+            if freq_window[index_remove] == freq_s1[index_remove]:
+                matches += 1
+            elif freq_window[index_remove] == freq_s1[index_remove] - 1:
+                matches -= 1
+            left += 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return matches == 26
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 
 ## 76. Minimum Window Substring ::2:: - Hard
