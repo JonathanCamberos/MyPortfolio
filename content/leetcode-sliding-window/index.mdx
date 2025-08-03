@@ -35,7 +35,7 @@ Sliding Window is ideal for problems that involve:
 It typically reduces time complexity from O(n<sup>2</sup>) (naive nested loops) 
 to O(n) since each element is processed at most twice (entering/exiting the window).
 
-### Binary Search Application: Fixed Size Window
+### Sliding Window Application: Fixed Size Window
 Fixed size windows help maintain a constant window of k elements 
 while scanning through a sequence.
 
@@ -587,7 +587,7 @@ matching characters you can get after replacing k or less characters.
 
 
 
-## 567. Permutation in String ::1:: - Medium
+## 567. Permutation in String ::2:: - Medium
 
 Topics:  Hash Table, String, Sliding Window
 
@@ -708,9 +708,14 @@ a permutation within string 2.
     def checkInclusion(s1: str, s2: str) -> bool:
         
         # Note:
-        # 1. Use fixed sliding window of length len(s1)
-        # 2. Maintain two frequency arrays (size 26) for O(1) updates
-        # 3. Maintain `matches` count to avoid full frequency comparison
+        # 1. Fixed sliding window of len(s1)
+        # 2. Two Count arrays size 26 for s1 and window
+        # 3. Track chars arrays between arrays that match with count
+        # 4. Window slides:
+        #    Add new char and update matches
+        #    Remove old char and updates matches
+        # 5. If matches == 26, permutation s1 exists in window and s2
+        # Results: validate if permutation of s1 exists in s2
 
         # s1 len > s2 len: permutation not possible
         len_s1, len_s2 = len(s1), len(s2)
@@ -764,8 +769,8 @@ a permutation within string 2.
                 matches -= 1
             left += 1
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: time complexity 
+        # overall: space complexity 
         return matches == 26
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

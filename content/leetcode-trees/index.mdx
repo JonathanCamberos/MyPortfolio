@@ -12,8 +12,13 @@ tags:
 
 ## Intro
 
+### What is a Tree
+
 Trees are hierachical data structures representing relationships
 between entities, often in a parent-child format.
+
+### Properties of a Tree
+
 Trees are a special type of graph, characters by:
 
 1. Nodes: The entities (ex: values, objects)
@@ -28,12 +33,12 @@ Trees are a special type of graph, characters by:
 
 6. Depth: The number of edges from the root to a specific node
 
-7. Cycles: Trees do not contain cycles
+7. No Cycles: Trees do not contain cycles
 
-8. Paths: Trees have exactly one path between any two nodes
+8. Single Paths: Trees have exactly one path between any two nodes
 
 Tree:
-```
+```python
       1
      / \
     2   3
@@ -41,20 +46,249 @@ Tree:
       4   5
 ```
 
-Parent Array:
-```
-Index (Node):   1   2   3   4   5
-Parent:        N/A  1   1   3   3
-```
-
 ### Tree Representations
 
-Please see [graph representations](/Notesleetcode-graphs#graph-representations)
+Trees can be represented in multiple formats:
 
+1. Adjacency Matrix: Used for general trees or graphs
+
+2. Parent Array: Store each child -> parent, in an array
+
+3. Linked Note Structure: Common in Binary Trees (TreeNode with left and right)
+
+For full notes on representations:
+please see [graph representations](/Notesleetcode-graphs#graph-representations)
+
+### Tree Math
+Height of a perfect binary tree with n nodes: log(n+1)-1
+
+Nodes in perfect binary tree of height h: 2^(h+1) -1
+
+Max nodes at level l: 2^l
+
+Edges = Nodes - 1
+
+### Tree Traversal Overview
+Given a Tree, and the task to traverse it,
+there a two fundamental search strategies that all others stem from. 
+
+### Depth First Search Traversal (DFS)
+Traversal Order: 
+Goes as deep as possible before backtracking
+(either recursively via function calls or iteratively via stack)
+
+Can process in pre, in, or post order:
+
+Pre: Root -> Left -> Right
+
+In: Left -> Root -> Right
+
+Post: Left -> Right -> Root
+
+### Breadth First Search Traversal (BFS)
+Traversal Order: 
+Explores nodes level by level
+
+Will queue nodes for next level, count how many exist, and process
+all nodes for that level by popping < count.
+
+### Specialized Traversals
+- Morris Traversal:
+In order traversal with O(1) extra space by temporarily modifying tree pointers.
+
+- Threaded Binary Tree:
+Uses null child pointers to store predecessor/successor pointers to enable O(1) traversal.
+
+### Tree Search Rule of Thumb:
+Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
+
+Level Order Traversal -> BFS (iterative)
+
+### Tree Application: DFS Pre order Traversal
+Pre order traversal visits nodes in Root -> Left -> Right order.
+Commonly used when we need to process a node before its children.
+
+Ex: Serialize a Binary Tree (Recursive + Iterative)
+```python
+    # Recursive Preorder
+    def serializeRecursive(root: Optional[TreeNode]) -> str:
+        def dfs(node):
+            if not node:
+                vals.append("N")
+                return
+            vals.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
+        
+        vals = []
+        dfs(root)
+        return ",".join(vals)
+
+    # Iterative Preorder (stack)
+    def serializeIterative(root: Optional[TreeNode]) -> str:
+        if not root:
+            return "N"
+
+        stack = [root]
+        vals = []
+        while stack:
+            node = stack.pop()
+            if node:
+                vals.append(str(node.val))
+                stack.append(node.right)
+                stack.append(node.left)
+            else:
+                vals.append("N")
+        return ",".join(vals)
+
+    # Example Tree:
+    #       1
+    #      / \
+    #     2   3
+    #        / \
+    #       4   5
+    # Output: "1,2,N,N,3,4,N,N,5,N,N"
+```
+
+### Tree Application: DFS In order Traversal
+In order nodes in Left -> Root -> Right order.
+Useful for processing sorted trees from a Binary Search Tree
+
+Ex: Convert BST to Sorted List (Recursive) & Validate BST (Iterative)
+```python 
+    # Recursive Inorder
+    def bstToSortedList(root: Optional[TreeNode]) -> List[int]:
+        res = []
+        def inorder(node):
+            if not node:
+                return
+            inorder(node.left)
+            res.append(node.val)
+            inorder(node.right)
+        inorder(root)
+        return res
+
+    # Iterative Inorder
+    def isValidBST(root: Optional[TreeNode]) -> bool:
+        stack = []
+        prev_val = float("-inf")
+        curr = root
+        while stack or curr:
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            curr = stack.pop()
+            if curr.val <= prev_val:
+                return False
+            prev_val = curr.val
+            curr = curr.right
+        return True
+
+    # Example BST:
+    #       2
+    #      / \
+    #     1   3
+    # bstToSortedList -> [1, 2, 3]
+    # isValidBST -> True
+```
+
+### Tree Application: DFS Post order Traversal
+Post order visits nodes in Left → Right → Root order.
+ Useful for cleanup or evaluation problems (process children before parent).
+
+Ex: Evaluate Expression Tree (Recursive) & Delete Tree (Iterative)
+```python
+# Recursive Postorder
+    def evaluateTree(root: Optional[TreeNode]) -> int:
+        if not root.left and not root.right:
+            return int(root.val)
+        left_val = evaluateTree(root.left)
+        right_val = evaluateTree(root.right)
+        if root.val == "+":
+            return left_val + right_val
+        elif root.val == "-":
+            return left_val - right_val
+        elif root.val == "*":
+            return left_val * right_val
+        elif root.val == "/":
+            return int(left_val / right_val)
+
+    # Iterative Postorder
+    def deleteTree(root: Optional[TreeNode]) -> None:
+        if not root:
+            return
+        stack, output = [root], []
+        while stack:
+            node = stack.pop()
+            output.append(node)
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+        while output:
+            node = output.pop()
+            del node
+
+    # Example:
+    # Expression Tree:
+    #       "+"
+    #      /   \
+    #     3     "*"
+    #          /   \
+    #         2     4
+    # evaluateTree -> 11
+    #
+    # DeleteTree on:
+    #       1
+    #      / \
+    #     2   3
+    # Deletion order: 2, 3, 1
+```
+
+### Tree Application: BFS Iterative
+BFS visits nodes level by level, processing all nodes at a given depth 
+before moving on to the next.
+Used for level order problems and shortest path calculations in unweighted graphs,
+as well as scenarios requiring nodes in order of distance from the root.
+
+Ex: Level order traversal of Binary Tree
+```python
+    def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+
+        result = []
+        queue = deque([root])
+
+        while queue:
+            level_size = len(queue)
+            level_nodes = []
+
+            for _ in range(level_size):
+                node = queue.popleft()
+                level_nodes.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+
+            result.append(level_nodes)
+
+        return result
+
+    # Example:
+    # Input Tree:
+    #       1
+    #      / \
+    #     2   3
+    #        / \
+    #       4   5
+    # Output: [[1], [2, 3], [4, 5]]
+```
 
 
 ### Tree Application: MinHeap
-
 Use a MinHeap, a type of binary tree, to maintain the smallest or
 highest-priority elements efficiently. 
 
@@ -83,3 +317,235 @@ Ex: Find the Top K Frequent Elements in a List
     # Input: nums = [1, 1, 1, 2, 2, 3], k = 2
     # Output: [1, 2]
 ```
+
+
+## 226. Invert Binary Tree ::1:: - Easy
+
+Topics:  Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+### Intro
+> Given the root of a binary tree, invert the tree, and return its root.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [4,2,7,1,3,6,9] | [4,7,2,9,6,3,1] |
+| root = [2,1,3] | [2,3,1] |
+| root = [] | [] |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [0, 100]
+
+-100 &le; Node.val &le; 100
+
+### Abstraction
+Invert the binary tree.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1:  - Sliding Window/Variable Size Window
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # Variable Size Sliding Window => [left, right]
+        # 1. left points to day we buy (lowest price so far)
+        # 2. right scans forward best profit day (highest sell price -> highest profit)
+        # 3. Get profit:
+        #    if prices[left] < prices[right]: profit possible, update max_profit
+        #    if prices[left] > prices[right]: lower buy found, update left
+        # Result: finds lowest buy and highest profit
+
+        # Lowest buy price day index, curr sell price day index
+        left, right = 0, 1
+
+        # max profit so far
+        max_profit = 0
+
+        # time complexity: iterate over list of n days
+        while right < len(prices):
+
+            # curr day higher than min
+            if prices[left] < prices[right]:
+                
+                # calculate possible profit, update max_profit
+                profit = prices[right] - prices[left]
+                max_profit = max(max_profit, profit)
+
+            # curr day lower than min
+            else:
+                left = right
+
+            # iterate curr day
+            right += 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return max_profit
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iteration | O(n) | O(1) | Iterate over array of n prices O(n) | No additional memory allocation for iteration O(1) |
+| Profit check | O(1) | O(1) | Profit calculation in constant O(1) | No additional memory allocation for calculation O(1) |
+| Overall | O(n) | O(1) | Iteration over array dominates O(n) | No additional memory allocation O(1) |
+
+
+### Solution 2: Implicit Sliding Window Tracking Min Price and Max Profit - Sliding Window/Variable Size Window
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+        
+        # Note:
+        # Variable Size Sliding Window => [left, right]
+        # 1. left points to day we buy (lowest price so far)
+        # 2. right scans forward for best profit day (highest sell price -> highest profit)
+        # 3. Get profit:
+        #    if prices[left] < prices[right]: profit possible, update max_profit
+        #    if prices[left] > prices[right]: lower buy found, update left
+        # Result: finds lowest buy and highest profit
+        
+        # Lowest Buy Day so far (+inf)
+        left = float('inf')
+        
+        # max profit so far
+        max_profit = 0
+
+        # time complexity: iterate over list of n prices O(n)
+        for right in prices:
+
+            # profit possible
+            if left < right:
+                profit = right - left
+                max_profit = max(max_profit, profit)
+
+            # new min buy day found
+            else:
+                left = right
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return max_profit
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iteration | O(n) | O(1) | Iteration over list of n prices O(n) | No additional memory allocation for iteration O(1) |
+| Profit Update | O(1) | O(1) | Calculation or update in constant O(1) | No additional memory allocation for calculation or update O(1) |
+| Overall | O(n) | O(1) | Iteration over list dominates, leading to O(n) | No additional memory allocation, leading to O(1) |
+
+
+### Solution 3: Table Dynamic Programming - Sliding Window/Variable Size Window
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # 1. DP[i][0] = highest profit so far
+        #    DP[i][1] = lowest buy price so far
+        # 2. At each day update [0] and [1]:
+        #    [0] = max(highest profit so far, profit from using lowest buy price so far against today sell price)
+        #    [1] = min(lowest buy price so far, todays buy price)
+    
+        # Empty check
+        if not prices:
+            return 0
+
+        n = len(prices)
+
+        # 2D array of n rows with 2 columns
+        # [i][0] -> max profit at day i
+        # [i][1] -> min buying price at day i
+        dp = [[0]*2 for _ in range(n)]
+
+        # set up dynamic programming table first iteration:
+
+        # min price up to day 0
+        dp[0][0] = -prices[0]
+        # max profit up to day 0
+        dp[0][1] = 0
+
+
+        # time complexity: iterate across n days for prices O(n)
+        for i in range(1, n):
+
+            # update min price
+            dp[i][0] = max(dp[i-1][0], -prices[i])            
+            # update max profit
+            dp[i][1] = max(dp[i-1][1], dp[i-1][0] + prices[i])
+
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return dp[-1][1]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 4: State Compression Dynamic Programming - Sliding Window/Variable Size Window
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # 1.  Compress DP O(n) table to O(1)
+        #     min_price = min price up to day i
+        #     max_profit = max profit up to day i
+        # # 2. At each day update min and max:
+        #     min_price = min(lowest price so far vs todays buy price)
+        #     max_profit = max(highest profit so far vs profit from todays sell price - lowest buy price)
+        # Result: Max profit at day n
+
+        n = len(prices)
+
+        # set up compressed dynamic programming table first iteration:        
+        # [i][0] -> min buying price up to day i
+        # [i][1] -> max profit up to day i
+
+        # min price up to day 0
+        min_price = -prices[0]
+        # max profit up to day 0
+        max_profit = 0
+
+
+        # time complexity: iterate over n day prices O(n)
+        for i in range(1, n):
+            
+            # update compressed dp table, (for up to day i)
+          
+            # update min price
+            min_price = max(min_price, -prices[i])
+            # update max profit
+            max_profit = max(max_profit, min_price + prices[i])  
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return max_profit
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
