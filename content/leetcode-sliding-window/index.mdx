@@ -297,10 +297,11 @@ Given an array of stock values, find the highest profit possible.
             
             # update compressed dp table, (for up to day i)
 
+            # update max profit
+            max_profit = max(max_profit, min_price + prices[i])            
             # update min price
             min_price = max(min_price, -prices[i])
-            # update max profit
-            max_profit = max(max_profit, min_price + prices[i])
+
 
         # overall: time complexity O(n)
         # overall: space complexity O(1)
@@ -359,7 +360,7 @@ Given a string, find longest substring without duplicates
 ```python
 ```
 
-### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+### Solution 1: Enumerate Char Most Recent Index Within Window Validation Two Pointer Sliding Window - Sliding Window/Variable Size Window
 ```python
     def lengthOfLongestSubstring(self, s: str) -> int:
 
@@ -381,20 +382,22 @@ Given a string, find longest substring without duplicates
         max_len = 0
 
         # time complexity: iterate over string n length O(n)
-        for right, char in enumerate(s):
+        for right, new_char in enumerate(s):
 
-            # if char already found, and previous char already
-            # within bounds of sliding window -> old duplicate found
-            if char in char_MRI and char_MRI[char] >= left:
+            # check if char already found and within curr window
+            if new_char in char_MRI and left <= char_MRI[new_char]:
                 
-                # move left index after oldest duplicate
-                start = char_MRI[char] + 1
+                # duplicate exists, move left -> oldest index + 1
+                left = char_MRI[new_char] + 1
             
             # update most recent index for curr char
-            char_MRI[char] = end
+            char_MRI[new_char] = right
+
+            # get new length
+            new_length = right - left + 1
 
             # update string length
-            max_len = max(max_len, end - start + 1)
+            max_len = max(max_len, new_length)
         
         # overall: time complexity O(n)
         # overall: space complexity O(1)
@@ -406,6 +409,65 @@ Given a string, find longest substring without duplicates
 | Hashmap operations | O(1) | O(1) | Lookup and insertion in constant O(1) | Constant length for 128-258 ascii characters O(1) |
 | Window shifting | O(n) | O(1) | Iteration over string visited at most once by start pointer O(n) | No additional memory allocation for start pointer iteration O(1) |
 | Overall | O(n) | O(1) | Iteration over string for start and end pointer dominates, leading to O(n) | Constant space for hashmap char indexes dominates, leading to O(n) |
+
+### Solution 2: Explicit Loop Char Most Recent Index Within Window Validation Two Pointer Sliding Window - Sliding Window/Variable Size Window
+```python
+    def lengthOfLongestSubstring(self, s: str) -> int:
+
+        # Note:
+        # Variable Sliding Window => [left, right]
+        # Hashmap => char -> most recent index
+        # 1. move right pointer forward while no duplicates, 
+        # 2. If duplicate found, move left to index after oldest duplicate
+        # 3. Update max length after processing each character.
+        # Result: max length without repeating characters
+
+        # char -> most recent index
+        char_MRI = {} 
+
+        # Variable Sliding window: [left, right]
+        left = 0
+
+        # max length
+        max_len = 0
+
+        # total prices
+        n = len(s)
+
+        # time complexity: iterate over string n length O(n)
+        for right in range(n):
+
+            new_char = s[right]
+
+            # check if new_char already found
+            if new_char in char_MRI:
+
+                # check if new_char within current window
+                if left <= char_MRI[new_char]:
+                
+                    # duplicate found,
+                    # move left: oldest index + 1
+                    left = char_MRI[new_char] + 1
+            
+            # update most recent index for curr new_char
+            char_MRI[new_char] = right
+            new_length = right - left + 1
+
+            # update string length
+            max_len = max(max_len, new_length)
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return max_len
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iteration | O(n) | O(1) | Iteration over string visited once by end pointer O(n) | No additional memory allocation for end pointer iteration O(1) |
+| Hashmap operations | O(1) | O(1) | Lookup and insertion in constant O(1) | Constant length for 128-258 ascii characters O(1) |
+| Window shifting | O(n) | O(1) | Iteration over string visited at most once by start pointer O(n) | No additional memory allocation for start pointer iteration O(1) |
+| Overall | O(n) | O(1) | Iteration over string for start and end pointer dominates, leading to O(n) | Constant space for hashmap char indexes dominates, leading to O(n) |
+
+
 
 
 ## 424. Longest Repeating Character Replacement ::1:: - Medium
