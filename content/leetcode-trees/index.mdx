@@ -171,7 +171,7 @@ Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 
 Level Order Traversal -> BFS (iterative) queue based
 
-### Tree Application: DFS Pre order Traversal
+### Tree Application: DFS Pre Order Traversal
 Pre order traversal visits nodes in Root -> Left -> Right order.
 Commonly used when we need to process a node before its children.
 
@@ -217,7 +217,7 @@ Ex: Serialize a Binary Tree (Recursive + Iterative)
     # Output: "1,2,N,N,3,4,N,N,5,N,N"
 ```
 
-### Tree Application: DFS In order Traversal
+### Tree Application: DFS In Order Traversal
 In order nodes in Left -> Root -> Right order.
 Useful for processing sorted trees from a Binary Search Tree
 
@@ -259,7 +259,7 @@ Ex: Convert BST to Sorted List (Recursive) & Validate BST (Iterative)
     # isValidBST -> True
 ```
 
-### Tree Application: DFS Post order Traversal
+### Tree Application: DFS Post Order Traversal
 Post order visits nodes in Left → Right → Root order.
  Useful for cleanup or evaluation problems (process children before parent).
 
@@ -475,7 +475,7 @@ Ex: Find the Top K Frequent Elements in a List
 ```
 
 
-## 226. Invert Binary Tree ::2:: - Easy
+## 226. Invert Binary Tree ::4:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
@@ -526,7 +526,7 @@ Invert the binary tree.
 ```python
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
-        # 1. DFS recursive approach inverts subtrees from bottom up
+        # Idea: DFS recursive inverts subtrees from bottom up
         # 2. Base case: return None if node is null
         # 3. Swap left and right children at each node
         # 4. Recurse into left and right children
@@ -555,42 +555,100 @@ Invert the binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-
-### Solution 2: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 2: DFS Recursive - Tree/DFS In Order Traversal
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
-        # 1. BFS iterative approach inverts nodes level by level
-        # 2. Queue stores nodes to process
-        # 3. For each node:
-        #    - Swap left and right children
-        #    - Add non-null children to queue
-        # 4. Continues until all levels processed
+        # Idea: DFS recursive approach using in order traversal
+        # 1. Traverse original left subtree first
+        # 2. Swap left and right children at current node
+        # 3. Traverse the new left subtree (originally the right)
+        # Result: Tree inverted in place using in order order
+        
+        # Base case:
+        if not root:
+            return None
+        
+        # Traverse original left subtree
+        self.invertTree(root.left)
+        
+        # Swap children
+        root.left, root.right = root.right, root.left
+        
+        # Traverse new left subtree (was originally right)
+        self.invertTree(root.left)
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(h), balanced tree O(log n), skewed tree O(n)
+        return root
+```
+
+
+### Solution 3: DFS Recursive - Tree/DFS Post Order Traversal
+```python
+    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # Note:
+        # Idea: DFS recursive approach inverts subtrees from bottom up (postorder)
+        # 1. Base case: return None if node is null
+        # 2. Recursively invert left subtree
+        # 3. Recursively invert right subtree
+        # 4. Swap left and right children of current node
+        # 5. Return inverted root
+        # Result: Original tree has been inverted
+
+        if not root:
+            return None
+
+        # Recursively invert left and right subtrees first (bottom-up)
+        left_inverted = invertTree(root.left)
+        right_inverted = invertTree(root.right)
+
+        # Swap inverted subtrees
+        root.left = right_inverted
+        root.right = left_inverted
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(h), O(log n) for balanced tree
+        return root
+```
+
+
+### Solution 4: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
+```python
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # Note:
+        # Idea: BFS iterative approach inverts nodes level by level
+        # 1. Queue stores nodes to process
+        # 2. For curr root pop() from queue:
+        #    Swap left and right children
+        #    Add non None children to queue
+        # 3. Continue while queue non empty
         
         # Empty tree check
         if not root:
             return None
         
-        # queue to support BFS
+        # Queue to support BFS
         queue = deque([root])
         
         # time complexity: iterate over tree, level by level O(n)
         while queue:
 
-            # grab curr root
-            node = queue.popleft()
+            # grab curr root, oldest TreeNode, First In First Out
+            currRoot = queue.popleft()
             
             # Swap left and right children
-            node.left, node.right = node.right, node.left
+            currRoot.left, currRoot.right = currRoot.right, currRoot.left
             
             # iterate over tree:
-            # add curr root left and right children to queue,
-            # curr root is no longer in the queue since we popped() already
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
+            # Add non None children to queue
+            if currRoot.left:
+                queue.append(currRoot.left)
+            if currRoot.right:
+                queue.append(currRoot.right)
         
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return root
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -665,6 +723,8 @@ Find the max depth of a binary tree.
         left_depth = self.maxDepth(root.left)
         right_depth = self.maxDepth(root.right)
         
+        # overall: time complexity
+        # overall: space complexity
         return 1 + max(left_depth, right_depth)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -701,6 +761,8 @@ Find the max depth of a binary tree.
                     queue.append(node.right)
             depth += 1
         
+        # overall: time complexity
+        # overall: space complexity
         return depth
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

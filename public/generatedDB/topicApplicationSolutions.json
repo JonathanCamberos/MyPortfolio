@@ -1130,25 +1130,67 @@
     ]
   },
   "tree": {
-    "modification": [
+    "dfs-pre-order-traversal": [
       {
         "number": 1,
+        "name": "DFS Recursive",
+        "type": "tree",
+        "application": "dfs-pre-order-traversal",
+        "code": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. DFS recursive approach inverts subtrees from bottom up\n        # 2. Base case: return None if node is null\n        # 3. Swap left and right children at each node\n        # 4. Recurse into left and right children\n        # 5. Returns inverted root\n        # Result: Original tree has been inverted\n        \n        # Base case:\n        # empty tree -> curr at leaf -> do nothing\n        if not root:\n            return None\n        \n        # Swap left and right children\n        root.left, root.right = root.right, root.left\n        \n        # Recursive calls to invert the left and right subtrees\n        self.invertTree(root.left)\n        self.invertTree(root.right)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(h), O(log n) for balanced tree\n        return root",
+        "questionNumber": 226,
+        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive---treedfs-pre-order-traversal",
+        "blog": "LeetCode: Trees"
+      },
+      {
+        "number": 1,
+        "name": "DFS Recursive (Pre order)",
+        "type": "tree",
+        "application": "dfs-pre-order-traversal",
+        "code": "def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. DFS Pre order: Compare current node values, then recurse on children\n        # 2. Base cases:\n        #    - If both nodes are None => trees match at this branch\n        #    - If one node is None or values mismatch => trees differ\n        # 3. Recurse left and right; both must match\n        \n        if not p and not q:\n            return True\n        if not p or not q or p.val != q.val:\n            return False\n        \n        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)",
+        "questionNumber": 100,
+        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive-pre-order---treedfs-pre-order-traversal",
+        "blog": "LeetCode: Trees"
+      },
+      {
+        "number": 1,
+        "name": "DFS Recursive (Pre order Traversal)",
+        "type": "tree",
+        "application": "dfs-pre-order-traversal",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. DFS Pre order traversal of `root`\n        # 2. At each node in `root`:\n        #    - Check if subtree matches starting here using helper isSameTree\n        #    - Recurse to left and right\n        # 3. Early exit if a match is found\n\n        def isSameTree(s, t):\n            if not s and not t:\n                return True\n            if not s or not t or s.val != t.val:\n                return False\n            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)\n        \n        if not subRoot:\n            return True\n        if not root:\n            return False\n        \n        if isSameTree(root, subRoot):\n            return True\n        \n        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)",
+        "questionNumber": 572,
+        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive-pre-order-traversal---treedfs-pre-order-traversal",
+        "blog": "LeetCode: Trees"
+      }
+    ],
+    "bfs-iterative-no-explicit-full-level-processing": [
+      {
+        "number": 2,
         "name": "BFS Iterative",
         "type": "tree",
-        "application": "modification",
-        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. BFS iterative approach inverts nodes level by level\n        # 2. Queue stores nodes to process\n        # 3. For each node:\n        #    - Swap left and right children\n        #    - Add non-null children to queue\n        # 4. Continues until all levels processed\n        \n        if not root:\n            return None\n        \n        queue = deque([root])\n        \n        while queue:\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # Add children to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root",
+        "application": "bfs-iterative-no-explicit-full-level-processing",
+        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. BFS iterative approach inverts nodes level by level\n        # 2. Queue stores nodes to process\n        # 3. For each node:\n        #    - Swap left and right children\n        #    - Add non-null children to queue\n        # 4. Continues until all levels processed\n        \n        # Empty tree check\n        if not root:\n            return None\n        \n        # queue to support BFS\n        queue = deque([root])\n        \n        # time complexity: iterate over tree, level by level O(n)\n        while queue:\n\n            # grab curr root\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # iterate over tree:\n            # add curr root left and right children to queue,\n            # curr root is no longer in the queue since we popped() already\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root",
         "questionNumber": 226,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-bfs-iterative---treemodification",
+        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-iterative-no-explicit-full-level-processing",
         "blog": "LeetCode: Trees"
       },
       {
         "number": 2,
-        "name": "Implicit Sliding Window Tracking Min Price and Max Profit",
+        "name": "BFS Iterative (Queue)",
         "type": "tree",
-        "application": "modification",
-        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. BFS iterative approach inverts nodes level by level\n        # 2. Queue stores nodes to process\n        # 3. For each node:\n        #    - Swap left and right children\n        #    - Add non-null children to queue\n        # 4. Continues until all levels processed\n        \n        if not root:\n            return None\n        \n        queue = deque([root])\n        \n        while queue:\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # Add children to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root",
-        "questionNumber": 226,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-implicit-sliding-window-tracking-min-price-and-max-profit---treemodification",
+        "application": "bfs-iterative-no-explicit-full-level-processing",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. BFS level order traversal of `root`\n        # 2. For each node:\n        #    - If value matches subRoot root, run isSameTree\n        # 3. Uses queue to iterate nodes iteratively\n\n        def isSameTree(s, t):\n            if not s and not t:\n                return True\n            if not s or not t or s.val != t.val:\n                return False\n            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)\n\n        if not subRoot:\n            return True\n        if not root:\n            return False\n        \n        queue = deque([root])\n        while queue:\n            node = queue.popleft()\n            if node.val == subRoot.val and isSameTree(node, subRoot):\n                return True\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return False",
+        "questionNumber": 572,
+        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative-queue---treebfs-iterative-no-explicit-full-level-processing",
+        "blog": "LeetCode: Trees"
+      },
+      {
+        "number": 3,
+        "name": "DFS + Serialization String Matching",
+        "type": "tree",
+        "application": "bfs-iterative-no-explicit-full-level-processing",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. Use DFS preorder traversal to serialize both trees\n        # 2. Each value is wrapped with a leading comma to prevent accidental partial matches\n        #    (e.g., \"2\" in \"12\" would match incorrectly without boundaries)\n        # 3. Compare serialized subRoot string as substring of root serialization\n        # 4. If subRoot serialization is found in root serialization, subRoot is a subtree\n\n        def serialize(node):\n            if not node:\n                return \",N\"  # \"N\" represents None\n            return f\",{node.val}\" + serialize(node.left) + serialize(node.right)\n\n        return serialize(subRoot) in serialize(root)",
+        "questionNumber": 572,
+        "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-serialization-string-matching---treebfs-iterative-no-explicit-full-level-processing",
         "blog": "LeetCode: Trees"
       }
     ],
@@ -1164,35 +1206,15 @@
         "blog": "LeetCode: Trees"
       }
     ],
-    "bfs-iterative-queue-based": [
+    "bfs-iterative-full-level-processing": [
       {
         "number": 2,
         "name": "BFS Iterative",
         "type": "tree",
-        "application": "bfs-iterative-queue-based",
+        "application": "bfs-iterative-full-level-processing",
         "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. BFS iterative approach calculates depth level-by-level\n        # 2. Queue stores nodes in current level\n        # 3. For each level:\n        #    - process all nodes at current depth\n        #    - add their children to queue\n        # 4. Increment depth after processing each level\n        \n        if not root:\n            return 0\n        \n        queue = deque([root])\n        depth = 0\n        \n        while queue:\n            level_size = len(queue)\n            for _ in range(level_size):\n                node = queue.popleft()\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            depth += 1\n        \n        return depth",
         "questionNumber": 104,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-iterative-queue-based",
-        "blog": "LeetCode: Trees"
-      },
-      {
-        "number": 2,
-        "name": "BFS Iterative (Queue)",
-        "type": "tree",
-        "application": "bfs-iterative-queue-based",
-        "code": "def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. BFS: Compare trees level-by-level\n        # 2. Use queue to store node pairs from p and q\n        # 3. For each pair:\n        #    - Both None => continue\n        #    - One None or value mismatch => return False\n        #    - Enqueue children in parallel\n        # Results: Early termination if mismatch found\n        \n        queue = deque([(p, q)])\n        \n        while queue:\n            node1, node2 = queue.popleft()\n            \n            if not node1 and not node2:\n                continue\n            if not node1 or not node2 or node1.val != node2.val:\n                return False\n            \n            queue.append((node1.left, node2.left))\n            queue.append((node1.right, node2.right))\n        \n        return True",
-        "questionNumber": 100,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative-queue---treebfs-iterative-queue-based",
-        "blog": "LeetCode: Trees"
-      },
-      {
-        "number": 2,
-        "name": "BFS Iterative (Queue)",
-        "type": "tree",
-        "application": "bfs-iterative-queue-based",
-        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. BFS level order traversal of `root`\n        # 2. For each node:\n        #    - If value matches subRoot root, run isSameTree\n        # 3. Uses queue to iterate nodes iteratively\n\n        def isSameTree(s, t):\n            if not s and not t:\n                return True\n            if not s or not t or s.val != t.val:\n                return False\n            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)\n\n        if not subRoot:\n            return True\n        if not root:\n            return False\n        \n        queue = deque([root])\n        while queue:\n            node = queue.popleft()\n            if node.val == subRoot.val and isSameTree(node, subRoot):\n                return True\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return False",
-        "questionNumber": 572,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative-queue---treebfs-iterative-queue-based",
+        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-iterative-full-level-processing",
         "blog": "LeetCode: Trees"
       }
     ],
@@ -1238,37 +1260,15 @@
         "blog": "LeetCode: Trees"
       }
     ],
-    "dfs-pre-order-traversal": [
+    "bfs-iterative-queue-based": [
       {
-        "number": 1,
-        "name": "DFS Recursive (Pre order)",
+        "number": 2,
+        "name": "BFS Iterative (Queue)",
         "type": "tree",
-        "application": "dfs-pre-order-traversal",
-        "code": "def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. DFS Pre order: Compare current node values, then recurse on children\n        # 2. Base cases:\n        #    - If both nodes are None => trees match at this branch\n        #    - If one node is None or values mismatch => trees differ\n        # 3. Recurse left and right; both must match\n        \n        if not p and not q:\n            return True\n        if not p or not q or p.val != q.val:\n            return False\n        \n        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)",
+        "application": "bfs-iterative-queue-based",
+        "code": "def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. BFS: Compare trees level-by-level\n        # 2. Use queue to store node pairs from p and q\n        # 3. For each pair:\n        #    - Both None => continue\n        #    - One None or value mismatch => return False\n        #    - Enqueue children in parallel\n        # Results: Early termination if mismatch found\n        \n        queue = deque([(p, q)])\n        \n        while queue:\n            node1, node2 = queue.popleft()\n            \n            if not node1 and not node2:\n                continue\n            if not node1 or not node2 or node1.val != node2.val:\n                return False\n            \n            queue.append((node1.left, node2.left))\n            queue.append((node1.right, node2.right))\n        \n        return True",
         "questionNumber": 100,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive-pre-order---treedfs-pre-order-traversal",
-        "blog": "LeetCode: Trees"
-      },
-      {
-        "number": 1,
-        "name": "DFS Recursive (Pre order Traversal)",
-        "type": "tree",
-        "application": "dfs-pre-order-traversal",
-        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. DFS Pre order traversal of `root`\n        # 2. At each node in `root`:\n        #    - Check if subtree matches starting here using helper isSameTree\n        #    - Recurse to left and right\n        # 3. Early exit if a match is found\n\n        def isSameTree(s, t):\n            if not s and not t:\n                return True\n            if not s or not t or s.val != t.val:\n                return False\n            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)\n        \n        if not subRoot:\n            return True\n        if not root:\n            return False\n        \n        if isSameTree(root, subRoot):\n            return True\n        \n        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)",
-        "questionNumber": 572,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive-pre-order-traversal---treedfs-pre-order-traversal",
-        "blog": "LeetCode: Trees"
-      }
-    ],
-    "custom-application-tree-serialization": [
-      {
-        "number": 3,
-        "name": "DFS + Serialization (String Matching)",
-        "type": "tree",
-        "application": "custom-application-tree-serialization",
-        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # 1. Use DFS preorder traversal to serialize both trees\n        # 2. Each value is wrapped with a leading comma to prevent accidental partial matches\n        #    (e.g., \"2\" in \"12\" would match incorrectly without boundaries)\n        # 3. Compare serialized subRoot string as substring of root serialization\n        # 4. If subRoot serialization is found in root serialization, subRoot is a subtree\n\n        def serialize(node):\n            if not node:\n                return \",N\"  # \"N\" represents None\n            return f\",{node.val}\" + serialize(node.left) + serialize(node.right)\n\n        return serialize(subRoot) in serialize(root)",
-        "questionNumber": 572,
-        "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-serialization-string-matching---treecustom-application-tree-serialization",
+        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative-queue---treebfs-iterative-queue-based",
         "blog": "LeetCode: Trees"
       }
     ]
