@@ -437,7 +437,7 @@ Ex: Find the Top K Frequent Elements in a List
 
 ## 226. Invert Binary Tree ::2:: - Easy
 
-Topics:  Tree, Depth-First Search, Breadth-First Search, Binary Tree
+Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
 ### Intro
 > Given the root of a binary tree, invert the tree, and return its root.
@@ -554,3 +554,622 @@ Invert the binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
+
+
+## 104. Maximum Depth of Binary Tree ::2:: - Easy
+
+Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
+
+### Intro
+> A binary tree's maximum depth is the number of nodes along 
+> the longest path from the root node down to the farthest leaf node.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [3,9,20,null,null,15,7] | 3 |
+| root = [1,null,2] | 2 |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [0, 10<sup>4</sup>]
+
+-100 &le; Node.val &le; 100
+
+### Abstraction
+Find the max depth of a binary tree.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Recursive - Tree/DFA Pre order Traversal
+```python
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # 1. DFS recursive approach calculates depth from leaf upward
+        # 2. Base case: if node is None, depth = 0
+        # 3. Recursive case:
+        #    - depth_left = depth of left subtree
+        #    - depth_right = depth of right subtree
+        #    - depth = 1 + max(depth_left, depth_right)
+        # 4. Returns depth of root as final result
+        
+        if not root:
+            return 0
+        
+        left_depth = self.maxDepth(root.left)
+        right_depth = self.maxDepth(root.right)
+        
+        return 1 + max(left_depth, right_depth)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: BFS Iterative - Tree/BFS Iterative Queue Based
+```python
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # 1. BFS iterative approach calculates depth level-by-level
+        # 2. Queue stores nodes in current level
+        # 3. For each level:
+        #    - process all nodes at current depth
+        #    - add their children to queue
+        # 4. Increment depth after processing each level
+        
+        if not root:
+            return 0
+        
+        queue = deque([root])
+        depth = 0
+        
+        while queue:
+            level_size = len(queue)
+            for _ in range(level_size):
+                node = queue.popleft()
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            depth += 1
+        
+        return depth
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+
+## 543. Diameter of Binary Tree ::2:: - Easy
+
+Topics:  Tree, Depth First Search, Binary Tree
+
+### Intro
+> Given the root of a binary tree, return the length of the diameter of the tree.
+> The diameter of a binary tree is the length of the longest path between any 
+> two nodes in a tree. This path may or may not pass through the root.
+> The length of a path between two nodes is represented by the number of
+> edges between them. 
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [1,2,3,4,5] | 3 |
+| root = [1,2] | 1 |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [0, 10<sup>4</sup>]
+
+-100 &le; Node.val &le; 100
+
+### Abstraction
+Find the diameter of a binary tree.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Recursive (Post order) - Tree/DFS Post order Traversal
+```python
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # 1. Post order DFS: compute height of subtrees bottom-up
+        # 2. At each node:
+        #    - Compute left height
+        #    - Compute right height
+        #    - Update diameter as max(left_height + right_height)
+        # 3. Return diameter after full traversal
+        # Results: longest path in terms of edges between any two nodes
+
+        self.diameter = 0
+        
+        def dfs(node):
+            if not node:
+                return 0
+            
+            # Heights of left and right subtrees
+            left_height = dfs(node.left)
+            right_height = dfs(node.right)
+            
+            # Update diameter at this node
+            self.diameter = max(self.diameter, left_height + right_height)
+            
+            # Height of subtree rooted at this node
+            return 1 + max(left_height, right_height)
+        
+        dfs(root)
+        return self.diameter
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Recursive (Optimized Return Tuple) - Tree/DFS Post order Traversal
+```python
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # 1. Combine diameter & height calculation in single DFS call
+        # 2. Each call returns tuple: (height, diameter)
+        # 3. Avoid global variable by computing max in recursion
+        # Results: same O(n) but cleaner function interface
+        
+        def dfs(node):
+            if not node:
+                return 0, 0  # (height, diameter)
+            
+            left_height, left_diam = dfs(node.left)
+            right_height, right_diam = dfs(node.right)
+            
+            # Diameter at this node
+            curr_diam = left_height + right_height
+            
+            # Best diameter so far
+            max_diam = max(curr_diam, left_diam, right_diam)
+            
+            # Height of subtree
+            return 1 + max(left_height, right_height), max_diam
+        
+        return dfs(root)[1]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 110. Balanced Binary Tree ::2:: - Easy
+
+Topics:  Tree, Depth First Search, Binary Tree
+
+### Intro
+> Given a binary tree, determine if it is height-balanced. 
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [3,9,20,null,null,15,7] | true |
+| root = [1,2,2,3,3,null,null,4,4] | false |
+| root = [] | true |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [0, 5000]
+
+-10<sup>4</sup> &le; Node.val &le; 10<sup>4</sup>
+
+### Abstraction
+Determine if a binary tree is height balanced.
+A height-balanced binary tree is a binary tree in which the 
+depth of the two subtrees of every node never differs by more than one.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Recursive (Post order) - Tree/DFS Post order Traversal
+```python
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. Post order DFS computes height bottom-up
+        # 2. At each node:
+        #    - Compute left height
+        #    - Compute right height
+        #    - Check if balance condition holds: abs(left - right) <= 1
+        # 3. Use -1 as sentinel to propagate imbalance early
+        # Results: returns False immediately when imbalance is detected
+
+        def dfs(node):
+            if not node:
+                return 0  # height
+            
+            left_height = dfs(node.left)
+            if left_height == -1:
+                return -1  # imbalance detected
+            
+            right_height = dfs(node.right)
+            if right_height == -1:
+                return -1  # imbalance detected
+            
+            if abs(left_height - right_height) > 1:
+                return -1  # imbalance detected
+            
+            return 1 + max(left_height, right_height)
+        
+        return dfs(root) != -1
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Recursive (Post order with Tuple) - Tree/DFS Post order Traversal
+```python
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. Post order DFS returns tuple: (is_balanced, height)
+        # 2. Combines height + balance check without sentinel value
+        # 3. Each call checks:
+        #    - Left subtree balance
+        #    - Right subtree balance
+        #    - Current node balance
+        # Results: cleaner return, same complexity
+        
+        def dfs(node):
+            if not node:
+                return True, 0  # (is_balanced, height)
+            
+            left_bal, left_height = dfs(node.left)
+            if not left_bal:
+                return False, 0
+            
+            right_bal, right_height = dfs(node.right)
+            if not right_bal:
+                return False, 0
+            
+            balanced = abs(left_height - right_height) <= 1
+            return balanced, 1 + max(left_height, right_height)
+        
+        return dfs(root)[0]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 100. Same Tree ::2:: - Easy
+
+Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
+
+### Intro
+> Given the roots of two binary trees p and q, write a function to
+> check if they are the same or not.
+> Two binary trees are considered the same if they are
+> structurally identical, and the nodes have the same value.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| p = [1,2,3], q = [1,2,3] | true |
+| p = [1,2], q = [1,null,2] | false |
+| p = [1,2,1], q = [1,1,2] | false |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [0, 100]
+
+-10<sup>4</sup> &le; Node.val &le; 10<sup>4</sup>
+
+### Abstraction
+Determine if two different binary trees match.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Recursive (Pre order) - Tree/DFS Pre order Traversal
+```python
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. DFS Pre order: Compare current node values, then recurse on children
+        # 2. Base cases:
+        #    - If both nodes are None => trees match at this branch
+        #    - If one node is None or values mismatch => trees differ
+        # 3. Recurse left and right; both must match
+        
+        if not p and not q:
+            return True
+        if not p or not q or p.val != q.val:
+            return False
+        
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: BFS Iterative (Queue) - Tree/BFS Iterative Queue Based
+```python
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. BFS: Compare trees level-by-level
+        # 2. Use queue to store node pairs from p and q
+        # 3. For each pair:
+        #    - Both None => continue
+        #    - One None or value mismatch => return False
+        #    - Enqueue children in parallel
+        # Results: Early termination if mismatch found
+        
+        queue = deque([(p, q)])
+        
+        while queue:
+            node1, node2 = queue.popleft()
+            
+            if not node1 and not node2:
+                continue
+            if not node1 or not node2 or node1.val != node2.val:
+                return False
+            
+            queue.append((node1.left, node2.left))
+            queue.append((node1.right, node2.right))
+        
+        return True
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 572. Subtree of Another Tree ::3:: - Easy
+
+Topics:  Tree, Depth First Search, String Matching, Binary Tree, Hash Function
+
+### Intro
+> Given the roots of two binary trees root and subRoot, return true if 
+> there is a subtree of root with the same structure and node values of 
+> subRoot and false otherwise.
+> A subtree of a binary tree tree is a tree that consists of a node in 
+> tree and all of this node's descendants. The tree tree could also be
+> considered as a subtree of itself.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [3,4,5,1,2], subRoot = [4,1,2] | true |
+| root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2] | false |
+ 
+Constraints:
+
+The number of nodes in the root tree is in the range [1, 2000].
+
+The number of nodes in the subRoot tree is in the range [1, 1000].
+
+-10<sup>4</sup> &le; root.val &le; 10<sup>4</sup>
+
+-10<sup>4</sup> &le; subRoot.val &le; 10<sup>4</sup>
+
+
+### Abstraction
+Determine binary tree tree2 is a subtree of binary tree tree1.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: (iterative)
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Recursive (Pre order Traversal) - Tree/DFS Pre order Traversal
+```python
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. DFS Pre order traversal of `root`
+        # 2. At each node in `root`:
+        #    - Check if subtree matches starting here using helper isSameTree
+        #    - Recurse to left and right
+        # 3. Early exit if a match is found
+
+        def isSameTree(s, t):
+            if not s and not t:
+                return True
+            if not s or not t or s.val != t.val:
+                return False
+            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)
+        
+        if not subRoot:
+            return True
+        if not root:
+            return False
+        
+        if isSameTree(root, subRoot):
+            return True
+        
+        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: BFS Iterative (Queue) - Tree/BFS Iterative Queue Based
+```python
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. BFS level order traversal of `root`
+        # 2. For each node:
+        #    - If value matches subRoot root, run isSameTree
+        # 3. Uses queue to iterate nodes iteratively
+
+        def isSameTree(s, t):
+            if not s and not t:
+                return True
+            if not s or not t or s.val != t.val:
+                return False
+            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)
+
+        if not subRoot:
+            return True
+        if not root:
+            return False
+        
+        queue = deque([root])
+        while queue:
+            node = queue.popleft()
+            if node.val == subRoot.val and isSameTree(node, subRoot):
+                return True
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        
+        return False
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 3: DFS + Serialization (String Matching) - Tree/Custom Application: Tree Serialization
+```python
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        # Note:
+        # 1. Use DFS preorder traversal to serialize both trees
+        # 2. Each value is wrapped with a leading comma to prevent accidental partial matches
+        #    (e.g., "2" in "12" would match incorrectly without boundaries)
+        # 3. Compare serialized subRoot string as substring of root serialization
+        # 4. If subRoot serialization is found in root serialization, subRoot is a subtree
+
+        def serialize(node):
+            if not node:
+                return ",N"  # "N" represents None
+            return f",{node.val}" + serialize(node.left) + serialize(node.right)
+
+        return serialize(subRoot) in serialize(root)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
