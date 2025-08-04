@@ -172,43 +172,55 @@ Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 Level Order Traversal -> BFS (iterative) queue based
 
 ### Tree Application: DFS Pre Order Traversal
-Pre order traversal visits nodes in Root -> Left -> Right order.
-Commonly used when we need to process a node before its children.
+Traversal Order: Root -> Left -> Right
+Top Down: Root is processed immediately, then we move deeper.
+Used when a node's work must be done before processing its children.
 
-Ex: Serialize a Binary Tree (Recursive + Iterative)
+Ex: Serialize a Binary Tree Recursive and Iterative
 ```python
-    # Recursive Preorder
+    # Recursive Pre Order
     def serializeRecursive(root: Optional[TreeNode]) -> str:
         def dfs(node):
             if not node:
                 vals.append("N")
                 return
+            
+            # Process Root (top-down work)
             vals.append(str(node.val))
+            
+            # Process Left Subtree
             dfs(node.left)
+            
+            # Process Right Subtree
             dfs(node.right)
         
         vals = []
         dfs(root)
         return ",".join(vals)
 
-    # Iterative Preorder (stack)
+    # Iterative Pre Order (stack)
     def serializeIterative(root: Optional[TreeNode]) -> str:
         if not root:
             return "N"
 
         stack = [root]
         vals = []
+        
         while stack:
             node = stack.pop()
             if node:
+                # Process Root (top-down work)
                 vals.append(str(node.val))
+                
+                # Push Right then Left (stack pops left first)
                 stack.append(node.right)
                 stack.append(node.left)
             else:
                 vals.append("N")
+        
         return ",".join(vals)
 
-    # Example Tree:
+    # Tree:
     #       1
     #      / \
     #     2   3
@@ -218,37 +230,54 @@ Ex: Serialize a Binary Tree (Recursive + Iterative)
 ```
 
 ### Tree Application: DFS In Order Traversal
-In order nodes in Left -> Root -> Right order.
-Useful for processing sorted trees from a Binary Search Tree
+Traversal Order: Left -> Root -> Right
+Mid Point: Left is processed, then Root, followed by Right 
+Used when a node's work must be done after visiting the left subtree
+but before visiting the right subtree.
 
-Ex: Convert BST to Sorted List (Recursive) & Validate BST (Iterative)
+Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python 
     # Recursive Inorder
     def bstToSortedList(root: Optional[TreeNode]) -> List[int]:
         res = []
-        def inorder(node):
+    
+        def inOrder(node):
             if not node:
                 return
-            inorder(node.left)
+            
+            # Process Left Subtree
+            inOrder(node.left)
+            
+            # Process Root (midpoint work)
             res.append(node.val)
-            inorder(node.right)
-        inorder(root)
+            
+            # Process Right Subtree
+            inOrder(node.right)
+        
+        inOrder(root)
         return res
 
-    # Iterative Inorder
+    # Iterative In order
     def isValidBST(root: Optional[TreeNode]) -> bool:
         stack = []
         prev_val = float("-inf")
         curr = root
+        
         while stack or curr:
+            # Traverse Left Subtree
             while curr:
                 stack.append(curr)
                 curr = curr.left
+            
+            # Process Root (midpoint work)
             curr = stack.pop()
             if curr.val <= prev_val:
                 return False
             prev_val = curr.val
+            
+            # Traverse Right Subtree
             curr = curr.right
+        
         return True
 
     # Example BST:
@@ -260,17 +289,24 @@ Ex: Convert BST to Sorted List (Recursive) & Validate BST (Iterative)
 ```
 
 ### Tree Application: DFS Post Order Traversal
-Post order visits nodes in Left → Right → Root order.
- Useful for cleanup or evaluation problems (process children before parent).
+Traversal Order: Left -> Right -> Root
+Bottom Up: Left and Right children are processed, followed by Root
+Useful when a node's work depends on fully processed children. 
 
-Ex: Evaluate Expression Tree (Recursive) & Delete Tree (Iterative)
+Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```python
-# Recursive Postorder
+    # Recursive Post Order
     def evaluateTree(root: Optional[TreeNode]) -> int:
         if not root.left and not root.right:
             return int(root.val)
+
+        # Process Left Subtree
         left_val = evaluateTree(root.left)
+        
+        # Process Right Subtree
         right_val = evaluateTree(root.right)
+        
+        # Process Root (bottom-up work)
         if root.val == "+":
             return left_val + right_val
         elif root.val == "-":
@@ -280,18 +316,24 @@ Ex: Evaluate Expression Tree (Recursive) & Delete Tree (Iterative)
         elif root.val == "/":
             return int(left_val / right_val)
 
-    # Iterative Postorder
+    # Iterative Post Order
     def deleteTree(root: Optional[TreeNode]) -> None:
         if not root:
-            return
+        return
+    
         stack, output = [root], []
+        
         while stack:
             node = stack.pop()
             output.append(node)
+            
+            # Push children to process them before root
             if node.left:
                 stack.append(node.left)
             if node.right:
                 stack.append(node.right)
+        
+        # Process Root (bottom-up: delete after children)
         while output:
             node = output.pop()
             del node
@@ -527,10 +569,10 @@ Invert the binary tree.
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
         # Idea: DFS recursive inverts subtrees from bottom up
-        # 2. Base case: return None if node is null
-        # 3. Swap left and right children at each node
-        # 4. Recurse into left and right children
-        # 5. Returns inverted root
+        # 1. Base case: return None if node is null
+        # 2. Swap left and right children at each node
+        # 3. Recurse into left and right children
+        # 4. Returns inverted root
         # Result: Original tree has been inverted
         
         # Base case:
@@ -538,9 +580,11 @@ Invert the binary tree.
         if not root:
             return None
         
+        # Process Root: 
         # Swap left and right children
         root.left, root.right = root.right, root.left
         
+        # Process Left + Right: 
         # Recursive calls to invert the left and right subtrees
         self.invertTree(root.left)
         self.invertTree(root.right)
@@ -569,13 +613,16 @@ Invert the binary tree.
         if not root:
             return None
         
-        # Traverse original left subtree
+        # Process Left:
+        # Recursive call to invert left subtree
         self.invertTree(root.left)
         
-        # Swap children
+        # Process Root:
+        # Swap left and right children
         root.left, root.right = root.right, root.left
         
-        # Traverse new left subtree (was originally right)
+        # Process Right:
+        # Recursive call to invert right subtree (now left)
         self.invertTree(root.left)
         
         # overall: time complexity O(n)
@@ -599,11 +646,13 @@ Invert the binary tree.
         if not root:
             return None
 
-        # Recursively invert left and right subtrees first (bottom-up)
+        # Process Left + Right:
+        # Recursive calls to invert the left and right subtrees
         left_inverted = invertTree(root.left)
         right_inverted = invertTree(root.right)
 
-        # Swap inverted subtrees
+        # Process Root:
+        # Swap left and right children
         root.left = right_inverted
         root.right = left_inverted
 
@@ -611,7 +660,6 @@ Invert the binary tree.
         # overall: space complexity O(h), O(log n) for balanced tree
         return root
 ```
-
 
 ### Solution 4: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
