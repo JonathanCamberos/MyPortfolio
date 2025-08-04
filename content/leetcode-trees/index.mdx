@@ -14,7 +14,7 @@ tags:
 
 ### What is a Tree
 
-Trees are hierachical data structures representing relationships
+Trees are hierarchical data structures representing relationships
 between entities, often in a parent-child format.
 
 ### Tree Characteristics
@@ -171,20 +171,25 @@ Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 Level Order Traversal -> BFS (iterative) queue based
 
 ### Tree Application: DFS Pre Order Traversal
-Traversal Order: Root -> Left -> Right
+Traversal Order: Root -> Left -> Right.
 Top Down: Root is processed immediately, then we move deeper.
 Used when a node's work must be done before processing its children.
 
 Ex: Serialize a Binary Tree Recursive and Iterative
 ```python
+    # ----------------------------------------
     # Recursive Pre Order
     def serializeRecursive(root: Optional[TreeNode]) -> str:
         def dfs(node):
+
+            # Base Case: 
+            # At leaf, label with 'N'
             if not node:
                 vals.append("N")
                 return
             
             # Process Root (top-down work)
+            # add to serialized array
             vals.append(str(node.val))
             
             # Process Left Subtree
@@ -193,31 +198,53 @@ Ex: Serialize a Binary Tree Recursive and Iterative
             # Process Right Subtree
             dfs(node.right)
         
+        # array representing tree
         vals = []
         dfs(root)
+
+        # join values of tree and return
         return ",".join(vals)
 
+    # ----------------------------------------
     # Iterative Pre Order (stack)
     def serializeIterative(root: Optional[TreeNode]) -> str:
+
+        # Empty Check
         if not root:
             return "N"
 
+        # start iteration over tree, with root
         stack = [root]
+        # array representing tree
         vals = []
         
+        # iterate over all nodes of tree
         while stack:
-            node = stack.pop()
-            if node:
+
+            # grab current root
+            currRoot = stack.pop()
+
+            # Node Case:
+            # current root being processed
+            if currRoot:
+
                 # Process Root (top-down work)
-                vals.append(str(node.val))
+                vals.append(str(currRoot.val))
                 
                 # Push Right then Left (stack pops left first)
-                stack.append(node.right)
-                stack.append(node.left)
+                stack.append(currRoot.right)
+                stack.append(currRoot.left)
+            
+            # Leaf Case: 
+            # At leaf, label with 'N'
             else:
                 vals.append("N")
         
+        # join values of tree and return
         return ",".join(vals)
+
+    # ----------------------------------------
+    # Result of recursive and iterative:
 
     # Tree:
     #       1
@@ -1378,4 +1405,5 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
+
 
