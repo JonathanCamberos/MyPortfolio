@@ -555,7 +555,7 @@
   },
   "226": {
     "questionNum": 226,
-    "questionTitle": "Invert Binary Tree ::2::",
+    "questionTitle": "Invert Binary Tree ::4::",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given the root of a binary tree, invert the tree, and return its root.",
     "questionTopics": [
@@ -564,7 +564,7 @@
       "Breadth First Search",
       "Binary Tree"
     ],
-    "questionLink": "/Notes/leetcode-trees#226-invert-binary-tree-2---easy",
+    "questionLink": "/Notes/leetcode-trees#226-invert-binary-tree-4---easy",
     "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1

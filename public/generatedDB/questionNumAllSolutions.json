@@ -467,7 +467,7 @@
       "name": "DFS Recursive",
       "type": "tree",
       "application": "dfa-pre-order-traversal",
-      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. DFS recursive approach calculates depth from leaf upward\n        # 2. Base case: if node is None, depth = 0\n        # 3. Recursive case:\n        #    - depth_left = depth of left subtree\n        #    - depth_right = depth of right subtree\n        #    - depth = 1 + max(depth_left, depth_right)\n        # 4. Returns depth of root as final result\n        \n        if not root:\n            return 0\n        \n        left_depth = self.maxDepth(root.left)\n        right_depth = self.maxDepth(root.right)\n        \n        return 1 + max(left_depth, right_depth)",
+      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. DFS recursive approach calculates depth from leaf upward\n        # 2. Base case: if node is None, depth = 0\n        # 3. Recursive case:\n        #    - depth_left = depth of left subtree\n        #    - depth_right = depth of right subtree\n        #    - depth = 1 + max(depth_left, depth_right)\n        # 4. Returns depth of root as final result\n        \n        if not root:\n            return 0\n        \n        left_depth = self.maxDepth(root.left)\n        right_depth = self.maxDepth(root.right)\n        \n        # overall: time complexity\n        # overall: space complexity\n        return 1 + max(left_depth, right_depth)",
       "questionNumber": 104,
       "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive---treedfa-pre-order-traversal",
       "blog": "LeetCode: Trees"
@@ -477,7 +477,7 @@
       "name": "BFS Iterative",
       "type": "tree",
       "application": "bfs-iterative-full-level-processing",
-      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. BFS iterative approach calculates depth level-by-level\n        # 2. Queue stores nodes in current level\n        # 3. For each level:\n        #    - process all nodes at current depth\n        #    - add their children to queue\n        # 4. Increment depth after processing each level\n        \n        if not root:\n            return 0\n        \n        queue = deque([root])\n        depth = 0\n        \n        while queue:\n            level_size = len(queue)\n            for _ in range(level_size):\n                node = queue.popleft()\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            depth += 1\n        \n        return depth",
+      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. BFS iterative approach calculates depth level-by-level\n        # 2. Queue stores nodes in current level\n        # 3. For each level:\n        #    - process all nodes at current depth\n        #    - add their children to queue\n        # 4. Increment depth after processing each level\n        \n        if not root:\n            return 0\n        \n        queue = deque([root])\n        depth = 0\n        \n        while queue:\n            level_size = len(queue)\n            for _ in range(level_size):\n                node = queue.popleft()\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            depth += 1\n        \n        # overall: time complexity\n        # overall: space complexity\n        return depth",
       "questionNumber": 104,
       "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-iterative-full-level-processing",
       "blog": "LeetCode: Trees"
@@ -879,19 +879,39 @@
       "name": "DFS Recursive",
       "type": "tree",
       "application": "dfs-pre-order-traversal",
-      "code": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. DFS recursive approach inverts subtrees from bottom up\n        # 2. Base case: return None if node is null\n        # 3. Swap left and right children at each node\n        # 4. Recurse into left and right children\n        # 5. Returns inverted root\n        # Result: Original tree has been inverted\n        \n        # Base case:\n        # empty tree -> curr at leaf -> do nothing\n        if not root:\n            return None\n        \n        # Swap left and right children\n        root.left, root.right = root.right, root.left\n        \n        # Recursive calls to invert the left and right subtrees\n        self.invertTree(root.left)\n        self.invertTree(root.right)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(h), O(log n) for balanced tree\n        return root",
+      "code": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # Idea: DFS recursive inverts subtrees from bottom up\n        # 2. Base case: return None if node is null\n        # 3. Swap left and right children at each node\n        # 4. Recurse into left and right children\n        # 5. Returns inverted root\n        # Result: Original tree has been inverted\n        \n        # Base case:\n        # empty tree -> curr at leaf -> do nothing\n        if not root:\n            return None\n        \n        # Swap left and right children\n        root.left, root.right = root.right, root.left\n        \n        # Recursive calls to invert the left and right subtrees\n        self.invertTree(root.left)\n        self.invertTree(root.right)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(h), O(log n) for balanced tree\n        return root",
       "questionNumber": 226,
       "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
     },
     {
       "number": 2,
+      "name": "DFS Recursive",
+      "type": "tree",
+      "application": "dfs-in-order-traversal",
+      "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # Idea: DFS recursive approach using in order traversal\n        # 1. Traverse original left subtree first\n        # 2. Swap left and right children at current node\n        # 3. Traverse the new left subtree (originally the right)\n        # Result: Tree inverted in place using in order order\n        \n        # Base case:\n        if not root:\n            return None\n        \n        # Traverse original left subtree\n        self.invertTree(root.left)\n        \n        # Swap children\n        root.left, root.right = root.right, root.left\n        \n        # Traverse new left subtree (was originally right)\n        self.invertTree(root.left)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(h), balanced tree O(log n), skewed tree O(n)\n        return root",
+      "questionNumber": 226,
+      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-recursive---treedfs-in-order-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "number": 3,
+      "name": "DFS Recursive",
+      "type": "tree",
+      "application": "dfs-post-order-traversal",
+      "code": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # Idea: DFS recursive approach inverts subtrees from bottom up (postorder)\n        # 1. Base case: return None if node is null\n        # 2. Recursively invert left subtree\n        # 3. Recursively invert right subtree\n        # 4. Swap left and right children of current node\n        # 5. Return inverted root\n        # Result: Original tree has been inverted\n\n        if not root:\n            return None\n\n        # Recursively invert left and right subtrees first (bottom-up)\n        left_inverted = invertTree(root.left)\n        right_inverted = invertTree(root.right)\n\n        # Swap inverted subtrees\n        root.left = right_inverted\n        root.right = left_inverted\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(h), O(log n) for balanced tree\n        return root",
+      "questionNumber": 226,
+      "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-recursive---treedfs-post-order-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "number": 4,
       "name": "BFS Iterative",
       "type": "tree",
       "application": "bfs-iterative-no-explicit-full-level-processing",
-      "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # 1. BFS iterative approach inverts nodes level by level\n        # 2. Queue stores nodes to process\n        # 3. For each node:\n        #    - Swap left and right children\n        #    - Add non-null children to queue\n        # 4. Continues until all levels processed\n        \n        # Empty tree check\n        if not root:\n            return None\n        \n        # queue to support BFS\n        queue = deque([root])\n        \n        # time complexity: iterate over tree, level by level O(n)\n        while queue:\n\n            # grab curr root\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # iterate over tree:\n            # add curr root left and right children to queue,\n            # curr root is no longer in the queue since we popped() already\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root",
+      "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # Idea: BFS iterative approach inverts nodes level by level\n        # 1. Queue stores nodes to process\n        # 2. For curr root pop() from queue:\n        #    Swap left and right children\n        #    Add non None children to queue\n        # 3. Continue while queue non empty\n        \n        # Empty tree check\n        if not root:\n            return None\n        \n        # Queue to support BFS\n        queue = deque([root])\n        \n        # time complexity: iterate over tree, level by level O(n)\n        while queue:\n\n            # grab curr root, oldest TreeNode, First In First Out\n            currRoot = queue.popleft()\n            \n            # Swap left and right children\n            currRoot.left, currRoot.right = currRoot.right, currRoot.left\n            \n            # iterate over tree:\n            # Add non None children to queue\n            if currRoot.left:\n                queue.append(currRoot.left)\n            if currRoot.right:\n                queue.append(currRoot.right)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return root",
       "questionNumber": 226,
-      "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-iterative-no-explicit-full-level-processing",
+      "solutionLink": "/Notes/leetcode-trees#solution-4-bfs-iterative---treebfs-iterative-no-explicit-full-level-processing",
       "blog": "LeetCode: Trees"
     }
   ],

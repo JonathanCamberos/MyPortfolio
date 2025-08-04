@@ -658,7 +658,7 @@ Invert the binary tree.
 |  |  |  |  |  |
 
 
-## 104. Maximum Depth of Binary Tree ::2:: - Easy
+## 104. Maximum Depth of Binary Tree ::4:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
@@ -717,14 +717,65 @@ Find the max depth of a binary tree.
         #    - depth = 1 + max(depth_left, depth_right)
         # 4. Returns depth of root as final result
         
+        def dfs(node, depth):
+            if not node:
+                return depth
+            return max(
+                dfs(node.left, depth + 1),
+                dfs(node.right, depth + 1)
+            )
+    
+    return dfs(root, 0)
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 2: DFS Recursive - Tree/DFA In Order Traversal
+```python
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        self.max_depth = 0
+        
+        def inorder(node, depth):
+            if not node:
+                return
+
+            # Go left first
+            inorder(node.left, depth + 1)
+             # "Visit" root
+            self.max_depth = max(self.max_depth, depth + 1)
+            # Go right
+            inorder(node.right, depth + 1)
+        
+        inorder(root, 0)
+        return self.max_depth
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 3: DFS Recursive - Tree/DFA Post Order Traversal
+```python
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # Idea: DFS postorder traversal (Left → Right → Root)
+        # 1. Compute depth of left subtree
+        # 2. Compute depth of right subtree
+        # 3. Combine results at root
+        # This is naturally bottom-up since we process children first
+        
         if not root:
             return 0
         
+        # Traverse left and right children
         left_depth = self.maxDepth(root.left)
         right_depth = self.maxDepth(root.right)
         
-        # overall: time complexity
-        # overall: space complexity
         return 1 + max(left_depth, right_depth)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -734,7 +785,9 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative - Tree/BFS Iterative Full Level Processing
+
+
+### Solution 4: BFS Iterative - Tree/BFS Iterative Full Level Processing
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
