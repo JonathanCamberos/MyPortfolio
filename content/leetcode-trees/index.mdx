@@ -37,8 +37,7 @@ Trees are a special type of graph, characterized by:
 
 8. Single Paths: Trees have exactly one path between any two nodes
 
-Tree:
-```python
+```
       1
      / \
     2   3
@@ -166,7 +165,7 @@ In order traversal with O(1) extra space by temporarily modifying tree pointers.
 - Threaded Binary Tree:
 Uses null child pointers to store predecessor/successor pointers to enable O(1) traversal.
 
-### Tree Search Rule of Thumb:
+### Tree Search Rule of Thumb
 Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 
 Level Order Traversal -> BFS (iterative) queue based
@@ -236,8 +235,8 @@ Used when a node's work must be done after visiting the left subtree
 but before visiting the right subtree.
 
 Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
-```python 
-    # Recursive Inorder
+```python
+    # Recursive In Order
     def bstToSortedList(root: Optional[TreeNode]) -> List[int]:
         res = []
     
