@@ -312,7 +312,7 @@ Ex: Evaluate Expression Tree (Recursive) & Delete Tree (Iterative)
     # Deletion order: 2, 3, 1
 ```
 
-### Tree Application: BFS Iterative Queue Based
+### Tree Application: BFS Iterative Full Level Processing
 BFS visits nodes level by level, processing all nodes at a given depth 
 before moving on to the next.
 Used for level order problems and shortest path calculations in unweighted graphs,
@@ -331,6 +331,7 @@ Ex: Level order traversal of Binary Tree
             level_size = len(queue)
             level_nodes = []
 
+            # Process all nodes in current level
             for _ in range(level_size):
                 node = queue.popleft()
                 level_nodes.append(node.val)
@@ -352,6 +353,45 @@ Ex: Level order traversal of Binary Tree
     #        / \
     #       4   5
     # Output: [[1], [2, 3], [4, 5]]
+```
+
+### Tree Application: BFS Iterative No Explicit Full Level Processing
+BFS visit nodes in breath first order.
+However, in some problems we don't process or store the full level at once.
+Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)
+
+Ex: Invert a Binary Tree
+```python
+    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+
+        # BFS - no explicit full level processing
+        queue = deque([root])
+        
+        while queue:
+            node = queue.popleft()
+            
+            # Swap left and right children
+            node.left, node.right = node.right, node.left
+            
+            # Add children to queue
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        
+        return root
+
+        # Example:
+        # Input Tree:
+        #       4
+        #      / \
+        #     2   7
+        # Output Tree:
+        #       4
+        #      / \
+        #     7   2
 ```
 
 ### Tree Application: Modification
@@ -482,34 +522,31 @@ Invert the binary tree.
 ```python
 ```
 
-### Solution 1: BFS Iterative - Tree/Modification
+### Solution 1: DFS Recursive - Tree/DFS Pre Order Traversal
 ```python
-    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
-        # 1. BFS iterative approach inverts nodes level by level
-        # 2. Queue stores nodes to process
-        # 3. For each node:
-        #    - Swap left and right children
-        #    - Add non-null children to queue
-        # 4. Continues until all levels processed
+        # 1. DFS recursive approach inverts subtrees from bottom up
+        # 2. Base case: return None if node is null
+        # 3. Swap left and right children at each node
+        # 4. Recurse into left and right children
+        # 5. Returns inverted root
+        # Result: Original tree has been inverted
         
+        # Base case:
+        # empty tree -> curr at leaf -> do nothing
         if not root:
             return None
         
-        queue = deque([root])
+        # Swap left and right children
+        root.left, root.right = root.right, root.left
         
-        while queue:
-            node = queue.popleft()
-            
-            # Swap left and right children
-            node.left, node.right = node.right, node.left
-            
-            # Add children to queue
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
+        # Recursive calls to invert the left and right subtrees
+        self.invertTree(root.left)
+        self.invertTree(root.right)
         
+        # overall: time complexity O(n)
+        # overall: space complexity O(h), O(log n) for balanced tree
         return root
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -519,7 +556,7 @@ Invert the binary tree.
 |  |  |  |  |  |
 
 
-### Solution 2: Implicit Sliding Window Tracking Min Price and Max Profit - Tree/Modification
+### Solution 2: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -530,18 +567,25 @@ Invert the binary tree.
         #    - Add non-null children to queue
         # 4. Continues until all levels processed
         
+        # Empty tree check
         if not root:
             return None
         
+        # queue to support BFS
         queue = deque([root])
         
+        # time complexity: iterate over tree, level by level O(n)
         while queue:
+
+            # grab curr root
             node = queue.popleft()
             
             # Swap left and right children
             node.left, node.right = node.right, node.left
             
-            # Add children to queue
+            # iterate over tree:
+            # add curr root left and right children to queue,
+            # curr root is no longer in the queue since we popped() already
             if node.left:
                 queue.append(node.left)
             if node.right:
@@ -630,7 +674,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative - Tree/BFS Iterative Queue Based
+### Solution 2: BFS Iterative - Tree/BFS Iterative Full Level Processing
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1110,7 +1154,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative (Queue) - Tree/BFS Iterative Queue Based
+### Solution 2: BFS Iterative (Queue) - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1150,7 +1194,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 3: DFS + Serialization (String Matching) - Tree/Custom Application: Tree Serialization
+### Solution 3: DFS + Serialization String Matching - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:

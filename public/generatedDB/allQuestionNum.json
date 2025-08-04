@@ -299,6 +299,53 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "100": {
+    "questionNum": 100,
+    "questionTitle": "Same Tree ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given the roots of two binary trees p and q, write a function to check if they are the same or not. Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Breadth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#100-same-tree-2---easy",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "104": {
+    "questionNum": 104,
+    "questionTitle": "Maximum Depth of Binary Tree ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Breadth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#104-maximum-depth-of-binary-tree-2---easy",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "110": {
+    "questionNum": 110,
+    "questionTitle": "Balanced Binary Tree ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given a binary tree, determine if it is height-balanced.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#110-balanced-binary-tree-2---easy",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "121": {
     "questionNum": 121,
     "questionTitle": "Best Time to Buy and Sell Stock ::4::",
@@ -513,8 +560,8 @@
     "questionBlurb": "Given the root of a binary tree, invert the tree, and return its root.",
     "questionTopics": [
       "Tree",
-      "Depth-First Search",
-      "Breadth-First Search",
+      "Depth First Search",
+      "Breadth First Search",
       "Binary Tree"
     ],
     "questionLink": "/Notes/leetcode-trees#226-invert-binary-tree-2---easy",
@@ -649,6 +696,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "543": {
+    "questionNum": 543,
+    "questionTitle": "Diameter of Binary Tree ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given the root of a binary tree, return the length of the diameter of the tree. The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root. The length of a path between two nodes is represented by the number of edges between them.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#543-diameter-of-binary-tree-2---easy",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "567": {
     "questionNum": 567,
     "questionTitle": "Permutation in String ::2::",
@@ -661,6 +723,23 @@
     ],
     "questionLink": "/Notes/leetcode-sliding-window#567-permutation-in-string-2---medium",
     "blog": "LeetCode: Sliding Window",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "572": {
+    "questionNum": 572,
+    "questionTitle": "Subtree of Another Tree ::3::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise. A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node's descendants. The tree tree could also be considered as a subtree of itself.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "String Matching",
+      "Binary Tree",
+      "Hash Function"
+    ],
+    "questionLink": "/Notes/leetcode-trees#572-subtree-of-another-tree-3---easy",
+    "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },

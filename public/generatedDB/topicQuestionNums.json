@@ -217,15 +217,38 @@
     23
   ],
   "Tree": [
-    226
+    226,
+    104,
+    543,
+    110,
+    100,
+    572
   ],
-  "Depth-First Search": [
-    226
+  "Depth First Search": [
+    226,
+    104,
+    543,
+    110,
+    100,
+    572
   ],
-  "Breadth-First Search": [
-    226
+  "Breadth First Search": [
+    226,
+    104,
+    100
   ],
   "Binary Tree": [
-    226
+    226,
+    104,
+    543,
+    110,
+    100,
+    572
+  ],
+  "String Matching": [
+    572
+  ],
+  "Hash Function": [
+    572
   ]
 }
