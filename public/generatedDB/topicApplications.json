@@ -41,7 +41,7 @@
     {
       "type": "HashMap",
       "title": "Backtracking with Caching for Pruning",
-      "summary": "Use a HashMap to cache explored paths or states to prune the search",
+      "summary": "Use a HashMap to cache explored paths or states to prune the search space effectively.",
       "exampleIntro": "Subset Sum with caching:",
       "codeExample": "def subsetSum(nums, target):\n        # Cache to store paths that can no longer lead to valid solutions\n        cache = {}\n        result = []\n\n        def backtrack(current, index, total):\n            # Check if we've encountered this path before\n            state = (tuple(current), total)\n            if state in cache:\n                return\n            cache[state] = True\n\n            # Prune: If the total exceeds the target\n            if total > target:\n                return\n            \n            # Valid solution\n            if total == target:\n                result.append(list(current))\n                return\n\n            # Explore further candidates\n            for i in range(index, len(nums)):\n                # Choose\n                current.append(nums[i])\n                # Recurse\n                backtrack(current, i + 1, total + nums[i])\n                # Undo the choice\n                current.pop()\n\n        backtrack([], 0, 0)\n        return result",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-backtracking-with-caching-for-pruning",
@@ -68,7 +68,7 @@
     {
       "type": "HashMap",
       "title": "Algorithm",
-      "summary": "Case where a problem that seems to require a HashMap is easily solved by",
+      "summary": "Case where a problem that seems to require a HashMap is easily solved by an algorithm specifically made for that problem",
       "exampleIntro": "Boyer-Moore Voting Algorithm",
       "codeExample": "def majorityElement(nums: List[int]) -> int:\n    candidate = None\n    count = 0\n\n    # Phase 1: Find a candidate for the majority element\n    for num in nums:\n        if count == 0:  # Reset candidate\n            candidate = num\n        count += (1 if num == candidate else -1)\n\n    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)\n    return candidate",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-algorithm",
@@ -79,7 +79,7 @@
     {
       "type": "Stack",
       "title": "Tracking Nested or Hierarchical Structures",
-      "summary": "We can track structure while iterating over an object ensuring it maintains",
+      "summary": "We can track structure while iterating over an object ensuring it maintains some criteria",
       "exampleIntro": "Validate if a string containing brackets ()[]{} is properly balanced:",
       "codeExample": "def balancedParentheses(s: str) -> bool:\n        stack = []\n        pairs = {')': '(', ']': '[', '}': '{'}\n        for char in s:\n            if char in pairs.values():\n                stack.append(char)\n            elif char in pairs:\n                if not stack or stack.pop() != pairs[char]:\n                    return False\n        return not stack",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-tracking-nested-or-hierarchical-structures",
@@ -88,7 +88,7 @@
     {
       "type": "Stack",
       "title": "Backtracking by Tracking History or State",
-      "summary": "We can use stacks in backtracking to store the state of exploration.",
+      "summary": "We can use stacks in backtracking to store the state of exploration. When a branch reaches a dead end or a solution, we pop the state to return to the previous state and continue exploring other branches.",
       "exampleIntro": "Subset Sum with Backtracking",
       "codeExample": "def subset_sum(nums, target):\n        stack = [(0, [], 0)]  # (index, current_subset, current_sum)\n        result = []\n        \n        while stack:\n            index, current_subset, current_sum = stack.pop()\n            \n            if current_sum > target:  # Prune invalid paths\n                continue\n            \n            if current_sum == target:  # Valid solution\n                result.append(list(current_subset))\n                continue\n            \n            # Push new states for further exploration\n            for i in range(index, len(nums)):\n                stack.append((i + 1, current_subset + [nums[i]], current_sum + nums[i]))\n        \n        return result\n\n    # subset_sum([2, 3, 6, 7], 7) = [[7]]",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-backtracking-by-tracking-history-or-state",
@@ -97,7 +97,7 @@
     {
       "type": "Stack",
       "title": "Monotonic Property Maintenance",
-      "summary": "A stack can maintain a monotonic property (increasing or decreasing)",
+      "summary": "A stack can maintain a monotonic property (increasing or decreasing) over a sequence while processing elements, ensuring efficient lookups or modifications.",
       "exampleIntro": "Find the Next Greater Element",
       "codeExample": "def nextGreaterElement(nums):\n        stack = []  # Stores indices of elements in decreasing order\n        result = [-1] * len(nums)  # Initialize result with -1\n        \n        for i in range(len(nums)):\n            while stack and nums[i] > nums[stack[-1]]:\n                idx = stack.pop()\n                result[idx] = nums[i]  # Found the next greater element\n            stack.append(i)\n        \n        return result\n\n    # Example: nextGreaterElement([2, 1, 2, 4, 3]) -> [4, 2, 4, -1, -1]",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-monotonic-property-maintenance",
@@ -115,7 +115,7 @@
     {
       "type": "Stack",
       "title": "Expression Evaluation and Parsing",
-      "summary": "We can use a stack to evaluate or parse expressions by storing operands",
+      "summary": "We can use a stack to evaluate or parse expressions by storing operands and incrementally applying operators. This approach is well-suited for postfix and prefix notations.",
       "exampleIntro": "Post and Prefix",
       "codeExample": "def evaluatePostfix(expression):\n        stack = []  # To hold operands during evaluation\n        \n        for token in expression.split():\n            if token.isdigit():  # If it's an operand, push it to the stack\n                stack.append(int(token))\n            else:  # If it's an operator, pop two operands and apply the operator\n                b = stack.pop()\n                a = stack.pop()\n                if token == '+':\n                    stack.append(a + b)\n                elif token == '-':\n                    stack.append(a - b)\n                elif token == '*':\n                    stack.append(a * b)\n                elif token == '/':  # Assuming integer division\n                    stack.append(a // b)\n        \n        return stack.pop()  # Final result is the only item left in the stack\n\n    # Example:\n    # Input: \"3 4 + 2 * 1 +\"\n    # Output: 15 (Equivalent to (3 + 4) * 2 + 1)",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-expression-evaluation-and-parsing",
@@ -124,8 +124,8 @@
     {
       "type": "Stack",
       "title": "Dynamic Programming State Compression",
-      "summary": "We can use a stack to compress the necessary state while scanning through data,",
-      "exampleIntro": "Given an array, partition it into the minimum number of strictly \nincreasing subsequences",
+      "summary": "We can use a stack to compress the necessary state while scanning through data, especially when enforcing a specific constraint or invariant like monotonicity. Instead of storing the entire history, we prune irrelevant elements from the stack to keep only the most useful summary of the past",
+      "exampleIntro": "Given an array, partition it into the minimum number of strictly",
       "codeExample": "def min_partitions(nums):\n        stacks = []  # Each element represents the last number in a subsequence\n        \n        for num in nums:\n            placed = False\n            for i in range(len(stacks)):\n                # If we can append to subsequence i\n                if stacks[i] < num:\n                    stacks[i] = num\n                    placed = True\n                    break\n            if not placed:\n                # Start a new subsequence (partition)\n                stacks.append(num)\n        return len(stacks)\n\n    # Example usage:\n    nums = [1, 3, 2, 4, 6, 5]\n    print(min_partitions(nums))  # Output: 2",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-dynamic-programming-state-compression",
       "blog": "LeetCode: Stacks"
@@ -133,7 +133,7 @@
     {
       "type": "Stack",
       "title": "Interval and Range Processing",
-      "summary": "We can use stacks to efficiently process intervals or ranges,",
+      "summary": "We can use stacks to efficiently process intervals or ranges, such as merging overlapping intervals, calculating spans, or finding next/previous smaller or larger elements within a range.",
       "exampleIntro": "Largest Rectangle in Histogram",
       "codeExample": "def largestRectangleArea(heights):\n        stack = []  # stores indices of bars\n        max_area = 0\n        \n        for i, h in enumerate(heights + [0]):  # Add sentinel to flush stack\n            while stack and heights[stack[-1]] > h:\n                height = heights[stack.pop()]\n                left = stack[-1] if stack else -1\n                width = i - left - 1\n                max_area = max(max_area, height * width)\n            stack.append(i)\n        \n        return max_area\n\n    # Example:\n    # Input: [2, 1, 5, 6, 2, 3]\n    # Output: 10  (largest rectangle is formed by heights 5 and 6)",
       "useCaseLink": "/Notes/leetcode-stacks#stack-application-interval-and-range-processing",
@@ -144,7 +144,7 @@
     {
       "type": "Two Pointers",
       "title": "One Pointer with Auxiliary State",
-      "summary": "Use a single pointer to scan linearly and keep track of additional state",
+      "summary": "Use a single pointer to scan linearly and keep track of additional state variables to simulate a second pointer.",
       "exampleIntro": "Move all zeros while maintaining order",
       "codeExample": "def move_zeros(nums: list[int]) -> None:\n        # `last_non_zero_found_at` tracks the position where the next non-zero\n        # element should be placed, simulating a second pointer.\n        last_non_zero_found_at = 0\n\n        for current in range(len(nums)):\n            if nums[current] != 0:\n                nums[last_non_zero_found_at], nums[current] = nums[current], nums[last_non_zero_found_at]\n                last_non_zero_found_at += 1\n\n    # arr = [0, 1, 0, 3, 12] \n    # move_zeros(arr)  Output: [1, 3, 12, 0, 0]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-one-pointer-with-auxiliary-state",
@@ -153,7 +153,7 @@
     {
       "type": "Two Pointers",
       "title": "Opposite Ends",
-      "summary": "We can have two pointers starting at opposite ends of a list and move them inward",
+      "summary": "We can have two pointers starting at opposite ends of a list and move them inward while validating some sort of logic.",
       "exampleIntro": "Determine if a string is a palindrome",
       "codeExample": "def is_palindrome(s: str) -> bool:\n        left, right = 0, len(s) - 1\n        while left < right:\n            if s[left] != s[right]:\n                return False\n            left += 1\n            right -= 1\n        return True\n\n    # Example:\n    print(is_palindrome(\"radar\"))  # Output: True\n    print(is_palindrome(\"hello\"))  # Output: False",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-opposite-ends",
@@ -162,7 +162,7 @@
     {
       "type": "Two Pointers",
       "title": "Sliding Window",
-      "summary": "We can have two pointers represent a window over a sequence that expands or shrinks",
+      "summary": "We can have two pointers represent a window over a sequence that expands or shrinks to satisfy a condition.",
       "exampleIntro": "Find the length of the longest substring without repeating characters.",
       "codeExample": "def longest_unique_substring(s: str) -> int:\n        char_set = set()\n        left = 0\n        maxLength = 0\n\n        for right in range(len(s)):\n            while s[right] in char_set:\n                char_set.remove(s[left])\n                left += 1\n            char_set.add(s[right])\n            maxLength = max(maxLength, right - left + 1)\n        \n        return maxLength\n\n    # Example:\n    print(longest_unique_substring(\"abcabcbb\"))  # Output: 3",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-sliding-window",
@@ -171,7 +171,7 @@
     {
       "type": "Two Pointers",
       "title": "Fast & Slow Pointers",
-      "summary": "We can have have two pointers moving at different speeds to detect cycles or find midpoints",
+      "summary": "We can have have two pointers moving at different speeds to detect cycles or find midpoints in linked lists or arrays.",
       "exampleIntro": "Detect a cycle in a linked list.",
       "codeExample": "class ListNode:\n        def __init__(self, value=0, next=None):\n            self.value = value\n            self.next = next\n\n    def has_cycle(head: ListNode) -> bool:\n        slow, fast = head, head\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n            if slow == fast:\n                return True\n        return False\n\n    # Example:\n    # Construct a list with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)\n    node1 = ListNode(1)\n    node2 = ListNode(2)\n    node3 = ListNode(3)\n    node4 = ListNode(4)\n    node1.next = node2\n    node2.next = node3\n    node3.next = node4\n    node4.next = node2\n    print(has_cycle(node1))  # Output: True",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-fast-slow-pointers-",
@@ -180,7 +180,7 @@
     {
       "type": "Two Pointers",
       "title": "Partitioning",
-      "summary": "We can have two pointers in the same array moving inward/outward to rearrange elements",
+      "summary": "We can have two pointers in the same array moving inward/outward to rearrange elements based on a condition.",
       "exampleIntro": "Move all zeros in an array to the end while maintaining the order of other elements",
       "codeExample": "def move_zeros(nums):\n        left, right = 0, 0\n        while right < len(nums):\n            if nums[right] != 0:\n                nums[left], nums[right] = nums[right], nums[left]\n                left += 1\n            right += 1\n        return nums\n\n    # Example:\n    print(move_zeros([0, 1, 0, 3, 12]))  # Output: [1, 3, 12, 0, 0]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-partitioning",
@@ -189,7 +189,7 @@
     {
       "type": "Two Pointers",
       "title": "Parallel Pointer Traversal",
-      "summary": "We can have two pointers traversing two separate arrays in parallel to merge, compare,",
+      "summary": "We can have two pointers traversing two separate arrays in parallel to merge, compare, or find intersections.",
       "exampleIntro": "Merge two sorted arrays into one sorted array",
       "codeExample": "def merge_sorted_arrays(arr1, arr2):\n        result = []\n        i, j = 0, 0\n\n        while i < len(arr1) and j < len(arr2):\n            if arr1[i] < arr2[j]:\n                result.append(arr1[i])\n                i += 1\n            else:\n                result.append(arr2[j])\n                j += 1\n        \n        result.extend(arr1[i:])\n        result.extend(arr2[j:])\n        return result\n\n    # Example:\n    print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-parallel-pointer-traversal-",
@@ -198,7 +198,7 @@
     {
       "type": "Two Pointers",
       "title": "Catchup",
-      "summary": "We have two pointers traversing one array. One remains frozen, but catches up",
+      "summary": "We have two pointers traversing one array. One remains frozen, but catches up to the other after logic is complete on a subsection.",
       "exampleIntro": "Decode Two Pointer Splicing",
       "codeExample": "",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-catchup",
@@ -207,7 +207,7 @@
     {
       "type": "Two Pointers",
       "title": "K Pointer Variants",
-      "summary": "We can extend the two pointer case to track k pointers simultaneously.",
+      "summary": "We can extend the two pointer case to track k pointers simultaneously. These pointers can traverse the same list, different lists, or freeze while moving other pointers.",
       "exampleIntro": "Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] that sum to 0.",
       "codeExample": "def threeSum(nums):\n        nums.sort()  # Step 1: Sort the array\n        result = []\n\n        for i in range(len(nums)):\n            # Avoid duplicates for the first element\n            if i > 0 and nums[i] == nums[i - 1]:\n                continue\n\n            # Two-pointer approach\n            left, right = i + 1, len(nums) - 1\n            while left < right:\n                current_sum = nums[i] + nums[left] + nums[right]\n                if current_sum == 0:\n                    result.append([nums[i], nums[left], nums[right]])\n\n                    # Move pointers and avoid duplicates\n                    left += 1\n                    while left < right and nums[left] == nums[left - 1]:\n                        left += 1\n                    right -= 1\n                    while left < right and nums[right] == nums[right + 1]:\n                        right -= 1\n\n                elif current_sum < 0:\n                    left += 1  # Increase sum by moving left pointer rightward\n                else:\n                    right -= 1  # Decrease sum by moving right pointer leftward\n\n        return result\n\n    # Example usage:\n    nums = [-1, 0, 1, 2, -1, -4]\n    print(threeSum(nums))  # Output: [[-1, -1, 2], [-1, 0, 1]]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-k-pointer-variants-",
@@ -216,7 +216,7 @@
     {
       "type": "Two Pointers",
       "title": "Algorithm",
-      "summary": "Case where a problem that seems to require Two Pointers is easily solved by",
+      "summary": "Case where a problem that seems to require Two Pointers is easily solved by an algorithm specifically made for that problem",
       "exampleIntro": "Manacher's Algorithm, find the longest palindromic substring",
       "codeExample": "def longestPalindrome(s: str) -> str:\n        # Preprocess the string to handle even-length palindromes\n        t = \"#\".join(f\"^{s}$\")\n        n = len(t)\n        p = [0] * n\n        center = right = 0\n\n        \n        for i in range(1, n - 1):\n            mirror = 2 * center - i  # Mirror of `i` with respect to `center`\n\n            # If within bounds of the current right boundary\n            if i < right:\n                p[i] = min(right - i, p[mirror])\n\n            # Expand around `i`\n            while t[i + p[i] + 1] == t[i - p[i] - 1]:\n                p[i] += 1\n\n            # Update the center and right boundary if the palindrome is expanded\n            if i + p[i] > right:\n                center = i\n                right = i + p[i]\n\n        # Find the maximum length palindrome\n        maxLen, centerIndex = max((n, i) for i, n in enumerate(p))\n        start = (centerIndex - maxLen) // 2  # Convert index back to original string\n        return s[start: start + maxLen]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-algorithm",
@@ -227,45 +227,45 @@
     {
       "type": "Binary Search",
       "title": "Target Binary Search",
-      "summary": "Using Binary Search to locate the position of a target element",
+      "summary": "Using Binary Search to locate the position of a target element in a sorted list by repeatedly dividing the search interval in half.",
       "exampleIntro": "Searching for a target number in a sorted array.",
-      "codeExample": "def binary_search(nums, target):\n        left, right = 0, len(nums) - 1\n\n        # Note 1:\n        # Target Binary Search: uses '<='\n        while left <= right:\n            mid = (left + right) // 2\n\n            # Note 2:\n            # 3 parts during iteration\n            # target check, remove left half, remove right half\n            if nums[mid] == target:\n                return mid\n            elif nums[mid] < target:\n                left = mid + 1\n            else:\n                right = mid - 1\n\n        # Note 3:\n        # Exit: left > right triggers ends\n        # Return value if not found\n        return -1",
+      "codeExample": "def binarySearch(nums, target):\n    left, right = 0, len(nums) - 1\n\n    while left <= right:\n        mid = (left + right) // 2\n\n        if nums[mid] == target:\n            return mid  # Target found\n        elif nums[mid] < target:\n            left = mid + 1  # Search right half\n        else:\n            right = mid - 1  # Search left half\n\n    return -1  # Target not found",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-target-binary-search",
       "blog": "LeetCode: Binary Search"
     },
     {
       "type": "Binary Search",
       "title": "Multiple Layers Binary Search",
-      "summary": "Applying binary search in multiple stages or layers, typically to",
+      "summary": "Applying binary search in multiple stages or layers, typically to first narrow down a substructure (i.e., row, segment, or time range), and then again within that substructure This approach is useful when data is structured in nested sorted layers.",
       "exampleIntro": "Searching for a target in a sorted 2D matrix",
-      "codeExample": "def find_min_valid_value():\n        left, right = 0, N-1\n\n        # Note 1:\n        # Optimization Binary Search: uses '<'\n        while left < right:\n            mid = (left + right) // 2\n\n            # Note 2:\n            # Check if condition is satisfied\n            # If so, include mid with left or right half\n            if condition(mid):\n                # or left = mid, depending on which half we are checking\n                right = mid      \n            else:\n                # or right = mid + 1, depending on which half we are removing\n                left = mid + 1 \n\n        # Note: 3\n        # Exit: left == right, triggers the exit\n        # we have found the optimized solution\n\n        # or right\n        return left",
+      "codeExample": "def searchMatrix(matrix: List[List[int]], target: int) -> bool:\n        if not matrix or not matrix[0]:\n            return False\n\n        rows, cols = len(matrix), len(matrix[0])\n\n        # First layer: Binary search over rows to find candidate row\n        top, bottom = 0, rows - 1\n        while top <= bottom:\n            mid_row = (top + bottom) // 2\n            if matrix[mid_row][0] <= target <= matrix[mid_row][-1]:\n                break\n            elif matrix[mid_row][0] > target:\n                bottom = mid_row - 1\n            else:\n                top = mid_row + 1\n        else:\n            return False  # Target is outside all row ranges\n\n        # Second layer: Binary search within the found row\n        row = mid_row\n        left, right = 0, cols - 1\n        while left <= right:\n            mid_col = (left + right) // 2\n            if matrix[row][mid_col] == target:\n                return True\n            elif matrix[row][mid_col] < target:\n                left = mid_col + 1\n            else:\n                right = mid_col - 1\n\n        return False",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-multiple-layers-binary-search",
       "blog": "LeetCode: Binary Search"
     },
     {
       "type": "Binary Search",
       "title": "Optimization Search Min Max Binary Search",
-      "summary": "Using binary search to find the smallest or largest valid value",
+      "summary": "Using binary search to find the smallest or largest valid value that satisfies a given constraint (e.g., minimum speed, minimum time, maximum capacity) Searches over a numeric range, not for a target, and typically uses while left < right (left == right, as a trigger) to fin the min or max boundary.",
       "exampleIntro": "Find the minimum eating speed to finish all bananas within h hours",
-      "codeExample": "def find_ceiling(nums, target):\n        left, right = 0, len(nums)\n\n        # Loop condition: left < right\n        while left < right:\n            mid = (left + right) // 2\n            \n            # If mid element is less than target,\n            # the ceiling must be to the right of mid (exclude mid)\n            if nums[mid] < target:\n                left = mid + 1\n            else:\n                # nums[mid] >= target, potential ceiling candidate\n                # Keep mid in search space by moving right boundary to mid\n                right = mid\n        \n        # At the end, left == right, points to the smallest element >= target if exists\n        # If left == len(nums), no ceiling found\n        if left == len(nums):\n            return None\n        return nums[left]",
+      "codeExample": "def minEatingSpeed(piles: List[int], h: int) -> int:\n        def hours_needed(speed):\n            return sum((pile + speed - 1) // speed for pile in piles)  # ceil\n\n        left, right = 1, max(piles)\n\n        # Optimization Search\n        while left < right:\n            mid = (left + right) // 2\n\n            # Try slower (minimization)\n            if hours_needed(mid) <= h:\n                right = mid  \n            \n            # Need faster\n            else:\n                left = mid + 1 \n\n        # Note:\n        # there is no case where left > right breaks the loop,\n        # because the condition is < and not <=,\n        # so trigger will always be:\n        # left == right\n        \n        # Smallest k that works\n        return left",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-optimization-search-min-max-binary-search-",
       "blog": "LeetCode: Binary Search"
     },
     {
       "type": "Binary Search",
       "title": "Condition Adapted Binary Search",
-      "summary": "Adapting search conditions of binary search to account for special",
+      "summary": "Adapting search conditions of binary search to account for special problem parameters or constraints (e.g., rotated array, duplicates, bounded search). Covers problems where binary search is applied, but the standard algorithm is modified.",
       "exampleIntro": "Finding the minimum element in a rotated sorted array",
-      "codeExample": "def find_floor_wrong(nums, target):\n    left, right = 0, len(nums)\n\n    # Loop condition: left < right\n    while left < right:\n        mid = (left + right) // 2\n\n        # Attempt: \n        # mid element <= target:\n        # move left boundary up to mid (include mid)\n        if nums[mid] <= target:\n            \n            # PROBLEM: \n            # left might not move forward when left == mid, causing infinite loop\n            left = mid \n            \n        else:\n            # mid element > target:\n            # move right boundary down (exclude mid)\n            right = mid\n\n    # When loop ends, left == right, but it may not point to floor directly\n    # Without shifting left or checking bounds, this is unreliable\n    if left == 0 and nums[left] > target:\n        return None\n    return nums[left]",
+      "codeExample": "def findMin(nums: List[int]) -> int:\n        left, right = 0, len(nums) - 1\n\n        # If array is not rotated (fully sorted ascending)\n        if nums[left] < nums[right]:\n            return nums[left]\n\n        # Modified binary search with parameter-based decision\n        while left < right:\n            mid = (left + right) // 2\n            \n            # Decision based on comparing mid and right elements\n            if nums[mid] > nums[right]:\n                left = mid + 1\n            else:\n                right = mid\n\n        # left == right points to minimum element\n        return nums[left]",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-condition-adapted-binary-search",
       "blog": "LeetCode: Binary Search"
     },
     {
       "type": "Binary Search",
       "title": "Upper Ceiling or Lower Floor Trick Based on Target Binary Search",
-      "summary": "Binary search cannot directly find the largest element less than or equal to a target",
+      "summary": "Binary search cannot directly find the largest element less than or equal to a target (or similarly find the smallest elements greater than or equal to a target) in one step. Instead we search for the first element greater than the target and then simply shift one position left to get the largest element less than or equal.",
       "exampleIntro": "Find the first element less than or equal to target",
-      "codeExample": "if condition(mid):\n        right = mid        # mid might be the answer, keep it\n    else:\n        left = mid + 1     # mid is invalid, discard it",
+      "codeExample": "def largest_leq_shift(nums, target):\n        left, right = 0, len(nums)  # half-open interval [left, right)\n\n        while left < right:\n            mid = (left + right) // 2\n            if nums[mid] <= target:\n                left = mid + 1  # move right since mid less to target\n            else:\n                right = mid     # mid > target, shrink right side\n\n        # left is now the index of first element > target\n        # so the answer is at left - 1 (if valid)\n        return nums[left - 1] if left > 0 else \"\"",
       "useCaseLink": "/Notes/leetcode-binary-search#binary-search-application-upper-ceiling-or-lower-floor-trick-based-on-target-binary-search",
       "blog": "LeetCode: Binary Search"
     }
@@ -274,7 +274,7 @@
     {
       "type": "Sliding Window",
       "title": "Fixed Size Window",
-      "summary": "Fixed size windows help maintain a constant window of k elements",
+      "summary": "Fixed size windows help maintain a constant window of k elements while scanning through a sequence.",
       "exampleIntro": "Maximum sum of any subarray of size k",
       "codeExample": "def maxSumSubarray(nums, k):\n        window_sum = sum(nums[:k])\n        max_sum = window_sum\n        \n        for i in range(k, len(nums)):\n            window_sum += nums[i] - nums[i - k]\n            max_sum = max(max_sum, window_sum)\n        \n        return max_sum\n\n    # maxSumSubarray([1, 4, 2, 10, 2, 3, 1, 0, 20], 4) = 24",
       "useCaseLink": "/Notes/leetcode-sliding-window#sliding-window-application-fixed-size-window",
@@ -283,7 +283,7 @@
     {
       "type": "Sliding Window",
       "title": "Variable Size Window",
-      "summary": "Variable size windows expand and shrink dynamically depending on",
+      "summary": "Variable size windows expand and shrink dynamically depending on whether some condition or constraint is met (e.g., substring uniqueness, sum ≤ target).",
       "exampleIntro": "Longest substring without repeating characters",
       "codeExample": "def lengthOfLongestSubstring(s: str) -> int:\n        char_index = {}\n        left = max_len = 0\n        \n        for right in range(len(s)):\n            if s[right] in char_index and char_index[s[right]] >= left:\n                left = char_index[s[right]] + 1\n            \n            char_index[s[right]] = right\n            max_len = max(max_len, right - left + 1)\n        \n        return max_len\n\n    # \"abcabcbb\" → lengthOfLongestSubstring = 3",
       "useCaseLink": "/Notes/leetcode-sliding-window#sliding-window-application-variable-size-window",
@@ -294,36 +294,36 @@
     {
       "type": "Linked List",
       "title": "Linear Traversal",
-      "summary": "We can traverse a linked list node by node using a single pointer.",
+      "summary": "We can traverse a linked list node by node using a single pointer. Commonly used for printing, searching, summing values, etc.",
       "exampleIntro": "Count number of nodes in the list",
-      "codeExample": "A → B → C → D → None",
+      "codeExample": "def countNodes(head):\n        count = 0\n        curr = head\n        \n        while curr: \n            count += 1\n            curr = curr.next\n\n        return count",
       "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-linear-traversal",
       "blog": "LeetCode: Linked List"
     },
     {
       "type": "Linked List",
       "title": "Dummy Head Trick",
-      "summary": "Using a dummy (sentinel) node simplifies edge cases in linked list operations,",
+      "summary": "Using a dummy (sentinel) node simplifies edge cases in linked list operations, especially when manipulating the head node. Dummy node precedes the head, providing the uniform way to handle deletions, insertions, or merges without adding logic to handle the head.",
       "exampleIntro": "Remove nth node from end of a list using dummy head",
-      "codeExample": "A → B → C → D → E  \n            ↑       ↓  \n            H ← G ← F",
+      "codeExample": "def removeNthFromEnd(head: Optional[ListNode], n: int) -> Optional[ListNode]:\n    \n    # dummy (sentinel) node used to point to the head\n    dummy = ListNode(0, head)\n    fast = slow = dummy\n\n    # Move fast pointer n+1 steps ahead to keep gap\n    for _ in range(n + 1):\n        fast = fast.next\n\n    # Move both pointers until fast reaches end\n    while fast:\n        fast = fast.next\n        slow = slow.next\n\n    # Remove the nth node (slow.next)\n    slow.next = slow.next.next\n\n    # Return head dummy is pointing to (may be different from original)\n    return dummy.next",
       "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-dummy-head-trick",
       "blog": "LeetCode: Linked List"
     },
     {
       "type": "Linked List",
       "title": "Tortoise and Hare",
-      "summary": "We can represent fast and slow pointers to traverse the list.",
+      "summary": "We can represent fast and slow pointers to traverse the list. Useful for splitting lists in half for sorting or palindrome checks and for checking for cycles.",
       "exampleIntro": "Return middle node in list",
-      "codeExample": "def countNodes(head):\n        count = 0\n        curr = head\n        \n        while curr: \n            count += 1\n            curr = curr.next\n\n        return count",
+      "codeExample": "def findMiddle(head):\n        slow = fast = head\n\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        return slow\n\n    # If F == None: Even length list\n    # S points to start of right half\n    # Left and right halves have equal length\n\n    # If F != None: Odd length list\n    # S points to middle node (belongs to left half) \n    # Left half is longer by 1 element\n\n    # None                              S: None\n    # S^F^                              F: None\n\n    # 0     None                        S: 0\n    # S^F^                              F: 0\n\n    # 0   1   None                      S: 1\n    #     S^  F^                        F: None\n\n    # 0   1   2   None                  S: 1\n    #     S^  F^                        F: 2\n\n    # 0   1   2   3   None              S: 2\n    #         S^      F^                F: None\n\n    # 0   1   2   3   4   None          S: 2\n    #         S^      F^                F: 4\n\n    # 0   1   2   3   4   5   None      S: 3\n    #             S^          F^        F: None\n\n    # 0   1   2   3   4   5   6   None  S: 3\n    #             S^          F^        F: 6",
       "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-tortoise-and-hare",
       "blog": "LeetCode: Linked List"
     },
     {
       "type": "Linked List",
       "title": "In Place Modification",
-      "summary": "Iteratively manipulate linked list during traversal for",
+      "summary": "Iteratively manipulate linked list during traversal for O(1) time and space.",
       "exampleIntro": "Reverse the entire list and return a new head",
-      "codeExample": "def removeNthFromEnd(head: Optional[ListNode], n: int) -> Optional[ListNode]:\n    \n    # dummy (sentinel) node used to point to the head\n    dummy = ListNode(0, head)\n    fast = slow = dummy\n\n    # Move fast pointer n+1 steps ahead to keep gap\n    for _ in range(n + 1):\n        fast = fast.next\n\n    # Move both pointers until fast reaches end\n    while fast:\n        fast = fast.next\n        slow = slow.next\n\n    # Remove the nth node (slow.next)\n    slow.next = slow.next.next\n\n    # Return head dummy is pointing to (may be different from original)\n    return dummy.next",
+      "codeExample": "def reverseList(head):\n        prev = None\n        curr = head\n\n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n\n        return prev",
       "useCaseLink": "/Notes/leetcode-linked-list#linked-list-application-in-place-modification",
       "blog": "LeetCode: Linked List"
     }
@@ -332,7 +332,7 @@
     {
       "type": "Tree",
       "title": "DFS Pre Order Traversal",
-      "summary": "Traversal Order: Root -> Left -> Right",
+      "summary": "Traversal Order: Root -> Left -> Right Top Down: Root is processed immediately, then we move deeper. Used when a node's work must be done before processing its children.",
       "exampleIntro": "Serialize a Binary Tree Recursive and Iterative",
       "codeExample": "# Recursive Pre Order\n    def serializeRecursive(root: Optional[TreeNode]) -> str:\n        def dfs(node):\n            if not node:\n                vals.append(\"N\")\n                return\n            \n            # Process Root (top-down work)\n            vals.append(str(node.val))\n            \n            # Process Left Subtree\n            dfs(node.left)\n            \n            # Process Right Subtree\n            dfs(node.right)\n        \n        vals = []\n        dfs(root)\n        return \",\".join(vals)\n\n    # Iterative Pre Order (stack)\n    def serializeIterative(root: Optional[TreeNode]) -> str:\n        if not root:\n            return \"N\"\n\n        stack = [root]\n        vals = []\n        \n        while stack:\n            node = stack.pop()\n            if node:\n                # Process Root (top-down work)\n                vals.append(str(node.val))\n                \n                # Push Right then Left (stack pops left first)\n                stack.append(node.right)\n                stack.append(node.left)\n            else:\n                vals.append(\"N\")\n        \n        return \",\".join(vals)\n\n    # Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: \"1,2,N,N,3,4,N,N,5,N,N\"",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-pre-order-traversal",
@@ -341,7 +341,7 @@
     {
       "type": "Tree",
       "title": "DFS In Order Traversal",
-      "summary": "Traversal Order: Left -> Root -> Right",
+      "summary": "Traversal Order: Left -> Root -> Right Mid Point: Left is processed, then Root, followed by Right Used when a node's work must be done after visiting the left subtree but before visiting the right subtree.",
       "exampleIntro": "Convert BST to Sorted List Recursive and Validate BST Iterative",
       "codeExample": "# Recursive In Order\n    def bstToSortedList(root: Optional[TreeNode]) -> List[int]:\n        res = []\n    \n        def inOrder(node):\n            if not node:\n                return\n            \n            # Process Left Subtree\n            inOrder(node.left)\n            \n            # Process Root (midpoint work)\n            res.append(node.val)\n            \n            # Process Right Subtree\n            inOrder(node.right)\n        \n        inOrder(root)\n        return res\n\n    # Iterative In order\n    def isValidBST(root: Optional[TreeNode]) -> bool:\n        stack = []\n        prev_val = float(\"-inf\")\n        curr = root\n        \n        while stack or curr:\n            # Traverse Left Subtree\n            while curr:\n                stack.append(curr)\n                curr = curr.left\n            \n            # Process Root (midpoint work)\n            curr = stack.pop()\n            if curr.val <= prev_val:\n                return False\n            prev_val = curr.val\n            \n            # Traverse Right Subtree\n            curr = curr.right\n        \n        return True\n\n    # Example BST:\n    #       2\n    #      / \\\n    #     1   3\n    # bstToSortedList -> [1, 2, 3]\n    # isValidBST -> True",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-in-order-traversal",
@@ -350,7 +350,7 @@
     {
       "type": "Tree",
       "title": "DFS Post Order Traversal",
-      "summary": "Traversal Order: Left -> Right -> Root",
+      "summary": "Traversal Order: Left -> Right -> Root Bottom Up: Left and Right children are processed, followed by Root Useful when a node's work depends on fully processed children.",
       "exampleIntro": "Evaluate Expression Tree Recursive and Delete Tree Iterative",
       "codeExample": "# Recursive Post Order\n    def evaluateTree(root: Optional[TreeNode]) -> int:\n        if not root.left and not root.right:\n            return int(root.val)\n\n        # Process Left Subtree\n        left_val = evaluateTree(root.left)\n        \n        # Process Right Subtree\n        right_val = evaluateTree(root.right)\n        \n        # Process Root (bottom-up work)\n        if root.val == \"+\":\n            return left_val + right_val\n        elif root.val == \"-\":\n            return left_val - right_val\n        elif root.val == \"*\":\n            return left_val * right_val\n        elif root.val == \"/\":\n            return int(left_val / right_val)\n\n    # Iterative Post Order\n    def deleteTree(root: Optional[TreeNode]) -> None:\n        if not root:\n        return\n    \n        stack, output = [root], []\n        \n        while stack:\n            node = stack.pop()\n            output.append(node)\n            \n            # Push children to process them before root\n            if node.left:\n                stack.append(node.left)\n            if node.right:\n                stack.append(node.right)\n        \n        # Process Root (bottom-up: delete after children)\n        while output:\n            node = output.pop()\n            del node\n\n    # Example:\n    # Expression Tree:\n    #       \"+\"\n    #      /   \\\n    #     3     \"*\"\n    #          /   \\\n    #         2     4\n    # evaluateTree -> 11\n    #\n    # DeleteTree on:\n    #       1\n    #      / \\\n    #     2   3\n    # Deletion order: 2, 3, 1",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-traversal",
@@ -359,7 +359,7 @@
     {
       "type": "Tree",
       "title": "BFS Iterative Full Level Processing",
-      "summary": "BFS visits nodes level by level, processing all nodes at a given depth",
+      "summary": "BFS visits nodes level by level, processing all nodes at a given depth before moving on to the next. Used for level order problems and shortest path calculations in unweighted graphs, as well as scenarios requiring nodes in order of distance from the root.",
       "exampleIntro": "Level order traversal of Binary Tree",
       "codeExample": "def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:\n        if not root:\n            return []\n\n        result = []\n        queue = deque([root])\n\n        while queue:\n            level_size = len(queue)\n            level_nodes = []\n\n            # Process all nodes in current level\n            for _ in range(level_size):\n                node = queue.popleft()\n                level_nodes.append(node.val)\n\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n\n            result.append(level_nodes)\n\n        return result\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: [[1], [2, 3], [4, 5]]",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-full-level-processing",
@@ -368,7 +368,7 @@
     {
       "type": "Tree",
       "title": "BFS Iterative No Explicit Full Level Processing",
-      "summary": "BFS visit nodes in breath first order.",
+      "summary": "BFS visit nodes in breath first order. However, in some problems we don't process or store the full level at once. Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)",
       "exampleIntro": "Invert a Binary Tree",
       "codeExample": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        if not root:\n            return None\n\n        # BFS - no explicit full level processing\n        queue = deque([root])\n        \n        while queue:\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # Add children to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root\n\n        # Example:\n        # Input Tree:\n        #       4\n        #      / \\\n        #     2   7\n        # Output Tree:\n        #       4\n        #      / \\\n        #     7   2",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-no-explicit-full-level-processing",
@@ -377,7 +377,7 @@
     {
       "type": "Tree",
       "title": "Modification",
-      "summary": "Tree structure is altered by rearranging nodes or pointers,",
+      "summary": "Tree structure is altered by rearranging nodes or pointers, rather than simply traversing or querying.",
       "exampleIntro": "Invert Binary Tree (DFS Recursive + BFS Iterative)",
       "codeExample": "# DFS Recursive (Postorder style)\ndef invertTreeDFS(root: Optional[TreeNode]) -> Optional[TreeNode]:\n    if not root:\n        return None\n    # Recursively invert left and right subtrees\n    left_inverted = invertTreeDFS(root.left)\n    right_inverted = invertTreeDFS(root.right)\n    # Swap left and right children\n    root.left, root.right = right_inverted, left_inverted\n    return root\n\n# BFS Iterative\nfrom collections import deque\n\ndef invertTreeBFS(root: Optional[TreeNode]) -> Optional[TreeNode]:\n    if not root:\n        return None\n    queue = deque([root])\n    while queue:\n        node = queue.popleft()\n        # Swap children\n        node.left, node.right = node.right, node.left\n        # Add children to queue if they exist\n        if node.left:\n            queue.append(node.left)\n        if node.right:\n            queue.append(node.right)\n    return root\n\n# Example Tree:\n#       4\n#      / \\\n#     2   7\n#    / \\ / \\\n#   1  3 6  9\n#\n# Inverted Tree:\n#       4\n#      / \\\n#     7   2\n#    / \\ / \\\n#   9  6 3  1",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-modification",
@@ -386,7 +386,7 @@
     {
       "type": "Tree",
       "title": "MinHeap",
-      "summary": "Use a MinHeap, a type of binary tree, to maintain the smallest or",
+      "summary": "Use a MinHeap, a type of binary tree, to maintain the smallest or highest-priority elements efficiently.",
       "exampleIntro": "Find the Top K Frequent Elements in a List",
       "codeExample": "def topKFrequent(nums: List[int], k: int) -> List[int]:\n        from collections import defaultdict\n        import heapq\n\n        # Step 1: Frequency count for each unique integer\n        count = defaultdict(int)  # O(m) space complexity for m unique integers\n        for num in nums:  # O(n) time complexity to iterate over n integers\n            count[num] += 1\n\n        # Step 2: Use a MinHeap to track the k most frequent elements\n        minHeap = []  # O(k) space complexity for k elements\n        for num, freq in count.items():  # O(m) time complexity for m unique integers\n            heapq.heappush(minHeap, (freq, num))  # O(log k) for each insertion\n            if len(minHeap) > k:  # Ensure heap size remains k\n                heapq.heappop(minHeap)  # O(log k) for each removal\n\n        # Step 3: Extract the elements from the heap\n        return [num for freq, num in minHeap]  # O(k) time complexity to extract results\n\n    # Example:\n    # Input: nums = [1, 1, 1, 2, 2, 3], k = 2\n    # Output: [1, 2]",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-minheap",

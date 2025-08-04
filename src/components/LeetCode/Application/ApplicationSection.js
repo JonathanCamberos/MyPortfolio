@@ -68,9 +68,9 @@ const ApplicationSection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-5 sm:mt-10 md:mt-24 sxl:px-32 px-5 sm:px-10 md:px-24">
         {filteredUseCases.length > 0 ? (
           filteredUseCases.map((useCase, index) => (
-            <Link href={useCase.useCaseLink} key={index} className="col-span-1 row-span-1">
+            <div key={index} className="col-span-1 row-span-1">
               <Application useCase={useCase} />
-            </Link>
+            </div>
           ))
         ) : (
           <p className="mt-0">

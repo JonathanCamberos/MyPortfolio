@@ -304,10 +304,8 @@ function parseQuestions(content, blogTitle) {
 function parseUseCases(content, blogTitle) {
   const useCasesMap = {};
   const useCaseRegex = /^###\s([\w\s]+)\sApplication:\s(.+)$/gm;
-  const summaryRegex = /^(?!###).+$/;
-  const exampleIntroRegex = /Ex:\s([\s\S]*?)(?=```)/;
-  const codeBlockRegex = /```python([\s\S]*?)```/gm;
 
+  // Normalize keys helper
   const normalizeKey = (key) =>
     key
       .toLowerCase()
@@ -319,18 +317,27 @@ function parseUseCases(content, blogTitle) {
     .replace(/[^a-z0-9\s]/g, "")
     .replace(/\s+/g, "-");
 
-  let currentUseCase = null;
-  let lines = content.split("\n");
-  let currentExampleIntroIndex = -1;
+  const lines = content.split("\n");
 
-  lines.forEach((line, idx) => {
+  let currentUseCase = null;
+  let summaryLines = [];
+  let collectingSummary = false;
+  let exampleIntroFoundAt = -1;
+
+  for (let idx = 0; idx < lines.length; idx++) {
+    const line = lines[idx];
+
     const useCaseMatch = useCaseRegex.exec(line);
     if (useCaseMatch) {
+      // Save previous use case if any
       if (currentUseCase) {
-        const normalizedKey = normalizeKey(currentUseCase.type);
-        if (!useCasesMap[normalizedKey]) useCasesMap[normalizedKey] = [];
-        useCasesMap[normalizedKey].push(currentUseCase);
+        currentUseCase.summary = summaryLines.join(" ").trim();
+        const normalizedType = normalizeKey(currentUseCase.type);
+        if (!useCasesMap[normalizedType]) useCasesMap[normalizedType] = [];
+        useCasesMap[normalizedType].push(currentUseCase);
       }
+
+      // Reset for new use case
       const [, structureType, useCaseTitle] = useCaseMatch;
       currentUseCase = {
         type: structureType.trim(),
@@ -338,52 +345,67 @@ function parseUseCases(content, blogTitle) {
         summary: "",
         exampleIntro: "",
         codeExample: "",
-        // changed here: use-case => application
         useCaseLink: `/Notes/${formattedBlogTitle}#${normalizeKey(structureType)}-application-${normalizeKey(
           useCaseTitle
         )}`,
         blog: blogTitle,
       };
-      return;
+
+      summaryLines = [];
+      collectingSummary = true;
+      exampleIntroFoundAt = -1;
+      continue;
     }
 
-    if (currentUseCase && !currentUseCase.summary && summaryRegex.test(line)) {
-      currentUseCase.summary += line.trim();
-      return;
-    }
+    // Collect summary lines (all lines until the line starts with 'Ex:')
+    if (currentUseCase && collectingSummary) {
+      if (line.startsWith("Ex:")) {
+        collectingSummary = false;
+        exampleIntroFoundAt = idx;
 
-    if (currentUseCase && line.startsWith("Ex:")) {
-      const exampleIntroMatch = exampleIntroRegex.exec(content.slice(content.indexOf(line)));
-      if (exampleIntroMatch) {
-        currentUseCase.exampleIntro = exampleIntroMatch[1].trim();
-        currentExampleIntroIndex = idx;
+        // Capture example intro text after 'Ex:'
+        currentUseCase.exampleIntro = line.slice(3).trim();
+        continue;
       }
-      return;
-    }
 
-    if (
-      currentUseCase &&
-      currentExampleIntroIndex !== -1 &&
-      idx > currentExampleIntroIndex &&
-      line.startsWith("```python")
-    ) {
-      const codeBlockMatch = codeBlockRegex.exec(content.slice(content.indexOf(line)));
-      if (codeBlockMatch) {
-        currentUseCase.codeExample = codeBlockMatch[1].trim();
-        currentExampleIntroIndex = -1;
+      if (line.trim() !== "") {
+        summaryLines.push(line.trim());
       }
-      return;
+      continue;
     }
-  });
 
+    // After example intro line found, look for the first code block starting from here
+    if (currentUseCase && exampleIntroFoundAt !== -1 && idx > exampleIntroFoundAt) {
+      if (line.startsWith("```python")) {
+        // Join the rest lines from this idx onward to search the code block
+        const remainingContent = lines.slice(idx).join("\n");
+        const codeBlockMatch = /```python([\s\S]*?)```/.exec(remainingContent);
+
+        if (codeBlockMatch) {
+          currentUseCase.codeExample = codeBlockMatch[1].trim();
+
+          // Move idx forward past this code block to avoid reprocessing
+          // Count how many lines the code block spans
+          const codeBlockLines = codeBlockMatch[0].split("\n").length;
+          idx += codeBlockLines - 1; // -1 because for-loop will add 1
+        }
+        exampleIntroFoundAt = -1; // reset so we don't grab multiple code blocks
+        continue;
+      }
+    }
+  }
+
+  // Save last use case
   if (currentUseCase) {
-    const normalizedKey = normalizeKey(currentUseCase.type);
-    if (!useCasesMap[normalizedKey]) useCasesMap[normalizedKey] = [];
-    useCasesMap[normalizedKey].push(currentUseCase);
+    currentUseCase.summary = summaryLines.join(" ").trim();
+    const normalizedType = normalizeKey(currentUseCase.type);
+    if (!useCasesMap[normalizedType]) useCasesMap[normalizedType] = [];
+    useCasesMap[normalizedType].push(currentUseCase);
   }
 
   return useCasesMap;
 }
+
 
 // New organizeSolutions function
 function organizeSolutions(inputPath, outputPath) {
