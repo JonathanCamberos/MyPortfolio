@@ -170,13 +170,19 @@ Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 
 Level Order Traversal -> BFS (iterative) queue based
 
-### Tree Application: DFS Pre Order Traversal
+### Tree Application: DFS Pre Order Traversal Top Down
 Traversal Order: Root -> Left -> Right.
 Top Down: Root is processed immediately, then we move deeper.
 Used when a node's work must be done before processing its children.
 
 Ex: Serialize a Binary Tree Recursive and Iterative
 ```python
+    # ----------------------------------------
+    # Why Pre Order?
+    # To serialize a graph into an array, you need copy the root value 
+    # before you get the left and right children value.
+    # Boils down to process order of: Root -> Left -> Right
+
     # ----------------------------------------
     # Recursive Pre Order
     def serializeRecursive(root: Optional[TreeNode]) -> str:
@@ -193,17 +199,17 @@ Ex: Serialize a Binary Tree Recursive and Iterative
             # add to serialized array
             vals.append(str(node.val))
             
-            # Process Left Subtree
+            # Process Left and Right Subtree
             dfsPreOrder(node.left)
-            
-            # Process Right Subtree
             dfsPreOrder(node.right)
         
         # array representing tree
         vals = []
+
+        # start recursive Top Down at Head Root
         dfsPreOrder(root)
 
-        # join values of tree and return
+        # join array representation of tree and return
         return ",".join(vals)
 
     # ----------------------------------------
@@ -256,7 +262,7 @@ Ex: Serialize a Binary Tree Recursive and Iterative
     # Output: "1,2,N,N,3,4,N,N,5,N,N"
 ```
 
-### Tree Application: DFS In Order Traversal
+### Tree Application: DFS In Order Traversal Mid Point
 Traversal Order: Left -> Root -> Right
 Mid Point: Left is processed, then Root, followed by Right 
 Used when a node's work must be done after visiting the left subtree
@@ -264,6 +270,12 @@ but before visiting the right subtree.
 
 Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python
+    # ----------------------------------------
+    # Why In Order?
+    # We assume tree is sorted by value: left < root < right,
+    # so we traverse in this order.
+    # Boils down to process order of: Left -> Root -> Right
+
     # ----------------------------------------
     # Recursive In Order
     def bstToSortedList(root: Optional[TreeNode]) -> List[int]:
@@ -288,25 +300,45 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
     # Iterative In order
     def isValidBST(root: Optional[TreeNode]) -> bool:
         
-        stack = []
+        # Track the previously visited value to ensure ascending order
         prev_val = float("-inf")
+
+        # stack for DFS
+        stack = [] 
+
+        # current pointer starting at root
         curr = root
         
-        # 
         while stack or curr:
             
-            # Traverse Left Subtree
+            # Traverse as far left as possible
             while curr:
+                # push curr root onto stack, 
+                # update curr root -> left subtree,
+                # explore new root (left)
                 stack.append(curr)
                 curr = curr.left
             
-            # Process Root (midpoint work)
+            # Exited Loop: Reached Leaf on Left Subtree
+            #     L
+            #  /     \ 
+            # leaf    ?
+                        
+            # Grab previous Left Subtree Root (from the stack)
             curr = stack.pop()
+
+            # Validate that current value is greater than previous
             if curr.val <= prev_val:
                 return False
+
+            # Update to current node's value
             prev_val = curr.val
             
-            # Traverse Right Subtree
+            # Move to the right subtree
+            # (which will eventually push more left children if they exist)
+            #     L
+            #  /     \ 
+            # leaf    *here*
             curr = curr.right
         
         return True
@@ -319,16 +351,28 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
     #      / \
     #     1   3
     # bstToSortedList -> [1, 2, 3]
+
+    # Tree:
+    #       2
+    #      / \
+    #     1   3
     # isValidBST -> True
 ```
 
-### Tree Application: DFS Post Order Traversal
+### Tree Application: DFS Post Order Traversal Bottom Up
 Traversal Order: Left -> Right -> Root
 Bottom Up: Left and Right children are processed, followed by Root
 Useful when a node's work depends on fully processed children. 
 
 Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```python
+    # ----------------------------------------
+    # Why Post Order?
+    # We need to compute/process the left and right subtrees 
+    # before computing the root itself.
+    # In other words, the root is dependent on the left and right subtrees.
+    # Boils down to process order of: Left -> Right -> Root
+
     # ----------------------------------------
     # Recursive Post Order
     def evaluateTree(root: Optional[TreeNode]) -> int:
@@ -357,30 +401,78 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
         
         return dfsPostOrder(root)
 
-
     # ----------------------------------------
     # Iterative Post Order
-    def deleteTree(root: Optional[TreeNode]) -> None:
+    def postorderTraversal(root: Optional[TreeNode]) -> None:
+        
+        # Empty check
         if not root:
-        return
-    
-        stack, output = [root], []
+            return 0
         
-        # 
-        while stack:
-            node = stack.pop()
-            output.append(node)
+        # stack for dfs
+        stack = []
+
+        # start at head root
+        curr = root
+
+        # last visited to avoid repeat visits
+        lastVisited = None
+
+        # store evaluated values for nodes
+        value_map = {}
+        
+        while stack or curr:
+
+            # Process Left Subtree:
+            # Traverse as far left as possible -> push left node for later process
+            while curr:
+                stack.append(curr)
+                curr = curr.left
             
-            # Push children to process them before root
-            if node.left:
-                stack.append(node.left)
-            if node.right:
-                stack.append(node.right)
+            # iteration 1 curr: reached leaf of a left subtree
+            # iteration 2 stack: recursed to root previous push during left exploration
+            peekNode = stack[-1]
+            
+            # Process Right Subtree:
+            # If right child exists and hasn't been processed -> explore right
+            if peekNode.right and lastVisited != peekNode.right:
+                curr = peekNode.right
+                
+            # Process Root:
+            # Both left and right have been processed 
+            else:
+
+                # pop root from previously pushed during left exploration
+                stack.pop()
+                
+                # Both left and right are None:
+                # peekNode -> Leaf node (operand)
+                if not peekNode.left and not peekNode.right:
+                    value_map[peekNode] = int(peekNode.val)
+                
+                # Else: 
+                # peekNode -> Non Leaf Node (operator)
+                else:
+
+                    # grab processed left and right values
+                    left_val = value_map.get(peekNode.left, 0)
+                    right_val = value_map.get(peekNode.right, 0)
+                    
+                    # compute: current node map -> value
+                    if peekNode.val == "+":
+                        value_map[peekNode] = left_val + right_val
+                    elif peekNode.val == "-":
+                        value_map[peekNode] = left_val - right_val
+                    elif peekNode.val == "*":
+                        value_map[peekNode] = left_val * right_val
+                    elif peekNode.val == "/":
+                        value_map[peekNode] = int(left_val / right_val)
+                
+                # update visited (to avoid duplicate visits)
+                lastVisited = peekNode
         
-        # Process Root (bottom-up: delete after children)
-        while output:
-            node = output.pop()
-            del node
+        # return final computed value
+        return value_map[root]
     # ----------------------------------------
     # Result of recursive and iterative:
 
@@ -391,12 +483,6 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
     #          /   \
     #         2     4
     # evaluateTree -> 11
-
-    # DeleteTree:
-    #       1
-    #      / \
-    #     2   3
-    # Deletion order: 2, 3, 1
 ```
 
 ### Tree Application: BFS Iterative Full Level Processing
