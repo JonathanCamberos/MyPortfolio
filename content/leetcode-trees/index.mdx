@@ -1125,7 +1125,7 @@ Find the max depth of a binary tree.
                 dfs(node.right, depth + 1)
             )
     
-    return dfs(root, 0)
+        return dfs(root, 0)
 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1137,16 +1137,30 @@ Find the max depth of a binary tree.
 ### Solution 2: DFS Recursive - Tree/DFA In Order Traversal
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # Idea: DFS recursive approach calculates depth from leaf upward
+        # 2. Base case: if node is None, depth = 0
+        # 3. Recursive case:
+        #    depth_left = depth of left subtree
+        #    depth_right = depth of right subtree
+        #    depth = 1 + max(depth_left, depth_right)
+        # 4. Returns depth of root as final result
+
         self.max_depth = 0
         
         def inorder(node, depth):
+            
+            # Base case:
+            # Leaf Node has no depth
             if not node:
                 return
 
             # Go left first
             inorder(node.left, depth + 1)
+
              # "Visit" root
             self.max_depth = max(self.max_depth, depth + 1)
+
             # Go right
             inorder(node.right, depth + 1)
         
@@ -1163,19 +1177,20 @@ Find the max depth of a binary tree.
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
-        # Idea: DFS postorder traversal (Left → Right → Root)
-        # 1. Compute depth of left subtree
-        # 2. Compute depth of right subtree
-        # 3. Combine results at root
-        # This is naturally bottom-up since we process children first
+        # Idea: DFS postorder traversal (Left -> Right -> Root)
+        # 1. Process depth of left subtree
+        # 2. Process depth of right subtree
+        # 3. Process results at root
+        # Result: Natural Bottom Up solution (need children results to compute root)
         
         if not root:
             return 0
         
-        # Traverse left and right children
+        # Process left and right children
         left_depth = self.maxDepth(root.left)
         right_depth = self.maxDepth(root.right)
         
+        # Process Root
         return 1 + max(left_depth, right_depth)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1185,9 +1200,35 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
+### Solution 4: DFS Iterative Stack - Tree/DFA Post Order Traversal
+```python
+    # Note:
+    # 1. DFS iterative approach simulates recursion using a stack
+    # 2. Each stack entry stores (node, current depth)
+    # 3. Update max_depth when visiting each node
+    # 4. Works like Postorder — compute children before root aggregation
+    
+    if not root:
+        return 0
+    
+    stack = [(root, 1)]
+    max_depth = 0
+    
+    while stack:
+        node, depth = stack.pop()
+        if node:
+            # Update maximum depth
+            max_depth = max(max_depth, depth)
+            
+            # Push children with incremented depth
+            stack.append((node.left, depth + 1))
+            stack.append((node.right, depth + 1))
+    
+    return max_depth
+```
 
 
-### Solution 4: BFS Iterative - Tree/BFS Iterative Full Level Processing
+### Solution 5: BFS Iterative - Tree/BFS Iterative Full Level Processing
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1225,6 +1266,34 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
+### Solution 6: BFS Iterative Node Depth Pair - Tree/BFS Iterative Full Level Processing
+```python
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # Note:
+        # 1. BFS without explicit level size
+        # 2. Queue stores (node, depth)
+        # 3. Track depth as you dequeue each node
+        
+        if not root:
+            return 0
+        
+        queue = deque([(root, 1)])
+        max_depth = 0
+        
+        while queue:
+            node, depth = queue.popleft()
+            
+            # Update maximum depth
+            max_depth = max(max_depth, depth)
+            
+            # Add children with incremented depth
+            if node.left:
+                queue.append((node.left, depth + 1))
+            if node.right:
+                queue.append((node.right, depth + 1))
+        
+        return max_depth
+```
 
 ## 543. Diameter of Binary Tree ::2:: - Easy
 
