@@ -485,7 +485,8 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
     # evaluateTree -> 11
 ```
 
-### Tree Application: BFS Iterative Full Level Processing
+### Tree Application: BFS Iterative Level Size Based Grouping Processing
+Traversal Order: Level by Level
 BFS visits nodes level by level, processing all nodes at a given depth 
 before moving on to the next.
 Used for level order problems and shortest path calculations in unweighted graphs,
@@ -533,7 +534,8 @@ Ex: Level order traversal of Binary Tree
     # Output: [[1], [2, 3], [4, 5]]
 ```
 
-### Tree Application: BFS Iterative No Explicit Full Level Processing
+### Tree Application: BFS Iterative No Explicit Level Sized Grouping Processing
+Traversal Order: Level by Level
 BFS visit nodes in breath first order.
 However, in some problems we don't process or store the full level at once.
 Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)
@@ -572,6 +574,214 @@ Ex: Invert a Binary Tree
         #      / \
         #     7   2
 ```
+
+### Tree Application: BFS Iterative Distance from Root Matters
+Traversal Order: Level by Level
+Distance Tracking: Each level corresponds to one distance step from the root.
+Used when the problem depends on minimum, maximum or some count depth.
+
+Ex: Minimum Depth of a Binary Tree
+```python
+    # ----------------------------------------
+    # Why BFS with Distance Tracking?
+    # BFS naturally explores nodes by distance from the root.
+    # The first leaf node encountered gives the minimum depth.
+    # Boils down to BFS where level number = distance.
+
+    # ----------------------------------------
+    # Iterative BFS with Depth Tracking
+    def minDepth(root: Optional[TreeNode]) -> int:
+        from collections import deque
+        
+        # Empty Tree
+        if not root:
+            return 0
+        
+        queue = deque([(root, 1)])  # store (node, depth)
+        
+        # BFS until first leaf is found
+        while queue:
+            node, depth = queue.popleft()
+            
+            # Leaf found: return depth
+            if not node.left and not node.right:
+                return depth
+            
+            # Add children with updated depth
+            if node.left:
+                queue.append((node.left, depth + 1))
+            if node.right:
+                queue.append((node.right, depth + 1))
+```
+
+### Tree Application: BFS Iterative State Changes Propagate Outward
+Traversal Order: Level by Level
+State Propagation: Changes spread outward in BFS "waves" from a source node.
+Used when state changes spread level by level (burning, infection)
+
+Ex: Infection Spread in Binary Tree
+```python
+    # ----------------------------------------
+    # Why BFS for State Propagation?
+    # State changes (infection, burning) spread to direct neighbors each step.
+    # BFS naturally handles wave-like outward spreading by levels.
+    # Boils down to BFS from the source with time = levels.
+
+    # ----------------------------------------
+    # Iterative BFS for Propagation
+    def amountOfTime(root: Optional[TreeNode], start: int) -> int:
+        from collections import defaultdict, deque
+        
+        # Step 1: Build adjacency list (treat tree as undirected graph)
+        graph = defaultdict(list)
+        
+        def dfs(node):
+            if not node:
+                return
+            if node.left:
+                graph[node.val].append(node.left.val)
+                graph[node.left.val].append(node.val)
+                dfs(node.left)
+            if node.right:
+                graph[node.val].append(node.right.val)
+                graph[node.right.val].append(node.val)
+                dfs(node.right)
+        
+        dfs(root)
+        
+        # Step 2: BFS starting from infected node
+        visited = set([start])
+        queue = deque([(start, 0)])
+        time = 0
+        
+        while queue:
+            node, time = queue.popleft()
+            
+            # Spread to neighbors
+            for nei in graph[node]:
+                if nei not in visited:
+                    visited.add(nei)
+                    queue.append((nei, time + 1))
+        
+        return time
+```
+
+### Tree Application: BFS Iterative Non-Standard Level Traversal
+Traversal ORder: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns)
+Used when the traversal order of nodes at each level must follow a specific 
+non standard pattern
+
+Ex: Binary Tree Zigzag Level Order Traversal
+```python
+    # ----------------------------------------
+    # Why BFS for Non-Standard Level Traversal?
+    # BFS visits nodes level by level, making it simple to apply 
+    # transformations (reversals, zigzags, diagonal skips, etc.) 
+    # before storing each level.
+    # Boils down to BFS level grouping + order transformation.
+
+    # ----------------------------------------
+    # Iterative BFS with Zigzag Example
+    def zigzagLevelOrder(root: Optional[TreeNode]) -> List[List[int]]:
+        from collections import deque
+        
+        # Empty Tree
+        if not root:
+            return []
+        
+        result = []
+        queue = deque([root])
+        left_to_right = True  # toggle for order
+        
+        while queue:
+            level_size = len(queue)
+            level_nodes = deque()
+            
+            # Process all nodes in current level
+            for _ in range(level_size):
+                node = queue.popleft()
+                
+                # Append based on pattern
+                if left_to_right:
+                    level_nodes.append(node.val)
+                else:
+                    level_nodes.appendleft(node.val)
+                
+                # Add children for next level
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            
+            result.append(list(level_nodes))
+            left_to_right = not left_to_right  # flip order for next level
+        
+        return result
+
+    # Example:
+    # Input Tree:
+    #       1
+    #      / \
+    #     2   3
+    #    / \   \
+    #   4   5   6
+    # Output: [[1], [3, 2], [4, 5, 6]]
+```
+
+### Tree Application: BFS Iterative Per Level Aggregation
+Traversal Order: Level by Level
+BFS naturally groups nodes by level, making it useful when each 
+level's value must be combined into an aggregate value (sum, average, product, etc)
+
+Ex: Average of Levels in a Binary Tree
+```python
+    # ----------------------------------------
+    # Why BFS for Per-Level Aggregation?
+    # BFS processes all nodes in a level before moving to the next, 
+    # making it easy to compute per-level aggregates in one pass.
+    # Boils down to BFS level grouping + aggregate computation.
+
+    # ----------------------------------------
+    # Iterative BFS with Per-Level Average
+    def averageOfLevels(root: Optional[TreeNode]) -> List[float]:
+        from collections import deque
+        
+        # Empty Tree
+        if not root:
+            return []
+        
+        result = []
+        queue = deque([root])
+        
+        while queue:
+            level_size = len(queue)
+            level_sum = 0
+            
+            # Process all nodes in current level
+            for _ in range(level_size):
+                node = queue.popleft()
+                level_sum += node.val
+                
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            
+            # Compute average for level
+            result.append(level_sum / level_size)
+        
+        return result
+
+    # Example:
+    # Input Tree:
+    #       3
+    #      / \
+    #     9   20
+    #        /  \
+    #       15   7
+    # Output: [3.0, 14.5, 11.0]
+```
+
 
 ### Tree Application: Modification
 Tree structure is altered by rearranging nodes or pointers,
