@@ -358,20 +358,56 @@
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Full Level Processing",
-      "summary": "BFS visits nodes level by level, processing all nodes at a given depth before moving on to the next. Used for level order problems and shortest path calculations in unweighted graphs, as well as scenarios requiring nodes in order of distance from the root.",
+      "title": "BFS Iterative Level Size Based Grouping Processing",
+      "summary": "Traversal Order: Level by Level BFS visits nodes level by level, processing all nodes at a given depth before moving on to the next. Used for level order problems and shortest path calculations in unweighted graphs, as well as scenarios requiring nodes in order of distance from the root.",
       "exampleIntro": "Level order traversal of Binary Tree",
       "codeExample": "# ----------------------------------------\n    # Iterative\n    def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:\n        \n        # Empty check\n        if not root:\n            return []\n\n        result = []\n        queue = deque([root])\n\n        # \n        while queue:\n            level_size = len(queue)\n            level_nodes = []\n\n            # Process all nodes in current level\n            for _ in range(level_size):\n                node = queue.popleft()\n                level_nodes.append(node.val)\n\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n\n            result.append(level_nodes)\n\n        return result\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: [[1], [2, 3], [4, 5]]",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-full-level-processing",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-level-size-based-grouping-processing",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative No Explicit Full Level Processing",
-      "summary": "BFS visit nodes in breath first order. However, in some problems we don't process or store the full level at once. Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)",
+      "title": "BFS Iterative No Explicit Level Sized Grouping Processing",
+      "summary": "Traversal Order: Level by Level BFS visit nodes in breath first order. However, in some problems we don't process or store the full level at once. Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)",
       "exampleIntro": "Invert a Binary Tree",
       "codeExample": "# ----------------------------------------\n    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        if not root:\n            return None\n\n        # BFS - no explicit full level processing\n        queue = deque([root])\n        \n        while queue:\n            node = queue.popleft()\n            \n            # Swap left and right children\n            node.left, node.right = node.right, node.left\n            \n            # Add children to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root\n\n        # Example:\n        # Input Tree:\n        #       4\n        #      / \\\n        #     2   7\n        # Output Tree:\n        #       4\n        #      / \\\n        #     7   2",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-no-explicit-full-level-processing",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-no-explicit-level-sized-grouping-processing",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BFS Iterative Distance from Root Matters",
+      "summary": "Traversal Order: Level by Level Distance Tracking: Each level corresponds to one distance step from the root. Used when the problem depends on minimum, maximum or some count depth.",
+      "exampleIntro": "Minimum Depth of a Binary Tree",
+      "codeExample": "# ----------------------------------------\n    # Why BFS with Distance Tracking?\n    # BFS naturally explores nodes by distance from the root.\n    # The first leaf node encountered gives the minimum depth.\n    # Boils down to BFS where level number = distance.\n\n    # ----------------------------------------\n    # Iterative BFS with Depth Tracking\n    def minDepth(root: Optional[TreeNode]) -> int:\n        from collections import deque\n        \n        # Empty Tree\n        if not root:\n            return 0\n        \n        queue = deque([(root, 1)])  # store (node, depth)\n        \n        # BFS until first leaf is found\n        while queue:\n            node, depth = queue.popleft()\n            \n            # Leaf found: return depth\n            if not node.left and not node.right:\n                return depth\n            \n            # Add children with updated depth\n            if node.left:\n                queue.append((node.left, depth + 1))\n            if node.right:\n                queue.append((node.right, depth + 1))",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-distance-from-root-matters",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BFS Iterative State Changes Propagate Outward",
+      "summary": "Traversal Order: Level by Level State Propagation: Changes spread outward in BFS \"waves\" from a source node. Used when state changes spread level by level (burning, infection)",
+      "exampleIntro": "Infection Spread in Binary Tree",
+      "codeExample": "# ----------------------------------------\n    # Why BFS for State Propagation?\n    # State changes (infection, burning) spread to direct neighbors each step.\n    # BFS naturally handles wave-like outward spreading by levels.\n    # Boils down to BFS from the source with time = levels.\n\n    # ----------------------------------------\n    # Iterative BFS for Propagation\n    def amountOfTime(root: Optional[TreeNode], start: int) -> int:\n        from collections import defaultdict, deque\n        \n        # Step 1: Build adjacency list (treat tree as undirected graph)\n        graph = defaultdict(list)\n        \n        def dfs(node):\n            if not node:\n                return\n            if node.left:\n                graph[node.val].append(node.left.val)\n                graph[node.left.val].append(node.val)\n                dfs(node.left)\n            if node.right:\n                graph[node.val].append(node.right.val)\n                graph[node.right.val].append(node.val)\n                dfs(node.right)\n        \n        dfs(root)\n        \n        # Step 2: BFS starting from infected node\n        visited = set([start])\n        queue = deque([(start, 0)])\n        time = 0\n        \n        while queue:\n            node, time = queue.popleft()\n            \n            # Spread to neighbors\n            for nei in graph[node]:\n                if nei not in visited:\n                    visited.add(nei)\n                    queue.append((nei, time + 1))\n        \n        return time",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-state-changes-propagate-outward",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BFS Iterative Non-Standard Level Traversal",
+      "summary": "Traversal ORder: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns) Used when the traversal order of nodes at each level must follow a specific non standard pattern",
+      "exampleIntro": "Binary Tree Zigzag Level Order Traversal",
+      "codeExample": "# ----------------------------------------\n    # Why BFS for Non-Standard Level Traversal?\n    # BFS visits nodes level by level, making it simple to apply \n    # transformations (reversals, zigzags, diagonal skips, etc.) \n    # before storing each level.\n    # Boils down to BFS level grouping + order transformation.\n\n    # ----------------------------------------\n    # Iterative BFS with Zigzag Example\n    def zigzagLevelOrder(root: Optional[TreeNode]) -> List[List[int]]:\n        from collections import deque\n        \n        # Empty Tree\n        if not root:\n            return []\n        \n        result = []\n        queue = deque([root])\n        left_to_right = True  # toggle for order\n        \n        while queue:\n            level_size = len(queue)\n            level_nodes = deque()\n            \n            # Process all nodes in current level\n            for _ in range(level_size):\n                node = queue.popleft()\n                \n                # Append based on pattern\n                if left_to_right:\n                    level_nodes.append(node.val)\n                else:\n                    level_nodes.appendleft(node.val)\n                \n                # Add children for next level\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            \n            result.append(list(level_nodes))\n            left_to_right = not left_to_right  # flip order for next level\n        \n        return result\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #    / \\   \\\n    #   4   5   6\n    # Output: [[1], [3, 2], [4, 5, 6]]",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-nonstandard-level-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BFS Iterative Per Level Aggregation",
+      "summary": "Traversal Order: Level by Level BFS naturally groups nodes by level, making it useful when each level's value must be combined into an aggregate value (sum, average, product, etc)",
+      "exampleIntro": "Average of Levels in a Binary Tree",
+      "codeExample": "# ----------------------------------------\n    # Why BFS for Per-Level Aggregation?\n    # BFS processes all nodes in a level before moving to the next, \n    # making it easy to compute per-level aggregates in one pass.\n    # Boils down to BFS level grouping + aggregate computation.\n\n    # ----------------------------------------\n    # Iterative BFS with Per-Level Average\n    def averageOfLevels(root: Optional[TreeNode]) -> List[float]:\n        from collections import deque\n        \n        # Empty Tree\n        if not root:\n            return []\n        \n        result = []\n        queue = deque([root])\n        \n        while queue:\n            level_size = len(queue)\n            level_sum = 0\n            \n            # Process all nodes in current level\n            for _ in range(level_size):\n                node = queue.popleft()\n                level_sum += node.val\n                \n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            \n            # Compute average for level\n            result.append(level_sum / level_size)\n        \n        return result\n\n    # Example:\n    # Input Tree:\n    #       3\n    #      / \\\n    #     9   20\n    #        /  \\\n    #       15   7\n    # Output: [3.0, 14.5, 11.0]",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-per-level-aggregation",
       "blog": "LeetCode: Trees"
     },
     {

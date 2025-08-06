@@ -869,7 +869,7 @@ Ex: Find the Top K Frequent Elements in a List
 ```
 
 
-## 226. Invert Binary Tree ::4:: - Easy
+## 226. Invert Binary Tree ::2:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
@@ -916,85 +916,18 @@ Invert the binary tree.
 ```python
 ```
 
-### Solution 1: DFS Recursive - Tree/DFS Pre Order Traversal
-```python
-    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
-        # Note:
-        # Idea: DFS recursive inverts subtrees from bottom up
-        # 1. Base case: return None if node is null
-        # 2. Swap left and right children at each node
-        # 3. Recurse into left and right children
-        # 4. Returns inverted root
-        # Result: Original tree has been inverted
-        
-        # Base case:
-        # empty tree -> curr at leaf -> do nothing
-        if not root:
-            return None
-        
-        # Process Root: 
-        # Swap left and right children
-        root.left, root.right = root.right, root.left
-        
-        # Process Left + Right: 
-        # Recursive calls to invert the left and right subtrees
-        self.invertTree(root.left)
-        self.invertTree(root.right)
-        
-        # overall: time complexity O(n)
-        # overall: space complexity O(h), O(log n) for balanced tree
-        return root
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-### Solution 2: DFS Recursive - Tree/DFS In Order Traversal
-```python
-    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        # Note:
-        # Idea: DFS recursive approach using in order traversal
-        # 1. Traverse original left subtree first
-        # 2. Swap left and right children at current node
-        # 3. Traverse the new left subtree (originally the right)
-        # Result: Tree inverted in place using in order order
-        
-        # Base case:
-        if not root:
-            return None
-        
-        # Process Left:
-        # Recursive call to invert left subtree
-        self.invertTree(root.left)
-        
-        # Process Root:
-        # Swap left and right children
-        root.left, root.right = root.right, root.left
-        
-        # Process Right:
-        # Recursive call to invert right subtree (now left)
-        self.invertTree(root.left)
-        
-        # overall: time complexity O(n)
-        # overall: space complexity O(h), balanced tree O(log n), skewed tree O(n)
-        return root
-```
-
-
-### Solution 3: DFS Recursive - Tree/DFS Post Order Traversal
+### Solution 1: DFS Recursive - Tree/DFS Post Order Traversal
 ```python
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
         # Idea: DFS recursive approach inverts subtrees from bottom up (postorder)
         # 1. Base case: return None if node is null
-        # 2. Recursively invert left subtree
-        # 3. Recursively invert right subtree
-        # 4. Swap left and right children of current node
-        # 5. Return inverted root
+        # 2. Left -> Right: Recursively invert subtree
+        # 3. Root: Swap left and right children
         # Result: Original tree has been inverted
 
+        # Base case:
+        # reached empty TreeNode
         if not root:
             return None
 
@@ -1013,35 +946,40 @@ Invert the binary tree.
         return root
 ```
 
-### Solution 4: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 2: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
         # Idea: BFS iterative approach inverts nodes level by level
         # 1. Queue stores nodes to process
-        # 2. For curr root pop() from queue:
+        # 2. While Queue is non empty
+        # 3. Process Root: 
+        #    Pop() from queue 
         #    Swap left and right children
-        #    Add non None children to queue
-        # 3. Continue while queue non empty
+        #    Push() left and right children to queue for processing
+        # Result: Tree reverse in place
         
         # Empty tree check
         if not root:
             return None
         
-        # Queue to support BFS
+        # dfs Queue:
         queue = deque([root])
         
-        # time complexity: iterate over tree, level by level O(n)
+        # queue hold nodes to be processed
+        # time complexity: iterate over tree by queuing nodes, level by level O(n)
         while queue:
 
-            # grab curr root, oldest TreeNode, First In First Out
+            # Grab Root:
+            # pop() from queue -> curr root
             currRoot = queue.popleft()
             
+            # Process Root:
             # Swap left and right children
             currRoot.left, currRoot.right = currRoot.right, currRoot.left
             
-            # iterate over tree:
-            # Add non None children to queue
+            # Process Left and Right subtrees:
+            # add left and right to dfs queue
             if currRoot.left:
                 queue.append(currRoot.left)
             if currRoot.right:
@@ -1058,7 +996,7 @@ Invert the binary tree.
 |  |  |  |  |  |
 
 
-## 104. Maximum Depth of Binary Tree ::4:: - Easy
+## 104. Maximum Depth of Binary Tree ::3:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
@@ -1105,75 +1043,7 @@ Find the max depth of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Recursive - Tree/DFA Pre order Traversal
-```python
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        # Note:
-        # 1. DFS recursive approach calculates depth from leaf upward
-        # 2. Base case: if node is None, depth = 0
-        # 3. Recursive case:
-        #    - depth_left = depth of left subtree
-        #    - depth_right = depth of right subtree
-        #    - depth = 1 + max(depth_left, depth_right)
-        # 4. Returns depth of root as final result
-        
-        def dfs(node, depth):
-            if not node:
-                return depth
-            return max(
-                dfs(node.left, depth + 1),
-                dfs(node.right, depth + 1)
-            )
-    
-        return dfs(root, 0)
-
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-### Solution 2: DFS Recursive - Tree/DFA In Order Traversal
-```python
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        # Note:
-        # Idea: DFS recursive approach calculates depth from leaf upward
-        # 2. Base case: if node is None, depth = 0
-        # 3. Recursive case:
-        #    depth_left = depth of left subtree
-        #    depth_right = depth of right subtree
-        #    depth = 1 + max(depth_left, depth_right)
-        # 4. Returns depth of root as final result
-
-        self.max_depth = 0
-        
-        def inorder(node, depth):
-            
-            # Base case:
-            # Leaf Node has no depth
-            if not node:
-                return
-
-            # Go left first
-            inorder(node.left, depth + 1)
-
-             # "Visit" root
-            self.max_depth = max(self.max_depth, depth + 1)
-
-            # Go right
-            inorder(node.right, depth + 1)
-        
-        inorder(root, 0)
-        return self.max_depth
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-### Solution 3: DFS Recursive - Tree/DFA Post Order Traversal
+### Solution 1: DFS Recursive - Tree/DFA Post Order Traversal
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1199,36 +1069,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-
-### Solution 4: DFS Iterative Stack - Tree/DFA Post Order Traversal
-```python
-    # Note:
-    # 1. DFS iterative approach simulates recursion using a stack
-    # 2. Each stack entry stores (node, current depth)
-    # 3. Update max_depth when visiting each node
-    # 4. Works like Postorder — compute children before root aggregation
-    
-    if not root:
-        return 0
-    
-    stack = [(root, 1)]
-    max_depth = 0
-    
-    while stack:
-        node, depth = stack.pop()
-        if node:
-            # Update maximum depth
-            max_depth = max(max_depth, depth)
-            
-            # Push children with incremented depth
-            stack.append((node.left, depth + 1))
-            stack.append((node.right, depth + 1))
-    
-    return max_depth
-```
-
-
-### Solution 5: BFS Iterative - Tree/BFS Iterative Full Level Processing
+### Solution 2: BFS Iterative - Tree/BFS Iterative Full Level Processing
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1266,33 +1107,33 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 6: BFS Iterative Node Depth Pair - Tree/BFS Iterative Full Level Processing
+
+
+### Solution 3: DFS Iterative Stack - Tree/DFA Post Order Traversal
 ```python
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        # Note:
-        # 1. BFS without explicit level size
-        # 2. Queue stores (node, depth)
-        # 3. Track depth as you dequeue each node
-        
-        if not root:
-            return 0
-        
-        queue = deque([(root, 1)])
-        max_depth = 0
-        
-        while queue:
-            node, depth = queue.popleft()
-            
+    # Note:
+    # 1. DFS iterative approach simulates recursion using a stack
+    # 2. Each stack entry stores (node, current depth)
+    # 3. Update max_depth when visiting each node
+    # 4. Works like Postorder — compute children before root aggregation
+    
+    if not root:
+        return 0
+    
+    stack = [(root, 1)]
+    max_depth = 0
+    
+    while stack:
+        node, depth = stack.pop()
+        if node:
             # Update maximum depth
             max_depth = max(max_depth, depth)
             
-            # Add children with incremented depth
-            if node.left:
-                queue.append((node.left, depth + 1))
-            if node.right:
-                queue.append((node.right, depth + 1))
-        
-        return max_depth
+            # Push children with incremented depth
+            stack.append((node.left, depth + 1))
+            stack.append((node.right, depth + 1))
+    
+    return max_depth
 ```
 
 ## 543. Diameter of Binary Tree ::2:: - Easy
@@ -1345,7 +1186,7 @@ Find the diameter of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Recursive (Post order) - Tree/DFS Post order Traversal
+### Solution 1: DFS Recursive Post order - Tree/DFS Post order Traversal
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1383,7 +1224,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Recursive (Optimized Return Tuple) - Tree/DFS Post order Traversal
+### Solution 2: DFS Recursive Optimized Return Tuple - Tree/DFS Post order Traversal
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1466,7 +1307,7 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
 ```
 
-### Solution 1: DFS Recursive (Post order) - Tree/DFS Post order Traversal
+### Solution 1: DFS Recursive Post order - Tree/DFS Post order Traversal
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1504,7 +1345,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Recursive (Post order with Tuple) - Tree/DFS Post order Traversal
+### Solution 2: DFS Recursive Post order with Tuple - Tree/DFS Post order Traversal
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1800,5 +1641,6 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
+
 
 
