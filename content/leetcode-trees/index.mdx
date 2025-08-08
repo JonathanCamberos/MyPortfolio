@@ -1576,7 +1576,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 
 
 
-## 235. Lowest Common Ancestor of a Binary Search Tree ::3:: - Medium
+## 235. Lowest Common Ancestor of a Binary Search Tree ::2:: - Medium
 
 Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
 
@@ -1637,12 +1637,24 @@ Find lowest node that has both p and q in their subtree.
 ### Solution 1: Recursive BST Traversal  - Tree/DFS Pre order Traversal
 ```python
     def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        
+        # Note:
+        # continue traversing down left and irght subtrees to find 
+        
+        # p and q are smaller -> LCA is in left subtree
         if p.val < root.val and q.val < root.val:
             return self.lowestCommonAncestor(root.left, p, q)
+
+        # p and q are smaller -> LCA is in right subtree
         elif p.val > root.val and q.val > root.val:
             return self.lowestCommonAncestor(root.right, p, q)
+        
+        # p and q are in different subtrees -> current node is LCA
         else:
             return root
+
+        # overall: time complex
+        # overall: space complex
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1653,14 +1665,24 @@ Find lowest node that has both p and q in their subtree.
 ### Solution 2: Iterative BST Traversal  - Tree/DFS Pre order Traversal
 ```python
     def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        
         curr = root
         while curr:
+
+            # p and q are smaller -> LCA is in left subtree
             if p.val < curr.val and q.val < curr.val:
                 curr = curr.left  # Both on left
+
+            # p and q are larger -> LCA is in right subtree
             elif p.val > curr.val and q.val > curr.val:
-                curr = curr.right  # Both on right
+                curr = curr.right
+
+            # p and q are in different subtrees -> current node is LCA
             else:
-                return curr  # Split point is LCA
+                return curr
+        
+        # overall: time complex
+        # overall: space complex
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1669,3 +1691,913 @@ Find lowest node that has both p and q in their subtree.
 |  |  |  |  |  |
 
 
+## 102. Binary Tree Level Order Traversal ::2:: - Medium
+
+Topics:  Tree, Breadth First Search, Binary Tree
+
+### Intro
+> Given the root of a binary tree, return the level order traversal 
+> of its nodes' values. (i.e., from left to right, level by level).
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [3,9,20,null,null,15,7] | [[3],[9,20],[15,7]] |
+| root = [1] | [[1]] |
+| root = [] | [] |
+ 
+Constraints:
+
+The number of nodes in the root tree is in the range [1, 2000].
+
+-1000 &leq; Node.val &leq; 1000
+
+### Abstraction
+Traverse a tree and return list of nodes grouped by level.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: BFS Iterative - Tree/DFS Pre order Traversal
+```python
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        
+        # Empty check
+        if not root:
+            return []
+        
+        groups = []
+        queue = deque([root])  # start with root
+        
+        while queue:
+            # grab size of current level
+            size = len(queue)
+            level = []
+            
+            # process each node in this level
+            for _ in range(size):
+                node = queue.popleft()
+                level.append(node.val)
+                
+                # enqueue children for next level
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            
+            groups.append(level)
+        
+        return groups
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
+```python
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        
+        groups = []
+        
+        def dfs(node, depth):
+            if not node:
+                return
+            
+            # expand groups list if new depth reached
+            if len(groups) == depth:
+                groups.append([])
+            
+            groups[depth].append(node.val)
+            
+            # recurse left and right children
+            dfs(node.left, depth + 1)
+            dfs(node.right, depth + 1)
+        
+        dfs(root, 0)
+        return groups
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 199. Binary Tree Right Side View ::2:: - Medium
+
+Topics:  Tree, Breadth First Search, Binary Tree
+
+### Intro
+> Given the root of a binary tree, imagine yourself standing on 
+> the right side of it, return the values of the nodes you can 
+> see ordered from top to bottom.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [1,2,3,null,5,null,4] | [1,3,4] |
+| root = [1,2,3,4,null,null,null,5] | [1,3,4,5] |
+| root = [1,null,3] | [1,3] |
+| root = [] | [] |
+ 
+Constraints:
+
+The number of nodes in the root tree is in the range [1, 100].
+
+-100 &leq; Node.val &leq; 100
+
+### Abstraction
+Given a tree, if you were to stand on the right side, return all nodes
+that you would have a direct line of sight to (not hidden by right-er nodes)
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: BFS Iterative - Tree/DFS Pre order Traversal
+```python
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        
+        result = []
+        queue = deque([root])
+        
+        while queue:
+            level_size = len(queue)
+            for i in range(level_size):
+                node = queue.popleft()
+                # If this is the last node in the current level, capture it
+                if i == level_size - 1:
+                    result.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+        
+        return result
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+```python
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        
+        result = []
+        
+        def dfs(node, depth):
+            if not node:
+                return
+            # If visiting this depth for the first time, this is the rightmost node
+            if depth == len(result):
+                result.append(node.val)
+            dfs(node.right, depth + 1)  # Prioritize right child
+            dfs(node.left, depth + 1)   # Then left child
+        
+        dfs(root, 0)
+        return result
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+
+## 1448. Count Good Nodes in Binary Tree ::2:: - Medium
+
+Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
+
+### Intro
+> Given a binary tree root, a node X in the tree is  
+> named good if in the path from root to X there are no nodes 
+> with a value greater than X.
+> Return the number of good nodes in the binary tree.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [3,1,4,3,null,1,5] | 4 |
+| root = [3,3,null,4,2] | 3 |
+| root = [1] | 1 |
+ 
+Constraints:
+
+The number of nodes in the root tree is in the range [1, 10<sup>5</sup>].
+
+Each node's value is between [-10<sup>4</sup>, 10<sup>4</sup>]
+
+### Abstraction
+Given a tree, a node is good if in the path between itself and the root
+there is no node that is larger than it.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: BFS Iterative - Tree/DFS Pre order Traversal
+```python
+    def goodNodes(self, root: TreeNode) -> int:
+        def dfs(node, max_so_far):
+            if not node:
+                return 0
+            
+            # A node is good if its value is >= max_so_far seen so far
+            good = 1 if node.val >= max_so_far else 0
+            
+            # Update max value along the path
+            new_max = max(max_so_far, node.val)
+            
+            # Recurse on left and right children
+            good += dfs(node.left, new_max)
+            good += dfs(node.right, new_max)
+            
+            return good
+        
+        return dfs(root, root.val)
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+```python
+    def goodNodes(self, root: TreeNode) -> int:
+        count = 0
+        queue = deque([(root, root.val)])  # (node, max_so_far)
+        
+        while queue:
+            node, max_so_far = queue.popleft()
+            
+            if node.val >= max_so_far:
+                count += 1
+            
+            new_max = max(max_so_far, node.val)
+            
+            if node.left:
+                queue.append((node.left, new_max))
+            if node.right:
+                queue.append((node.right, new_max))
+        
+        return count
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 98. Validate Binary Search Tree ::2:: - Medium
+
+Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
+
+### Intro
+> Given the root of a binary tree, determine if it is a 
+> valid binary search tree (BST).
+> The left subtree of a node contains only nodes with 
+> keys strictly less than the node's key.
+> The right subtree of a node contains only nodes with keys 
+> strictly greater than the node's key.
+> Both the left and right subtrees must also be binary search trees.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [2,1,3] | true |
+| root = [5,1,4,null,null,3,6] | false |
+ 
+Constraints:
+
+The number of nodes in the root tree is in the range [1, 10<sup>4</sup>].
+
+-2<sup>31</sup> &leq; Node.val &leq; 2<sup>31</sup>-1
+
+### Abstraction
+Given a tree, determine if tree is a valid BST. Where value of nodes
+is always: left.val &leq; root.val &leq; right.val 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS with Range Limits - Tree/DFS Pre order Traversal
+```python
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        # Helper DFS function with valid value range constraints
+        def dfs(node, low, high):
+            if not node:
+                return True  # Reached leaf, no violations
+
+            # If current node violates BST property -> invalid
+            if not (low < node.val < high):
+                return False
+
+            # Left subtree must have values < node.val
+            # Right subtree must have values > node.val
+            return dfs(node.left, low, node.val) and dfs(node.right, node.val, high)
+
+        # Start with infinite bounds
+        return dfs(root, float('-inf'), float('inf'))
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+```python
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        self.prev = None  # Stores last visited node value
+
+        def inorder(node):
+            if not node:
+                return True
+
+            # Inorder: Left -> Node -> Right
+            if not inorder(node.left):
+                return False
+
+            # Current node must be greater than previous inorder value
+            if self.prev is not None and node.val <= self.prev:
+                return False
+            self.prev = node.val
+
+            return inorder(node.right)
+
+        return inorder(root)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+
+## 230. Kth Smallest Element in a BST ::2:: - Medium
+
+Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
+
+### Intro
+> Given the root of a binary search tree, and an integer k,
+> return the kth smallest value (1-indexed) of 
+> all the values of the nodes in the tree.
+> Follow up: If the BST is modified often (i.e., we can do insert and
+> delete operations) and you need to find the kth smallest frequently,
+> how would you optimize?
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [3,1,4,null,2], k = 1 | 1 |
+| root = [5,3,6,2,4,null,null,1], k = 3 | 3 |
+ 
+Constraints:
+
+The number of nodes in the root tree is n 
+
+1 &leq; k &leq; n &leq; 10<sup>4</sup>
+
+0 &leq; Node.val &leq; 10<sup>4</sup>
+
+### Abstraction
+Given a BST, find the kth smallest node. 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: In Order Traversal Early Stop  - Tree/DFS Pre order Traversal
+```python
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        self.k = k
+        self.result = None
+        
+        def inorder(node):
+            if not node or self.result is not None:
+                return
+            
+            inorder(node.left)
+            
+            self.k -= 1
+            if self.k == 0:
+                self.result = node.val
+                return
+            
+            inorder(node.right)
+        
+        inorder(root)
+        return self.result
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+```python
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        stack = []
+        while True:
+            while root:
+                stack.append(root)
+                root = root.left
+            
+            root = stack.pop()
+            k -= 1
+            if k == 0:
+                return root.val
+            
+            root = root.right
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 3: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+```python
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        # Postorder: compute size of subtree, and store left subtree size
+        def compute_sizes(node):
+            if not node:
+                return 0
+            left_size = compute_sizes(node.left)
+            right_size = compute_sizes(node.right)
+            # attach attribute to the node instance
+            node.left_count = left_size
+            return left_size + right_size + 1
+
+        compute_sizes(root)
+
+        # Now query using left_count (no recursion needed)
+        node = root
+        while node:
+            left_count = getattr(node, "left_count", 0)
+            if k == left_count + 1:
+                return node.val
+            elif k <= left_count:
+                node = node.left
+            else:
+                k -= (left_count + 1)
+                node = node.right
+
+        return None  # not reached if 1 <= k <= n
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 105. Construct Binary Tree from Preorder and Inorder Traversal ::2:: - Medium
+
+Topics:  Array, Hash Table, Divide and Conquer, Tree, Binary Tree
+
+### Intro
+> Given two integer arrays pre order and in order where 
+> pre order is the pre order traversal of a binary tree and 
+> inorder is the inorder traversal of the same tree, 
+> construct and return the binary tree.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| preorder = [3,9,20,15,7], inorder = [9,3,15,20,7] | [3,9,20,null,null,15,7] |
+| preorder = [-1], inorder = [-1] | [-1] |
+ 
+Constraints:
+
+1 &leq; preorder.length &leq; 3000
+
+inorder.length == preorder.length
+
+-3000 &leq; preorder[i], inorder[i] &leq; 3000
+
+Each value or inorder also appears in preorder.
+
+preorder is guaranteed to be the preorder traversal of the tree.
+
+inorder is guaranteed to be the inorder traversal of the tree.
+
+### Abstraction
+Create original free given pre and post order traversals.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive Build with Hash Map  - Tree/DFS Pre order Traversal
+```python
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        # Step 1: Map each value to its index in inorder for O(1) lookups
+        inorder_index_map = {val: idx for idx, val in enumerate(inorder)}
+
+        # Step 2: Preorder index pointer (to track root positions)
+        self.pre_idx = 0
+
+        def array_to_tree(left, right):
+            # Base case: no elements to construct the subtree
+            if left > right:
+                return None
+
+            # Step 3: Get root value from preorder
+            root_val = preorder[self.pre_idx]
+            self.pre_idx += 1
+
+            # Create the root node
+            root = TreeNode(root_val)
+
+            # Step 4: Recursively build left & right subtrees
+            root.left = array_to_tree(left, inorder_index_map[root_val] - 1)
+            root.right = array_to_tree(inorder_index_map[root_val] + 1, right)
+
+            return root
+
+        # Step 5: Build the tree from full range
+        return array_to_tree(0, len(inorder) - 1)
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Solution 2: Iterative Using Stack - Tree/DFS Pre order Traversal
+```python
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        if not preorder or not inorder:
+            return None
+        
+        root = TreeNode(preorder[0])
+        stack = [root]
+        inorder_index = 0
+        
+        for i in range(1, len(preorder)):
+            node = stack[-1]
+            preorder_val = preorder[i]
+            
+            # If the last node in stack is not equal to current inorder,
+            # then the next preorder value is in the left subtree.
+            if node.val != inorder[inorder_index]:
+                node.left = TreeNode(preorder_val)
+                stack.append(node.left)
+            else:
+                # Otherwise, pop nodes from the stack while the node's value
+                # matches inorder and move inorder_index forward.
+                while stack and stack[-1].val == inorder[inorder_index]:
+                    node = stack.pop()
+                    inorder_index += 1
+                
+                # The next preorder value is the right child of the last popped node
+                node.right = TreeNode(preorder_val)
+                stack.append(node.right)
+        
+        return root
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 124. Binary Tree Maximum Path Sum ::1:: - Hard
+
+Topics:  Dynamic Programming, Tree, Depth First Search, Binary Tree
+
+### Intro
+> A path in a binary tree is a sequence of nodes where each pair of 
+> adjacent nodes in the sequence has an edge connecting them. A 
+> node can only appear in the sequence at most once. Note that 
+> the path does not need to pass through the root.
+> The path sum of a path is the sum of the node's values in the path.
+> Given the root of a binary tree, return the maximum path sum of 
+> any non-empty path.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [1,2,3] | 6 |
+| root = [-10,9,20,null,null,15,7] | 42 |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [1, 3 * 10<sup>4</sup>]
+
+-1000 &leq; Node.val &leq; 1000
+
+### Abstraction
+Given a tree, find the path that produces the max sum.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Post-Order + Global Max Tracker  - Tree/DFS Pre order Traversal
+```python
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        max_sum = float('-inf')
+
+        def dfs(node):
+            nonlocal max_sum
+
+            if not node:
+                return 0
+
+            # Get max gain from left and right subtree; ignore negative gains by max with 0
+            left_gain = max(dfs(node.left), 0)
+            right_gain = max(dfs(node.right), 0)
+
+            # Current max path including both children and current node
+            current_path_sum = node.val + left_gain + right_gain
+
+            # Update global max sum if current path is better
+            max_sum = max(max_sum, current_path_sum)
+
+            # Return max gain to parent (single path)
+            return node.val + max(left_gain, right_gain)
+
+        dfs(root)
+        return max_sum
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## 297. Serialize and Deserialize Binary Tree ::2:: - Hard
+
+Topics:  String, Tree, Depth First Search, Breadth First Search, Design, Binary Tree
+
+### Intro
+> Serialization is the process of converting a data structure or 
+> object into a sequence of bits so that it can be stored in a file 
+> or memory buffer, or transmitted across a network connection 
+> link to be reconstructed later in the same or another computer environment.
+> Design an algorithm to serialize and deserialize a binary tree. 
+> There is no restriction on how your serialization/deserialization 
+> algorithm should work. You just need to ensure 
+> that a binary tree can be serialized to a string and this string 
+> can be deserialized to the original tree structure.
+> Clarification: The input/output format is the same as
+> how LeetCode serializes a binary tree. ou do not necessarily need 
+> to follow this format, so please be creative and come up with 
+> different approaches yourself.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [1,2,3,null,null,4,5] | [1,2,3,null,null,4,5] |
+| root = [] | [] |
+ 
+Constraints:
+
+The number of nodes in the tree is in the range [1, 10<sup>4</sup>]
+
+-1000 &leq; Node.val &leq; 1000
+
+### Abstraction
+Create a serialize and deserialize functions for trees
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Post-Order + Global Max Tracker  - Tree/DFS Pre order Traversal
+```python
+class Codec:
+
+    def serialize(self, root):
+        vals = []
+
+        def dfs(node):
+            if not node:
+                vals.append("N")
+                return
+            vals.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
+
+        dfs(root)
+        return ",".join(vals)
+        
+
+    def deserialize(self, data):
+        vals = deque(data.split(","))
+
+        def dfs():
+            if not vals:
+                return None
+            val = vals.popleft()
+            if val == "N":
+                return None
+
+            node = TreeNode(int(val))
+            node.left = dfs()
+            node.right = dfs()
+            return node
+
+        return dfs()
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
