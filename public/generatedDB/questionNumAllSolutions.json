@@ -464,32 +464,32 @@
   "104": [
     {
       "number": 1,
-      "name": "DFS Recursive Bottom Up Children Depth",
+      "name": "DFS Post Order Recursive Bottom Up Children Depth",
       "type": "tree",
       "application": "dfa-post-order-traversal",
-      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # Idea: DFS postorder traversal (Left -> Right -> Root)\n        # 1. Process depth of left subtree\n        # 2. Process depth of right subtree\n        # 3. Process results at root\n        # Result: Natural Bottom Up solution (need children results to compute root)\n        \n        if not root:\n            return 0\n        \n        # Process left and right children\n        left_depth = self.maxDepth(root.left)\n        right_depth = self.maxDepth(root.right)\n        \n        # Process Root\n        return 1 + max(left_depth, right_depth)",
+      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # DFS post order traversal: left -> right -> root\n        # 1. Process depth of left and right subtrees\n        # 2. Process node by grabbing max(left, right)\n        # Result: max depth of tree\n        \n        # Base case:\n        # leaf -> depth of 0\n        if not root:\n            return 0\n        \n        # process left and right children\n        left_depth = self.maxDepth(root.left)\n        right_depth = self.maxDepth(root.right)\n        \n        # process root\n        return 1 + max(left_depth, right_depth)",
       "questionNumber": 104,
-      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive-bottom-up-children-depth---treedfa-post-order-traversal",
-      "blog": "LeetCode: Trees"
-    },
-    {
-      "number": 3,
-      "name": "DFS Iterative Carry Down Depth Val",
-      "type": "tree",
-      "application": "dfa-post-order-traversal",
-      "code": "# Note:\n    # 1. DFS iterative approach simulates recursion using a stack\n    # 2. Each stack entry stores (node, current depth)\n    # 3. Update max_depth when visiting each node\n    # 4. Works like Postorder — compute children before root aggregation\n    \n    if not root:\n        return 0\n    \n    stack = [(root, 1)]\n    max_depth = 0\n    \n    while stack:\n        node, depth = stack.pop()\n        if node:\n            # Update maximum depth\n            max_depth = max(max_depth, depth)\n            \n            # Push children with incremented depth\n            stack.append((node.left, depth + 1))\n            stack.append((node.right, depth + 1))\n    \n    return max_depth",
-      "questionNumber": 104,
-      "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-iterative-carry-down-depth-val---treedfa-post-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-post-order-recursive-bottom-up-children-depth---treedfa-post-order-traversal",
       "blog": "LeetCode: Trees"
     },
     {
       "number": 2,
+      "name": "DFS Pre Order Iterative Carry Down Depth Val",
+      "type": "tree",
+      "application": "dfa-pre-order-traversal",
+      "code": "# Note:\n    # DFS pre order iterative: root -> left -> right\n    # 1. Each stack entry stores (node, current depth)\n    # 2. Update max_depth when visiting each node\n    # 3. Works like Post order — compute children before root aggregation\n    # Result: deepest level updated global counter -> max depth\n    \n    # Empty check\n    if not root:\n        return 0\n    \n    # iterative stack\n    stack = [(root, 1)]\n\n    # global depth\n    max_depth = 0\n    \n    while stack:\n\n        # process node\n        node, depth = stack.pop()\n\n        # non leaf node\n        if node:\n\n            # update maximum depth\n            max_depth = max(max_depth, depth)\n            \n            # process left and right subtrees\n            stack.append((node.left, depth + 1))\n            stack.append((node.right, depth + 1))\n    \n    # overall: time complexity\n    # overall: space complexity\n    return max_depth",
+      "questionNumber": 104,
+      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-iterative-carry-down-depth-val---treedfa-pre-order-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "number": 3,
       "name": "BFS Iterative Count By Level Width",
       "type": "tree",
       "application": "bfs-iterative-full-level-processing",
-      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. BFS iterative approach calculates depth level-by-level\n        # 2. Queue stores nodes in current level\n        # 3. For each level:\n        #    - process all nodes at current depth\n        #    - add their children to queue\n        # 4. Increment depth after processing each level\n        \n        if not root:\n            return 0\n        \n        queue = deque([root])\n        depth = 0\n        \n        while queue:\n            level_size = len(queue)\n            for _ in range(level_size):\n                node = queue.popleft()\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            depth += 1\n        \n        # overall: time complexity\n        # overall: space complexity\n        return depth",
+      "code": "def maxDepth(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # BFS iterative: count number of levels\n        # 1. Queue will store nodes in current level\n        # 2. For each level:\n        #      process all nodes\n        #      add next level to queue\n        #      add to global depth counter after processing full level\n        # Result: number of levels -> max depth\n        \n        # Empty check\n        if not root:\n            return 0\n        \n        # iterative stack\n        queue = deque([root])\n\n        # global depth\n        depth = 0\n        \n        while queue:\n\n            # curr level size\n            size = len(queue)\n            for _ in range(size):\n\n                # process all nodes in level\n                node = queue.popleft()\n\n                # append next level\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n\n            # finished processing level, add to depth counter\n            depth += 1\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return depth",
       "questionNumber": 104,
-      "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative-count-by-level-width---treebfs-iterative-full-level-processing",
+      "solutionLink": "/Notes/leetcode-trees#solution-3-bfs-iterative-count-by-level-width---treebfs-iterative-full-level-processing",
       "blog": "LeetCode: Trees"
     }
   ],
@@ -1114,22 +1114,22 @@
   "543": [
     {
       "number": 1,
-      "name": "DFS Recursive Post order",
+      "name": "DFS Post Order Recursive Global Diameter",
       "type": "tree",
       "application": "dfs-post-order-traversal",
-      "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. Post order DFS: compute height of subtrees bottom-up\n        # 2. At each node:\n        #    - Compute left height\n        #    - Compute right height\n        #    - Update diameter as max(left_height + right_height)\n        # 3. Return diameter after full traversal\n        # Results: longest path in terms of edges between any two nodes\n\n        self.diameter = 0\n        \n        def dfs(node):\n            if not node:\n                return 0\n            \n            # Heights of left and right subtrees\n            left_height = dfs(node.left)\n            right_height = dfs(node.right)\n            \n            # Update diameter at this node\n            self.diameter = max(self.diameter, left_height + right_height)\n            \n            # Height of subtree rooted at this node\n            return 1 + max(left_height, right_height)\n        \n        dfs(root)\n        return self.diameter",
+      "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left and right subtrees width\n        # 2. Process node by max(left width, right width)\n        # Result: longest path in terms of edges between any two nodes\n\n        diameter = 0\n        \n        def dfs(node):\n            nonlocal diameter\n\n            # Base case:\n            # no width added\n            if not node:\n                return 0\n            \n            # Heights/Length of left and right subtrees\n            left_len = dfs(node.left)\n            right_len = dfs(node.right)\n            \n            # check final diameter connecting left and right subtrees\n            diameter = max(diameter, left_len + right_len)\n\n            # continue longer subtree upwards for potential longer diameter\n            add_edge = 1 + max(left_len, right_len)\n\n            return add_edge\n        \n        # recursive call on root\n        dfs(root)\n\n        # overall: time complexity\n        # overall: space complexity\n        return diameter",
       "questionNumber": 543,
-      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive-post-order---treedfs-post-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-post-order-recursive-global-diameter---treedfs-post-order-traversal",
       "blog": "LeetCode: Trees"
     },
     {
       "number": 2,
-      "name": "DFS Recursive Optimized Return Tuple",
+      "name": "DFS Recursive Optimized Passed Tuple Diameter",
       "type": "tree",
       "application": "dfs-post-order-traversal",
-      "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # 1. Combine diameter & height calculation in single DFS call\n        # 2. Each call returns tuple: (height, diameter)\n        # 3. Avoid global variable by computing max in recursion\n        # Results: same O(n) but cleaner function interface\n        \n        def dfs(node):\n            if not node:\n                return 0, 0  # (height, diameter)\n            \n            left_height, left_diam = dfs(node.left)\n            right_height, right_diam = dfs(node.right)\n            \n            # Diameter at this node\n            curr_diam = left_height + right_height\n            \n            # Best diameter so far\n            max_diam = max(curr_diam, left_diam, right_diam)\n            \n            # Height of subtree\n            return 1 + max(left_height, right_height), max_diam\n        \n        return dfs(root)[1]",
+      "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left and right subtrees width\n        # 2. Process node by max(left width, right width)\n        # Result: longest path in terms of edges between any two nodes\n        \n        def dfs(node):\n\n            # Base case:\n            # no width added\n            if not node:\n                return 0, 0\n            \n            # recursive call to process left and right subtrees\n            # grab longest diameter for each subtree\n            left_len, left_diameter = dfs(node.left)\n            right_len, right_diameter = dfs(node.right)\n            \n            # Diameter at this node connected left and right subtrees length\n            curr_diam = left_len + right_len\n            \n            # max diameter between curr node, left subtree, and right subtree\n            max_diam = max(curr_diam, left_diameter, right_diameter)\n            \n            # continue longer subtree upwards for potential longer diameter\n            add_edge = 1 + max(left_len, right_len)\n            \n            return (add_edge, max_diam)\n        \n        return dfs(root)[1]",
       "questionNumber": 543,
-      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-recursive-optimized-return-tuple---treedfs-post-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-recursive-optimized-passed-tuple-diameter---treedfs-post-order-traversal",
       "blog": "LeetCode: Trees"
     }
   ],

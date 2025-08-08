@@ -1108,6 +1108,8 @@ Topics:  Tree, Depth First Search, Binary Tree
 
 ### Intro
 > Given a binary tree, determine if it is height-balanced. 
+> A height-balanced binary tree is a binary tree in which the depth 
+> of the two subtrees of every node never differs by more than one.
 
 |  Example Input           | Output |  
 | ---------------- | ------ | 
@@ -1155,31 +1157,41 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. Post order DFS computes height bottom-up
-        # 2. At each node:
-        #    - Compute left height
-        #    - Compute right height
-        #    - Check if balance condition holds: abs(left - right) <= 1
-        # 3. Use -1 as sentinel to propagate imbalance early
-        # Results: returns False immediately when imbalance is detected
+        # DFS post order: left -> right -> root
+        # 1. At each node:
+        #    process left and right subtrees
+        #    validate balance: abs(left - right) <= 1
+        # 2. Throw -1 imbalance error
+        # Results: detect imbalance
 
         def dfs(node):
+
+            # Base case:
+            # start adding height upwards
             if not node:
-                return 0  # height
+                return 0
             
+            # recursive call to process left and right subtrees
             left_height = dfs(node.left)
-            if left_height == -1:
-                return -1  # imbalance detected
-            
             right_height = dfs(node.right)
+
+            # pass imbalance upwards
+            if left_height == -1:
+                return -1         
             if right_height == -1:
-                return -1  # imbalance detected
+                return -1
             
+            # process node by checking for imbalance between left and right subtrees
             if abs(left_height - right_height) > 1:
-                return -1  # imbalance detected
+                return -1
             
+            # add to height and pass up
             return 1 + max(left_height, right_height)
         
+        # check if any imbalance error pass upwards
+
+        # overall: time complexity
+        # overall: space complexity
         return dfs(root) != -1
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1193,29 +1205,38 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. Post order DFS returns tuple: (is_balanced, height)
-        # 2. Combines height + balance check without sentinel value
-        # 3. Each call checks:
-        #    - Left subtree balance
-        #    - Right subtree balance
-        #    - Current node balance
-        # Results: cleaner return, same complexity
+        # DFS post order: left -> right -> root
+        # 1. At each node:
+        #    process left and right subtrees
+        #    validate balance: abs(left - right) <= 1
+        # 2. Throw -1 imbalance error
+        # Results: detect imbalance
         
         def dfs(node):
+
+            # Base case: leaf -> balanced:true, height:0
             if not node:
-                return True, 0  # (is_balanced, height)
+                return (True, 0)
             
-            left_bal, left_height = dfs(node.left)
+            # recursive call to process left and right subtrees:
+            # is_balanced, height 
+            (left_bal, left_height) = dfs(node.left)
+            (right_bal, right_height) = dfs(node.right)
+
+            # continue propagating error up
             if not left_bal:
                 return False, 0
-            
-            right_bal, right_height = dfs(node.right)
             if not right_bal:
                 return False, 0
             
+            # process node: validate balance
             balanced = abs(left_height - right_height) <= 1
-            return balanced, 1 + max(left_height, right_height)
+
+            # continue propagating result up
+            return (balanced, 1 + max(left_height, right_height))
         
+        # overall: time complexity
+        # overall space complexity
         return dfs(root)[0]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1275,22 +1296,38 @@ Determine if two different binary trees match.
 ```python
 ```
 
-### Solution 1: DFS Recursive (Pre order) - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. DFS Pre order: Compare current node values, then recurse on children
-        # 2. Base cases:
-        #    - If both nodes are None => trees match at this branch
-        #    - If one node is None or values mismatch => trees differ
-        # 3. Recurse left and right; both must match
+        # DFS pre order recursive: root -> left -> right
+        # 2. Process node:
+        #    if both nodes are 'None' -> trees match
+        #    if only one node is 'None' -> trees differ
+        #    if values mismatch -> trees differ
+        # 3. Process left and right subtrees
+        # Result: determine is trees match
         
+        # Process node: validate match
+
+        # Base case: both nodes are 'None'
         if not p and not q:
             return True
-        if not p or not q or p.val != q.val:
+
+        # Base case: only one node is 'None' -> trees differ
+        if not p or not q:
+            return False
+
+        # Base case: node values differ -> trees differ
+        if p.val != q.val:
             return False
         
-        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        # Recursive call to process left and right subtrees:
+        match = (self.isSameTree(p.left, q.left) and 
+                self.isSameTree(p.right, q.right))
+
+        # propagate upwards
+        return match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1299,31 +1336,48 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative (Queue) - Tree/BFS Iterative Queue Based
+### Solution 2: BFS Iterative - Tree/BFS Iterative Queue Based
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. BFS: Compare trees level-by-level
-        # 2. Use queue to store node pairs from p and q
-        # 3. For each pair:
-        #    - Both None => continue
-        #    - One None or value mismatch => return False
-        #    - Enqueue children in parallel
-        # Results: Early termination if mismatch found
+        # BFS Iterate: level by level
+        # 1. Queue will store nodes from both trees
+        # 2. Process node:
+        #    Pop pair of elements
+        #    if both nodes are 'None' -> trees match
+        #    if only one node is 'None' -> trees differ
+        #    if values mismatch -> trees differ
+        # 3. Process next level
+        # Result: determine is trees match
         
+        # iterative stack
         queue = deque([(p, q)])
         
         while queue:
+
+            # tree node pairs
             node1, node2 = queue.popleft()
             
+            # Base case: both nodes are 'None'
             if not node1 and not node2:
                 continue
-            if not node1 or not node2 or node1.val != node2.val:
+            
+            # Base case: node values differ -> trees differ
+            if not node1 or not node2
                 return False
             
+            # Base case: node values differ -> trees differ
+            if node1.val != node2.val:
+                return False
+            
+            # add next level pairs
             queue.append((node1.left, node2.left))
             queue.append((node1.right, node2.right))
         
+        # trees match
+
+        # overall: time complexity
+        # overall: space complexity
         return True
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1375,7 +1429,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  | 
 
 
-### Brute Force: (iterative)
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1389,32 +1443,50 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 ```python
 ```
 
-### Solution 1: DFS Recursive (Pre order Traversal) - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. DFS Pre order traversal of `root`
-        # 2. At each node in `root`:
-        #    - Check if subtree matches starting here using helper isSameTree
-        #    - Recurse to left and right
-        # 3. Early exit if a match is found
+        # DFS pre order: root -> left -> right
+        # 1. Process node
+        #    Check if subtree matches isSameTree()
+        # 2. Process left and right subtrees
+        # Result: validate if match found
 
+        # same as above
         def isSameTree(s, t):
+            # Base case: 
+            # leaf -> node match
             if not s and not t:
                 return True
-            if not s or not t or s.val != t.val:
+
+            # no match: propagate upwards
+            if not s or not t:
                 return False
+            if s.val != t.val:
+                return False
+            
+            # process subtrees
             return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)
         
+        # Empty check:
+        # empty subRoot is always a subtree
         if not subRoot:
             return True
+
+        # Empty check:
+        # empty root cannot have subtrees
         if not root:
             return False
         
+        # recursive call over root and subRoot
         if isSameTree(root, subRoot):
             return True
         
-        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+        # process root left and right subtrees
+        match = self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot) 
+
+        return match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1423,24 +1495,37 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative (Queue) - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 2: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. BFS level order traversal of `root`
-        # 2. For each node:
+        # BFS order: level by level
+        # 1. For each node:
         #    - If value matches subRoot root, run isSameTree
         # 3. Uses queue to iterate nodes iteratively
 
         def isSameTree(s, t):
+
+            # Base case: leaf -> match
             if not s and not t:
                 return True
-            if not s or not t or s.val != t.val:
+
+            # no longer match: propagate error upwards
+            if not s or not t:
+                return False  
+            if s.val != t.val:
                 return False
+            
+            # validate subtrees
             return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)
 
+        # Empty check:
+        # empty subRoot is always a subtree
         if not subRoot:
             return True
+
+        # Empty check:
+        # empty root cannot have subtrees
         if not root:
             return False
         
@@ -1467,18 +1552,21 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
-        # 1. Use DFS preorder traversal to serialize both trees
-        # 2. Each value is wrapped with a leading comma to prevent accidental partial matches
-        #    (e.g., "2" in "12" would match incorrectly without boundaries)
-        # 3. Compare serialized subRoot string as substring of root serialization
-        # 4. If subRoot serialization is found in root serialization, subRoot is a subtree
+        # DFS pre order: root -> left -> right
+        # 1. Node values with leading comma
+        #    ("2" in "12" would match incorrectly without boundaries)
+        # 2. Check if serialized subRoot is substring of serialized root
+        # Result: checks if tree is subtree
 
         def serialize(node):
             if not node:
                 return ",N"  # "N" represents None
             return f",{node.val}" + serialize(node.left) + serialize(node.right)
 
-        return serialize(subRoot) in serialize(root)
+        serializedSubRoot = serialize(subRoot)
+        serializedRoot = serialize(root)
+
+        return serializedSubRoot in serializedRoot
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1487,5 +1575,97 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
+
+## 235. Lowest Common Ancestor of a Binary Search Tree ::3:: - Medium
+
+Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
+
+### Intro
+> Given a binary search tree (BST), find the lowest common 
+> ancestor (LCA) node of two given nodes in the BST.
+> According to the definition of LCA on Wikipedia: 
+> “The lowest common ancestor is defined between
+> two nodes p and q as the lowest node in T that has both p and q as descendants 
+> (where we allow a node to be a descendant of itself).”
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8 | 6 |
+| root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4 | 2 |
+| root = [2,1], p = 2, q = 1 | 2 |
+ 
+Constraints:
+
+The number of nodes in the root tree is in the range [1, 10<sup>5</sup>].
+
+-10<sup>4</sup> &le; root.val &le; 10<sup>4</sup>
+
+All Node.val are unique.
+
+p != q
+
+p and q will exist in the BST.
+
+### Abstraction
+Find lowest node that has both p and q in their subtree.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force: iterative
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive BST Traversal  - Tree/DFS Pre order Traversal
+```python
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        elif p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        else:
+            return root
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+### Solution 2: Iterative BST Traversal  - Tree/DFS Pre order Traversal
+```python
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        curr = root
+        while curr:
+            if p.val < curr.val and q.val < curr.val:
+                curr = curr.left  # Both on left
+            elif p.val > curr.val and q.val > curr.val:
+                curr = curr.right  # Both on right
+            else:
+                return curr  # Split point is LCA
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
 
