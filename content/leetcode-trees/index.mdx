@@ -181,27 +181,25 @@ Ex: Serialize a Binary Tree Recursive and Iterative
         
         def dfsPreOrder(node):
 
-            # Base Case: 
-            # At leaf, label with 'N'
+            # Base case: process leaf 
             if not node:
                 vals.append("N")
                 return
             
-            # Process Root (top-down work)
-            # add to serialized array
+            # Process node (top-down work)
             vals.append(str(node.val))
             
-            # Process Left and Right Subtree
+            # Recursive call to process left and right subtree
             dfsPreOrder(node.left)
             dfsPreOrder(node.right)
         
-        # array representing tree
+        # serialized array
         vals = []
 
-        # start recursive Top Down at Head Root
+        # recursive call at root
         dfsPreOrder(root)
 
-        # join array representation of tree and return
+        # join serialized array
         return ",".join(vals)
 
     # Tree:
@@ -226,34 +224,33 @@ Ex: Serialize a Binary Tree Recursive and Iterative
         if not root:
             return "N"
 
-        # start iteration over tree, with root
+        # iteration via stack
         stack = [root]
-        # array representing tree
+
+        # serialized array
         vals = []
         
-        # iterate over all nodes of tree
         while stack:
 
-            # grab current root
+            # pop: Last In First Out
+            # leads to deep search (dfs)
             currRoot = stack.pop()
 
-            # Node Case:
-            # current root being processed
+            # process node
             if currRoot:
 
-                # Process Root (top-down work)
+                # process node (top-down work)
                 vals.append(str(currRoot.val))
                 
-                # Push Right then Left (stack pops left first)
+                # push to stack, for iterative process left and right
                 stack.append(currRoot.right)
                 stack.append(currRoot.left)
             
-            # Leaf Case: 
-            # At leaf, label with 'N'
+            # process leaf
             else:
                 vals.append("N")
         
-        # join values of tree and return
+        # join serialized array
         return ",".join(vals)
 
     # Tree:
@@ -275,27 +272,38 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python
     def bstToSortedList(root: Optional[TreeNode]) -> List[int]:
         
+        # tracks previous value
+        prev_val = float("-inf")
+            
         def dfsInOrder(node):
+            nonlocal prev_val
+            
+            # Base case: leaf -> no value
             if not node:
-                return
+                return True
             
-            # Process Left Subtree
-            dfsInOrder(node.left)
+            # recursive call to process left subtree
+            if not dfsInOrder(node.left):
+                return False
             
-            # Process Root (midpoint work)
-            res.append(node.val)
-            
-            # Process Right Subtree
-            dfsInOrder(node.right)
-        
-        dfsInOrder(root)
-        return res
+            # process node (mid-point work)
+            if node.val <= prev_val:
+                return False
 
-    # Tree:
-    #       2
-    #      / \
-    #     1   3
-    # bstToSortedList -> [1, 2, 3]
+            # set to current value
+            prev_val = node.val
+            
+            # recursive call to process right subtree
+            return dfsInOrder(node.right)
+        
+        # recursive call on root
+        return dfsInOrder(root)
+
+        # Tree:
+        #       2
+        #      / \
+        #     1   3
+        # isValidBST -> True
 ```
 
 ### Tree Application: DFS In Order Iterative Mid Point
@@ -308,42 +316,43 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python
     def isValidBST(root: Optional[TreeNode]) -> bool:
         
-        # Track the previously visited value to ensure ascending order
+        # tracks previous value
         prev_val = float("-inf")
 
-        # stack for DFS
+        # iteration via stack
         stack = [] 
 
-        # current pointer starting at root
+        # pointer to check for empty case
         curr = root
         
         while stack or curr:
             
-            # Traverse as far left as possible
-            while curr:
-                # push curr root onto stack, 
-                # update curr root -> left subtree,
-                # explore new root (left)
+            # traverse left subtree of curr:
+            # will go as far left as possible
+            while curr: 
+                # continue traversal down left subtree
                 stack.append(curr)
                 curr = curr.left
             
-            # Exited Loop: Reached Leaf on Left Subtree
+            # Exited loop: 
+            # reached 'leaf' of left subtree
             #     L
             #  /     \ 
             # leaf    ?
                         
-            # Grab previous Left Subtree Root (from the stack)
+            # process left, node, right:
+            # via previous left subtree node 'L' from stack
             curr = stack.pop()
 
-            # Validate that current value is greater than previous
+            # validate
             if curr.val <= prev_val:
                 return False
 
-            # Update to current node's value
+            # set to current value
             prev_val = curr.val
             
-            # Move to the right subtree
-            # (which will eventually push more left children if they exist)
+            # traverse right subtree
+            # (which we thus explore left, node and right subtrees again)
             #     L
             #  /     \ 
             # leaf    *here*
@@ -365,39 +374,42 @@ Useful when a node's work depends on fully processed children.
 
 Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```python
-    def evaluateTree(root: Optional[TreeNode]) -> int:
-    
-        def dfsPostOrder(node):
-            
-            # Leaf case
-            if not node.left and not node.right:
-                return int(node.val)
-            
-            # Process Left Subtree
-            left_val = dfsPostOrder(node.left)
-            
-            # Process Right Subtree
-            right_val = dfsPostOrder(node.right)
-            
-            # Process Root (bottom-up work)
-            if node.val == "+":
-                return left_val + right_val
-            elif node.val == "-":
-                return left_val - right_val
-            elif node.val == "*":
-                return left_val * right_val
-            elif node.val == "/":
-                return int(left_val / right_val)
+    def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:
         
-        return dfsPostOrder(root)
+        # global diameter
+        diameter = 0
 
-    # Expression Tree:
-    #       "+"
-    #      /   \
-    #     3     "*"
-    #          /   \
-    #         2     4
-    # evaluateTree -> 11
+        def dfs(node):
+            nonlocal diameter
+
+            # Base case:
+            # no width added
+            if not node:
+                return 0
+
+            # recursive call to process left and right
+            left = dfs(node.left)
+            right = dfs(node.right)
+
+            # process node
+            diameter = max(diameter, left + right)
+
+            # pass width upwards
+            return 1 + max(left, right)
+
+        # recursive on root
+        dfs(root)
+
+        # return global diameter
+        return diameter
+
+    # Tree:
+    #         1
+    #        / \
+    #       2   3
+    #      / \
+    #     4   5
+    # diameterOfBinaryTree -> 3
 ```
 
 ### Tree Application: DFS Post Order Iterative Bottom Up
@@ -407,84 +419,65 @@ Useful when a node's work depends on fully processed children.
 
 Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```python
-    def postorderTraversal(root: Optional[TreeNode]) -> None:
-        
+    def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:
+
         # Empty check
         if not root:
             return 0
-        
-        # stack for dfs
+
+        # global width
+        diameter = 0
+
+        # iterative stack
         stack = []
 
-        # start at head root
+        # 
         curr = root
-
-        # last visited to avoid repeat visits
         lastVisited = None
+        depth_map = defaultdict(int)
 
-        # store evaluated values for nodes
-        value_map = {}
-        
         while stack or curr:
 
-            # Process Left Subtree:
-            # Traverse as far left as possible -> push left node for later process
+            # traverse left subtree of curr:
+            # will go as far left as possible
             while curr:
                 stack.append(curr)
                 curr = curr.left
-            
-            # iteration 1 curr: reached leaf of a left subtree
-            # iteration 2 stack: recursed to root previous push during left exploration
-            peekNode = stack[-1]
-            
-            # Process Right Subtree:
-            # If right child exists and hasn't been processed -> explore right
-            if peekNode.right and lastVisited != peekNode.right:
-                curr = peekNode.right
-                
-            # Process Root:
-            # Both left and right have been processed 
+
+            # check if right subtree exists
+            peek = stack[-1]
+
+            # if right subtree exists and hasn't been visited
+            if peek.right and lastVisited != peek.right:
+                node = peek.right
+
+            # process node
             else:
-
-                # pop root from previously pushed during left exploration
                 stack.pop()
-                
-                # Both left and right are None:
-                # peekNode -> Leaf node (operand)
-                if not peekNode.left and not peekNode.right:
-                    value_map[peekNode] = int(peekNode.val)
-                
-                # Else: 
-                # peekNode -> Non Leaf Node (operator)
-                else:
 
-                    # grab processed left and right values
-                    left_val = value_map.get(peekNode.left, 0)
-                    right_val = value_map.get(peekNode.right, 0)
-                    
-                    # compute: current node map -> value
-                    if peekNode.val == "+":
-                        value_map[peekNode] = left_val + right_val
-                    elif peekNode.val == "-":
-                        value_map[peekNode] = left_val - right_val
-                    elif peekNode.val == "*":
-                        value_map[peekNode] = left_val * right_val
-                    elif peekNode.val == "/":
-                        value_map[peekNode] = int(left_val / right_val)
-                
-                # update visited (to avoid duplicate visits)
-                lastVisited = peekNode
-        
-        # return final computed value
-        return value_map[root]
+                # grab width of left and right subtree if exists
+                left_depth = depth_map.get(peek.left, 0)
+                right_depth = depth_map.get(peek.right, 0)
 
-    # Expression Tree:
-    #       "+"
-    #      /   \
-    #     3     "*"
-    #          /   \
-    #         2     4
-    # evaluateTree -> 11
+                # node diameter
+                diameter = max(diameter, left_depth + right_depth)
+
+                # store node diameter
+                depth_map[peek] = 1 + max(left_depth, right_depth)
+
+                # set last visited to current node
+                lastVisited = peek
+
+        # return width
+        return diameter
+
+    # Tree:
+    #         1
+    #        / \
+    #       2   3
+    #      / \
+    #     4   5
+    # diameterOfBinaryTree -> 3 (path: 4 → 2 → 5 or 4 → 2 → 1 → 3)
 ```
 
 
@@ -497,35 +490,41 @@ as well as scenarios requiring nodes in order of distance from the root.
 
 Ex: Level order traversal of Binary Tree
 ```python
-    # ----------------------------------------
-    # Iterative
     def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:
         
         # Empty check
         if not root:
             return []
 
-        result = []
+        group = []
+
+        # start with group 1: root
         queue = deque([root])
 
-        # 
         while queue:
-            level_size = len(queue)
-            level_nodes = []
 
-            # Process all nodes in current level
-            for _ in range(level_size):
+            # grab size of curr level
+            size = len(queue)
+            level = []
+
+            # process entire level
+            for _ in range(size):
+
+                # grab node of group
                 node = queue.popleft()
-                level_nodes.append(node.val)
+                level.append(node.val)
 
+                # append next level
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
 
-            result.append(level_nodes)
+            # add level group to list of groups
+            groups.append(level)
 
-        return result
+        # return all level groups
+        return groups
 
     # Example:
     # Input Tree:
@@ -545,21 +544,22 @@ Instead we act on nodes individually or in partial groupings (pairs, linked neig
 
 Ex: Invert a Binary Tree
 ```python
-    # ----------------------------------------
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         if not root:
             return None
 
-        # BFS - no explicit full level processing
+        # start at root
         queue = deque([root])
         
         while queue:
+
+            # grab nodes sequentially
             node = queue.popleft()
             
-            # Swap left and right children
+            # process node
             node.left, node.right = node.right, node.left
             
-            # Add children to queue
+            # process left and right subtrees by appending to queue
             if node.left:
                 queue.append(node.left)
             if node.right:
@@ -572,27 +572,20 @@ Ex: Invert a Binary Tree
         #       4
         #      / \
         #     2   7
+
         # Output Tree:
         #       4
         #      / \
         #     7   2
 ```
 
-### Tree Application: BFS Iterative Distance from Root Matters
+### Tree Application: BFS Iterative Distance from Root
 Traversal Order: Level by Level
 Distance Tracking: Each level corresponds to one distance step from the root.
 Used when the problem depends on minimum, maximum or some count depth.
 
 Ex: Minimum Depth of a Binary Tree
 ```python
-    # ----------------------------------------
-    # Why BFS with Distance Tracking?
-    # BFS naturally explores nodes by distance from the root.
-    # The first leaf node encountered gives the minimum depth.
-    # Boils down to BFS where level number = distance.
-
-    # ----------------------------------------
-    # Iterative BFS with Depth Tracking
     def minDepth(root: Optional[TreeNode]) -> int:
         from collections import deque
         
@@ -600,77 +593,28 @@ Ex: Minimum Depth of a Binary Tree
         if not root:
             return 0
         
-        queue = deque([(root, 1)])  # store (node, depth)
+        # initialize depth value
+        queue = deque([(root, 1)])
         
-        # BFS until first leaf is found
         while queue:
+            
+            # grab current depth, increase to children
             node, depth = queue.popleft()
             
-            # Leaf found: return depth
+            # first leaf found -> min depth 
             if not node.left and not node.right:
                 return depth
             
-            # Add children with updated depth
+            # iterate to left and right subtrees with updated depth
             if node.left:
                 queue.append((node.left, depth + 1))
             if node.right:
                 queue.append((node.right, depth + 1))
 ```
 
-### Tree Application: BFS Iterative State Changes Propagate Outward
-Traversal Order: Level by Level
-State Propagation: Changes spread outward in BFS "waves" from a source node.
-Used when state changes spread level by level (burning, infection)
-
-Ex: Infection Spread in Binary Tree
-```python
-    # ----------------------------------------
-    # Why BFS for State Propagation?
-    # State changes (infection, burning) spread to direct neighbors each step.
-    # BFS naturally handles wave-like outward spreading by levels.
-    # Boils down to BFS from the source with time = levels.
-
-    # ----------------------------------------
-    # Iterative BFS for Propagation
-    def amountOfTime(root: Optional[TreeNode], start: int) -> int:
-        from collections import defaultdict, deque
-        
-        # Step 1: Build adjacency list (treat tree as undirected graph)
-        graph = defaultdict(list)
-        
-        def dfs(node):
-            if not node:
-                return
-            if node.left:
-                graph[node.val].append(node.left.val)
-                graph[node.left.val].append(node.val)
-                dfs(node.left)
-            if node.right:
-                graph[node.val].append(node.right.val)
-                graph[node.right.val].append(node.val)
-                dfs(node.right)
-        
-        dfs(root)
-        
-        # Step 2: BFS starting from infected node
-        visited = set([start])
-        queue = deque([(start, 0)])
-        time = 0
-        
-        while queue:
-            node, time = queue.popleft()
-            
-            # Spread to neighbors
-            for nei in graph[node]:
-                if nei not in visited:
-                    visited.add(nei)
-                    queue.append((nei, time + 1))
-        
-        return time
-```
 
 ### Tree Application: BFS Iterative Non-Standard Level Traversal
-Traversal ORder: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns)
+Traversal Order: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns)
 Used when the traversal order of nodes at each level must follow a specific 
 non standard pattern
 
@@ -730,147 +674,6 @@ Ex: Binary Tree Zigzag Level Order Traversal
     #   4   5   6
     # Output: [[1], [3, 2], [4, 5, 6]]
 ```
-
-### Tree Application: BFS Iterative Per Level Aggregation
-Traversal Order: Level by Level
-BFS naturally groups nodes by level, making it useful when each 
-level's value must be combined into an aggregate value (sum, average, product, etc)
-
-Ex: Average of Levels in a Binary Tree
-```python
-    # ----------------------------------------
-    # Why BFS for Per-Level Aggregation?
-    # BFS processes all nodes in a level before moving to the next, 
-    # making it easy to compute per-level aggregates in one pass.
-    # Boils down to BFS level grouping + aggregate computation.
-
-    # ----------------------------------------
-    # Iterative BFS with Per-Level Average
-    def averageOfLevels(root: Optional[TreeNode]) -> List[float]:
-        from collections import deque
-        
-        # Empty Tree
-        if not root:
-            return []
-        
-        result = []
-        queue = deque([root])
-        
-        while queue:
-            level_size = len(queue)
-            level_sum = 0
-            
-            # Process all nodes in current level
-            for _ in range(level_size):
-                node = queue.popleft()
-                level_sum += node.val
-                
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
-            
-            # Compute average for level
-            result.append(level_sum / level_size)
-        
-        return result
-
-    # Example:
-    # Input Tree:
-    #       3
-    #      / \
-    #     9   20
-    #        /  \
-    #       15   7
-    # Output: [3.0, 14.5, 11.0]
-```
-
-
-### Tree Application: Modification
-Tree structure is altered by rearranging nodes or pointers,
-rather than simply traversing or querying.
-
-Ex: Invert Binary Tree (DFS Recursive + BFS Iterative)
-```python
-    # ----------------------------------------
-    # DFS Recursive (Postorder style)
-
-    def invertTreeDFS(root: Optional[TreeNode]) -> Optional[TreeNode]:
-        if not root:
-            return None
-        # Recursively invert left and right subtrees
-        left_inverted = invertTreeDFS(root.left)
-        right_inverted = invertTreeDFS(root.right)
-        # Swap left and right children
-        root.left, root.right = right_inverted, left_inverted
-        return root
-
-    # ----------------------------------------
-    # BFS Iterative
-
-    def invertTreeBFS(root: Optional[TreeNode]) -> Optional[TreeNode]:
-        if not root:
-            return None
-        queue = deque([root])
-        while queue:
-            node = queue.popleft()
-            # Swap children
-            node.left, node.right = node.right, node.left
-            # Add children to queue if they exist
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
-        return root
-
-    # ----------------------------------------
-    # Result of recursive and iterative:
-
-    # Tree:
-    #       4
-    #      / \
-    #     2   7
-    #    / \ / \
-    #   1  3 6  9
-    
-    # Inverted Tree:
-    #       4
-    #      / \
-    #     7   2
-    #    / \ / \
-    #   9  6 3  1
-```
-
-### Tree Application: MinHeap
-Use a MinHeap, a type of binary tree, to maintain the smallest or
-highest-priority elements efficiently. 
-
-Ex: Find the Top K Frequent Elements in a List
-```python
-    def topKFrequent(nums: List[int], k: int) -> List[int]:
-        from collections import defaultdict
-        import heapq
-
-        # Step 1: Frequency count for each unique integer
-        count = defaultdict(int)  # O(m) space complexity for m unique integers
-        for num in nums:  # O(n) time complexity to iterate over n integers
-            count[num] += 1
-
-        # Step 2: Use a MinHeap to track the k most frequent elements
-        minHeap = []  # O(k) space complexity for k elements
-        for num, freq in count.items():  # O(m) time complexity for m unique integers
-            heapq.heappush(minHeap, (freq, num))  # O(log k) for each insertion
-            if len(minHeap) > k:  # Ensure heap size remains k
-                heapq.heappop(minHeap)  # O(log k) for each removal
-
-        # Step 3: Extract the elements from the heap
-        return [num for freq, num in minHeap]  # O(k) time complexity to extract results
-
-    # Example:
-    # Input: nums = [1, 1, 1, 2, 2, 3], k = 2
-    # Output: [1, 2]
-```
-
 
 ## 226. Invert Binary Tree ::2:: - Easy
 
