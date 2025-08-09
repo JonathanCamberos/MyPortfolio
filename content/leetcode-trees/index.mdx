@@ -175,23 +175,33 @@ Traversal Order: Root -> Left -> Right.
 Top Down: Root is processed immediately, then we move deeper.
 Used when a node's work must be done before processing its children.
 
-Ex: Serialize a Binary Tree Recursive and Iterative
+Ex: Serialize a Binary Tree Recursive
 ```python
-    def serializeRecursive(root: Optional[TreeNode]) -> str:
+    def preOrderSerializeRecursive(root: Optional[TreeNode]) -> str:
         
         def dfsPreOrder(node):
+            # Note:
+            # DFS pre order: root -> left -> right
 
             # Base case: process leaf 
             if not node:
                 vals.append("N")
                 return
             
-            # Process node (top-down work)
+            # Process root -> (DFS top down)
             vals.append(str(node.val))
             
-            # Recursive call to process left and right subtree
+            # Note:
+            # order of recursive call determines order
+
+            # Recursive call to process -> left -> right, left deepest 
             dfsPreOrder(node.left)
             dfsPreOrder(node.right)
+
+            # could have been: -> right -> left
+            # with deep right subtree 
+            # dfsPreOrder(node.right)
+            # dfsPreOrder(node.left)
         
         # serialized array
         vals = []
@@ -216,9 +226,11 @@ Traversal Order: Root -> Left -> Right.
 Top Down: Root is processed immediately, then we move deeper.
 Used when a node's work must be done before processing its children.
 
-Ex: Serialize a Binary Tree Recursive and Iterative
+Ex: Pre Order Serialize a Binary Tree Iterative
 ```python
-    def serializeIterative(root: Optional[TreeNode]) -> str:
+    def preOrderSerializeIterative(root: Optional[TreeNode]) -> str:
+        # Note:
+        # DFS pre order: root -> left -> right
 
         # Empty Check
         if not root:
@@ -232,22 +244,34 @@ Ex: Serialize a Binary Tree Recursive and Iterative
         
         while stack:
 
-            # pop: Last In First Out
-            # leads to deep search (dfs)
+            # dfs -> pop()
+            # bfs -> popleft()
             currRoot = stack.pop()
 
-            # process node
+            # process root ->: if value
             if currRoot:
 
-                # process node (top-down work)
+                # serialize root (dfs pre order top down)
                 vals.append(str(currRoot.val))
                 
-                # push to stack, for iterative process left and right
+                # Note:
+                # order of append determines order
+
+                # Iterative process: -> left -> right
+                # append(right), append(left), as pop() will pop(left), pop(right)
+                # pop() leads to deep left subtree search 
                 stack.append(currRoot.right)
                 stack.append(currRoot.left)
+
+
+                # Could have been -> right -> left
+                # leading to deep right subtree search
+                # stack.append(currRoot.left)
+                # stack.append(currRoot.right)
             
-            # process leaf
+            # process root ->: if leaf
             else:
+                # serialize root (dfs pre order top down)
                 vals.append("N")
         
         # join serialized array
@@ -722,28 +746,24 @@ Invert the binary tree.
 ```python
 ```
 
-### Solution 1: DFS Recursive - Tree/DFS Post Order Traversal
+### Solution 1: DFS Post Order Recursive - Tree/DFS Post Order Traversal
 ```python
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
-        # Idea: DFS recursive approach inverts subtrees from bottom up (postorder)
-        # 1. Base case: return None if node is null
-        # 2. Left -> Right: Recursively invert subtree
-        # 3. Root: Swap left and right children
-        # Result: Original tree has been inverted
+        # DFS post order: left -> right -> root
+        # 1. Process left -> right: inverting
+        # 2. Process  -> root: swap left and right subtree
+        # Result: swapping bottom to up 
 
-        # Base case:
-        # reached empty TreeNode
+        # Base case: no swap
         if not root:
             return None
 
-        # Process Left + Right:
-        # Recursive calls to invert the left and right subtrees
+        # Recursive call to process left -> right subtrees
         left_inverted = self.invertTree(root.left)
         right_inverted = self.invertTree(root.right)
 
-        # Process Root:
-        # Swap left and right children
+        # Process -> root: swap left and right subtrees
         root.left = right_inverted
         root.right = left_inverted
 
@@ -756,36 +776,28 @@ Invert the binary tree.
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
-        # Idea: BFS iterative approach inverts nodes level by level
-        # 1. Queue stores nodes to process
-        # 2. While Queue is non empty
-        # 3. Process Root: 
-        #    Pop() from queue 
-        #    Swap left and right children
-        #    Push() left and right children to queue for processing
-        # Result: Tree reverse in place
+        # BFS iterative: level by level: root -> left -> right
+        # 1. Process root -> : iterate over level
+        #      swap left and right subtrees
+        # 2. Process -> left -> right: append left and right iterative process
+        # Result: Top down invert
         
-        # Empty tree check
+        # Empty check
         if not root:
             return None
         
-        # dfs Queue:
+        # iterative stack:
         queue = deque([root])
         
-        # queue hold nodes to be processed
-        # time complexity: iterate over tree by queuing nodes, level by level O(n)
         while queue:
 
-            # Grab Root:
-            # pop() from queue -> curr root
+            # process root:
             currRoot = queue.popleft()
             
-            # Process Root:
-            # Swap left and right children
+            # swap left and right subtrees
             currRoot.left, currRoot.right = currRoot.right, currRoot.left
             
-            # Process Left and Right subtrees:
-            # add left and right to dfs queue
+            # Append left and right subtrees for iterative process
             if currRoot.left:
                 queue.append(currRoot.left)
             if currRoot.right:
@@ -876,7 +888,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Pre Order Iterative Carry Down Depth Val - Tree/DFA Pre Order Traversal
+### Solution 2: DFS Pre Order Iterative Carry Down Tuple (Node, Depth) - Tree/DFA Pre Order Traversal
 ```python
     # Note:
     # DFS pre order iterative: root -> left -> right
@@ -897,18 +909,17 @@ Find the max depth of a binary tree.
     
     while stack:
 
-        # process node
-        node, depth = stack.pop()
-
-        # non leaf node
-        if node:
-
-            # update maximum depth
-            max_depth = max(max_depth, depth)
-            
-            # process left and right subtrees
-            stack.append((node.left, depth + 1))
-            stack.append((node.right, depth + 1))
+        # process node: (node, prev depth)
+        node, depth = stack.popleft()
+        
+        # check node maximum depth
+        max_depth = max(max_depth, depth)
+        
+        # process left and right subtrees:
+        if node.left:
+            stack.append((node.left, depth+1))
+        if node.right:
+            stack.append((node.right, depth+1))
     
     # overall: time complexity
     # overall: space complexity

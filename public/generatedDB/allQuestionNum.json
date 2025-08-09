@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "2": {
     "questionNum": 2,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "11": {
     "questionNum": 11,
@@ -86,7 +86,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "15": {
     "questionNum": 15,
@@ -102,7 +102,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "19": {
     "questionNum": 19,
@@ -130,7 +130,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 26
+    "coldnessCount": 27
   },
   "21": {
     "questionNum": 21,
@@ -204,7 +204,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "36": {
     "questionNum": 36,
@@ -219,7 +219,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "42": {
     "questionNum": 42,
@@ -236,7 +236,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "49": {
     "questionNum": 49,
@@ -252,7 +252,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "74": {
     "questionNum": 74,
@@ -267,7 +267,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "76": {
     "questionNum": 76,
@@ -299,6 +299,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "98": {
+    "questionNum": 98,
+    "questionTitle": "Validate Binary Search Tree ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given the root of a binary tree, determine if it is a valid binary search tree (BST). The left subtree of a node contains only nodes with keys strictly less than the node's key. The right subtree of a node contains only nodes with keys strictly greater than the node's key. Both the left and right subtrees must also be binary search trees.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Binary Search Tree",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#98-validate-binary-search-tree-2---medium",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "100": {
     "questionNum": 100,
     "questionTitle": "Same Tree ::2::",
@@ -311,6 +327,21 @@
       "Binary Tree"
     ],
     "questionLink": "/Notes/leetcode-trees#100-same-tree-2---easy",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "102": {
+    "questionNum": 102,
+    "questionTitle": "Binary Tree Level Order Traversal ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).",
+    "questionTopics": [
+      "Tree",
+      "Breadth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#102-binary-tree-level-order-traversal-2---medium",
     "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -331,11 +362,28 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "105": {
+    "questionNum": 105,
+    "questionTitle": "Construct Binary Tree from Preorder and Inorder Traversal ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given two integer arrays pre order and in order where pre order is the pre order traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Divide and Conquer",
+      "Tree",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#105-construct-binary-tree-from-preorder-and-inorder-traversal-2---medium",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "110": {
     "questionNum": 110,
     "questionTitle": "Balanced Binary Tree ::2::",
     "questionDifficulty": "Easy",
-    "questionBlurb": "Given a binary tree, determine if it is height-balanced.",
+    "questionBlurb": "Given a binary tree, determine if it is height-balanced. A height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.",
     "questionTopics": [
       "Tree",
       "Depth First Search",
@@ -361,6 +409,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "124": {
+    "questionNum": 124,
+    "questionTitle": "Binary Tree Maximum Path Sum ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root. The path sum of a path is the sum of the node's values in the path. Given the root of a binary tree, return the maximum path sum of any non-empty path.",
+    "questionTopics": [
+      "Dynamic Programming",
+      "Tree",
+      "Depth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#124-binary-tree-maximum-path-sum-1---hard",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "125": {
     "questionNum": 125,
     "questionTitle": "Valid Palindrome ::3::",
@@ -373,7 +437,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "128": {
     "questionNum": 128,
@@ -388,7 +452,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "138": {
     "questionNum": 138,
@@ -465,7 +529,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 27
+    "coldnessCount": 28
   },
   "153": {
     "questionNum": 153,
@@ -479,7 +543,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "155": {
     "questionNum": 155,
@@ -493,7 +557,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 26
+    "coldnessCount": 27
   },
   "162": {
     "questionNum": 162,
@@ -522,7 +586,22 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
+  },
+  "199": {
+    "questionNum": 199,
+    "questionTitle": "Binary Tree Right Side View ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.",
+    "questionTopics": [
+      "Tree",
+      "Breadth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#199-binary-tree-right-side-view-2---medium",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "206": {
     "questionNum": 206,
@@ -551,7 +630,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "226": {
     "questionNum": 226,
@@ -569,6 +648,38 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "230": {
+    "questionNum": 230,
+    "questionTitle": "Kth Smallest Element in a BST ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree. Follow up: If the BST is modified often (i.e., we can do insert and delete operations) and you need to find the kth smallest frequently, how would you optimize?",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Binary Search Tree",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#230-kth-smallest-element-in-a-bst-2---medium",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "235": {
+    "questionNum": 235,
+    "questionTitle": "Lowest Common Ancestor of a Binary Search Tree ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST. According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Binary Search Tree",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#235-lowest-common-ancestor-of-a-binary-search-tree-2---medium",
+    "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "238": {
     "questionNum": 238,
     "questionTitle": "Product of Array Except Self ::2::",
@@ -581,7 +692,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "239": {
     "questionNum": 239,
@@ -613,7 +724,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "271": {
     "questionNum": 271,
@@ -627,7 +738,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "287": {
     "questionNum": 287,
@@ -642,6 +753,24 @@
     ],
     "questionLink": "/Notes/leetcode-linked-list#287-find-the-duplicate-number-3---medium",
     "blog": "LeetCode: Linked List",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "297": {
+    "questionNum": 297,
+    "questionTitle": "Serialize and Deserialize Binary Tree ::2::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment. Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure. Clarification: The input/output format is the same as how LeetCode serializes a binary tree. ou do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.",
+    "questionTopics": [
+      "String",
+      "Tree",
+      "Depth First Search",
+      "Breadth First Search",
+      "Design",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#297-serialize-and-deserialize-binary-tree-2---hard",
+    "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -663,7 +792,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "402": {
     "questionNum": 402,
@@ -755,7 +884,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "739": {
     "questionNum": 739,
@@ -805,7 +934,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "981": {
     "questionNum": 981,
@@ -820,6 +949,22 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#981-time-based-key-value-store-2---medium",
     "blog": "LeetCode: Binary Search",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1448": {
+    "questionNum": 1448,
+    "questionTitle": "Count Good Nodes in Binary Tree ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a binary tree root, a node X in the tree is named good if in the path from root to X there are no nodes with a value greater than X. Return the number of good nodes in the binary tree.",
+    "questionTopics": [
+      "Tree",
+      "Depth First Search",
+      "Breadth First Search",
+      "Binary Tree"
+    ],
+    "questionLink": "/Notes/leetcode-trees#1448-count-good-nodes-in-binary-tree-2---medium",
+    "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }

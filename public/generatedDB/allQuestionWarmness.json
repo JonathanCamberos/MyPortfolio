@@ -1,7 +1,7 @@
 {
   "1": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "2": {
     "lastSubmittedDate": null,
@@ -17,15 +17,15 @@
   },
   "5": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "11": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "15": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "19": {
     "lastSubmittedDate": null,
@@ -33,7 +33,7 @@
   },
   "20": {
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 26
+    "coldnessCount": 27
   },
   "21": {
     "lastSubmittedDate": null,
@@ -53,23 +53,23 @@
   },
   "33": {
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "36": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "42": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "49": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "74": {
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "76": {
     "lastSubmittedDate": null,
@@ -79,11 +79,23 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "98": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "100": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "102": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "104": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "105": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -95,13 +107,17 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "124": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "125": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "128": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "138": {
     "lastSubmittedDate": null,
@@ -121,15 +137,15 @@
   },
   "150": {
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 27
+    "coldnessCount": 28
   },
   "153": {
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "155": {
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 26
+    "coldnessCount": 27
   },
   "162": {
     "lastSubmittedDate": null,
@@ -137,7 +153,11 @@
   },
   "167": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
+  },
+  "199": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "206": {
     "lastSubmittedDate": null,
@@ -145,15 +165,23 @@
   },
   "217": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "226": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "230": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "235": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "238": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "239": {
     "lastSubmittedDate": null,
@@ -161,19 +189,23 @@
   },
   "242": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "271": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "287": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "297": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "347": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "402": {
     "lastSubmittedDate": null,
@@ -197,7 +229,7 @@
   },
   "704": {
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "739": {
     "lastSubmittedDate": null,
@@ -209,9 +241,13 @@
   },
   "875": {
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 15
+    "coldnessCount": 16
   },
   "981": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1448": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }
