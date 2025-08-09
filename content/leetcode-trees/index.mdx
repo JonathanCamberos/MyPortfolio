@@ -439,7 +439,7 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
     # diameterOfBinaryTree -> 3
 ```
 
-### Tree Application: DFS Post Order Iterative Bottom Up
+### Tree Application: DFS Post Order Iterative Two Sided Bottom Up 
 Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) 
 Mindset: Fully explore both sides before processing the root.
 Trick: I'll finish everything to your left then right or right then left
@@ -767,6 +767,10 @@ Invert the binary tree.
         left_inverted = self.invertTree(root.left)
         right_inverted = self.invertTree(root.right)
 
+        # Could have been: right -> left subtrees
+        # right_inverted = self.invertTree(root.right)
+        # left_inverted = self.invertTree(root.left)
+
         # Process -> root: swap left and right subtrees
         root.left = right_inverted
         root.right = left_inverted
@@ -870,8 +874,8 @@ Find the max depth of a binary tree.
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
         # DFS post order traversal: left -> right -> root
-        # 1. Process depth of left and right subtrees
-        # 2. Process node by grabbing max(left, right)
+        # 1. Process left -> right: subtrees
+        # 2. Process -> root: by max(left_subtree, right_subtree)
         # Result: max depth of tree
         
         # Base case:
@@ -879,11 +883,11 @@ Find the max depth of a binary tree.
         if not root:
             return 0
         
-        # process left and right children
+        # process left -> right -> subtrees
         left_depth = self.maxDepth(root.left)
         right_depth = self.maxDepth(root.right)
         
-        # process root
+        # process -> root
         return 1 + max(left_depth, right_depth)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -896,10 +900,9 @@ Find the max depth of a binary tree.
 ```python
     # Note:
     # DFS pre order iterative: root -> left -> right
-    # 1. Each stack entry stores (node, current depth)
-    # 2. Update max_depth when visiting each node
-    # 3. Works like Post order — compute children before root aggregation
-    # Result: deepest level updated global counter -> max depth
+    # 1. Process root -> : check current depth against max_depth
+    # 2. Process -> left -> right : continue incrementing depth down both subtrees
+    # Result: deepest branch updates global max_depth
     
     # Empty check
     if not root:
@@ -913,13 +916,13 @@ Find the max depth of a binary tree.
     
     while stack:
 
-        # process node: (node, prev depth)
+        # process root -> : (node, node_depth)
         node, depth = stack.popleft()
         
-        # check node maximum depth
+        # check node depth against max_depth
         max_depth = max(max_depth, depth)
         
-        # process left and right subtrees:
+        # append process left and right subtrees: increment depth by + 1
         if node.left:
             stack.append((node.left, depth+1))
         if node.right:
@@ -934,13 +937,10 @@ Find the max depth of a binary tree.
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
-        # BFS iterative: count number of levels
-        # 1. Queue will store nodes in current level
-        # 2. For each level:
-        #      process all nodes
-        #      add next level to queue
-        #      add to global depth counter after processing full level
-        # Result: number of levels -> max depth
+        # BFS iterative: full across level, (node -> node -> ...)
+        # 1. Process level: pop() all nodes in current level
+        # 2. Increment depth count
+        # Result: depth is total of levels -> max depth 
         
         # Empty check
         if not root:
@@ -954,20 +954,22 @@ Find the max depth of a binary tree.
         
         while queue:
 
-            # curr level size
+            # level size
             size = len(queue)
+
+            # process all nodes in current level
             for _ in range(size):
 
-                # process all nodes in level
+                # pop() all nodes
                 node = queue.popleft()
 
-                # append next level
+                # append() subtrees belonging to next level
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
 
-            # finished processing level, add to depth counter
+            # level processed, add to depth counter
             depth += 1
         
         # overall: time complexity O(n)

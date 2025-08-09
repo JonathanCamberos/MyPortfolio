@@ -331,53 +331,53 @@
   "tree": [
     {
       "type": "Tree",
-      "title": "DFS Pre Order Traversal Top Down",
-      "summary": "Traversal Order: Root -> Left -> Right. Top Down: Root is processed immediately, then we do deep search in left or right subtree. Trick: I'll visit you first, then i'll deal with your kids",
+      "title": "DFS Pre Order Recursive One Sided Top Down",
+      "summary": "Traversal Order: Root -> Left -> Right (or Root -> Right -> Left) Mindset: Process the root as soon as you see it, then traverse into one subtree fully before the other Trick: I'll visit you first, then i'll deal with your kids",
       "exampleIntro": "Serialize a Binary Tree Recursive",
       "codeExample": "def preOrderSerializeRecursive(root: Optional[TreeNode]) -> str:\n        \n        def dfsPreOrder(node):\n            # Note:\n            # DFS pre order: root -> left -> right\n\n            # Base case: process leaf \n            if not node:\n                vals.append(\"N\")\n                return\n            \n            # Process root -> (DFS top down)\n            vals.append(str(node.val))\n            \n            # Note:\n            # order of recursive call determines order\n\n            # Recursive call to process -> left -> right, left deepest \n            dfsPreOrder(node.left)\n            dfsPreOrder(node.right)\n\n            # could have been: -> right -> left\n            # with deep right subtree \n            # dfsPreOrder(node.right)\n            # dfsPreOrder(node.left)\n        \n        # serialized array\n        vals = []\n\n        # recursive call at root\n        dfsPreOrder(root)\n\n        # join serialized array\n        return \",\".join(vals)\n\n    # Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: \"1,2,N,N,3,4,N,N,5,N,N\"",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-pre-order-traversal-top-down",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-pre-order-recursive-one-sided-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "DFS Pre Order Iterative Top Down",
-      "summary": "Traversal Order: Root -> Left -> Right. Top Down: Root is processed immediately, then we do deep search in left or right subtree. Trick: I'll visit you first, then i'll deal with your kids",
+      "title": "DFS Pre Order Iterative One Sided Top Down",
+      "summary": "Traversal Order: Root -> Left -> Right (or Root -> Right -> Left) Mindset: Process the root as soon as you see it, then traverse into one subtree fully before the other Trick: I'll visit you first, then i'll deal with your kids",
       "exampleIntro": "Pre Order Serialize a Binary Tree Iterative",
       "codeExample": "def preOrderSerializeIterative(root: Optional[TreeNode]) -> str:\n        # Note:\n        # DFS pre order: root -> left -> right\n\n        # Empty Check\n        if not root:\n            return \"N\"\n\n        # iteration via stack\n        stack = [root]\n\n        # serialized array\n        vals = []\n        \n        while stack:\n\n            # dfs -> pop()\n            # bfs -> popleft()\n            currRoot = stack.pop()\n\n            # process root ->: if value\n            if currRoot:\n\n                # serialize root (dfs pre order top down)\n                vals.append(str(currRoot.val))\n                \n                # Note:\n                # order of append determines order\n\n                # Iterative process: -> left -> right\n                # append(right), append(left), as pop() will pop(left), pop(right)\n                # pop() leads to deep left subtree search \n                stack.append(currRoot.right)\n                stack.append(currRoot.left)\n\n\n                # Could have been -> right -> left\n                # leading to deep right subtree search\n                # stack.append(currRoot.left)\n                # stack.append(currRoot.right)\n            \n            # process root ->: if leaf\n            else:\n                # serialize root (dfs pre order top down)\n                vals.append(\"N\")\n        \n        # join serialized array\n        return \",\".join(vals)\n\n    # Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: \"1,2,N,N,3,4,N,N,5,N,N\"",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-pre-order-iterative-top-down",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-pre-order-iterative-one-sided-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "DFS In Order Recursive Mid Point",
-      "summary": "Traversal Order: Left -> Root -> Right  ||  Right -> Root -> Left Left Up or Right Up: Deep search on left or right subtree, root is processed, then deep search on right's left subtree or left's right subtree (depending if first step was a deep search on left or right) Trick: I'll finish everything to your left or right before I pay attention to you",
+      "title": "DFS In Order Recursive One Sided Bottom Up",
+      "summary": "Traversal Order: Left -> Root -> Right  (or Right -> Root -> Left) Mindset: Fully explore one side before paying attention to the root, then move to the other side Trick: I'll finish everything to your left or right before I pay attention to you",
       "exampleIntro": "Convert BST to Sorted List Recursive and Validate BST Iterative",
       "codeExample": "def bstToSortedList(root: Optional[TreeNode]) -> List[int]:\n        \n        # tracks previous value\n        prev_val = float(\"-inf\")\n            \n        def dfsInOrder(node):\n            nonlocal prev_val\n            \n            # Base case: leaf -> no value\n            if not node:\n                return True\n            \n            # recursive call to process left subtree\n            if not dfsInOrder(node.left):\n                return False\n            \n            # process node (mid-point work)\n            if node.val <= prev_val:\n                return False\n\n            # set to current value\n            prev_val = node.val\n            \n            # recursive call to process right subtree\n            return dfsInOrder(node.right)\n        \n        # recursive call on root\n        return dfsInOrder(root)\n\n        # Tree:\n        #       2\n        #      / \\\n        #     1   3\n        # isValidBST -> True",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-in-order-recursive-mid-point",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-in-order-recursive-one-sided-bottom-up",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "DFS In Order Iterative Mid Point",
-      "summary": "Traversal Order: Left -> Root -> Right  ||  Right -> Root -> Left Left Up or Right Up: Deep search on left or right subtree, root is processed, then deep search on right's left subtree or left's right subtree (depending if first step was a deep search on left or right) Trick: I'll finish everything to your left or right before I pay attention to you",
+      "title": "DFS In Order Iterative One Sided Bottom Up",
+      "summary": "Traversal Order: Left -> Root -> Right  (or Right -> Root -> Left) Mindset: Fully explore one side before paying attention to the root, then move to the other side Trick: I'll finish everything to your left or right before I pay attention to you",
       "exampleIntro": "Convert BST to Sorted List Recursive and Validate BST Iterative",
       "codeExample": "def isValidBST(root: Optional[TreeNode]) -> bool:\n        \n        # tracks previous value\n        prev_val = float(\"-inf\")\n\n        # iteration via stack\n        stack = [] \n\n        # pointer to check for empty case\n        curr = root\n        \n        while stack or curr:\n            \n            # traverse left subtree of curr:\n            # will go as far left as possible\n            while curr: \n                # continue traversal down left subtree\n                stack.append(curr)\n                curr = curr.left\n            \n            # Exited loop: \n            # reached 'leaf' of left subtree\n            #     L\n            #  /     \\ \n            # leaf    ?\n                        \n            # process left, node, right:\n            # via previous left subtree node 'L' from stack\n            curr = stack.pop()\n\n            # validate\n            if curr.val <= prev_val:\n                return False\n\n            # set to current value\n            prev_val = curr.val\n            \n            # traverse right subtree\n            # (which we thus explore left, node and right subtrees again)\n            #     L\n            #  /     \\ \n            # leaf    *here*\n            curr = curr.right\n        \n        return True\n\n    # Tree:\n    #       2\n    #      / \\\n    #     1   3\n    # isValidBST -> True",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-in-order-iterative-mid-point",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-in-order-iterative-one-sided-bottom-up",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "DFS Post Order Recursive Bottom Up",
-      "summary": "Traversal Order: Left -> Right -> Root  ||  Right -> Left -> Root Left Up then Right Up or Right Up then Left Up: Deep search on left or right subtree, root is processed, then deep search on right's left subtree or left's right subtree (depending if first step was a deep search on left or right) Trick: I'll finish everything to your left then right or right then left before I pay attention to you",
+      "title": "DFS Post Order Recursive Two Sided Bottom Up",
+      "summary": "Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) Mindset: Fully explore both sides before processing the root. Trick: I'll finish everything to your left then right or right then left before I pay attention to you",
       "exampleIntro": "Evaluate Expression Tree Recursive and Delete Tree Iterative",
       "codeExample": "def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:\n        \n        # global diameter\n        diameter = 0\n\n        def dfs(node):\n            nonlocal diameter\n\n            # Base case:\n            # no width added\n            if not node:\n                return 0\n\n            # recursive call to process left and right\n            left = dfs(node.left)\n            right = dfs(node.right)\n\n            # process node\n            diameter = max(diameter, left + right)\n\n            # pass width upwards\n            return 1 + max(left, right)\n\n        # recursive on root\n        dfs(root)\n\n        # return global diameter\n        return diameter\n\n    # Tree:\n    #         1\n    #        / \\\n    #       2   3\n    #      / \\\n    #     4   5\n    # diameterOfBinaryTree -> 3",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-recursive-bottom-up",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-recursive-two-sided-bottom-up",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
       "title": "DFS Post Order Iterative Bottom Up",
-      "summary": "Traversal Order: Left -> Right -> Root  ||  Right -> Left -> Root Left Up then Right Up or Right Up then Left Up: Deep search on left or right subtree, root is processed, then deep search on right's left subtree or left's right subtree (depending if first step was a deep search on left or right) Trick: I'll finish everything to your left then right or right then left before I pay attention to you",
+      "summary": "Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) Mindset: Fully explore both sides before processing the root. Trick: I'll finish everything to your left then right or right then left before I pay attention to you",
       "exampleIntro": "Evaluate Expression Tree Recursive and Delete Tree Iterative",
       "codeExample": "def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:\n\n        # Empty check\n        if not root:\n            return 0\n\n        # global width\n        diameter = 0\n\n        # iterative stack\n        stack = []\n\n        # \n        curr = root\n        lastVisited = None\n        depth_map = defaultdict(int)\n\n        while stack or curr:\n\n            # traverse left subtree of curr:\n            # will go as far left as possible\n            while curr:\n                stack.append(curr)\n                curr = curr.left\n\n            # check if right subtree exists\n            peek = stack[-1]\n\n            # if right subtree exists and hasn't been visited\n            if peek.right and lastVisited != peek.right:\n                node = peek.right\n\n            # process node\n            else:\n                stack.pop()\n\n                # grab width of left and right subtree if exists\n                left_depth = depth_map.get(peek.left, 0)\n                right_depth = depth_map.get(peek.right, 0)\n\n                # node diameter\n                diameter = max(diameter, left_depth + right_depth)\n\n                # store node diameter\n                depth_map[peek] = 1 + max(left_depth, right_depth)\n\n                # set last visited to current node\n                lastVisited = peek\n\n        # return width\n        return diameter\n\n    # Tree:\n    #         1\n    #        / \\\n    #       2   3\n    #      / \\\n    #     4   5\n    # diameterOfBinaryTree -> 3 (path: 4 → 2 → 5 or 4 → 2 → 1 → 3)",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-iterative-bottom-up",
@@ -385,38 +385,38 @@
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Level Size Based Grouping Processing",
+      "title": "BFS Iterative Level Size Based Grouping Full Across Top Down",
       "summary": "Traversal Order: Level by Level BFS visits nodes level by level, processing all nodes at a given depth before moving on to the next. Used for level order problems and shortest path calculations in unweighted graphs, as well as scenarios requiring nodes in order of distance from the root.",
       "exampleIntro": "Level order traversal of Binary Tree",
       "codeExample": "def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:\n        \n        # Empty check\n        if not root:\n            return []\n\n        group = []\n\n        # start with group 1: root\n        queue = deque([root])\n\n        while queue:\n\n            # grab size of curr level\n            size = len(queue)\n            level = []\n\n            # process entire level\n            for _ in range(size):\n\n                # grab node of group\n                node = queue.popleft()\n                level.append(node.val)\n\n                # append next level\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n\n            # add level group to list of groups\n            groups.append(level)\n\n        # return all level groups\n        return groups\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: [[1], [2, 3], [4, 5]]",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-level-size-based-grouping-processing",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-level-size-based-grouping-full-across-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative No Explicit Level Sized Grouping Processing",
+      "title": "BFS Iterative No Explicit Level Sized Grouping Full Across Top Down",
       "summary": "Traversal Order: Level by Level BFS visit nodes in breath first order. However, in some problems we don't process or store the full level at once. Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)",
       "exampleIntro": "Invert a Binary Tree",
       "codeExample": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        if not root:\n            return None\n\n        # start at root\n        queue = deque([root])\n        \n        while queue:\n\n            # grab nodes sequentially\n            node = queue.popleft()\n            \n            # process node\n            node.left, node.right = node.right, node.left\n            \n            # process left and right subtrees by appending to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root\n\n        # Example:\n        # Input Tree:\n        #       4\n        #      / \\\n        #     2   7\n\n        # Output Tree:\n        #       4\n        #      / \\\n        #     7   2",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-no-explicit-level-sized-grouping-processing",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-no-explicit-level-sized-grouping-full-across-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Distance from Root",
+      "title": "BFS Iterative Distance from Root Full Across Top Down",
       "summary": "Traversal Order: Level by Level Distance Tracking: Each level corresponds to one distance step from the root. Used when the problem depends on minimum, maximum or some count depth.",
       "exampleIntro": "Minimum Depth of a Binary Tree",
       "codeExample": "def minDepth(root: Optional[TreeNode]) -> int:\n        from collections import deque\n        \n        # Empty Tree\n        if not root:\n            return 0\n        \n        # initialize depth value\n        queue = deque([(root, 1)])\n        \n        while queue:\n            \n            # grab current depth, increase to children\n            node, depth = queue.popleft()\n            \n            # first leaf found -> min depth \n            if not node.left and not node.right:\n                return depth\n            \n            # iterate to left and right subtrees with updated depth\n            if node.left:\n                queue.append((node.left, depth + 1))\n            if node.right:\n                queue.append((node.right, depth + 1))",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-distance-from-root",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-distance-from-root-full-across-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Non-Standard Level Traversal",
+      "title": "BFS Iterative Non-Standard Level Traversal Non Standard Full Across",
       "summary": "Traversal Order: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns) Used when the traversal order of nodes at each level must follow a specific non standard pattern",
       "exampleIntro": "Binary Tree Zigzag Level Order Traversal",
       "codeExample": "def zigzagLevelOrder(root: Optional[TreeNode]) -> List[List[int]]:\n        \n        # Empty Tree\n        if not root:\n            return []\n        \n        groups = []\n\n        # iteration stack\n        queue = deque([root])\n\n        # order toggle\n        left_to_right = True\n        \n        while queue:\n\n            # for each level\n            size = len(queue)\n            level = deque()\n            \n            # Process all nodes in current level\n            for _ in range(size):\n                node = queue.popleft()\n                \n                # append order based on pattern\n                if left_to_right:\n                    level.append(node.val)\n                else:\n                    level.appendleft(node.val)\n                \n                # iterate by appending left and right subtrees\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            \n            # flip order for next level\n            left_to_right = not left_to_right  \n\n            # add to groups            \n            groups.append(list(level))\n\n        return groups\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #    / \\   \\\n    #   4   5   6\n\n    # Output: [[1], [3, 2], [4, 5, 6]]",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-nonstandard-level-traversal",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-nonstandard-level-traversal-non-standard-full-across",
       "blog": "LeetCode: Trees"
     }
   ]
