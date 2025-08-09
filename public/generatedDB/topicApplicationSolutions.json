@@ -1163,42 +1163,42 @@
       },
       {
         "number": 1,
-        "name": "DFS Post Order Recursive Pass Upwards Subtree Diameter",
+        "name": "DFS Post Order Recursive Global Diameter + Local Edge Count Pass",
         "type": "tree",
         "application": "dfs-post-order-recursive-two-sided-bottom-up",
         "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left -> right : subtrees width\n        # 2. Process -> node : 1 + max(left width, right width)\n        # Result: longest path of edges between any two nodes\n\n        max_diameter = 0\n        \n        def dfs(node):\n            nonlocal max_diameter\n\n            # Base case:\n            # no width added\n            if not node:\n                return 0\n            \n            # Process left -> right ->\n            left_len = dfs(node.left)\n            right_len = dfs(node.right)\n            \n            # Process -> root : connecting left and right diameters\n            max_diameter = max(max_diameter, left_len + right_len)\n\n            # Process -> root: root edge diameter adds 1 edge to longer diameter\n            add_edge = 1 + max(left_len, right_len)\n\n            return add_edge\n        \n        # recursive process root\n        dfs(root)\n\n        # overall: time complexity\n        # overall: space complexity\n        return max_diameter",
         "questionNumber": 543,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-post-order-recursive-pass-upwards-subtree-diameter---treedfs-post-order-recursive-two-sided-bottom-up",
+        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-post-order-recursive-global-diameter-local-edge-count-pass---treedfs-post-order-recursive-two-sided-bottom-up",
         "blog": "LeetCode: Trees"
       },
       {
         "number": 2,
-        "name": "DFS Post Order Recursive Optimized Passed Tuple (Edges, Diameter)",
+        "name": "DFS Post Order Recursive Local Diameter + Local Edge Count Pass",
         "type": "tree",
         "application": "dfs-post-order-recursive-two-sided-bottom-up",
         "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left -> right\n        # 2. Process -> root : Pass up by max(left width, right width)\n        # Result: longest path of edges between any two nodes\n        # Avoids: global variable\n\n        def dfs(node):\n\n            # Leaf case: (diameter:0, max_diameter:0)\n            if not node:\n                return 0, 0\n            \n            # process left -> right -> : length and longest diameter for subtree\n            left_edges, left_bridge = dfs(node.left)\n            right_edges, right_bridge = dfs(node.right)\n            \n            # process -> root : root connects left and right length\n            connected_bridge = left_edges + right_edges\n            \n            # process -> root : max between -> \n            # 1. bridged left edges and right edges\n            # 2. max bridge in left subtree\n            # 3. max bridge in right subtree\n            root_max_bridge = max(connected_bridge, left_bridge, right_bridge)\n            \n            # Process -> root: account for edge from root to root's parent by + 1,\n            # return to roots parent\n            root_edges = 1 + max(left_edges, right_edges)\n            \n            # pass up (root edges, root max bridge)\n            return (root_edges, root_max_bridge)\n        \n        # overall: time complexity\n        # overall: space complexity\n        return dfs(root)[1]",
         "questionNumber": 543,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-post-order-recursive-optimized-passed-tuple-edges-diameter---treedfs-post-order-recursive-two-sided-bottom-up",
+        "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-post-order-recursive-local-diameter-local-edge-count-pass---treedfs-post-order-recursive-two-sided-bottom-up",
         "blog": "LeetCode: Trees"
       },
       {
         "number": 3,
-        "name": "DFS Post Order Iterative Dictionary of Subtree Diameter",
+        "name": "DFS Post Order Iterative Global Diameter + Dictionary Local Edge Count",
         "type": "tree",
         "application": "dfs-post-order-recursive-two-sided-bottom-up",
         "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n        \n        # Empty check\n        if not root:\n            return 0\n        \n        max_diameter = 0\n        \n        # iterative stack\n        stack = []\n\n        # store results \n        depth_map = defaultdict(int)\n        last_visited = None\n        node = root\n\n        while stack or node:\n            \n            # process left -> \n            # \n            while node:\n                stack.append(node)\n                node = node.left\n            \n            # check if right subtree exists\n            peek = stack[-1]\n\n            # process -> right -> \n            # if right subtree exists and not visited yet:\n            if peek.right and last_visited != peek.right:\n                node = peek.right\n            \n            # process -> root : (after subtrees)\n            else:\n                # remove from stack\n                stack.pop()\n\n                # results from subtrees\n                left_depth = depth_map[peek.left]\n                right_depth = depth_map[peek.right]\n\n                # process -> root : Update diameter with path through current node\n                max_diameter = max(max_diameter, left_depth + right_depth)\n\n                # process -> root : get diameter of root\n                depth_map[peek] = 1 + max(left_depth, right_depth)\n\n                # update last visited to current\n                last_visited = peek\n\n        # overall: time complexity\n        # overall: space complexity\n        return max_diameter",
         "questionNumber": 543,
-        "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-post-order-iterative-dictionary-of-subtree-diameter---treedfs-post-order-recursive-two-sided-bottom-up",
+        "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-post-order-iterative-global-diameter-dictionary-local-edge-count---treedfs-post-order-recursive-two-sided-bottom-up",
         "blog": "LeetCode: Trees"
       },
       {
         "number": 4,
-        "name": "DFS Post Order Iterative Dictionary of Subtree Tuple (Edges, Diameter)",
+        "name": "DFS Post Order Iterative Dictionary Local Diameter + Local Edge Count",
         "type": "tree",
         "application": "dfs-post-order-recursive-two-sided-bottom-up",
         "code": "def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:\n\n        # Empty check\n        if not root:\n            return 0\n\n        max_diameter = 0\n        stack = []\n        last_visited = None\n\n        # lambda sets default to (0, 0)\n        node_data = defaultdict(lambda: (0, 0))\n\n        curr = root\n        while stack or curr:\n            \n            # Process left -> : \n            while curr:\n                stack.append(curr)\n                curr = curr.left\n\n            # Check if right subtree exists\n            peek = stack[-1]\n\n            # Process -> right -> \n            # if right subtree exists and had not been visited:\n            if peek.right and last_visited != peek.right:\n                curr = peek.right\n\n            # Process -> root\n            else:\n                # remove root from stack\n                stack.pop()\n\n                # grab results from subtrees\n                left_edges, left_bridge = node_data[peek.left]\n                right_edges, right_bridge = node_data[peek.right]\n\n                # bridge by connecting left and right edges\n                connected_bridge = left_edges + right_edges\n\n                # max bridge between new bridge, max left bridge, and max right bridge\n                root_max_bridge = max(connected_bridge, left_bridge, right_bridge)\n\n                # length/edges at current root\n                root_edges = 1 + max(left_edges, right_edges)\n\n                # update data for current root\n                node_data[peek] = (root_edges, root_max_bridge)\n\n                # check max diameter\n                max_diameter = max(max_diameter, root_max_bridge)\n\n                # update last visited\n                last_visited = peek\n                \n        return max_diameter",
         "questionNumber": 543,
-        "solutionLink": "/Notes/leetcode-trees#solution-4-dfs-post-order-iterative-dictionary-of-subtree-tuple-edges-diameter---treedfs-post-order-recursive-two-sided-bottom-up",
+        "solutionLink": "/Notes/leetcode-trees#solution-4-dfs-post-order-iterative-dictionary-local-diameter-local-edge-count---treedfs-post-order-recursive-two-sided-bottom-up",
         "blog": "LeetCode: Trees"
       },
       {

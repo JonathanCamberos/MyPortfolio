@@ -752,7 +752,7 @@ Invert the binary tree.
 
 ### Solution 1: DFS Post Order Recursive Pass Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
-    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
         # DFS post order: left -> right -> root
         # 1. Process left -> right: inverting
@@ -784,7 +784,7 @@ Invert the binary tree.
 
 ### Solution 2: DFS Post Order Iterative Carry Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
-    def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
         # DFS post order: left -> right -> root
         # 1. Process left -> right: inverting
@@ -832,7 +832,7 @@ Invert the binary tree.
         return root
 ```
 
-### Solution 3: BFS Pre Order Iterative Full Level Each Node Inversion - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 3: BFS Pre Order Iterative Full Level Node Inversion - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -846,22 +846,28 @@ Invert the binary tree.
         if not root:
             return None
         
-        # iterative stack:
+        # iterative level stack:
         queue = deque([root])
         
         while queue:
 
-            # process root:
-            currRoot = queue.popleft()
-            
-            # swap left and right subtrees
-            currRoot.left, currRoot.right = currRoot.right, currRoot.left
-            
-            # Append left and right subtrees for iterative process
-            if currRoot.left:
-                queue.append(currRoot.left)
-            if currRoot.right:
-                queue.append(currRoot.right)
+            # current level length 
+            size = len(queue)
+
+            # process full level at a time
+            for _ in range(size):
+
+                # process root -> :
+                node = queue.popleft()
+                
+                # process root -> : swap left and right subtrees
+                node.left, node.right = node.right, node.left
+                
+                # process -> left -> right subtrees
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
         
         # overall: time complexity O(n)
         # overall: space complexity O(n)
@@ -926,8 +932,8 @@ Find the max depth of a binary tree.
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
         # DFS post order traversal: left -> right -> root
-        # 1. Process left -> right: subtrees
-        # 2. Process -> root: by max(left_subtree, right_subtree)
+        # 1. Process left -> right
+        # 2. Process -> root : by max(left_subtree, right_subtree)
         # Result: max depth of tree
         
         # Base case:
@@ -944,7 +950,9 @@ Find the max depth of a binary tree.
         # left_depth = self.maxDepth(root.left)
 
         # process -> root
-        return 1 + max(left_depth, right_depth)
+        root_depth = 1 + max(left_depth, right_depth)
+
+        return root_depth
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -952,7 +960,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Post Order Iterative Pass Up Subtree Depth - Tree/DFS Post Order Iterative Two Sided Bottom Up
+### Solution 2: DFS Post Order Iterative Dictionary (Lookup Subtree Depth) - Tree/DFS Post Order Iterative Two Sided Bottom Up
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -966,53 +974,60 @@ Find the max depth of a binary tree.
 
         stack = []
         depth_map = defaultdict(int)
-        max_depth = 0
-        node = root
+        curr = root
         last_visited = None
 
-        while stack or node:
-            # Go as far left as possible
-            while node:
-                stack.append(node)
-                node = node.left
+        while stack or curr:
             
+            # process left ->
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            
+            # check if -> right : exists
             peek = stack[-1]
 
-            # If right child exists and hasn't been processed yet, go right
+            # Process -> right : 
+            # if right child exists and hasn't been processed yet
             if peek.right and last_visited != peek.right:
-                node = peek.right
+                curr = peek.right
+
+            # Process -> root : 
             else:
-                # Process the node (post-order)
+                # remove root from stack
                 stack.pop()
                 
+                # grab left and right results from dictionary
                 left_depth = depth_map[peek.left]
                 right_depth = depth_map[peek.right]
+
+                # Process -> root : 
                 current_depth = 1 + max(left_depth, right_depth)
 
+                # Process -> root :
                 depth_map[peek] = current_depth
-                max_depth = max(max_depth, current_depth)
 
+                # update last visited
                 last_visited = peek
-                node = None  # prevent going left again
 
         # overall: time complexity
         # overall: space complexity
-        return max_depth
+        return depth_map[root]
 ```
 
-### Solution 3: DFS Pre Order Iterative Throw Down Tuple (Root, Depth) - Tree/DFS Pre Order Iterative One Sided Top Down
+### Solution 3: DFS Pre Order Iterative Global Depth + Tuple (Subtree, Subtree Depth) Pass Down - Tree/DFS Pre Order Iterative One Sided Top Down
 ```python
     # Note:
     # DFS pre order iterative: root -> left -> right
-    # 1. Process root -> : check current depth against max_depth
-    # 2. Process -> left -> right : continue incrementing depth down both subtrees
+    # 1. Process root -> : root depth vs max_depth, append subtrees + 1 root depth
+    # 2. Process -> left -> right :
     # Result: deepest branch updates global max_depth
     
     # Empty check
     if not root:
         return 0
     
-    # iterative stack
+    # iterative level stack
     stack = [(root, 1)]
 
     # global depth
@@ -1020,30 +1035,35 @@ Find the max depth of a binary tree.
     
     while stack:
 
-        # process root -> : (node, node_depth)
-        node, depth = stack.popleft()
-        
-        # check node depth against max_depth
-        max_depth = max(max_depth, depth)
-        
-        # append process left and right subtrees: increment depth by + 1
-        if node.left:
-            stack.append((node.left, depth+1))
-        if node.right:
-            stack.append((node.right, depth+1))
+        # process entire level
+        size = len(stack)
+        for _ in range(size):
+
+            # process root -> : (node, node_depth)
+            node, node_depth = stack.popleft()
+            
+            # process root -> : max_depth vs node_depth
+            max_depth = max(max_depth, node_depth)
+            
+            # process -> left -> right : depth by + 1
+            if node.left:
+                stack.append((node.left, node_depth + 1))
+            if node.right:
+                stack.append((node.right, node_depth + 1))
     
     # overall: time complexity
     # overall: space complexity
     return max_depth
 ```
 
-### Solution 4: BFS Pre Order Iterative Full Level Each Node Count Level Number - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
+### Solution 4: BFS Pre Order Iterative Full Level Global Depth + Completed Level Adds to Depth - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
-        # BFS iterative: full across level, (node -> node -> ...)
-        # 1. Process level: pop() all nodes in current level
-        # 2. Increment depth count
+        # BFS pre order iterative: process level by: root -> left -> right
+        # 1. For each level: get len of level
+        # 2. Process root -> 
+        # 3. Process -> left -> right
         # Result: depth is total of levels -> max depth 
         
         # Empty check
@@ -1073,7 +1093,7 @@ Find the max depth of a binary tree.
                 if node.right:
                     queue.append(node.right)
 
-            # level processed, add to depth counter
+            # level complete, add to depth counter
             depth += 1
         
         # overall: time complexity O(n)
@@ -1137,22 +1157,21 @@ Find the diameter of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Global Diameter + Local Edge Count Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Global Max Diameter + (Subtree Edge Count) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
         # DFS post order: left -> right -> root
-        # 1. Process left -> right : subtrees width
-        # 2. Process -> node : 1 + max(left width, right width)
-        # Result: longest path of edges between any two nodes
+        # 1. Process left -> right :
+        # 2. Process -> root :  connect left and right subtrees, add edge from root -> parent
+        # Result: longest path of edges
 
         max_diameter = 0
         
         def dfs(node):
             nonlocal max_diameter
 
-            # Base case:
-            # no width added
+            # Empty check
             if not node:
                 return 0
             
@@ -1160,13 +1179,16 @@ Find the diameter of a binary tree.
             left_len = dfs(node.left)
             right_len = dfs(node.right)
             
-            # Process -> root : connecting left and right diameters
-            max_diameter = max(max_diameter, left_len + right_len)
+            # Process -> root : connect left and right subtrees
+            connected_at_root = left_len + right_len
 
-            # Process -> root: root edge diameter adds 1 edge to longer diameter
-            add_edge = 1 + max(left_len, right_len)
+            # Update max diameters: 
+            max_diameter = max(max_diameter, connected_at_root)
 
-            return add_edge
+            # Process -> root: add edge between root -> parent
+            root_len = 1 + max(left_len, right_len)
+
+            return root_len
         
         # recursive process root
         dfs(root)
@@ -1181,7 +1203,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Post Order Recursive Local Diameter + Local Edge Count Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive Tuple (Subtree Diameter, Subtree Edge Count) Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1228,7 +1250,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 3: DFS Post Order Iterative Global Diameter + Dictionary Local Edge Count - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 3: DFS Post Order Iterative Global Diameter + Dictionary (Subtree Edge Count) - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         
@@ -1285,7 +1307,7 @@ Find the diameter of a binary tree.
         return max_diameter
 ```
 
-### Solution 4: DFS Post Order Iterative Dictionary Local Diameter + Local Edge Count - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 4: DFS Post Order Iterative Global Diameter + Dictionary (Subtree Diameter + Subtree Edge Count) - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
 
@@ -1398,7 +1420,7 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Pass Height Upwards - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Global Error Marker + Local Height Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1441,7 +1463,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Post Order Recursive Pass Height Error Tuple Upwards - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive Tuple (Local Build Bool, Local Height) Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
