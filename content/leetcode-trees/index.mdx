@@ -750,7 +750,7 @@ Invert the binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Carry Up Inverted Subtrees - Tree/DFS Post Order Traversal
+### Solution 1: DFS Post Order Recursive Carry Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -780,7 +780,7 @@ Invert the binary tree.
         return root
 ```
 
-### Solution 2: BFS Iterative Full Level Across Node Inversion - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 2: BFS Iterative Full Level Across Node Inversion - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -869,7 +869,7 @@ Find the max depth of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Carry Up Subtree Depth - Tree/DFA Post Order Traversal
+### Solution 1: DFS Post Order Recursive Carry Up Subtree Depth - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -900,7 +900,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Pre Order Iterative Throw Down Root Depth (Root, Depth) - Tree/DFA Pre Order Traversal
+### Solution 2: DFS Pre Order Iterative Throw Down Root Depth (Root, Depth) - Tree/DFS Pre Order Iterative One Sided Top Down
 ```python
     # Note:
     # DFS pre order iterative: root -> left -> right
@@ -937,7 +937,7 @@ Find the max depth of a binary tree.
     return max_depth
 ```
 
-### Solution 3: BFS Iterative Total Number of Levels - Tree/BFS Iterative Full Level Processing
+### Solution 3: BFS Iterative Total Number of Levels - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1037,7 +1037,7 @@ Find the diameter of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Pass Upwards Subtree Diameter - Tree/DFS Post order Traversal
+### Solution 1: DFS Post Order Recursive Pass Upwards Subtree Diameter - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1082,7 +1082,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Post Order Recursive Optimized Passed Tuple Diameter - Tree/DFS Post order Traversal
+### Solution 2: DFS Post Order Recursive Optimized Passed Tuple Diameter - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1180,7 +1180,7 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Pass Height Upwards - Tree/DFS Post order Traversal
+### Solution 1: DFS Post Order Recursive Pass Height Upwards - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1223,7 +1223,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Post Order Recursive Pass Height Error Tuple Upwards - Tree/DFS Post order Traversal
+### Solution 2: DFS Post Order Recursive Pass Height Error Tuple Upwards - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1317,7 +1317,7 @@ Determine if two different binary trees match.
 ```python
 ```
 
-### Solution 1: DFS Pre Order Recursive Pass Node Match Down - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive Pass Node Match Down - Tree/DFS Pre Order Recursive One Sided Top Down
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
@@ -1359,17 +1359,17 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative - Tree/BFS Iterative Queue Based
+### Solution 2: BFS Iterative - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
         # BFS Iterate: level by level
-        # 1. Process left -> right ->
-        # 2. Process -> root :
+        # 1. Process root ->
         #    pop() left and right nodes
         #    if both nodes are 'None' -> trees match
         #    if only one node is 'None' -> trees differ
         #    if values mismatch -> trees differ
+        # 2. Process -> left -> right
         # Result: validate tree match 
         
         # iterative stack
@@ -1464,7 +1464,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 ```python
 ```
 
-### Solution 1: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive - Tree/DFS Pre Order Recursive One Sided Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1516,7 +1516,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 2: BFS Iterative - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1569,7 +1569,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 3: DFS + Serialization String Matching - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 3: DFS + Serialization String Matching - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
