@@ -736,7 +736,7 @@ Invert the binary tree.
 |  |  | 
 
 
-### Brute Force: (iterative)
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -750,7 +750,7 @@ Invert the binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive - Tree/DFS Post Order Traversal
+### Solution 1: DFS Post Order Recursive Carry Up Inverted Subtrees - Tree/DFS Post Order Traversal
 ```python
     def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -780,7 +780,7 @@ Invert the binary tree.
         return root
 ```
 
-### Solution 2: BFS Iterative - Tree/BFS Iterative No Explicit Full Level Processing
+### Solution 2: BFS Iterative Full Level Across Node Inversion - Tree/BFS Iterative No Explicit Full Level Processing
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -855,7 +855,7 @@ Find the max depth of a binary tree.
 |  |  | 
 
 
-### Brute Force: iterative
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -869,7 +869,7 @@ Find the max depth of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Bottom Up Children Depth - Tree/DFA Post Order Traversal
+### Solution 1: DFS Post Order Recursive Carry Up Subtree Depth - Tree/DFA Post Order Traversal
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -883,10 +883,14 @@ Find the max depth of a binary tree.
         if not root:
             return 0
         
-        # process left -> right -> subtrees
+        # process left -> right ->
         left_depth = self.maxDepth(root.left)
         right_depth = self.maxDepth(root.right)
         
+        # could have been: right -> left ->
+        # right_depth = self.maxDepth(root.right)
+        # left_depth = self.maxDepth(root.left)
+
         # process -> root
         return 1 + max(left_depth, right_depth)
 ```
@@ -896,7 +900,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Pre Order Iterative Carry Down Tuple (Node, Depth) - Tree/DFA Pre Order Traversal
+### Solution 2: DFS Pre Order Iterative Throw Down Root Depth (Root, Depth) - Tree/DFA Pre Order Traversal
 ```python
     # Note:
     # DFS pre order iterative: root -> left -> right
@@ -933,7 +937,7 @@ Find the max depth of a binary tree.
     return max_depth
 ```
 
-### Solution 3: BFS Iterative Count By Level Width - Tree/BFS Iterative Full Level Processing
+### Solution 3: BFS Iterative Total Number of Levels - Tree/BFS Iterative Full Level Processing
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1019,7 +1023,7 @@ Find the diameter of a binary tree.
 |  |  | 
 
 
-### Brute Force: iterative
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1033,14 +1037,14 @@ Find the diameter of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Global Diameter - Tree/DFS Post order Traversal
+### Solution 1: DFS Post Order Recursive Pass Upwards Subtree Diameter - Tree/DFS Post order Traversal
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
         # DFS post order: left -> right -> root
-        # 1. Process left and right subtrees width
-        # 2. Process node by max(left width, right width)
-        # Result: longest path in terms of edges between any two nodes
+        # 1. Process left -> right : subtrees width
+        # 2. Process -> node : 1 + max(left width, right width)
+        # Result: longest path of edges between any two nodes
 
         diameter = 0
         
@@ -1052,19 +1056,19 @@ Find the diameter of a binary tree.
             if not node:
                 return 0
             
-            # Heights/Length of left and right subtrees
+            # Process left -> right ->
             left_len = dfs(node.left)
             right_len = dfs(node.right)
             
-            # check final diameter connecting left and right subtrees
+            # Process -> root : connecting left and right diameters
             diameter = max(diameter, left_len + right_len)
 
-            # continue longer subtree upwards for potential longer diameter
+            # Process -> root: root edge diameter adds 1 edge to longer diameter
             add_edge = 1 + max(left_len, right_len)
 
             return add_edge
         
-        # recursive call on root
+        # recursive process root
         dfs(root)
 
         # overall: time complexity
@@ -1078,38 +1082,44 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Recursive Optimized Passed Tuple Diameter - Tree/DFS Post order Traversal
+### Solution 2: DFS Post Order Recursive Optimized Passed Tuple Diameter - Tree/DFS Post order Traversal
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
         # DFS post order: left -> right -> root
-        # 1. Process left and right subtrees width
-        # 2. Process node by max(left width, right width)
-        # Result: longest path in terms of edges between any two nodes
-        
+        # 1. Process left -> right
+        # 2. Process -> root : Pass up by max(left width, right width)
+        # Result: longest path of edges between any two nodes
+        # Avoids: global variable
+
         def dfs(node):
 
-            # Base case:
-            # no width added
+            # Leaf case: (diameter:0, max_diameter:0)
             if not node:
                 return 0, 0
             
-            # recursive call to process left and right subtrees
-            # grab longest diameter for each subtree
-            left_len, left_diameter = dfs(node.left)
-            right_len, right_diameter = dfs(node.right)
+            # process left -> right -> : length and longest diameter for subtree
+            left_edges, left_bridge = dfs(node.left)
+            right_edges, right_bridge = dfs(node.right)
             
-            # Diameter at this node connected left and right subtrees length
-            curr_diam = left_len + right_len
+            # process -> root : root connects left and right length
+            connected_bridge = left_edges + right_edges
             
-            # max diameter between curr node, left subtree, and right subtree
-            max_diam = max(curr_diam, left_diameter, right_diameter)
+            # process -> root : max between -> 
+            # 1. bridged left edges and right edges
+            # 2. max bridge in left subtree
+            # 3. max bridge in right subtree
+            root_max_bridge = max(connected_bridge, left_bridge, right_bridge)
             
-            # continue longer subtree upwards for potential longer diameter
-            add_edge = 1 + max(left_len, right_len)
+            # Process -> root: account for edge from root to root's parent by + 1,
+            # return to roots parent
+            root_edges = 1 + max(left_edges, right_edges)
             
-            return (add_edge, max_diam)
+            # pass up (root edges, root max bridge)
+            return (root_edges, root_max_bridge)
         
+        # overall: time complexity
+        # overall: space complexity
         return dfs(root)[1]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1156,7 +1166,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  | 
 
 
-### Brute Force: (iterative)
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

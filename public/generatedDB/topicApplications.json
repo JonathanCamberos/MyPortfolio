@@ -376,11 +376,11 @@
     },
     {
       "type": "Tree",
-      "title": "DFS Post Order Iterative Bottom Up",
+      "title": "DFS Post Order Iterative Two Sided Bottom Up",
       "summary": "Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) Mindset: Fully explore both sides before processing the root. Trick: I'll finish everything to your left then right or right then left before I pay attention to you",
       "exampleIntro": "Evaluate Expression Tree Recursive and Delete Tree Iterative",
       "codeExample": "def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:\n\n        # Empty check\n        if not root:\n            return 0\n\n        # global width\n        diameter = 0\n\n        # iterative stack\n        stack = []\n\n        # \n        curr = root\n        lastVisited = None\n        depth_map = defaultdict(int)\n\n        while stack or curr:\n\n            # traverse left subtree of curr:\n            # will go as far left as possible\n            while curr:\n                stack.append(curr)\n                curr = curr.left\n\n            # check if right subtree exists\n            peek = stack[-1]\n\n            # if right subtree exists and hasn't been visited\n            if peek.right and lastVisited != peek.right:\n                node = peek.right\n\n            # process node\n            else:\n                stack.pop()\n\n                # grab width of left and right subtree if exists\n                left_depth = depth_map.get(peek.left, 0)\n                right_depth = depth_map.get(peek.right, 0)\n\n                # node diameter\n                diameter = max(diameter, left_depth + right_depth)\n\n                # store node diameter\n                depth_map[peek] = 1 + max(left_depth, right_depth)\n\n                # set last visited to current node\n                lastVisited = peek\n\n        # return width\n        return diameter\n\n    # Tree:\n    #         1\n    #        / \\\n    #       2   3\n    #      / \\\n    #     4   5\n    # diameterOfBinaryTree -> 3 (path: 4 → 2 → 5 or 4 → 2 → 1 → 3)",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-iterative-bottom-up",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-dfs-post-order-iterative-two-sided-bottom-up-",
       "blog": "LeetCode: Trees"
     },
     {
