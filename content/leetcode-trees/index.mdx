@@ -509,7 +509,7 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```
 
 
-### Tree Application: BFS Iterative Level Size Based Grouping Full Across Top Down
+### Tree Application: BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 Traversal Order: Level by Level
 BFS visits nodes level by level, processing all nodes at a given depth 
 before moving on to the next.
@@ -564,7 +564,7 @@ Ex: Level order traversal of Binary Tree
     # Output: [[1], [2, 3], [4, 5]]
 ```
 
-### Tree Application: BFS Iterative No Explicit Level Sized Grouping Full Across Top Down
+### Tree Application: BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 Traversal Order: Level by Level
 BFS visit nodes in breath first order.
 However, in some problems we don't process or store the full level at once.
@@ -607,7 +607,7 @@ Ex: Invert a Binary Tree
         #     7   2
 ```
 
-### Tree Application: BFS Iterative Distance from Root Full Across Top Down
+### Tree Application: BFS Pre Order Across Level Distance from Root Full Across Top Down
 Traversal Order: Level by Level
 Distance Tracking: Each level corresponds to one distance step from the root.
 Used when the problem depends on minimum, maximum or some count depth.
@@ -641,7 +641,7 @@ Ex: Minimum Depth of a Binary Tree
 ```
 
 
-### Tree Application: BFS Iterative Non-Standard Level Traversal Non Standard Full Across
+### Tree Application: BFS Pre Order Across Level Non-Standard Level Traversal Non Standard Full Across
 Traversal Order: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns)
 Used when the traversal order of nodes at each level must follow a specific 
 non standard pattern
@@ -1180,7 +1180,7 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
 ```
 
-### Solution 1: DFS Recursive Post order - Tree/DFS Post order Traversal
+### Solution 1: DFS Post Order Recursive Pass Height Upwards - Tree/DFS Post order Traversal
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1223,7 +1223,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Recursive Post order with Tuple - Tree/DFS Post order Traversal
+### Solution 2: DFS Post Order Recursive Pass Height Error Tuple Upwards - Tree/DFS Post order Traversal
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1317,37 +1317,39 @@ Determine if two different binary trees match.
 ```python
 ```
 
-### Solution 1: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive Pass Node Match Down - Tree/DFS Pre order Traversal
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
         # DFS pre order recursive: root -> left -> right
-        # 2. Process node:
+        # 2. Process root -> :
         #    if both nodes are 'None' -> trees match
         #    if only one node is 'None' -> trees differ
         #    if values mismatch -> trees differ
-        # 3. Process left and right subtrees
-        # Result: determine is trees match
+        # 3. Process -> left -> right :
+        # Result: validate tree match 
         
-        # Process node: validate match
-
-        # Base case: both nodes are 'None'
+        # Process root -> : both nodes are 'None'
         if not p and not q:
             return True
 
-        # Base case: only one node is 'None' -> trees differ
+        # Process root -> : only one node is 'None' 
         if not p or not q:
             return False
 
-        # Base case: node values differ -> trees differ
+        # Process root -> : values differ
         if p.val != q.val:
             return False
         
-        # Recursive call to process left and right subtrees:
-        match = (self.isSameTree(p.left, q.left) and 
-                self.isSameTree(p.right, q.right))
+        # Process left -> right
+        left_match = self.isSameTree(p.left, q.left)
+        right_match = self.isSameTree(p.right, q.right)
 
-        # propagate upwards
+        # Process left -> right : pass left and right match upwards
+        match = left_match and right_match
+        
+        # overall: time complexity
+        # overall: space complexity
         return match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1362,41 +1364,39 @@ Determine if two different binary trees match.
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
         # BFS Iterate: level by level
-        # 1. Queue will store nodes from both trees
-        # 2. Process node:
-        #    Pop pair of elements
+        # 1. Process left -> right ->
+        # 2. Process -> root :
+        #    pop() left and right nodes
         #    if both nodes are 'None' -> trees match
         #    if only one node is 'None' -> trees differ
         #    if values mismatch -> trees differ
-        # 3. Process next level
-        # Result: determine is trees match
+        # Result: validate tree match 
         
         # iterative stack
+        # process root1 -> and root2 ->
         queue = deque([(p, q)])
         
         while queue:
 
-            # tree node pairs
+            # pop() left and right nodes
             node1, node2 = queue.popleft()
             
-            # Base case: both nodes are 'None'
+            # Process root -> : both nodes are 'None'
             if not node1 and not node2:
                 continue
             
-            # Base case: node values differ -> trees differ
+            # Process root -> : only one node is 'None' 
             if not node1 or not node2
                 return False
             
-            # Base case: node values differ -> trees differ
+            # Process root -> : values differ
             if node1.val != node2.val:
                 return False
             
-            # add next level pairs
+            # process -> left -> right
             queue.append((node1.left, node2.left))
             queue.append((node1.right, node2.right))
         
-        # trees match
-
         # overall: time complexity
         # overall: space complexity
         return True
