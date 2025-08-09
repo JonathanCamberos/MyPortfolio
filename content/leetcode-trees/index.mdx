@@ -1309,13 +1309,15 @@ Find the diameter of a binary tree.
         if not root:
             return 0
 
-        stack = []
-        last_visited = None
-
-        # lambda sets default to (0, 0)
+        # dictionary: node -> (tree max diameter, tree length)
         node_data = defaultdict(lambda: (0, 0))
 
+        # iterative stack
+        stack = []
+
         curr = root
+        last_visited = None
+
         while stack or curr:
             
             # Process left -> : 
