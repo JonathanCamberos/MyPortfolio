@@ -170,10 +170,10 @@ Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 
 Level Order Traversal -> BFS (iterative) queue based
 
-### Tree Application: DFS Pre Order Traversal Top Down
-Traversal Order: Root -> Left -> Right.
-Top Down: Root is processed immediately, 
-then we do deep search in left or right subtree.
+### Tree Application: DFS Pre Order Recursive One Sided Top Down
+Traversal Order: Root -> Left -> Right (or Root -> Right -> Left)
+Mindset: Process the root as soon as you see it, 
+then traverse into one subtree fully before the other
 Trick: I'll visit you first, then i'll deal with your kids
 
 Ex: Serialize a Binary Tree Recursive
@@ -222,10 +222,10 @@ Ex: Serialize a Binary Tree Recursive
     # Output: "1,2,N,N,3,4,N,N,5,N,N"
 ```
 
-### Tree Application: DFS Pre Order Iterative Top Down
-Traversal Order: Root -> Left -> Right.
-Top Down: Root is processed immediately, 
-then we do deep search in left or right subtree.
+### Tree Application: DFS Pre Order Iterative One Sided Top Down
+Traversal Order: Root -> Left -> Right (or Root -> Right -> Left)
+Mindset: Process the root as soon as you see it, 
+then traverse into one subtree fully before the other
 Trick: I'll visit you first, then i'll deal with your kids
 
 Ex: Pre Order Serialize a Binary Tree Iterative
@@ -288,12 +288,10 @@ Ex: Pre Order Serialize a Binary Tree Iterative
     # Output: "1,2,N,N,3,4,N,N,5,N,N"
 ```
 
-### Tree Application: DFS In Order Recursive Mid Point
-Traversal Order: Left -> Root -> Right  ||  Right -> Root -> Left 
-Left Up or Right Up: Deep search on left or right subtree, 
-root is processed, then deep search on right's left subtree 
-or left's right subtree
-(depending if first step was a deep search on left or right)
+### Tree Application: DFS In Order Recursive One Sided Bottom Up
+Traversal Order: Left -> Root -> Right  (or Right -> Root -> Left) 
+Mindset: Fully explore one side before paying attention 
+to the root, then move to the other side
 Trick: I'll finish everything to your left or right before I pay attention to you
 
 Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
@@ -334,14 +332,11 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
         # isValidBST -> True
 ```
 
-### Tree Application: DFS In Order Iterative Mid Point
-Traversal Order: Left -> Root -> Right  ||  Right -> Root -> Left 
-Left Up or Right Up: Deep search on left or right subtree, 
-root is processed, then deep search on right's left subtree 
-or left's right subtree
-(depending if first step was a deep search on left or right)
+### Tree Application: DFS In Order Iterative One Sided Bottom Up
+Traversal Order: Left -> Root -> Right  (or Right -> Root -> Left) 
+Mindset: Fully explore one side before paying attention 
+to the root, then move to the other side
 Trick: I'll finish everything to your left or right before I pay attention to you
-
 
 Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python
@@ -398,11 +393,9 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
     # isValidBST -> True
 ```
 
-### Tree Application: DFS Post Order Recursive Bottom Up
-Traversal Order: Left -> Right -> Root  ||  Right -> Left -> Root 
-Left Up then Right Up or Right Up then Left Up: Deep search on left or right subtree, root is processed, 
-then deep search on right's left subtree or left's right subtree
-(depending if first step was a deep search on left or right)
+### Tree Application: DFS Post Order Recursive Two Sided Bottom Up
+Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) 
+Mindset: Fully explore both sides before processing the root.
 Trick: I'll finish everything to your left then right or right then left
 before I pay attention to you
 
@@ -447,10 +440,8 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```
 
 ### Tree Application: DFS Post Order Iterative Bottom Up
-Traversal Order: Left -> Right -> Root  ||  Right -> Left -> Root 
-Left Up then Right Up or Right Up then Left Up: Deep search on left or right subtree, root is processed, 
-then deep search on right's left subtree or left's right subtree
-(depending if first step was a deep search on left or right)
+Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) 
+Mindset: Fully explore both sides before processing the root.
 Trick: I'll finish everything to your left then right or right then left
 before I pay attention to you
 
@@ -518,7 +509,7 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```
 
 
-### Tree Application: BFS Iterative Level Size Based Grouping Processing
+### Tree Application: BFS Iterative Level Size Based Grouping Full Across Top Down
 Traversal Order: Level by Level
 BFS visits nodes level by level, processing all nodes at a given depth 
 before moving on to the next.
@@ -573,7 +564,7 @@ Ex: Level order traversal of Binary Tree
     # Output: [[1], [2, 3], [4, 5]]
 ```
 
-### Tree Application: BFS Iterative No Explicit Level Sized Grouping Processing
+### Tree Application: BFS Iterative No Explicit Level Sized Grouping Full Across Top Down
 Traversal Order: Level by Level
 BFS visit nodes in breath first order.
 However, in some problems we don't process or store the full level at once.
@@ -616,7 +607,7 @@ Ex: Invert a Binary Tree
         #     7   2
 ```
 
-### Tree Application: BFS Iterative Distance from Root
+### Tree Application: BFS Iterative Distance from Root Full Across Top Down
 Traversal Order: Level by Level
 Distance Tracking: Each level corresponds to one distance step from the root.
 Used when the problem depends on minimum, maximum or some count depth.
@@ -650,7 +641,7 @@ Ex: Minimum Depth of a Binary Tree
 ```
 
 
-### Tree Application: BFS Iterative Non-Standard Level Traversal
+### Tree Application: BFS Iterative Non-Standard Level Traversal Non Standard Full Across
 Traversal Order: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns)
 Used when the traversal order of nodes at each level must follow a specific 
 non standard pattern
