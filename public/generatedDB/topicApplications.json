@@ -385,38 +385,38 @@
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Level Size Based Grouping Full Across Top Down",
+      "title": "BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down",
       "summary": "Traversal Order: Level by Level BFS visits nodes level by level, processing all nodes at a given depth before moving on to the next. Used for level order problems and shortest path calculations in unweighted graphs, as well as scenarios requiring nodes in order of distance from the root.",
       "exampleIntro": "Level order traversal of Binary Tree",
       "codeExample": "def levelOrderIterative(root: Optional[TreeNode]) -> List[List[int]]:\n        \n        # Empty check\n        if not root:\n            return []\n\n        group = []\n\n        # start with group 1: root\n        queue = deque([root])\n\n        while queue:\n\n            # grab size of curr level\n            size = len(queue)\n            level = []\n\n            # process entire level\n            for _ in range(size):\n\n                # grab node of group\n                node = queue.popleft()\n                level.append(node.val)\n\n                # append next level\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n\n            # add level group to list of groups\n            groups.append(level)\n\n        # return all level groups\n        return groups\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #        / \\\n    #       4   5\n    # Output: [[1], [2, 3], [4, 5]]",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-level-size-based-grouping-full-across-top-down",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-pre-order-across-level-for-level-size-based-grouping-full-across-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative No Explicit Level Sized Grouping Full Across Top Down",
+      "title": "BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down",
       "summary": "Traversal Order: Level by Level BFS visit nodes in breath first order. However, in some problems we don't process or store the full level at once. Instead we act on nodes individually or in partial groupings (pairs, linked neighbors, etc)",
       "exampleIntro": "Invert a Binary Tree",
       "codeExample": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        if not root:\n            return None\n\n        # start at root\n        queue = deque([root])\n        \n        while queue:\n\n            # grab nodes sequentially\n            node = queue.popleft()\n            \n            # process node\n            node.left, node.right = node.right, node.left\n            \n            # process left and right subtrees by appending to queue\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        \n        return root\n\n        # Example:\n        # Input Tree:\n        #       4\n        #      / \\\n        #     2   7\n\n        # Output Tree:\n        #       4\n        #      / \\\n        #     7   2",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-no-explicit-level-sized-grouping-full-across-top-down",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Distance from Root Full Across Top Down",
+      "title": "BFS Pre Order Across Level Distance from Root Full Across Top Down",
       "summary": "Traversal Order: Level by Level Distance Tracking: Each level corresponds to one distance step from the root. Used when the problem depends on minimum, maximum or some count depth.",
       "exampleIntro": "Minimum Depth of a Binary Tree",
       "codeExample": "def minDepth(root: Optional[TreeNode]) -> int:\n        from collections import deque\n        \n        # Empty Tree\n        if not root:\n            return 0\n        \n        # initialize depth value\n        queue = deque([(root, 1)])\n        \n        while queue:\n            \n            # grab current depth, increase to children\n            node, depth = queue.popleft()\n            \n            # first leaf found -> min depth \n            if not node.left and not node.right:\n                return depth\n            \n            # iterate to left and right subtrees with updated depth\n            if node.left:\n                queue.append((node.left, depth + 1))\n            if node.right:\n                queue.append((node.right, depth + 1))",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-distance-from-root-full-across-top-down",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-pre-order-across-level-distance-from-root-full-across-top-down",
       "blog": "LeetCode: Trees"
     },
     {
       "type": "Tree",
-      "title": "BFS Iterative Non-Standard Level Traversal Non Standard Full Across",
+      "title": "BFS Pre Order Across Level Non-Standard Level Traversal Non Standard Full Across",
       "summary": "Traversal Order: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns) Used when the traversal order of nodes at each level must follow a specific non standard pattern",
       "exampleIntro": "Binary Tree Zigzag Level Order Traversal",
       "codeExample": "def zigzagLevelOrder(root: Optional[TreeNode]) -> List[List[int]]:\n        \n        # Empty Tree\n        if not root:\n            return []\n        \n        groups = []\n\n        # iteration stack\n        queue = deque([root])\n\n        # order toggle\n        left_to_right = True\n        \n        while queue:\n\n            # for each level\n            size = len(queue)\n            level = deque()\n            \n            # Process all nodes in current level\n            for _ in range(size):\n                node = queue.popleft()\n                \n                # append order based on pattern\n                if left_to_right:\n                    level.append(node.val)\n                else:\n                    level.appendleft(node.val)\n                \n                # iterate by appending left and right subtrees\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            \n            # flip order for next level\n            left_to_right = not left_to_right  \n\n            # add to groups            \n            groups.append(list(level))\n\n        return groups\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #    / \\   \\\n    #   4   5   6\n\n    # Output: [[1], [3, 2], [4, 5, 6]]",
-      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-iterative-nonstandard-level-traversal-non-standard-full-across",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-pre-order-across-level-nonstandard-level-traversal-non-standard-full-across",
       "blog": "LeetCode: Trees"
     }
   ]
