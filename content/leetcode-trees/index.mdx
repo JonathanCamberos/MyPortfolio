@@ -1185,38 +1185,33 @@ depth of the two subtrees of every node never differs by more than one.
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
         # DFS post order: left -> right -> root
-        # 1. At each node:
-        #    process left and right subtrees
-        #    validate balance: abs(left - right) <= 1
-        # 2. Throw -1 imbalance error
+        # 1. Process left -> right -> :
+        # 2. Process -> root : validate if balanced, throw -1 imbalance error
         # Results: detect imbalance
 
         def dfs(node):
 
-            # Base case:
-            # start adding height upwards
+            # Base case: pass height upwards
             if not node:
                 return 0
             
-            # recursive call to process left and right subtrees
+            # process left -> right ->
             left_height = dfs(node.left)
             right_height = dfs(node.right)
 
-            # pass imbalance upwards
+            # pass thrown error upwards
             if left_height == -1:
                 return -1         
             if right_height == -1:
                 return -1
             
-            # process node by checking for imbalance between left and right subtrees
+            # process -> root : validate balanced left and right subtrees
             if abs(left_height - right_height) > 1:
                 return -1
             
-            # add to height and pass up
+            # process -> root : add to height and pass to root's parent
             return 1 + max(left_height, right_height)
         
-        # check if any imbalance error pass upwards
-
         # overall: time complexity
         # overall: space complexity
         return dfs(root) != -1
@@ -1233,38 +1228,37 @@ depth of the two subtrees of every node never differs by more than one.
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
         # DFS post order: left -> right -> root
-        # 1. At each node:
-        #    process left and right subtrees
-        #    validate balance: abs(left - right) <= 1
-        # 2. Throw -1 imbalance error
+        # 1. Process left -> right ->
+        # 2. Process -> root : validate if balanced, throw -1 imbalance error
         # Results: detect imbalance
         
         def dfs(node):
 
-            # Base case: leaf -> balanced:true, height:0
+            # Base case: leaf -> (balanced:True, height:0)
             if not node:
-                return (True, 0)
+                return (0, True)
             
-            # recursive call to process left and right subtrees:
-            # is_balanced, height 
-            (left_bal, left_height) = dfs(node.left)
-            (right_bal, right_height) = dfs(node.right)
+            # Process left -> right -> (is_balanced, height)
+            (left_height, left_bal) = dfs(node.left)
+            (right_height, right_bal) = dfs(node.right)
 
-            # continue propagating error up
+            # pass thrown error upwards
             if not left_bal:
-                return False, 0
+                return (-1, False)
             if not right_bal:
-                return False, 0
+                return (-1, False)
             
-            # process node: validate balance
-            balanced = abs(left_height - right_height) <= 1
+            # process -> root : validate balanced left and right subtrees
+            is_root_balanced = abs(left_height - right_height) <= 1
 
-            # continue propagating result up
-            return (balanced, 1 + max(left_height, right_height))
+            # process -> root : add to height and pass to root's parent
+            root_height = 1 + max(left_height, right_height)
+
+            return (root_height, is_root_balanced)
         
         # overall: time complexity
         # overall space complexity
-        return dfs(root)[0]
+        return dfs(root)[1]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
