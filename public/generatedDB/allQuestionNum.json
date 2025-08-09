@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "2": {
     "questionNum": 2,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "11": {
     "questionNum": 11,
@@ -86,7 +86,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "15": {
     "questionNum": 15,
@@ -102,7 +102,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "19": {
     "questionNum": 19,
@@ -130,7 +130,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 27
+    "coldnessCount": 28
   },
   "21": {
     "questionNum": 21,
@@ -204,7 +204,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 16
+    "coldnessCount": 17
   },
   "36": {
     "questionNum": 36,
@@ -219,7 +219,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "42": {
     "questionNum": 42,
@@ -236,7 +236,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "49": {
     "questionNum": 49,
@@ -252,7 +252,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "74": {
     "questionNum": 74,
@@ -267,7 +267,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 16
+    "coldnessCount": 17
   },
   "76": {
     "questionNum": 76,
@@ -348,7 +348,7 @@
   },
   "104": {
     "questionNum": 104,
-    "questionTitle": "Maximum Depth of Binary Tree ::3::",
+    "questionTitle": "Maximum Depth of Binary Tree ::4::",
     "questionDifficulty": "Easy",
     "questionBlurb": "A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.",
     "questionTopics": [
@@ -357,14 +357,14 @@
       "Breadth First Search",
       "Binary Tree"
     ],
-    "questionLink": "/Notes/leetcode-trees#104-maximum-depth-of-binary-tree-3---easy",
+    "questionLink": "/Notes/leetcode-trees#104-maximum-depth-of-binary-tree-4---easy",
     "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
   "105": {
     "questionNum": 105,
-    "questionTitle": "Construct Binary Tree from Preorder and Inorder Traversal ::2::",
+    "questionTitle": "Construct Binary Tree from Pre Order and In Order Traversal ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given two integer arrays pre order and in order where pre order is the pre order traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.",
     "questionTopics": [
@@ -374,7 +374,7 @@
       "Tree",
       "Binary Tree"
     ],
-    "questionLink": "/Notes/leetcode-trees#105-construct-binary-tree-from-preorder-and-inorder-traversal-2---medium",
+    "questionLink": "/Notes/leetcode-trees#105-construct-binary-tree-from-pre-order-and-in-order-traversal-2---medium",
     "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -437,7 +437,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "128": {
     "questionNum": 128,
@@ -452,7 +452,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "138": {
     "questionNum": 138,
@@ -529,7 +529,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 28
+    "coldnessCount": 29
   },
   "153": {
     "questionNum": 153,
@@ -543,7 +543,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 16
+    "coldnessCount": 17
   },
   "155": {
     "questionNum": 155,
@@ -557,7 +557,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 27
+    "coldnessCount": 28
   },
   "162": {
     "questionNum": 162,
@@ -586,7 +586,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-input-array-is-sorted-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "199": {
     "questionNum": 199,
@@ -630,11 +630,11 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "226": {
     "questionNum": 226,
-    "questionTitle": "Invert Binary Tree ::2::",
+    "questionTitle": "Invert Binary Tree ::3::",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given the root of a binary tree, invert the tree, and return its root.",
     "questionTopics": [
@@ -643,7 +643,7 @@
       "Breadth First Search",
       "Binary Tree"
     ],
-    "questionLink": "/Notes/leetcode-trees#226-invert-binary-tree-2---easy",
+    "questionLink": "/Notes/leetcode-trees#226-invert-binary-tree-3---easy",
     "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -692,7 +692,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "239": {
     "questionNum": 239,
@@ -724,7 +724,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "271": {
     "questionNum": 271,
@@ -738,7 +738,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "287": {
     "questionNum": 287,
@@ -792,7 +792,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 30
+    "coldnessCount": 31
   },
   "402": {
     "questionNum": 402,
@@ -884,7 +884,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 16
+    "coldnessCount": 17
   },
   "739": {
     "questionNum": 739,
@@ -934,7 +934,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 16
+    "coldnessCount": 17
   },
   "981": {
     "questionNum": 981,

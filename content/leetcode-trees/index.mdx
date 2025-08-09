@@ -1137,7 +1137,7 @@ Find the diameter of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Pass Upwards Subtree Diameter - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Global Diameter + Local Edge Count Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1181,7 +1181,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Post Order Recursive Optimized Passed Tuple (Edges, Diameter) - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive Local Diameter + Local Edge Count Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1228,7 +1228,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 3: DFS Post Order Iterative Dictionary of Subtree Diameter - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 3: DFS Post Order Iterative Global Diameter + Dictionary Local Edge Count - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         
@@ -1285,7 +1285,7 @@ Find the diameter of a binary tree.
         return max_diameter
 ```
 
-### Solution 4: DFS Post Order Iterative Dictionary of Subtree Tuple (Edges, Diameter) - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 4: DFS Post Order Iterative Dictionary Local Diameter + Local Edge Count - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
 
