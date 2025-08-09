@@ -1133,12 +1133,12 @@
     "dfs-post-order-traversal": [
       {
         "number": 1,
-        "name": "DFS Recursive",
+        "name": "DFS Post Order Recursive",
         "type": "tree",
         "application": "dfs-post-order-traversal",
-        "code": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # Idea: DFS recursive approach inverts subtrees from bottom up (postorder)\n        # 1. Base case: return None if node is null\n        # 2. Left -> Right: Recursively invert subtree\n        # 3. Root: Swap left and right children\n        # Result: Original tree has been inverted\n\n        # Base case:\n        # reached empty TreeNode\n        if not root:\n            return None\n\n        # Process Left + Right:\n        # Recursive calls to invert the left and right subtrees\n        left_inverted = self.invertTree(root.left)\n        right_inverted = self.invertTree(root.right)\n\n        # Process Root:\n        # Swap left and right children\n        root.left = right_inverted\n        root.right = left_inverted\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(h), O(log n) for balanced tree\n        return root",
+        "code": "def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left -> right: inverting\n        # 2. Process  -> root: swap left and right subtree\n        # Result: swapping bottom to up \n\n        # Base case: no swap\n        if not root:\n            return None\n\n        # Recursive call to process left -> right subtrees\n        left_inverted = self.invertTree(root.left)\n        right_inverted = self.invertTree(root.right)\n\n        # Process -> root: swap left and right subtrees\n        root.left = right_inverted\n        root.right = left_inverted\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(h), O(log n) for balanced tree\n        return root",
         "questionNumber": 226,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-recursive---treedfs-post-order-traversal",
+        "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-post-order-recursive---treedfs-post-order-traversal",
         "blog": "LeetCode: Trees"
       },
       {
@@ -1188,7 +1188,7 @@
         "name": "BFS Iterative",
         "type": "tree",
         "application": "bfs-iterative-no-explicit-full-level-processing",
-        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # Idea: BFS iterative approach inverts nodes level by level\n        # 1. Queue stores nodes to process\n        # 2. While Queue is non empty\n        # 3. Process Root: \n        #    Pop() from queue \n        #    Swap left and right children\n        #    Push() left and right children to queue for processing\n        # Result: Tree reverse in place\n        \n        # Empty tree check\n        if not root:\n            return None\n        \n        # dfs Queue:\n        queue = deque([root])\n        \n        # queue hold nodes to be processed\n        # time complexity: iterate over tree by queuing nodes, level by level O(n)\n        while queue:\n\n            # Grab Root:\n            # pop() from queue -> curr root\n            currRoot = queue.popleft()\n            \n            # Process Root:\n            # Swap left and right children\n            currRoot.left, currRoot.right = currRoot.right, currRoot.left\n            \n            # Process Left and Right subtrees:\n            # add left and right to dfs queue\n            if currRoot.left:\n                queue.append(currRoot.left)\n            if currRoot.right:\n                queue.append(currRoot.right)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return root",
+        "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # BFS iterative: level by level: root -> left -> right\n        # 1. Process root -> : iterate over level\n        #      swap left and right subtrees\n        # 2. Process -> left -> right: append left and right iterative process\n        # Result: Top down invert\n        \n        # Empty check\n        if not root:\n            return None\n        \n        # iterative stack:\n        queue = deque([root])\n        \n        while queue:\n\n            # process root:\n            currRoot = queue.popleft()\n            \n            # swap left and right subtrees\n            currRoot.left, currRoot.right = currRoot.right, currRoot.left\n            \n            # Append left and right subtrees for iterative process\n            if currRoot.left:\n                queue.append(currRoot.left)\n            if currRoot.right:\n                queue.append(currRoot.right)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return root",
         "questionNumber": 226,
         "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-iterative-no-explicit-full-level-processing",
         "blog": "LeetCode: Trees"
@@ -1229,12 +1229,12 @@
     "dfa-pre-order-traversal": [
       {
         "number": 2,
-        "name": "DFS Pre Order Iterative Carry Down Depth Val",
+        "name": "DFS Pre Order Iterative Carry Down Tuple (Node, Depth)",
         "type": "tree",
         "application": "dfa-pre-order-traversal",
-        "code": "# Note:\n    # DFS pre order iterative: root -> left -> right\n    # 1. Each stack entry stores (node, current depth)\n    # 2. Update max_depth when visiting each node\n    # 3. Works like Post order — compute children before root aggregation\n    # Result: deepest level updated global counter -> max depth\n    \n    # Empty check\n    if not root:\n        return 0\n    \n    # iterative stack\n    stack = [(root, 1)]\n\n    # global depth\n    max_depth = 0\n    \n    while stack:\n\n        # process node\n        node, depth = stack.pop()\n\n        # non leaf node\n        if node:\n\n            # update maximum depth\n            max_depth = max(max_depth, depth)\n            \n            # process left and right subtrees\n            stack.append((node.left, depth + 1))\n            stack.append((node.right, depth + 1))\n    \n    # overall: time complexity\n    # overall: space complexity\n    return max_depth",
+        "code": "# Note:\n    # DFS pre order iterative: root -> left -> right\n    # 1. Each stack entry stores (node, current depth)\n    # 2. Update max_depth when visiting each node\n    # 3. Works like Post order — compute children before root aggregation\n    # Result: deepest level updated global counter -> max depth\n    \n    # Empty check\n    if not root:\n        return 0\n    \n    # iterative stack\n    stack = [(root, 1)]\n\n    # global depth\n    max_depth = 0\n    \n    while stack:\n\n        # process node: (node, prev depth)\n        node, depth = stack.popleft()\n        \n        # check node maximum depth\n        max_depth = max(max_depth, depth)\n        \n        # process left and right subtrees:\n        if node.left:\n            stack.append((node.left, depth+1))\n        if node.right:\n            stack.append((node.right, depth+1))\n    \n    # overall: time complexity\n    # overall: space complexity\n    return max_depth",
         "questionNumber": 104,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-iterative-carry-down-depth-val---treedfa-pre-order-traversal",
+        "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-iterative-carry-down-tuple-node-depth---treedfa-pre-order-traversal",
         "blog": "LeetCode: Trees"
       }
     ],

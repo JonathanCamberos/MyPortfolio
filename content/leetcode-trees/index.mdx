@@ -172,8 +172,9 @@ Level Order Traversal -> BFS (iterative) queue based
 
 ### Tree Application: DFS Pre Order Traversal Top Down
 Traversal Order: Root -> Left -> Right.
-Top Down: Root is processed immediately, then we move deeper.
-Used when a node's work must be done before processing its children.
+Top Down: Root is processed immediately, 
+then we do deep search in left or right subtree.
+Trick: I'll visit you first, then i'll deal with your kids
 
 Ex: Serialize a Binary Tree Recursive
 ```python
@@ -223,8 +224,9 @@ Ex: Serialize a Binary Tree Recursive
 
 ### Tree Application: DFS Pre Order Iterative Top Down
 Traversal Order: Root -> Left -> Right.
-Top Down: Root is processed immediately, then we move deeper.
-Used when a node's work must be done before processing its children.
+Top Down: Root is processed immediately, 
+then we do deep search in left or right subtree.
+Trick: I'll visit you first, then i'll deal with your kids
 
 Ex: Pre Order Serialize a Binary Tree Iterative
 ```python
@@ -287,10 +289,12 @@ Ex: Pre Order Serialize a Binary Tree Iterative
 ```
 
 ### Tree Application: DFS In Order Recursive Mid Point
-Traversal Order: Left -> Root -> Right
-Mid Point: Left is processed, then Root, followed by Right 
-Used when a node's work must be done after visiting the left subtree
-but before visiting the right subtree.
+Traversal Order: Left -> Root -> Right  ||  Right -> Root -> Left 
+Left Up or Right Up: Deep search on left or right subtree, 
+root is processed, then deep search on right's left subtree 
+or left's right subtree
+(depending if first step was a deep search on left or right)
+Trick: I'll finish everything to your left or right before I pay attention to you
 
 Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python
@@ -331,10 +335,13 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```
 
 ### Tree Application: DFS In Order Iterative Mid Point
-Traversal Order: Left -> Root -> Right
-Mid Point: Left is processed, then Root, followed by Right 
-Used when a node's work must be done after visiting the left subtree
-but before visiting the right subtree.
+Traversal Order: Left -> Root -> Right  ||  Right -> Root -> Left 
+Left Up or Right Up: Deep search on left or right subtree, 
+root is processed, then deep search on right's left subtree 
+or left's right subtree
+(depending if first step was a deep search on left or right)
+Trick: I'll finish everything to your left or right before I pay attention to you
+
 
 Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```python
@@ -392,9 +399,12 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
 ```
 
 ### Tree Application: DFS Post Order Recursive Bottom Up
-Traversal Order: Left -> Right -> Root
-Bottom Up: Left and Right children are processed, followed by Root
-Useful when a node's work depends on fully processed children. 
+Traversal Order: Left -> Right -> Root  ||  Right -> Left -> Root 
+Left Up then Right Up or Right Up then Left Up: Deep search on left or right subtree, root is processed, 
+then deep search on right's left subtree or left's right subtree
+(depending if first step was a deep search on left or right)
+Trick: I'll finish everything to your left then right or right then left
+before I pay attention to you
 
 Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```python
@@ -437,9 +447,12 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```
 
 ### Tree Application: DFS Post Order Iterative Bottom Up
-Traversal Order: Left -> Right -> Root
-Bottom Up: Left and Right children are processed, followed by Root
-Useful when a node's work depends on fully processed children. 
+Traversal Order: Left -> Right -> Root  ||  Right -> Left -> Root 
+Left Up then Right Up or Right Up then Left Up: Deep search on left or right subtree, root is processed, 
+then deep search on right's left subtree or left's right subtree
+(depending if first step was a deep search on left or right)
+Trick: I'll finish everything to your left then right or right then left
+before I pay attention to you
 
 Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```python
