@@ -1157,7 +1157,7 @@ Find the diameter of a binary tree.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Global Max Diameter + (Subtree Edge Count) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Global Max Diameter + (Tree Length) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1203,41 +1203,35 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: DFS Post Order Recursive Tuple (Subtree Diameter, Subtree Edge Count) Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive (Tree Max Diameter, Tree Length) Tuple Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
         # DFS post order: left -> right -> root
-        # 1. Process left -> right
-        # 2. Process -> root : Pass up by max(left width, right width)
-        # Result: longest path of edges between any two nodes
-        # Avoids: global variable
+        # 1. Process left -> right :
+        # 2. Process -> root : connect left and right subtrees, get root max diameter
+        # Result: longest path of edges
 
         def dfs(node):
 
-            # Leaf case: (diameter:0, max_diameter:0)
+            # Empty check
             if not node:
-                return 0, 0
+                return (0, 0)
             
-            # process left -> right -> : length and longest diameter for subtree
-            left_edges, left_bridge = dfs(node.left)
-            right_edges, right_bridge = dfs(node.right)
+            # process left -> right -> :
+            (left_len, left_max_diameter) = dfs(node.left)
+            (right_len, right_max_diameter) = dfs(node.right)
             
-            # process -> root : root connects left and right length
-            connected_bridge = left_edges + right_edges
+            # process -> root : connect left and right subtrees
+            connected_at_root = left_len + right_len
             
-            # process -> root : max between -> 
-            # 1. bridged left edges and right edges
-            # 2. max bridge in left subtree
-            # 3. max bridge in right subtree
-            root_max_bridge = max(connected_bridge, left_bridge, right_bridge)
+            # Update max diameters
+            root_max_diameter = max(connected_at_root, left_max_diameter, right_max_diameter)
             
-            # Process -> root: account for edge from root to root's parent by + 1,
-            # return to roots parent
-            root_edges = 1 + max(left_edges, right_edges)
+            # Process -> root: add edge between root -> parent
+            root_len = 1 + max(left_len, right_len)
             
-            # pass up (root edges, root max bridge)
-            return (root_edges, root_max_bridge)
+            return (root_len, root_max_diameter)
         
         # overall: time complexity
         # overall: space complexity
@@ -1250,7 +1244,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-### Solution 3: DFS Post Order Iterative Global Diameter + Dictionary (Subtree Edge Count) - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 3: DFS Post Order Iterative Global Max Diameter + Dictionary (Tree Length) Lookup - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         
@@ -1307,7 +1301,7 @@ Find the diameter of a binary tree.
         return max_diameter
 ```
 
-### Solution 4: DFS Post Order Iterative Global Diameter + Dictionary (Subtree Diameter + Subtree Edge Count) - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 4: DFS Post Order Iterative Dictionary (Tree Max Diameter, Tree Length) Lookup - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
 
@@ -1315,7 +1309,6 @@ Find the diameter of a binary tree.
         if not root:
             return 0
 
-        max_diameter = 0
         stack = []
         last_visited = None
 
@@ -1359,13 +1352,10 @@ Find the diameter of a binary tree.
                 # update data for current root
                 node_data[peek] = (root_edges, root_max_bridge)
 
-                # check max diameter
-                max_diameter = max(max_diameter, root_max_bridge)
-
                 # update last visited
                 last_visited = peek
                 
-        return max_diameter
+        return node_data[root][1]
 ```
 
 
