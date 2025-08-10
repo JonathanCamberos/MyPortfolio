@@ -2896,7 +2896,7 @@ Create original free given pre and post order traversals.
 ```python
 ```
 
-### Solution 1: Recursive Build with Hash Map  - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive In Order Hash Map  - Tree/DFS Pre order Traversal
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
 
@@ -2904,10 +2904,15 @@ Create original free given pre and post order traversals.
         # Pre order: root -> left -> root
         # In order: left -> root -> right
        
-        # Map each value to its in order index for O(1) lookups
+        # Note:
+        # for in order, original root will be somewhere in middle, thus:
+        # invariant:
+        # for all roots -> [ leftSubtree, root, rightSubtree ]
+
+        # val -> in order array index
         inorder_index_map = {val: idx for idx, val in enumerate(inorder)}
 
-        # PreOrder index pointer to track root positions in preOrder list
+        # for in order, iterating will decide which tree we are building
         pre_idx = 0
 
         def array_to_tree(left, right):
@@ -2919,27 +2924,29 @@ Create original free given pre and post order traversals.
 
             # 1. curr root
             root_val = preorder[pre_idx]
+            
             # prepare next root
             pre_idx += 1
 
-            # Create root node
+            # Create curr root node
             root = TreeNode(root_val)
 
-            # 2: Find root's index in inorder
+            # 2: Find root's index in in order 
+            #    to take advantage of invariant [leftSubtree, root, rightSubtree]
             root_index = inorder_index_map[root_val]
 
-            # 3: get root's left subtree range for inorder array
+            # 3: given invariant, grab left subtree range for in order array
             left_subtree_left = left
             left_subtree_right = root_index - 1
 
-            # 4: get root's right subtree range for inorder array
+            # 4: given invariant, grab right subtree range for in order array
             right_subtree_left = root_index + 1
             right_subtree_right = right
 
-            # 5: build left subtree
+            # 5: pass left subtree range
             root.left = array_to_tree(left_subtree_left, left_subtree_right)
 
-            # 5: build right subtree
+            # 5: pass] right subtree range
             root.right = array_to_tree(right_subtree_left, right_subtree_right)
 
             return root
@@ -2959,7 +2966,7 @@ Create original free given pre and post order traversals.
 |  |  |  |  |  |
 
 
-### Solution 2: Iterative Build Using Stack - Tree/DFS Pre order Traversal
+### Solution 2: DFS Pre Order Iterative Build Using Stack - Tree/DFS Pre order Traversal
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
 
