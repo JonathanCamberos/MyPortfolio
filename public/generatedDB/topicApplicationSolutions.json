@@ -1389,20 +1389,20 @@
       },
       {
         "number": 1,
-        "name": "BFS Iterative",
+        "name": "BFS Pre Order Iterative",
         "type": "tree",
         "application": "dfs-pre-order-traversal",
-        "code": "def rightSideView(self, root: Optional[TreeNode]) -> List[int]:\n        if not root:\n            return []\n        \n        result = []\n        queue = deque([root])\n        \n        while queue:\n            level_size = len(queue)\n            for i in range(level_size):\n                node = queue.popleft()\n                # If this is the last node in the current level, capture it\n                if i == level_size - 1:\n                    result.append(node.val)\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n        \n        return result",
+        "code": "def rightSideView(self, root: Optional[TreeNode]) -> List[int]:\n        \n        # Note:\n        # BFS pre order: process level : root -> left -> right\n        # 1. For each level\n        # 2. Process root -> :\n        #    grab length of level, if root is last element in group, add to res\n        # 3. Process -> left -> right :\n        # Result: right most element of each level added\n        \n        # Empty check\n        if not root:\n            return []\n        \n        # right most elements of each level\n        result = []\n        \n        # iterative queue\n        queue = deque([root])\n        \n        while queue:\n\n            # process entire level\n            level_size = len(queue)\n            for i in range(level_size):\n\n                # Process root -> : \n                node = queue.popleft()\n\n                # Process root -> : \n                # if this is last element in level, add to res\n                if i == level_size - 1:\n                    result.append(node.val)\n\n                # Process -> left -> right : \n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n        \n        # overall: time complexity\n        # overall: space complexity\n        return result",
         "questionNumber": 199,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-bfs-iterative---treedfs-pre-order-traversal",
+        "solutionLink": "/Notes/leetcode-trees#solution-1-bfs-pre-order-iterative---treedfs-pre-order-traversal",
         "blog": "LeetCode: Trees"
       },
       {
         "number": 2,
-        "name": "DFS Pre Order Right-to-Left First Depth Capture",
+        "name": "DFS Pre Order Right to Left First Depth Capture",
         "type": "tree",
         "application": "dfs-pre-order-traversal",
-        "code": "def rightSideView(self, root: Optional[TreeNode]) -> List[int]:\n        \n        result = []\n        \n        def dfs(node, depth):\n            if not node:\n                return\n            # If visiting this depth for the first time, this is the rightmost node\n            if depth == len(result):\n                result.append(node.val)\n            dfs(node.right, depth + 1)  # Prioritize right child\n            dfs(node.left, depth + 1)   # Then left child\n        \n        dfs(root, 0)\n        return result",
+        "code": "def rightSideView(self, root: Optional[TreeNode]) -> List[int]:\n        \n        # Note:\n        # DFS pre order: root -> right -> left\n        # 1. Process root -> : \n        # 2. Process -> right -> left\n        #    we are exploring right subtree first,\n        #    first time we hit a new depth, we must be at right most node,\n        #    add node to res\n        # Result: right most element of each level added\n\n        # right most elements of each level\n        result = []\n        \n        def dfs(node, depth):\n\n            # Empty check\n            if not node:\n                return\n\n            # Process root -> :\n            # if hit new depth, must be at right most node\n            if depth == len(result):\n                result.append(node.val)\n\n            # Process -> right -> left\n            dfs(node.right, depth + 1)\n            dfs(node.left, depth + 1)\n        \n        # recursive call on root\n        dfs(root, 0)\n\n        # overall: time complexity\n        # overall: space complexity\n        return result",
         "questionNumber": 199,
         "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-right-to-left-first-depth-capture---treedfs-pre-order-traversal",
         "blog": "LeetCode: Trees"
