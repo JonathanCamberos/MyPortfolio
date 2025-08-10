@@ -2607,54 +2607,42 @@ is always: left.val &leq; root.val &leq; right.val
 ```python
 ```
 
-### Solution 1: DFS with Range Limits - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive Passing Range Limits - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        # Helper DFS function with valid value range constraints
+        
+        # Note:
+        # DFS pre order: root -> left -> right
+        # 1. Process root -> :
+        #    validate order
+        # 2. Process -> left -> right : 
+        # Result: validated BST
+        
         def dfs(node, low, high):
-            if not node:
-                return True  # Reached leaf, no violations
 
-            # If current node violates BST property -> invalid
-            if not (low < node.val < high):
-                return False
-
-            # Left subtree must have values < node.val
-            # Right subtree must have values > node.val
-            return dfs(node.left, low, node.val) and dfs(node.right, node.val, high)
-
-        # Start with infinite bounds
-        return dfs(root, float('-inf'), float('inf'))
-
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-
-### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
-```python
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        self.prev = None  # Stores last visited node value
-
-        def inorder(node):
+            # Process root -> : 
             if not node:
                 return True
 
-            # Inorder: Left -> Node -> Right
-            if not inorder(node.left):
+            # Process root -> : validate order
+            if not (low < node.val < high):
                 return False
 
-            # Current node must be greater than previous inorder value
-            if self.prev is not None and node.val <= self.prev:
-                return False
-            self.prev = node.val
+            # Process -> left -> right :
+            left_valid = dfs(node.left, low, node.val)
+            right_valid = dfs(node.right, node.val, high)
 
-            return inorder(node.right)
+            # Process -> left -> right :
+            subtreeValid = left_valid and right_valid
 
-        return inorder(root)
+            return subtreeValid
+
+        # Start with infinite bounds
+        treeValid = dfs(root, float('-inf'), float('inf'))
+
+        # overall: time complexity
+        # overall: space complexity
+        return treeValid
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2662,6 +2650,43 @@ is always: left.val &leq; root.val &leq; right.val
 |  |  |  |  |  |
 |  |  |  |  |  |
 
+
+### Solution 2: BFS Pre Order Iterative Passing Queuing Range Limits  - Tree/DFS Pre order Traversal
+```python
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+
+        # Note:
+        # BFS pre order: process level: root -> left -> right
+        # 1. Process level: 
+        #      Process root -> :
+        #        validate range limits
+        # 2. Process -> left -> right : 
+        # Result: validated BST
+
+        # iterative queue
+        queue = deque([(root, float('-inf'), float('inf'))])
+
+        while queue:
+
+            # Process root -> :
+            node, low, high = queue.popleft()
+
+            # Process root -> : 
+            if not node:
+                continue
+
+            # Process root -> : validate order
+            if not (low < node.val < high):
+                return False
+
+            # Process -> left -> right :
+            queue.append((node.left, low, node.val))
+            queue.append((node.right, node.val, high))
+
+        # overall: time complexity
+        # overall: space complexity
+        return True
+```
 
 
 ## 230. Kth Smallest Element in a BST ::2:: - Medium
