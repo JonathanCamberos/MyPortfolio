@@ -1028,22 +1028,22 @@
   "230": [
     {
       "number": 1,
-      "name": "In Order Traversal Early Stop",
+      "name": "DFS In Order Recursive Early Stop with Global Element Counter",
       "type": "tree",
       "application": "dfs-pre-order-traversal",
-      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        self.k = k\n        self.result = None\n        \n        def inorder(node):\n            if not node or self.result is not None:\n                return\n            \n            inorder(node.left)\n            \n            self.k -= 1\n            if self.k == 0:\n                self.result = node.val\n                return\n            \n            inorder(node.right)\n        \n        inorder(root)\n        return self.result",
+      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n\n        # Note:\n        # DFS in order: left -> root -> right\n        # 1. Process left -> : \n        # 2. Process -> root -> :\n        #    if reached kth node, return\n        # 3. Process -> right :\n        # Result: kth smallest found\n\n        # global counter\n        k = k\n        # global pointer\n        result = None\n        \n        def inorder(node):\n            nonlocal k\n            nonlocal result\n\n            # Process left -> :\n            if not node or result is not None:\n                return\n            \n            # Process left -> :\n            inorder(node.left)\n            \n            # Process root -> : \n            # if kth node, return\n            k -= 1\n            if k == 0:\n                result = node.val\n                return\n            \n            # Process right -> : \n            inorder(node.right)\n        \n        inorder(root)\n\n        # overall: time complexity\n        # overall: space complexity\n        return result",
       "questionNumber": 230,
-      "solutionLink": "/Notes/leetcode-trees#solution-1-in-order-traversal-early-stop---treedfs-pre-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-in-order-recursive-early-stop-with-global-element-counter---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
     },
     {
       "number": 2,
-      "name": "DFS Pre Order Right-to-Left First Depth Capture",
+      "name": "DFS In Order Iterative with Element Counter",
       "type": "tree",
       "application": "dfs-pre-order-traversal",
-      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        stack = []\n        while True:\n            while root:\n                stack.append(root)\n                root = root.left\n            \n            root = stack.pop()\n            k -= 1\n            if k == 0:\n                return root.val\n            \n            root = root.right",
+      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n\n        # Note:\n        # DFS in order: left -> root -> right\n        # 1. Process left -> : \n        # 2. Process -> root -> :\n        #    if reached kth node, return\n        # 3. Process -> right :\n        # Result: kth smallest found\n\n        # iterative stack\n        stack = []\n        \n        while True:\n\n            # Process left -> :\n            while root:\n                stack.append(root)\n                root = root.left\n            \n            # Process -> root -> :\n            root = stack.pop()\n\n            # Process -> root -> : \n            # if kth node, return\n            k -= 1\n            if k == 0:\n                return root.val\n            \n            # Process -> right :\n            root = root.right\n\n        # overall: time complexity\n        # overall: space complexity",
       "questionNumber": 230,
-      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-right-to-left-first-depth-capture---treedfs-pre-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-in-order-iterative-with-element-counter---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
     },
     {

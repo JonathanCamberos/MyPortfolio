@@ -2837,41 +2837,6 @@ Given a BST, find the kth smallest node.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 3: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
-```python
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        # Postorder: compute size of subtree, and store left subtree size
-        def compute_sizes(node):
-            if not node:
-                return 0
-            left_size = compute_sizes(node.left)
-            right_size = compute_sizes(node.right)
-            # attach attribute to the node instance
-            node.left_count = left_size
-            return left_size + right_size + 1
-
-        compute_sizes(root)
-
-        # Now query using left_count (no recursion needed)
-        node = root
-        while node:
-            left_count = getattr(node, "left_count", 0)
-            if k == left_count + 1:
-                return node.val
-            elif k <= left_count:
-                node = node.left
-            else:
-                k -= (left_count + 1)
-                node = node.right
-
-        return None  # not reached if 1 <= k <= n
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
 
 ## 105. Construct Binary Tree from Pre Order and In Order Traversal ::2:: - Medium
 
@@ -2934,32 +2899,58 @@ Create original free given pre and post order traversals.
 ### Solution 1: Recursive Build with Hash Map  - Tree/DFS Pre order Traversal
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        # Step 1: Map each value to its index in inorder for O(1) lookups
+
+        # Note:
+        # Pre order: root -> left -> root
+        # In order: left -> root -> right
+       
+        # Map each value to its in order index for O(1) lookups
         inorder_index_map = {val: idx for idx, val in enumerate(inorder)}
 
-        # Step 2: Preorder index pointer (to track root positions)
-        self.pre_idx = 0
+        # PreOrder index pointer to track root positions in preOrder list
+        pre_idx = 0
 
         def array_to_tree(left, right):
-            # Base case: no elements to construct the subtree
+            nonlocal pre_idx
+
+            # Base case: no elements to construct subtree
             if left > right:
                 return None
 
-            # Step 3: Get root value from preorder
-            root_val = preorder[self.pre_idx]
-            self.pre_idx += 1
+            # 1. curr root
+            root_val = preorder[pre_idx]
+            # prepare next root
+            pre_idx += 1
 
-            # Create the root node
+            # Create root node
             root = TreeNode(root_val)
 
-            # Step 4: Recursively build left & right subtrees
-            root.left = array_to_tree(left, inorder_index_map[root_val] - 1)
-            root.right = array_to_tree(inorder_index_map[root_val] + 1, right)
+            # 2: Find root's index in inorder
+            root_index = inorder_index_map[root_val]
+
+            # 3: get root's left subtree range for inorder array
+            left_subtree_left = left
+            left_subtree_right = root_index - 1
+
+            # 4: get root's right subtree range for inorder array
+            right_subtree_left = root_index + 1
+            right_subtree_right = right
+
+            # 5: build left subtree
+            root.left = array_to_tree(left_subtree_left, left_subtree_right)
+
+            # 5: build right subtree
+            root.right = array_to_tree(right_subtree_left, right_subtree_right)
 
             return root
 
-        # Step 5: Build the tree from full range
-        return array_to_tree(0, len(inorder) - 1)
+        # initialize bounds
+        left_start = 0 
+        right_start = len(inorder)-1
+
+        # overall: time complexity
+        # overall: space complexity 
+        return array_to_tree(left_start, right_start)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2968,36 +2959,81 @@ Create original free given pre and post order traversals.
 |  |  |  |  |  |
 
 
-### Solution 2: Iterative Using Stack - Tree/DFS Pre order Traversal
+### Solution 2: Iterative Build Using Stack - Tree/DFS Pre order Traversal
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+
+        # Note:
+        # Pre order: root -> left -> root
+        # In order: left -> root -> right
+
+        # Empty check
         if not preorder or not inorder:
             return None
         
+        # 1: Starting at the root, 
+        #    the algorithm iteratively processes the tree by 
+        #    building subtrees one by one:
         root = TreeNode(preorder[0])
+
+        # 2: stack:
+        #    holds nodes whose subtrees are still being built
+        #    top of stack, is the previous node waiting for its subtrees
         stack = [root]
+
+        # 2: inorder_index:
+        #    holds progress in inOrder array: left -> root -> right
+        #    advances when node has received both children
+        #    (only points to 'root', when 'root' receives left)
+
+        # so we start at 0, since in order: left -> root -> right
         inorder_index = 0
         
+        # 3: start 2nd element: root -> left -> right
+        #.   since we start by processing left subtree
         for i in range(1, len(preorder)):
-            node = stack[-1]
+
+            # peek top of stack:
+            # previous elem waiting for subtrees
+            top = stack[-1]
+
+            # current subtree of previous call (next root) to be added to tree
             preorder_val = preorder[i]
             
-            # If the last node in stack is not equal to current inorder,
-            # then the next preorder value is in the left subtree.
-            if node.val != inorder[inorder_index]:
-                node.left = TreeNode(preorder_val)
-                stack.append(node.left)
+            # stack: root 
+            # inorder: left -> root -> right
+
+            # compare top of stack's value with inorder_val to decide if:
+            #   1) top != inorder_val : preorder_val is a left child, connect and push to stack
+            #   2) top == inorder_val -> preorder_val is a right child, connect and push to stack
+            inorder_val = inorder[inorder_index]
+
+            # still processing left subtree
+            # process -> left
+            if top.val != inorder_val:
+
+                # process -> left -> :
+                # preorder_val is a left child, connect and push to stack        
+                top.left = TreeNode(preorder_val)
+                stack.append(top.left)
+                        
+            # finished processed left subtree
+            # process -> right
             else:
-                # Otherwise, pop nodes from the stack while the node's value
-                # matches inorder and move inorder_index forward.
+                
+                # keep pop() while initial ' if top.val != inorder_val: '
+                # remains true: 
                 while stack and stack[-1].val == inorder[inorder_index]:
-                    node = stack.pop()
+                    top = stack.pop()
                     inorder_index += 1
                 
-                # The next preorder value is the right child of the last popped node
-                node.right = TreeNode(preorder_val)
-                stack.append(node.right)
+                # process -> right :
+                # preorder_val is a right child, connect and push to stack
+                top.right = TreeNode(preorder_val)
+                stack.append(top.right)
         
+        # overall: time complexity
+        # overall: space complexity
         return root
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -3060,31 +3096,45 @@ Given a tree, find the path that produces the max sum.
 ```python
 ```
 
-### Solution 1: DFS Post-Order + Global Max Tracker  - Tree/DFS Pre order Traversal
+### Solution 1: DFS Post Order Recursive Global Max Tracker  - Tree/DFS Pre order Traversal
 ```python
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        
+        # Note:
+        # DFS post order: left -> right -> root
+        # 1. Process left -> right -> :
+        # 2. Process -> root :
+        #     
+
+        # global max
         max_sum = float('-inf')
 
         def dfs(node):
             nonlocal max_sum
 
+            # Empty check
             if not node:
                 return 0
 
-            # Get max gain from left and right subtree; ignore negative gains by max with 0
+            # Process left -> right -> 
             left_gain = max(dfs(node.left), 0)
             right_gain = max(dfs(node.right), 0)
 
-            # Current max path including both children and current node
-            current_path_sum = node.val + left_gain + right_gain
+            # Process -> root :
+            connected_at_root = node.val + left_gain + right_gain
 
-            # Update global max sum if current path is better
-            max_sum = max(max_sum, current_path_sum)
+            # Process -> root : check global max
+            max_sum = max(max_sum, connected_at_root)
 
-            # Return max gain to parent (single path)
-            return node.val + max(left_gain, right_gain)
+            # Process -> root : get max path at root
+            root_max_path = node.val + max(left_gain, right_gain)
+
+            return root_max_path
 
         dfs(root)
+
+        # overall: time complexity
+        # overall: space complexity
         return max_sum
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -3152,40 +3202,74 @@ Create a serialize and deserialize functions for trees
 ```python
 ```
 
-### Solution 1: DFS Post-Order + Global Max Tracker  - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive  - Tree/DFS Pre order Traversal
 ```python
 class Codec:
 
     def serialize(self, root):
+
+        # Note: 
+        # DFS pre order: root -> left -> right:
+        # 1. Process root -> :
+        #    if val, append val 
+        #    if None, append marker
+        # 2. Process -> left -> right :
+        # Result: serialized pre order tree 
+
         vals = []
 
         def dfs(node):
+
+            # Process root -> :
             if not node:
                 vals.append("N")
                 return
+
+            # Process root -> :
             vals.append(str(node.val))
+
+            # Process -> left -> right :
             dfs(node.left)
             dfs(node.right)
 
         dfs(root)
+
+        # overall: time complexity
+        # overall: time complexity
         return ",".join(vals)
         
 
     def deserialize(self, data):
+        
+        # Note:
+        # DFS pre order: root -> left -> right :
+        # 1. Process root :
+        #.   if val
+
+        # deserialize string into queue
         vals = deque(data.split(","))
 
         def dfs():
+            
+            # Process root -> :
             if not vals:
                 return None
+
+            # Process root -> :
             val = vals.popleft()
             if val == "N":
                 return None
 
+            # Process root -> :
             node = TreeNode(int(val))
+
+            # Process -> left -> right :
             node.left = dfs()
             node.right = dfs()
+
             return node
 
+        # new root of tree
         return dfs()
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
