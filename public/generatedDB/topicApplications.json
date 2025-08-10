@@ -418,6 +418,24 @@
       "codeExample": "def zigzagLevelOrder(root: Optional[TreeNode]) -> List[List[int]]:\n        \n        # Empty Tree\n        if not root:\n            return []\n        \n        groups = []\n\n        # iteration stack\n        queue = deque([root])\n\n        # order toggle\n        left_to_right = True\n        \n        while queue:\n\n            # for each level\n            size = len(queue)\n            level = deque()\n            \n            # Process all nodes in current level\n            for _ in range(size):\n                node = queue.popleft()\n                \n                # append order based on pattern\n                if left_to_right:\n                    level.append(node.val)\n                else:\n                    level.appendleft(node.val)\n                \n                # iterate by appending left and right subtrees\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            \n            # flip order for next level\n            left_to_right = not left_to_right  \n\n            # add to groups            \n            groups.append(list(level))\n\n        return groups\n\n    # Example:\n    # Input Tree:\n    #       1\n    #      / \\\n    #     2   3\n    #    / \\   \\\n    #   4   5   6\n\n    # Output: [[1], [3, 2], [4, 5, 6]]",
       "useCaseLink": "/Notes/leetcode-trees#tree-application-bfs-pre-order-across-level-nonstandard-level-traversal-non-standard-full-across",
       "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BST Guided Recursive Traversal",
+      "summary": "Traversal Order: Top down traversal pruning half the tree at each step based on BST property Mindset: Use BST ordering to decide which subtree to recurse into Trick: Like binary search, narrow search space by recursively exploring only one subtree.",
+      "exampleIntro": "Lowest Common Ancestor in BST Recursive",
+      "codeExample": "def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n    \n        # If both nodes smaller than root, recurse left subtree\n        if p.val < root.val and q.val < root.val:\n            return lowestCommonAncestor(root.left, p, q)\n\n        # If both nodes greater than root, recurse right subtree\n        elif p.val > root.val and q.val > root.val:\n            return lowestCommonAncestor(root.right, p, q)\n        \n        # Otherwise, root is split point and LCA\n        else:\n            return root",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bst-guided-recursive-traversal",
+      "blog": "LeetCode: Trees"
+    },
+    {
+      "type": "Tree",
+      "title": "BST Guided Iterative Traversal",
+      "summary": "Traversal Order: Top down traversal pruning half the tree at each step based on BST property Mindset: Use BST ordering to decide which subtree to iterate into Trick: Like binary search, narrow search space by iteratively exploring only one subtree.",
+      "exampleIntro": "Lowest Common Ancestor in BST Iterative",
+      "codeExample": "def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        curr = root\n\n        while curr:\n            # If both nodes smaller, go left\n            if p.val < curr.val and q.val < curr.val:\n                curr = curr.left\n\n            # If both nodes greater, go right\n            elif p.val > curr.val and q.val > curr.val:\n                curr = curr.right\n            \n            # Else, current node is LCA\n            else:\n                return curr",
+      "useCaseLink": "/Notes/leetcode-trees#tree-application-bst-guided-iterative-traversal",
+      "blog": "LeetCode: Trees"
     }
   ]
 }

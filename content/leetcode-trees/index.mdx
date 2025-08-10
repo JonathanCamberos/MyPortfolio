@@ -1692,7 +1692,7 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-## 572. Subtree of Another Tree ::3:: - Easy
+## 572. Subtree of Another Tree ::5:: - Easy
 
 Topics:  Tree, Depth First Search, String Matching, Binary Tree, Hash Function
 
@@ -2218,23 +2218,39 @@ Traverse a tree and return list of nodes grouped by level.
 ```python
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         
+        # Note:
+        # DFS pre order: root -> left -> right
+        # 1. Process root -> :
+        #    append root to corresponding depth group
+        # 2. Process -> left -> right :
+        # Results: nodes grouped by depth level
+        
+        # depth level groups
         groups = []
         
         def dfs(node, depth):
+
+            # Empty check
             if not node:
                 return
             
-            # expand groups list if new depth reached
+            # Process root -> :
+            # add group if new depth reached
             if len(groups) == depth:
                 groups.append([])
             
+            # Process root -> : 
+            # add node to corresponding depth group
             groups[depth].append(node.val)
             
-            # recurse left and right children
+            # Process -> left -> right : update depth
             dfs(node.left, depth + 1)
             dfs(node.right, depth + 1)
         
         dfs(root, 0)
+
+        # overall: time complexity
+        # overall: space complexity
         return groups
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |

@@ -1284,7 +1284,7 @@
         "name": "DFS Pre Order Recursive Abstraction Call Over Root Tree",
         "type": "tree",
         "application": "dfs-pre-order-recursive-one-sided-top-down",
-        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # DFS pre order: root -> left -> right\n        # 1. Process root -> : \n        #    validate subtree matches\n        # 2. Process -> left -> right :\n        # Result: validate if subtree is subtree of tree\n\n        # helper func \n        def isSameTree(s, t):\n\n            # process root -> : \n            if not s and not t:\n                return True\n\n            # process root -> :\n            if not s or not t:\n                return False\n\n            # process root -> :\n            if s.val != t.val:\n                return False\n            \n            # process -> left -> right :\n            left_match = isSameTree(s.left, t.left)\n            right_match = isSameTree(s.right, t.right)\n\n            # process -> left -> right:\n            subTreeMatch = left_match and right_match\n\n            return subTreeMatch\n        \n\n        # Empty check\n        if not subRoot:\n            return True\n\n        # Empty check\n        if not root:\n            return False\n        \n        # process root -> : \n        if isSameTree(root, subRoot):\n            return True\n        \n        # process -> left -> right :\n        tree_left_subtree_match = self.isSubtree(root.left, subRoot)\n        tree_right_subtree_match = self.isSubtree(root.right, subRoot) \n\n        # process -> left -> right :\n        tree_match = tree_left_subtree_match or tree_right_subtree_match\n\n        return tree_match",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # DFS pre order: root -> left -> right\n        # 1. Process root -> : \n        #    validate subtree matches\n        # 2. Process -> left -> right :\n        # Result: validate if subtree is subtree of tree\n\n        # helper func \n        def isSameTree(s, t):\n\n            # process root -> : \n            if not s and not t:\n                return True\n\n            # process root -> :\n            if not s or not t:\n                return False\n\n            # process root -> :\n            if s.val != t.val:\n                return False\n            \n            # process -> left -> right :\n            left_match = isSameTree(s.left, t.left)\n            right_match = isSameTree(s.right, t.right)\n\n            # process -> left -> right:\n            subTreeMatch = left_match and right_match\n\n            return subTreeMatch\n        \n\n        # Empty check\n        if not subRoot:\n            return True\n\n        # Empty check\n        if not root:\n            return False\n        \n        # process root -> : \n        if isSameTree(root, subRoot):\n            return True\n        \n        # process -> left -> right :\n        tree_left_subtree_match = self.isSubtree(root.left, subRoot)\n        tree_right_subtree_match = self.isSubtree(root.right, subRoot) \n\n        # process -> left -> right :\n        tree_match = tree_left_subtree_match or tree_right_subtree_match\n\n        # overall: time complexity\n        # overall: space complexity\n        return tree_match",
         "questionNumber": 572,
         "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-pre-order-recursive-abstraction-call-over-root-tree---treedfs-pre-order-recursive-one-sided-top-down",
         "blog": "LeetCode: Trees"
@@ -1303,46 +1303,70 @@
       },
       {
         "number": 2,
-        "name": "BFS Iterative",
+        "name": "BFS Pre Order Iterative Root Match Then Call isSameTree",
         "type": "tree",
         "application": "bfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
         "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # BFS order: level by level : root -> left -> right\n        # 1. For each level:\n        # 2. Process root -> : \n        #    if root values match, run isSameTree\n        # 3. Process -> left -> right :\n        # Result: validate if subtree is subtree of tree\n\n        def isSameTree(s, t):\n\n            # Process root -> :\n            if not s and not t:\n                return True\n\n            # Process root -> : \n            if not s or not t:\n                return False  \n\n            # Process root -> : \n            if s.val != t.val:\n                return False\n            \n            # Process -> left -> right :\n            left_match = isSameTree(s.left, t.left)\n            right_match = isSameTree(s.right, t.right)\n\n            # Process -> left -> right :\n            subtree_match = left_match and right_match\n\n            return subtree_match\n\n        # Empty check:\n        if not subRoot:\n            return True\n\n        # Empty check:\n        if not root:\n            return False\n        \n        # iterative queue\n        queue = deque([root])\n\n        while queue:\n\n            # Process root -> :\n            root_node = queue.popleft()\n\n            # Process root -> : if match, test with isSameTree\n            if root_node.val == subRoot.val and isSameTree(root_node, subRoot):\n                return True\n\n            # Process -> left -> right :\n            if root_node.left:\n                queue.append(root_node.left)\n            if root_node.right:\n                queue.append(root_node.right)\n        \n        # overall: time complexity\n        # overall: space complexity\n        return False",
         "questionNumber": 572,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-iterative---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-pre-order-iterative-root-match-then-call-issametree---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
         "blog": "LeetCode: Trees"
       },
       {
         "number": 3,
-        "name": "DFS + Serialization String Matching",
+        "name": "DFS Pre Order Tree Serialization Comparison",
         "type": "tree",
         "application": "bfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
-        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # DFS pre order: root -> left -> right\n        # 1. Process root -> :\n        #      serialize values with leading comma\n        #      (\"2\" in \"12\" would match incorrectly without boundaries, so comma needed)\n        #      \",2\"\n        # 2. Process -> left -> right :\n        # Result: validate if subtree is subtree of tree\n\n        def serialize(node):\n            \n            # process root -> :\n            if not node:\n                return \",N\"\n\n            # process root -> :\n            root_serial = node.val\n\n            # process -> left -> right :\n            left_serial = serialize(node.left)\n            right_serial = serialize(node.right)\n\n            # process root -> :\n            subTree_serial = f\",{node.val}{left_serial}{right_serial}\" \n\n            return subTree_serial\n\n        # process root -> :\n        serializedSubRoot = serialize(subRoot)\n        serializedRoot = serialize(root)\n\n        # process root -> :\n        subTree_match = serializedSubRoot in serializedRoot\n\n        return subTree_match",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # Note:\n        # DFS pre order: root -> left -> right\n        # 1. Process root -> :\n        #      serialize values with leading comma\n        #      (\"2\" in \"12\" would match incorrectly without boundaries, so comma needed)\n        #      \",2\"\n        # 2. Process -> left -> right :\n        # Result: validate if subtree is subtree of tree\n\n        def serialize(node):\n            \n            # process root -> :\n            if not node:\n                return \",N\"\n\n            # process root -> :\n            root_serial = node.val\n\n            # process -> left -> right :\n            left_serial = serialize(node.left)\n            right_serial = serialize(node.right)\n\n            # process root -> :\n            subTree_serial = f\",{node.val}{left_serial}{right_serial}\" \n\n            return subTree_serial\n\n        # process root -> :\n        serializedSubRoot = serialize(subRoot)\n        serializedRoot = serialize(root)\n\n        # process root -> :\n        subTree_match = serializedSubRoot in serializedRoot\n\n        # overall: time complexity\n        # overall: space complexity\n        return subTree_match",
         "questionNumber": 572,
-        "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-serialization-string-matching---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "solutionLink": "/Notes/leetcode-trees#solution-3-dfs-pre-order-tree-serialization-comparison---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "blog": "LeetCode: Trees"
+      },
+      {
+        "number": 4,
+        "name": "DFS In Order Tree Serialization Comparison",
+        "type": "tree",
+        "application": "bfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        \n        def serialize(node):\n            if not node:\n                return \",N\"\n\n            # In-order: left -> root -> right\n            left_serial = serialize(node.left)\n            root_val = f\",{node.val}\"\n            right_serial = serialize(node.right)\n            \n            subtree_serial = f\"#{left_serial}@{root_val}${right_serial}^\"\n            return subtree_serial\n\n        \n        serializedSubRoot = serialize(subRoot)\n        serializedRoot = serialize(root)\n        \n        # Check if serializedSubRoot is a substring of serializedRoot\n        match = serializedSubRoot in serializedRoot\n\n        # overall: time complexity\n        # overall: space complexity\n        return match",
+        "questionNumber": 572,
+        "solutionLink": "/Notes/leetcode-trees#solution-4-dfs-in-order-tree-serialization-comparison---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "blog": "LeetCode: Trees"
+      },
+      {
+        "number": 5,
+        "name": "DFS Post Order Tree Serialization Comparison",
+        "type": "tree",
+        "application": "bfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "code": "def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        def serialize(node):\n            # Base case: null marker for missing child\n            if not node:\n                return \",N\"\n            \n            # Postorder: left -> right -> root\n            \n            left_serial = serialize(node.left)\n            right_serial = serialize(node.right)\n            \n            # Append root after left and right serialization\n            subTree_serial = f\"#{left_serial}@{right_serial},{node.val}^\"            \n            return subTree_serial\n        \n        serializedSubRoot = serialize(subRoot)\n        serializedRoot = serialize(root)\n        \n        # Check if serializedSubRoot is a substring of serializedRoot\n        match = serializedSubRoot in serializedRoot \n\n        # overall: time complexity\n        # overall: space complexity\n        return match",
+        "questionNumber": 572,
+        "solutionLink": "/Notes/leetcode-trees#solution-5-dfs-post-order-tree-serialization-comparison---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
+        "blog": "LeetCode: Trees"
+      }
+    ],
+    "bst-guided-recursive-traversal": [
+      {
+        "number": 1,
+        "name": "BST Recursive Traversal",
+        "type": "tree",
+        "application": "bst-guided-recursive-traversal",
+        "code": "def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        \n        # Note:\n        # BST traversal: root -> either -> left or -> right\n        # 1. Process -> root : \n        #    determine if LCA is in left or right\n        # 2. Process -> left or -> right :\n        # Result: find LCA node\n        \n        # process root -> :\n        # p and q are smaller, LCA in left subtree \n        if p.val < root.val and q.val < root.val:\n\n            # process -> left :\n            return self.lowestCommonAncestor(root.left, p, q)\n\n        # process root -> :\n        # p and q are larger, LCA in right subtree\n        elif p.val > root.val and q.val > root.val:\n\n            # process -> right :\n            return self.lowestCommonAncestor(root.right, p, q)\n        \n        # process root -> :\n        # p and q are in different subtrees, root is LCA\n        else:\n            return root\n\n        # overall: time complexity\n        # overall: space complexity",
+        "questionNumber": 235,
+        "solutionLink": "/Notes/leetcode-trees#solution-1-bst-recursive-traversal---treebst-guided-recursive-traversal",
+        "blog": "LeetCode: Trees"
+      }
+    ],
+    "bst-guided-iterative-traversal": [
+      {
+        "number": 2,
+        "name": "BST Iterative Traversal",
+        "type": "tree",
+        "application": "bst-guided-iterative-traversal",
+        "code": "def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        \n        # Note:\n        # BST traversal: root -> either -> left or -> right\n        # 1. Process -> root : \n        #    determine if LCA is in left or right\n        # 2. Process -> left or -> right :\n        # Result: find LCA node\n\n        # iterative root\n        while root:\n\n            # process root -> :\n            # p and q are smaller, LCA in left subtree \n            if p.val < root.val and q.val < root.val:\n\n                # process -> left :\n                root = root.left\n\n            # process root ->\n            # p and q are larger, LCA in right subtree\n            elif p.val > curr.val and q.val > curr.val:\n\n                # process -> right :\n                curr = curr.right\n\n            # process root -> :\n            # p and q are in different subtrees, root is LCA\n            else:\n                return curr\n        \n        # overall: time complexity\n        # overall: space complexity",
+        "questionNumber": 235,
+        "solutionLink": "/Notes/leetcode-trees#solution-2-bst-iterative-traversal---treebst-guided-iterative-traversal",
         "blog": "LeetCode: Trees"
       }
     ],
     "dfs-pre-order-traversal": [
-      {
-        "number": 1,
-        "name": "Recursive BST Traversal",
-        "type": "tree",
-        "application": "dfs-pre-order-traversal",
-        "code": "def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        \n        # Note:\n        # continue traversing down left and irght subtrees to find \n        \n        # p and q are smaller -> LCA is in left subtree\n        if p.val < root.val and q.val < root.val:\n            return self.lowestCommonAncestor(root.left, p, q)\n\n        # p and q are smaller -> LCA is in right subtree\n        elif p.val > root.val and q.val > root.val:\n            return self.lowestCommonAncestor(root.right, p, q)\n        \n        # p and q are in different subtrees -> current node is LCA\n        else:\n            return root\n\n        # overall: time complex\n        # overall: space complex",
-        "questionNumber": 235,
-        "solutionLink": "/Notes/leetcode-trees#solution-1-recursive-bst-traversal---treedfs-pre-order-traversal",
-        "blog": "LeetCode: Trees"
-      },
-      {
-        "number": 2,
-        "name": "Iterative BST Traversal",
-        "type": "tree",
-        "application": "dfs-pre-order-traversal",
-        "code": "def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        \n        curr = root\n        while curr:\n\n            # p and q are smaller -> LCA is in left subtree\n            if p.val < curr.val and q.val < curr.val:\n                curr = curr.left  # Both on left\n\n            # p and q are larger -> LCA is in right subtree\n            elif p.val > curr.val and q.val > curr.val:\n                curr = curr.right\n\n            # p and q are in different subtrees -> current node is LCA\n            else:\n                return curr\n        \n        # overall: time complex\n        # overall: space complex",
-        "questionNumber": 235,
-        "solutionLink": "/Notes/leetcode-trees#solution-2-iterative-bst-traversal---treedfs-pre-order-traversal",
-        "blog": "LeetCode: Trees"
-      },
       {
         "number": 1,
         "name": "BFS Iterative",
