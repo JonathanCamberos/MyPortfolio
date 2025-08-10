@@ -2743,28 +2743,49 @@ Given a BST, find the kth smallest node.
 ```python
 ```
 
-### Solution 1: In Order Traversal Early Stop  - Tree/DFS Pre order Traversal
+### Solution 1: DFS In Order Recursive Early Stop with Global Element Counter  - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        self.k = k
-        self.result = None
+
+        # Note:
+        # DFS in order: left -> root -> right
+        # 1. Process left -> : 
+        # 2. Process -> root -> :
+        #    if reached kth node, return
+        # 3. Process -> right :
+        # Result: kth smallest found
+
+        # global counter
+        k = k
+        # global pointer
+        result = None
         
         def inorder(node):
-            if not node or self.result is not None:
+            nonlocal k
+            nonlocal result
+
+            # Process left -> :
+            if not node or result is not None:
                 return
             
+            # Process left -> :
             inorder(node.left)
             
-            self.k -= 1
-            if self.k == 0:
-                self.result = node.val
+            # Process root -> : 
+            # if kth node, return
+            k -= 1
+            if k == 0:
+                result = node.val
                 return
             
+            # Process right -> : 
             inorder(node.right)
         
         inorder(root)
-        return self.result
 
+        # overall: time complexity
+        # overall: space complexity
+        return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2773,21 +2794,42 @@ Given a BST, find the kth smallest node.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+### Solution 2: DFS In Order Iterative with Element Counter - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
+
+        # Note:
+        # DFS in order: left -> root -> right
+        # 1. Process left -> : 
+        # 2. Process -> root -> :
+        #    if reached kth node, return
+        # 3. Process -> right :
+        # Result: kth smallest found
+
+        # iterative stack
         stack = []
+        
         while True:
+
+            # Process left -> :
             while root:
                 stack.append(root)
                 root = root.left
             
+            # Process -> root -> :
             root = stack.pop()
+
+            # Process -> root -> : 
+            # if kth node, return
             k -= 1
             if k == 0:
                 return root.val
             
+            # Process -> right :
             root = root.right
+
+        # overall: time complexity
+        # overall: space complexity
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |

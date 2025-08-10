@@ -442,22 +442,22 @@
   "98": [
     {
       "number": 1,
-      "name": "DFS with Range Limits",
+      "name": "DFS Pre Order Recursive Passing Range Limits",
       "type": "tree",
       "application": "dfs-pre-order-traversal",
-      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        # Helper DFS function with valid value range constraints\n        def dfs(node, low, high):\n            if not node:\n                return True  # Reached leaf, no violations\n\n            # If current node violates BST property -> invalid\n            if not (low < node.val < high):\n                return False\n\n            # Left subtree must have values < node.val\n            # Right subtree must have values > node.val\n            return dfs(node.left, low, node.val) and dfs(node.right, node.val, high)\n\n        # Start with infinite bounds\n        return dfs(root, float('-inf'), float('inf'))",
+      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        \n        # Note:\n        # DFS pre order: root -> left -> right\n        # 1. Process root -> :\n        #    validate order\n        # 2. Process -> left -> right : \n        # Result: validated BST\n        \n        def dfs(node, low, high):\n\n            # Process root -> : \n            if not node:\n                return True\n\n            # Process root -> : validate order\n            if not (low < node.val < high):\n                return False\n\n            # Process -> left -> right :\n            left_valid = dfs(node.left, low, node.val)\n            right_valid = dfs(node.right, node.val, high)\n\n            # Process -> left -> right :\n            subtreeValid = left_valid and right_valid\n\n            return subtreeValid\n\n        # Start with infinite bounds\n        treeValid = dfs(root, float('-inf'), float('inf'))\n\n        # overall: time complexity\n        # overall: space complexity\n        return treeValid",
       "questionNumber": 98,
-      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-with-range-limits---treedfs-pre-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-pre-order-recursive-passing-range-limits---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
     },
     {
       "number": 2,
-      "name": "DFS Pre Order Right-to-Left First Depth Capture",
+      "name": "BFS Pre Order Iterative Passing Queuing Range Limits",
       "type": "tree",
       "application": "dfs-pre-order-traversal",
-      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        self.prev = None  # Stores last visited node value\n\n        def inorder(node):\n            if not node:\n                return True\n\n            # Inorder: Left -> Node -> Right\n            if not inorder(node.left):\n                return False\n\n            # Current node must be greater than previous inorder value\n            if self.prev is not None and node.val <= self.prev:\n                return False\n            self.prev = node.val\n\n            return inorder(node.right)\n\n        return inorder(root)",
+      "code": "def isValidBST(self, root: Optional[TreeNode]) -> bool:\n\n        # Note:\n        # BFS pre order: process level: root -> left -> right\n        # 1. Process level: \n        #      Process root -> :\n        #        validate range limits\n        # 2. Process -> left -> right : \n        # Result: validated BST\n\n        # iterative queue\n        queue = deque([(root, float('-inf'), float('inf'))])\n\n        while queue:\n\n            # Process root -> :\n            node, low, high = queue.popleft()\n\n            # Process root -> : \n            if not node:\n                continue\n\n            # Process root -> : validate order\n            if not (low < node.val < high):\n                return False\n\n            # Process -> left -> right :\n            queue.append((node.left, low, node.val))\n            queue.append((node.right, node.val, high))\n\n        # overall: time complexity\n        # overall: space complexity\n        return True",
       "questionNumber": 98,
-      "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-right-to-left-first-depth-capture---treedfs-pre-order-traversal",
+      "solutionLink": "/Notes/leetcode-trees#solution-2-bfs-pre-order-iterative-passing-queuing-range-limits---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
     }
   ],
