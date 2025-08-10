@@ -1698,50 +1698,61 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 ```python
 ```
 
-### Solution 1: DFS Pre Order Recursive - Tree/DFS Pre Order Recursive One Sided Top Down
+### Solution 1: DFS Pre Order Recursive Abstraction Call Over Root Tree - Tree/DFS Pre Order Recursive One Sided Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
         # DFS pre order: root -> left -> right
-        # 1. Process node
-        #    Check if subtree matches isSameTree()
-        # 2. Process left and right subtrees
-        # Result: validate if match found
+        # 1. Process root -> : 
+        #    validate subtree matches
+        # 2. Process -> left -> right :
+        # Result: validate if subtree is subtree of tree
 
-        # same as above
+        # helper func 
         def isSameTree(s, t):
-            # Base case: 
-            # leaf -> node match
+
+            # process root -> : 
             if not s and not t:
                 return True
 
-            # no match: propagate upwards
+            # process root -> :
             if not s or not t:
                 return False
+
+            # process root -> :
             if s.val != t.val:
                 return False
             
-            # process subtrees
-            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)
+            # process -> left -> right :
+            left_match = isSameTree(s.left, t.left)
+            right_match = isSameTree(s.right, t.right)
+
+            # process -> left -> right:
+            subTreeMatch = left_match and right_match
+
+            return subTreeMatch
         
-        # Empty check:
-        # empty subRoot is always a subtree
+
+        # Empty check
         if not subRoot:
             return True
 
-        # Empty check:
-        # empty root cannot have subtrees
+        # Empty check
         if not root:
             return False
         
-        # recursive call over root and subRoot
+        # process root -> : 
         if isSameTree(root, subRoot):
             return True
         
-        # process root left and right subtrees
-        match = self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot) 
+        # process -> left -> right :
+        tree_left_subtree_match = self.isSubtree(root.left, subRoot)
+        tree_right_subtree_match = self.isSubtree(root.right, subRoot) 
 
-        return match
+        # process -> left -> right :
+        tree_match = tree_left_subtree_match or tree_right_subtree_match
+
+        return tree_match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1754,46 +1765,64 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
-        # BFS order: level by level
-        # 1. For each node:
-        #    - If value matches subRoot root, run isSameTree
-        # 3. Uses queue to iterate nodes iteratively
+        # BFS order: level by level : root -> left -> right
+        # 1. For each level:
+        # 2. Process root -> : 
+        #    if root values match, run isSameTree
+        # 3. Process -> left -> right :
+        # Result: validate if subtree is subtree of tree
 
         def isSameTree(s, t):
 
-            # Base case: leaf -> match
+            # Process root -> :
             if not s and not t:
                 return True
 
-            # no longer match: propagate error upwards
+            # Process root -> : 
             if not s or not t:
                 return False  
+
+            # Process root -> : 
             if s.val != t.val:
                 return False
             
-            # validate subtrees
-            return isSameTree(s.left, t.left) and isSameTree(s.right, t.right)
+            # Process -> left -> right :
+            left_match = isSameTree(s.left, t.left)
+            right_match = isSameTree(s.right, t.right)
+
+            # Process -> left -> right :
+            subtree_match = left_match and right_match
+
+            return subtree_match
 
         # Empty check:
-        # empty subRoot is always a subtree
         if not subRoot:
             return True
 
         # Empty check:
-        # empty root cannot have subtrees
         if not root:
             return False
         
+        # iterative queue
         queue = deque([root])
+
         while queue:
-            node = queue.popleft()
-            if node.val == subRoot.val and isSameTree(node, subRoot):
+
+            # Process root -> :
+            root_node = queue.popleft()
+
+            # Process root -> : if match, test with isSameTree
+            if root_node.val == subRoot.val and isSameTree(root_node, subRoot):
                 return True
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
+
+            # Process -> left -> right :
+            if root_node.left:
+                queue.append(root_node.left)
+            if root_node.right:
+                queue.append(root_node.right)
         
+        # overall: time complexity
+        # overall: space complexity
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1808,20 +1837,39 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
         # DFS pre order: root -> left -> right
-        # 1. Node values with leading comma
-        #    ("2" in "12" would match incorrectly without boundaries)
-        # 2. Check if serialized subRoot is substring of serialized root
-        # Result: checks if tree is subtree
+        # 1. Process root -> :
+        #      serialize values with leading comma
+        #      ("2" in "12" would match incorrectly without boundaries, so comma needed)
+        #      ",2"
+        # 2. Process -> left -> right :
+        # Result: validate if subtree is subtree of tree
 
         def serialize(node):
+            
+            # process root -> :
             if not node:
-                return ",N"  # "N" represents None
-            return f",{node.val}" + serialize(node.left) + serialize(node.right)
+                return ",N"
 
+            # process root -> :
+            root_serial = node.val
+
+            # process -> left -> right :
+            left_serial = serialize(node.left)
+            right_serial = serialize(node.right)
+
+            # process root -> :
+            subTree_serial = f",{node.val}{left_serial}{right_serial}" 
+
+            return subTree_serial
+
+        # process root -> :
         serializedSubRoot = serialize(subRoot)
         serializedRoot = serialize(root)
 
-        return serializedSubRoot in serializedRoot
+        # process root -> :
+        subTree_match = serializedSubRoot in serializedRoot
+
+        return subTree_match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
