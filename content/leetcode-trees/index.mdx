@@ -1412,7 +1412,7 @@ depth of the two subtrees of every node never differs by more than one.
 ```python
 ```
 
-### Solution 1: DFS Post Order Recursive Global Error Marker + Local Height Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Height or Error Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1432,17 +1432,17 @@ depth of the two subtrees of every node never differs by more than one.
             right_height = dfs(node.right)
 
             # pass thrown error upwards
-            if left_height == -1:
+            if left_height == -1 or right_height == -1:
                 return -1         
-            if right_height == -1:
-                return -1
             
             # process -> root : validate balanced left and right subtrees
             if abs(left_height - right_height) > 1:
                 return -1
             
+            root_height = 1 + max(left_height, right_height)
+
             # process -> root : add to height and pass to root's parent
-            return 1 + max(left_height, right_height)
+            return root_height
         
         # overall: time complexity
         # overall: space complexity
@@ -1455,13 +1455,13 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Post Order Recursive Tuple (Local Build Bool, Local Height) Pass - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive Tuple (Height, Bool) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
         # DFS post order: left -> right -> root
         # 1. Process left -> right ->
-        # 2. Process -> root : validate if balanced, throw -1 imbalance error
+        # 2. Process -> root : validate if balanced, pass invalid tuple error
         # Results: detect imbalance
         
         def dfs(node):
@@ -1475,9 +1475,7 @@ depth of the two subtrees of every node never differs by more than one.
             (right_height, right_bal) = dfs(node.right)
 
             # pass thrown error upwards
-            if not left_bal:
-                return (-1, False)
-            if not right_bal:
+            if not left_bal or not right_bal:
                 return (-1, False)
             
             # process -> root : validate balanced left and right subtrees
@@ -1549,18 +1547,22 @@ Determine if two different binary trees match.
 ```python
 ```
 
-### Solution 1: DFS Pre Order Recursive Pass Node Match Down - Tree/DFS Pre Order Recursive One Sided Top Down
+### Solution 1: DFS Pre Order Recursive Early Root Stop or Subtree Match Pass Up - Tree/DFS Pre Order Recursive One Sided Top Down
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
-        # DFS pre order recursive: root -> left -> right
-        # 2. Process root -> :
+        # DFS pre order: root -> left -> right
+        # 1. Process root -> :
         #    if both nodes are 'None' -> trees match
         #    if only one node is 'None' -> trees differ
         #    if values mismatch -> trees differ
         # 3. Process -> left -> right :
         # Result: validate tree match 
         
+        # Note: this is 'process root' instead of 'base case'
+        # because it leads to an early termination, instead of being a regular base case
+        # thus, this solution is pre order
+
         # Process root -> : both nodes are 'None'
         if not p and not q:
             return True
@@ -1577,12 +1579,12 @@ Determine if two different binary trees match.
         left_match = self.isSameTree(p.left, q.left)
         right_match = self.isSameTree(p.right, q.right)
 
-        # Process left -> right : pass left and right match upwards
-        match = left_match and right_match
+        # Process left -> right : pass left and right results up
+        subTreeMatch = left_match and right_match
         
         # overall: time complexity
         # overall: space complexity
-        return match
+        return subTreeMatch
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1591,43 +1593,43 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 2: BFS Iterative Early Root Stop or Subtree Match Pass Up - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
         # BFS Iterate: level by level
-        # 1. Process root ->
-        #    pop() left and right nodes
+        # 1. Process root -> : 
         #    if both nodes are 'None' -> trees match
         #    if only one node is 'None' -> trees differ
         #    if values mismatch -> trees differ
-        # 2. Process -> left -> right
+        # 2. Process -> left -> right : 
         # Result: validate tree match 
         
         # iterative stack
-        # process root1 -> and root2 ->
         queue = deque([(p, q)])
         
         while queue:
 
-            # pop() left and right nodes
-            node1, node2 = queue.popleft()
+            # process root -> :
+            root1, root2 = queue.popleft()
             
+            # Note: early termination during process root -> : 
+
             # Process root -> : both nodes are 'None'
-            if not node1 and not node2:
+            if not root1 and not root2:
                 continue
             
             # Process root -> : only one node is 'None' 
-            if not node1 or not node2
+            if not root1 or not root2
                 return False
             
             # Process root -> : values differ
-            if node1.val != node2.val:
+            if root1.val != root2.val:
                 return False
             
             # process -> left -> right
-            queue.append((node1.left, node2.left))
-            queue.append((node1.right, node2.right))
+            queue.append((root1.left, root2.left))
+            queue.append((root1.right, root2.right))
         
         # overall: time complexity
         # overall: space complexity
