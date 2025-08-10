@@ -1802,6 +1802,8 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
         # process -> left -> right :
         tree_match = tree_left_subtree_match or tree_right_subtree_match
 
+        # overall: time complexity
+        # overall: space complexity
         return tree_match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1919,6 +1921,8 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
         # process root -> :
         subTree_match = serializedSubRoot in serializedRoot
 
+        # overall: time complexity
+        # overall: space complexity
         return subTree_match
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1948,7 +1952,11 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
         serializedRoot = serialize(root)
         
         # Check if serializedSubRoot is a substring of serializedRoot
-        return serializedSubRoot in serializedRoot
+        match = serializedSubRoot in serializedRoot
+
+        # overall: time complexity
+        # overall: space complexity
+        return match
 ```
 
 ### Solution 5: DFS Post Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
@@ -1972,7 +1980,11 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
         serializedRoot = serialize(root)
         
         # Check if serializedSubRoot is a substring of serializedRoot
-        return serializedSubRoot in serializedRoot   
+        match = serializedSubRoot in serializedRoot 
+
+        # overall: time complexity
+        # overall: space complexity
+        return match   
 ```
 
 ## 235. Lowest Common Ancestor of a Binary Search Tree ::2:: - Medium
@@ -2038,22 +2050,33 @@ Find lowest node that has both p and q in their subtree.
     def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
         
         # Note:
-        # continue traversing down left and irght subtrees to find 
+        # BST traversal: root -> either -> left or -> right
+        # 1. Process -> root : 
+        #    determine if LCA is in left or right
+        # 2. Process -> left or -> right :
+        # Result: find LCA node
         
-        # p and q are smaller -> LCA is in left subtree
+        # process root -> :
+        # p and q are smaller, LCA in left subtree 
         if p.val < root.val and q.val < root.val:
+
+            # process -> left :
             return self.lowestCommonAncestor(root.left, p, q)
 
-        # p and q are smaller -> LCA is in right subtree
+        # process root -> :
+        # p and q are larger, LCA in right subtree
         elif p.val > root.val and q.val > root.val:
+
+            # process -> right :
             return self.lowestCommonAncestor(root.right, p, q)
         
-        # p and q are in different subtrees -> current node is LCA
+        # process root -> :
+        # p and q are in different subtrees, root is LCA
         else:
             return root
 
-        # overall: time complex
-        # overall: space complex
+        # overall: time complexity
+        # overall: space complexity
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2065,23 +2088,37 @@ Find lowest node that has both p and q in their subtree.
 ```python
     def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
         
-        curr = root
-        while curr:
+        # Note:
+        # BST traversal: root -> either -> left or -> right
+        # 1. Process -> root : 
+        #    determine if LCA is in left or right
+        # 2. Process -> left or -> right :
+        # Result: find LCA node
 
-            # p and q are smaller -> LCA is in left subtree
-            if p.val < curr.val and q.val < curr.val:
-                curr = curr.left  # Both on left
+        # iterative root
+        while root:
 
-            # p and q are larger -> LCA is in right subtree
+            # process root -> :
+            # p and q are smaller, LCA in left subtree 
+            if p.val < root.val and q.val < root.val:
+
+                # process -> left :
+                root = root.left
+
+            # process root ->
+            # p and q are larger, LCA in right subtree
             elif p.val > curr.val and q.val > curr.val:
+
+                # process -> right :
                 curr = curr.right
 
-            # p and q are in different subtrees -> current node is LCA
+            # process root -> :
+            # p and q are in different subtrees, root is LCA
             else:
                 return curr
         
-        # overall: time complex
-        # overall: space complex
+        # overall: time complexity
+        # overall: space complexity
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
