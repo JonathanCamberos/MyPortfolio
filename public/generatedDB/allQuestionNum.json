@@ -857,7 +857,7 @@
   },
   "572": {
     "questionNum": 572,
-    "questionTitle": "Subtree of Another Tree ::3::",
+    "questionTitle": "Subtree of Another Tree ::5::",
     "questionDifficulty": "Easy",
     "questionBlurb": "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise. A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node's descendants. The tree tree could also be considered as a subtree of itself.",
     "questionTopics": [
@@ -867,7 +867,7 @@
       "Binary Tree",
       "Hash Function"
     ],
-    "questionLink": "/Notes/leetcode-trees#572-subtree-of-another-tree-3---easy",
+    "questionLink": "/Notes/leetcode-trees#572-subtree-of-another-tree-5---easy",
     "blog": "LeetCode: Trees",
     "lastSubmittedDate": null,
     "coldnessCount": -1

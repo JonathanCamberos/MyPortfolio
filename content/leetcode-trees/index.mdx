@@ -2312,29 +2312,51 @@ that you would have a direct line of sight to (not hidden by right-er nodes)
 ```python
 ```
 
-### Solution 1: BFS Iterative - Tree/DFS Pre order Traversal
+### Solution 1: BFS Pre Order Iterative - Tree/DFS Pre order Traversal
 ```python
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        
+        # Note:
+        # BFS pre order: process level : root -> left -> right
+        # 1. For each level
+        # 2. Process root -> :
+        #    grab length of level, if root is last element in group, add to res
+        # 3. Process -> left -> right :
+        # Result: right most element of each level added
+        
+        # Empty check
         if not root:
             return []
         
+        # right most elements of each level
         result = []
+        
+        # iterative queue
         queue = deque([root])
         
         while queue:
+
+            # process entire level
             level_size = len(queue)
             for i in range(level_size):
+
+                # Process root -> : 
                 node = queue.popleft()
-                # If this is the last node in the current level, capture it
+
+                # Process root -> : 
+                # if this is last element in level, add to res
                 if i == level_size - 1:
                     result.append(node.val)
+
+                # Process -> left -> right : 
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
         
+        # overall: time complexity
+        # overall: space complexity
         return result
-
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2343,24 +2365,43 @@ that you would have a direct line of sight to (not hidden by right-er nodes)
 |  |  |  |  |  |
 
 
-### Solution 2: DFS Pre Order Right-to-Left First Depth Capture  - Tree/DFS Pre order Traversal
+### Solution 2: DFS Pre Order Right to Left First Depth Capture  - Tree/DFS Pre order Traversal
 ```python
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         
+        # Note:
+        # DFS pre order: root -> right -> left
+        # 1. Process root -> : 
+        # 2. Process -> right -> left
+        #    we are exploring right subtree first,
+        #    first time we hit a new depth, we must be at right most node,
+        #    add node to res
+        # Result: right most element of each level added
+
+        # right most elements of each level
         result = []
         
         def dfs(node, depth):
+
+            # Empty check
             if not node:
                 return
-            # If visiting this depth for the first time, this is the rightmost node
+
+            # Process root -> :
+            # if hit new depth, must be at right most node
             if depth == len(result):
                 result.append(node.val)
-            dfs(node.right, depth + 1)  # Prioritize right child
-            dfs(node.left, depth + 1)   # Then left child
-        
-        dfs(root, 0)
-        return result
 
+            # Process -> right -> left
+            dfs(node.right, depth + 1)
+            dfs(node.left, depth + 1)
+        
+        # recursive call on root
+        dfs(root, 0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
