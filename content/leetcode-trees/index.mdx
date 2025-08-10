@@ -1761,7 +1761,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 2: BFS Iterative - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 2: BFS Pre Order Iterative Root Match Then Call isSameTree - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1832,7 +1832,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-### Solution 3: DFS + Serialization String Matching - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 3: DFS Pre Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1877,7 +1877,53 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
+### Solution 4: DFS In Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+```python
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        
+        def serialize(node):
+            if not node:
+                return ",N"
 
+            # In-order: left -> root -> right
+            left_serial = serialize(node.left)
+            root_val = f",{node.val}"
+            right_serial = serialize(node.right)
+            
+            subtree_serial = f"#{left_serial}@{root_val}${right_serial}^"
+            return subtree_serial
+
+        
+        serializedSubRoot = serialize(subRoot)
+        serializedRoot = serialize(root)
+        
+        # Check if serializedSubRoot is a substring of serializedRoot
+        return serializedSubRoot in serializedRoot
+```
+
+### Solution 5: DFS Post Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+```python
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        def serialize(node):
+            # Base case: null marker for missing child
+            if not node:
+                return ",N"
+            
+            # Postorder: left -> right -> root
+            
+            left_serial = serialize(node.left)
+            right_serial = serialize(node.right)
+            
+            # Append root after left and right serialization
+            subTree_serial = f"#{left_serial}@{right_serial},{node.val}^"            
+            return subTree_serial
+        
+        serializedSubRoot = serialize(subRoot)
+        serializedRoot = serialize(root)
+        
+        # Check if serializedSubRoot is a substring of serializedRoot
+        return serializedSubRoot in serializedRoot   
+```
 
 ## 235. Lowest Common Ancestor of a Binary Search Tree ::2:: - Medium
 
