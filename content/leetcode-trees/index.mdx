@@ -2900,21 +2900,38 @@ Create original free given pre and post order traversals.
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
 
+        # Tree:
+        #        1
+        #       / \
+        #      2   3
+        #     / \   \
+        #    4   5   6
+        #             \
+        #              7
+    
+        # Pre order: root -> left -> right
+        # [1, 2, 4, 5, 3, 6, 7]
+
+        # In order: left -> root -> right 
+        # [4, 2, 5, 1, 3, 6, 7]
+
         # Note:
-        # Pre order: root -> left -> root
-        # In order: left -> root -> right
-       
-        # Note:
-        # for in order, original root will be somewhere in middle, thus:
-        # invariant:
+        # Pre order: current root supplier
+        # by iterating over this: root -> left -> right
+
+        # In order: recursive range provider
+        # due to Invariant from: left -> root -> right
         # for all roots -> [ leftSubtree, root, rightSubtree ]
 
         # val -> in order array index
         inorder_index_map = {val: idx for idx, val in enumerate(inorder)}
 
-        # for in order, iterating will decide which tree we are building
+        # iterating over pre order: the current root supplier, 
+        # will determine which tree we are currently building
         pre_idx = 0
 
+
+        # recurse over in order list 
         def array_to_tree(left, right):
             nonlocal pre_idx
 
@@ -2922,24 +2939,26 @@ Create original free given pre and post order traversals.
             if left > right:
                 return None
 
-            # 1. curr root
+            # 1. curr 'root': root -> left -> right
             root_val = preorder[pre_idx]
             
-            # prepare next root
+            # prepare next root ('left'): above becomes -> left -> right
             pre_idx += 1
 
-            # Create curr root node
+            # Create root node
             root = TreeNode(root_val)
 
-            # 2: Find root's index in in order 
-            #    to take advantage of invariant [leftSubtree, root, rightSubtree]
+            # 2: Find root's index for in order 
+            #    to trigger invariant [leftSubtree, root, rightSubtree]
             root_index = inorder_index_map[root_val]
 
-            # 3: given invariant, grab left subtree range for in order array
+            # 3: given invariant, 
+            #    trigger left subtree range for in order array
             left_subtree_left = left
             left_subtree_right = root_index - 1
 
-            # 4: given invariant, grab right subtree range for in order array
+            # 4: given invariant, 
+            #    trigger right subtree range for in order array
             right_subtree_left = root_index + 1
             right_subtree_right = right
 
@@ -2949,11 +2968,16 @@ Create original free given pre and post order traversals.
             # 5: pass] right subtree range
             root.right = array_to_tree(right_subtree_left, right_subtree_right)
 
+            # root with subtrees
             return root
 
-        # initialize bounds
+        # initialize bounds for topmost root
         left_start = 0 
         right_start = len(inorder)-1
+
+        # recurse starting at topmost root, 
+        # rest of tree created by recursion (magic)
+        orig_tree = array_to_tree(left_start, right_start)
 
         # overall: time complexity
         # overall: space complexity 
@@ -2970,66 +2994,71 @@ Create original free given pre and post order traversals.
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
 
-        # Note:
-        # Pre order: root -> left -> root
-        # In order: left -> root -> right
+        # Tree:
+        #        1
+        #       / \
+        #      2   3
+        #     / \   \
+        #    4   5   6
+        #             \
+        #              7
+    
+        # Pre order: root -> left -> right
+        # [1, 2, 4, 5, 3, 6, 7]
+
+        # In order: left -> root -> right 
+        # [4, 2, 5, 1, 3, 6, 7]
 
         # Empty check
         if not preorder or not inorder:
             return None
         
-        # 1: Starting at the root, 
-        #    the algorithm iteratively processes the tree by 
-        #    building subtrees one by one:
+        # 1: topmost root -> preorder[0]
+        #.   iterate over preorder, create and connect with parent
         root = TreeNode(preorder[0])
 
-        # 2: stack:
-        #    holds nodes whose subtrees are still being built
-        #    top of stack, is the previous node waiting for its subtrees
+        # 2: stack: 
+        #    filled by iterative preorder root -> left -> right
+        #    holds roots that are waiting for subtrees
         stack = [root]
 
         # 2: inorder_index:
-        #    holds progress in inOrder array: left -> root -> right
-        #    advances when node has received both children
-        #    (only points to 'root', when 'root' receives left)
-
-        # so we start at 0, since in order: left -> root -> right
+        #  start at bottom left most subtree 0
         inorder_index = 0
-        
-        # 3: start 2nd element: root -> left -> right
-        #.   since we start by processing left subtree
+
+        # In order invariant -> [leftSubtree, root, rightSubtree]
+        # when inorder index pointing to some root:
+        #   1) root has no left subtrees
+        #   2) root's left subtrees have been created and assigned
+
+        # 3: iterate over preorder: root -> left -> right
         for i in range(1, len(preorder)):
 
             # peek top of stack:
-            # previous elem waiting for subtrees
+            # previous node waiting for subtrees
             top = stack[-1]
 
-            # current subtree of previous call (next root) to be added to tree
+            # pre order: subtree of top
             preorder_val = preorder[i]
             
-            # stack: root 
-            # inorder: left -> root -> right
-
-            # compare top of stack's value with inorder_val to decide if:
-            #   1) top != inorder_val : preorder_val is a left child, connect and push to stack
-            #   2) top == inorder_val -> preorder_val is a right child, connect and push to stack
+            # in order: left most complete root
             inorder_val = inorder[inorder_index]
 
-            # still processing left subtree
-            # process -> left
+            # if top of stack is not complete
+            # preorder is the tops left subtree
             if top.val != inorder_val:
 
-                # process -> left -> :
-                # preorder_val is a left child, connect and push to stack        
+                # connect and push to stack,
+                # to find left subtrees subtrees
                 top.left = TreeNode(preorder_val)
                 stack.append(top.left)
                         
-            # finished processed left subtree
-            # process -> right
+            # if top of stack is complete
+            # preorder is the tops right subtree
             else:
                 
-                # keep pop() while initial ' if top.val != inorder_val: '
-                # remains true: 
+                # now we have arrive to top most root,
+                # if in order marks as complete, that means there ar
                 while stack and stack[-1].val == inorder[inorder_index]:
                     top = stack.pop()
                     inorder_index += 1
