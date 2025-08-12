@@ -448,5 +448,16 @@
       "useCaseLink": "/Notes/leetcode-tries#trie-application-trie",
       "blog": "LeetCode: Tries"
     }
+  ],
+  "heap": [
+    {
+      "type": "Heap",
+      "title": "Heap",
+      "summary": "something something",
+      "exampleIntro": "Basic Trie",
+      "codeExample": "def someHeap(root: Optional[TreeNode]) -> str:",
+      "useCaseLink": "/Notes/leetcode-heaps#heap-application-heap",
+      "blog": "LeetCode: Heaps"
+    }
   ]
 }
