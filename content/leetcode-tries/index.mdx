@@ -10,7 +10,454 @@ tags:
 - data structures and algorithms
 ---
 
-## Tries Intro
+## Trie Intro
+
+LeetCode questions regarding tries.
+
+### What is a Trie
 
 Trees but for words!
+
+
+### Trie Application: Trie
+something something 
+
+
+Ex: Basic Trie
+```python
+    def someTrie(root: Optional[TreeNode]) -> str:
+        
+```
+
+## 208. Implement Trie (Prefix Tree) ::1:: - Medium
+
+Topics:  Hash Table, String, Design, Trie
+
+### Intro
+> A trie (pronounced as "try") or prefix tree is a tree data structure used 
+> to efficiently store and retrieve keys in a dataset of strings. There are 
+> various applications of this data structure, such as autocomplete
+> and spellchecker.
+> Implement the Trie class:
+> Trie() Initializes the trie object.
+> void insert(String word) Inserts the string word into the trie.
+> boolean search(String word) Returns true if the string word is in the 
+> trie (i.e., was inserted before), and false otherwise.
+> boolean startsWith(String prefix) Returns true if there is a 
+> previously inserted string word that has the prefix prefix, and
+> false otherwise.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| ["Trie", "insert", "search", "search", "startsWith", "insert", "search"] [[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]] | [null, null, true, false, true, null, true] |
+ 
+Constraints:
+
+1 &leq; word.length, prefix.length &leq; 2000
+
+word and prefix consist only of lowercase English letters.
+
+At most 3 * 10<sup>4</sup> calls in total will be made to insert, search
+and starts with 
+
+### Abstraction
+Implement a trie data structure.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Trie Implementation - Trie/Trie
+```python
+class TrieNode:
+    def __init__(self):
+        # Dictionary to store child nodes: char -> TrieNode
+        self.children = {}
+        # Flag to indicate this node represents the end of a valid word
+        self.is_end = False
+
+
+class Trie:
+    def __init__(self):
+        # Note:
+        # root node does not store any characters itself
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        
+        # Note:
+        #   Insert word character-by-character into the trie
+        #   If a character path doesn't exist, create a new TrieNode
+        #   Time Complexity: O(L), where L = len(word)
+        #   Space Complexity: O(L) extra in worst case if all chars are new
+
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.is_end = True  # Mark completion of word
+
+    def search(self, word: str) -> bool:
+        
+        # Note:
+        #   Traverse the trie following each character
+        #   Return True only if final node marks end of a valid word
+        #   Time Complexity: O(L)
+        #   Space Complexity: O(1)
+        
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return node.is_end
+
+    def startsWith(self, prefix: str) -> bool:
+        
+        # Note:
+        #   Similar to search(), but only checks if prefix path exists
+        #   No need to check is_end flag
+        #   Time Complexity: O(L)
+        #   Space Complexity: O(1)
+        
+        node = self.root
+        for ch in prefix:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return True
+```
+
+
+## 211. Design Add and Search Words Data Structure ::1:: - Medium
+
+Topics:  String, Depth First Search, Design, Trie
+
+### Intro
+> Design a data structure that supports adding new words 
+> and finding if a string matches any previously added string.
+> Implement the WordDictionary class:
+> WordDictionary() Initializes the object.
+> void addWord(word) Adds word to the data structure, 
+> it can be matched later.
+> bool search(word) Returns true if there is any string 
+> in the data structure that matches word or false 
+> otherwise. word may contain dots '.' where dots can 
+> be matched with any letter.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| ["WordDictionary","addWord","addWord","addWord","search","search","search","search"] [[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]] | [null,null,null,null,false,true,true,true] |
+ 
+Constraints:
+
+1 &leq; word.length, prefix.length &leq; 25
+
+word in addWord consists of lowercase English letters.
+
+word in search consist of '.' or lowercase English letters.
+
+There will be at most 2 dots in word for search queries.
+
+At most 10<sup>4</sup> calls will be made to addWord and search.
+
+### Abstraction
+Implement a trie data structure with add work functionality.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Trie Implementation - Trie/Trie
+```python
+class TrieNode:
+    def __init__(self):
+        # Dictionary to store child nodes: char -> TrieNode
+        self.children = {}
+        # Flag to mark the end of a complete word
+        self.is_end = False
+
+
+class WordDictionary:
+    def __init__(self):
+        # Root node does not store any character
+        self.root = TrieNode()
+
+    def addWord(self, word: str) -> None:
+        
+        # Note:
+        #   Inserts a word into the trie character-by-character.
+        #   Creates new TrieNodes if a character path does not exist.
+        #   Time Complexity: O(L), where L = len(word)
+        #   Space Complexity: O(L) extra in worst case if all characters are new.
+        
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.is_end = True  # Mark completion of the word
+
+    def search(self, word: str) -> bool:
+        
+        # Note:
+        #   Uses DFS to handle '.' wildcards, which can match any letter.
+        #   When '.' is found, tries all possible children paths recursively.
+        #   Stops early if a match is found.
+        #   Time Complexity: O(26^d * L) in worst case, 
+        #   where d = number of '.' in word, L = len(word)
+        #   Given constraints (≤ 2 dots), this is efficient.
+        #   Space Complexity: O(L) recursion depth in worst case.
+        
+        def dfs(index: int, node: TrieNode) -> bool:
+            # Base case: reached end of word
+            if index == len(word):
+                return node.is_end
+
+            ch = word[index]
+            if ch == '.':
+                # Try all possible next paths
+                for child_node in node.children.values():
+                    if dfs(index + 1, child_node):
+                        return True
+                return False
+            else:
+                # Regular character: follow the path if it exists
+                if ch not in node.children:
+                    return False
+                return dfs(index + 1, node.children[ch])
+
+        return dfs(0, self.root)
+```
+
+
+
+## 212. Word Search II ::1:: - Medium
+
+Topics:  Hash Table, String, Design, Trie
+
+### Intro
+> Given an m x n board of characters and a list of 
+> strings words, return all words on the board.
+> Each word must be constructed from letters of 
+> sequentially adjacent cells, where adjacent cells are 
+> horizontally or vertically neighboring. The same letter 
+> cell may not be used more than once in a word.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| look at LeetCode question diagram | ["eat","oath"] |
+ 
+Constraints:
+
+m == board.length
+
+n == board[i].length
+
+1 &leq; m, n &leq; 12
+
+board[i][j] is a lowercase English letter.
+
+1 &leq; words.length &leq; 3 * 10<sup>4</sup>
+
+1 &leq; works[i].length &leq; 10
+
+words[i] consists of lowercase English letters.
+
+All the strings of words are unique.
+
+### Abstraction
+Given a board and a list of words, return all words
+from the list that are present on the board.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Trie Implementation - Trie/Trie
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isWord = False
+
+    def addWord(self, word):
+        node = self
+        for c in word:
+            node = node.children.setdefault(c, TrieNode())
+        node.isWord = True
+
+
+class Solution:
+    def findWords(self, board, words):
+        root = TrieNode()
+        for word in words:
+            root.addWord(word)
+
+        rows, cols = len(board), len(board[0])
+        res, visit = set(), set()
+
+        def dfs(r, c, node, path):
+            if (r < 0 or c < 0 or r >= rows or c >= cols or
+                board[r][c] not in node.children or (r, c) in visit):
+                return
+
+            visit.add((r, c))
+            node = node.children[board[r][c]]
+            path += board[r][c]
+
+            if node.isWord:
+                res.add(path)
+
+            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                dfs(r + dr, c + dc, node, path)
+
+            visit.remove((r, c))
+
+        for r in range(rows):
+            for c in range(cols):
+                dfs(r, c, root, "")
+
+        return list(res)
+```
+
+### Solution 2: Trie Implementation Optimal - Trie/Trie
+```python
+class TrieNode:
+    def __init__(self):
+        # Dictionary mapping char -> TrieNode
+        self.children = {}
+        # Stores a complete word at the end node (None if not end)
+        self.word = None  
+
+
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        """
+        Note:
+        - Build a Trie from the given word list for O(1) prefix checking.
+        - Use DFS backtracking from each cell to explore possible words.
+        - Mark visited cells to avoid reuse in a single path.
+        - Time Complexity: O(M * N * 4^L), 
+          but pruned significantly by the Trie (M, N = board size, L = max word length).
+        - Space Complexity: O(sum(len(w) for w in words)) for the Trie +
+          O(L) recursion stack.
+        """
+
+        # Step 1: Build Trie from words
+        root = TrieNode()
+        for word in words:
+            node = root
+            for ch in word:
+                if ch not in node.children:
+                    node.children[ch] = TrieNode()
+                node = node.children[ch]
+            node.word = word  # Store the word at the end node
+
+        rows, cols = len(board), len(board[0])
+        result = []
+
+        # Step 2: DFS Backtracking
+        def backtrack(r: int, c: int, parent: TrieNode):
+            letter = board[r][c]
+            curr_node = parent.children[letter]
+
+            # Check if we found a word
+            if curr_node.word:
+                result.append(curr_node.word)
+                curr_node.word = None  # Avoid duplicate entries
+
+            # Mark the cell as visited
+            board[r][c] = "#"
+
+            # Explore neighbors
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nr, nc = r + dr, c + dc
+                if (
+                    0 <= nr < rows
+                    and 0 <= nc < cols
+                    and board[nr][nc] in curr_node.children
+                ):
+                    backtrack(nr, nc, curr_node)
+
+            # Restore cell value after backtracking
+            board[r][c] = letter
+
+            # Optimization: Remove leaf node to prune search space
+            if not curr_node.children:
+                parent.children.pop(letter)
+
+        # Step 3: Start DFS from each cell if it matches a Trie prefix
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] in root.children:
+                    backtrack(r, c, root)
+
+        return result
+```
 

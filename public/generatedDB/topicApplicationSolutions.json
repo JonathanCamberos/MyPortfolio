@@ -1508,5 +1508,19 @@
         "blog": "LeetCode: Trees"
       }
     ]
+  },
+  "trie": {
+    "trie": [
+      {
+        "number": 1,
+        "name": "Trie Implementation",
+        "type": "trie",
+        "application": "trie",
+        "code": "class TrieNode:\n    def __init__(self):\n        # Dictionary to store child nodes: char -> TrieNode\n        self.children = {}\n        # Flag to indicate this node represents the end of a valid word\n        self.is_end = False\n\n\nclass Trie:\n    def __init__(self):\n        # Note:\n        # root node does not store any characters itself\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        \n        # Note:\n        #   Insert word character-by-character into the trie\n        #   If a character path doesn't exist, create a new TrieNode\n        #   Time Complexity: O(L), where L = len(word)\n        #   Space Complexity: O(L) extra in worst case if all chars are new\n\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.is_end = True  # Mark completion of word\n\n    def search(self, word: str) -> bool:\n        \n        # Note:\n        #   Traverse the trie following each character\n        #   Return True only if final node marks end of a valid word\n        #   Time Complexity: O(L)\n        #   Space Complexity: O(1)\n        \n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return node.is_end\n\n    def startsWith(self, prefix: str) -> bool:\n        \n        # Note:\n        #   Similar to search(), but only checks if prefix path exists\n        #   No need to check is_end flag\n        #   Time Complexity: O(L)\n        #   Space Complexity: O(1)\n        \n        node = self.root\n        for ch in prefix:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return True",
+        "questionNumber": 208,
+        "solutionLink": "/Notes/leetcode-tries#solution-1-trie-implementation---trietrie",
+        "blog": "LeetCode: Tries"
+      }
+    ]
   }
 }

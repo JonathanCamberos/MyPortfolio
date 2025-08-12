@@ -437,5 +437,16 @@
       "useCaseLink": "/Notes/leetcode-trees#tree-application-bst-guided-iterative-traversal",
       "blog": "LeetCode: Trees"
     }
+  ],
+  "trie": [
+    {
+      "type": "Trie",
+      "title": "Trie",
+      "summary": "something something",
+      "exampleIntro": "Basic Trie",
+      "codeExample": "def someTrie(root: Optional[TreeNode]) -> str:",
+      "useCaseLink": "/Notes/leetcode-tries#trie-application-trie",
+      "blog": "LeetCode: Tries"
+    }
   ]
 }
