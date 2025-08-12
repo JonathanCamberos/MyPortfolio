@@ -97,8 +97,8 @@ class KthLargest:
         # 1. Maintain a min-heap of size k containing the k largest elements seen so far.
         # 2. The heap root (heap[0]) is the kth largest element.
         # 3. When adding a new element:
-        #    - If heap size < k, push new element.
-        #    - Else if new element > heap root, pop root and push new element.
+        #    if heap size < k, push new element.
+        #    else if new element > heap root, pop root and push new element.
         # 4. This ensures O(log k) time per add.
         
         self.k = k

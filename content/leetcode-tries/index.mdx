@@ -16,17 +16,123 @@ LeetCode questions regarding tries.
 
 ### What is a Trie
 
-Trees but for words!
+A Trie, also known as a prefix tree, is a tree data structure
+used for storing and querying strings (words) efficiently
+
+### Trie Characteristics
+
+Tries are a special type of tree, characterized by:
+
+1. Nodes: Each node stores a character
+2. Edges: Represent transitions from one character to the next
+3. Root: Represents an empty string prefix
+4. Word End Flag: Nodes mark the end of a valid word via a boolean or by storing the complete word
+5. Subtrees: Nodes can have multiple children, one per possible next character.
+6. No Cycles: Tries are acyclic graphs
+7. Time and Space Tradeoff: Space complexity can be large O(sum of all chars), but allows for efficient prefix queries O(1) ** check this **
+8. Alphabet Size: Can be optimized based on the expected character set (26 for lowercase English)
+
+### Trie Representation
+
+Tries are usually represented in TrieNodes which hold a dictionary of char -> subtrees.
+
+### Trie IRL
+
+Autocomplete Systems: Find all words starting with a given prefix
+
+Spell Checkers: Quickly find if a word exists or suggest corrections
+
+Prefix Matching: Search for all strings sharing a common prefix
+
+IP Routing: Longest prefix matching in networking
+
+Word Games: Efficiently verify and search word lists
 
 
-### Trie Application: Trie
-something something 
+### Trie Visualization
 
-
-Ex: Basic Trie
+Example words inserted: ["cat", "car", "dog"]
 ```python
-    def someTrie(root: Optional[TreeNode]) -> str:
+         root
+        /    \
+       c      d
+      /        \
+     a          o
+    /  \         \
+    t   r         g
+  (end)  (end)   (end)
+```
+
+
+### Trie Application: Trie Insert and Search Recursive
+Traversal Order: Insert/Search characters one by one from root to leaf nodes
+Mindset: At each char, check subtrees and create new nodes if needed (insert) or check existence (search)
+Trick: Ill follow the string one char at a time, building or verifying the path as I go
+
+Ex: Basic Trie Insert and Search Recursive
+```python
+class TrieNode:
+    def __init__(self):
+        # Children dictionary: char -> TrieNode
+        self.children = {}
+        # Indicates if node marks end of a valid word
+        self.is_end_of_word = False
+
+class Trie:
+    def __init__(self):
+        # Root node represents empty prefix
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        def insert_recursive(node: TrieNode, idx: int):
+            # Note:
+            # Base case: if index reached end of word, mark node as word end
+            if idx == len(word):
+                node.is_end_of_word = True
+                return
+            
+            ch = word[idx]
+            
+            # If no child node for current char, create one
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            
+            # Recursive call to next character
+            insert_recursive(node.children[ch], idx + 1)
         
+        # Start recursive insertion at root and index 0
+        insert_recursive(self.root, 0)
+
+    def search(self, word: str) -> bool:
+        def search_recursive(node: TrieNode, idx: int) -> bool:
+            # Note:
+            # Base case: if index reached end, check if current node marks end of a word
+            if idx == len(word):
+                return node.is_end_of_word
+            
+            ch = word[idx]
+
+            # If character path missing, word does not exist
+            if ch not in node.children:
+                return False
+            
+            # Recursive call to next character
+            return search_recursive(node.children[ch], idx + 1)
+        
+        # Start recursive search at root and index 0
+        return search_recursive(self.root, 0)
+        
+
+    # ["cat", "car", "dog"]:
+
+    #             root
+    #            /    \
+    #           c      d
+    #          /        \
+    #         a          o
+    #        /  \         \
+    #        t   r         g
+    #      (end) (end)   (end)
 ```
 
 ## 208. Implement Trie (Prefix Tree) ::1:: - Medium
@@ -88,7 +194,7 @@ Implement a trie data structure.
 ```python
 ```
 
-### Solution 1: Trie Implementation - Trie/Trie
+### Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
     def __init__(self):
@@ -244,7 +350,7 @@ Implement a trie data structure with add work functionality.
 ```python
 ```
 
-### Solution 1: Trie Implementation - Trie/Trie
+### Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
     def __init__(self):
@@ -397,7 +503,7 @@ from the list that are present on the board.
 ```python
 ```
 
-### Solution 1: Trie Implementation - Trie/Trie
+### Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
 
@@ -501,7 +607,7 @@ class Solution:
         return list(res)
 ```
 
-### Solution 2: Trie Implementation Optimal - Trie/Trie
+### Solution 2: Trie Implementation Optimal - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
     def __init__(self):

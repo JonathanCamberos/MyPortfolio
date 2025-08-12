@@ -441,11 +441,11 @@
   "trie": [
     {
       "type": "Trie",
-      "title": "Trie",
-      "summary": "something something",
-      "exampleIntro": "Basic Trie",
-      "codeExample": "def someTrie(root: Optional[TreeNode]) -> str:",
-      "useCaseLink": "/Notes/leetcode-tries#trie-application-trie",
+      "title": "Trie Insert and Search Recursive",
+      "summary": "Traversal Order: Insert/Search characters one by one from root to leaf nodes Mindset: At each char, check subtrees and create new nodes if needed (insert) or check existence (search) Trick: Ill follow the string one char at a time, building or verifying the path as I go",
+      "exampleIntro": "Basic Trie Insert and Search Recursive",
+      "codeExample": "class TrieNode:\n    def __init__(self):\n        # Children dictionary: char -> TrieNode\n        self.children = {}\n        # Indicates if node marks end of a valid word\n        self.is_end_of_word = False\n\nclass Trie:\n    def __init__(self):\n        # Root node represents empty prefix\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        def insert_recursive(node: TrieNode, idx: int):\n            # Note:\n            # Base case: if index reached end of word, mark node as word end\n            if idx == len(word):\n                node.is_end_of_word = True\n                return\n            \n            ch = word[idx]\n            \n            # If no child node for current char, create one\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            \n            # Recursive call to next character\n            insert_recursive(node.children[ch], idx + 1)\n        \n        # Start recursive insertion at root and index 0\n        insert_recursive(self.root, 0)\n\n    def search(self, word: str) -> bool:\n        def search_recursive(node: TrieNode, idx: int) -> bool:\n            # Note:\n            # Base case: if index reached end, check if current node marks end of a word\n            if idx == len(word):\n                return node.is_end_of_word\n            \n            ch = word[idx]\n\n            # If character path missing, word does not exist\n            if ch not in node.children:\n                return False\n            \n            # Recursive call to next character\n            return search_recursive(node.children[ch], idx + 1)\n        \n        # Start recursive search at root and index 0\n        return search_recursive(self.root, 0)\n        \n\n    # [\"cat\", \"car\", \"dog\"]:\n\n    #             root\n    #            /    \\\n    #           c      d\n    #          /        \\\n    #         a          o\n    #        /  \\         \\\n    #        t   r         g\n    #      (end) (end)   (end)",
+      "useCaseLink": "/Notes/leetcode-tries#trie-application-trie-insert-and-search-recursive",
       "blog": "LeetCode: Tries"
     }
   ],
