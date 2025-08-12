@@ -651,8 +651,8 @@
   },
   "212": {
     "questionNum": 212,
-    "questionTitle": "Word Search II ::1::",
-    "questionDifficulty": "Medium",
+    "questionTitle": "Word Search II ::2::",
+    "questionDifficulty": "Hard",
     "questionBlurb": "Given an m x n board of characters and a list of strings words, return all words on the board. Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.",
     "questionTopics": [
       "Hash Table",
@@ -660,7 +660,7 @@
       "Design",
       "Trie"
     ],
-    "questionLink": "/Notes/leetcode-tries#212-word-search-ii-1---medium",
+    "questionLink": "/Notes/leetcode-tries#212-word-search-ii-2---hard",
     "blog": "LeetCode: Tries",
     "lastSubmittedDate": null,
     "coldnessCount": -1

@@ -92,64 +92,96 @@ Implement a trie data structure.
 ```python
 class TrieNode:
     def __init__(self):
-        # Dictionary to store child nodes: char -> TrieNode
-        self.children = {}
-        # Flag to indicate this node represents the end of a valid word
+        # list of char subtrees for current node: char -> TrieNode
+        self.subtrees = {}
+        # Indicates end of a valid word
         self.is_end = False
 
 
 class Trie:
+
     def __init__(self):
+
         # Note:
-        # root node does not store any characters itself
+        # root node does not store any chars itself,
+        # it only points to child chars
         self.root = TrieNode()
 
+    # time complexity:
+    # space complexity:
     def insert(self, word: str) -> None:
         
         # Note:
-        #   Insert word character-by-character into the trie
-        #   If a character path doesn't exist, create a new TrieNode
-        #   Time Complexity: O(L), where L = len(word)
-        #   Space Complexity: O(L) extra in worst case if all chars are new
+        #   Insert word char by char into the trie
+        #   If a char path does not exist, create a new TrieNode
 
+        # start search at root
         node = self.root
-        for ch in word:
-            if ch not in node.children:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.is_end = True  # Mark completion of word
 
+        # insert each char
+        for c in word:
+
+            # if subtree does not exist, create new
+            if c not in node.subtrees:
+                node.subtrees[c] = TrieNode()
+
+            # iterate to subtree
+            node = node.subtrees[c]
+
+        # mark last char
+        node.is_end = True
+
+    # time complexity:
+    # space complexity:
     def search(self, word: str) -> bool:
         
         # Note:
         #   Traverse the trie following each character
         #   Return True only if final node marks end of a valid word
-        #   Time Complexity: O(L)
-        #   Space Complexity: O(1)
         
+        # start at root
         node = self.root
-        for ch in word:
-            if ch not in node.children:
+
+        # for each char
+        for c in word:
+
+            # if subtree does not exist, work is not in trie
+            if c not in node.subtrees:
                 return False
-            node = node.children[ch]
+
+            # iterate to subtree
+            node = node.subtrees[c]
+        
+        # check if valid end of word
         return node.is_end
 
+    # time complexity:
+    # space complexity:
     def startsWith(self, prefix: str) -> bool:
         
         # Note:
         #   Similar to search(), but only checks if prefix path exists
         #   No need to check is_end flag
-        #   Time Complexity: O(L)
-        #   Space Complexity: O(1)
         
+        # start at root
         node = self.root
-        for ch in prefix:
-            if ch not in node.children:
-                return False
-            node = node.children[ch]
-        return True
-```
 
+        # for each char
+        for c in prefix:
+
+            # if subtree does not exist, false
+            if c not in node.subtrees:
+                return False
+            
+            # iterate to subtree
+            node = node.subtrees[c]
+
+        # entire prefix exists, true
+        return True
+
+    # overall: time complexity
+    # overall: space complexity
+```
 
 ## 211. Design Add and Search Words Data Structure ::1:: - Medium
 
@@ -216,67 +248,93 @@ Implement a trie data structure with add work functionality.
 ```python
 class TrieNode:
     def __init__(self):
-        # Dictionary to store child nodes: char -> TrieNode
-        self.children = {}
-        # Flag to mark the end of a complete word
+        # list of char subtrees for current node: char -> TrieNode
+        self.subtrees = {}
+        # Indicates end of a valid word
         self.is_end = False
 
 
 class WordDictionary:
     def __init__(self):
-        # Root node does not store any character
+        
+        # Note:
+        # root node does not store any chars itself,
+        # it only points to child chars
         self.root = TrieNode()
 
+    # time complexity:
+    # space complexity: 
     def addWord(self, word: str) -> None:
         
         # Note:
         #   Inserts a word into the trie character-by-character.
         #   Creates new TrieNodes if a character path does not exist.
-        #   Time Complexity: O(L), where L = len(word)
-        #   Space Complexity: O(L) extra in worst case if all characters are new.
         
+        # start at root
         node = self.root
-        for ch in word:
-            if ch not in node.children:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.is_end = True  # Mark completion of the word
 
+        # for each char
+        for c in word:
+
+            # if subtree does not exist, create
+            if c not in node.subtrees:
+                node.subtrees[c] = TrieNode()
+
+            # iterate to subtree
+            node = node.subtrees[c]
+
+        # mark valid end of word
+        node.is_end = True
+
+
+    # time complexity:
+    # space complexity:
     def search(self, word: str) -> bool:
         
         # Note:
-        #   Uses DFS to handle '.' wildcards, which can match any letter.
-        #   When '.' is found, tries all possible children paths recursively.
-        #   Stops early if a match is found.
-        #   Time Complexity: O(26^d * L) in worst case, 
-        #   where d = number of '.' in word, L = len(word)
-        #   Given constraints (≤ 2 dots), this is efficient.
-        #   Space Complexity: O(L) recursion depth in worst case.
+        #   In previous trie, all searches are deterministic
+        #   Here due to wildcard '.', we must try all possible subtree paths
+        #   and stop early if a match is found.
         
         def dfs(index: int, node: TrieNode) -> bool:
-            # Base case: reached end of word
+            
+            # Base case: check if valid end of word
             if index == len(word):
                 return node.is_end
 
-            ch = word[index]
-            if ch == '.':
-                # Try all possible next paths
-                for child_node in node.children.values():
+            # grab curr char
+            c = word[index]
+
+            # non deterministic: search all subtrees
+            if c == '.':
+
+                # try all subtree paths
+                for child_node in node.subtrees.values():
+
+                    # early exit if match is found
                     if dfs(index + 1, child_node):
                         return True
+
+                # explored all paths, string does not exist
                 return False
+
+            # deterministic: check if subtree exists
             else:
-                # Regular character: follow the path if it exists
-                if ch not in node.children:
+                # char subtree does not exist
+                if c not in node.subtrees:
                     return False
-                return dfs(index + 1, node.children[ch])
+
+                # continue down char subtree
+                return dfs(index + 1, node.subtrees[c])
 
         return dfs(0, self.root)
+
+    
+    # overall: time complexity
+    # overall: space complexity
 ```
 
-
-
-## 212. Word Search II ::1:: - Medium
+## 212. Word Search II ::2:: - Hard
 
 Topics:  Hash Table, String, Design, Trie
 
@@ -342,47 +400,104 @@ from the list that are present on the board.
 ### Solution 1: Trie Implementation - Trie/Trie
 ```python
 class TrieNode:
+
     def __init__(self):
-        self.children = {}
+        # list of char subtrees for current node: char -> TrieNode
+        self.subtrees = {}
+        # Indicates end of a valid word
         self.isWord = False
 
+    # time complexity:
+    # space complexity:
     def addWord(self, word):
+        # updated current node
         node = self
+
+        # for each char
         for c in word:
-            node = node.children.setdefault(c, TrieNode())
+
+            # if subtree does not exist, create
+            if c not in node.subtrees:
+                node.subtrees[c] = TrieNode()
+            
+            # iterate to subtree 
+            node = node.subtrees[c]
+        
+        # set as valid end of word
         node.isWord = True
 
 
 class Solution:
+
+    # time complexity:
+    # space complexity:
     def findWords(self, board, words):
+
+        # Note:
+        # 1. We build a Trie from the provided word list for O(1) prefix checking
+        # 2. DFS from each cell to explore all possible words
+        # 3. Mark visited cells in place by temporarily replacing char with '#'
+        #    to avoid using extra memory for tracking visited cells
+        # 4. Once word is found, add to results and remove from Trie (set node.Word=None)
+        #    to prevent duplicate matches
+        # 5. Prune Trie nodes by removing leaf nodes to reduce unnecessary DFS branches 
+
+        # build Trie for provided words
         root = TrieNode()
         for word in words:
             root.addWord(word)
 
+        # board boundaries
         rows, cols = len(board), len(board[0])
+
+        # tracking 
         res, visit = set(), set()
 
         def dfs(r, c, node, path):
-            if (r < 0 or c < 0 or r >= rows or c >= cols or
-                board[r][c] not in node.children or (r, c) in visit):
+
+            # Boundary check and pruning:
+            
+            #   check board boundaries
+            if r < 0 or c < 0 or r >= rows or c >= cols:
+                return   
+            
+            # curr board char exists in Trie subtrees of node
+            if board[r][c] not in node.subtrees: 
                 return
 
+            # curr cell has already been visited to avoid reuse
+            if (r, c) in visit:
+                return
+ 
+            # Not yet visited, continue dfs
+
+            # add to visited 
             visit.add((r, c))
-            node = node.children[board[r][c]]
+            
+            # grab subtrees
+            node = node.subtrees[board[r][c]]
+            # track char path
             path += board[r][c]
 
+            # check if valid end of word
             if node.isWord:
                 res.add(path)
 
+            # dfs: up, down, left, and left from current node
             for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                 dfs(r + dr, c + dc, node, path)
 
+            # remove from curr node from visited
             visit.remove((r, c))
 
+        # explore each cell in grid
         for r in range(rows):
             for c in range(cols):
+                # explore current cell
                 dfs(r, c, root, "")
 
+        # overall: time complexity
+        # overall: space complexity
         return list(res)
 ```
 
@@ -390,74 +505,91 @@ class Solution:
 ```python
 class TrieNode:
     def __init__(self):
-        # Dictionary mapping char -> TrieNode
-        self.children = {}
-        # Stores a complete word at the end node (None if not end)
-        self.word = None  
-
+        # list of char subtrees for current node: char -> TrieNode
+        self.subtrees = {}
+        # store complete word at end node, None if not end
+        self.word = None
 
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        """
-        Note:
-        - Build a Trie from the given word list for O(1) prefix checking.
-        - Use DFS backtracking from each cell to explore possible words.
-        - Mark visited cells to avoid reuse in a single path.
-        - Time Complexity: O(M * N * 4^L), 
-          but pruned significantly by the Trie (M, N = board size, L = max word length).
-        - Space Complexity: O(sum(len(w) for w in words)) for the Trie +
-          O(L) recursion stack.
-        """
-
-        # Step 1: Build Trie from words
+        
+        # Note:
+        # 1. Build a Trie from the given word list for O(1) prefix checking.
+        # 2. DFS from each cell to explore all possible words
+        # 3. Mark visited cells in place by temporarily replacing char with '#'
+        # 4. Once word is found, add to results and remove from Trie (set node.Word=None)
+        #    to prevent duplicate matches
+        # 5. Prune Trie nodes by removing leaf nodes to reduce unnecessary DFS branches 
+        
+        # build Trie for provided words
         root = TrieNode()
         for word in words:
             node = root
-            for ch in word:
-                if ch not in node.children:
-                    node.children[ch] = TrieNode()
-                node = node.children[ch]
-            node.word = word  # Store the word at the end node
+            for c in word:
+                
+                # if subtree does not exist, create
+                if c not in node.subtrees:
+                    node.subtrees[c] = TrieNode()
+                # iterate to subtree
+                node = node.subtrees[c]
 
+            # add word to end of list 
+            node.word = word
+
+        # grid boundaries
         rows, cols = len(board), len(board[0])
+
+        # res
         result = []
 
-        # Step 2: DFS Backtracking
         def backtrack(r: int, c: int, parent: TrieNode):
+            
+            # grab curr char
             letter = board[r][c]
-            curr_node = parent.children[letter]
 
-            # Check if we found a word
+            # grab node for curr char
+            curr_node = parent.subtrees[letter]
+
+            # if valid end of word
             if curr_node.word:
                 result.append(curr_node.word)
-                curr_node.word = None  # Avoid duplicate entries
+                # remove word to avoid duplicates
+                curr_node.word = None  
 
-            # Mark the cell as visited
+            # mark the cell as visited
             board[r][c] = "#"
 
-            # Explore neighbors
-            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                nr, nc = r + dr, c + dc
-                if (
-                    0 <= nr < rows
-                    and 0 <= nc < cols
-                    and board[nr][nc] in curr_node.children
-                ):
+            # dfs: up, down, left, and right from curr node
+            for (dr, dc) in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                
+                # new rows and columns
+                (nr, nc) = r + dr, c + dc
+                
+                # ignore dfs if invalid
+                if (0 <= nr < rows and 
+                    0 <= nc < cols and 
+                    board[nr][nc] in curr_node.subtrees):
                     backtrack(nr, nc, curr_node)
 
-            # Restore cell value after backtracking
+            # restore cell (unvisited)
             board[r][c] = letter
 
-            # Optimization: Remove leaf node to prune search space
-            if not curr_node.children:
-                parent.children.pop(letter)
+            # Optimization: 
+            # Remove leaf node to prune search space
+            # if char has no more subtrees, remove from search space
+            # (which will prune as we return recursively)
+            if not curr_node.subtrees:
+                parent.subtrees.pop(letter)
 
-        # Step 3: Start DFS from each cell if it matches a Trie prefix
+        # dfs from all cells
         for r in range(rows):
             for c in range(cols):
-                if board[r][c] in root.children:
+                # for curr cell
+                if board[r][c] in root.subtrees:
                     backtrack(r, c, root)
 
+        # overall: time complexity
+        # overall: space complexity
         return result
 ```
 
