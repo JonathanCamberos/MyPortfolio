@@ -983,6 +983,40 @@
       "blog": "LeetCode: Tries"
     }
   ],
+  "211": [
+    {
+      "number": 1,
+      "name": "Trie Implementation",
+      "type": "trie",
+      "application": "trie",
+      "code": "class TrieNode:\n    def __init__(self):\n        # Dictionary to store child nodes: char -> TrieNode\n        self.children = {}\n        # Flag to mark the end of a complete word\n        self.is_end = False\n\n\nclass WordDictionary:\n    def __init__(self):\n        # Root node does not store any character\n        self.root = TrieNode()\n\n    def addWord(self, word: str) -> None:\n        \n        # Note:\n        #   Inserts a word into the trie character-by-character.\n        #   Creates new TrieNodes if a character path does not exist.\n        #   Time Complexity: O(L), where L = len(word)\n        #   Space Complexity: O(L) extra in worst case if all characters are new.\n        \n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.is_end = True  # Mark completion of the word\n\n    def search(self, word: str) -> bool:\n        \n        # Note:\n        #   Uses DFS to handle '.' wildcards, which can match any letter.\n        #   When '.' is found, tries all possible children paths recursively.\n        #   Stops early if a match is found.\n        #   Time Complexity: O(26^d * L) in worst case, \n        #   where d = number of '.' in word, L = len(word)\n        #   Given constraints (≤ 2 dots), this is efficient.\n        #   Space Complexity: O(L) recursion depth in worst case.\n        \n        def dfs(index: int, node: TrieNode) -> bool:\n            # Base case: reached end of word\n            if index == len(word):\n                return node.is_end\n\n            ch = word[index]\n            if ch == '.':\n                # Try all possible next paths\n                for child_node in node.children.values():\n                    if dfs(index + 1, child_node):\n                        return True\n                return False\n            else:\n                # Regular character: follow the path if it exists\n                if ch not in node.children:\n                    return False\n                return dfs(index + 1, node.children[ch])\n\n        return dfs(0, self.root)",
+      "questionNumber": 211,
+      "solutionLink": "/Notes/leetcode-tries#solution-1-trie-implementation---trietrie",
+      "blog": "LeetCode: Tries"
+    }
+  ],
+  "212": [
+    {
+      "number": 1,
+      "name": "Trie Implementation",
+      "type": "trie",
+      "application": "trie",
+      "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.isWord = False\n\n    def addWord(self, word):\n        node = self\n        for c in word:\n            node = node.children.setdefault(c, TrieNode())\n        node.isWord = True\n\n\nclass Solution:\n    def findWords(self, board, words):\n        root = TrieNode()\n        for word in words:\n            root.addWord(word)\n\n        rows, cols = len(board), len(board[0])\n        res, visit = set(), set()\n\n        def dfs(r, c, node, path):\n            if (r < 0 or c < 0 or r >= rows or c >= cols or\n                board[r][c] not in node.children or (r, c) in visit):\n                return\n\n            visit.add((r, c))\n            node = node.children[board[r][c]]\n            path += board[r][c]\n\n            if node.isWord:\n                res.add(path)\n\n            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:\n                dfs(r + dr, c + dc, node, path)\n\n            visit.remove((r, c))\n\n        for r in range(rows):\n            for c in range(cols):\n                dfs(r, c, root, \"\")\n\n        return list(res)",
+      "questionNumber": 212,
+      "solutionLink": "/Notes/leetcode-tries#solution-1-trie-implementation---trietrie",
+      "blog": "LeetCode: Tries"
+    },
+    {
+      "number": 2,
+      "name": "Trie Implementation Optimal",
+      "type": "trie",
+      "application": "trie",
+      "code": "class TrieNode:\n    def __init__(self):\n        # Dictionary mapping char -> TrieNode\n        self.children = {}\n        # Stores a complete word at the end node (None if not end)\n        self.word = None  \n\n\nclass Solution:\n    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:\n        \"\"\"\n        Note:\n        - Build a Trie from the given word list for O(1) prefix checking.\n        - Use DFS backtracking from each cell to explore possible words.\n        - Mark visited cells to avoid reuse in a single path.\n        - Time Complexity: O(M * N * 4^L), \n          but pruned significantly by the Trie (M, N = board size, L = max word length).\n        - Space Complexity: O(sum(len(w) for w in words)) for the Trie +\n          O(L) recursion stack.\n        \"\"\"\n\n        # Step 1: Build Trie from words\n        root = TrieNode()\n        for word in words:\n            node = root\n            for ch in word:\n                if ch not in node.children:\n                    node.children[ch] = TrieNode()\n                node = node.children[ch]\n            node.word = word  # Store the word at the end node\n\n        rows, cols = len(board), len(board[0])\n        result = []\n\n        # Step 2: DFS Backtracking\n        def backtrack(r: int, c: int, parent: TrieNode):\n            letter = board[r][c]\n            curr_node = parent.children[letter]\n\n            # Check if we found a word\n            if curr_node.word:\n                result.append(curr_node.word)\n                curr_node.word = None  # Avoid duplicate entries\n\n            # Mark the cell as visited\n            board[r][c] = \"#\"\n\n            # Explore neighbors\n            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:\n                nr, nc = r + dr, c + dc\n                if (\n                    0 <= nr < rows\n                    and 0 <= nc < cols\n                    and board[nr][nc] in curr_node.children\n                ):\n                    backtrack(nr, nc, curr_node)\n\n            # Restore cell value after backtracking\n            board[r][c] = letter\n\n            # Optimization: Remove leaf node to prune search space\n            if not curr_node.children:\n                parent.children.pop(letter)\n\n        # Step 3: Start DFS from each cell if it matches a Trie prefix\n        for r in range(rows):\n            for c in range(cols):\n                if board[r][c] in root.children:\n                    backtrack(r, c, root)\n\n        return result",
+      "questionNumber": 212,
+      "solutionLink": "/Notes/leetcode-tries#solution-2-trie-implementation-optimal---trietrie",
+      "blog": "LeetCode: Tries"
+    }
+  ],
   "217": [
     {
       "number": 1,

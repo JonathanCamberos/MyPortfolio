@@ -633,6 +633,38 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "211": {
+    "questionNum": 211,
+    "questionTitle": "Design Add and Search Words Data Structure ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Design a data structure that supports adding new words and finding if a string matches any previously added string. Implement the WordDictionary class: WordDictionary() Initializes the object. void addWord(word) Adds word to the data structure, it can be matched later. bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise. word may contain dots '.' where dots can be matched with any letter.",
+    "questionTopics": [
+      "String",
+      "Depth First Search",
+      "Design",
+      "Trie"
+    ],
+    "questionLink": "/Notes/leetcode-tries#211-design-add-and-search-words-data-structure-1---medium",
+    "blog": "LeetCode: Tries",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "212": {
+    "questionNum": 212,
+    "questionTitle": "Word Search II ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an m x n board of characters and a list of strings words, return all words on the board. Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Design",
+      "Trie"
+    ],
+    "questionLink": "/Notes/leetcode-tries#212-word-search-ii-1---medium",
+    "blog": "LeetCode: Tries",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "217": {
     "questionNum": 217,
     "questionTitle": "Contains Duplicate ::2::",
