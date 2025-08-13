@@ -318,7 +318,7 @@ Implement a heap that will keep track of the kth highest score for a data stream
 ```python
 ```
 
-### Solution 1: heap - Heap/Heap
+### Solution 1: Min Heap of Size k - Heap/Heap
 ```python
 class KthLargest:
     def __init__(self, k: int, nums: list[int]):
@@ -410,33 +410,687 @@ stone loses weight equal to the weight of the less heavy stone.
 ```python
 ```
 
-### Solution 1: heap - Heap/Heap
+### Solution 1: Max Heap - Heap/Heap
 ```python
-class KthLargest:
-    def __init__(self, k: int, nums: list[int]):
+    def lastStoneWeight(self, stones: list[int]) -> int:
         # Note:
-        # 1. Maintain a min-heap of size k containing the k largest elements seen so far.
-        # 2. The heap root (heap[0]) is the kth largest element.
-        # 3. When adding a new element:
-        #    if heap size < k, push new element.
-        #    else if new element > heap root, pop root and push new element.
-        # 4. This ensures O(log k) time per add.
+        # 1. We need to repeatedly take the two heaviest stones.
+        # 2. Python's heapq is a min-heap, so to simulate a max-heap:
+        #    store each stone as its negative value.
+        # 3. Pop the two largest (most negative) stones, smash them, and push the result
+        #    back into the heap (if not zero).
+        # 4. Continue until at most one stone remains.
+        # 5. Return that stone's weight, or 0 if no stones left.
+        #
+        # Time Complexity: O(n log n) — heapifying + repeated pop/push operations.
+        # Space Complexity: O(n) — storing all stones in heap.
+
+        # Convert all stones to negative to simulate max-heap
+        maxHeap = [-stone for stone in stones]
+        heapq.heapify(maxHeap)
+
+        while len(maxHeap) > 1:
+            # Pop two heaviest stones
+            first = -heapq.heappop(maxHeap)  # largest
+            second = -heapq.heappop(maxHeap) # second largest
+
+            if first != second:
+                # Push the difference back (negative for max-heap)
+                heapq.heappush(maxHeap, -(first - second))
+
+        # Return last stone if exists, else 0
+        return -maxHeap[0] if maxHeap else 0
+```
+
+## 973. K Closest Points to Origin ::2:: - Medium
+
+Topics:  Array, Math, Divide and Conquer, Geometry, Sorting, Heap (Priority Queue), Quickselect
+
+### Intro
+> Given an array of points where points[i] = [x_i, y_i] represents 
+> a point on the X-Y plane and an integer k, return the k closest 
+> points to the origin (0, 0).
+> The distance between two points on the X-Y plane is the Euclidean 
+> distance: sqrt((x_1, x-2)^2 + (y_1 + y_2)^2)
+> You may return the answer in any order. The answer is 
+> guaranteed to be unique (except for the order that it is in).
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| points = [[1,3],[-2,2]], k = 1 | [[-2, 2]] |
+| points = [[3,3],[5,-1],[-2,4]], k = 2 | [[3,3],[-2,4]] |
+
+Constraints:
+
+1 &leq; k &leq; points.length &leq; 10<sup>4</sup>
+
+-10<sup>4</sup> &leq; x_1, y_i &leq; 10<sup>4</sup>
+
+### Abstraction
+Given a list of point on a X-Y grid, find the k closest points to the origin.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Max Heap of size k - Heap/Heap
+```python
+    def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
+        # Note:
+        # 1. We want the k points with the smallest Euclidean distances from (0, 0).
+        # 2. Instead of computing sqrt(x^2 + y^2), we can use the squared distance x^2 + y^2
+        #    because sqrt is monotonic and doesn't change order.
+        # 3. Approach:
+        #    - Use a max-heap (store negative distances) of size k.
+        #    - Iterate over points:
+        #         if heap size < k: push (-distance, point)
+        #         else if current distance < largest distance in heap: pop and push
+        #    - This ensures we always keep k closest points in O(n log k) time.
+        # 4. Complexity:
+        #    - Time: O(n log k) — each heap push/pop is O(log k)
+        #    - Space: O(k) — heap stores k elements.
+
+        max_heap = []  # stores (-distance, [x, y])
+
+        for x, y in points:
+            dist = x * x + y * y  # squared distance
+            if len(max_heap) < k:
+                heapq.heappush(max_heap, (-dist, [x, y]))
+            else:
+                if dist < -max_heap[0][0]:  # if closer than farthest in heap
+                    heapq.heapreplace(max_heap, (-dist, [x, y]))
+
+        return [point for (_, point) in max_heap]
+```
+
+### Solution 2: QuickSelect - Heap/Heap
+```python
+    def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
+        # Helper: squared distance to origin
+        def dist(i: int) -> int:
+            return points[i][0] ** 2 + points[i][1] ** 2
         
-        self.k = k
-        self.minHeap = []
+        def partition(left: int, right: int, pivot_index: int) -> int:
+            pivot_dist = dist(pivot_index)
+            # Move pivot to end
+            points[pivot_index], points[right] = points[right], points[pivot_index]
+            store_index = left
+            
+            # Move all points closer than pivot to the left
+            for i in range(left, right):
+                if dist(i) < pivot_dist:
+                    points[store_index], points[i] = points[i], points[store_index]
+                    store_index += 1
+            
+            # Move pivot to final place
+            points[right], points[store_index] = points[store_index], points[right]
+            return store_index
+        
+        def quickselect(left: int, right: int, k_smallest: int):
+            """Sort the array such that the k_smallest elements are in first k_smallest slots."""
+            if left >= right:
+                return
+            
+            pivot_index = random.randint(left, right)
+            pivot_index = partition(left, right, pivot_index)
+            
+            # Recurse into the part that contains the k_smallest
+            if k_smallest < pivot_index:
+                quickselect(left, pivot_index - 1, k_smallest)
+            elif k_smallest > pivot_index:
+                quickselect(pivot_index + 1, right, k_smallest)
+            # else pivot_index == k_smallest → done
+        
+        n = len(points)
+        quickselect(0, n - 1, k)
+        return points[:k]
+```
+
+
+## 215. Kth Largest Element in an Array ::2:: - Medium
+
+Topics:  Array, Math, Divide and Conquer, Geometry, Sorting, Heap (Priority Queue), Quickselect
+
+### Intro
+> Given an integer array nums and an integer k, return the
+> kth largest element in the array.
+> Note that it is the kth largest element in the sorted order, 
+> not the kth distinct element.
+> Can you solve it without sorting?
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [3,2,1,5,6,4], k = 2 | 5 |
+| nums = [3,2,3,1,2,4,5,5,6], k = 4 | 4 |
+
+Constraints:
+
+1 &leq; k &leq; nums.length &leq; 10<sup>5</sup>
+
+-10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
+
+### Abstraction
+Given an unsorted array, find the kth largest element in sorted order.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Min Heap of Size k - Heap/Heap
+```python
+    def findKthLargest(self, nums: list[int], k: int) -> int:
+        # Note:
+        # 1. Maintain a min-heap of size k to keep track of k largest elements.
+        # 2. Push elements until heap size is k.
+        # 3. For each new element, if it is larger than the smallest in heap (heap root),
+        #    pop the smallest and add the new element.
+        # 4. After processing all elements, the root of the heap is the kth largest element.
+        
+        minHeap = []
         
         for num in nums:
-            self.add(num)
-    
-    def add(self, val: int) -> int:
-        # If heap size less than k, just push val
-        if len(self.minHeap) < self.k:
-            heapq.heappush(self.minHeap, val)
-        else:
-            # Only add val if it is larger than the smallest element in heap (heap root)
-            if val > self.minHeap[0]:
-                heapq.heapreplace(self.minHeap, val)
+            if len(minHeap) < k:
+                heapq.heappush(minHeap, num)
+            else:
+                # Only add if num is larger than smallest in minHeap
+                if num > minHeap[0]:
+                    heapq.heapreplace(minHeap, num)
         
-        # The kth largest element is always at heap root
-        return self.minHeap[0]
+        # kth largest is at the root of the min-heap
+        return minHeap[0]
+```
+
+### Solution 2: Modified Quick Select - Heap/Heap
+```python
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        
+        # Note:
+        # 
+
+        # Empty check
+        if not nums: 
+            return
+        
+        # random pivot
+        pivot = random.choice(nums)
+        
+        # Partition nums into three parts:
+        # bigger: elements greater than pivot
+        bigger = [num for num in nums if num > pivot]
+        
+        # If kth largest is in the bigger partition, recurse into it
+        if k <= len(bigger):
+            
+            # recursively go on with this array
+            return self.findKthLargest(bigger, k)
+        
+        # equal: elements equal to pivot
+        equal = [num for num in nums if num == pivot]
+        
+        # If kth largest is within the equal partition, return pivot value
+        if k <= len(bigger) + len(equal):
+            
+            # we found the value and can return it
+            return equal[0]
+        
+        # smaller: elements smaller than pivot
+        smaller = [num for num in nums if num < pivot]
+
+        # Adjust k to skip bigger and equal partitions and recurse
+        return self.findKthLargest(smaller, k-len(bigger)-len(equal))
+```
+
+## 621. Task Scheduler ::3:: - Medium
+
+Topics:  Array, Hash Table, Greedy, Sorting, Heap (Priority Queue), Counting
+
+### Intro
+> You are given an array of CPU tasks, each labeled with a 
+> letter from A to Z, and a number n. Each CPU interval can 
+> be idle or allow the completion of one task. Tasks can be 
+> completed in any order, but there's a constraint: there has 
+> to be a gap of at least n intervals between two tasks with 
+> the same label.
+> Return the minimum number of CPU intervals required to 
+> complete all tasks.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| tasks = ["A","A","A","B","B","B"], n = 2 | 8 |
+| ["A","C","A","B","D","B"], n = 1 | 6 |
+| tasks = ["A","A","A", "B","B","B"], n = 3 | 10 |
+
+Constraints:
+
+1 &leq; tasks.length &leq; 10<sup>5</sup>
+
+tasks[i] is an uppercase English letter
+
+0 &leq; n &leq; 100
+
+### Abstraction
+Given a list of tasks marked by uppercase English letters and a minimum
+distance n between identical tasks, find how many cycles it would take to 
+finish all tasks.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1:  Counting + Greedy Math Formula  - Heap/Heap
+```python
+    def leastInterval(self, tasks: list[str], n: int) -> int:
+        # Count frequency of each task (A-Z)
+        task_counts = Counter(tasks)
+        
+        # Maximum frequency among all tasks
+        max_freq = max(task_counts.values())
+        
+        # Count how many tasks have this max frequency
+        max_count = sum(1 for count in task_counts.values() if count == max_freq)
+        
+        # The minimum time is based on arranging the most frequent tasks spaced by n:
+        # We form (max_freq - 1) "intervals" each of length (n + 1)
+        # Then add the count of tasks with max frequency to the end
+        # The result is max between total tasks and this arrangement
+        intervals = (max_freq - 1) * (n + 1) + max_count
+        
+        # If intervals is less than total tasks, no idle needed, return tasks length
+        return max(intervals, len(tasks))
+```
+
+### Solution 2:  Max Heap + Simulation  - Heap/Heap
+```python
+    def leastInterval(self, tasks: list[str], n: int) -> int:
+        # Count frequency of tasks
+        task_counts = Counter(tasks)
+        
+        # Max heap with negative counts (Python heapq is min-heap)
+        maxHeap = [-cnt for cnt in task_counts.values()]
+        heapq.heapify(maxHeap)
+        
+        time = 0
+        # Queue to hold cooldown tasks: (ready_time, count)
+        cooldown = deque()
+        
+        while maxHeap or cooldown:
+            time += 1
+            
+            if maxHeap:
+                # Pop most frequent task
+                cnt = heapq.heappop(maxHeap) + 1  # decrement count (negative)
+                if cnt != 0:
+                    # Put into cooldown with time when it can be used again
+                    cooldown.append((time + n, cnt))
+            
+            # Check if any task in cooldown is ready to be re-added to heap
+            if cooldown and cooldown[0][0] == time:
+                _, cnt = cooldown.popleft()
+                heapq.heappush(maxHeap, cnt)
+        
+        return time
+```
+
+### Solution 3: Deque - Heap/Heap
+```python
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        count = Counter(tasks)
+        maxHeap = [-cnt for cnt in count.values()]
+        heapq.heapify(maxHeap)
+
+        time = 0
+        q = deque()  # pairs of [-cnt, idleTime]
+        while maxHeap or q:
+            time += 1
+
+            if not maxHeap:
+                time = q[0][1]
+            else:
+                cnt = 1 + heapq.heappop(maxHeap)
+                if cnt:
+                    q.append([cnt, time + n])
+            if q and q[0][1] == time:
+                heapq.heappush(maxHeap, q.popleft()[0])
+        return time
+```
+
+## 355. Design Twitter ::2:: - Medium
+
+Topics:  Hash Table, Linked List, Design, Heap (Priority Queue)
+
+### Intro
+> Design a simplified version of Twitter where users can post 
+> tweets, follow/unfollow another user, and is able to see the 10 
+> most recent tweets in the user's news feed.
+> Implement the Twitter class:
+> Twitter() Initializes your twitter object.
+> void postTweet(int userId, int tweetId) Composes a
+> new tweet with ID tweetId by the user userId. Each call to 
+> this function will be made with a unique tweetId.
+> List[Integer] getNewsFeed(int userId) Retrieves the 10 
+> most recent tweet IDs in the user's news feed. Each item in 
+> the news feed must be posted by users who the user 
+> followed or by the user themself. Tweets must be ordered 
+> from most recent to least recent.
+> void follow(int followerId, int followeeId) The user
+> with ID followerId started following the user with ID 
+> followeeId.
+> void unfollow(int followerId, int followeeId) The 
+> user with ID followerId started unfollowing the user with 
+> ID followeeId.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| ["Twitter", "postTweet", "getNewsFeed", "follow", "postTweet", "getNewsFeed", "unfollow", "getNewsFeed"] [[], [1, 5], [1], [1, 2], [2, 6], [1], [1, 2], [1]] | [null, null, [5], null, null, [6, 5], null, [5]] |
+
+Constraints:
+
+1 &leq; userId, follwerId, followeeId &leq; 500
+
+0 &leq; tweetId &leq; 10<sup>4</sup>
+
+All the tweets have unique IDs.
+
+At most 3 * 10<sup>4</sup> calls will be made to postTweet, getNewsFeed,
+follow, and unfollow
+
+A user cannot follow themselves.
+
+### Abstraction
+Design a miniTwitter that allows for efficient news feed and postTweet.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Store Tweets as Lists + Min Heap Merge - Heap/Heap
+```python
+class Twitter:
+    def __init__(self):
+        # Map userId to set of followed userIds (initially empty)
+        self.followees = defaultdict(set)
+        
+        # Map userId to deque of (timestamp, tweetId), newest at right
+        self.tweets = defaultdict(deque)
+        
+        # Global timestamp to order tweets
+        self.time = 0
+        
+        # Max tweets to show
+        self.FEED_SIZE = 10
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        # Assign current timestamp and increment
+        self.time += 1
+        # Append tweet to the user’s tweet list
+        self.tweets[userId].append((self.time, tweetId))
+        # Optional: Limit stored tweets per user to save memory (e.g., last 100)
+        if len(self.tweets[userId]) > 100:
+            self.tweets[userId].popleft()
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if followerId != followeeId:
+            self.followees[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        self.followees[followerId].discard(followeeId)
+
+    def getNewsFeed(self, userId: int) -> list[int]:
+        # The heap will store (-timestamp, tweetId, userId, index_in_user_tweets)
+        heap = []
+        # The list of users to fetch tweets from: self + followees
+        users = self.followees[userId] | {userId}
+        
+        # Initialize pointers for each user's tweet list (start from newest)
+        for u in users:
+            if self.tweets[u]:
+                # Index of last tweet in deque (newest)
+                idx = len(self.tweets[u]) - 1
+                timestamp, tweetId = self.tweets[u][idx]
+                heapq.heappush(heap, (-timestamp, tweetId, u, idx))
+        
+        result = []
+        while heap and len(result) < self.FEED_SIZE:
+            neg_time, tweetId, u, idx = heapq.heappop(heap)
+            result.append(tweetId)
+            # Move pointer to next newest tweet if available
+            if idx > 0:
+                idx -= 1
+                timestamp, tweetId = self.tweets[u][idx]
+                heapq.heappush(heap, (-timestamp, tweetId, u, idx))
+        
+        return result
+```
+
+### Solution 2: Store Tweets as Linked Lists + Merge K Sorted Lists - Heap/Heap
+```python
+class TweetNode:
+    def __init__(self, tweetId, time):
+        self.tweetId = tweetId
+        self.time = time
+        self.next = None
+
+class Twitter:
+    def __init__(self):
+        # Map userId to head of linked list of tweets
+        self.tweets = {}
+        # Map userId to set of followed userIds
+        self.followees = defaultdict(set)
+        self.time = 0
+        self.FEED_SIZE = 10
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.time += 1
+        node = TweetNode(tweetId, self.time)
+        node.next = self.tweets.get(userId, None)
+        self.tweets[userId] = node
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if followerId != followeeId:
+            self.followees[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        self.followees[followerId].discard(followeeId)
+
+    def getNewsFeed(self, userId: int) -> list[int]:
+        import heapq
+
+        # Users to consider: self + followees
+        users = self.followees[userId] | {userId}
+        
+        # Build a max heap of (-time, TweetNode) for heads of all tweet lists
+        heap = []
+        for u in users:
+            if self.tweets.get(u):
+                heapq.heappush(heap, (-self.tweets[u].time, self.tweets[u]))
+        
+        result = []
+        while heap and len(result) < self.FEED_SIZE:
+            neg_time, node = heapq.heappop(heap)
+            result.append(node.tweetId)
+            if node.next:
+                heapq.heappush(heap, (-node.next.time, node.next))
+        
+        return result
+```
+
+
+## 295. Find Median from Data Stream ::1:: - Medium
+
+Topics:  Two Pointers, Design, Sorting, Heap (Priority Queue), Data Stream
+
+### Intro
+> The median is the middle value in an ordered integer list.
+> If the size of the list is even, there is no middle value, and
+> the median is the mean of the two middle values.
+> For example, for arr = [2,3,4], the median is 3.
+> For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.
+> Implement the MedianFinder class:
+> MedianFinder() initializes the MedianFinder object.
+> void addNum(int num) adds the integer num from 
+> the data stream to the data structure.
+> double findMedian() returns the median of all 
+> elements so far. Answers within 10-5 of the actual 
+> answer will be accepted.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"] [[], [1], [2], [], [3], []] | [null, null, null, 1.5, null, 2.0] |
+
+Constraints:
+
+-10<sup>5</sup> &leq; num &leq; 10<sup>5</sup>
+
+There will be at least one element in the data 
+structure before calling findMedian.
+
+At most 5 * 10<sup>4</sup> calls will be made to addNum and findMedian 
+
+### Abstraction
+Find median value from a stream of data. 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: MaxHeap + MinHeap Median Finder - Heap/Heap
+```python
+class MedianFinder:
+    def __init__(self):
+        # maxHeap stores the smaller half, but Python only has minHeap,
+        # so we push negatives to simulate maxHeap behavior
+        self.maxHeap = []  # e.g., stores values as -num
+        # minHeap stores the larger half of numbers
+        self.minHeap = []
+
+    def addNum(self, num: int) -> None:
+        # Step 1: Add new number to maxHeap (invert sign)
+        heapq.heappush(self.maxHeap, -num)
+        
+        # Step 2: Ensure every element in maxHeap <= every element in minHeap
+        # Move largest from maxHeap to minHeap if out of order
+        if (self.minHeap and (-self.maxHeap[0] > self.minHeap[0])):
+            val = -heapq.heappop(self.maxHeap)
+            heapq.heappush(self.minHeap, val)
+        
+        # Step 3: Balance sizes, maxHeap can have 1 more element than minHeap
+        if len(self.maxHeap) < len(self.minHeap):
+            val = heapq.heappop(self.minHeap)
+            heapq.heappush(self.maxHeap, -val)
+        elif len(self.maxHeap) > len(self.minHeap) + 1:
+            val = -heapq.heappop(self.maxHeap)
+            heapq.heappush(self.minHeap, val)
+
+    def findMedian(self) -> float:
+        # If odd total elements, median is root of maxHeap
+        if len(self.maxHeap) > len(self.minHeap):
+            return -self.maxHeap[0]
+        # Else average of roots from both heaps
+        return (-self.maxHeap[0] + self.minHeap[0]) / 2
 ```

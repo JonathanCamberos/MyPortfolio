@@ -1017,6 +1017,18 @@
       "blog": "LeetCode: Tries"
     }
   ],
+  "215": [
+    {
+      "number": 1,
+      "name": "Min Heap of Size k",
+      "type": "heap",
+      "application": "heap",
+      "code": "def findKthLargest(self, nums: list[int], k: int) -> int:\n        # Note:\n        # 1. Maintain a min-heap of size k to keep track of k largest elements.\n        # 2. Push elements until heap size is k.\n        # 3. For each new element, if it is larger than the smallest in heap (heap root),\n        #    pop the smallest and add the new element.\n        # 4. After processing all elements, the root of the heap is the kth largest element.\n        \n        minHeap = []\n        \n        for num in nums:\n            if len(minHeap) < k:\n                heapq.heappush(minHeap, num)\n            else:\n                # Only add if num is larger than smallest in minHeap\n                if num > minHeap[0]:\n                    heapq.heapreplace(minHeap, num)\n        \n        # kth largest is at the root of the min-heap\n        return minHeap[0]",
+      "questionNumber": 215,
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-min-heap-of-size-k---heapheap",
+      "blog": "LeetCode: Heaps"
+    }
+  ],
   "217": [
     {
       "number": 1,
@@ -1452,12 +1464,12 @@
   "703": [
     {
       "number": 1,
-      "name": "heap",
+      "name": "Min Heap of Size k",
       "type": "heap",
       "application": "heap",
       "code": "class KthLargest:\n    def __init__(self, k: int, nums: list[int]):\n        # Note:\n        # 1. Maintain a min-heap of size k containing the k largest elements seen so far.\n        # 2. The heap root (heap[0]) is the kth largest element.\n        # 3. When adding a new element:\n        #    if heap size < k, push new element.\n        #    else if new element > heap root, pop root and push new element.\n        # 4. This ensures O(log k) time per add.\n        \n        self.k = k\n        self.minHeap = []\n        \n        for num in nums:\n            self.add(num)\n    \n    def add(self, val: int) -> int:\n        # If heap size less than k, just push val\n        if len(self.minHeap) < self.k:\n            heapq.heappush(self.minHeap, val)\n        else:\n            # Only add val if it is larger than the smallest element in heap (heap root)\n            if val > self.minHeap[0]:\n                heapq.heapreplace(self.minHeap, val)\n        \n        # The kth largest element is always at heap root\n        return self.minHeap[0]",
       "questionNumber": 703,
-      "solutionLink": "/Notes/leetcode-heaps#solution-1-heap---heapheap",
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-min-heap-of-size-k---heapheap",
       "blog": "LeetCode: Heaps"
     }
   ],
@@ -1559,6 +1571,28 @@
       "blog": "LeetCode: Binary Search"
     }
   ],
+  "973": [
+    {
+      "number": 1,
+      "name": "Max Heap of size k",
+      "type": "heap",
+      "application": "heap",
+      "code": "def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:\n        # Note:\n        # 1. We want the k points with the smallest Euclidean distances from (0, 0).\n        # 2. Instead of computing sqrt(x^2 + y^2), we can use the squared distance x^2 + y^2\n        #    because sqrt is monotonic and doesn't change order.\n        # 3. Approach:\n        #    - Use a max-heap (store negative distances) of size k.\n        #    - Iterate over points:\n        #         if heap size < k: push (-distance, point)\n        #         else if current distance < largest distance in heap: pop and push\n        #    - This ensures we always keep k closest points in O(n log k) time.\n        # 4. Complexity:\n        #    - Time: O(n log k) — each heap push/pop is O(log k)\n        #    - Space: O(k) — heap stores k elements.\n\n        max_heap = []  # stores (-distance, [x, y])\n\n        for x, y in points:\n            dist = x * x + y * y  # squared distance\n            if len(max_heap) < k:\n                heapq.heappush(max_heap, (-dist, [x, y]))\n            else:\n                if dist < -max_heap[0][0]:  # if closer than farthest in heap\n                    heapq.heapreplace(max_heap, (-dist, [x, y]))\n\n        return [point for (_, point) in max_heap]",
+      "questionNumber": 973,
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-max-heap-of-size-k---heapheap",
+      "blog": "LeetCode: Heaps"
+    },
+    {
+      "number": 2,
+      "name": "QuickSelect",
+      "type": "heap",
+      "application": "heap",
+      "code": "def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:\n        # Helper: squared distance to origin\n        def dist(i: int) -> int:\n            return points[i][0] ** 2 + points[i][1] ** 2\n        \n        def partition(left: int, right: int, pivot_index: int) -> int:\n            pivot_dist = dist(pivot_index)\n            # Move pivot to end\n            points[pivot_index], points[right] = points[right], points[pivot_index]\n            store_index = left\n            \n            # Move all points closer than pivot to the left\n            for i in range(left, right):\n                if dist(i) < pivot_dist:\n                    points[store_index], points[i] = points[i], points[store_index]\n                    store_index += 1\n            \n            # Move pivot to final place\n            points[right], points[store_index] = points[store_index], points[right]\n            return store_index\n        \n        def quickselect(left: int, right: int, k_smallest: int):\n            \"\"\"Sort the array such that the k_smallest elements are in first k_smallest slots.\"\"\"\n            if left >= right:\n                return\n            \n            pivot_index = random.randint(left, right)\n            pivot_index = partition(left, right, pivot_index)\n            \n            # Recurse into the part that contains the k_smallest\n            if k_smallest < pivot_index:\n                quickselect(left, pivot_index - 1, k_smallest)\n            elif k_smallest > pivot_index:\n                quickselect(pivot_index + 1, right, k_smallest)\n            # else pivot_index == k_smallest → done\n        \n        n = len(points)\n        quickselect(0, n - 1, k)\n        return points[:k]",
+      "questionNumber": 973,
+      "solutionLink": "/Notes/leetcode-heaps#solution-2-quickselect---heapheap",
+      "blog": "LeetCode: Heaps"
+    }
+  ],
   "981": [
     {
       "number": 1,
@@ -1589,6 +1623,18 @@
       "questionNumber": 981,
       "solutionLink": "/Notes/leetcode-binary-search#solution-3-floor-search-tracking-largest-valid-index-with-right-pointer---binary-searchupper-ceiling-or-lower-floor-trick-based-on-target-binary-search",
       "blog": "LeetCode: Binary Search"
+    }
+  ],
+  "1046": [
+    {
+      "number": 1,
+      "name": "Max Heap",
+      "type": "heap",
+      "application": "heap",
+      "code": "def lastStoneWeight(self, stones: list[int]) -> int:\n        # Note:\n        # 1. We need to repeatedly take the two heaviest stones.\n        # 2. Python's heapq is a min-heap, so to simulate a max-heap:\n        #    store each stone as its negative value.\n        # 3. Pop the two largest (most negative) stones, smash them, and push the result\n        #    back into the heap (if not zero).\n        # 4. Continue until at most one stone remains.\n        # 5. Return that stone's weight, or 0 if no stones left.\n        #\n        # Time Complexity: O(n log n) — heapifying + repeated pop/push operations.\n        # Space Complexity: O(n) — storing all stones in heap.\n\n        # Convert all stones to negative to simulate max-heap\n        maxHeap = [-stone for stone in stones]\n        heapq.heapify(maxHeap)\n\n        while len(maxHeap) > 1:\n            # Pop two heaviest stones\n            first = -heapq.heappop(maxHeap)  # largest\n            second = -heapq.heappop(maxHeap) # second largest\n\n            if first != second:\n                # Push the difference back (negative for max-heap)\n                heapq.heappush(maxHeap, -(first - second))\n\n        # Return last stone if exists, else 0\n        return -maxHeap[0] if maxHeap else 0",
+      "questionNumber": 1046,
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-max-heap---heapheap",
+      "blog": "LeetCode: Heaps"
     }
   ],
   "1448": [

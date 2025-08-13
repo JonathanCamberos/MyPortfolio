@@ -43,6 +43,7 @@
   "208. Implement Trie (Prefix Tree) ::1::": 208,
   "211. Design Add and Search Words Data Structure ::1::": 211,
   "212. Word Search II ::2::": 212,
+  "215. Kth Largest Element in an Array ::1::": 215,
   "217. Contains Duplicate ::2::": 217,
   "226. Invert Binary Tree ::3::": 226,
   "230. Kth Smallest Element in a BST ::2::": 230,
@@ -64,6 +65,8 @@
   "739. Daily Temperatures ::3::": 739,
   "853. Car Fleet ::2::": 853,
   "875. Koko Eating Bananas ::2::": 875,
+  "973. K Closest Points to Origin ::2::": 973,
   "981. Time Based Key Value Store ::2::": 981,
+  "1046. Last Stone Weight ::1::": 1046,
   "1448. Count Good Nodes in Binary Tree ::2::": 1448
 }
