@@ -12,15 +12,244 @@ tags:
 
 ## Heaps intro
 
-a ordered queue! 
+LeetCode problems with heap solutions. 
 
-### Heap Application: Heap
-something something 
+### What is a Heap
+Heaps are specialized complete binary tree structures used to prioritize data.
 
-Ex: Basic Trie
+A heap maintains a partial order property:
+
+1. MinHeap: Parent nodes are less than or equal to their children (smallest element at root)
+2. MaxHeap: Parent nodes are greater than or equal to their  children (largest element at root)
+
+The tree is complete: all levels are fully filled except possible the last, 
+which is filled left to right 
+
+Peek(): efficient access to min/max element in O(1) time
+Insert()/Pop(): Heap edit in O(log n) time
+
+### Heap Characteristics
+
+Heaps are characterized by: 
+
+1. Nodes: Contain values arranged by heap property
+2. Complete Tree: Shape property ensures tree is always balanced
+3. Heap Property: Parent value &leq; (minHeap) or Parent value &geq; children values
+4. Nothing beyond heap property: No ordering between siblings or subtrees maintained, other than parent child from heap property
+5. Array: Implemented as array for space and cache efficiency
+
+### Heap Representation
+Tree heap represented as an array:
+
 ```python
-    def someHeap(root: Optional[TreeNode]) -> str:
+    Array Form
+    Index:  0   1   2   3   4   5   6
+    Value: [3,  5,  8,  9, 10, 12, 15]
+
+    Tree Form
+
+            (0)3
+            /     \
+        (1)5       (2)8
+        /   \      /   \
+    (3)9  (4)10 (5)12 (6)15
+```
+
+### Heap IRL
+Priority Queues: scheduling, bandwidth management
+Graph algorithms: Dijkstra's shortest path, Prim's MST
+Event simulation: process events by priority/time
+
+### Heap Application: Top K Element Extraction
+We can maintain a heap to quickly retrieve the top K largest
+or smallest elements without fully sorting the input.
+
+Ex: Find the kth largest element in array
+```python
+    def kthLargest(nums, k):
+        heap = []
+        for num in nums:
+            heapq.heappush(heap, num)
+            if len(heap) > k:
+                heapq.heappop(heap)  # Keep only top K elements
+        return heap[0]
+
+    # Example: kthLargest([3, 2, 1, 5, 6, 4], 2) -> 5
+```
+
+### Heap Application: Dual Heap Balancing Representing Secondary Property
+We can use two heaps, maxHeap for lower half of values and a 
+minHeap for the upper half, to maintain a property while adding
+and removing elements. 
+Pattern supports quick lookups of medians, balance points, 
+or range constraints.
+
+Ex: Maintain median of stream.
+```python
+class MedianFinder:
+    def __init__(self):
+        self.low = []   # Max-heap (invert values)
+        self.high = []  # Min-heap
+    
+    def addNum(self, num: int) -> None:
+        heapq.heappush(self.low, -num)
+        heapq.heappush(self.high, -heapq.heappop(self.low))
+        if len(self.low) < len(self.high):
+            heapq.heappush(self.low, -heapq.heappop(self.high))
+    
+    def findMedian(self) -> float:
+        if len(self.low) > len(self.high):
+            return -self.low[0]
+        return (-self.low[0] + self.high[0]) / 2        
+```
+
+### Heap Application: K Way Merge for Sorted Streams
+A minHeap can efficiently merge multiple sorted lists or streams by
+always extracting the next smallest element across all inputs.
+
+Ex: Merge k sorted lists into one sorted lists
+```python
+def mergeKSorted(lists):
+    heap = []
+    for i, lst in enumerate(lists):
+        if lst:
+            heapq.heappush(heap, (lst[0], i, 0))
+    
+    result = []
+    while heap:
+        val, list_idx, elem_idx = heapq.heappop(heap)
+        result.append(val)
+        if elem_idx + 1 < len(lists[list_idx]):
+            heapq.heappush(heap, (lists[list_idx][elem_idx+1], list_idx, elem_idx+1))
+    return result
+
+# Example: mergeKSorted([[1,4,5],[1,3,4],[2,6]]) -> [1,1,2,3,4,4,5,6]   
+```
+
+### Heap Application: Best First Search or Breadth First Search with Priority
+A heap can drive a search algorithm where you can expand the 'best' 
+candidate first: A*, Dijkstra's, Prims, etc.
+In a non negative weighted graph context: a minHeap can be 
+used to expand on the closest node first in a 
+This always ensures that the next node popped from the heap has
+the smallest known distance from the source.
+
+Ex: Dijkstra's Algorithm MinHeap
+```python
+def dijkstra(graph, start):
+    
+    # Graph: Node -> list of (neighbor, weight) tuples
+    # start: Starting node for shortest path search
+
+    # Result: 
+    # dist: shortest distance from start to all other nodes
+
+    # Init all distances to infinity, 
+    # except start node which has distance 0
+    dist = {node: float('inf') for node in graph}
+    dist[start] = 0
+
+    # minHeap priority queue stores tuples of (distance, node)
+    # iterate from start node and commence exploring neighbors
+    heap = [(0, start)]
+
+    # while there are nodes to process in heap
+    while heap:
         
+        # grab node with smallest known distance from start
+        d, node = heapq.heappop(heap)
+
+        # Skip if we already have already explored a shorter
+        # path to the current node
+        if d > dist[node]:
+            continue
+
+        # Check each neighbor and see if we have found 
+        # a shorter path through the current node
+        for nei, w in graph[node]:
+            
+            # grab new distance
+            nd = d + w
+
+            # if shorter path found, update and push to heap
+            if nd < dist[nei]:
+                dist[nei] = nd
+                heapq.heappush(heap, (nd, nei))
+
+    # overall: time complexity
+    # overall: space complexity
+    return dist
+```
+
+### Heap Application: Kth element Within Iterating Sliding Window
+A heap can track max/min within a sliding window efficiently when
+combined with lazy deletion or index tracking.
+
+Ex: Find maximum in each sliding windows
+```python
+    def max_sliding_window(nums, k):
+
+        # maxHeap via minHeap with negative values
+        # initialize with first k elements
+        heap = [(-nums[i], i) for i in range(k)]
+        heapq.heapify(heap)
+
+        # root of heap is the largest in the current window
+        res = [-heap[0][0]]
+        
+        # iterate sliding window forward
+        for i in range(k, len(nums)):
+
+            # push new element to heap
+            heapq.heappush(heap, (-nums[i], i))
+
+            # remove top element if they are outside current window
+            while heap[0][1] <= i - k:
+                heapq.heappop(heap)
+
+            # after removing out of window elements, heap root is max
+            # within the current window
+            res.append(-heap[0][0])
+
+        return res
+```
+
+### Heap Application: Interval Scheduling Optimization
+A minHeap can track the earliest finishing times among active
+intervals, enabling optimal scheduling of jobs or meetings without conflicts.
+
+Ex: Find the minimum number of meeting rooms required
+```python
+    def minMeetingRooms(intervals):
+
+        # Sort intervals by their start time,
+        # ensures we process meetings in chronological order
+        intervals.sort(key=lambda x: x[0])
+
+        # minHeap to track end time of ongoing meetings,
+        # storing the earliest ending meeting at the top
+        heap = []
+
+        # iterate over rooms in earliest starting order
+        for start, end in intervals:
+
+            # if heap is not empty, and the earliest ending meeting the earliest meeting ends
+            # ends before or exactly when the new meeting starts,
+            # then we can remove the earliest ending meeting 
+            # (essentially freeing up a room)
+            if heap and heap[0] <= start:
+                # pop meeting that ended the earliest
+                heapq.heappop(heap)
+
+            # 'start' the current meeting by pushing it to the heap
+            heapq.heappush(heap, end)
+
+        # last heap size is the number meetings running
+        # concurrently after all meetings have started
+        return len(heap)
+
+    # Example: 
+    # minMeetingRooms([[0,30],[5,10],[15,20]]) -> 2
 ```
 
 ## 703. Kth Largest Element in a Stream ::1:: - Easy
@@ -63,6 +292,98 @@ At most 10<sup>4</sup> calls will be make to add.
 
 ### Abstraction
 Implement a heap that will keep track of the kth highest score for a data stream.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: heap - Heap/Heap
+```python
+class KthLargest:
+    def __init__(self, k: int, nums: list[int]):
+        # Note:
+        # 1. Maintain a min-heap of size k containing the k largest elements seen so far.
+        # 2. The heap root (heap[0]) is the kth largest element.
+        # 3. When adding a new element:
+        #    if heap size < k, push new element.
+        #    else if new element > heap root, pop root and push new element.
+        # 4. This ensures O(log k) time per add.
+        
+        self.k = k
+        self.minHeap = []
+        
+        for num in nums:
+            self.add(num)
+    
+    def add(self, val: int) -> int:
+        # If heap size less than k, just push val
+        if len(self.minHeap) < self.k:
+            heapq.heappush(self.minHeap, val)
+        else:
+            # Only add val if it is larger than the smallest element in heap (heap root)
+            if val > self.minHeap[0]:
+                heapq.heapreplace(self.minHeap, val)
+        
+        # The kth largest element is always at heap root
+        return self.minHeap[0]
+```
+
+
+## 1046. Last Stone Weight ::1:: - Easy
+
+Topics:  Array, Heap (Priority Queue)
+
+### Intro
+> You are given an array of integers stones where stones[i] is 
+> the weight of the ith stone.
+> We are playing a game with the stones. On each turn, we 
+> choose the heaviest two stones and smash them together. 
+> Suppose the heaviest two stones have weights 
+> x and y with x &leq; y. The result of this smash is:
+> If x == y, both stones are destroyed, and
+> If x != y, the stone of weight x is destroyed, and the
+> stone of weight y has new weight y - x.
+> At the end of the game, there is at most one stone left.
+> Return the weight of the last remaining stone. If there are no 
+> stones left, return 0.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| stones = [2,7,4,1,8,1] | 1 |
+| stones = [1] | 1 |
+
+Constraints:
+
+1 &leq; stones.length &leq; 30 
+
+1 &leq; stones[i] &leq; 1000
+
+### Abstraction
+Stone smashing game. Given some amount of stones, a round consists
+of smashing the two heaviest stones together. If they are the same weight
+both stones are destroyed. If one is heavier than the other, the heavier 
+stone loses weight equal to the weight of the less heavy stone.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
