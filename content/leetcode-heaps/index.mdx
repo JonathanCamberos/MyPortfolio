@@ -429,32 +429,31 @@ stone loses weight equal to the weight of the less heavy stone.
 ```python
     def lastStoneWeight(self, stones: list[int]) -> int:
         # Note:
-        # 1. We need to repeatedly take the two heaviest stones.
-        # 2. Python's heapq is a min-heap, so to simulate a max-heap:
-        #    store each stone as its negative value.
-        # 3. Pop the two largest (most negative) stones, smash them, and push the result
-        #    back into the heap (if not zero).
-        # 4. Continue until at most one stone remains.
-        # 5. Return that stone's weight, or 0 if no stones left.
-        #
-        # Time Complexity: O(n log n) — heapifying + repeated pop/push operations.
-        # Space Complexity: O(n) — storing all stones in heap.
-
-        # Convert all stones to negative to simulate max-heap
+        # 1. MaxHeap via MinHeap with negative values
+        # 2. Continue smashing pairs of stones until heap size 1
+        # Result: final stone weight or all stones destroyed
+       
+        # Add stone negative weight to minHeap (mocking a MaxHeap)
         maxHeap = [-stone for stone in stones]
         heapq.heapify(maxHeap)
 
+        # until 1 stone left 
         while len(maxHeap) > 1:
-            # Pop two heaviest stones
-            first = -heapq.heappop(maxHeap)  # largest
-            second = -heapq.heappop(maxHeap) # second largest
 
+            # grab two heaviest stones
+            first = -heapq.heappop(maxHeap)  
+            second = -heapq.heappop(maxHeap)
+
+            # readd stone weight to maxHeap
             if first != second:
-                # Push the difference back (negative for max-heap)
                 heapq.heappush(maxHeap, -(first - second))
 
-        # Return last stone if exists, else 0
-        return -maxHeap[0] if maxHeap else 0
+        # check if stone remains
+        res = -maxHeap[0] if maxHeap else 0
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ## 973. K Closest Points to Origin ::2:: - Medium
