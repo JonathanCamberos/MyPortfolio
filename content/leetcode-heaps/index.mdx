@@ -321,32 +321,47 @@ Implement a heap that will keep track of the kth highest score for a data stream
 ### Solution 1: Min Heap of Size k - Heap/Heap
 ```python
 class KthLargest:
+
     def __init__(self, k: int, nums: list[int]):
-        # Note:
-        # 1. Maintain a min-heap of size k containing the k largest elements seen so far.
-        # 2. The heap root (heap[0]) is the kth largest element.
-        # 3. When adding a new element:
-        #    if heap size < k, push new element.
-        #    else if new element > heap root, pop root and push new element.
-        # 4. This ensures O(log k) time per add.
         
+        # Note:
+        # 1.  MinHeap of size k containing the k largest elements seen so far.
+        # Result: Top k scores saved, with lowest top score at root
+
+        # size of minHeap     
         self.k = k
+
+        # minHeap
         self.minHeap = []
         
+        # stream input data
         for num in nums:
             self.add(num)
     
+    # time complexity:
+    # space complexity: 
     def add(self, val: int) -> int:
-        # If heap size less than k, just push val
+
+        # Note:
+        # 1. if minHeap is less than capacity, simply push
+        # 2. if minHeap is out of space, push only if new score beats lowest score (root)
+
+        # heap still has space, simply push
         if len(self.minHeap) < self.k:
             heapq.heappush(self.minHeap, val)
+
+        # heap is out of space, check if valid add
         else:
-            # Only add val if it is larger than the smallest element in heap (heap root)
-            if val > self.minHeap[0]:
+            # push if new score beats lowest high score (root)
+            smallestTopScore = self.minHeap[0]
+            if val > smallestTopScore:
                 heapq.heapreplace(self.minHeap, val)
         
-        # The kth largest element is always at heap root
+        # return top score
         return self.minHeap[0]
+
+    # overall: time complexity
+    # overall: space complexity 
 ```
 
 

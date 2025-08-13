@@ -667,7 +667,7 @@
   },
   "215": {
     "questionNum": 215,
-    "questionTitle": "Kth Largest Element in an Array ::1::",
+    "questionTitle": "Kth Largest Element in an Array ::2::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums and an integer k, return the kth largest element in the array. Note that it is the kth largest element in the sorted order, not the kth distinct element. Can you solve it without sorting?",
     "questionTopics": [
@@ -679,7 +679,7 @@
       "Heap (Priority Queue)",
       "Quickselect"
     ],
-    "questionLink": "/Notes/leetcode-heaps#215-kth-largest-element-in-an-array-1---medium",
+    "questionLink": "/Notes/leetcode-heaps#215-kth-largest-element-in-an-array-2---medium",
     "blog": "LeetCode: Heaps",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -823,6 +823,23 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "295": {
+    "questionNum": 295,
+    "questionTitle": "Find Median from Data Stream ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values. For example, for arr = [2,3,4], the median is 3. For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5. Implement the MedianFinder class: MedianFinder() initializes the MedianFinder object. void addNum(int num) adds the integer num from the data stream to the data structure. double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.",
+    "questionTopics": [
+      "Two Pointers",
+      "Design",
+      "Sorting",
+      "Heap (Priority Queue)",
+      "Data Stream"
+    ],
+    "questionLink": "/Notes/leetcode-heaps#295-find-median-from-data-stream-1---medium",
+    "blog": "LeetCode: Heaps",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "297": {
     "questionNum": 297,
     "questionTitle": "Serialize and Deserialize Binary Tree ::2::",
@@ -860,6 +877,22 @@
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 34
+  },
+  "355": {
+    "questionNum": 355,
+    "questionTitle": "Design Twitter ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and is able to see the 10 most recent tweets in the user's news feed. Implement the Twitter class: Twitter() Initializes your twitter object. void postTweet(int userId, int tweetId) Composes a new tweet with ID tweetId by the user userId. Each call to this function will be made with a unique tweetId. List[Integer] getNewsFeed(int userId) Retrieves the 10 most recent tweet IDs in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user themself. Tweets must be ordered from most recent to least recent. void follow(int followerId, int followeeId) The user with ID followerId started following the user with ID followeeId. void unfollow(int followerId, int followeeId) The user with ID followerId started unfollowing the user with ID followeeId.",
+    "questionTopics": [
+      "Hash Table",
+      "Linked List",
+      "Design",
+      "Heap (Priority Queue)"
+    ],
+    "questionLink": "/Notes/leetcode-heaps#355-design-twitter-2---medium",
+    "blog": "LeetCode: Heaps",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "402": {
     "questionNum": 402,
@@ -936,6 +969,24 @@
     ],
     "questionLink": "/Notes/leetcode-trees#572-subtree-of-another-tree-5---easy",
     "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "621": {
+    "questionNum": 621,
+    "questionTitle": "Task Scheduler ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label. Return the minimum number of CPU intervals required to complete all tasks.",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Greedy",
+      "Sorting",
+      "Heap (Priority Queue)",
+      "Counting"
+    ],
+    "questionLink": "/Notes/leetcode-heaps#621-task-scheduler-3---medium",
+    "blog": "LeetCode: Heaps",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },

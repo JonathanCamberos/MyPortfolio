@@ -1027,6 +1027,16 @@
       "questionNumber": 215,
       "solutionLink": "/Notes/leetcode-heaps#solution-1-min-heap-of-size-k---heapheap",
       "blog": "LeetCode: Heaps"
+    },
+    {
+      "number": 2,
+      "name": "Modified Quick Select",
+      "type": "heap",
+      "application": "heap",
+      "code": "def findKthLargest(self, nums: List[int], k: int) -> int:\n        \n        # Note:\n        # \n\n        # Empty check\n        if not nums: \n            return\n        \n        # random pivot\n        pivot = random.choice(nums)\n        \n        # Partition nums into three parts:\n        # bigger: elements greater than pivot\n        bigger = [num for num in nums if num > pivot]\n        \n        # If kth largest is in the bigger partition, recurse into it\n        if k <= len(bigger):\n            \n            # recursively go on with this array\n            return self.findKthLargest(bigger, k)\n        \n        # equal: elements equal to pivot\n        equal = [num for num in nums if num == pivot]\n        \n        # If kth largest is within the equal partition, return pivot value\n        if k <= len(bigger) + len(equal):\n            \n            # we found the value and can return it\n            return equal[0]\n        \n        # smaller: elements smaller than pivot\n        smaller = [num for num in nums if num < pivot]\n\n        # Adjust k to skip bigger and equal partitions and recurse\n        return self.findKthLargest(smaller, k-len(bigger)-len(equal))",
+      "questionNumber": 215,
+      "solutionLink": "/Notes/leetcode-heaps#solution-2-modified-quick-select---heapheap",
+      "blog": "LeetCode: Heaps"
     }
   ],
   "217": [
@@ -1257,6 +1267,18 @@
       "blog": "LeetCode: Linked List"
     }
   ],
+  "295": [
+    {
+      "number": 1,
+      "name": "MaxHeap + MinHeap Median Finder",
+      "type": "heap",
+      "application": "heap",
+      "code": "class MedianFinder:\n    def __init__(self):\n        # maxHeap stores the smaller half, but Python only has minHeap,\n        # so we push negatives to simulate maxHeap behavior\n        self.maxHeap = []  # e.g., stores values as -num\n        # minHeap stores the larger half of numbers\n        self.minHeap = []\n\n    def addNum(self, num: int) -> None:\n        # Step 1: Add new number to maxHeap (invert sign)\n        heapq.heappush(self.maxHeap, -num)\n        \n        # Step 2: Ensure every element in maxHeap <= every element in minHeap\n        # Move largest from maxHeap to minHeap if out of order\n        if (self.minHeap and (-self.maxHeap[0] > self.minHeap[0])):\n            val = -heapq.heappop(self.maxHeap)\n            heapq.heappush(self.minHeap, val)\n        \n        # Step 3: Balance sizes, maxHeap can have 1 more element than minHeap\n        if len(self.maxHeap) < len(self.minHeap):\n            val = heapq.heappop(self.minHeap)\n            heapq.heappush(self.maxHeap, -val)\n        elif len(self.maxHeap) > len(self.minHeap) + 1:\n            val = -heapq.heappop(self.maxHeap)\n            heapq.heappush(self.minHeap, val)\n\n    def findMedian(self) -> float:\n        # If odd total elements, median is root of maxHeap\n        if len(self.maxHeap) > len(self.minHeap):\n            return -self.maxHeap[0]\n        # Else average of roots from both heaps\n        return (-self.maxHeap[0] + self.minHeap[0]) / 2",
+      "questionNumber": 295,
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-maxheap-minheap-median-finder---heapheap",
+      "blog": "LeetCode: Heaps"
+    }
+  ],
   "297": [
     {
       "number": 1,
@@ -1319,6 +1341,28 @@
       "questionNumber": 347,
       "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-5-bucketsort-by-count---hashmapalgorithm",
       "blog": "LeetCode: Arrays and Hashing"
+    }
+  ],
+  "355": [
+    {
+      "number": 1,
+      "name": "Store Tweets as Lists + Min Heap Merge",
+      "type": "heap",
+      "application": "heap",
+      "code": "class Twitter:\n    def __init__(self):\n        # Map userId to set of followed userIds (initially empty)\n        self.followees = defaultdict(set)\n        \n        # Map userId to deque of (timestamp, tweetId), newest at right\n        self.tweets = defaultdict(deque)\n        \n        # Global timestamp to order tweets\n        self.time = 0\n        \n        # Max tweets to show\n        self.FEED_SIZE = 10\n\n    def postTweet(self, userId: int, tweetId: int) -> None:\n        # Assign current timestamp and increment\n        self.time += 1\n        # Append tweet to the user’s tweet list\n        self.tweets[userId].append((self.time, tweetId))\n        # Optional: Limit stored tweets per user to save memory (e.g., last 100)\n        if len(self.tweets[userId]) > 100:\n            self.tweets[userId].popleft()\n\n    def follow(self, followerId: int, followeeId: int) -> None:\n        if followerId != followeeId:\n            self.followees[followerId].add(followeeId)\n\n    def unfollow(self, followerId: int, followeeId: int) -> None:\n        self.followees[followerId].discard(followeeId)\n\n    def getNewsFeed(self, userId: int) -> list[int]:\n        # The heap will store (-timestamp, tweetId, userId, index_in_user_tweets)\n        heap = []\n        # The list of users to fetch tweets from: self + followees\n        users = self.followees[userId] | {userId}\n        \n        # Initialize pointers for each user's tweet list (start from newest)\n        for u in users:\n            if self.tweets[u]:\n                # Index of last tweet in deque (newest)\n                idx = len(self.tweets[u]) - 1\n                timestamp, tweetId = self.tweets[u][idx]\n                heapq.heappush(heap, (-timestamp, tweetId, u, idx))\n        \n        result = []\n        while heap and len(result) < self.FEED_SIZE:\n            neg_time, tweetId, u, idx = heapq.heappop(heap)\n            result.append(tweetId)\n            # Move pointer to next newest tweet if available\n            if idx > 0:\n                idx -= 1\n                timestamp, tweetId = self.tweets[u][idx]\n                heapq.heappush(heap, (-timestamp, tweetId, u, idx))\n        \n        return result",
+      "questionNumber": 355,
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-store-tweets-as-lists-min-heap-merge---heapheap",
+      "blog": "LeetCode: Heaps"
+    },
+    {
+      "number": 2,
+      "name": "Store Tweets as Linked Lists + Merge K Sorted Lists",
+      "type": "heap",
+      "application": "heap",
+      "code": "class TweetNode:\n    def __init__(self, tweetId, time):\n        self.tweetId = tweetId\n        self.time = time\n        self.next = None\n\nclass Twitter:\n    def __init__(self):\n        # Map userId to head of linked list of tweets\n        self.tweets = {}\n        # Map userId to set of followed userIds\n        self.followees = defaultdict(set)\n        self.time = 0\n        self.FEED_SIZE = 10\n\n    def postTweet(self, userId: int, tweetId: int) -> None:\n        self.time += 1\n        node = TweetNode(tweetId, self.time)\n        node.next = self.tweets.get(userId, None)\n        self.tweets[userId] = node\n\n    def follow(self, followerId: int, followeeId: int) -> None:\n        if followerId != followeeId:\n            self.followees[followerId].add(followeeId)\n\n    def unfollow(self, followerId: int, followeeId: int) -> None:\n        self.followees[followerId].discard(followeeId)\n\n    def getNewsFeed(self, userId: int) -> list[int]:\n        import heapq\n\n        # Users to consider: self + followees\n        users = self.followees[userId] | {userId}\n        \n        # Build a max heap of (-time, TweetNode) for heads of all tweet lists\n        heap = []\n        for u in users:\n            if self.tweets.get(u):\n                heapq.heappush(heap, (-self.tweets[u].time, self.tweets[u]))\n        \n        result = []\n        while heap and len(result) < self.FEED_SIZE:\n            neg_time, node = heapq.heappop(heap)\n            result.append(node.tweetId)\n            if node.next:\n                heapq.heappush(heap, (-node.next.time, node.next))\n        \n        return result",
+      "questionNumber": 355,
+      "solutionLink": "/Notes/leetcode-heaps#solution-2-store-tweets-as-linked-lists-merge-k-sorted-lists---heapheap",
+      "blog": "LeetCode: Heaps"
     }
   ],
   "402": [
@@ -1459,6 +1503,38 @@
       "questionNumber": 572,
       "solutionLink": "/Notes/leetcode-trees#solution-5-dfs-post-order-tree-serialization-comparison---treebfs-pre-order-across-level-no-explicit-level-sized-grouping-full-across-top-down",
       "blog": "LeetCode: Trees"
+    }
+  ],
+  "621": [
+    {
+      "number": 1,
+      "name": "Counting + Greedy Math Formula",
+      "type": "heap",
+      "application": "heap",
+      "code": "def leastInterval(self, tasks: list[str], n: int) -> int:\n        # Count frequency of each task (A-Z)\n        task_counts = Counter(tasks)\n        \n        # Maximum frequency among all tasks\n        max_freq = max(task_counts.values())\n        \n        # Count how many tasks have this max frequency\n        max_count = sum(1 for count in task_counts.values() if count == max_freq)\n        \n        # The minimum time is based on arranging the most frequent tasks spaced by n:\n        # We form (max_freq - 1) \"intervals\" each of length (n + 1)\n        # Then add the count of tasks with max frequency to the end\n        # The result is max between total tasks and this arrangement\n        intervals = (max_freq - 1) * (n + 1) + max_count\n        \n        # If intervals is less than total tasks, no idle needed, return tasks length\n        return max(intervals, len(tasks))",
+      "questionNumber": 621,
+      "solutionLink": "/Notes/leetcode-heaps#solution-1-counting-greedy-math-formula---heapheap",
+      "blog": "LeetCode: Heaps"
+    },
+    {
+      "number": 2,
+      "name": "Max Heap + Simulation",
+      "type": "heap",
+      "application": "heap",
+      "code": "def leastInterval(self, tasks: list[str], n: int) -> int:\n        # Count frequency of tasks\n        task_counts = Counter(tasks)\n        \n        # Max heap with negative counts (Python heapq is min-heap)\n        maxHeap = [-cnt for cnt in task_counts.values()]\n        heapq.heapify(maxHeap)\n        \n        time = 0\n        # Queue to hold cooldown tasks: (ready_time, count)\n        cooldown = deque()\n        \n        while maxHeap or cooldown:\n            time += 1\n            \n            if maxHeap:\n                # Pop most frequent task\n                cnt = heapq.heappop(maxHeap) + 1  # decrement count (negative)\n                if cnt != 0:\n                    # Put into cooldown with time when it can be used again\n                    cooldown.append((time + n, cnt))\n            \n            # Check if any task in cooldown is ready to be re-added to heap\n            if cooldown and cooldown[0][0] == time:\n                _, cnt = cooldown.popleft()\n                heapq.heappush(maxHeap, cnt)\n        \n        return time",
+      "questionNumber": 621,
+      "solutionLink": "/Notes/leetcode-heaps#solution-2-max-heap-simulation---heapheap",
+      "blog": "LeetCode: Heaps"
+    },
+    {
+      "number": 3,
+      "name": "Deque",
+      "type": "heap",
+      "application": "heap",
+      "code": "def leastInterval(self, tasks: List[str], n: int) -> int:\n        count = Counter(tasks)\n        maxHeap = [-cnt for cnt in count.values()]\n        heapq.heapify(maxHeap)\n\n        time = 0\n        q = deque()  # pairs of [-cnt, idleTime]\n        while maxHeap or q:\n            time += 1\n\n            if not maxHeap:\n                time = q[0][1]\n            else:\n                cnt = 1 + heapq.heappop(maxHeap)\n                if cnt:\n                    q.append([cnt, time + n])\n            if q and q[0][1] == time:\n                heapq.heappush(maxHeap, q.popleft()[0])\n        return time",
+      "questionNumber": 621,
+      "solutionLink": "/Notes/leetcode-heaps#solution-3-deque---heapheap",
+      "blog": "LeetCode: Heaps"
     }
   ],
   "703": [
