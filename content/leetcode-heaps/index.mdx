@@ -676,32 +676,44 @@ Given an unsorted array, find the kth largest element in sorted order.
 ```python
     def findKthLargest(self, nums: list[int], k: int) -> int:
         # Note:
-        # 1. Maintain a min-heap of size k to keep track of k largest elements.
-        # 2. Push elements until heap size is k.
-        # 3. For each new element, if it is larger than the smallest in heap (heap root),
-        #    pop the smallest and add the new element.
-        # 4. After processing all elements, the root of the heap is the kth largest element.
+        # 1. MinHeap of size k
+        # Result: root of minHeap contains kth largest element
         
+        # heap
         minHeap = []
         
+        # for each element
         for num in nums:
+
+            # if heap has space, simply push
             if len(minHeap) < k:
                 heapq.heappush(minHeap, num)
+
+            # if heap has no space, check if push is necessary
             else:
-                # Only add if num is larger than smallest in minHeap
+                # push if new num is larger than smallest in minHeap,
+                # this will force a new kth largest element
                 if num > minHeap[0]:
                     heapq.heapreplace(minHeap, num)
         
-        # kth largest is at the root of the min-heap
-        return minHeap[0]
+        # kth largest is at the root of the minHeap
+        kth = minHeap[0]
+
+        # overall: time complexity
+        # overall: space complexity
+        return kth
 ```
 
-### Solution 2: Modified Quick Select - Heap/Heap
+### Solution 2: Modified Ignore Duplicates Quick Select - Heap/Heap
 ```python
     def findKthLargest(self, nums: List[int], k: int) -> int:
         
         # Note:
-        # 
+        # Optimized Quick Select which will remove 1 subList of duplicates per iteration 
+        # 1. RandPivot
+        # 2. Partition nums by creating larger, equal, or smaller than pivot subLists
+        # 3. Recurse into the correct subList
+        # Result: kth largest found while accounting for potential stream of duplicates
 
         # Empty check
         if not nums: 
@@ -714,25 +726,22 @@ Given an unsorted array, find the kth largest element in sorted order.
         # bigger: elements greater than pivot
         bigger = [num for num in nums if num > pivot]
         
-        # If kth largest is in the bigger partition, recurse into it
+        # if kth is within bigger, recurse
         if k <= len(bigger):
-            
-            # recursively go on with this array
             return self.findKthLargest(bigger, k)
         
+        # Duplicate Optimization 
         # equal: elements equal to pivot
         equal = [num for num in nums if num == pivot]
         
-        # If kth largest is within the equal partition, return pivot value
+        # If kth largest is within biggest + equal count,
+        # kth will be within partition duplicate list
         if k <= len(bigger) + len(equal):
-            
-            # we found the value and can return it
             return equal[0]
         
-        # smaller: elements smaller than pivot
+        # kth must be within smaller list, recurse
+        # update k to ignore length of bigger and equal list
         smaller = [num for num in nums if num < pivot]
-
-        # Adjust k to skip bigger and equal partitions and recurse
         return self.findKthLargest(smaller, k-len(bigger)-len(equal))
 ```
 
@@ -794,33 +803,62 @@ finish all tasks.
 ```python
 ```
 
-### Solution 1:  Counting + Greedy Math Formula  - Heap/Heap
+### Solution 1: Counting + Greedy Math Formula  - Heap/Heap
 ```python
     def leastInterval(self, tasks: list[str], n: int) -> int:
+
+        # Note:
+        # 1. Highest occurring tasks + idle time determine the min scheduling
+        # 2. Total number of tasks determine the min scheduling
+        # Result: min scheduling for list of tasks 
+
         # Count frequency of each task (A-Z)
-        task_counts = Counter(tasks)
+        freq = defaultdict(int)
+        for task in tasks:
+            freq[task] += 1
         
-        # Maximum frequency among all tasks
-        max_freq = max(task_counts.values())
+        # highest number of occurrences for single task
+        maxFreq = max(freq.values())
         
-        # Count how many tasks have this max frequency
-        max_count = sum(1 for count in task_counts.values() if count == max_freq)
+        # number of tasks with highest number of occurrences
+        maxCount = sum(1 for count in freq.values() if count == maxFreq)
         
         # The minimum time is based on arranging the most frequent tasks spaced by n:
-        # We form (max_freq - 1) "intervals" each of length (n + 1)
-        # Then add the count of tasks with max frequency to the end
-        # The result is max between total tasks and this arrangement
-        intervals = (max_freq - 1) * (n + 1) + max_count
+        # ex:
+        # A, B, C share freq count of 9
+        # idle interval n = 5
+        # 
+        # so:
+        # [A -> B -> C -> idle -> idle...] * 8 times
+        # + [A -> B -> C] last group (notice no idles needed)
+
+        # (maxFreq-1) -> 8 times = groups
+        # (n+1) = length of group (n idle time + 1 for task occurrence
+
+        # + maxCount for last group
+        intervals = (maxFreq - 1) * (n + 1) + maxCount
         
-        # If intervals is less than total tasks, no idle needed, return tasks length
-        return max(intervals, len(tasks))
+        # if totalTasks is higher than intervals, totalTasks is the lower bound
+        # ie: A,B,C combo takes 51 
+        #     however, rest of alphabet all has 4 count, leading to 119
+        # we will take the 119
+        # (in this case, we wont have to use idle)
+        res = max(intervals, len(tasks))
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
-### Solution 2:  Max Heap + Simulation  - Heap/Heap
+### Solution 2: Max Heap + Simulation  - Heap/Heap
 ```python
     def leastInterval(self, tasks: list[str], n: int) -> int:
-        # Count frequency of tasks
-        task_counts = Counter(tasks)
+
+        # Note:
+        #
+
+        # counts
+        freq = Counter(tasks)
         
         # Max heap with negative counts (Python heapq is min-heap)
         maxHeap = [-cnt for cnt in task_counts.values()]
@@ -845,18 +883,28 @@ finish all tasks.
                 _, cnt = cooldown.popleft()
                 heapq.heappush(maxHeap, cnt)
         
+        # overall: time complexity
+        # overall: space complexity
         return time
 ```
 
 ### Solution 3: Deque - Heap/Heap
 ```python
     def leastInterval(self, tasks: List[str], n: int) -> int:
+
+        # Note:
+        # 
+
         count = Counter(tasks)
         maxHeap = [-cnt for cnt in count.values()]
         heapq.heapify(maxHeap)
 
         time = 0
-        q = deque()  # pairs of [-cnt, idleTime]
+
+        # pairs of [-cnt, idleTime]
+        q = deque()  
+
+
         while maxHeap or q:
             time += 1
 
@@ -868,6 +916,9 @@ finish all tasks.
                     q.append([cnt, time + n])
             if q and q[0][1] == time:
                 heapq.heappush(maxHeap, q.popleft()[0])
+
+        # overall: time complexity
+        # overall: space complexity
         return time
 ```
 
