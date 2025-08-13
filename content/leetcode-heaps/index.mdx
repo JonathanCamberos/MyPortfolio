@@ -1013,6 +1013,9 @@ A user cannot follow themselves.
 
 ### Abstraction
 Design a miniTwitter that allows for efficient news feed and postTweet.
+Boils down to desicions on efficiently storing tweets and retrieving 
+the top 10 recent ones.
+Also boils down to a merge k sorted lists question.
 
 ### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -1042,7 +1045,18 @@ Design a miniTwitter that allows for efficient news feed and postTweet.
 ### Solution 1: Store Tweets as Lists + Min Heap Merge - Heap/Heap
 ```python
 class Twitter:
+
     def __init__(self):
+
+        # Note:
+        # Tweets: Stores tweets as deques (lists) per user.
+        # News Feed: Merges k sorted lists using a maxHeap to always pick the most
+        #            recent tweet across the user and their followees.
+
+        # Pros: Simple implementation, efficient for moderate tweet counts.
+        # Cons: Heap merge has some overhead; memory grows with many tweets per user.
+        # IRL Use Case: Balanced usage scenario users follow moderate number of accounts, tweet counts are not huge.
+
         # Map userId to set of followed userIds (initially empty)
         self.followees = defaultdict(set)
         
@@ -1055,12 +1069,203 @@ class Twitter:
         # Max tweets to show
         self.FEED_SIZE = 10
 
+    # time complexity:
+    # space complexity:
     def postTweet(self, userId: int, tweetId: int) -> None:
+
+        # Note:
+        #
+
         # Assign current timestamp and increment
         self.time += 1
+
         # Append tweet to the user’s tweet list
         self.tweets[userId].append((self.time, tweetId))
+
         # Optional: Limit stored tweets per user to save memory (e.g., last 100)
+        if len(self.tweets[userId]) > 100:
+            self.tweets[userId].popleft()
+
+    # time complexity:
+    # space complexity:
+    def follow(self, followerId: int, followeeId: int) -> None:
+
+        # Note:
+        #
+
+        if followerId != followeeId:
+            self.followees[followerId].add(followeeId)
+
+    # time complexity:
+    # space complexity:
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+
+        # Note:
+        #
+
+        self.followees[followerId].discard(followeeId)
+
+    # time complexity:
+    # space complexity:
+    def getNewsFeed(self, userId: int) -> list[int]:
+
+        # Note:
+        #
+
+        # The heap will store (-timestamp, tweetId, userId, index_in_user_tweets)
+        heap = []
+        # The list of users to fetch tweets from: self + followees
+        users = self.followees[userId] | {userId}
+        
+        # Initialize pointers for each user's tweet list (start from newest)
+        for u in users:
+
+            if self.tweets[u]:
+
+                # Index of last tweet in deque (newest)
+                idx = len(self.tweets[u]) - 1
+                timestamp, tweetId = self.tweets[u][idx]
+                heapq.heappush(heap, (-timestamp, tweetId, u, idx))
+        
+        result = []
+
+        while heap and len(result) < self.FEED_SIZE:
+
+            neg_time, tweetId, u, idx = heapq.heappop(heap)
+            result.append(tweetId)
+
+            # Move pointer to next newest tweet if available
+            if idx > 0:
+                idx -= 1
+                timestamp, tweetId = self.tweets[u][idx]
+                heapq.heappush(heap, (-timestamp, tweetId, u, idx))
+        
+        return result
+
+    # overall: time complexity
+    # overall: space complexity
+```
+
+### Solution 2: Store Tweets as Linked Lists + Merge K Sorted Lists - Heap/Heap
+```python
+class TweetNode:
+   
+    # Note:
+    # Tweets: Linked list node for tweets, storing tweetId, timestamp, and next pointer
+    # News Feed: MaxHeap merges the heads of k linked lists, picking the newest tweet each time to produce top 10.
+
+    # Pros: Handles users with very large tweet histories efficiently.
+    # Cons: Pointer overhead; more complex than simple list implementation.
+    # IRL Use Case: 'Celebrity' users with many tweets; avoids indexing overhead when fetching top 10.    
+    
+    def __init__(self, tweetId, time):
+        self.tweetId = tweetId
+        self.time = time
+        self.next = None
+
+class Twitter:
+    def __init__(self):
+
+        # Note:
+        # Stores tweets as linked lists.
+        # News feed built by max-heap merging list heads.
+        # Pros/Cons as above.
+
+        # Map userId to head of linked list of tweets
+        self.tweets = {}
+
+        # Map userId to set of followed userIds
+        self.followees = defaultdict(set)
+        self.time = 0
+        self.FEED_SIZE = 10
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        
+        # Note:
+        # 
+
+        self.time += 1
+        node = TweetNode(tweetId, self.time)
+        node.next = self.tweets.get(userId, None)
+        self.tweets[userId] = node
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+
+        # Note:
+        # 
+
+        if followerId != followeeId:
+            self.followees[followerId].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+
+        # Note:
+        #
+
+        self.followees[followerId].discard(followeeId)
+
+    def getNewsFeed(self, userId: int) -> list[int]:
+
+        # Note:
+        #
+
+        # Users to consider: self + followees
+        users = self.followees[userId] | {userId}
+        
+        # Build a max heap of (-time, TweetNode) for heads of all tweet lists
+        heap = []
+
+        for u in users:
+
+            if self.tweets.get(u):
+                heapq.heappush(heap, (-self.tweets[u].time, self.tweets[u]))
+        
+        result = []
+
+        while heap and len(result) < self.FEED_SIZE:
+
+            neg_time, node = heapq.heappop(heap)
+            result.append(node.tweetId)
+
+            if node.next:
+                heapq.heappush(heap, (-node.next.time, node.next))
+        
+        return result
+
+    # overall: time complexity
+    # overall: space complexity
+```
+
+### Solution 3: Store Tweets as Arrays/Deques + Dynamic Heap Merge - Heap/Heap
+```python
+class Twitter:
+
+    def __init__(self):
+
+        # Note:
+        # Tweets: Stores tweets as deques per user, uses indices to access latest tweets.
+        # News Feed: Max-heap merges the most recent tweets from each user for news feed.
+        
+        # Pros: Simple, practical, low overhead, works well with typical usage.
+        # Cons: Slightly more complex than naive list append-only approach; still has heap overhead.
+        # IRL Use Case: Most practical for IRL apps where MOST users have few tweets and follow a manageable number of accounts.
+        #               Slightly more efficient than Solution 1 due to index-based access for news feed construction.
+
+        # Map userId to list of (timestamp, tweetId)
+        self.tweets = defaultdict(deque)
+        
+        # Map userId to set of followed userIds
+        self.followees = defaultdict(set)
+        
+        # Global timestamp for ordering
+        self.time = 0
+        self.FEED_SIZE = 10
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        # Increment timestamp
+        self.time += 1
+        self.tweets[userId].append((self.time, tweetId))
+        # Optional: limit stored tweets to last 100 per user
         if len(self.tweets[userId]) > 100:
             self.tweets[userId].popleft()
 
@@ -1072,84 +1277,29 @@ class Twitter:
         self.followees[followerId].discard(followeeId)
 
     def getNewsFeed(self, userId: int) -> list[int]:
-        # The heap will store (-timestamp, tweetId, userId, index_in_user_tweets)
-        heap = []
-        # The list of users to fetch tweets from: self + followees
+        # Users to pull tweets from: self + followees
         users = self.followees[userId] | {userId}
-        
-        # Initialize pointers for each user's tweet list (start from newest)
+        heap = []
+
+        # Initialize heap with most recent tweet of each user
         for u in users:
             if self.tweets[u]:
-                # Index of last tweet in deque (newest)
                 idx = len(self.tweets[u]) - 1
-                timestamp, tweetId = self.tweets[u][idx]
-                heapq.heappush(heap, (-timestamp, tweetId, u, idx))
-        
+                ts, tid = self.tweets[u][idx]
+                heapq.heappush(heap, (-ts, tid, u, idx))
+
         result = []
+
         while heap and len(result) < self.FEED_SIZE:
-            neg_time, tweetId, u, idx = heapq.heappop(heap)
-            result.append(tweetId)
-            # Move pointer to next newest tweet if available
+            neg_ts, tid, u, idx = heapq.heappop(heap)
+            result.append(tid)
             if idx > 0:
                 idx -= 1
-                timestamp, tweetId = self.tweets[u][idx]
-                heapq.heappush(heap, (-timestamp, tweetId, u, idx))
-        
+                ts, tid = self.tweets[u][idx]
+                heapq.heappush(heap, (-ts, tid, u, idx))
+
         return result
 ```
-
-### Solution 2: Store Tweets as Linked Lists + Merge K Sorted Lists - Heap/Heap
-```python
-class TweetNode:
-    def __init__(self, tweetId, time):
-        self.tweetId = tweetId
-        self.time = time
-        self.next = None
-
-class Twitter:
-    def __init__(self):
-        # Map userId to head of linked list of tweets
-        self.tweets = {}
-        # Map userId to set of followed userIds
-        self.followees = defaultdict(set)
-        self.time = 0
-        self.FEED_SIZE = 10
-
-    def postTweet(self, userId: int, tweetId: int) -> None:
-        self.time += 1
-        node = TweetNode(tweetId, self.time)
-        node.next = self.tweets.get(userId, None)
-        self.tweets[userId] = node
-
-    def follow(self, followerId: int, followeeId: int) -> None:
-        if followerId != followeeId:
-            self.followees[followerId].add(followeeId)
-
-    def unfollow(self, followerId: int, followeeId: int) -> None:
-        self.followees[followerId].discard(followeeId)
-
-    def getNewsFeed(self, userId: int) -> list[int]:
-        import heapq
-
-        # Users to consider: self + followees
-        users = self.followees[userId] | {userId}
-        
-        # Build a max heap of (-time, TweetNode) for heads of all tweet lists
-        heap = []
-        for u in users:
-            if self.tweets.get(u):
-                heapq.heappush(heap, (-self.tweets[u].time, self.tweets[u]))
-        
-        result = []
-        while heap and len(result) < self.FEED_SIZE:
-            neg_time, node = heapq.heappop(heap)
-            result.append(node.tweetId)
-            if node.next:
-                heapq.heappush(heap, (-node.next.time, node.next))
-        
-        return result
-```
-
 
 ## 295. Find Median from Data Stream ::1:: - Hard
 
@@ -1214,35 +1364,110 @@ Find median value from a stream of data.
 ### Solution 1: MaxHeap + MinHeap Median Finder - Heap/Heap
 ```python
 class MedianFinder:
+
+    # Note:
+    # Two
+
     def __init__(self):
-        # maxHeap stores the smaller half, but Python only has minHeap,
-        # so we push negatives to simulate maxHeap behavior
-        self.maxHeap = []  # e.g., stores values as -num
-        # minHeap stores the larger half of numbers
+        
+        # MaxHeap stores smaller half,
+        # all numbers less than or equal to the median
+        self.maxHeap = []
+
+        # MinHeap stores larger half,
+        # all numbers greater than or equal to the median
         self.minHeap = []
 
+    # time complexity:
+    # space complexity: 
     def addNum(self, num: int) -> None:
-        # Step 1: Add new number to maxHeap (invert sign)
+
+        # Note:
+        # Two heaps track lower and upper half
+        # 
+
+        # Add new number to maxHeap
         heapq.heappush(self.maxHeap, -num)
         
-        # Step 2: Ensure every element in maxHeap <= every element in minHeap
-        # Move largest from maxHeap to minHeap if out of order
+        # Ensure all elements in maxHeap greater than every element in minHeap
+        # move smallest  largest from maxHeap to minHeap if out of order
         if (self.minHeap and (-self.maxHeap[0] > self.minHeap[0])):
             val = -heapq.heappop(self.maxHeap)
             heapq.heappush(self.minHeap, val)
         
-        # Step 3: Balance sizes, maxHeap can have 1 more element than minHeap
+        # Balance heaps:
+        # MaxHeap should have 1 more element than minHeap
+
+        # if minHeap is larger, move minHeap root to maxHeap
         if len(self.maxHeap) < len(self.minHeap):
+            
+            #
             val = heapq.heappop(self.minHeap)
+            #
             heapq.heappush(self.maxHeap, -val)
+
+        # if maxHeap is larger by more than 1, move maxHeap root to minHeap
         elif len(self.maxHeap) > len(self.minHeap) + 1:
+            
+            #
             val = -heapq.heappop(self.maxHeap)
+            #
             heapq.heappush(self.minHeap, val)
 
+
+    # time complexity:
+    # space complexity:
     def findMedian(self) -> float:
-        # If odd total elements, median is root of maxHeap
+
+        # Note:
+        # Median retrieval logic:
+        # 1. if odd -> root of MaxHeap (largest in smaller half)
+        # 2. if even -> average of roots from both heaps
+
+        # odd
         if len(self.maxHeap) > len(self.minHeap):
             return -self.maxHeap[0]
-        # Else average of roots from both heaps
-        return (-self.maxHeap[0] + self.minHeap[0]) / 2
+       
+        # even
+        average = (-self.maxHeap[0] + self.minHeap[0]) / 2
+
+        return average
+```
+
+
+### Solution 2: Balanced BST - Heap/Heap
+```python
+class MedianFinder:
+    def __init__(self):
+
+        # Note:
+        # balanced binary tree 
+        self.sl = SortedList()
+
+    # time complexity:
+    # space complexity:
+    def addNum(self, num: int) -> None:
+
+        # insert in sorted order
+        self.sl.add(num)
+
+    # time complexity:
+    # space complexity:
+    def findMedian(self) -> float:
+        
+        # len
+        n = len(self.sl)
+
+        # odd
+        if n % 2 == 1:
+            return self.sl[n // 2]
+
+        # even
+        average = (self.sl[n // 2 - 1] + self.sl[n // 2]) / 2
+
+        return average
+
+    
+    # overall: time complexity
+    # overall: space complexity
 ```
