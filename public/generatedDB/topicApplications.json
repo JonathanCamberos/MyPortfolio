@@ -504,5 +504,16 @@
       "useCaseLink": "/Notes/leetcode-heaps#heap-application-interval-scheduling-optimization",
       "blog": "LeetCode: Heaps"
     }
+  ],
+  "backtracking": [
+    {
+      "type": "Backtracking",
+      "title": "something",
+      "summary": "We",
+      "exampleIntro": "something",
+      "codeExample": "def kthLargest(nums, k):",
+      "useCaseLink": "/Notes/leetcode-backtracking#backtracking-application-something",
+      "blog": "LeetCode: Backtracking"
+    }
   ]
 }

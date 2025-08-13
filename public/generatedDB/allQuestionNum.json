@@ -284,6 +284,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "78": {
+    "questionNum": 78,
+    "questionTitle": "Subsets ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums of unique elements, return all possible subsets (the power set). A subset of an array is a selection of elements (possibly none) of the array. The solution set must not contain duplicate subsets. Return the solution in any order.",
+    "questionTopics": [
+      "Array",
+      "Backtracking",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#78-subsets-1---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "84": {
     "questionNum": 84,
     "questionTitle": "Largest Rectangle in Histogram ::2::",

@@ -417,6 +417,18 @@
       "blog": "LeetCode: Sliding Window"
     }
   ],
+  "78": [
+    {
+      "number": 1,
+      "name": "Min Heap of Size k",
+      "type": "heap",
+      "application": "heap",
+      "code": "def subsets(self, nums: List[int]) -> List[List[int]]:\n        res = []\n\n        def dfs_backtrack(start: int, path: List[int]):\n            # Append a copy of the current subset (path)\n            res.append(path[:])\n            \n            # Explore further elements to add\n            for i in range(start, len(nums)):\n                # Include nums[i] and move to next\n                path.append(nums[i])\n                dfs_backtrack(i + 1, path)\n                # Backtrack: remove last element\n                path.pop()\n        \n        dfs_backtrack(0, [])\n        return res",
+      "questionNumber": 78,
+      "solutionLink": "/Notes/leetcode-backtracking#solution-1-min-heap-of-size-k---heapheap",
+      "blog": "LeetCode: Backtracking"
+    }
+  ],
   "84": [
     {
       "number": 1,

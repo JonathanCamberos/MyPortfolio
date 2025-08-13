@@ -29,7 +29,8 @@
     1046,
     973,
     215,
-    621
+    621,
+    78
   ],
   "Hash Table": [
     217,
@@ -167,7 +168,8 @@
     124
   ],
   "Backtracking": [
-    22
+    22,
+    78
   ],
   "Monotonic Stack": [
     739,
@@ -250,7 +252,8 @@
     25
   ],
   "Bit Manipulation": [
-    287
+    287,
+    78
   ],
   "Doubly Linked List": [
     146
