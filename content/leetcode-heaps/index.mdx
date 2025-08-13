@@ -1048,6 +1048,9 @@ class Twitter:
 
     def __init__(self):
 
+        # IRL Use Case: 
+        # Balanced usage scenario users follow moderate number of accounts, tweet counts are not huge.
+
         # Note:
         # Tweets: Stores tweets as deques (lists) per user.
         # News Feed: Merges k sorted lists using a maxHeap to always pick the most
@@ -1055,7 +1058,6 @@ class Twitter:
 
         # Pros: Simple implementation, efficient for moderate tweet counts.
         # Cons: Heap merge has some overhead; memory grows with many tweets per user.
-        # IRL Use Case: Balanced usage scenario users follow moderate number of accounts, tweet counts are not huge.
 
         # Map userId to set of followed userIds (initially empty)
         self.followees = defaultdict(set)
@@ -1150,14 +1152,17 @@ class Twitter:
 ```python
 class TweetNode:
    
+    # IRL Use Case: 
+    # 'Celebrity' users with many tweets; avoids indexing overhead when fetching top 10.    
+    
+
     # Note:
     # Tweets: Linked list node for tweets, storing tweetId, timestamp, and next pointer
     # News Feed: MaxHeap merges the heads of k linked lists, picking the newest tweet each time to produce top 10.
 
     # Pros: Handles users with very large tweet histories efficiently.
     # Cons: Pointer overhead; more complex than simple list implementation.
-    # IRL Use Case: 'Celebrity' users with many tweets; avoids indexing overhead when fetching top 10.    
-    
+
     def __init__(self, tweetId, time):
         self.tweetId = tweetId
         self.time = time
@@ -1242,14 +1247,16 @@ class Twitter:
 
     def __init__(self):
 
+        # IRL Use Case: 
+        # Most practical for IRL apps where MOST users have few tweets and follow a manageable number of accounts.
+        # Slightly more efficient than Solution 1 due to index-based access for news feed construction.
+
         # Note:
         # Tweets: Stores tweets as deques per user, uses indices to access latest tweets.
         # News Feed: Max-heap merges the most recent tweets from each user for news feed.
         
         # Pros: Simple, practical, low overhead, works well with typical usage.
         # Cons: Slightly more complex than naive list append-only approach; still has heap overhead.
-        # IRL Use Case: Most practical for IRL apps where MOST users have few tweets and follow a manageable number of accounts.
-        #               Slightly more efficient than Solution 1 due to index-based access for news feed construction.
 
         # Map userId to list of (timestamp, tweetId)
         self.tweets = defaultdict(deque)
