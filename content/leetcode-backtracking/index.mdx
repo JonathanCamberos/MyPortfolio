@@ -10,7 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-## Intro
+## Backtracking intro
+
+LeetCode problems with heap solutions. 
+
+### What is Backtracking
 
 Backtracking is a technique where we incrementally build candidates 
 for solutions and abandon or 'backtrack' a candidate when it cannot
@@ -21,3 +25,98 @@ invalid branches.
 
 Backtracking commonly leads to high time complexity is often the most practical way
 to solve certain types of problem that require an exhaustive search exploring all possibilities.
+
+### Backtracking Characteristics
+
+Heaps
+
+### Backtracking Representation
+Tree 
+
+### Backtracking IRL
+Prio
+
+### Backtracking Application: something
+We 
+
+Ex: something
+```python
+    def kthLargest(nums, k):
+       
+```
+
+
+## 78. Subsets ::1:: - Medium
+
+Topics:  Array, Backtracking, Bit Manipulation
+
+### Intro
+> Given an integer array nums of unique elements, return 
+> all possible subsets (the power set).
+> A subset of an array is a selection of elements (possibly none) of the array.
+> The solution set must not contain duplicate subsets.
+> Return the solution in any order.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,2,3] | [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]] |
+| nums = [0] | [[],[0]] |
+
+Constraints:
+
+1 &leq; nums.length &leq; 10
+
+-10 &leq; nums[i] &leq; 10
+
+All the numbers of nums are unique.
+
+### Abstraction
+Given a list of numbers, return all unique subsets.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Min Heap of Size k - Heap/Heap
+```python
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+
+        def dfs_backtrack(start: int, path: List[int]):
+            # Append a copy of the current subset (path)
+            res.append(path[:])
+            
+            # Explore further elements to add
+            for i in range(start, len(nums)):
+                # Include nums[i] and move to next
+                path.append(nums[i])
+                dfs_backtrack(i + 1, path)
+                # Backtrack: remove last element
+                path.pop()
+        
+        dfs_backtrack(0, [])
+        return res
+```
+
