@@ -524,64 +524,101 @@ Given a list of point on a X-Y grid, find the k closest points to the origin.
         #         if heap size < k: push (-distance, point)
         #         else if current distance < largest distance in heap: pop and push
         #    - This ensures we always keep k closest points in O(n log k) time.
-        # 4. Complexity:
-        #    - Time: O(n log k) — each heap push/pop is O(log k)
-        #    - Space: O(k) — heap stores k elements.
 
-        max_heap = []  # stores (-distance, [x, y])
+        # (-distance, [x, y])
+        maxHeap = []
 
+        # add all distances to maxHeap
         for x, y in points:
-            dist = x * x + y * y  # squared distance
-            if len(max_heap) < k:
-                heapq.heappush(max_heap, (-dist, [x, y]))
-            else:
-                if dist < -max_heap[0][0]:  # if closer than farthest in heap
-                    heapq.heapreplace(max_heap, (-dist, [x, y]))
 
-        return [point for (_, point) in max_heap]
+            # square distance
+            dist = x * x + y * y 
+
+            # if maxHeap has space, simply push
+            if len(maxHeap) < k:
+                heapq.heappush(maxHeap, (-dist, [x, y]))
+
+            # if maxHeap is full, check if push is required
+            else:
+
+                # if closer than farthest point
+                if dist < -maxHeap[0][0]:
+                    heapq.heapreplace(maxHeap, (-dist, [x, y]))
+        
+        # grab list of coords
+        res = [xy for (_, xy) in maxHeap]
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 2: QuickSelect - Heap/Heap
 ```python
     def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
-        # Helper: squared distance to origin
+        
+        # Note:
+        # Classic Quick Select but with square distance
+        # sqrt() is monotonic so we can ignore it
+        
+        # squared distance to origin
         def dist(i: int) -> int:
             return points[i][0] ** 2 + points[i][1] ** 2
         
-        def partition(left: int, right: int, pivot_index: int) -> int:
-            pivot_dist = dist(pivot_index)
-            # Move pivot to end
-            points[pivot_index], points[right] = points[right], points[pivot_index]
-            store_index = left
+        def partition(left, right, randPivotIndex) -> int:
+
+            # prepare partition
+            randPivotDist = dist(randPivotIndex)
+            points[randPivotIndex], points[right] = points[right], points[randPivotIndex]
+            leftPartition = left
             
-            # Move all points closer than pivot to the left
+            # partition all closer points to left
             for i in range(left, right):
-                if dist(i) < pivot_dist:
-                    points[store_index], points[i] = points[i], points[store_index]
-                    store_index += 1
+
+                # if point is closer to origin (lower)
+                if dist(i) < randPivotDist:
+                    points[leftPartition], points[i] = points[i], points[leftPartition]
+                    leftPartition += 1
             
-            # Move pivot to final place
-            points[right], points[store_index] = points[store_index], points[right]
-            return store_index
+            # restore pivot
+            points[right], points[leftPartition] = points[leftPartition], points[right]
+
+            # return
+            return leftPartition
         
-        def quickselect(left: int, right: int, k_smallest: int):
-            """Sort the array such that the k_smallest elements are in first k_smallest slots."""
+        def quickselect(left, right, finalIndex):
+            
+            # Base case:
             if left >= right:
                 return
             
-            pivot_index = random.randint(left, right)
-            pivot_index = partition(left, right, pivot_index)
+            # random pivot and result
+            randPivotIndex = random.randint(left, right)
+            resPivot = partition(left, right, randPivotIndex)
             
-            # Recurse into the part that contains the k_smallest
-            if k_smallest < pivot_index:
-                quickselect(left, pivot_index - 1, k_smallest)
-            elif k_smallest > pivot_index:
-                quickselect(pivot_index + 1, right, k_smallest)
-            # else pivot_index == k_smallest → done
+            # target check
+            if resPivot == finalIndex:
+                return
+            
+            elif resPivot < finalIndex: 
+                quickselect(resPivot + 1, right, finalIndex)
+
+            else:
+                quickselect(left, resPivot - 1, finalIndex)
+            
         
+        # boundary
         n = len(points)
+
+        # quickSelect on bounds
         quickselect(0, n - 1, k)
-        return points[:k]
+
+        # grab lowest k points
+        res = points[:k]
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 
