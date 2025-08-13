@@ -1,9 +1,9 @@
 ---
 title: "LeetCode: Backtracking"
 description: "backtracking"
-image: "../../public/Notes/backtracking-1.png"
-publishedAt: "2025-04-02"
-updatedAt: "2025-04-02"
+image: "../../public/Notes/backtracking.png"
+publishedAt: "2025-08-20"
+updatedAt: "2025-08-20"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -21,69 +21,3 @@ invalid branches.
 
 Backtracking commonly leads to high time complexity is often the most practical way
 to solve certain types of problem that require an exhaustive search exploring all possibilities.
-
-
-
-### Example: Sum of a Subset
-
-> Given a list of integers and a target sum, find all subsets that add up to the target.
-
-|  Input   | Output  |  
-| -------- | ------- | 
-| [2, 6, 7, 10, 15] | [[7]] |
-
-
-### Solution 1: Backtracking
-```python
-    def subsetSum(self, nums, target):
-        
-        # store valid results
-        result = []
-
-        def backtrack(current, index, total):
-            
-            # Prune the path if the total exceeds the target
-            if total > target:
-                return
-
-            # If total matches the target, add to result
-            if total == target:
-                result.append(list(current))
-                return
-
-            # Explore further candidates
-            for i in range(index, len(nums)):
-                # Choose
-                current.append(nums[i])
-
-                # Recurse
-                backtrack(current, i + 1, total + nums[i])
-
-                # Undo the choice (backtrack)
-                current.pop()
-
-        backtrack([], 0, 0)
-
-        # overall: time complexity
-        # overall: space complexity
-        return result
-```
-```
-Backtracking for: [2, 6, 7, 10, 15]
-                                                  [] 
-                     Include 2                                           Exclude 2
-                    /                                                          \
-                   [2]                                                         []
-          Include 6   Exclude 6                                       Include 6   Exclude 6     
-           /              \                                            /                 \
-       [2,6]              [2]                                      [6]                  []
-        Prune      Include 7  Exclude 7                    Include 7  Exclude 7        Include 7  Exclude 7
-                       /           \                         /              \           /              \
-                    [2,7]          [2]                     [6,7]           [6]        [7]              []
-                    Prune    Include 10  Exclude 10        Prune          ....     Solution           ...
-                                /           \
-                               [10]         []
-                               Prune        ...
-```
-
-

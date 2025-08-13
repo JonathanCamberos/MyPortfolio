@@ -1059,16 +1059,9 @@ class Twitter:
         # Pros: Simple implementation, efficient for moderate tweet counts.
         # Cons: Heap merge has some overhead; memory grows with many tweets per user.
 
-        # Map userId to set of followed userIds (initially empty)
         self.followees = defaultdict(set)
-        
-        # Map userId to deque of (timestamp, tweetId), newest at right
         self.tweets = defaultdict(deque)
-        
-        # Global timestamp to order tweets
         self.time = 0
-        
-        # Max tweets to show
         self.FEED_SIZE = 10
 
     # time complexity:
@@ -1078,13 +1071,9 @@ class Twitter:
         # Note:
         #
 
-        # Assign current timestamp and increment
         self.time += 1
-
-        # Append tweet to the user’s tweet list
         self.tweets[userId].append((self.time, tweetId))
 
-        # Optional: Limit stored tweets per user to save memory (e.g., last 100)
         if len(self.tweets[userId]) > 100:
             self.tweets[userId].popleft()
 
@@ -1114,12 +1103,13 @@ class Twitter:
         # Note:
         #
 
-        # The heap will store (-timestamp, tweetId, userId, index_in_user_tweets)
+        # heap stores (-timestamp, tweetId, userId, index_in_user_tweets)
         heap = []
+
         # The list of users to fetch tweets from: self + followees
         users = self.followees[userId] | {userId}
         
-        # Initialize pointers for each user's tweet list (start from newest)
+        # Init pointers for each user tweet list (start from newest)
         for u in users:
 
             if self.tweets[u]:
