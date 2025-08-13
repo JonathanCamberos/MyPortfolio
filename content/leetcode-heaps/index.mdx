@@ -433,20 +433,23 @@ stone loses weight equal to the weight of the less heavy stone.
         # 2. Continue smashing pairs of stones until heap size 1
         # Result: final stone weight or all stones destroyed
        
-        # Add stone negative weight to minHeap (mocking a MaxHeap)
+        # turn list to negative numbers
         maxHeap = [-stone for stone in stones]
+
+        # transform list into heap, in place, in linear time
         heapq.heapify(maxHeap)
 
-        # until 1 stone left 
+        # remove top two stones until one stone left 
         while len(maxHeap) > 1:
 
             # grab two heaviest stones
-            first = -heapq.heappop(maxHeap)  
-            second = -heapq.heappop(maxHeap)
+            first = -(heapq.heappop(maxHeap))
+            second = -(heapq.heappop(maxHeap))
 
-            # readd stone weight to maxHeap
+            # push if partial stone remains
             if first != second:
-                heapq.heappush(maxHeap, -(first - second))
+                remainingStoneWeight = -(first - second)
+                heapq.heappush(maxHeap, remainingStoneWeight)
 
         # check if stone remains
         res = -maxHeap[0] if maxHeap else 0
