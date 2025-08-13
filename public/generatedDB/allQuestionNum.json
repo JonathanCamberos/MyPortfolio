@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "2": {
     "questionNum": 2,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "11": {
     "questionNum": 11,
@@ -86,7 +86,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "15": {
     "questionNum": 15,
@@ -102,7 +102,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "19": {
     "questionNum": 19,
@@ -130,7 +130,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 31
+    "coldnessCount": 32
   },
   "21": {
     "questionNum": 21,
@@ -204,7 +204,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 20
+    "coldnessCount": 21
   },
   "36": {
     "questionNum": 36,
@@ -219,7 +219,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "42": {
     "questionNum": 42,
@@ -236,7 +236,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "49": {
     "questionNum": 49,
@@ -252,7 +252,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "74": {
     "questionNum": 74,
@@ -267,7 +267,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 20
+    "coldnessCount": 21
   },
   "76": {
     "questionNum": 76,
@@ -437,7 +437,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "128": {
     "questionNum": 128,
@@ -452,7 +452,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "138": {
     "questionNum": 138,
@@ -529,7 +529,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 32
+    "coldnessCount": 33
   },
   "153": {
     "questionNum": 153,
@@ -543,7 +543,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 20
+    "coldnessCount": 21
   },
   "155": {
     "questionNum": 155,
@@ -557,7 +557,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 31
+    "coldnessCount": 32
   },
   "162": {
     "questionNum": 162,
@@ -586,7 +586,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-sorted-array-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "199": {
     "questionNum": 199,
@@ -697,7 +697,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "226": {
     "questionNum": 226,
@@ -759,7 +759,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "239": {
     "questionNum": 239,
@@ -791,7 +791,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "271": {
     "questionNum": 271,
@@ -805,7 +805,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "287": {
     "questionNum": 287,
@@ -826,7 +826,7 @@
   "295": {
     "questionNum": 295,
     "questionTitle": "Find Median from Data Stream ::1::",
-    "questionDifficulty": "Medium",
+    "questionDifficulty": "Hard",
     "questionBlurb": "The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values. For example, for arr = [2,3,4], the median is 3. For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5. Implement the MedianFinder class: MedianFinder() initializes the MedianFinder object. void addNum(int num) adds the integer num from the data stream to the data structure. double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.",
     "questionTopics": [
       "Two Pointers",
@@ -835,7 +835,7 @@
       "Heap (Priority Queue)",
       "Data Stream"
     ],
-    "questionLink": "/Notes/leetcode-heaps#295-find-median-from-data-stream-1---medium",
+    "questionLink": "/Notes/leetcode-heaps#295-find-median-from-data-stream-1---hard",
     "blog": "LeetCode: Heaps",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -876,7 +876,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 34
+    "coldnessCount": 35
   },
   "355": {
     "questionNum": 355,
@@ -1020,7 +1020,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 20
+    "coldnessCount": 21
   },
   "739": {
     "questionNum": 739,
@@ -1070,7 +1070,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 20
+    "coldnessCount": 21
   },
   "973": {
     "questionNum": 973,
