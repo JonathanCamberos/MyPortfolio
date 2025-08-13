@@ -473,7 +473,7 @@
       "title": "K Way Merge for Sorted Streams",
       "summary": "A minHeap can efficiently merge multiple sorted lists or streams by always extracting the next smallest element across all inputs.",
       "exampleIntro": "Merge k sorted lists into one sorted lists",
-      "codeExample": "def mergeKSorted(lists):\n    heap = []\n    for i, lst in enumerate(lists):\n        if lst:\n            heapq.heappush(heap, (lst[0], i, 0))\n    \n    result = []\n    while heap:\n        val, list_idx, elem_idx = heapq.heappop(heap)\n        result.append(val)\n        if elem_idx + 1 < len(lists[list_idx]):\n            heapq.heappush(heap, (lists[list_idx][elem_idx+1], list_idx, elem_idx+1))\n    return result\n\n# Example: mergeKSorted([[1,4,5],[1,3,4],[2,6]]) -> [1,1,2,3,4,4,5,6]",
+      "codeExample": "def mergeKSorted(lists):\n        heap = []\n        for i, lst in enumerate(lists):\n            if lst:\n                heapq.heappush(heap, (lst[0], i, 0))\n        \n        result = []\n        while heap:\n            val, list_idx, elem_idx = heapq.heappop(heap)\n            result.append(val)\n            if elem_idx + 1 < len(lists[list_idx]):\n                heapq.heappush(heap, (lists[list_idx][elem_idx+1], list_idx, elem_idx+1))\n        return result\n\n    # mergeKSorted([[1,4,5],[1,3,4],[2,6]]) -> [1,1,2,3,4,4,5,6]",
       "useCaseLink": "/Notes/leetcode-heaps#heap-application-k-way-merge-for-sorted-streams",
       "blog": "LeetCode: Heaps"
     },
