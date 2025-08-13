@@ -803,7 +803,7 @@ finish all tasks.
 ```python
 ```
 
-### Solution 1: Counting + Greedy Math Formula  - Heap/Heap
+### Solution 1: Highest Occurring Tasks into Greedy Math Formula - Heap/Heap
 ```python
     def leastInterval(self, tasks: list[str], n: int) -> int:
 
@@ -850,37 +850,55 @@ finish all tasks.
         return res
 ```
 
-### Solution 2: Max Heap + Simulation  - Heap/Heap
+### Solution 2: Max Heap Tick by Tick Simulation For Count Occurrences - Heap/Heap
 ```python
     def leastInterval(self, tasks: list[str], n: int) -> int:
 
         # Note:
-        #
+        # Simulates task scheduling process 
+        # 1. MaxHeap picks current most frequent remaining task first
+        # 2. Queue (FIFO) simulates cool down to store tasks that have been run
+        # but must wait 'n' intervals before they can be scheduled again
+        # 3. Each iteration represents 1 unit of CPU time
+        # 4. Iterate until both MaxHeap and Queue are empty
+        # Result: time is total CPU time needed, including idle intervals
 
         # counts
         freq = Counter(tasks)
         
-        # Max heap with negative counts (Python heapq is min-heap)
-        maxHeap = [-cnt for cnt in task_counts.values()]
+        # MaxHeap with negative counts
+        maxHeap = [-count for count in freq.values()]
         heapq.heapify(maxHeap)
         
+        # total CPU time simulated
         time = 0
+        
         # Queue to hold cooldown tasks: (ready_time, count)
         cooldown = deque()
         
+        # until both are empty
         while maxHeap or cooldown:
+
+            # 1 CPU tick
             time += 1
             
+            # grab most frequent task
             if maxHeap:
-                # Pop most frequent task
-                cnt = heapq.heappop(maxHeap) + 1  # decrement count (negative)
+                
+                # remove most freq task from root, and decrement by 1 
+                cnt = heapq.heappop(maxHeap) + 1
                 if cnt != 0:
-                    # Put into cooldown with time when it can be used again
+                    # put task into cool down,
+                    # and calculate time until next available use
                     cooldown.append((time + n, cnt))
             
-            # Check if any task in cooldown is ready to be re-added to heap
+            # check if any task in cool down is ready to be added back to maxHeap
             if cooldown and cooldown[0][0] == time:
+
+                # pop FIFO
                 _, cnt = cooldown.popleft()
+
+                # push task occurrence count back to maxHeap
                 heapq.heappush(maxHeap, cnt)
         
         # overall: time complexity
@@ -888,34 +906,63 @@ finish all tasks.
         return time
 ```
 
-### Solution 3: Deque - Heap/Heap
+### Solution 3: Max Heap Time Jump Optimization Simulation for Count Occurrences - Heap/Heap
 ```python
     def leastInterval(self, tasks: List[str], n: int) -> int:
 
         # Note:
-        # 
-
-        count = Counter(tasks)
-        maxHeap = [-cnt for cnt in count.values()]
+        # Simulates task scheduling with a MaxHeap + cool down queue
+        # 1. MaxHeap picks current most frequent remaining task first
+        # 2. Queue (FIFO) simulates cool down to store tasks that have been run
+        # but must wait 'n' intervals before they can be scheduled again
+        # 3. if MaxHeap is empty but cool down queue is not, we 'jump' 
+        #    directly to the next ready task instead of simulating idle ticks,
+        #.   skipping over unnecessary +1 increments and speeds up simulation
+        # Result: time is total CPU time needed, including idle intervals,
+        #         with fewer iterations
+        
+        
+        # counts
+        freq = Counter(tasks)
+        
+        # MaxHeap with negative counts
+        maxHeap = [-count for count in freq.values()]
         heapq.heapify(maxHeap)
 
+        # total CPU time simulated
         time = 0
 
-        # pairs of [-cnt, idleTime]
+        # Queue to hold cooldown tasks: (-cnt, idleTime)
         q = deque()  
 
-
+        # until both are empty
         while maxHeap or q:
+
+            # CPU tick
             time += 1
 
+            # if maxHeap is empty
             if not maxHeap:
+                # time 'jump' to next cool down
                 time = q[0][1]
+
+            # maxHeap is non empty
             else:
+
+                # remove most freq task from root, and decrement by 1 
                 cnt = 1 + heapq.heappop(maxHeap)
                 if cnt:
+                    # put task into cool down,
+                    # and calculate time until next available use 
                     q.append([cnt, time + n])
+
+            # check if any task in cool down is ready to be added back to maxHeap
             if q and q[0][1] == time:
-                heapq.heappush(maxHeap, q.popleft()[0])
+                
+                # pop FIFO
+                (cnt, idleTime) = q.popleft()
+
+                heapq.heappush(maxHeap, cnt)
 
         # overall: time complexity
         # overall: space complexity
