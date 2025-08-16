@@ -16,33 +16,199 @@ LeetCode problems with heap solutions.
 
 ### What is Backtracking
 
-Backtracking is a technique where we incrementally build candidates 
-for solutions and abandon or 'backtrack' a candidate when it cannot
-lead to a valid solution. 
+Backtracking is a systematic technique for exploring all possible solutions
+to a problem by building them incrementally and abandoning ('backtracking')
+as soon as it becomes clear that a candidate cannot lead to a valid solution.
 
-The key idea is recursive exploration to build solutions while pruning
-invalid branches.
+It is often implemented recursively, but can also be simulated iteratively
+with a stack.
 
-Backtracking commonly leads to high time complexity is often the most practical way
-to solve certain types of problem that require an exhaustive search exploring all possibilities.
+While backtracking often has exponential time complexity in the worst case,
+it is the most practical way to solve problems that require exploring many
+possibilities with pruning.
 
 ### Backtracking Characteristics
 
-Heaps
+1. Build -> partial solution
+2. Prune -> remove branches that violate constraints
+3. Explore -> recurse or continue to extend the current partial solution
+4. Backtrack -> undo the last step and try another option
 
 ### Backtracking Representation
-Tree 
+
+- Tree representation: Each node represents a decision state
+
+- Children: represent choices from the current states
+
+- Leaves: Either full solutions or dead nodes
+
+Generating subsets of [1,2,3] forms a decision tree where at each step,
+we decide to include or exclude a number
+
 
 ### Backtracking IRL
-Prio
+In the context of solving a maze, at each intersection, you choose a path
+(a decision). If the path leads to a dead end, you backtrack to the intersection
+and try another route. Eventually, you either find the exit (solution) 
+or exhaust all paths (no solutions).
 
-### Backtracking Application: something
-We 
+### Backtracking Application: Generate All Combinations Or Subsets
+We can explore all subsets, permutations, or combinations by recursively
+building solutions and backtracking when needed.
 
-Ex: something
+Ex: Generate all subsets of a set
 ```python
-    def kthLargest(nums, k):
-       
+    def subsets(nums):
+        res = []
+        
+        def backtrack(start, path):
+            res.append(path[:])  # Record the current subset
+            
+            for i in range(start, len(nums)):
+                path.append(nums[i])          # Choose nums[i]
+                backtrack(i + 1, path)        # Explore further
+                path.pop()                    # Undo choice (backtrack)
+        
+        backtrack(0, [])
+        return res
+
+    # Example: subsets([1,2,3]) -> [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]
+```
+
+### Backtracking Application: Generate While Constraint Satisfaction
+We can explore all permutations, we can enforce rules as we explore
+in order to prune invalid branches early.
+
+Ex: Generate all valid parentheses
+```python
+    def generateParenthesis(n):
+        res = []
+        
+        def backtrack(open_count, close_count, path):
+            if len(path) == 2 * n:   # Found valid sequence
+                res.append("".join(path))
+                return
+            
+            if open_count < n:       # We can still add '('
+                path.append("(")
+                backtrack(open_count + 1, close_count, path)
+                path.pop()
+            
+            if close_count < open_count:  # We can close only if '(' remains unmatched
+                path.append(")")
+                backtrack(open_count, close_count + 1, path)
+                path.pop()
+        
+        backtrack(0, 0, [])
+        return res
+
+    # Example: generateParenthesis(3) -> ["((()))","(()())","(())()","()(())","()()()"]
+```
+
+
+### Backtracking Application: Path Finding In Search Space
+We can explores paths step by step, backtracking when reaching dead ends
+in different search spaces (e.g. grids, graphs, networks).
+
+Ex: Word Search in grid
+```python
+    def exist(board, word):
+        rows, cols = len(board), len(board[0])
+        
+        def backtrack(r, c, idx):
+            if idx == len(word):     # Matched full word
+                return True
+            if r < 0 or c < 0 or r >= rows or c >= cols:
+                return False
+            if board[r][c] != word[idx]:
+                return False
+            
+            tmp, board[r][c] = board[r][c], "#"  # Mark visited
+            found = (backtrack(r+1, c, idx+1) or
+                     backtrack(r-1, c, idx+1) or
+                     backtrack(r, c+1, idx+1) or
+                     backtrack(r, c-1, idx+1))
+            board[r][c] = tmp  # Restore state (backtrack)
+            return found
+        
+        for r in range(rows):
+            for c in range(cols):
+                if backtrack(r, c, 0):
+                    return True
+        return False
+
+    # Example: exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED") -> True
+```
+
+### Backtracking Application: Combinatorial Optimization
+We can search for an optimal solution while pruning bad candidates.
+
+Ex: N Queens Problem
+```python
+    def solveNQueens(n):
+        res = []
+        cols = set()
+        diag1 = set()  # r - c
+        diag2 = set()  # r + c
+        
+        board = [["."] * n for _ in range(n)]
+        
+        def backtrack(r):
+            if r == n:  # All queens placed
+                res.append(["".join(row) for row in board])
+                return
+            
+            for c in range(n):
+                if c in cols or (r-c) in diag1 or (r+c) in diag2:
+                    continue
+                
+                # Place queen
+                board[r][c] = "Q"
+                cols.add(c); diag1.add(r-c); diag2.add(r+c)
+                
+                backtrack(r + 1)
+                
+                # Remove queen (backtrack)
+                board[r][c] = "."
+                cols.remove(c); diag1.remove(r-c); diag2.remove(r+c)
+        
+        backtrack(0)
+        return res
+
+    # Example: solveNQueens(4) -> [
+    #   [".Q..","...Q","Q...","..Q."],
+    #   ["..Q.","Q...","...Q",".Q.."]
+    # ]    
+    
+```
+
+
+### Backtracking Application: Decision Trees And Partitioning
+We can make binary or k-ary decision at each step, exploring all outcomes
+
+Ex: Partition a string into palindromic substrings
+```python
+    def partition(s):
+        res = []
+        
+        def is_palindrome(sub):
+            return sub == sub[::-1]
+        
+        def backtrack(start, path):
+            if start == len(s):   # Reached end of string
+                res.append(path[:])
+                return
+            
+            for end in range(start+1, len(s)+1):
+                if is_palindrome(s[start:end]):   # Only continue if palindrome
+                    path.append(s[start:end])
+                    backtrack(end, path)
+                    path.pop()
+        
+        backtrack(0, [])
+        return res
+
+    # Example: partition("aab") -> [["a","a","b"], ["aa","b"]]
 ```
 
 
@@ -99,7 +265,7 @@ Given a list of numbers, return all unique subsets.
 ```python
 ```
 
-### Solution 1: Min Heap of Size k - Heap/Heap
+### Solution 1: Recursive DFS Backtracking on Current Subset to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
         res = []
@@ -117,6 +283,835 @@ Given a list of numbers, return all unique subsets.
                 path.pop()
         
         dfs_backtrack(0, [])
+        return res
+```
+
+
+## 39. Combination Sum ::2:: - Medium
+
+Topics:  Array, Backtracking
+
+### Intro
+> Given an array of distinct integers candidates and a target 
+> integer target, return a list of all unique combinations of 
+> candidates where the chosen numbers sum to target. You 
+> may return the combinations in any order.
+> The same number may be chosen from candidates an 
+> unlimited number of times. Two combinations are unique if 
+> the frequency of at least one of the chosen numbers is different.
+> The test cases are generated such that the number of unique 
+> combinations that sum up to target is less than 150 
+> combinations for the given input.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| candidates = [2,3,6,7], target = 7 | [[2,2,3],[7]] |
+| candidates = [2,3,5], target = 8 | [[2,2,2,2],[2,3,3],[3,5]] |
+| candidates = [2], target = 1 | [] |
+
+Constraints:
+
+1 &leq; candidates.length &leq; 30
+
+2 &leq; candidates[i] &leq; 40
+
+All the numbers of nums are unique.
+
+1 &leq; target &leq; 40
+
+### Abstraction
+Find all combinations that add up to target.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Backtracking on Combination Path Sum Guided - Backtracking/Generate All Combinations Or Subsets
+```python
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        # candidates = sorted(candidates)
+
+        solutions = []
+        path = []
+
+        def combo(idx, cur):
+            if cur > target:
+                return
+            if cur == target:
+                solutions.append(path[:])
+            for i in range(idx, len(candidates)):
+                path.append(candidates[i])
+                combo(i, cur + candidates[i])
+                path.pop(-1)
+
+        combo(0, 0)
+        return solutions
+```
+
+### Solution 2: Backtracking on Combination Path With Early Exit - Backtracking/Generate While Constraint Satisfaction
+```python
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+
+        # Sort candidates to allow early pruning
+        candidates.sort()
+
+        def backtrack(start: int, path: List[int], remaining: int):
+            # If remaining sum is zero, we found a valid combination
+            if remaining == 0:
+                res.append(path[:])
+                return
+
+            for i in range(start, len(candidates)):
+                candidate = candidates[i]
+
+                # Early pruning: no need to continue if candidate exceeds remaining
+                if candidate > remaining:
+                    break
+
+                # Include candidate and recurse (allowing same candidate again)
+                path.append(candidate)
+                backtrack(i, path, remaining - candidate)
+                path.pop()  # Backtrack: remove last added element
+
+        backtrack(0, [], target)
+        return res
+```
+
+
+## 40. Combination Sum II ::2:: - Medium
+
+Topics:  Array, Backtracking
+
+### Intro
+> Given a collection of candidate numbers (candidates) and a 
+> target number (target), find all unique combinations in 
+> candidates where the candidate numbers sum to target.
+> Each number in candidates may only be used once in the combination.
+> Note: The solution set must not contain duplicate combinations.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| candidates = [10,1,2,7,6,1,5], target = 8 | [[1,1,6], [1,2,5], [1,7], [2,6]] |
+| candidates = [2,5,2,1,2], target = 5 | [[1,2,2], [5]] |
+
+Constraints:
+
+1 &leq; candidates.length &leq; 100
+
+2 &leq; candidates[i] &leq; 30
+
+1 &leq; target &leq; 30
+
+### Abstraction
+Find all combinations that add up to target with no guaranteed unique values.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive DFS Backtracking on Current Combination with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
+```python
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()  # Sort to help skip duplicates
+
+        def backtrack(start: int, path: List[int], remaining: int):
+            # If remaining sum is zero, we found a valid combination
+            if remaining == 0:
+                res.append(path[:])
+                return
+            
+            for i in range(start, len(candidates)):
+                # Skip duplicates
+                if i > start and candidates[i] == candidates[i - 1]:
+                    continue
+
+                # Early pruning: no need to continue if candidate exceeds remaining
+                if candidates[i] > remaining:
+                    break
+
+                # Include candidate and recurse, move to next index (use once)
+                path.append(candidates[i])
+                backtrack(i + 1, path, remaining - candidates[i])
+                path.pop()  # Backtrack
+
+        backtrack(0, [], target)
+        return res
+```
+
+
+### Solution 2: Recursive DFS with Current Sum Tracking and Early Exit - Backtracking/Generate While Constraint Satisfaction
+```python
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        res = []
+
+        def dfs(target, start, comb):
+            if target < 0:
+                return
+            if target == 0:
+                res.append(comb)
+                return
+            for i in range(start, len(candidates)):
+                if i > start and candidates[i] == candidates[i-1]:
+                    continue
+                if candidates[i] > target:
+                    break
+                dfs(target-candidates[i], i+1, comb+[candidates[i]])
+
+        dfs(target, 0, [])
+        return res
+```
+
+
+## 46. Permutations ::1:: - Medium
+
+Topics:  Array, Backtracking
+
+### Intro
+> Given an array nums of distinct integers, return all the 
+> possible . You can return the answer in any order.
+> A permutation is a rearrangement of all 
+> the elements of an array.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,2,3] | [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]] |
+| nums = [0,1] | [[0,1],[1,0]] |
+| nums = [1] | [[1]] |
+
+Constraints:
+
+1 &leq; nums.length &leq; 6
+
+2 &leq; nums[i] &leq; 30
+
+All the integers of nums are unique.
+
+### Abstraction
+Find all permutations of an array.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive DFS Backtracking on Current Permutation Path with Element Usage Tracking - Backtracking/Generate While Constraint Satisfaction
+```python
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        n = len(nums)
+        used = [False] * n  # Track which elements are already in the current path
+
+        def backtrack(path: List[int]):
+            if len(path) == n:      # Full permutation formed
+                res.append(path[:])
+                return
+            
+            for i in range(n):
+                if used[i]:          # Skip already used elements
+                    continue
+                
+                # Choose element nums[i]
+                path.append(nums[i])
+                used[i] = True
+
+                backtrack(path)      # Recurse for next position
+
+                # Backtrack: remove element and mark unused
+                path.pop()
+                used[i] = False
+
+        backtrack([])
+        return res
+```
+
+
+## 90. Subsets II ::1:: - Medium
+
+Topics:  Array, Backtracking, Bit Manipulation
+
+### Intro
+> Given an integer array nums that may contain duplicates, return 
+> all possible subsets (the power set).
+> The solution set must not contain duplicate subsets. Return the
+> solution in any order.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,2,2] | [[],[1],[1,2],[1,2,2],[2],[2,2]] |
+| nums = [0] | [[],[0]] |
+
+Constraints:
+
+1 &leq; nums.length &leq; 10
+
+-10 &leq; nums[i] &leq; 10
+
+### Abstraction
+Find all unique subsets of an array.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive DFS Backtracking on Current Subset Path with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
+```python
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()  # Sort to bring duplicates together
+
+        def backtrack(start: int, path: List[int]):
+            res.append(path[:])  # Record current subset
+
+            for i in range(start, len(nums)):
+                # Skip duplicates on the same recursive level
+                if i > start and nums[i] == nums[i-1]:
+                    continue
+                
+                path.append(nums[i])          # Include nums[i]
+                backtrack(i + 1, path)       # Move to next index
+                path.pop()                    # Backtrack
+
+        backtrack(0, [])
+        return res
+```
+
+
+## 79. Word Search ::2:: - Medium
+
+Topics:  Array, String, Backtracking, Depth First Search, Matrix
+
+### Intro
+> Given an m x n grid of characters board and a string word, 
+> return true if word exists in the grid.
+> The word can be constructed from letters of sequentially 
+> adjacent cells, where adjacent cells are horizontally or 
+> vertically neighboring. The same letter cell may not be used 
+> more than once.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED" | true |
+| board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE" | true |
+
+Constraints:
+
+m == board.length
+
+n = board[i].length
+
+1 &leq; m, n &leq; 6
+
+1 &leq; word.length &leq; 15
+
+board and word consists of only lowercase and uppercase English letters.
+
+Follow up: Could you use search pruning to make your solution faster with a larger board?
+
+### Abstraction
+Find if word exists in grid.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
+```python
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        rows, cols = len(board), len(board[0])
+        
+        def backtrack(r, c, idx):
+            # Found full word
+            if idx == len(word):
+                return True
+            
+            # Out of bounds or mismatch
+            if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[idx]:
+                return False
+            
+            # Mark visited
+            tmp, board[r][c] = board[r][c], "#"
+            
+            # Explore neighbors
+            found = (backtrack(r+1, c, idx+1) or
+                     backtrack(r-1, c, idx+1) or
+                     backtrack(r, c+1, idx+1) or
+                     backtrack(r, c-1, idx+1))
+            
+            # Restore state (backtrack)
+            board[r][c] = tmp
+            return found
+        
+        for r in range(rows):
+            for c in range(cols):
+                if backtrack(r, c, 0):
+                    return True
+        return False
+```
+
+### Solution 2: DFS Backtracking on Current Path with Search Pruning via Letter Frequency and Optional Word Reversal - Backtracking/Path Finding in Search Space
+```python
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        rows, cols = len(board), len(board[0])
+        word_count = Counter(word)
+        board_count = Counter(c for row in board for c in row)
+        
+        # Prune: check if board has enough letters for word
+        for char, count in word_count.items():
+            if board_count[char] < count:
+                return False
+        
+        # Optional optimization: reverse word if last letter rarer than first
+        if board_count[word[0]] > board_count[word[-1]]:
+            word = word[::-1]
+        
+        def backtrack(r, c, idx):
+            if idx == len(word):
+                return True
+            if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[idx]:
+                return False
+            
+            tmp, board[r][c] = board[r][c], "#"
+            found = (backtrack(r+1, c, idx+1) or
+                     backtrack(r-1, c, idx+1) or
+                     backtrack(r, c+1, idx+1) or
+                     backtrack(r, c-1, idx+1))
+            board[r][c] = tmp
+            return found
+        
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] == word[0]:
+                    if backtrack(r, c, 0):
+                        return True
+        return False
+```
+
+
+## 131. Palindrome Partitioning ::2:: - Medium
+
+Topics:  String, Dynamic Programming, Backtracking
+
+### Intro
+> Given a string s, partition s such that every substring
+> of the partition is a palindrome. Return all possible 
+> palindrome partitioning of s.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "aab" | [["a","a","b"],["aa","b"]] |
+| s = "a" | [["a"]] |
+
+Constraints:
+
+1 &leq; s.length &leq; 16
+
+s contains only lowercase English letters.
+
+### Abstraction
+Split string s in a way such that every substring of the partition 
+is a palindrome. 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
+```python
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+        res = []
+
+        # Helper: check if substring s[l:r+1] is palindrome
+        def is_palindrome(l: int, r: int) -> bool:
+            while l < r:
+                if s[l] != s[r]:
+                    return False
+                l += 1
+                r -= 1
+            return True
+
+        def backtrack(start: int, path: List[str]):
+            if start == n:
+                res.append(path[:])
+                return
+
+            for end in range(start, n):
+                if is_palindrome(start, end):
+                    path.append(s[start:end+1])
+                    backtrack(end+1, path)
+                    path.pop()  # Backtrack
+
+        backtrack(0, [])
+        return res
+```
+
+
+### Solution 2: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
+```python
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+        res = []
+
+        # Precompute palindromes: is_pal[i][j] is True if s[i:j+1] is palindrome
+        is_pal = [[False]*n for _ in range(n)]
+        for i in range(n-1, -1, -1):
+            for j in range(i, n):
+                if s[i] == s[j] and (j - i <= 2 or is_pal[i+1][j-1]):
+                    is_pal[i][j] = True
+
+        def backtrack(start: int, path: List[str]):
+            if start == n:  # Reached end of string
+                res.append(path[:])
+                return
+
+            for end in range(start, n):
+                if is_pal[start][end]:
+                    path.append(s[start:end+1])
+                    backtrack(end+1, path)
+                    path.pop()  # Backtrack
+
+        backtrack(0, [])
+        return res  
+```
+
+
+## 17. Letter Combinations of a Phone Number ::1:: - Medium
+
+Topics:  Hash Table, String, Backtracking
+
+### Intro
+> Given a string containing digits from 2-9 inclusive, 
+> return all possible letter combinations that the number
+> could represent. Return the answer in any order.
+> A mapping of digits to letters (just like on the 
+> telephone buttons) is given below. Note that 1 does 
+> not map to any letters.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| digits = "23" | ["ad","ae","af","bd","be","bf","cd","ce","cf"] |
+| digits = "" | [] |
+| digits = "2" | ["a","b","c"] |
+
+Constraints:
+
+0 &leq; digits.length &leq; 4
+
+digits[i] is a digit in the range ['2', '9'].
+
+### Abstraction
+Given a mini phone number, find all the possible letter combinations.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive DFS Backtracking on Current Letter Path - Backtracking/Generate All Combinations
+```python
+    def letterCombinations(self, digits: str) -> List[str]:
+        
+        if not digits:
+            return []
+
+        # Map digits to letters
+        digit_map = {
+            "2": "abc", "3": "def", "4": "ghi", "5": "jkl",
+            "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"
+        }
+
+        res = []
+
+        def backtrack(index: int, path: List[str]):
+            # If current path length matches digits length, record combination
+            if index == len(digits):
+                res.append("".join(path))
+                return
+            
+            # Explore letters for current digit
+            for char in digit_map[digits[index]]:
+                path.append(char)       # Choose letter
+                backtrack(index + 1, path)  # Move to next digit
+                path.pop()              # Backtrack
+
+        backtrack(0, [])
+        return res
+```
+
+
+## 51. N Queens ::1:: - Hard
+
+Topics:  Array, Backtracking
+
+### Intro
+> The n-queens puzzle is the problem of placing n queens on an
+> n x n chessboard such that no two queens attack each other.
+> Given an integer n, return all distinct solutions to the n queens 
+> puzzle. You may return the answer in any order.
+> Each solution contains a distinct board configuration of the 
+> n queens' placement, where 'Q' and '.' both indicate a queen 
+> and an empty space, respectively.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 4 | [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]] |
+| n = 1 | [["Q"]] |
+
+Constraints:
+
+1 &leq; n &leq; 9
+
+### Abstraction
+Find all the possible ways to possible n queens on a board of n x n size.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive DFS Backtracking on Current Row with Column/Diagonal Tracking - Backtracking/Combinatorial Optimization
+```python
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        res = []
+        board = [["."] * n for _ in range(n)]
+        
+        # Sets to track threats
+        cols = set()       # Columns occupied
+        diag1 = set()      # r - c diagonals
+        diag2 = set()      # r + c diagonals
+
+        def backtrack(row: int):
+            if row == n:  # All queens placed
+                res.append(["".join(r) for r in board])
+                return
+            
+            for col in range(n):
+                if col in cols or (row - col) in diag1 or (row + col) in diag2:
+                    continue
+                
+                # Place queen
+                board[row][col] = "Q"
+                cols.add(col)
+                diag1.add(row - col)
+                diag2.add(row + col)
+                
+                backtrack(row + 1)
+                
+                # Remove queen (backtrack)
+                board[row][col] = "."
+                cols.remove(col)
+                diag1.remove(row - col)
+                diag2.remove(row + col)
+
+        backtrack(0)
+        return res
+```
+
+### Solution 2: Recursive DFS Backtracking Using Bitmasking for Columns/Diagonals - Backtracking/Combinatorial Optimization
+```python
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        res = []
+
+        def backtrack(row: int, cols: int, diag1: int, diag2: int, path: List[int]):
+            if row == n:
+                board = []
+                for r in path:
+                    row_str = ["." for _ in range(n)]
+                    row_str[r] = "Q"
+                    board.append("".join(row_str))
+                res.append(board)
+                return
+            
+            # All available positions for current row
+            available = ((1 << n) - 1) & (~(cols | diag1 | diag2))
+            
+            while available:
+                pos = available & -available      # Rightmost available bit
+                available &= available - 1        # Remove chosen position
+                col = (pos - 1).bit_length()
+                
+                backtrack(
+                    row + 1,
+                    cols | pos,
+                    (diag1 | pos) << 1,
+                    (diag2 | pos) >> 1,
+                    path + [col]
+                )
+
+        backtrack(0, 0, 0, 0, [])
         return res
 ```
 
