@@ -104,6 +104,21 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 38
   },
+  "17": {
+    "questionNum": 17,
+    "questionTitle": "Letter Combinations of a Phone Number ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order. A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Backtracking"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#17-letter-combinations-of-a-phone-number-1---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "19": {
     "questionNum": 19,
     "questionTitle": "Remove Nth Node From End of List ::2::",
@@ -221,6 +236,34 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 38
   },
+  "39": {
+    "questionNum": 39,
+    "questionTitle": "Combination Sum ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order. The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different. The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.",
+    "questionTopics": [
+      "Array",
+      "Backtracking"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#39-combination-sum-2---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "40": {
+    "questionNum": 40,
+    "questionTitle": "Combination Sum II ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target. Each number in candidates may only be used once in the combination. Note: The solution set must not contain duplicate combinations.",
+    "questionTopics": [
+      "Array",
+      "Backtracking"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#40-combination-sum-ii-2---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "42": {
     "questionNum": 42,
     "questionTitle": "Trapping Rain Water ::3::",
@@ -238,6 +281,20 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 38
   },
+  "46": {
+    "questionNum": 46,
+    "questionTitle": "Permutations ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array nums of distinct integers, return all the possible . You can return the answer in any order. A permutation is a rearrangement of all the elements of an array.",
+    "questionTopics": [
+      "Array",
+      "Backtracking"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#46-permutations-1---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "49": {
     "questionNum": 49,
     "questionTitle": "Group Anagrams ::2::",
@@ -253,6 +310,20 @@
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 38
+  },
+  "51": {
+    "questionNum": 51,
+    "questionTitle": "N Queens ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other. Given an integer n, return all distinct solutions to the n queens puzzle. You may return the answer in any order. Each solution contains a distinct board configuration of the n queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively.",
+    "questionTopics": [
+      "Array",
+      "Backtracking"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#51-n-queens-1---hard",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "74": {
     "questionNum": 74,
@@ -299,6 +370,23 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "79": {
+    "questionNum": 79,
+    "questionTitle": "Word Search ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an m x n grid of characters board and a string word, return true if word exists in the grid. The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.",
+    "questionTopics": [
+      "Array",
+      "String",
+      "Backtracking",
+      "Depth First Search",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#79-word-search-2---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "84": {
     "questionNum": 84,
     "questionTitle": "Largest Rectangle in Histogram ::2::",
@@ -311,6 +399,21 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#84-largest-rectangle-in-histogram-2---hard",
     "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "90": {
+    "questionNum": 90,
+    "questionTitle": "Subsets II ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums that may contain duplicates, return all possible subsets (the power set). The solution set must not contain duplicate subsets. Return the solution in any order.",
+    "questionTopics": [
+      "Array",
+      "Backtracking",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#90-subsets-ii-1---medium",
+    "blog": "LeetCode: Backtracking",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -468,6 +571,21 @@
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 38
+  },
+  "131": {
+    "questionNum": 131,
+    "questionTitle": "Palindrome Partitioning ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.",
+    "questionTopics": [
+      "String",
+      "Dynamic Programming",
+      "Backtracking"
+    ],
+    "questionLink": "/Notes/leetcode-backtracking#131-palindrome-partitioning-2---medium",
+    "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "138": {
     "questionNum": 138,

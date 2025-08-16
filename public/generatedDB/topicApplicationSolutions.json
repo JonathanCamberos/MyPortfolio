@@ -1694,15 +1694,157 @@
         "questionNumber": 295,
         "solutionLink": "/Notes/leetcode-heaps#solution-2-balanced-bst---heapheap",
         "blog": "LeetCode: Heaps"
+      }
+    ]
+  },
+  "backtracking": {
+    "generate-all-combinations-or-subsets": [
+      {
+        "number": 1,
+        "name": "Recursive DFS Backtracking on Current Subset to Generate All Subsets",
+        "type": "backtracking",
+        "application": "generate-all-combinations-or-subsets",
+        "code": "def subsets(self, nums: List[int]) -> List[List[int]]:\n        res = []\n\n        def dfs_backtrack(start: int, path: List[int]):\n            # Append a copy of the current subset (path)\n            res.append(path[:])\n            \n            # Explore further elements to add\n            for i in range(start, len(nums)):\n                # Include nums[i] and move to next\n                path.append(nums[i])\n                dfs_backtrack(i + 1, path)\n                # Backtrack: remove last element\n                path.pop()\n        \n        dfs_backtrack(0, [])\n        return res",
+        "questionNumber": 78,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-subset-to-generate-all-subsets---backtrackinggenerate-all-combinations-or-subsets",
+        "blog": "LeetCode: Backtracking"
       },
       {
         "number": 1,
-        "name": "Min Heap of Size k",
-        "type": "heap",
-        "application": "heap",
-        "code": "def subsets(self, nums: List[int]) -> List[List[int]]:\n        res = []\n\n        def dfs_backtrack(start: int, path: List[int]):\n            # Append a copy of the current subset (path)\n            res.append(path[:])\n            \n            # Explore further elements to add\n            for i in range(start, len(nums)):\n                # Include nums[i] and move to next\n                path.append(nums[i])\n                dfs_backtrack(i + 1, path)\n                # Backtrack: remove last element\n                path.pop()\n        \n        dfs_backtrack(0, [])\n        return res",
-        "questionNumber": 78,
-        "solutionLink": "/Notes/leetcode-backtracking#solution-1-min-heap-of-size-k---heapheap",
+        "name": "Backtracking on Combination Path Sum Guided",
+        "type": "backtracking",
+        "application": "generate-all-combinations-or-subsets",
+        "code": "def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:\n        # candidates = sorted(candidates)\n\n        solutions = []\n        path = []\n\n        def combo(idx, cur):\n            if cur > target:\n                return\n            if cur == target:\n                solutions.append(path[:])\n            for i in range(idx, len(candidates)):\n                path.append(candidates[i])\n                combo(i, cur + candidates[i])\n                path.pop(-1)\n\n        combo(0, 0)\n        return solutions",
+        "questionNumber": 39,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-backtracking-on-combination-path-sum-guided---backtrackinggenerate-all-combinations-or-subsets",
+        "blog": "LeetCode: Backtracking"
+      }
+    ],
+    "generate-while-constraint-satisfaction": [
+      {
+        "number": 2,
+        "name": "Backtracking on Combination Path With Early Exit",
+        "type": "backtracking",
+        "application": "generate-while-constraint-satisfaction",
+        "code": "def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:\n        res = []\n\n        # Sort candidates to allow early pruning\n        candidates.sort()\n\n        def backtrack(start: int, path: List[int], remaining: int):\n            # If remaining sum is zero, we found a valid combination\n            if remaining == 0:\n                res.append(path[:])\n                return\n\n            for i in range(start, len(candidates)):\n                candidate = candidates[i]\n\n                # Early pruning: no need to continue if candidate exceeds remaining\n                if candidate > remaining:\n                    break\n\n                # Include candidate and recurse (allowing same candidate again)\n                path.append(candidate)\n                backtrack(i, path, remaining - candidate)\n                path.pop()  # Backtrack: remove last added element\n\n        backtrack(0, [], target)\n        return res",
+        "questionNumber": 39,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-2-backtracking-on-combination-path-with-early-exit---backtrackinggenerate-while-constraint-satisfaction",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 1,
+        "name": "Recursive DFS Backtracking on Current Combination with Duplicate Skipping",
+        "type": "backtracking",
+        "application": "generate-while-constraint-satisfaction",
+        "code": "def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:\n        res = []\n        candidates.sort()  # Sort to help skip duplicates\n\n        def backtrack(start: int, path: List[int], remaining: int):\n            # If remaining sum is zero, we found a valid combination\n            if remaining == 0:\n                res.append(path[:])\n                return\n            \n            for i in range(start, len(candidates)):\n                # Skip duplicates\n                if i > start and candidates[i] == candidates[i - 1]:\n                    continue\n\n                # Early pruning: no need to continue if candidate exceeds remaining\n                if candidates[i] > remaining:\n                    break\n\n                # Include candidate and recurse, move to next index (use once)\n                path.append(candidates[i])\n                backtrack(i + 1, path, remaining - candidates[i])\n                path.pop()  # Backtrack\n\n        backtrack(0, [], target)\n        return res",
+        "questionNumber": 40,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-combination-with-duplicate-skipping---backtrackinggenerate-while-constraint-satisfaction",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 2,
+        "name": "Recursive DFS with Current Sum Tracking and Early Exit",
+        "type": "backtracking",
+        "application": "generate-while-constraint-satisfaction",
+        "code": "def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:\n        candidates.sort()\n        res = []\n\n        def dfs(target, start, comb):\n            if target < 0:\n                return\n            if target == 0:\n                res.append(comb)\n                return\n            for i in range(start, len(candidates)):\n                if i > start and candidates[i] == candidates[i-1]:\n                    continue\n                if candidates[i] > target:\n                    break\n                dfs(target-candidates[i], i+1, comb+[candidates[i]])\n\n        dfs(target, 0, [])\n        return res",
+        "questionNumber": 40,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-2-recursive-dfs-with-current-sum-tracking-and-early-exit---backtrackinggenerate-while-constraint-satisfaction",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 1,
+        "name": "Recursive DFS Backtracking on Current Permutation Path with Element Usage Tracking",
+        "type": "backtracking",
+        "application": "generate-while-constraint-satisfaction",
+        "code": "def permute(self, nums: List[int]) -> List[List[int]]:\n        res = []\n        n = len(nums)\n        used = [False] * n  # Track which elements are already in the current path\n\n        def backtrack(path: List[int]):\n            if len(path) == n:      # Full permutation formed\n                res.append(path[:])\n                return\n            \n            for i in range(n):\n                if used[i]:          # Skip already used elements\n                    continue\n                \n                # Choose element nums[i]\n                path.append(nums[i])\n                used[i] = True\n\n                backtrack(path)      # Recurse for next position\n\n                # Backtrack: remove element and mark unused\n                path.pop()\n                used[i] = False\n\n        backtrack([])\n        return res",
+        "questionNumber": 46,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-permutation-path-with-element-usage-tracking---backtrackinggenerate-while-constraint-satisfaction",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 1,
+        "name": "Recursive DFS Backtracking on Current Subset Path with Duplicate Skipping",
+        "type": "backtracking",
+        "application": "generate-while-constraint-satisfaction",
+        "code": "def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:\n        res = []\n        nums.sort()  # Sort to bring duplicates together\n\n        def backtrack(start: int, path: List[int]):\n            res.append(path[:])  # Record current subset\n\n            for i in range(start, len(nums)):\n                # Skip duplicates on the same recursive level\n                if i > start and nums[i] == nums[i-1]:\n                    continue\n                \n                path.append(nums[i])          # Include nums[i]\n                backtrack(i + 1, path)       # Move to next index\n                path.pop()                    # Backtrack\n\n        backtrack(0, [])\n        return res",
+        "questionNumber": 90,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-subset-path-with-duplicate-skipping---backtrackinggenerate-while-constraint-satisfaction",
+        "blog": "LeetCode: Backtracking"
+      }
+    ],
+    "path-finding-in-search-space": [
+      {
+        "number": 1,
+        "name": "DFS Backtracking on Current Path to Match Word",
+        "type": "backtracking",
+        "application": "path-finding-in-search-space",
+        "code": "def exist(self, board: List[List[str]], word: str) -> bool:\n        rows, cols = len(board), len(board[0])\n        \n        def backtrack(r, c, idx):\n            # Found full word\n            if idx == len(word):\n                return True\n            \n            # Out of bounds or mismatch\n            if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[idx]:\n                return False\n            \n            # Mark visited\n            tmp, board[r][c] = board[r][c], \"#\"\n            \n            # Explore neighbors\n            found = (backtrack(r+1, c, idx+1) or\n                     backtrack(r-1, c, idx+1) or\n                     backtrack(r, c+1, idx+1) or\n                     backtrack(r, c-1, idx+1))\n            \n            # Restore state (backtrack)\n            board[r][c] = tmp\n            return found\n        \n        for r in range(rows):\n            for c in range(cols):\n                if backtrack(r, c, 0):\n                    return True\n        return False",
+        "questionNumber": 79,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-dfs-backtracking-on-current-path-to-match-word---backtrackingpath-finding-in-search-space",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 2,
+        "name": "DFS Backtracking on Current Path with Search Pruning via Letter Frequency and Optional Word Reversal",
+        "type": "backtracking",
+        "application": "path-finding-in-search-space",
+        "code": "def exist(self, board: List[List[str]], word: str) -> bool:\n        rows, cols = len(board), len(board[0])\n        word_count = Counter(word)\n        board_count = Counter(c for row in board for c in row)\n        \n        # Prune: check if board has enough letters for word\n        for char, count in word_count.items():\n            if board_count[char] < count:\n                return False\n        \n        # Optional optimization: reverse word if last letter rarer than first\n        if board_count[word[0]] > board_count[word[-1]]:\n            word = word[::-1]\n        \n        def backtrack(r, c, idx):\n            if idx == len(word):\n                return True\n            if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[idx]:\n                return False\n            \n            tmp, board[r][c] = board[r][c], \"#\"\n            found = (backtrack(r+1, c, idx+1) or\n                     backtrack(r-1, c, idx+1) or\n                     backtrack(r, c+1, idx+1) or\n                     backtrack(r, c-1, idx+1))\n            board[r][c] = tmp\n            return found\n        \n        for r in range(rows):\n            for c in range(cols):\n                if board[r][c] == word[0]:\n                    if backtrack(r, c, 0):\n                        return True\n        return False",
+        "questionNumber": 79,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-2-dfs-backtracking-on-current-path-with-search-pruning-via-letter-frequency-and-optional-word-reversal---backtrackingpath-finding-in-search-space",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 1,
+        "name": "DFS Backtracking on Current Path to Match Word",
+        "type": "backtracking",
+        "application": "path-finding-in-search-space",
+        "code": "def partition(self, s: str) -> List[List[str]]:\n        n = len(s)\n        res = []\n\n        # Helper: check if substring s[l:r+1] is palindrome\n        def is_palindrome(l: int, r: int) -> bool:\n            while l < r:\n                if s[l] != s[r]:\n                    return False\n                l += 1\n                r -= 1\n            return True\n\n        def backtrack(start: int, path: List[str]):\n            if start == n:\n                res.append(path[:])\n                return\n\n            for end in range(start, n):\n                if is_palindrome(start, end):\n                    path.append(s[start:end+1])\n                    backtrack(end+1, path)\n                    path.pop()  # Backtrack\n\n        backtrack(0, [])\n        return res",
+        "questionNumber": 131,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-dfs-backtracking-on-current-path-to-match-word---backtrackingpath-finding-in-search-space",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 2,
+        "name": "DFS Backtracking on Current Path to Match Word",
+        "type": "backtracking",
+        "application": "path-finding-in-search-space",
+        "code": "def partition(self, s: str) -> List[List[str]]:\n        n = len(s)\n        res = []\n\n        # Precompute palindromes: is_pal[i][j] is True if s[i:j+1] is palindrome\n        is_pal = [[False]*n for _ in range(n)]\n        for i in range(n-1, -1, -1):\n            for j in range(i, n):\n                if s[i] == s[j] and (j - i <= 2 or is_pal[i+1][j-1]):\n                    is_pal[i][j] = True\n\n        def backtrack(start: int, path: List[str]):\n            if start == n:  # Reached end of string\n                res.append(path[:])\n                return\n\n            for end in range(start, n):\n                if is_pal[start][end]:\n                    path.append(s[start:end+1])\n                    backtrack(end+1, path)\n                    path.pop()  # Backtrack\n\n        backtrack(0, [])\n        return res",
+        "questionNumber": 131,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-2-dfs-backtracking-on-current-path-to-match-word---backtrackingpath-finding-in-search-space",
+        "blog": "LeetCode: Backtracking"
+      }
+    ],
+    "generate-all-combinations": [
+      {
+        "number": 1,
+        "name": "Recursive DFS Backtracking on Current Letter Path",
+        "type": "backtracking",
+        "application": "generate-all-combinations",
+        "code": "def letterCombinations(self, digits: str) -> List[str]:\n        \n        if not digits:\n            return []\n\n        # Map digits to letters\n        digit_map = {\n            \"2\": \"abc\", \"3\": \"def\", \"4\": \"ghi\", \"5\": \"jkl\",\n            \"6\": \"mno\", \"7\": \"pqrs\", \"8\": \"tuv\", \"9\": \"wxyz\"\n        }\n\n        res = []\n\n        def backtrack(index: int, path: List[str]):\n            # If current path length matches digits length, record combination\n            if index == len(digits):\n                res.append(\"\".join(path))\n                return\n            \n            # Explore letters for current digit\n            for char in digit_map[digits[index]]:\n                path.append(char)       # Choose letter\n                backtrack(index + 1, path)  # Move to next digit\n                path.pop()              # Backtrack\n\n        backtrack(0, [])\n        return res",
+        "questionNumber": 17,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-letter-path---backtrackinggenerate-all-combinations",
+        "blog": "LeetCode: Backtracking"
+      }
+    ],
+    "combinatorial-optimization": [
+      {
+        "number": 1,
+        "name": "Recursive DFS Backtracking on Current Row with Column/Diagonal Tracking",
+        "type": "backtracking",
+        "application": "combinatorial-optimization",
+        "code": "def solveNQueens(self, n: int) -> List[List[str]]:\n        res = []\n        board = [[\".\"] * n for _ in range(n)]\n        \n        # Sets to track threats\n        cols = set()       # Columns occupied\n        diag1 = set()      # r - c diagonals\n        diag2 = set()      # r + c diagonals\n\n        def backtrack(row: int):\n            if row == n:  # All queens placed\n                res.append([\"\".join(r) for r in board])\n                return\n            \n            for col in range(n):\n                if col in cols or (row - col) in diag1 or (row + col) in diag2:\n                    continue\n                \n                # Place queen\n                board[row][col] = \"Q\"\n                cols.add(col)\n                diag1.add(row - col)\n                diag2.add(row + col)\n                \n                backtrack(row + 1)\n                \n                # Remove queen (backtrack)\n                board[row][col] = \".\"\n                cols.remove(col)\n                diag1.remove(row - col)\n                diag2.remove(row + col)\n\n        backtrack(0)\n        return res",
+        "questionNumber": 51,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-row-with-column-diagonal-tracking---backtrackingcombinatorial-optimization",
+        "blog": "LeetCode: Backtracking"
+      },
+      {
+        "number": 2,
+        "name": "Recursive DFS Backtracking Using Bitmasking for Columns/Diagonals",
+        "type": "backtracking",
+        "application": "combinatorial-optimization",
+        "code": "def solveNQueens(self, n: int) -> List[List[str]]:\n        res = []\n\n        def backtrack(row: int, cols: int, diag1: int, diag2: int, path: List[int]):\n            if row == n:\n                board = []\n                for r in path:\n                    row_str = [\".\" for _ in range(n)]\n                    row_str[r] = \"Q\"\n                    board.append(\"\".join(row_str))\n                res.append(board)\n                return\n            \n            # All available positions for current row\n            available = ((1 << n) - 1) & (~(cols | diag1 | diag2))\n            \n            while available:\n                pos = available & -available      # Rightmost available bit\n                available &= available - 1        # Remove chosen position\n                col = (pos - 1).bit_length()\n                \n                backtrack(\n                    row + 1,\n                    cols | pos,\n                    (diag1 | pos) << 1,\n                    (diag2 | pos) >> 1,\n                    path + [col]\n                )\n\n        backtrack(0, 0, 0, 0, [])\n        return res",
+        "questionNumber": 51,
+        "solutionLink": "/Notes/leetcode-backtracking#solution-2-recursive-dfs-backtracking-using-bitmasking-for-columns-diagonals---backtrackingcombinatorial-optimization",
         "blog": "LeetCode: Backtracking"
       }
     ]
