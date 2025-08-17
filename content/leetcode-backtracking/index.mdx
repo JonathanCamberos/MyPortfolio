@@ -342,13 +342,15 @@ Given a list of numbers, return all unique subsets.
 ```python
 ```
 
-### Solution 1: Recursive DFS Backtracking on Current Subset to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
+### Solution 1: Recursive DFS Backtracking on Current Path to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
         # Note:
-        # At each index, we decide to include or exclude the current element
-        # The 'path' keeps the current subset, and we backtrack after recursion
+        # Recursive DFS backtracking: Create and Pass current Path to add all nums to
+        # 1. Process Root -> : add current subset
+        # 2. Process Choices -> : explore each element from current index onward
+        # Result: 
 
         res = []
 
@@ -360,19 +362,51 @@ Given a list of numbers, return all unique subsets.
             # Process Choices -> : explore elements from current index onward
             for i in range(start, len(nums)):
                 
-                # Build: Include nums[i] and move to next
+                # Build: Include nums[i] to current path
                 path.append(nums[i])
 
-                # Explore: recurse to next index
+                # Explore: recurse new current path targeting next index
                 dfs_backtrack(i + 1, path)
 
-                # Backtrack: remove last element
+                # Backtrack: remove last element, attempt curr path with next element
                 path.pop()
         
         dfs_backtrack(0, [])
 
         # overall: time complexity
         # overall: space complexity
+        return res
+```
+
+### Solution 2: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
+```python
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+
+        # Note:
+        # Iterative: Build subsets in order to append to existing subsets
+        # 1. Process Root -> start with empty subset
+        # 2. Process Choices -> for each num in nums, add to existing subsets
+        # Result: Subsets continue building with new nums to provide all subsets
+
+        # Process Root -> : start with empty subset
+        res = [[]]
+
+        # Process -> Choices : iterate through all numbers in nums
+        for n in nums:
+
+            # Explore -> : iterate over subsets, create new subset
+            for i in range(len(res)):
+
+                # Build -> : current subset
+                new = res[i] + [n]
+
+                # Explore -> : create new subset with n
+                res.append(new)
+
+                # Backtrack -> : implicit, original subsets remain for next iterations
+
+        # overall: time complexity
+        # overall space complexity
         return res
 ```
 
@@ -441,16 +475,22 @@ Find all combinations that add up to target.
 ### Solution 1: Backtracking on Combination Path Sum Guided - Backtracking/Generate All Combinations Or Subsets
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        # candidates = sorted(candidates)
+        
+        # Note:
+        # Recursive DFS backtracking: Track current path and sum
+        # 1. Process Root -> check if current sum equals target
+        # 2. Process Choices -> : explore each candidate from current index onwards
+        # 3. Backtrack -> : remove last choice to try next candidate
+        # Result: all valid combinations appended to res
 
-        solutions = []
+        res = []
         path = []
 
-        def combo(idx, cur):
+        def dfs_backtracking(idx, cur):
 
             # Process Root -> : check if sum reached target
             if cur == target:
-                solutions.append(path[:])
+                res.append(path[:])
 
             # Early Pruning -> : 
             if cur > target:
@@ -463,18 +503,26 @@ Find all combinations that add up to target.
                 path.append(candidates[i])
 
                 # Explore: recurse with same i (allow reuse), add to sum
-                combo(i, cur + candidates[i])
+                dfs_backtracking(i, cur + candidates[i])
 
                 # Backtrack: remove last choice
                 path.pop(-1)
 
-        combo(0, 0)
-        return solutions
+        dfs_backtracking(0, 0)
+        return res
 ```
 
-### Solution 2: Backtracking on Combination Path With Early Exit - Backtracking/Generate While Constraint Satisfaction
+### Solution 2: Backtracking on Combination Path With Early Pruning - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        
+        # Note:
+        # Sort candidates for early pruning
+        # 1. Process Root -> : check if remaining sum is zero
+        # 2. Process Choices -> : try candidates <= remaining
+        # 3. Backtrack -> : remove last choice after recursion
+        # Result: all valid combinations appended to res
+        
         res = []
 
         # Sort candidates to allow early pruning
@@ -491,7 +539,7 @@ Find all combinations that add up to target.
             for i in range(start, len(candidates)):
                 candidate = candidates[i]
 
-                # Early pruning -> skip if exceeds remaining
+                # Early Pruning -> skip if exceeds remaining
                 if candidate > remaining:
                     break
 
@@ -566,6 +614,14 @@ Find all combinations that add up to target with no guaranteed unique values.
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         
+        # Note:
+        # Recursive DFS backtracking: Track current path and remaining sum
+        # 1. Process Root -> : check if remaining == 0 to record valid combination
+        # 2. Process Choices -> : explore each candidate from current index onward
+        # 3. Duplicate Pruning -> : avoid repeating combinations
+        # 4. Backtrack -> : remove last choice to try next candidate 
+        # Result: all valid combinations appended to res
+
         res = []
         # Sort to align duplicates
         candidates.sort() 
@@ -605,6 +661,15 @@ Find all combinations that add up to target with no guaranteed unique values.
 ### Solution 2: Recursive DFS with Current Sum Tracking and Early Exit - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+
+        # Note:
+        # Recursive DFS: track path and remaining sum
+        # 1. Process Root -> : check if remaining == 0
+        # 2. Process Choices -> : explore numbers from current index onward
+        # 3. Prune duplicates -> : avoid repeating combinations
+        # 4. Early Prune -> : stop recursion if remaining < 0
+        # 5. Backtrack -> implicit using new path list
+        # Result: all valid combinations appended to res
 
         res = []
         candidates.sort()
@@ -703,6 +768,15 @@ Find all permutations of an array.
 ### Solution 1: Recursive DFS Backtracking on Current Permutation Path with Element Usage Tracking - Backtracking/Generate While Constraint Satisfaction
 ```python
     def permute(self, nums: List[int]) -> List[List[int]]:
+
+        # Note:
+        # Recursive DFS backtracking: Track current permutation path
+        # 1. Process Root -> : check if path length == n to record full permutation
+        # 2. Process Choices -> : iterate over all unused elements
+        # 3. Early Pruning -> skip elements already used
+        # 4. Backtrack -> remove last choice and mark unused
+        # Result: all valid permutations appended to res
+
         res = []
         n = len(nums)
 
@@ -791,6 +865,15 @@ Find all unique subsets of an array.
 ### Solution 1: Recursive DFS Backtracking on Current Subset Path with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
 ```python
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+
+        # Note:
+        # Recursive DFS backtracking: Track current subset path
+        # 1. Process Root -> : record current subset path
+        # 2. Process Choices -> : iterate elements from current index onward
+        # 3. Prune Duplicates -> skip duplicates at same recursion level
+        # 4. Backtrack -> remove last element before next choice
+        # Result: all unique subsets appended to res 
+
         res = []
 
         # Sort to bring duplicates together
@@ -884,6 +967,15 @@ Find if word exists in grid.
 ### Solution 1: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
 ```python
     def exist(self, board: List[List[str]], word: str) -> bool:
+        
+        # Note:
+        # Recursive DFS backtracking: Track current path matching word
+        # 1. Process Root : check if current path matches word
+        # 2. Process Choices -> : explore all 4 directions from current cell
+        # 3. Prune -> : skip cells out of bounds, mismatched letters, or previously visited
+        # 4. Backtrack -> : restore cell after recursion
+        # Result: return True if any path matches the word
+
         rows, cols = len(board), len(board[0])
         
         def backtrack(r, c, idx):
@@ -921,6 +1013,16 @@ Find if word exists in grid.
 ```python
     def exist(self, board: List[List[str]], word: str) -> bool:
         
+        # Note:
+        # Recursive DFS backtracking with search pruning:
+        # 1. Count letters on board and work to prune impossible searches
+        # 2. Reverse word if last letter is rarer than first
+        # 3. Process Root -> : check if current path matches word
+        # 4. Process Choices -> : explore all 4 directions
+        # 5. Prune -> : skip out of bounds, mismatched letters, previously visited
+        # 6. Backtrack -> : restore board cell after recursion
+        # Result: return True if any valid path matches word
+
         rows, cols = len(board), len(board[0])
         word_count = Counter(word)
         
@@ -1024,6 +1126,15 @@ is a palindrome.
 ### Solution 1: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
 ```python
     def partition(self, s: str) -> List[List[str]]:
+
+        # Note:
+        # Recursive DFS backtracking: Track current partition path
+        # 1. Process Root -> : check if end of string reached, record valid partition
+        # 2. Process Choices -> : try all substrings starting from current index
+        # 3. Prune -> : skip substring if not palindrome
+        # 4. Backtrack -> : remove last substring before next choice
+        # Result: all possible palindrome partitions appended to res
+
         n = len(s)
         res = []
 
@@ -1066,6 +1177,16 @@ is a palindrome.
 ### Solution 2: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
 ```python
     def partition(self, s: str) -> List[List[str]]:
+
+        # Note:
+        # Recursive DFS backtracking with precomputed palindrome table:
+        # 1. Precompute palindromes in O(n^2) to avoid repeated checks
+        # 2. Process Root -> : check if end of string reached
+        # 3. Process Choices -> : explore all substring end positions
+        # 4. Prune -> : skip substrings that are not palindromes
+        # 5. Backtrack -> : remove last substring before next choice
+        # Result: all palindrome partitions appended to res
+
         n = len(s)
         res = []
 
@@ -1160,6 +1281,15 @@ Given a mini phone number, find all the possible letter combinations.
 ```python
     def letterCombinations(self, digits: str) -> List[str]:
         
+        # Note:
+        # Recursive DFS backtracking: Track current letter path
+        # 1. Process Root -> : path length equals digits length, record combination
+        # 2. Process Choices -> : letters corresponding to current digit
+        # 3. Build -> : append letter to path
+        # 4. Explore -> : recurse to next digit
+        # 5. Backtrack -> : remove last letter before trying next option
+        # Result: all possible letter combinations appended to res
+
         # Empty check
         if not digits:
             return []
@@ -1250,6 +1380,17 @@ Find all the possible ways to possible n queens on a board of n x n size.
 ### Solution 1: Recursive DFS Backtracking on Current Row with Column/Diagonal Tracking - Backtracking/Combinatorial Optimization
 ```python
     def solveNQueens(self, n: int) -> List[List[str]]:
+
+        # Note:
+        # Recursive DFS backtracking: Track current row placement
+        # 1. Process Root -> : all rows filled, record board configuration
+        # 2. Process Choices -> : iterate columns in current row
+        # 3. Prune -> : skip if column or diagonals threatened
+        # 4. Build -> : place queen
+        # 5. Explore -> : recurse to next row
+        # 6. Backtrack -> : remove queen, free column/diagonals
+        # Result: all valid board configurations appended to res
+
         res = []
         board = [["."] * n for _ in range(n)]
         
@@ -1294,6 +1435,16 @@ Find all the possible ways to possible n queens on a board of n x n size.
 ### Solution 2: Recursive DFS Backtracking Using Bitmasking for Columns/Diagonals - Backtracking/Combinatorial Optimization
 ```python
     def solveNQueens(self, n: int) -> List[List[str]]:
+
+        # Note:
+        # Recursive DFS with bitmasking: Track available columns/diagonals
+        # 1. Process Root -> : all rows filled, convert path to board
+        # 2. Process Choices -> : available positions using bitmask
+        # 3. Build -> : pick rightmost available position
+        # 4. Explore -> : recurse with updated masks and path
+        # 5. Backtrack -> : implicit via new path list
+        # Result: all valid board configurations appended to res
+
         res = []
 
         def backtrack(row: int, cols: int, diag1: int, diag2: int, path: List[int]):
