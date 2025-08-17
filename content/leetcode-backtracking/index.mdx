@@ -77,19 +77,20 @@ Ex: Generate all subsets of a set
         res = []
         
         def dfs_backtrack(start, path):
-            # Process Root -> : 
-            # record current subset first
+
+            # Process Root -> : record current subset first
             res.append(path[:]) 
             
-            # Process -> Choices :
-            # decide which to include/exclude
+            # Process -> Choices : decide which to include/exclude
             for i in range(start, len(nums)):
 
-                # include nums[i]
+                # Build: include nums[i]
                 path.append(nums[i])
-                # explore
+
+                # Explore: recurse to next index
                 dfs_backtrack(i + 1, path)
-                # exclude (backtrack)
+
+                # Backtrack: remove last element
                 path.pop()
         
         dfs_backtrack(0, [])
@@ -120,14 +121,20 @@ Ex: Generate all valid parentheses
             
             # Process -> Choices : add '(' if possible
             if open_count < n:
+                # Build
                 path.append("(")
+                # Explore
                 dfs_backtrack(open_count + 1, close_count, path)
+                # Backtrack
                 path.pop()
             
             # Process -> Choices : add ')' if it will not break validity
             if close_count < open_count:
+                # Build
                 path.append(")")
+                # Explore
                 dfs_backtrack(open_count, close_count + 1, path)
+                # Backtrack
                 path.pop()
         
         dfs_backtrack(0, 0, [])
@@ -166,18 +173,17 @@ Ex: Word Search in grid
 
             # Process -> Choices : explore all 4 directions
 
-            # Process Root -> : mark current cell as exploring
+            # Build: mark current cell as exploring
             tmp, board[r][c] = board[r][c], "#"
 
-            # Process -> Choices : explore neighbor cell
+            # Explore: recurse to neighbor cell
             found = (dfs_backtrack(r+1, c, idx+1) or
                      dfs_backtrack(r-1, c, idx+1) or
                      dfs_backtrack(r, c+1, idx+1) or
                      dfs_backtrack(r, c-1, idx+1))
 
-            # Backtrack: Restore neighbor cell state
+            # Backtrack: Restore cell
             board[r][c] = tmp
-
             return found
         
         # dfs_backtrack starting from all cells
@@ -218,14 +224,14 @@ Ex: N Queens Problem
                 if c in cols or (r-c) in diag1 or (r+c) in diag2:
                     continue
                 
-                # add: place queen
+                # Build: place queen
                 board[r][c] = "Q"
                 cols.add(c); diag1.add(r-c); diag2.add(r+c)
                 
-                # Explore: next row
+                # Explore: recurse to next row
                 dfs_backtrack(r + 1)
                 
-                # Backtrack: Remove queen
+                # Backtrack: remove queen
                 board[r][c] = "."
                 cols.remove(c); diag1.remove(r-c); diag2.remove(r+c)
         
@@ -251,6 +257,9 @@ Ex: Partition a string into palindromic substrings
 ```python
     def partition(s):
         res = []
+
+        def is_palindrome(sub):
+            return sub == sub[::-1]
         
         def dfs_backtrack(start, path):
             # Process Root -> : reached end of string
@@ -264,13 +273,13 @@ Ex: Partition a string into palindromic substrings
                 # Constraint check: palindrome check
                 if is_palindrome(s[start:end]):
 
-                    # add: place next choice
+                    # Build: add substring
                     path.append(s[start:end])
 
-                    # explore: next choice
+                    # Explore: recurse to next string
                     dfs_backtrack(end, path)
 
-                    # backtrack: remove char
+                    # Backtrack: remove substring
                     path.pop()
         
         dfs_backtrack(0, [])
@@ -345,10 +354,10 @@ Given a list of numbers, return all unique subsets.
 
         def dfs_backtrack(start: int, path: List[int]):
             
-            # record a copy of the current subset
+            # Process Root -> : record copy of current subset
             res.append(path[:])
             
-            # Explore elements from current index onward
+            # Process Choices -> : explore elements from current index onward
             for i in range(start, len(nums)):
                 
                 # Build: Include nums[i] and move to next
@@ -438,13 +447,25 @@ Find all combinations that add up to target.
         path = []
 
         def combo(idx, cur):
-            if cur > target:
-                return
+
+            # Process Root -> : check if sum reached target
             if cur == target:
                 solutions.append(path[:])
+
+            # Early Pruning -> : 
+            if cur > target:
+                return
+
+            # Process -> Choices : try each candidate from current index onward
             for i in range(idx, len(candidates)):
+
+                # Build: choose candidates[i]
                 path.append(candidates[i])
+
+                # Explore: recurse with same i (allow reuse), add to sum
                 combo(i, cur + candidates[i])
+
+                # Backtrack: remove last choice
                 path.pop(-1)
 
         combo(0, 0)
@@ -460,22 +481,28 @@ Find all combinations that add up to target.
         candidates.sort()
 
         def backtrack(start: int, path: List[int], remaining: int):
-            # If remaining sum is zero, we found a valid combination
+
+            # Process Root -> : check if sum reached target
             if remaining == 0:
                 res.append(path[:])
                 return
 
+            # Process -> Choices : try valid candidates
             for i in range(start, len(candidates)):
                 candidate = candidates[i]
 
-                # Early pruning: no need to continue if candidate exceeds remaining
+                # Early pruning -> skip if exceeds remaining
                 if candidate > remaining:
                     break
 
-                # Include candidate and recurse (allowing same candidate again)
+                # Build: add candidate
                 path.append(candidate)
+
+                # Explore: recurse with same i (allow reuse)
                 backtrack(i, path, remaining - candidate)
-                path.pop()  # Backtrack: remove last added element
+
+                # Backtrack: remove last
+                path.pop()
 
         backtrack(0, [], target)
         return res
@@ -538,28 +565,37 @@ Find all combinations that add up to target with no guaranteed unique values.
 ### Solution 1: Recursive DFS Backtracking on Current Combination with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        
         res = []
-        candidates.sort()  # Sort to help skip duplicates
+        # Sort to align duplicates
+        candidates.sort() 
 
         def backtrack(start: int, path: List[int], remaining: int):
-            # If remaining sum is zero, we found a valid combination
+
+            # Process Root -> : check if valid combination
             if remaining == 0:
                 res.append(path[:])
                 return
             
+            # Process -> Choices : explore numbers from this index onward
             for i in range(start, len(candidates)):
-                # Skip duplicates
+                
+                # Early Pruning -> : Skip duplicates
                 if i > start and candidates[i] == candidates[i - 1]:
                     continue
 
-                # Early pruning: no need to continue if candidate exceeds remaining
+                # Early pruning: stop if candidate is too large
                 if candidates[i] > remaining:
                     break
 
-                # Include candidate and recurse, move to next index (use once)
+                # Build: include candidate[i]
                 path.append(candidates[i])
+                
+                # Explore: move to next index (can't reuse same element)
                 backtrack(i + 1, path, remaining - candidates[i])
-                path.pop()  # Backtrack
+
+                # Backtrack: remove last
+                path.pop()
 
         backtrack(0, [], target)
         return res
@@ -569,23 +605,45 @@ Find all combinations that add up to target with no guaranteed unique values.
 ### Solution 2: Recursive DFS with Current Sum Tracking and Early Exit - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        candidates.sort()
-        res = []
 
-        def dfs(target, start, comb):
-            if target < 0:
+        res = []
+        candidates.sort()
+
+
+        def dfs(start: int, path: List[int], remaining: int):
+
+            # Process Root -> : check if valid combination
+            if remaining == 0:
+                res.append(path[:])
                 return
-            if target == 0:
-                res.append(comb)
+            
+            # Early Pruning -> : exit if overshot
+            if remaining < 0:
                 return
+            
+            # Process -> Choices : explore numbers from this index onward
             for i in range(start, len(candidates)):
+
+                # Early Pruning -> : skip duplicates at this decision level
                 if i > start and candidates[i] == candidates[i-1]:
                     continue
-                if candidates[i] > target:
-                    break
-                dfs(target-candidates[i], i+1, comb+[candidates[i]])
 
-        dfs(target, 0, [])
+                # Early pruning: stop if candidate is too large   
+                if candidates[i] > remaining:
+                    break
+
+                # Build: include candidates[i]
+                new_path = path + [candidates[i]]
+
+                # Explore: move to next index (can't reuse same element)
+                dfs(i + 1, new_path, remaining - candidates[i])
+                
+                # Backtrack: implicit, since we used a new list `new_path`
+
+        dfs(0, [], target)
+        
+        # overall: time complexity
+        # overall: space complexity
         return res
 ```
 
@@ -647,24 +705,32 @@ Find all permutations of an array.
     def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
         n = len(nums)
-        used = [False] * n  # Track which elements are already in the current path
+
+        # Track which elements are already in the current path
+        used = [False] * n 
 
         def backtrack(path: List[int]):
-            if len(path) == n:      # Full permutation formed
+
+            # Process Root -> : check if valid full permutation
+            if len(path) == n:
                 res.append(path[:])
                 return
             
+            # Process -> Choices : try each unused number
             for i in range(n):
-                if used[i]:          # Skip already used elements
+                
+                # Early Pruning -> : skip already used elements
+                if used[i]:          
                     continue
                 
-                # Choose element nums[i]
+                # Build: include nums[i] in path
                 path.append(nums[i])
                 used[i] = True
 
-                backtrack(path)      # Recurse for next position
+                # Explore: recurse with nums[i] added
+                backtrack(path)
 
-                # Backtrack: remove element and mark unused
+                # Backtrack: undo last choice
                 path.pop()
                 used[i] = False
 
@@ -726,19 +792,30 @@ Find all unique subsets of an array.
 ```python
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
         res = []
-        nums.sort()  # Sort to bring duplicates together
+
+        # Sort to bring duplicates together
+        nums.sort()
 
         def backtrack(start: int, path: List[int]):
-            res.append(path[:])  # Record current subset
 
+            # Process Root -> : record current subset
+            res.append(path[:])
+
+            # Process -> Choices : explore elements from current index onward
             for i in range(start, len(nums)):
-                # Skip duplicates on the same recursive level
+
+                # Prune -> : skip duplicates at this recursive level
                 if i > start and nums[i] == nums[i-1]:
                     continue
                 
-                path.append(nums[i])          # Include nums[i]
-                backtrack(i + 1, path)       # Move to next index
-                path.pop()                    # Backtrack
+                # Build -> : include nums[i] in path
+                path.append(nums[i])
+
+                # Explore -> : recurse to next index
+                backtrack(i + 1, path)
+
+                # Backtrack -> : remove last element before trying next choice
+                path.pop()
 
         backtrack(0, [])
         return res
@@ -810,27 +887,29 @@ Find if word exists in grid.
         rows, cols = len(board), len(board[0])
         
         def backtrack(r, c, idx):
-            # Found full word
+
+            # Process Root -> : full word matched
             if idx == len(word):
                 return True
             
-            # Out of bounds or mismatch
+            # Prune -> : out of bounds or current cell mismatch
             if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[idx]:
                 return False
             
-            # Mark visited
+            # Build -> : mark current cell as visited
             tmp, board[r][c] = board[r][c], "#"
             
-            # Explore neighbors
+            # Explore -> : recurse in all 4 directions
             found = (backtrack(r+1, c, idx+1) or
                      backtrack(r-1, c, idx+1) or
                      backtrack(r, c+1, idx+1) or
                      backtrack(r, c-1, idx+1))
             
-            # Restore state (backtrack)
+            # Backtrack -> : restore cell to original state
             board[r][c] = tmp
             return found
-        
+
+        # Try starting DFS from each cell
         for r in range(rows):
             for c in range(cols):
                 if backtrack(r, c, 0):
@@ -841,38 +920,53 @@ Find if word exists in grid.
 ### Solution 2: DFS Backtracking on Current Path with Search Pruning via Letter Frequency and Optional Word Reversal - Backtracking/Path Finding in Search Space
 ```python
     def exist(self, board: List[List[str]], word: str) -> bool:
+        
         rows, cols = len(board), len(board[0])
         word_count = Counter(word)
+        
+        # counter for optimziation
         board_count = Counter(c for row in board for c in row)
         
-        # Prune: check if board has enough letters for word
+        # Prune -> : board doesn't contain enough letters for word
         for char, count in word_count.items():
             if board_count[char] < count:
                 return False
         
-        # Optional optimization: reverse word if last letter rarer than first
+        # Optional optimization -> : reverse word if last letter rarer than first
         if board_count[word[0]] > board_count[word[-1]]:
             word = word[::-1]
         
         def backtrack(r, c, idx):
+
+            # Process Root -> : full word matched
             if idx == len(word):
                 return True
+            
+            # Prune -> : out of bounds or mismatch
             if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != word[idx]:
                 return False
             
+            # Build -> : mark cell as visited
             tmp, board[r][c] = board[r][c], "#"
+
+            # Explore -> : recurse in 4 directions
             found = (backtrack(r+1, c, idx+1) or
                      backtrack(r-1, c, idx+1) or
                      backtrack(r, c+1, idx+1) or
                      backtrack(r, c-1, idx+1))
+
+            # Backtrack -> : restore cell
             board[r][c] = tmp
             return found
         
+        # Process -> Choices : start DFS only from cells matching first letter
         for r in range(rows):
             for c in range(cols):
                 if board[r][c] == word[0]:
                     if backtrack(r, c, 0):
                         return True
+
+
         return False
 ```
 
@@ -943,15 +1037,26 @@ is a palindrome.
             return True
 
         def backtrack(start: int, path: List[str]):
+
+            # Process Root -> : reached end of string, record valid partition
             if start == n:
                 res.append(path[:])
                 return
 
+            # Process -> Choices : try all substrings starting from current index
             for end in range(start, n):
+
+                # Prune -> : skip if substring is not palindrome
                 if is_palindrome(start, end):
+
+                    # Build -> : add palindromic substring
                     path.append(s[start:end+1])
+
+                    # Explore -> : recurse to next starting index
                     backtrack(end+1, path)
-                    path.pop()  # Backtrack
+
+                    # Backtrack -> : remove last substring and try next partition
+                    path.pop()
 
         backtrack(0, [])
         return res
@@ -972,15 +1077,26 @@ is a palindrome.
                     is_pal[i][j] = True
 
         def backtrack(start: int, path: List[str]):
-            if start == n:  # Reached end of string
+            
+            # Process Root -> : reached end of string
+            if start == n:
                 res.append(path[:])
                 return
 
+            # Process -> Choices : explore all substring end positions
             for end in range(start, n):
+
+                # Prune -> : skip if not palindrome
                 if is_pal[start][end]:
+
+                    # Build -> : append substring
                     path.append(s[start:end+1])
+
+                    # Explore -> : move to next index
                     backtrack(end+1, path)
-                    path.pop()  # Backtrack
+
+                    # Backtrack -> : remove last substring
+                    path.pop()
 
         backtrack(0, [])
         return res  
@@ -1044,6 +1160,7 @@ Given a mini phone number, find all the possible letter combinations.
 ```python
     def letterCombinations(self, digits: str) -> List[str]:
         
+        # Empty check
         if not digits:
             return []
 
@@ -1056,16 +1173,23 @@ Given a mini phone number, find all the possible letter combinations.
         res = []
 
         def backtrack(index: int, path: List[str]):
-            # If current path length matches digits length, record combination
+
+            # Process Root -> : current path has full length
             if index == len(digits):
                 res.append("".join(path))
                 return
             
-            # Explore letters for current digit
+            # Process -> Choices : letters corresponding to current digit
             for char in digit_map[digits[index]]:
-                path.append(char)       # Choose letter
-                backtrack(index + 1, path)  # Move to next digit
-                path.pop()              # Backtrack
+
+                # Build -> : choose current letter
+                path.append(char)
+
+                # Explore -> : move to next digit
+                backtrack(index + 1, path)
+
+                # Backtrack -> : remove last letter to try next option 
+                path.pop()
 
         backtrack(0, [])
         return res
@@ -1129,29 +1253,35 @@ Find all the possible ways to possible n queens on a board of n x n size.
         res = []
         board = [["."] * n for _ in range(n)]
         
-        # Sets to track threats
+        # Sets to track threatened positions
         cols = set()       # Columns occupied
         diag1 = set()      # r - c diagonals
         diag2 = set()      # r + c diagonals
 
         def backtrack(row: int):
-            if row == n:  # All queens placed
+
+            # Process Root -> : all queens placed successfully
+            if row == n:
                 res.append(["".join(r) for r in board])
                 return
             
+            # Process -> Choices : columns in current row
             for col in range(n):
+
+                # Prune -> : skip if column or diagonals threatened
                 if col in cols or (row - col) in diag1 or (row + col) in diag2:
                     continue
                 
-                # Place queen
+                # Build -> : place queen at (row, col)
                 board[row][col] = "Q"
                 cols.add(col)
                 diag1.add(row - col)
                 diag2.add(row + col)
                 
+                # Explore -> : move to next row
                 backtrack(row + 1)
                 
-                # Remove queen (backtrack)
+                # Backtrack -> : remove queen and free column/diagonals
                 board[row][col] = "."
                 cols.remove(col)
                 diag1.remove(row - col)
@@ -1167,6 +1297,8 @@ Find all the possible ways to possible n queens on a board of n x n size.
         res = []
 
         def backtrack(row: int, cols: int, diag1: int, diag2: int, path: List[int]):
+            
+            # Process Root -> : all queens placed successfully
             if row == n:
                 board = []
                 for r in path:
@@ -1176,14 +1308,17 @@ Find all the possible ways to possible n queens on a board of n x n size.
                 res.append(board)
                 return
             
-            # All available positions for current row
+            # Process -> Choices : calculate available positions with bitmasking
             available = ((1 << n) - 1) & (~(cols | diag1 | diag2))
             
             while available:
-                pos = available & -available      # Rightmost available bit
+                
+                # Build -> : pick rightmost available position
+                pos = available & -available
                 available &= available - 1        # Remove chosen position
                 col = (pos - 1).bit_length()
                 
+                # Explore -> : recurse to next row with updated masks
                 backtrack(
                     row + 1,
                     cols | pos,
@@ -1191,6 +1326,8 @@ Find all the possible ways to possible n queens on a board of n x n size.
                     (diag2 | pos) >> 1,
                     path + [col]
                 )
+
+                # Backtrack -> : implicit due to path + [col] creating new list
 
         backtrack(0, 0, 0, 0, [])
         return res
