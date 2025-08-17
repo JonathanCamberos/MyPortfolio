@@ -289,7 +289,7 @@ Ex: Partition a string into palindromic substrings
 ```
 
 
-## 78. Subsets ::1:: - Medium
+## 78. Subsets ::2:: - Medium
 
 Topics:  Array, Backtracking, Bit Manipulation
 
@@ -356,16 +356,50 @@ Given a list of numbers, return all unique subsets.
 
         def dfs_backtrack(start: int, path: List[int]):
             
-            # Process Root -> : record copy of current subset
+            # Reference copy: 
+            # reference copy of path (which is being changed constantly)
+            # res.append(path)
+
+            # Shallow copy:
+            # Process Root -> : shallow copy of current path (curr subset)
             res.append(path[:])
             
-            # Process Choices -> : explore elements from current index onward
+            # a -> [ [1, 2], [3, 4] ]
+            # shallow -> [ [1, 2], [3, 4] ]
+
+            # a and shallow: point to different outer lists, but the 
+            # inner [1,2] and [3,4] are the same objects.
+
+            # Deep copy:
+            # deep copy is slower because it recursively clones everything inside path, 
+            # even if it doesn’t need to.
+
+            # res.append(copy.deepcopy(path))
+
+            # a -> [ [1, 2], [3, 4] ]
+            # deep -> [ [1, 2], [3, 4] ]
+
+            # a and deep: point to different outer lists, and the
+            # inner [1,2] and [3,4] are different objects.
+
+            # Process Choices -> : explore remaining paths from curr index onwards
+            # Avoid Duplicates -> : only explore from curr element onwards to avoid duplicate sets
+            
+            # Without this rule:
+            # [] -> 1 -> 2
+            # [] -> 2 -> 1  # This would generate the same subset [1,2] again
             for i in range(start, len(nums)):
                 
-                # Build: Include nums[i] to current path
+                # Build: Include nums[i] to make new path
+                # in place modification: 
                 path.append(nums[i])
 
-                # Explore: recurse new current path targeting next index
+                # Incorrect:
+                # new = path.append(nums[i])
+                # .append() always returns None,
+                # as modification is in-place
+
+                # Explore: recurse new path starting after next index
                 dfs_backtrack(i + 1, path)
 
                 # Backtrack: remove last element, attempt curr path with next element
@@ -392,18 +426,25 @@ Given a list of numbers, return all unique subsets.
         res = [[]]
 
         # Process -> Choices : iterate through all numbers in nums
+        # since we build as we go, we cant build backwards, so we cant create a duplicate?
         for n in nums:
 
-            # Explore -> : iterate over subsets, create new subset
+            # Explore -> : iterate over existing subsets, append to create new subset
             for i in range(len(res)):
 
-                # Build -> : current subset
+                # Build -> : for all existing subset, add curr number
+                # new string 
                 new = res[i] + [n]
 
-                # Explore -> : create new subset with n
+                # Incorrect:
+                # new = res[i].append(n)
+                # .append() always returns None,
+                # as modification is in-place
+
+                # Explore -> : append new subset to allow for iterative exploration
                 res.append(new)
 
-                # Backtrack -> : implicit, original subsets remain for next iterations
+                # Backtrack -> : implicit, existing subsets remain for following iterations
 
         # overall: time complexity
         # overall space complexity
