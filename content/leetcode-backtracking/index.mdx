@@ -45,6 +45,18 @@ possibilities with pruning.
 Generating subsets of [1,2,3] forms a decision tree where at each step,
 we decide to include or exclude a number
 
+```
+    Decision tree for [1,2,3]:
+    
+                         []
+                      /      \
+                   [1]        []
+                 /    \     /     \
+             [1,2]   [1] [2]       []
+            /   \      ... ...
+       [1,2,3]  ...
+```
+
 
 ### Backtracking IRL
 In the context of solving a maze, at each intersection, you choose a path
@@ -52,7 +64,10 @@ In the context of solving a maze, at each intersection, you choose a path
 and try another route. Eventually, you either find the exit (solution) 
 or exhaust all paths (no solutions).
 
-### Backtracking Application: Generate All Combinations Or Subsets
+### Backtracking Application: DFS Generate All Combinations Or Subsets
+Traversal Order: Root -> Choices 
+Mindset: Process the current subset as soon as you build it, then explore further elements
+Trick: Ill record the current subset first, then decide which elements to include next.
 We can explore all subsets, permutations, or combinations by recursively
 building solutions and backtracking when needed.
 
@@ -61,22 +76,34 @@ Ex: Generate all subsets of a set
     def subsets(nums):
         res = []
         
-        def backtrack(start, path):
-            res.append(path[:])  # Record the current subset
+        def dfs_backtrack(start, path):
+            # Process Root -> : 
+            # record current subset first
+            res.append(path[:]) 
             
+            # Process -> Choices :
+            # decide which to include/exclude
             for i in range(start, len(nums)):
-                path.append(nums[i])          # Choose nums[i]
-                backtrack(i + 1, path)        # Explore further
-                path.pop()                    # Undo choice (backtrack)
+
+                # include nums[i]
+                path.append(nums[i])
+                # explore
+                dfs_backtrack(i + 1, path)
+                # exclude (backtrack)
+                path.pop()
         
-        backtrack(0, [])
+        dfs_backtrack(0, [])
         return res
 
     # Example: subsets([1,2,3]) -> [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]
 ```
 
-### Backtracking Application: Generate While Constraint Satisfaction
-We can explore all permutations, we can enforce rules as we explore
+### Backtracking Application: DFS Generate While Constraint Satisfaction
+Traversal Order: Root -> Choices
+Mindset: Build sequences step by step, only adding valid elements and
+backtracking when constraints are violated
+Tricks: Ill try to add '(' or ')' next only if rules allow, then undo if needed.
+As we explore all permutations, we can enforce rules
 in order to prune invalid branches early.
 
 Ex: Generate all valid parentheses
@@ -84,63 +111,90 @@ Ex: Generate all valid parentheses
     def generateParenthesis(n):
         res = []
         
-        def backtrack(open_count, close_count, path):
-            if len(path) == 2 * n:   # Found valid sequence
+        def dfs_backtrack(open_count, close_count, path):
+            
+            # Process Root -> : check if sequence complete
+            if len(path) == 2 * n:
                 res.append("".join(path))
                 return
             
-            if open_count < n:       # We can still add '('
+            # Process -> Choices : add '(' if possible
+            if open_count < n:
                 path.append("(")
-                backtrack(open_count + 1, close_count, path)
+                dfs_backtrack(open_count + 1, close_count, path)
                 path.pop()
             
-            if close_count < open_count:  # We can close only if '(' remains unmatched
+            # Process -> Choices : add ')' if it will not break validity
+            if close_count < open_count:
                 path.append(")")
-                backtrack(open_count, close_count + 1, path)
+                dfs_backtrack(open_count, close_count + 1, path)
                 path.pop()
         
-        backtrack(0, 0, [])
+        dfs_backtrack(0, 0, [])
         return res
 
     # Example: generateParenthesis(3) -> ["((()))","(()())","(())()","()(())","()()()"]
 ```
 
-
 ### Backtracking Application: Path Finding In Search Space
-We can explores paths step by step, backtracking when reaching dead ends
-in different search spaces (e.g. grids, graphs, networks).
+Traversal Order: Root -> Choices (neighboring paths)
+Mindset: Explore each path step by step, backtracking when reaching dead ends.
+Trick: Ill walk one direction fully before trying another, undoing my steps if blocked.
+We can explore fully explore paths, by stepping through and backtracking 
+when reaching dead ends for different search spaces (grids, graphs, networks).
 
 Ex: Word Search in grid
 ```python
     def exist(board, word):
         rows, cols = len(board), len(board[0])
         
-        def backtrack(r, c, idx):
-            if idx == len(word):     # Matched full word
+        def dfs_backtrack(r, c, idx):
+
+            # Early exit:
+            # Process Root -> : matched full word
+            if idx == len(word):
                 return True
+
+            # Early Pruning -> : check boundaries
             if r < 0 or c < 0 or r >= rows or c >= cols:
                 return False
+
+            # Early Pruning -> : check current cell
             if board[r][c] != word[idx]:
                 return False
             
-            tmp, board[r][c] = board[r][c], "#"  # Mark visited
-            found = (backtrack(r+1, c, idx+1) or
-                     backtrack(r-1, c, idx+1) or
-                     backtrack(r, c+1, idx+1) or
-                     backtrack(r, c-1, idx+1))
-            board[r][c] = tmp  # Restore state (backtrack)
+
+            # Process -> Choices : explore all 4 directions
+
+            # Process Root -> : mark current cell as exploring
+            tmp, board[r][c] = board[r][c], "#"
+
+            # Process -> Choices : explore neighbor cell
+            found = (dfs_backtrack(r+1, c, idx+1) or
+                     dfs_backtrack(r-1, c, idx+1) or
+                     dfs_backtrack(r, c+1, idx+1) or
+                     dfs_backtrack(r, c-1, idx+1))
+
+            # Backtrack: Restore neighbor cell state
+            board[r][c] = tmp
+
             return found
         
+        # dfs_backtrack starting from all cells
         for r in range(rows):
             for c in range(cols):
-                if backtrack(r, c, 0):
+                if dfs_backtrack(r, c, 0):
                     return True
+
         return False
 
     # Example: exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED") -> True
 ```
 
 ### Backtracking Application: Combinatorial Optimization
+Traversal Order: Root -> Choices (column positions)
+Mindset: Place one queen at a time, pruning invalid columns, and backtrack when stuck 
+Trick: Ill place a queen, explore further rows, then remove it if it leads to a conflict.
 We can search for an optimal solution while pruning bad candidates.
 
 Ex: N Queens Problem
@@ -153,26 +207,29 @@ Ex: N Queens Problem
         
         board = [["."] * n for _ in range(n)]
         
-        def backtrack(r):
-            if r == n:  # All queens placed
+        def dfs_backtrack(r):
+            # Process Root -> : all queens placed
+            if r == n:
                 res.append(["".join(row) for row in board])
                 return
             
+            # Process -> Choices : try each column
             for c in range(n):
                 if c in cols or (r-c) in diag1 or (r+c) in diag2:
                     continue
                 
-                # Place queen
+                # add: place queen
                 board[r][c] = "Q"
                 cols.add(c); diag1.add(r-c); diag2.add(r+c)
                 
-                backtrack(r + 1)
+                # Explore: next row
+                dfs_backtrack(r + 1)
                 
-                # Remove queen (backtrack)
+                # Backtrack: Remove queen
                 board[r][c] = "."
                 cols.remove(c); diag1.remove(r-c); diag2.remove(r+c)
         
-        backtrack(0)
+        dfs_backtrack(0)
         return res
 
     # Example: solveNQueens(4) -> [
@@ -182,8 +239,12 @@ Ex: N Queens Problem
     
 ```
 
-
 ### Backtracking Application: Decision Trees And Partitioning
+Traversal Order: Root -> Choices (substring partitions)
+Mindset: Partition strings step by step, backtracking when a substring
+is not a palindrome
+Trick: Ill add a palindromic piece, explore further, then remove it 
+if it doesn't lead to a solution.
 We can make binary or k-ary decision at each step, exploring all outcomes
 
 Ex: Partition a string into palindromic substrings
@@ -191,21 +252,28 @@ Ex: Partition a string into palindromic substrings
     def partition(s):
         res = []
         
-        def is_palindrome(sub):
-            return sub == sub[::-1]
-        
-        def backtrack(start, path):
-            if start == len(s):   # Reached end of string
+        def dfs_backtrack(start, path):
+            # Process Root -> : reached end of string
+            if start == len(s):
                 res.append(path[:])
                 return
             
+            # Process -> Choices : try all possible substrings
             for end in range(start+1, len(s)+1):
-                if is_palindrome(s[start:end]):   # Only continue if palindrome
+
+                # Constraint check: palindrome check
+                if is_palindrome(s[start:end]):
+
+                    # add: place next choice
                     path.append(s[start:end])
-                    backtrack(end, path)
+
+                    # explore: next choice
+                    dfs_backtrack(end, path)
+
+                    # backtrack: remove char
                     path.pop()
         
-        backtrack(0, [])
+        dfs_backtrack(0, [])
         return res
 
     # Example: partition("aab") -> [["a","a","b"], ["aa","b"]]
@@ -268,21 +336,34 @@ Given a list of numbers, return all unique subsets.
 ### Solution 1: Recursive DFS Backtracking on Current Subset to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
+
+        # Note:
+        # At each index, we decide to include or exclude the current element
+        # The 'path' keeps the current subset, and we backtrack after recursion
+
         res = []
 
         def dfs_backtrack(start: int, path: List[int]):
-            # Append a copy of the current subset (path)
+            
+            # record a copy of the current subset
             res.append(path[:])
             
-            # Explore further elements to add
+            # Explore elements from current index onward
             for i in range(start, len(nums)):
-                # Include nums[i] and move to next
+                
+                # Build: Include nums[i] and move to next
                 path.append(nums[i])
+
+                # Explore: recurse to next index
                 dfs_backtrack(i + 1, path)
+
                 # Backtrack: remove last element
                 path.pop()
         
         dfs_backtrack(0, [])
+
+        # overall: time complexity
+        # overall: space complexity
         return res
 ```
 
