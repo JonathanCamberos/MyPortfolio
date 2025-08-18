@@ -238,14 +238,14 @@
   },
   "39": {
     "questionNum": 39,
-    "questionTitle": "Combination Sum ::2::",
+    "questionTitle": "Combination Sum ::3::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order. The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different. The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.",
     "questionTopics": [
       "Array",
       "Backtracking"
     ],
-    "questionLink": "/Notes/leetcode-backtracking#39-combination-sum-2---medium",
+    "questionLink": "/Notes/leetcode-backtracking#39-combination-sum-3---medium",
     "blog": "LeetCode: Backtracking",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -357,7 +357,7 @@
   },
   "78": {
     "questionNum": 78,
-    "questionTitle": "Subsets ::2::",
+    "questionTitle": "Subsets ::3::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums of unique elements, return all possible subsets (the power set). A subset of an array is a selection of elements (possibly none) of the array. The solution set must not contain duplicate subsets. Return the solution in any order.",
     "questionTopics": [
@@ -365,7 +365,7 @@
       "Backtracking",
       "Bit Manipulation"
     ],
-    "questionLink": "/Notes/leetcode-backtracking#78-subsets-2---medium",
+    "questionLink": "/Notes/leetcode-backtracking#78-subsets-3---medium",
     "blog": "LeetCode: Backtracking",
     "lastSubmittedDate": null,
     "coldnessCount": -1

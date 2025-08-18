@@ -561,7 +561,7 @@ Find all combinations that add up to target.
         res = []
         path = []
 
-        def dfs_backtracking(idx, currSum):
+        def dfs_backtrack(idx, currSum):
 
             # Process Root -> check if sum reached target, shallow copy
             if currSum == target:
@@ -579,12 +579,12 @@ Find all combinations that add up to target.
                 path.append(candidates[i])
 
                 # Explore: recurse with new path with same i (allow reuse)
-                dfs_backtracking(i, currSum + candidates[i])
+                dfs_backtrack(i, currSum + candidates[i])
 
                 # Backtrack: remove last candidate, attempt curr path with next candidate
                 path.pop()
 
-        dfs_backtracking(0, 0)
+        dfs_backtrack(0, 0)
 
         # overall: time complexity
         # overall: space complexity
@@ -606,14 +606,13 @@ Find all combinations that add up to target.
         # the remaining sum, pruning branches from the root itself. 
         # Avoids creating unnecessary branches
 
-        
         res = []
         path = []
 
-        # Sort candidates to allow early pruning
+        # Sort ascending so pruning works
         candidates.sort()
 
-        def backtrack(start: int, remaining: int):
+        def dfs_backtrack(start: int, remaining: int):
 
             # Process Root -> check if sum reached target, shallow copy
             if remaining == 0:
@@ -634,12 +633,12 @@ Find all combinations that add up to target.
                 path.append(candidate)
 
                 # Explore: recurse with same index (allow reuse)
-                backtrack(i, remaining - candidate)
+                dfs_backtrack(i, remaining - candidate)
 
                     # Backtrack: remove last element for next iteration
                 path.pop()
 
-        backtrack(0, target) 
+        dfs_backtrack(0, target) 
         return res
 ```
 
@@ -656,9 +655,9 @@ Find all combinations that add up to target.
         # 4. Backtrack -> remove last choice after recursion
         # Result: all valid combinations appended to res
         
-        # "Early Pruning with Backward DFS": largest candidates are considered first,
-        # and branches exceeding target are skipped immediately. 
-        # Removes more unnecessary branches than forward early pruning.
+        # "Early Pruning" +  "Backward DFS": largest candidates are considered first,
+        # branches exceeding target are skipped immediately, 
+        # allows unnecessary branches than forward early pruning.
 
         res = []
         path = []
@@ -666,7 +665,7 @@ Find all combinations that add up to target.
         # Sort ascending so pruning works (largest candidates explored first)
         candidates.sort()
 
-        def dfs_backtracking(i, target):
+        def dfs_backtrack(i, target):
 
             # Process Root -> : check if remaining sum equals zero, shallow copy
             if target == 0:
@@ -679,23 +678,23 @@ Find all combinations that add up to target.
 
             # Early Pruning -> if candidate too large, skip
             if candidates[i] > target:
-                dfs_backtracking(i - 1, target)
+                dfs_backtrack(i - 1, target)
                 return
 
             # Build: add candidate into path
             path.append(candidates[i])
 
             # Explore: recurse with same index (reuse allowed), update target
-            dfs_backtracking(i, target - candidates[i])
+            dfs_backtrack(i, target - candidates[i])
 
             # Backtrack: remove last included candidate
             path.pop()
 
             # Explore: skip current candidate
-            dfs_backtracking(i - 1, target)
+            dfs_backtrack(i - 1, target)
 
         # recursion from last index
-        dfs_backtracking(len(candidates) - 1, target)
+        dfs_backtrack(len(candidates) - 1, target)
 
         # overall: time complexity
         # overall: space complexity
@@ -756,107 +755,117 @@ Find all combinations that add up to target with no guaranteed unique values.
 ```python
 ```
 
-### Solution 1: Recursive DFS Backtracking on Current Combination with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
+### Solution 1: Sorted Early Pruning Forward Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         
         # Note:
+        # Sort candidates ascending to align duplicates for pruning
         # Recursive DFS backtracking: Track current path and remaining sum
-        # 1. Process Root -> : check if remaining == 0 to record valid combination
-        # 2. Process Choices -> : explore each candidate from current index onward
-        # 3. Duplicate Pruning -> : avoid repeating combinations
-        # 4. Backtrack -> : remove last choice to try next candidate 
+        # 1. Process Root -> check if remaining == 0 to record valid combination
+        # 2. Process Choices -> explore each candidate from current index onward
+        # 3. Early Pruning -> skip candidates larger than remaining sum
+        # 4. Duplicate Pruning -> skip candidates equal to previous at same level
+        # 5. Backtrack -> remove last choice to try next candidate
         # Result: all valid combinations appended to res
 
         res = []
-        # Sort to align duplicates
+        path = []
+
+        # sort for duplicates & early pruning
         candidates.sort() 
 
-        def backtrack(start: int, path: List[int], remaining: int):
+        def dfs_backtrack(start: int, remaining: int):
 
-            # Process Root -> : check if valid combination
+            # Process Root -> : check if valid combination, shallow copy
             if remaining == 0:
                 res.append(path[:])
                 return
             
-            # Process -> Choices : explore numbers from this index onward
+            # Process Choices -> : explore numbers from current index onward
             for i in range(start, len(candidates)):
                 
-                # Early Pruning -> : Skip duplicates
+                # Duplicate Pruning -> : skip same candidate at this decision level
                 if i > start and candidates[i] == candidates[i - 1]:
                     continue
 
-                # Early pruning: stop if candidate is too large
+                # Early Pruning -> : candidate exceeds remaining sum
                 if candidates[i] > remaining:
                     break
 
                 # Build: include candidate[i]
                 path.append(candidates[i])
                 
-                # Explore: move to next index (can't reuse same element)
-                backtrack(i + 1, path, remaining - candidates[i])
+                # Explore -> move to next index (cannot reuse same element)
+                dfs_backtrack(i + 1, path, remaining - candidates[i])
 
-                # Backtrack: remove last
+                # Backtrack -> remove last included candidate
                 path.pop()
 
-        backtrack(0, [], target)
+        dfs_backtrack(0, [], target)
+
+        # overall: time complexity
+        # overall: space complexity 
         return res
 ```
 
-
-### Solution 2: Recursive DFS with Current Sum Tracking and Early Exit - Backtracking/Generate While Constraint Satisfaction
+### Solution 2: Sorted Early Pruning Backwards Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-
+        
         # Note:
-        # Recursive DFS: track path and remaining sum
-        # 1. Process Root -> : check if remaining == 0
-        # 2. Process Choices -> : explore numbers from current index onward
-        # 3. Prune duplicates -> : avoid repeating combinations
-        # 4. Early Prune -> : stop recursion if remaining < 0
-        # 5. Backtrack -> implicit using new path list
+        # Sort ascending for duplicates & pruning
+        # Recursive DFS backwards: Track path and remaining sum
+        # 1. Process Root -> check if remaining == 0 to record valid combination
+        # 2. Process Choices -> explore each candidate from current index backwards
+        # 3. Early Pruning -> skip candidates larger than remaining
+        # 4. Duplicate Pruning -> skip duplicates at same decision level
+        # 5. Backtrack -> remove last choice after recursion
         # Result: all valid combinations appended to res
 
         res = []
         candidates.sort()
+        path = []
 
+        def dfs_backtracking(i: int, remaining: int):
 
-        def dfs(start: int, path: List[int], remaining: int):
-
-            # Process Root -> : check if valid combination
+            # Process Root -> remaining sum zero
             if remaining == 0:
                 res.append(path[:])
                 return
-            
-            # Early Pruning -> : exit if overshot
-            if remaining < 0:
+
+            # No more candidates
+            if i < 0:
                 return
-            
-            # Process -> Choices : explore numbers from this index onward
-            for i in range(start, len(candidates)):
 
-                # Early Pruning -> : skip duplicates at this decision level
-                if i > start and candidates[i] == candidates[i-1]:
-                    continue
+            # Early Pruning -> candidate too large
+            if candidates[i] > remaining:
+                dfs_backtracking(i - 1, remaining)
+                return
 
-                # Early pruning: stop if candidate is too large   
-                if candidates[i] > remaining:
-                    break
+            # Duplicate Pruning -> skip duplicates at same decision level
+            if i < len(candidates) - 1 and candidates[i] == candidates[i + 1]:
+                dfs_backtracking(i - 1, remaining)
+                return
 
-                # Build: include candidates[i]
-                new_path = path + [candidates[i]]
+            # Build -> include candidate[i]
+            path.append(candidates[i])
 
-                # Explore: move to next index (can't reuse same element)
-                dfs(i + 1, new_path, remaining - candidates[i])
-                
-                # Backtrack: implicit, since we used a new list `new_path`
+            # Explore -> move backward without reusing same element
+            dfs_backtracking(i - 1, remaining - candidates[i])
 
-        dfs(0, [], target)
-        
-        # overall: time complexity
-        # overall: space complexity
+            # Backtrack -> remove last
+            path.pop()
+
+            # Explore -> skip candidate[i], move to next smaller index
+            dfs_backtracking(i - 1, remaining)
+
+        # Start recursion from last index
+        dfs_backtracking(len(candidates) - 1, target)
         return res
+
 ```
+
 
 
 ## 46. Permutations ::1:: - Medium
