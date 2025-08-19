@@ -289,7 +289,7 @@ Ex: Partition a string into palindromic substrings
 ```
 
 
-## 78. Subsets ::3:: - Medium
+## 78. Subsets ::2:: - Medium
 
 Topics:  Array, Backtracking, Bit Manipulation
 
@@ -342,77 +342,7 @@ Given a list of numbers, return all unique subsets.
 ```python
 ```
 
-### Solution 1: Recursive DFS Backtracking on Current Path to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
-```python
-    def subsets(self, nums: List[int]) -> List[List[int]]:
-
-        # Note:
-        # Recursive DFS backtracking: Create and Pass current Path to add all nums to
-        # 1. Process Root -> : add current subset
-        # 2. Process Choices -> : explore each element from current index onward
-        # Result: 
-
-        res = []
-
-        def dfs_backtrack(start: int, path: List[int]):
-            
-            # Reference copy: 
-            # reference copy of path (which is being changed constantly)
-            # res.append(path)
-
-            # Shallow copy:
-            # Process Root -> : shallow copy of current path (curr subset)
-            res.append(path[:])
-            
-            # a -> [ [1, 2], [3, 4] ]
-            # shallow -> [ [1, 2], [3, 4] ]
-
-            # a and shallow: point to different outer lists, but the 
-            # inner [1,2] and [3,4] are the same objects.
-
-            # Deep copy:
-            # deep copy is slower because it recursively clones everything inside path, 
-            # even if it doesn’t need to.
-
-            # res.append(copy.deepcopy(path))
-
-            # a -> [ [1, 2], [3, 4] ]
-            # deep -> [ [1, 2], [3, 4] ]
-
-            # a and deep: point to different outer lists, and the
-            # inner [1,2] and [3,4] are different objects.
-
-            # Process Choices -> : explore remaining paths from curr index onwards
-            # Avoid Duplicates -> : only explore from curr element onwards to avoid duplicate sets
-            
-            # Without this rule:
-            # [] -> 1 -> 2
-            # [] -> 2 -> 1  # This would generate the same subset [1,2] again
-            for i in range(start, len(nums)):
-                
-                # Build: Include nums[i] to make new path
-                # in place modification: 
-                path.append(nums[i])
-
-                # Incorrect:
-                # new = path.append(nums[i])
-                # .append() always returns None,
-                # as modification is in-place
-
-                # Explore: recurse new path starting after next index
-                dfs_backtrack(i + 1, path)
-
-                # Backtrack: remove last element, attempt curr path with next element
-                path.pop()
-        
-        dfs_backtrack(0, [])
-
-        # overall: time complexity
-        # overall: space complexity
-        return res
-```
-
-### Solution 2: Recursive DFS Backtracking on Global Path to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
+### Solution 1: Recursive DFS Backtracking on Global Path to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
@@ -440,7 +370,7 @@ Given a list of numbers, return all unique subsets.
 ```
 
 
-### Solution 3: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
+### Solution 2: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
@@ -480,7 +410,7 @@ Given a list of numbers, return all unique subsets.
 ```
 
 
-## 39. Combination Sum ::3:: - Medium
+## 39. Combination Sum ::4:: - Medium
 
 Topics:  Array, Backtracking
 
@@ -541,7 +471,7 @@ Find all combinations that add up to target.
 ```python
 ```
 
-### Solution 1: Unsorted Late Pruning Backtracking on Global Path  - Backtracking/Generate All Combinations Or Subsets
+### Solution 1: Recursive Unsorted Late Branch Pruning Backtracking on Global Path  - Backtracking/Generate All Combinations Or Subsets
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -557,23 +487,22 @@ Find all combinations that add up to target.
         # Branches grow first, then are cut off if sum exceeds target. 
         # Creates unnecessary branches compared to early pruning.
 
-
         res = []
         path = []
 
-        def dfs_backtrack(idx, currSum):
+        def dfs_backtrack(start, currSum):
 
             # Process Root -> check if sum reached target, shallow copy
             if currSum == target:
                 res.append(path[:])
                 return
 
-            # Late Pruning -> we can only prune branch after adding elements
+            # Late Branch Pruning -> we can only prune branch after adding elements
             if currSum > target:
                 return
 
             # Process -> Choices : try each candidate from current index onward, prune when in branch
-            for i in range(idx, len(candidates)):
+            for i in range(start, len(candidates)):
 
                 # Build: Include candidates[i] to make a new path
                 path.append(candidates[i])
@@ -591,7 +520,7 @@ Find all combinations that add up to target.
         return res
 ```
 
-### Solution 2: Sorted Early Pruning Forward Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
+### Solution 2: Recursive Sorted Early Candidate Pruning Forward Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -612,7 +541,7 @@ Find all combinations that add up to target.
         # Sort ascending so pruning works
         candidates.sort()
 
-        def dfs_backtrack(start: int, remaining: int):
+        def dfs_backtrack(start, remaining):
 
             # Process Root -> check if sum reached target, shallow copy
             if remaining == 0:
@@ -622,10 +551,10 @@ Find all combinations that add up to target.
             # Process -> Choices : prune invalid candidates
             for i in range(start, len(candidates)):
 
-                # Build: grab candidate
+                # grab candidate
                 candidate = candidates[i]
 
-                # Early Pruning -> : skip early if candidate exceeds remaining,
+                # Early Candidate Pruning -> : skip early if candidate exceeds remaining,
                 if candidate > remaining:
                     break
 
@@ -635,14 +564,14 @@ Find all combinations that add up to target.
                 # Explore: recurse with same index (allow reuse)
                 dfs_backtrack(i, remaining - candidate)
 
-                    # Backtrack: remove last element for next iteration
+                # Backtrack: remove last element for next iteration
                 path.pop()
 
         dfs_backtrack(0, target) 
         return res
 ```
 
-### Solution 3: Sorted Early Pruning Backwards Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
+### Solution 3: Recursive Sorted Early Pruning Backwards Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
                 
@@ -665,41 +594,101 @@ Find all combinations that add up to target.
         # Sort ascending so pruning works (largest candidates explored first)
         candidates.sort()
 
-        def dfs_backtrack(i, target):
+        def dfs_backtrack(i, remaining):
 
             # Process Root -> : check if remaining sum equals zero, shallow copy
-            if target == 0:
+            if remaining == 0:
                 res.append(path[:])
                 return
 
-            # Empty check: no more candidates
+            # For Loop Exit: no more candidates
             if i < 0:
                 return
 
-            # Early Pruning -> if candidate too large, skip
-            if candidates[i] > target:
-                dfs_backtrack(i - 1, target)
+            # grab candidate
+            candidate = candidates[i]
+
+            # Early Candidate Pruning -> if candidate too large, skip
+            if candidate > remaining:
+                dfs_backtrack(i - 1, remaining)
                 return
 
             # Build: add candidate into path
-            path.append(candidates[i])
+            path.append(candidate)
 
-            # Explore: recurse with same index (reuse allowed), update target
-            dfs_backtrack(i, target - candidates[i])
+            # Explore: recurse with same index (reuse allowed), update remaining
+            dfs_backtrack(i, remaining - candidate)
 
             # Backtrack: remove last included candidate
             path.pop()
 
-            # Explore: skip current candidate
-            dfs_backtrack(i - 1, target)
+            # For Loop Iteration: next candidate
+            dfs_backtrack(i - 1, remaining)
 
         # recursion from last index
-        dfs_backtrack(len(candidates) - 1, target)
+        dfs_backtrack(len(candidates) - 1, remaining)
 
         # overall: time complexity
         # overall: space complexity
         return res
 ```
+
+### Solution 4: Iterative DFS Early Pruning with Explicit Stack - Backtracking/Generate While Constraint Satisfaction
+```python
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+                
+        # Note:
+        # Iterative DFS using explicit stack to simulate recursion
+        # 1. Process Root -> push initial state
+        # 2. Process Choices -> expand from current index forward
+        # 3. Build -> include candidate into new path
+        # 4. Explore -> push new state with reduced remaining sum
+        # 5. Backtrack -> implicit when stack pops, no in-place undo needed
+        # Result: collect all valid paths where remaining == 0
+
+        res = []
+
+        # Sort candidates ascending for pruning
+        candidates.sort()
+
+        # tuples (start, path, remaining)
+        stack = [(0, [], target)]
+
+        # Iterative DFS expansion
+        while stack:
+
+            # Pop last state (DFS order FIFO)
+            (start, path, remaining) = stack.pop()
+
+            # Process Root -> if remaining == 0, valid combination found
+            if remaining == 0:
+                res.append(path)
+                continue
+
+            # Process Choices -> try each candidate from current index forward
+            for i in range(start, len(candidates)):
+
+                # grab candidate
+                candidate = candidates[i]
+
+                # Early Candidate Pruning -> skip if candidate exceeds remaining
+                if candidate > remaining:
+                    break
+
+                # Build -> include candidate into path (need new path obj, order not guaranteed in iterative)
+                new_path = path + [candidate]
+
+                # Explore -> push new state, allow reuse of same candidate i
+                stack.append((i, new_path, remaining - candidate))
+
+                # Backtrack -> implicit, no need to pop since previous path objs still exit
+
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
+
 
 
 ## 40. Combination Sum II ::2:: - Medium
@@ -755,7 +744,7 @@ Find all combinations that add up to target with no guaranteed unique values.
 ```python
 ```
 
-### Solution 1: Sorted Early Pruning Forward Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
+### Solution 1: Recursive Sorted Early Pruning Forward Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -772,7 +761,7 @@ Find all combinations that add up to target with no guaranteed unique values.
         res = []
         path = []
 
-        # sort for duplicates & early pruning
+        # Sort for duplicate and early candidate pruning
         candidates.sort() 
 
         def dfs_backtrack(start: int, remaining: int):
@@ -785,7 +774,11 @@ Find all combinations that add up to target with no guaranteed unique values.
             # Process Choices -> : explore numbers from current index onward
             for i in range(start, len(candidates)):
                 
-                # Duplicate Pruning -> : skip same candidate at this decision level
+                # Duplicate Pruning -> : matching values only allowed when i == start,
+                # ex: candidates = [1, 1, 1, 2], target = 3
+                #
+                #   1. ignores duplicates [1, 1, 1, 2], will skip the multiple [1, 2], [1, 2]...
+                #   2. allows matching elements [1, 1, 1], upon first entering dfs level (i == start)
                 if i > start and candidates[i] == candidates[i - 1]:
                     continue
 
@@ -797,24 +790,24 @@ Find all combinations that add up to target with no guaranteed unique values.
                 path.append(candidates[i])
                 
                 # Explore -> move to next index (cannot reuse same element)
-                dfs_backtrack(i + 1, path, remaining - candidates[i])
+                dfs_backtrack(i + 1, remaining - candidates[i])
 
                 # Backtrack -> remove last included candidate
                 path.pop()
 
-        dfs_backtrack(0, [], target)
+        dfs_backtrack(0, target)
 
         # overall: time complexity
         # overall: space complexity 
         return res
 ```
 
-### Solution 2: Sorted Early Pruning Backwards Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
+### Solution 2: Recursive Sorted Early Pruning Backwards Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         
         # Note:
-        # Sort ascending for duplicates & pruning
+        # Sort ascending for duplicates and pruning
         # Recursive DFS backwards: Track path and remaining sum
         # 1. Process Root -> check if remaining == 0 to record valid combination
         # 2. Process Choices -> explore each candidate from current index backwards
