@@ -14,7 +14,8 @@ const filePaths = [
   'content/leetcode-trees/index.mdx',
   'content/leetcode-tries/index.mdx',
   'content/leetcode-heaps/index.mdx',
-  'content/leetcode-backtracking/index.mdx'
+  'content/leetcode-backtracking/index.mdx',
+  'content/leetcode-graphs/index.mdx'
 ];
 
 function syncWarmness() {

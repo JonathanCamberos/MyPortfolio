@@ -551,5 +551,16 @@
       "useCaseLink": "/Notes/leetcode-backtracking#backtracking-application-decision-trees-and-partitioning",
       "blog": "LeetCode: Backtracking"
     }
+  ],
+  "graph": [
+    {
+      "type": "Graph",
+      "title": "something",
+      "summary": "Graphs are cool!",
+      "exampleIntro": "Find the kth largest element in array",
+      "codeExample": "def graphBrrrr():\n        wow!",
+      "useCaseLink": "/Notes/leetcode-graphs#graph-application-something",
+      "blog": "LeetCode: Graphs"
+    }
   ]
 }

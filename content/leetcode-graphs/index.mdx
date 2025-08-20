@@ -2,88 +2,1841 @@
 title: "LeetCode: Graphs"
 description: "graphs"
 image: "../../public/Notes/graph.png"
-publishedAt: "2025-05-03"
-updatedAt: "2025-05-03"
+publishedAt: "2025-08-29"
+updatedAt: "2025-08-29"
 author: "jonathancamberos"
 isPublished: true
 tags:
 - data structures and algorithms
 ---
 
-## Intro
+## Graphs Intro
 
-Graphs are data structures representing relationships
-between entities. Graphs contain:
+LeetCode problems with graph based solutions.
 
-Vertices (n): The entities (ex: nodes)
+### What is a Graph?
 
-Edges (m): The connections between entities
+A graph is a data structure used to represent relationships between entities.
 
-## Graph Representations: 
+### Graph Characteristics
 
-### Adjacency Matrix
+1. Vertices (n): entities (e.g. nodes)
+2. Edges (m): connections between entities
+3. Direction: Edges can be directed (nodes pointing to nodes), or undirected (no one pointing)
+4. Weight: Edges can have weight (e.g. cost, time) or unweighted
+5. Unordered: unlike tree, heaps, etc, graphs allow cycles, multiple paths, and varying connectivity
+6. Representation: Graphs are stored as adjacency matrix, adjacency list, or edge lists depending on the use case
 
-Graph:
+### Graph Representations: Adjacency Matrix
+
+Graph and Matrix:
 ```
-    1---2
-     \ /
-      3
-```
+        1---2
+         \ /
+          3
 
-Adjacency Matrix Representation (n = 3):
-```
+
         1  2  3
     1  [0, 1, 1]
     2  [1, 0, 1]
     3  [1, 1, 0]
 ```
 
-The rows and columns represent vertices.
+A[i][j] = 1 -> edge exists between i and j
 
-A[i][j] = 1 indicates an edge between vertex i and vertex j.
+A[i][j] = 0 -> no edge between i and j
 
-A[i][j] = 0 indicates no edge
+Space complexity O(n<sup>2</sup>) -> better for dense graphs
 
-### Adjacency List
+### Graph Representations: Adjacency List
 
-Graph:
+Graph and List
 ```
-    1---2
-     \ /
-      3
-```
+        1---2
+         \ /
+          3
 
-Adjacency List Representation (n = 3, m = 3):
-```
     1: [2, 3]
     2: [1, 3]
     3: [1, 2]
 ```
 
-Each vertex points to a list of its neighbors
+Each vertex points to its neighbors
 
-Space-efficient for sparse graphs
+Space complexity: O(n + m) -> efficient for sparse graphs
 
-### Edge List
+### Graph Representations: Edge List
 
-Graph:
+Graph and Edge List
 ```
-    1---2
-     \ /
-      3
-```
+        1---2
+         \ /
+          3
 
-Edge List Representation (m = 3):
-```
     Edges:
     (1, 2)
     (1, 3)
     (2, 3)
 ```
 
-Each edge is explicitly listed as a pair of vertices (u,v)
+Stores all edges explicitly as (u, v) pairs
+
+Space complexity O(m) -> useful for algorithms that only need edges
 
 Simplest representation for algorithms that only care about edges.
 
+### Graph Application: something
+Graphs are cool!
 
-## Notation
+Ex: Find the kth largest element in array
+```python
+    def graphBrrrr():
+        wow!
+
+```
+
+
+## 200. Number of Islands ::3:: - Medium
+
+Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
+
+### Intro
+> Given an m x n 2D binary grid grid which represents a  
+> map of '1's (land) and '0's (water), return the number of 
+> islands.
+> An island is surrounded by water and is formed by 
+> connecting adjacent lands horizontally or vertically. You may 
+> assume all four edges of the grid are all surrounded by  
+> water.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| grid (see LeetCode) | 1 |
+| grid (see LeetCode) | 3 |
+
+Constraints:
+
+m == grid.length
+
+n == grid[i].length
+
+1 &leq; m, n &leq; 300
+
+grid[i][j] is '0' or '1'
+
+### Abstraction
+Given a graph, return the number of islands, where an islands is a cell
+that is surrounded by water, and islands can connect horizontally or vertically.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS with Explicit Visited Set - Graph/something
+```python
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # Note:
+        # 1. Use a visited set to avoid mutating grid
+        # 2. DFS marks all connected land from each unvisited '1'
+        # 3. Each DFS trigger = new island
+
+        if not grid:
+            return 0
+
+        m, n = len(grid), len(grid[0])
+        visited = set()
+        count = 0
+
+        def dfs(i: int, j: int) -> None:
+            # Explore 4 directions
+            for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:
+                ni, nj = i + dx, j + dy
+                # Check bounds + not visited + land cell
+                if (ni, nj) not in visited and 0 <= ni < m and 0 <= nj < n and grid[ni][nj] == '1':
+                    visited.add((ni, nj))
+                    dfs(ni, nj)
+
+        # Scan grid, run DFS whenever unvisited land is found
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == '1' and (i, j) not in visited:
+                    count += 1
+                    visited.add((i, j))
+                    dfs(i, j)
+
+        # overall: time complexity O(m * n)
+        # overall: space complexity O(m * n) (visited set + recursion stack)
+        return count
+```
+
+
+### Solution 2: Optimized DFS Flood Fill - Graph/something
+```python
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # Note:
+        # 1. Sink land in-place by flipping '1' -> '0'
+        # 2. DFS flood fills an island whenever unvisited '1' is found
+        # 3. No visited set required (saves space)
+        
+        if not grid:
+            return 0
+        
+        m, n = len(grid), len(grid[0])
+        islands = 0
+        
+        def dfs(r: int, c: int) -> None:
+            # Base case: out of bounds or water
+            if r < 0 or c < 0 or r >= m or c >= n or grid[r][c] == '0':
+                return
+            grid[r][c] = '0'  # mark visited (sink)
+            
+            # Explore 4 directions
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+        
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == '1':
+                    islands += 1
+                    dfs(r, c)
+        
+        # overall: time complexity O(m * n)
+        # overall: space complexity O(m * n) worst-case (DFS recursion depth)
+        return islands
+```
+
+
+### Solution 3: Optimized BFS Flood Fill - Graph/something
+```python
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # Note:
+        # 1. Same idea as DFS but iterative BFS avoids recursion depth issues
+        # 2. Use queue to explore an entire island
+        # 3. Mutates grid in-place to mark visited
+        
+        if not grid:
+            return 0
+        
+        m, n = len(grid), len(grid[0])
+        islands = 0
+        
+        def bfs(r: int, c: int) -> None:
+            queue = deque([(r, c)])
+            grid[r][c] = '0'  # mark visited
+            
+            while queue:
+                cr, cc = queue.popleft()
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                    nr, nc = cr + dr, cc + dc
+                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == '1':
+                        grid[nr][nc] = '0'
+                        queue.append((nr, nc))
+        
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == '1':
+                    islands += 1
+                    bfs(r, c)
+        
+        # overall: time complexity O(m * n)
+        # overall: space complexity O(m * n) worst-case (queue holding all land)
+        return islands
+```
+
+
+## 695. Max Area of Island ::1:: - Medium
+
+Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
+
+### Intro
+> You are given an m x n binary matrix grid. An island is a 
+> group of 1's (representing land) connected 4-directionally  
+> (horizontal or vertical.) You may assume all four edges of the 
+> grid are surrounded by water.
+> The area of an island is the number of cells with a value 1 in 
+> the island.
+> Return the maximum area of an island in grid. If there is no 
+> island, return 0.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| grid (see LeetCode) | 6 |
+| grid (see LeetCode) | 0 |
+
+Constraints:
+
+m == grid.length
+
+n == grid[i].length
+
+1 &leq; m, n &leq; 50
+
+grid[i][j] is either 0 or 1
+
+### Abstraction
+Given a graph, return the largest island.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Optimized DFS Flood Fill - Graph/something
+```python
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        # Note:
+        # 1. Treat grid as a graph: 1 = land node, edges = 4-direction adjacency
+        # 2. DFS flood fill sinks land in-place to mark visited cells
+        # 3. Track area of each island during DFS
+        # 4. Return the maximum island area
+
+        if not grid:
+            return 0
+
+        m, n = len(grid), len(grid[0])
+        max_area = 0
+
+        def dfs(r: int, c: int) -> int:
+            # Base case: out of bounds or water
+            if r < 0 or c < 0 or r >= m or c >= n or grid[r][c] == 0:
+                return 0
+
+            grid[r][c] = 0  # mark visited (sink)
+            area = 1  # count current cell
+
+            # Explore 4 directions and accumulate area
+            area += dfs(r + 1, c)
+            area += dfs(r - 1, c)
+            area += dfs(r, c + 1)
+            area += dfs(r, c - 1)
+            return area
+
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 1:
+                    # compute area of this island and update max_area
+                    island_area = dfs(r, c)
+                    max_area = max(max_area, island_area)
+
+        # overall: time complexity O(m * n)
+        # overall: space complexity O(m * n) worst-case (DFS recursion stack)
+        return max_area
+```
+
+
+### Solution 2: Optimized BFS Flood Fill - Graph/something
+```python
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        # Note:
+        # 1. Treat grid as a graph: 1 = land, edges = 4-direction adjacency
+        # 2. BFS explores each island iteratively using a queue
+        # 3. Sink land cells in-place to mark visited
+        # 4. Track area of each island, return maximum
+
+        if not grid:
+            return 0
+
+        m, n = len(grid), len(grid[0])
+        max_area = 0
+
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 1:
+                    # start BFS for this island
+                    area = 0
+                    queue = deque([(r, c)])
+                    grid[r][c] = 0  # mark visited
+
+                    while queue:
+                        cr, cc = queue.popleft()
+                        area += 1
+
+                        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                            nr, nc = cr + dr, cc + dc
+                            if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                                grid[nr][nc] = 0  # mark visited
+                                queue.append((nr, nc))
+
+                    max_area = max(max_area, area)
+
+        # overall: time complexity O(m * n)
+        # overall: space complexity O(m * n) worst-case (queue holds all land cells)
+        return max_area
+```
+
+
+## 133. Clone Graph ::2:: - Medium
+
+Topics:  Hash Table, Depth First Search, Breadth First Search, Graph
+
+### Intro
+> Given a reference of a node in a connected undirected graph.
+> Return a deep copy (clone) of the graph. 
+> Each node in the graph contains a value (int) and a list  
+> (List[Node]) of its neighbors.
+> class Node ( public int val; public List[Node] neighbors; )
+> Test case format:
+> For simplicity, each node's value is the same as the node's index 
+> (1-indexed). For example, the first node with val == 1, the 
+> second node with val == 2, and so on. The graph is represented 
+> in the test case using an adjacency list.
+> An adjacency list is a collection of unordered lists used to 
+> represent a finite graph. Each list describes the set of neighbors 
+> of a node in the graph.
+> The given node will always be the first node with val = 1. You 
+> must return the copy of the given node as a reference to the 
+> cloned graph.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| adjList = [[2,4],[1,3],[2,4],[1,3]] | [[2,4],[1,3],[2,4],[1,3]] |
+| adjList = [[]] | [[]] |
+| adjList = [] | [] |
+
+Constraints:
+
+The number of nodes in the graph is in the range [0, 100].
+
+1 &leq; Node.val &leq; 100
+
+Node.val is unique for each node.
+
+There are no repeated edges and no self-loops in the graph.
+
+The Graph is connected and all nodes can be visited starting from the given node.
+
+### Abstraction
+Given a graph represented by an adjacency matrix, return a deep copy.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS - Graph/something
+```python
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        # Note:
+        # 1. Use DFS to traverse the graph
+        # 2. Use a hashmap to store already cloned nodes
+        # 3. For each node, recursively clone its neighbors
+        # 4. Return the cloned node corresponding to the input
+
+        if not node:
+            return None
+
+        cloned = {}  # maps original node -> cloned node
+
+        def dfs(n: Node) -> Node:
+            if n in cloned:
+                return cloned[n]
+
+            copy = Node(n.val)
+            cloned[n] = copy
+
+            for neighbor in n.neighbors:
+                copy.neighbors.append(dfs(neighbor))
+
+            return copy
+
+        return dfs(node)
+
+        # overall: time complexity O(V + E), visit each node and edge once
+        # overall: space complexity O(V), for hashmap + recursion stack
+```
+
+### Solution 2: BFS - Graph/something
+```python
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+         # Note:
+        # 1. Use BFS to traverse the graph iteratively
+        # 2. Use a hashmap to track cloned nodes
+        # 3. For each node dequeued, clone its neighbors if not already cloned
+        # 4. Return the cloned node corresponding to the input
+
+        if not node:
+            return None
+
+        cloned = {node: Node(node.val)}
+        queue = deque([node])
+
+        while queue:
+            current = queue.popleft()
+
+            for neighbor in current.neighbors:
+                if neighbor not in cloned:
+                    cloned[neighbor] = Node(neighbor.val)
+                    queue.append(neighbor)
+                cloned[current].neighbors.append(cloned[neighbor])
+
+        # overall: time complexity O(V + E), each node and edge visited once
+        # overall: space complexity O(V), for hashmap + queue
+        return cloned[node]
+```
+
+
+## 994. Rotting Oranges ::2:: - Medium
+
+Topics:  Array, Breadth First Search, Matrix
+
+### Intro
+> You are given an m x n grid where each cell can have one of 
+> three values:
+> 0 representing an empty cell,
+> 1 representing a fresh orange, or
+> 2 representing a rotten orange.
+> Every minute, any fresh orange that is 4-directionally adjacent to 
+> a rotten orange becomes rotten.
+> Return the minimum number of minutes that must elapse until no
+> cell has a fresh orange. If this is impossible, return -1.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| grid = [[2,1,1],[1,1,0],[0,1,1]] | 4 |
+| grid = [[2,1,1],[0,1,1],[1,0,1]] | -1 |
+| grid = [[0,2]] | 0 |
+
+Constraints:
+
+m == grid.length
+
+n == grid[i].length
+
+1 &leq; m, n &leq; 10
+
+grid[i][j] is 0, 1, or 2.
+
+### Abstraction
+Given a grid with oranges, return how much time until no fresh oranges remain.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Multi Source BFS - Graph/something
+```python
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        # Note:
+        # 1. Start BFS from all initially rotten oranges (multi-source BFS)
+        # 2. Each BFS level = 1 minute of rotting spread
+        # 3. Track fresh oranges count, decrement when they rot
+        # 4. Return minutes if all fresh rot, else -1
+
+        if not grid:
+            return -1
+
+        m, n = len(grid), len(grid[0])
+        fresh = 0
+        queue = deque()
+
+        # collect initial state
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 2:
+                    queue.append((r, c, 0))  # (row, col, minute)
+                elif grid[r][c] == 1:
+                    fresh += 1
+
+        minutes = 0
+        directions = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        # BFS
+        while queue:
+            r, c, minutes = queue.popleft()
+
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                    grid[nr][nc] = 2
+                    fresh -= 1
+                    queue.append((nr, nc, minutes + 1))
+
+        # all fresh must rot
+        return minutes if fresh == 0 else -1
+```
+
+### Solution 2: BFS with Level Processing - Graph/something
+```python
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        # Note:
+        # 1. Instead of storing time in queue, process BFS by levels
+        # 2. Each level of queue expansion corresponds to +1 minute
+        # 3. Track number of fresh oranges, ensure all rot or return -1
+
+        if not grid:
+            return -1
+
+        m, n = len(grid), len(grid[0])
+        fresh = 0
+        queue = deque()
+
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 2:
+                    queue.append((r, c))
+                elif grid[r][c] == 1:
+                    fresh += 1
+
+        minutes = 0
+        directions = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        while queue and fresh > 0:
+            for _ in range(len(queue)):
+                r, c = queue.popleft()
+
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                        grid[nr][nc] = 2
+                        fresh -= 1
+                        queue.append((nr, nc))
+
+            minutes += 1
+
+        return minutes if fresh == 0 else -1
+```
+
+
+
+## 417. Pacific Atlantic Water Flow ::2:: - Medium
+
+Topics:  Array, Breadth First Search, Matrix
+
+### Intro
+> There is an m x n rectangular island that borders both
+> the Pacific Ocean and Atlantic Ocean. The Pacific 
+> Ocean touches the island's left and top edges, and the 
+> Atlantic Ocean touches the island's right and bottom edges.
+> The island is partitioned into a grid of square cells. You 
+> are given an m x n integer matrix heights where 
+> heights[r][c] represents the height above sea level 
+> of the cell at coordinate (r, c).
+> The island receives a lot of rain, and the rain water can 
+> flow to neighboring cells directly north, south, east, 
+> and west if the neighboring cell's height is less than 
+> or equal to the current cell's height. Water can flow 
+> from any cell adjacent to an ocean into the ocean.
+> Return a 2D list of grid coordinates result where 
+> result[i] = [ri, ci] denotes that rain water can 
+> flow from cell (ri, ci) to both the Pacific and 
+> Atlantic oceans.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| grid height (see LeetCode) | res grid |
+| grid height (see LeetCode) | res grid |
+
+Constraints:
+
+m == heights.length
+
+n == heights[r].length
+
+1 &leq; m, n &leq; 200
+
+0 &leq; heights[r][c] &leq; 10<sup>5</sup>
+
+### Abstraction
+Given a grid of heights, return which cells can flow to the ocean.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Reverse Flow - Graph/something
+```python
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        # Note:
+        # 1. Instead of simulating water flow forward (downhill), reverse the process:
+        #    - Start from the oceans and "climb uphill" (to neighbors with height >= current).
+        # 2. Perform DFS from Pacific edges and Atlantic edges separately.
+        # 3. Any cell visited in both traversals can reach both oceans.
+        # 4. Collect intersection of visited sets.
+
+        if not heights:
+            return []
+
+        m, n = len(heights), len(heights[0])
+        pacific = set()
+        atlantic = set()
+
+        def dfs(r: int, c: int, visited: set, prev_height: int) -> None:
+            # base case: out of bounds, visited, or downhill
+            if ((r, c) in visited or r < 0 or c < 0 or r >= m or c >= n 
+                or heights[r][c] < prev_height):
+                return
+            visited.add((r, c))
+
+            # explore 4 directions
+            dfs(r + 1, c, visited, heights[r][c])
+            dfs(r - 1, c, visited, heights[r][c])
+            dfs(r, c + 1, visited, heights[r][c])
+            dfs(r, c - 1, visited, heights[r][c])
+
+        # Pacific edges: top row + left col
+        for i in range(m):
+            dfs(i, 0, pacific, heights[i][0])
+            dfs(i, n - 1, atlantic, heights[i][n - 1])
+        for j in range(n):
+            dfs(0, j, pacific, heights[0][j])
+            dfs(m - 1, j, atlantic, heights[m - 1][j])
+
+        # intersection: cells reachable to both oceans
+        return list(pacific & atlantic)
+```
+
+
+### Solution 2: BFS Reverse Flow - Graph/something
+```python
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        # Note:
+        # 1. Same reverse flow idea, but BFS is used instead of DFS.
+        # 2. BFS avoids recursion depth issues and may be easier to reason about.
+        # 3. Initialize queues with Pacific and Atlantic edges separately.
+        # 4. Traverse "uphill" from oceans, track visited cells for each.
+        # 5. Answer = intersection of both visited sets.
+
+        if not heights:
+            return []
+
+        m, n = len(heights), len(heights[0])
+
+        def bfs(starts: List[Tuple[int,int]]) -> set:
+            visited = set(starts)
+            queue = deque(starts)
+
+            while queue:
+                r, c = queue.popleft()
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                    nr, nc = r + dr, c + dc
+                    if (0 <= nr < m and 0 <= nc < n and (nr, nc) not in visited
+                        and heights[nr][nc] >= heights[r][c]):
+                        visited.add((nr, nc))
+                        queue.append((nr, nc))
+            return visited
+
+        pacific_starts = [(0, j) for j in range(n)] + [(i, 0) for i in range(m)]
+        atlantic_starts = [(m - 1, j) for j in range(n)] + [(i, n - 1) for i in range(m)]
+
+        pacific = bfs(pacific_starts)
+        atlantic = bfs(atlantic_starts)
+
+        return list(pacific & atlantic)
+```
+
+
+## 130. Surrounded Regions ::3:: - Medium
+
+Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
+
+### Intro
+> You are given an m x n matrix board containing letters
+> 'X' and 'O', capture regions that are surrounded:
+> Connect: A cell is connected to adjacent cells 
+> horizontally or vertically.
+> Region: To form a region connect every 'O' cell.
+> Surround: The region is surrounded with 'X' cells 
+> if you can connect the region with 'X' cells and 
+> none of the region cells are on the edge of the board.
+> To capture a surrounded region, replace all 'O's with 
+> 'X's in-place within the original board. You do not need 
+> to return anything.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| grid height (see LeetCode) | res grid |
+| grid height (see LeetCode) | res grid |
+
+Constraints:
+
+m == heights.length
+
+n == heights[r].length
+
+1 &leq; m, n &leq; 200
+
+board[i][j] is 'X' or 'O'.
+
+### Abstraction
+Given a board, find all surrounded regions, capture and return them.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Flood Fill from Borders - Graph/something
+```python
+    def solve(self, board: List[List[str]]) -> None:
+        # Note:
+        # 1. Any 'O' connected to the border cannot be captured.
+        # 2. Mark all border-connected 'O's with DFS (temporary marker 'T').
+        # 3. After traversal:
+        #    - Flip all remaining 'O' to 'X' (they are surrounded).
+        #    - Flip all 'T' back to 'O'.
+        # 4. Mutates board in-place, no return required.
+
+        if not board:
+            return
+
+        m, n = len(board), len(board[0])
+
+        def dfs(r: int, c: int) -> None:
+            if r < 0 or c < 0 or r >= m or c >= n or board[r][c] != 'O':
+                return
+            board[r][c] = 'T'  # mark as safe
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+
+        # Step 1: DFS from borders
+        for i in range(m):
+            dfs(i, 0)
+            dfs(i, n - 1)
+        for j in range(n):
+            dfs(0, j)
+            dfs(m - 1, j)
+
+        # Step 2: Flip surrounded regions
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                elif board[i][j] == 'T':
+                    board[i][j] = 'O'
+```
+
+
+### Solution 2: BFS Flood Fill from Borders - Graph/something
+```python
+    def solve(self, board: List[List[str]]) -> None:
+        # Note:
+        # 1. Same idea as DFS, but BFS is used to avoid recursion depth issues.
+        # 2. Traverse from border 'O's, mark as 'T'.
+        # 3. After BFS, flip surrounded 'O' -> 'X' and 'T' -> 'O'.
+
+        if not board:
+            return
+
+        m, n = len(board), len(board[0])
+        directions = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        def bfs(r: int, c: int) -> None:
+            queue = deque([(r, c)])
+            board[r][c] = 'T'
+            while queue:
+                cr, cc = queue.popleft()
+                for dr, dc in directions:
+                    nr, nc = cr + dr, cc + dc
+                    if 0 <= nr < m and 0 <= nc < n and board[nr][nc] == 'O':
+                        board[nr][nc] = 'T'
+                        queue.append((nr, nc))
+
+        # Step 1: BFS from borders
+        for i in range(m):
+            if board[i][0] == 'O':
+                bfs(i, 0)
+            if board[i][n - 1] == 'O':
+                bfs(i, n - 1)
+        for j in range(n):
+            if board[0][j] == 'O':
+                bfs(0, j)
+            if board[m - 1][j] == 'O':
+                bfs(m - 1, j)
+
+        # Step 2: Flip surrounded regions
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                elif board[i][j] == 'T':
+                    board[i][j] = 'O'
+```
+
+
+### Solution 3: Union Find Disjoint Set Union - Graph/something 
+```python
+    def solve(self, board: List[List[str]]) -> None:
+        # Note:
+        # 1. Use Union Find (Disjoint Set Union).
+        # 2. Create a dummy node representing the border.
+        # 3. Union all 'O's on the border with the dummy node.
+        # 4. Union all adjacent 'O's with each other.
+        # 5. After unions, any 'O' connected to dummy is safe.
+        # 6. Flip all other 'O' to 'X'.
+
+        if not board:
+            return
+
+        m, n = len(board), len(board[0])
+        parent = {}
+
+        def find(x: int) -> int:
+            parent.setdefault(x, x)
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+
+        def union(x: int, y: int) -> None:
+            parent[find(x)] = find(y)
+
+        dummy = m * n  # special node for border
+
+        # Step 1: Union border 'O's with dummy, and connect neighbors
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O':
+                    idx = i * n + j
+                    if i in (0, m - 1) or j in (0, n - 1):
+                        union(idx, dummy)
+                    for di, dj in [(1,0), (-1,0), (0,1), (0,-1)]:
+                        ni, nj = i + di, j + dj
+                        if 0 <= ni < m and 0 <= nj < n and board[ni][nj] == 'O':
+                            union(idx, ni * n + nj)
+
+        # Step 2: Flip non-connected 'O's
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O' and find(i * n + j) != find(dummy):
+                    board[i][j] = 'X'
+```
+
+
+## 207. Course Schedule ::2:: - Medium
+
+Topics:  Depth First Search, Breadth First Search, Graph, Topological Sort
+
+### Intro
+> There are a total of numCourses courses you have to take, 
+> labeled from 0 to numCourses - 1. You are given an array 
+> prerequisites where prerequisites[i] = [ai, bi] 
+> indicates that you must take course bi first if you want to 
+> take course ai.
+> For example, the pair [0, 1], indicates that to take
+> course 0 you have to first take course 1.
+> Return true if you can finish all courses. Otherwise, 
+> return false.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| numCourses = 2, prerequisites = [[1,0]] | true |
+| numCourses = 2, prerequisites = [[1,0],[0,1]] | false |
+
+Constraints:
+
+1 &leq; numCourses &leq; 2000
+
+0 &leq; prerequisites.length &leq; 5000
+
+prerequisites[i].length == 2
+
+0 &leq; ai, bi &lt; numCourses
+
+All the pairs prerequisites[i] are unique.
+
+### Abstraction
+Given a number of courses and prerequisites, 
+determine if you can finish all courses.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Cycle Detection - Graph/something
+```python
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        graph = {i: [] for i in range(numCourses)}
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+
+        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited
+
+        def dfs(course):
+            if visited[course] == 1:  # cycle detected
+                return False
+            if visited[course] == 2:  # already processed
+                return True
+
+            visited[course] = 1  # mark as visiting
+            for nei in graph[course]:
+                if not dfs(nei):
+                    return False
+            visited[course] = 2  # mark as visited
+            return True
+
+        for c in range(numCourses):
+            if not dfs(c):
+                return False
+        return True
+```
+
+
+### Solution 2: BFS Topological Sort - Graph/something
+```python
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        indegree = [0] * numCourses
+        graph = {i: [] for i in range(numCourses)}
+
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+            indegree[course] += 1
+
+        queue = deque([i for i in range(numCourses) if indegree[i] == 0])
+        count = 0
+
+        while queue:
+            curr = queue.popleft()
+            count += 1
+            for nei in graph[curr]:
+                indegree[nei] -= 1
+                if indegree[nei] == 0:
+                    queue.append(nei)
+
+        return count == numCourses
+```
+
+
+## 210. Course Schedule II ::3:: - Medium
+
+Topics:  Depth First Search, Breadth First Search, Graph, Topological Sort
+
+### Intro
+> There are a total of numCourses courses you have to take,
+> labeled from 0 to numCourses - 1. You are given an array 
+> prerequisites where prerequisites[i] = [ai, bi] 
+> indicates that you must take course bi first if you want to 
+> take course ai.
+> For example, the pair [0, 1], indicates that to take 
+> course 0 you have to first take course 1.
+> Return the ordering of courses you should take to finish all 
+> courses. If there are many valid answers, return any of them. 
+> If it is impossible to finish all courses, return an empty 
+> array.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| numCourses = 2, prerequisites = [[1,0]] | [0,1] |
+| numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]] | [0,2,1,3] |
+| numCourses = 1, prerequisites = [] | [0] |
+
+Constraints:
+
+1 &leq; numCourses &leq; 2000
+
+0 &leq; prerequisites.length &leq; numCourses * (numCourses-1)
+
+prerequisites[i].length == 2
+
+0 &leq; ai, bi &lt; numCourses
+
+ai != bi
+
+All the pairs prerequisites[i] are distinct.
+
+### Abstraction
+Given a number of courses and prerequisites, 
+determine if you can finish all courses, 
+and return the order to finish all courses.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Topological Sort with Cycle Detection - Graph/something
+```python
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        graph = {i: [] for i in range(numCourses)}
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+
+        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited
+        res = []
+        self.is_possible = True
+
+        def dfs(course):
+            if visited[course] == 1:  # cycle detected
+                self.is_possible = False
+                return
+            if visited[course] == 2:  # already processed
+                return
+
+            visited[course] = 1
+            for nei in graph[course]:
+                dfs(nei)
+                if not self.is_possible:
+                    return
+            visited[course] = 2
+            res.append(course)
+
+        for c in range(numCourses):
+            if visited[c] == 0:
+                dfs(c)
+                if not self.is_possible:
+                    return []
+        return res[::-1]  # reverse postorder
+```
+
+### Solution 2: DFS Topological Sort with Cycle Detection - Graph/something
+```python
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        indegree = [0] * numCourses
+        graph = {i: [] for i in range(numCourses)}
+
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+            indegree[course] += 1
+
+        queue = deque([i for i in range(numCourses) if indegree[i] == 0])
+        res = []
+
+        while queue:
+            curr = queue.popleft()
+            res.append(curr)
+            for nei in graph[curr]:
+                indegree[nei] -= 1
+                if indegree[nei] == 0:
+                    queue.append(nei)
+
+        return res if len(res) == numCourses else []
+```
+
+## 261. Graph Valid Tree ::3:: - Medium
+
+Topics:  Depth First Search, Breadth First Search, Graph, Union Find
+
+### Intro
+> Given n nodes labeled from 0 to n - 1 and a list of 
+> undirected edges (each edge is a pair of nodes), write a 
+> function to check whether these edges make up a valid tree.
+> You can assume that no duplicate edges will appear in 
+> edges. Since all edges are undirected, [0, 1] is the 
+> same as [1, 0] and thus will not appear together in edges.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 5 edges = [[0, 1], [0, 2], [0, 3], [1, 4]] | true |
+| n = 5 edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]] | false |
+
+Constraints:
+
+1 &leq; n &leq; 100
+
+0 &leq; edges.length &leq; n * n(-1) / 2
+
+
+### Abstraction
+Given a list of undirected edges, check if valid tree is made.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS Cycle Detection + Connectivity Check - Graph/something
+```python
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        if len(edges) != n - 1:  # a tree must have exactly n-1 edges
+            return False
+
+        graph = {i: [] for i in range(n)}
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        visited = set()
+
+        def dfs(node, parent):
+            if node in visited:
+                return False
+            visited.add(node)
+            for nei in graph[node]:
+                if nei == parent:
+                    continue
+                if not dfs(nei, node):
+                    return False
+            return True
+
+        return dfs(0, -1) and len(visited) == n
+```
+
+### Solution 2: BFS Cycle Detection + Connectivity Check - Graph/something
+```python
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        if len(edges) != n - 1:
+            return False
+
+        graph = {i: [] for i in range(n)}
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        visited = set()
+        queue = deque([(0, -1)])
+
+        while queue:
+            node, parent = queue.popleft()
+            if node in visited:
+                return False
+            visited.add(node)
+            for nei in graph[node]:
+                if nei != parent:
+                    queue.append((nei, node))
+
+        return len(visited) == n
+```
+
+### Solution 3: Union Find Disjoint Set Union - Graph/something
+```python
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        if len(edges) != n - 1:
+            return False
+
+        parent = [i for i in range(n)]
+        rank = [1] * n
+
+        def find(x):
+            while x != parent[x]:
+                parent[x] = parent[parent[x]]  # path compression
+                x = parent[x]
+            return x
+
+        def union(x, y):
+            rootX, rootY = find(x), find(y)
+            if rootX == rootY:
+                return False  # cycle detected
+            if rank[rootX] > rank[rootY]:
+                parent[rootY] = rootX
+            elif rank[rootX] < rank[rootY]:
+                parent[rootX] = rootY
+            else:
+                parent[rootY] = rootX
+                rank[rootX] += 1
+            return True
+
+        for u, v in edges:
+            if not union(u, v):
+                return False
+
+        return True
+```
+
+
+## 323. Number of Connected Components in an Undirected Graph ::3:: - Medium
+
+Topics:  Depth First Search, Breadth First Search, Graph, Union Find
+
+### Intro
+> There is an undirected graph with n nodes. There is also 
+> an edges array, where edges[i] = [a, b] means that 
+> there is an edge between node a and node b in the graph.
+> The nodes are numbered from 0 to n - 1.
+> Return the total number of connected components in that graph.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n=3 edges=[[0,1], [0,2]] | 1 |
+| n=6 edges=[[0,1], [1,2], [2,3], [4,5]] | 2 |
+
+Constraints:
+
+1 &leq; n &leq; 100
+
+0 &leq; edges.length &leq; n * (n-1) / 2
+
+
+### Abstraction
+Given a list of undirected edges, return number of connected components.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS - Graph/something
+```python
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        # build adjacency list
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        visited = set()
+        
+        def dfs(node):
+            for nei in graph[node]:
+                if nei not in visited:
+                    visited.add(nei)
+                    dfs(nei)
+        
+        components = 0
+        for i in range(n):
+            if i not in visited:
+                visited.add(i)
+                dfs(i)
+                components += 1
+        return components
+```
+
+### Solution 2: BFS - Graph/something
+```python
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        visited = set()
+        
+        def bfs(start):
+            queue = deque([start])
+            while queue:
+                node = queue.popleft()
+                for nei in graph[node]:
+                    if nei not in visited:
+                        visited.add(nei)
+                        queue.append(nei)
+        
+        components = 0
+        for i in range(n):
+            if i not in visited:
+                visited.add(i)
+                bfs(i)
+                components += 1
+        return components
+```
+
+### Solution 3: BFS - Graph/something
+```python
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        parent = [i for i in range(n)]
+        rank = [1] * n
+        
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])   # path compression
+            return parent[x]
+        
+        def union(x, y):
+            rootX, rootY = find(x), find(y)
+            if rootX == rootY:
+                return 0  # no merge
+            if rank[rootX] > rank[rootY]:
+                parent[rootY] = rootX
+            elif rank[rootX] < rank[rootY]:
+                parent[rootX] = rootY
+            else:
+                parent[rootY] = rootX
+                rank[rootX] += 1
+            return 1  # successful merge
+        
+        components = n
+        for u, v in edges:
+            if union(u, v):
+                components -= 1
+        return components
+```
+
+
+## 684. Redundant Connection ::3:: - Medium
+
+Topics:  Depth First Search, Breadth First Search, Union Find, Graph
+
+### Intro
+> In this problem, a tree is an undirected graph that is 
+> connected and has no cycles.
+> You are given a graph that started as a tree with n nodes 
+> labeled from 1 to n, with one additional edge added. The 
+> added edge has two different vertices chosen from 1 to n, 
+> and was not an edge that already existed. The graph is 
+> represented as an array edges of length n where edges[i] = [ai, bi]
+> indicates that there is an edge between nodes ai and bi in the graph.
+> Return an edge that can be removed so that the resulting graph 
+> is a tree of n nodes. If there are multiple answers, return the 
+> answer that occurs last in the input.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| edges = [[1,2],[1,3],[2,3]] | [2,3] |
+| edges = [[1,2],[2,3],[3,4],[1,4],[1,5]] | [1,4] |
+
+Constraints:
+
+n == edges.length
+
+3 &leq; n &leq; 1000
+
+edges[i].length == 2
+
+1 &leq; ai, &lt; bi &leq; edges.length
+
+ai != bi
+
+There are no repeated edges.
+
+The given graph is connected.
+
+### Abstraction
+Given a list of undirected edges, determine if there are redundant connections.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS - Graph/something
+```python
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        graph = defaultdict(list)
+        
+        def dfs(u, target, visited):
+            if u == target:
+                return True
+            visited.add(u)
+            for v in graph[u]:
+                if v not in visited and dfs(v, target, visited):
+                    return True
+            return False
+        
+        for u, v in edges:
+            visited = set()
+            if u in graph and v in graph and dfs(u, v, visited):
+                return [u, v]
+            graph[u].append(v)
+            graph[v].append(u)
+```
+
+### Solution 2: BFS - Graph/something
+```python
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        graph = defaultdict(list)
+        
+        def bfs(u, target):
+            visited = set([u])
+            queue = deque([u])
+            while queue:
+                node = queue.popleft()
+                if node == target:
+                    return True
+                for nei in graph[node]:
+                    if nei not in visited:
+                        visited.add(nei)
+                        queue.append(nei)
+            return False
+        
+        for u, v in edges:
+            if u in graph and v in graph and bfs(u, v):
+                return [u, v]
+            graph[u].append(v)
+            graph[v].append(u)
+```
+
+### Solution 3: Union Find Disjoint Set Union - Graph/something
+```python
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        n = len(edges)
+        parent = [i for i in range(n + 1)]
+        rank = [1] * (n + 1)
+        
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+        
+        def union(x, y):
+            rootX, rootY = find(x), find(y)
+            if rootX == rootY:
+                return False
+            if rank[rootX] > rank[rootY]:
+                parent[rootY] = rootX
+            elif rank[rootX] < rank[rootY]:
+                parent[rootX] = rootY
+            else:
+                parent[rootY] = rootX
+                rank[rootX] += 1
+            return True
+        
+        for u, v in edges:
+            if not union(u, v):
+                return [u, v]
+```
+
+
+## 127. Word Ladder ::3:: - Hard
+
+Topics:  Hash Table, String, Breadth First Search
+
+### Intro
+> A transformation sequence from word beginWord to 
+> word endWord using a dictionary wordList is a 
+> sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
+> Every adjacent pair of words differs by a single letter.
+> Every si for 1 &leq; i &leq; k is in wordList.
+> Note that beginWord does not need to be in wordList
+> sk == endWord
+> Given two words, beginWord and endWord, and a 
+> dictionary wordList, return the number of words in 
+> the shortest transformation sequence from
+> beginWord to endWord, or 0 if no such sequence exists.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"] | 5 |
+| beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"] | 0 |
+
+Constraints:
+
+1 &leq; beginWord.length &leq; 10
+
+endWord.length == beginWord.length
+
+1 &leq; wordList.length &leq; 5000 
+
+wordList[i].length == beginWord.length
+
+beginWord, endWord, and wordList[i] consist of lowercase English letters.
+
+beginWord != endWord
+
+All the words in wordList are unique.
+
+### Abstraction
+Given a begin word, end word, and transformation dictionary, 
+determine shortest transformation sequence from begin to end.
+
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: BFS - Graph/something
+```python
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        wordSet = set(wordList)
+        if endWord not in wordSet:
+            return 0
+
+        L = len(beginWord)
+        all_combo_dict = defaultdict(list)
+        for word in wordSet:
+            for i in range(L):
+                pattern = word[:i] + "*" + word[i+1:]
+                all_combo_dict[pattern].append(word)
+
+        queue = deque([(beginWord, 1)])
+        visited = set([beginWord])
+
+        while queue:
+            current_word, level = queue.popleft()
+            for i in range(L):
+                pattern = current_word[:i] + "*" + current_word[i+1:]
+                for neighbor in all_combo_dict[pattern]:
+                    if neighbor == endWord:
+                        return level + 1
+                    if neighbor not in visited:
+                        visited.add(neighbor)
+                        queue.append((neighbor, level + 1))
+                all_combo_dict[pattern] = []  # mark pattern visited
+        return 0
+```
+
+
+### Solution 2: Bidirectional BFS - Graph/something
+```python
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        wordSet = set(wordList)
+        if endWord not in wordSet:
+            return 0
+
+        L = len(beginWord)
+        all_combo_dict = defaultdict(list)
+        for word in wordSet:
+            for i in range(L):
+                pattern = word[:i] + "*" + word[i+1:]
+                all_combo_dict[pattern].append(word)
+
+        begin_set = {beginWord}
+        end_set = {endWord}
+        visited = set([beginWord, endWord])
+        level = 1
+
+        while begin_set and end_set:
+            if len(begin_set) > len(end_set):
+                begin_set, end_set = end_set, begin_set  # expand smaller frontier
+
+            temp = set()
+            for word in begin_set:
+                for i in range(L):
+                    pattern = word[:i] + "*" + word[i+1:]
+                    for neighbor in all_combo_dict[pattern]:
+                        if neighbor in end_set:
+                            return level + 1
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            temp.add(neighbor)
+            begin_set = temp
+            level += 1
+
+        return 0
+```
+
+
