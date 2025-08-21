@@ -843,6 +843,28 @@
       "blog": "LeetCode: Two Pointers"
     }
   ],
+  "127": [
+    {
+      "number": 1,
+      "name": "BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:\n        wordSet = set(wordList)\n        if endWord not in wordSet:\n            return 0\n\n        L = len(beginWord)\n        all_combo_dict = defaultdict(list)\n        for word in wordSet:\n            for i in range(L):\n                pattern = word[:i] + \"*\" + word[i+1:]\n                all_combo_dict[pattern].append(word)\n\n        queue = deque([(beginWord, 1)])\n        visited = set([beginWord])\n\n        while queue:\n            current_word, level = queue.popleft()\n            for i in range(L):\n                pattern = current_word[:i] + \"*\" + current_word[i+1:]\n                for neighbor in all_combo_dict[pattern]:\n                    if neighbor == endWord:\n                        return level + 1\n                    if neighbor not in visited:\n                        visited.add(neighbor)\n                        queue.append((neighbor, level + 1))\n                all_combo_dict[pattern] = []  # mark pattern visited\n        return 0",
+      "questionNumber": 127,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "Bidirectional BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:\n        wordSet = set(wordList)\n        if endWord not in wordSet:\n            return 0\n\n        L = len(beginWord)\n        all_combo_dict = defaultdict(list)\n        for word in wordSet:\n            for i in range(L):\n                pattern = word[:i] + \"*\" + word[i+1:]\n                all_combo_dict[pattern].append(word)\n\n        begin_set = {beginWord}\n        end_set = {endWord}\n        visited = set([beginWord, endWord])\n        level = 1\n\n        while begin_set and end_set:\n            if len(begin_set) > len(end_set):\n                begin_set, end_set = end_set, begin_set  # expand smaller frontier\n\n            temp = set()\n            for word in begin_set:\n                for i in range(L):\n                    pattern = word[:i] + \"*\" + word[i+1:]\n                    for neighbor in all_combo_dict[pattern]:\n                        if neighbor in end_set:\n                            return level + 1\n                        if neighbor not in visited:\n                            visited.add(neighbor)\n                            temp.add(neighbor)\n            begin_set = temp\n            level += 1\n\n        return 0",
+      "questionNumber": 127,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bidirectional-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    }
+  ],
   "128": [
     {
       "number": 1,
@@ -875,6 +897,38 @@
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],
+  "130": [
+    {
+      "number": 1,
+      "name": "DFS Flood Fill from Borders",
+      "type": "graph",
+      "application": "something",
+      "code": "def solve(self, board: List[List[str]]) -> None:\n        # Note:\n        # 1. Any 'O' connected to the border cannot be captured.\n        # 2. Mark all border-connected 'O's with DFS (temporary marker 'T').\n        # 3. After traversal:\n        #    - Flip all remaining 'O' to 'X' (they are surrounded).\n        #    - Flip all 'T' back to 'O'.\n        # 4. Mutates board in-place, no return required.\n\n        if not board:\n            return\n\n        m, n = len(board), len(board[0])\n\n        def dfs(r: int, c: int) -> None:\n            if r < 0 or c < 0 or r >= m or c >= n or board[r][c] != 'O':\n                return\n            board[r][c] = 'T'  # mark as safe\n            dfs(r + 1, c)\n            dfs(r - 1, c)\n            dfs(r, c + 1)\n            dfs(r, c - 1)\n\n        # Step 1: DFS from borders\n        for i in range(m):\n            dfs(i, 0)\n            dfs(i, n - 1)\n        for j in range(n):\n            dfs(0, j)\n            dfs(m - 1, j)\n\n        # Step 2: Flip surrounded regions\n        for i in range(m):\n            for j in range(n):\n                if board[i][j] == 'O':\n                    board[i][j] = 'X'\n                elif board[i][j] == 'T':\n                    board[i][j] = 'O'",
+      "questionNumber": 130,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-flood-fill-from-borders---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS Flood Fill from Borders",
+      "type": "graph",
+      "application": "something",
+      "code": "def solve(self, board: List[List[str]]) -> None:\n        # Note:\n        # 1. Same idea as DFS, but BFS is used to avoid recursion depth issues.\n        # 2. Traverse from border 'O's, mark as 'T'.\n        # 3. After BFS, flip surrounded 'O' -> 'X' and 'T' -> 'O'.\n\n        if not board:\n            return\n\n        m, n = len(board), len(board[0])\n        directions = [(1,0), (-1,0), (0,1), (0,-1)]\n\n        def bfs(r: int, c: int) -> None:\n            queue = deque([(r, c)])\n            board[r][c] = 'T'\n            while queue:\n                cr, cc = queue.popleft()\n                for dr, dc in directions:\n                    nr, nc = cr + dr, cc + dc\n                    if 0 <= nr < m and 0 <= nc < n and board[nr][nc] == 'O':\n                        board[nr][nc] = 'T'\n                        queue.append((nr, nc))\n\n        # Step 1: BFS from borders\n        for i in range(m):\n            if board[i][0] == 'O':\n                bfs(i, 0)\n            if board[i][n - 1] == 'O':\n                bfs(i, n - 1)\n        for j in range(n):\n            if board[0][j] == 'O':\n                bfs(0, j)\n            if board[m - 1][j] == 'O':\n                bfs(m - 1, j)\n\n        # Step 2: Flip surrounded regions\n        for i in range(m):\n            for j in range(n):\n                if board[i][j] == 'O':\n                    board[i][j] = 'X'\n                elif board[i][j] == 'T':\n                    board[i][j] = 'O'",
+      "questionNumber": 130,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-flood-fill-from-borders---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 3,
+      "name": "Union Find Disjoint Set Union",
+      "type": "graph",
+      "application": "something",
+      "code": "def solve(self, board: List[List[str]]) -> None:\n        # Note:\n        # 1. Use Union Find (Disjoint Set Union).\n        # 2. Create a dummy node representing the border.\n        # 3. Union all 'O's on the border with the dummy node.\n        # 4. Union all adjacent 'O's with each other.\n        # 5. After unions, any 'O' connected to dummy is safe.\n        # 6. Flip all other 'O' to 'X'.\n\n        if not board:\n            return\n\n        m, n = len(board), len(board[0])\n        parent = {}\n\n        def find(x: int) -> int:\n            parent.setdefault(x, x)\n            if parent[x] != x:\n                parent[x] = find(parent[x])\n            return parent[x]\n\n        def union(x: int, y: int) -> None:\n            parent[find(x)] = find(y)\n\n        dummy = m * n  # special node for border\n\n        # Step 1: Union border 'O's with dummy, and connect neighbors\n        for i in range(m):\n            for j in range(n):\n                if board[i][j] == 'O':\n                    idx = i * n + j\n                    if i in (0, m - 1) or j in (0, n - 1):\n                        union(idx, dummy)\n                    for di, dj in [(1,0), (-1,0), (0,1), (0,-1)]:\n                        ni, nj = i + di, j + dj\n                        if 0 <= ni < m and 0 <= nj < n and board[ni][nj] == 'O':\n                            union(idx, ni * n + nj)\n\n        # Step 2: Flip non-connected 'O's\n        for i in range(m):\n            for j in range(n):\n                if board[i][j] == 'O' and find(i * n + j) != find(dummy):\n                    board[i][j] = 'X'",
+      "questionNumber": 130,
+      "solutionLink": "/Notes/leetcode-graphs#solution-3-union-find-disjoint-set-union---graphsomething",
+      "blog": "LeetCode: Graphs"
+    }
+  ],
   "131": [
     {
       "number": 1,
@@ -900,12 +954,22 @@
   "133": [
     {
       "number": 1,
-      "name": "Optimized DFS Flood Fill",
+      "name": "DFS",
       "type": "graph",
       "application": "something",
-      "code": "def maxAreaOfIsland(self, grid: List[List[int]]) -> int:\n        # Note:\n        # 1. Treat grid as a graph: 1 = land node, edges = 4-direction adjacency\n        # 2. DFS flood fill sinks land in-place to mark visited cells\n        # 3. Track area of each island during DFS\n        # 4. Return the maximum island area\n\n        if not grid:\n            return 0\n\n        m, n = len(grid), len(grid[0])\n        max_area = 0\n\n        def dfs(r: int, c: int) -> int:\n            # Base case: out of bounds or water\n            if r < 0 or c < 0 or r >= m or c >= n or grid[r][c] == 0:\n                return 0\n\n            grid[r][c] = 0  # mark visited (sink)\n            area = 1  # count current cell\n\n            # Explore 4 directions and accumulate area\n            area += dfs(r + 1, c)\n            area += dfs(r - 1, c)\n            area += dfs(r, c + 1)\n            area += dfs(r, c - 1)\n            return area\n\n        for r in range(m):\n            for c in range(n):\n                if grid[r][c] == 1:\n                    # compute area of this island and update max_area\n                    island_area = dfs(r, c)\n                    max_area = max(max_area, island_area)\n\n        # overall: time complexity O(m * n)\n        # overall: space complexity O(m * n) worst-case (DFS recursion stack)\n        return max_area",
+      "code": "def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:\n        # Note:\n        # 1. Use DFS to traverse the graph\n        # 2. Use a hashmap to store already cloned nodes\n        # 3. For each node, recursively clone its neighbors\n        # 4. Return the cloned node corresponding to the input\n\n        if not node:\n            return None\n\n        cloned = {}  # maps original node -> cloned node\n\n        def dfs(n: Node) -> Node:\n            if n in cloned:\n                return cloned[n]\n\n            copy = Node(n.val)\n            cloned[n] = copy\n\n            for neighbor in n.neighbors:\n                copy.neighbors.append(dfs(neighbor))\n\n            return copy\n\n        return dfs(node)\n\n        # overall: time complexity O(V + E), visit each node and edge once\n        # overall: space complexity O(V), for hashmap + recursion stack",
       "questionNumber": 133,
-      "solutionLink": "/Notes/leetcode-graphs#solution-1-optimized-dfs-flood-fill---graphsomething",
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:\n         # Note:\n        # 1. Use BFS to traverse the graph iteratively\n        # 2. Use a hashmap to track cloned nodes\n        # 3. For each node dequeued, clone its neighbors if not already cloned\n        # 4. Return the cloned node corresponding to the input\n\n        if not node:\n            return None\n\n        cloned = {node: Node(node.val)}\n        queue = deque([node])\n\n        while queue:\n            current = queue.popleft()\n\n            for neighbor in current.neighbors:\n                if neighbor not in cloned:\n                    cloned[neighbor] = Node(neighbor.val)\n                    queue.append(neighbor)\n                cloned[current].neighbors.append(cloned[neighbor])\n\n        # overall: time complexity O(V + E), each node and edge visited once\n        # overall: space complexity O(V), for hashmap + queue\n        return cloned[node]",
+      "questionNumber": 133,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs---graphsomething",
       "blog": "LeetCode: Graphs"
     }
   ],
@@ -1203,6 +1267,28 @@
       "blog": "LeetCode: Linked List"
     }
   ],
+  "207": [
+    {
+      "number": 1,
+      "name": "DFS Cycle Detection",
+      "type": "graph",
+      "application": "something",
+      "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n\n        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited\n\n        def dfs(course):\n            if visited[course] == 1:  # cycle detected\n                return False\n            if visited[course] == 2:  # already processed\n                return True\n\n            visited[course] = 1  # mark as visiting\n            for nei in graph[course]:\n                if not dfs(nei):\n                    return False\n            visited[course] = 2  # mark as visited\n            return True\n\n        for c in range(numCourses):\n            if not dfs(c):\n                return False\n        return True",
+      "questionNumber": 207,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-cycle-detection---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS Topological Sort",
+      "type": "graph",
+      "application": "something",
+      "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        count = 0\n\n        while queue:\n            curr = queue.popleft()\n            count += 1\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        return count == numCourses",
+      "questionNumber": 207,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-topological-sort---graphsomething",
+      "blog": "LeetCode: Graphs"
+    }
+  ],
   "208": [
     {
       "number": 1,
@@ -1213,6 +1299,28 @@
       "questionNumber": 208,
       "solutionLink": "/Notes/leetcode-tries#solution-1-trie-implementation---trietrie-insert-and-search-recursive",
       "blog": "LeetCode: Tries"
+    }
+  ],
+  "210": [
+    {
+      "number": 1,
+      "name": "DFS Topological Sort with Cycle Detection",
+      "type": "graph",
+      "application": "something",
+      "code": "def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n\n        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited\n        res = []\n        self.is_possible = True\n\n        def dfs(course):\n            if visited[course] == 1:  # cycle detected\n                self.is_possible = False\n                return\n            if visited[course] == 2:  # already processed\n                return\n\n            visited[course] = 1\n            for nei in graph[course]:\n                dfs(nei)\n                if not self.is_possible:\n                    return\n            visited[course] = 2\n            res.append(course)\n\n        for c in range(numCourses):\n            if visited[c] == 0:\n                dfs(c)\n                if not self.is_possible:\n                    return []\n        return res[::-1]  # reverse postorder",
+      "questionNumber": 210,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-topological-sort-with-cycle-detection---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "DFS Topological Sort with Cycle Detection",
+      "type": "graph",
+      "application": "something",
+      "code": "def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        res = []\n\n        while queue:\n            curr = queue.popleft()\n            res.append(curr)\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        return res if len(res) == numCourses else []",
+      "questionNumber": 210,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-dfs-topological-sort-with-cycle-detection---graphsomething",
+      "blog": "LeetCode: Graphs"
     }
   ],
   "211": [
@@ -1445,6 +1553,38 @@
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],
+  "261": [
+    {
+      "number": 1,
+      "name": "DFS Cycle Detection + Connectivity Check",
+      "type": "graph",
+      "application": "something",
+      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        if len(edges) != n - 1:  # a tree must have exactly n-1 edges\n            return False\n\n        graph = {i: [] for i in range(n)}\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n\n        visited = set()\n\n        def dfs(node, parent):\n            if node in visited:\n                return False\n            visited.add(node)\n            for nei in graph[node]:\n                if nei == parent:\n                    continue\n                if not dfs(nei, node):\n                    return False\n            return True\n\n        return dfs(0, -1) and len(visited) == n",
+      "questionNumber": 261,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-cycle-detection-connectivity-check---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS Cycle Detection + Connectivity Check",
+      "type": "graph",
+      "application": "something",
+      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        if len(edges) != n - 1:\n            return False\n\n        graph = {i: [] for i in range(n)}\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n\n        visited = set()\n        queue = deque([(0, -1)])\n\n        while queue:\n            node, parent = queue.popleft()\n            if node in visited:\n                return False\n            visited.add(node)\n            for nei in graph[node]:\n                if nei != parent:\n                    queue.append((nei, node))\n\n        return len(visited) == n",
+      "questionNumber": 261,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-cycle-detection-connectivity-check---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 3,
+      "name": "Union Find Disjoint Set Union",
+      "type": "graph",
+      "application": "something",
+      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        if len(edges) != n - 1:\n            return False\n\n        parent = [i for i in range(n)]\n        rank = [1] * n\n\n        def find(x):\n            while x != parent[x]:\n                parent[x] = parent[parent[x]]  # path compression\n                x = parent[x]\n            return x\n\n        def union(x, y):\n            rootX, rootY = find(x), find(y)\n            if rootX == rootY:\n                return False  # cycle detected\n            if rank[rootX] > rank[rootY]:\n                parent[rootY] = rootX\n            elif rank[rootX] < rank[rootY]:\n                parent[rootX] = rootY\n            else:\n                parent[rootY] = rootX\n                rank[rootX] += 1\n            return True\n\n        for u, v in edges:\n            if not union(u, v):\n                return False\n\n        return True",
+      "questionNumber": 261,
+      "solutionLink": "/Notes/leetcode-graphs#solution-3-union-find-disjoint-set-union---graphsomething",
+      "blog": "LeetCode: Graphs"
+    }
+  ],
   "271": [
     {
       "number": 1,
@@ -1531,6 +1671,38 @@
       "questionNumber": 297,
       "solutionLink": "/Notes/leetcode-trees#solution-1-dfs-pre-order-recursive---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
+    }
+  ],
+  "323": [
+    {
+      "number": 1,
+      "name": "DFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def countComponents(self, n: int, edges: List[List[int]]) -> int:\n        # build adjacency list\n        graph = defaultdict(list)\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n        \n        visited = set()\n        \n        def dfs(node):\n            for nei in graph[node]:\n                if nei not in visited:\n                    visited.add(nei)\n                    dfs(nei)\n        \n        components = 0\n        for i in range(n):\n            if i not in visited:\n                visited.add(i)\n                dfs(i)\n                components += 1\n        return components",
+      "questionNumber": 323,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def countComponents(self, n: int, edges: List[List[int]]) -> int:\n        graph = defaultdict(list)\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n        \n        visited = set()\n        \n        def bfs(start):\n            queue = deque([start])\n            while queue:\n                node = queue.popleft()\n                for nei in graph[node]:\n                    if nei not in visited:\n                        visited.add(nei)\n                        queue.append(nei)\n        \n        components = 0\n        for i in range(n):\n            if i not in visited:\n                visited.add(i)\n                bfs(i)\n                components += 1\n        return components",
+      "questionNumber": 323,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 3,
+      "name": "BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def countComponents(self, n: int, edges: List[List[int]]) -> int:\n        parent = [i for i in range(n)]\n        rank = [1] * n\n        \n        def find(x):\n            if parent[x] != x:\n                parent[x] = find(parent[x])   # path compression\n            return parent[x]\n        \n        def union(x, y):\n            rootX, rootY = find(x), find(y)\n            if rootX == rootY:\n                return 0  # no merge\n            if rank[rootX] > rank[rootY]:\n                parent[rootY] = rootX\n            elif rank[rootX] < rank[rootY]:\n                parent[rootX] = rootY\n            else:\n                parent[rootY] = rootX\n                rank[rootX] += 1\n            return 1  # successful merge\n        \n        components = n\n        for u, v in edges:\n            if union(u, v):\n                components -= 1\n        return components",
+      "questionNumber": 323,
+      "solutionLink": "/Notes/leetcode-graphs#solution-3-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
     }
   ],
   "347": [
@@ -1627,6 +1799,28 @@
       "questionNumber": 402,
       "solutionLink": "/Notes/leetcode-stacks#solution-1-forward-iteration-monotonic-increasing-digits-stack---stackmonotonic-property-maintenance",
       "blog": "LeetCode: Stacks"
+    }
+  ],
+  "417": [
+    {
+      "number": 1,
+      "name": "DFS Reverse Flow",
+      "type": "graph",
+      "application": "something",
+      "code": "def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:\n        # Note:\n        # 1. Instead of simulating water flow forward (downhill), reverse the process:\n        #    - Start from the oceans and \"climb uphill\" (to neighbors with height >= current).\n        # 2. Perform DFS from Pacific edges and Atlantic edges separately.\n        # 3. Any cell visited in both traversals can reach both oceans.\n        # 4. Collect intersection of visited sets.\n\n        if not heights:\n            return []\n\n        m, n = len(heights), len(heights[0])\n        pacific = set()\n        atlantic = set()\n\n        def dfs(r: int, c: int, visited: set, prev_height: int) -> None:\n            # base case: out of bounds, visited, or downhill\n            if ((r, c) in visited or r < 0 or c < 0 or r >= m or c >= n \n                or heights[r][c] < prev_height):\n                return\n            visited.add((r, c))\n\n            # explore 4 directions\n            dfs(r + 1, c, visited, heights[r][c])\n            dfs(r - 1, c, visited, heights[r][c])\n            dfs(r, c + 1, visited, heights[r][c])\n            dfs(r, c - 1, visited, heights[r][c])\n\n        # Pacific edges: top row + left col\n        for i in range(m):\n            dfs(i, 0, pacific, heights[i][0])\n            dfs(i, n - 1, atlantic, heights[i][n - 1])\n        for j in range(n):\n            dfs(0, j, pacific, heights[0][j])\n            dfs(m - 1, j, atlantic, heights[m - 1][j])\n\n        # intersection: cells reachable to both oceans\n        return list(pacific & atlantic)",
+      "questionNumber": 417,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-reverse-flow---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS Reverse Flow",
+      "type": "graph",
+      "application": "something",
+      "code": "def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:\n        # Note:\n        # 1. Same reverse flow idea, but BFS is used instead of DFS.\n        # 2. BFS avoids recursion depth issues and may be easier to reason about.\n        # 3. Initialize queues with Pacific and Atlantic edges separately.\n        # 4. Traverse \"uphill\" from oceans, track visited cells for each.\n        # 5. Answer = intersection of both visited sets.\n\n        if not heights:\n            return []\n\n        m, n = len(heights), len(heights[0])\n\n        def bfs(starts: List[Tuple[int,int]]) -> set:\n            visited = set(starts)\n            queue = deque(starts)\n\n            while queue:\n                r, c = queue.popleft()\n                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:\n                    nr, nc = r + dr, c + dc\n                    if (0 <= nr < m and 0 <= nc < n and (nr, nc) not in visited\n                        and heights[nr][nc] >= heights[r][c]):\n                        visited.add((nr, nc))\n                        queue.append((nr, nc))\n            return visited\n\n        pacific_starts = [(0, j) for j in range(n)] + [(i, 0) for i in range(m)]\n        atlantic_starts = [(m - 1, j) for j in range(n)] + [(i, n - 1) for i in range(m)]\n\n        pacific = bfs(pacific_starts)\n        atlantic = bfs(atlantic_starts)\n\n        return list(pacific & atlantic)",
+      "questionNumber": 417,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-reverse-flow---graphsomething",
+      "blog": "LeetCode: Graphs"
     }
   ],
   "424": [
@@ -1787,6 +1981,38 @@
       "questionNumber": 621,
       "solutionLink": "/Notes/leetcode-heaps#solution-3-max-heap-time-jump-optimization-simulation-for-count-occurrences---heapheap",
       "blog": "LeetCode: Heaps"
+    }
+  ],
+  "684": [
+    {
+      "number": 1,
+      "name": "DFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:\n        graph = defaultdict(list)\n        \n        def dfs(u, target, visited):\n            if u == target:\n                return True\n            visited.add(u)\n            for v in graph[u]:\n                if v not in visited and dfs(v, target, visited):\n                    return True\n            return False\n        \n        for u, v in edges:\n            visited = set()\n            if u in graph and v in graph and dfs(u, v, visited):\n                return [u, v]\n            graph[u].append(v)\n            graph[v].append(u)",
+      "questionNumber": 684,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:\n        graph = defaultdict(list)\n        \n        def bfs(u, target):\n            visited = set([u])\n            queue = deque([u])\n            while queue:\n                node = queue.popleft()\n                if node == target:\n                    return True\n                for nei in graph[node]:\n                    if nei not in visited:\n                        visited.add(nei)\n                        queue.append(nei)\n            return False\n        \n        for u, v in edges:\n            if u in graph and v in graph and bfs(u, v):\n                return [u, v]\n            graph[u].append(v)\n            graph[v].append(u)",
+      "questionNumber": 684,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 3,
+      "name": "Union Find Disjoint Set Union",
+      "type": "graph",
+      "application": "something",
+      "code": "def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:\n        n = len(edges)\n        parent = [i for i in range(n + 1)]\n        rank = [1] * (n + 1)\n        \n        def find(x):\n            if parent[x] != x:\n                parent[x] = find(parent[x])\n            return parent[x]\n        \n        def union(x, y):\n            rootX, rootY = find(x), find(y)\n            if rootX == rootY:\n                return False\n            if rank[rootX] > rank[rootY]:\n                parent[rootY] = rootX\n            elif rank[rootX] < rank[rootY]:\n                parent[rootX] = rootY\n            else:\n                parent[rootY] = rootX\n                rank[rootX] += 1\n            return True\n        \n        for u, v in edges:\n            if not union(u, v):\n                return [u, v]",
+      "questionNumber": 684,
+      "solutionLink": "/Notes/leetcode-graphs#solution-3-union-find-disjoint-set-union---graphsomething",
+      "blog": "LeetCode: Graphs"
     }
   ],
   "695": [
@@ -1973,6 +2199,28 @@
       "questionNumber": 981,
       "solutionLink": "/Notes/leetcode-binary-search#solution-3-floor-search-tracking-largest-valid-index-with-right-pointer---binary-searchupper-ceiling-or-lower-floor-trick-based-on-target-binary-search",
       "blog": "LeetCode: Binary Search"
+    }
+  ],
+  "994": [
+    {
+      "number": 1,
+      "name": "Multi Source BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def orangesRotting(self, grid: List[List[int]]) -> int:\n        # Note:\n        # 1. Start BFS from all initially rotten oranges (multi-source BFS)\n        # 2. Each BFS level = 1 minute of rotting spread\n        # 3. Track fresh oranges count, decrement when they rot\n        # 4. Return minutes if all fresh rot, else -1\n\n        if not grid:\n            return -1\n\n        m, n = len(grid), len(grid[0])\n        fresh = 0\n        queue = deque()\n\n        # collect initial state\n        for r in range(m):\n            for c in range(n):\n                if grid[r][c] == 2:\n                    queue.append((r, c, 0))  # (row, col, minute)\n                elif grid[r][c] == 1:\n                    fresh += 1\n\n        minutes = 0\n        directions = [(1,0), (-1,0), (0,1), (0,-1)]\n\n        # BFS\n        while queue:\n            r, c, minutes = queue.popleft()\n\n            for dr, dc in directions:\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:\n                    grid[nr][nc] = 2\n                    fresh -= 1\n                    queue.append((nr, nc, minutes + 1))\n\n        # all fresh must rot\n        return minutes if fresh == 0 else -1",
+      "questionNumber": 994,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-multi-source-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
+    },
+    {
+      "number": 2,
+      "name": "BFS with Level Processing",
+      "type": "graph",
+      "application": "something",
+      "code": "def orangesRotting(self, grid: List[List[int]]) -> int:\n        # Note:\n        # 1. Instead of storing time in queue, process BFS by levels\n        # 2. Each level of queue expansion corresponds to +1 minute\n        # 3. Track number of fresh oranges, ensure all rot or return -1\n\n        if not grid:\n            return -1\n\n        m, n = len(grid), len(grid[0])\n        fresh = 0\n        queue = deque()\n\n        for r in range(m):\n            for c in range(n):\n                if grid[r][c] == 2:\n                    queue.append((r, c))\n                elif grid[r][c] == 1:\n                    fresh += 1\n\n        minutes = 0\n        directions = [(1,0), (-1,0), (0,1), (0,-1)]\n\n        while queue and fresh > 0:\n            for _ in range(len(queue)):\n                r, c = queue.popleft()\n\n                for dr, dc in directions:\n                    nr, nc = r + dr, c + dc\n                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:\n                        grid[nr][nc] = 2\n                        fresh -= 1\n                        queue.append((nr, nc))\n\n            minutes += 1\n\n        return minutes if fresh == 0 else -1",
+      "questionNumber": 994,
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-with-level-processing---graphsomething",
+      "blog": "LeetCode: Graphs"
     }
   ],
   "1046": [

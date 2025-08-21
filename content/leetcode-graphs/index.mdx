@@ -85,18 +85,121 @@ Space complexity O(m) -> useful for algorithms that only need edges
 
 Simplest representation for algorithms that only care about edges.
 
-### Graph Application: something
-Graphs are cool!
+### Graph Application: DFS Pre Order
+Use pre order DFS when you need to process a node immediately before
+exploring its neighbors
 
-Ex: Find the kth largest element in array
+Ex: Sink islands or mark visited immediately in a grid
 ```python
-    def graphBrrrr():
-        wow!
+def dfs_pre(r, c, grid):
+    if not (0 <= r < len(grid) and 0 <= c < len(grid[0])) or grid[r][c] == '0':
+        return
 
+    grid[r][c] = '0'  # mark visited (pre-order processing)
+
+    for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+        dfs_pre(r + dr, c + dc, grid)
+
+# Example: numIslands uses pre-order DFS to flood fill
+```
+
+### Graph Application: DFS In Order (Binary Tree Only)
+Use in order DFS mainly for binary trees where left -> right order matters
+
+Ex: Extract sorted values from a BST
+```python
+def inorder(node, res):
+    if not node:
+        return
+    inorder(node.left, res)
+    res.append(node.val)  # process node in between left/right
+    inorder(node.right, res)
+
+# Example: LeetCode 98, Validate BST or BST inorder traversal
 ```
 
 
-## 200. Number of Islands ::3:: - Medium
+### Graph Application: DFS Post Order
+Use post order DFS when you want to process a node after exploring
+all its neighbors.
+
+
+Ex: Calculate size of connected components or backtracking cleanup
+```python
+def dfs_post(r, c, grid):
+    if not (0 <= r < len(grid) and 0 <= c < len(grid[0])) or grid[r][c] == '0':
+        return 0
+
+    grid[r][c] = '0'  # mark visited
+    size = 1  # count current cell
+
+    for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+        size += dfs_post(r + dr, c + dc, grid)
+
+    return size  # post-order: aggregate after children
+
+# Example: maxAreaOfIsland uses post-order DFS to sum area
+```
+
+### Graph Application: BFS Level Order / Flood Fill
+Use BFS when you need shortest path in unweighted graphs, or to
+expand layers level by level.
+
+Ex: Shortest path in 2D grid:
+```python
+def bfs_shortest(grid, start):
+    queue = deque([(*start, 0)])  # (r, c, distance)
+    visited = set([start])
+
+    while queue:
+        r, c, dist = queue.popleft()
+        if grid[r][c] == 'target':
+            return dist
+
+        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and (nr,nc) not in visited:
+                visited.add((nr,nc))
+                queue.append((nr,nc, dist + 1))
+```
+
+### Graph Application: Union Find Disjoint Set
+Use Union Find to efficiently track connected components in dynamic graphs.
+
+Ex: Count islands or merge friend groups
+```python
+    def numIslandsUnion(grid):
+        parent = {}
+        
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+        
+        def union(x, y):
+            parent[find(x)] = find(y)
+        
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == '1':
+                    parent[(r,c)] = (r,c)
+        
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == '1':
+                    for dr, dc in [(1,0),(0,1)]:
+                        nr, nc = r+dr, c+dc
+                        if (nr,nc) in parent:
+                            union((r,c),(nr,nc))
+        
+        roots = {find(x) for x in parent}
+        return len(roots)
+```
+
+
+
+
+## 200. Number of Islands ::4:: - Medium
 
 Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
 
@@ -154,121 +257,262 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 ```python
 ```
 
-### Solution 1: DFS with Explicit Visited Set - Graph/something
+### Solution 1: Recursive DFS with Visited Set - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
-        # Note:
-        # 1. Use a visited set to avoid mutating grid
-        # 2. DFS marks all connected land from each unvisited '1'
-        # 3. Each DFS trigger = new island
 
+        # Note:
+        # Recursive DFS traversal: mark visited cells to avoid re-processing
+        # 1. Process Root -> check if current cell is '1'
+        # 2. Process Choices -> explore four neighbors (up, down, left, right)
+        # 3. Backtrack -> recursion returns after marking all connected land
+        # Result: increment island count per root land cell
+        
+        # Empty check
         if not grid:
             return 0
+        
+        # boundaries
+        rows, cols = len(grid), len(grid[0])
 
-        m, n = len(grid), len(grid[0])
+        # tracking
         visited = set()
-        count = 0
 
-        def dfs(i: int, j: int) -> None:
-            # Explore 4 directions
-            for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:
-                ni, nj = i + dx, j + dy
-                # Check bounds + not visited + land cell
-                if (ni, nj) not in visited and 0 <= ni < m and 0 <= nj < n and grid[ni][nj] == '1':
-                    visited.add((ni, nj))
-                    dfs(ni, nj)
-
-        # Scan grid, run DFS whenever unvisited land is found
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j] == '1' and (i, j) not in visited:
-                    count += 1
-                    visited.add((i, j))
-                    dfs(i, j)
-
-        # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) (visited set + recursion stack)
-        return count
-```
-
-
-### Solution 2: Optimized DFS Flood Fill - Graph/something
-```python
-    def numIslands(self, grid: List[List[str]]) -> int:
-        # Note:
-        # 1. Sink land in-place by flipping '1' -> '0'
-        # 2. DFS flood fills an island whenever unvisited '1' is found
-        # 3. No visited set required (saves space)
-        
-        if not grid:
-            return 0
-        
-        m, n = len(grid), len(grid[0])
+        # count
         islands = 0
-        
-        def dfs(r: int, c: int) -> None:
-            # Base case: out of bounds or water
-            if r < 0 or c < 0 or r >= m or c >= n or grid[r][c] == '0':
+
+        # visits any land touching (r, c)
+        def dfs(r, c):
+
+            # Late Pruning -> skip if out-of-bounds, water, or already visited
+            if (r < 0 or r >= rows or 
+                c < 0 or c >= cols or 
+                grid[r][c] == "0" or 
+                (r, c) in visited):
                 return
-            grid[r][c] = '0'  # mark visited (sink)
-            
-            # Explore 4 directions
+
+            # Process Root -> mark current cell as visited land
+            visited.add((r, c))
+
+            # Explore -> visit all 4 neighbors
             dfs(r + 1, c)
             dfs(r - 1, c)
             dfs(r, c + 1)
             dfs(r, c - 1)
-        
-        for r in range(m):
-            for c in range(n):
-                if grid[r][c] == '1':
+
+            # Backtrack -> implicit, no undo needed
+
+        # iterate over grid
+        for r in range(rows):
+            for c in range(cols):
+
+                # Process Root -> unvisited land found
+                if grid[r][c] == '1' and (r, c) not in visited:
                     islands += 1
                     dfs(r, c)
-        
-        # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) worst-case (DFS recursion depth)
+
+        # overall: time complexity
+        # overall: space complexity
         return islands
 ```
 
-
-### Solution 3: Optimized BFS Flood Fill - Graph/something
+### Solution 2: Recursive DFS with In Place Flood Fill - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
         # Note:
-        # 1. Same idea as DFS but iterative BFS avoids recursion depth issues
-        # 2. Use queue to explore an entire island
-        # 3. Mutates grid in-place to mark visited
+        # Recursive DFS flood fill: mark visited land in-place
+        # 1. Process Root -> check if current cell is '1'
+        # 2. Process Choices -> explore four neighbors
+        # 3. Backtrack -> recursion returns after marking all connected land
+        # Result: increment island count per root land cell
         
+        # Empty check
         if not grid:
             return 0
         
-        m, n = len(grid), len(grid[0])
+        # boundaries
+        rows, cols = len(grid), len(grid[0])
+
+        # count
         islands = 0
-        
-        def bfs(r: int, c: int) -> None:
-            queue = deque([(r, c)])
-            grid[r][c] = '0'  # mark visited
-            
-            while queue:
-                cr, cc = queue.popleft()
-                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
-                    nr, nc = cr + dr, cc + dc
-                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == '1':
-                        grid[nr][nc] = '0'
-                        queue.append((nr, nc))
-        
-        for r in range(m):
-            for c in range(n):
+
+        # visits any land touching (r, c)
+        def dfs(r, c):
+
+            # Late Pruning -> skip out-of-bounds or water
+            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == '0':
+                return
+
+            # Build / Mark -> sink current land
+            grid[r][c] = '0'
+
+            # Explore -> visit all 4 neighbors
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+
+            # Backtrack -> implicit, no undo needed
+
+        for r in range(rows):
+            for c in range(cols):
+
+                # Process Root -> unvisited land found
                 if grid[r][c] == '1':
                     islands += 1
-                    bfs(r, c)
-        
+                    dfs(r, c)
+
         # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) worst-case (queue holding all land)
+        # overall: space complexity O(m * n) worst-case recursion depth
         return islands
 ```
 
+### Solution 3: Iterative BFS with In Place Flood Fill - Graph/something
+```python
+    def numIslands(self, grid: List[List[str]]) -> int:
 
-## 695. Max Area of Island ::1:: - Medium
+        # Note:
+        # Iterative BFS flood fill: explore entire island per root land
+        # 1. Process Root -> enqueue starting land cell
+        # 2. Process Choices -> explore neighbors iteratively
+        # 3. Backtrack -> implicit by queue processing
+        # Result: increment island count per root land cell
+
+        # Empty check
+        if not grid:
+            return 0
+
+        # boundaries
+        rows, cols = len(grid), len(grid[0])
+        islands = 0
+
+        # visits any land touching (r, c)
+        def bfs(r, c):
+
+            # iterative queue
+            queue = deque()
+
+            # start iteration
+            queue.append((r, c))
+
+            # Build -> sink root island
+            grid[r][c] = '0'
+
+            while queue:
+
+                # grab 
+                cr, cc = queue.popleft()
+
+                # Explore -> neighbors in 4 directions
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                    nr, nc = cr + dr, cc + dc
+
+                    # Late Pruning -> skip out-of-bounds or water
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                        grid[nr][nc] = '0'
+                        queue.append((nr, nc))
+
+        # iterate over grid
+        for r in range(rows):
+            for c in range(cols):
+
+                # Process Root -> unvisited land found
+                if grid[r][c] == '1':
+                    islands += 1
+                    bfs(r, c)
+
+        # overall: time complexity O(m * n)
+        # overall: space complexity O(m * n) worst-case queue
+        return islands
+```
+
+### Solution 4: Union Find - Graph/something
+```python
+    def numIslands(self, grid: List[List[str]]) -> int:
+
+        # Note:
+        # Union-Find approach: treat each land cell as a node
+        # 1. Process Root -> initialize parent and rank for each land
+        # 2. Process Choices -> union adjacent lands (right and down)
+        # 3. Backtrack -> implicit via union
+        # Result: number of connected components = number of islands
+
+        # Empty check
+        if not grid:
+            return 0
+        
+        # boundaries
+        rows, cols = len(grid), len(grid[0])
+
+        # parent and rank (size)
+        parent = {}
+        rank = {}
+
+        # initialize unions -> set parent to self rank to 0
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == '1':
+                    parent[(r, c)] = (r, c)
+                    rank[(r, c)] = 0
+
+        # Find Path compression
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+
+        # Union between sets
+        def union(x, y):
+            rootX, rootY = find(x), find(y)
+            if rootX == rootY:
+                return
+
+            # union by rank (height based)
+            if rank[rootX] > rank[rootY]:
+               parent[rootY] = rootX
+            elif rank[rootX] < rank[rootY]:
+                parent[rootX] = rootY
+            else:
+                # height of tree only increases by 1 on equal size trees
+                # A=3, B=2 -> B will point to Root A, leading to height of 3
+                parent[rootY] = rootX
+                rank[rootX] += 1
+
+            # union by size (weight based)
+            # if rank[rootX] > rank[rootY]:
+            #     rank[rootX] += rank[rootY]
+            #     parent[rootY] = rootX
+            # else rank[rootX] < rank[rootY]:
+            #     rank[rootY] += rank[rootX]
+            #     parent[rootX] = rootY
+
+        # iterate over grid
+        for r in range(rows):
+            for c in range(cols):
+
+                # island found
+                if grid[r][c] == '1':
+
+                    # Process Choices -> 
+                    # Union only down and right to avoid double union
+                    for dr, dc in [(1,0), (0,1)]:
+                        nr, nc = r + dr, c + dc
+
+                        # Early Candidate Pruning -> boundaries
+                        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                            union((r, c), (nr, nc))
+
+        # Unique root count -> Unique Island Counts
+        roots = set(find(cell) for cell in parent)
+
+        # overall: time complexity
+        # overall: space complexity
+        return len(roots)
+```
+
+
+
+## 695. Max Area of Island ::3:: - Medium
 
 Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
 
@@ -326,7 +570,7 @@ Given a graph, return the largest island.
 ```python
 ```
 
-### Solution 1: Optimized DFS Flood Fill - Graph/something
+### Solution 1: Recursive DFS with Flood Fill - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         # Note:
@@ -335,31 +579,48 @@ Given a graph, return the largest island.
         # 3. Track area of each island during DFS
         # 4. Return the maximum island area
 
+        # Empty check
         if not grid:
             return 0
 
+        # Boundaries
         m, n = len(grid), len(grid[0])
+
+        # max
         max_area = 0
 
         def dfs(r: int, c: int) -> int:
-            # Base case: out of bounds or water
-            if r < 0 or c < 0 or r >= m or c >= n or grid[r][c] == 0:
+            # Late Candidate Prune -> : out of bounds or water
+            if r < 0 or c < 0 or r >= m or c >= n:
                 return 0
 
-            grid[r][c] = 0  # mark visited (sink)
-            area = 1  # count current cell
+            # Late Candidate Prune -> : water
+            if grid[r][c] == 0:
+                return 0
 
-            # Explore 4 directions and accumulate area
+            # Process Root -> sink land
+            grid[r][c] = 0
+
+            # Process Root -> count land from root
+            area = 1
+
+            # Process Choices -> explore neighbors, add to land count
             area += dfs(r + 1, c)
             area += dfs(r - 1, c)
             area += dfs(r, c + 1)
             area += dfs(r, c - 1)
-            return area
 
+            # Backtrack -> return root land count to parent
+            return area
+    
+        # iterate over grid
         for r in range(m):
             for c in range(n):
+
+                # Process Root -> unvisited land found
                 if grid[r][c] == 1:
-                    # compute area of this island and update max_area
+
+                    # grab area of new island, check with max
                     island_area = dfs(r, c)
                     max_area = max(max_area, island_area)
 
@@ -369,7 +630,7 @@ Given a graph, return the largest island.
 ```
 
 
-### Solution 2: Optimized BFS Flood Fill - Graph/something
+### Solution 2: Iterative BFS with Flood Fill - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         # Note:
@@ -378,36 +639,121 @@ Given a graph, return the largest island.
         # 3. Sink land cells in-place to mark visited
         # 4. Track area of each island, return maximum
 
+        # Empty check
         if not grid:
             return 0
 
+        # Boundaries
         m, n = len(grid), len(grid[0])
+
+        # max
         max_area = 0
 
+        def bfs(r, c):
+            # start BFS for this island
+            area = 0
+            queue = deque([(r, c)])
+            grid[r][c] = 0  # mark visited
+
+            while queue:
+                cr, cc = queue.popleft()
+                area += 1
+
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                    nr, nc = cr + dr, cc + dc
+                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                        grid[nr][nc] = 0  # mark visited
+                        queue.append((nr, nc))
+
+            return area
+
+
+        # iterate over grid 
         for r in range(m):
             for c in range(n):
                 if grid[r][c] == 1:
-                    # start BFS for this island
-                    area = 0
-                    queue = deque([(r, c)])
-                    grid[r][c] = 0  # mark visited
+                    island_area = bfs(r, c)
+                    max_area = max(max_area, island_area)
 
-                    while queue:
-                        cr, cc = queue.popleft()
-                        area += 1
-
-                        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
-                            nr, nc = cr + dr, cc + dc
-                            if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
-                                grid[nr][nc] = 0  # mark visited
-                                queue.append((nr, nc))
-
-                    max_area = max(max_area, area)
 
         # overall: time complexity O(m * n)
         # overall: space complexity O(m * n) worst-case (queue holds all land cells)
         return max_area
 ```
+
+### Solution 3: Union Find - Graph/something
+```python
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        
+        # Note:
+        # Union-Find approach to track connected components by size
+        # 1. Process Root -> initialize parent and size for each land cell
+        # 2. Process Candidates -> union adjacent land cells (down/right)
+        # 3. Early Prune -> skip out-of-bounds
+        # 4. Late Prune -> skip water cells
+        # Result: max size among all connected components = max island area
+
+        # Empty check
+        if not grid:
+            return 0
+
+        # Boundaries
+        m, n = len(grid), len(grid[0])
+
+        # Union find info
+        parent = {}
+        size = {}
+
+        # Find Path Compression
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
+
+        # Union two sets
+        def union(x, y):
+            
+            rootX, rootY = find(x), find(y)
+            if rootX == rootY:
+                return
+            
+            # Union by size
+            if size[rootX] >= size[rootY]:
+                parent[rootY] = rootX
+                size[rootX] += size[rootY]
+            else:
+                parent[rootX] = rootY
+                size[rootY] += size[rootX]
+
+        # Init Union Find,
+        # set parent to self and size to 0
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 1:
+                    parent[(r, c)] = (r, c)
+                    size[(r, c)] = 1
+
+        # Iterate over grid and Union adjacent 
+        # bottom and right land cells (to avoid double union)
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 1:
+
+                    # Process Choices -> 
+                    # Union only down and right to avoid double union
+                    for dr, dc in [(1,0), (0,1)]:
+                        nr, nc = r + dr, c + dc
+                        if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                            union((r, c), (nr, nc))
+
+        # grab the largest union size
+        largestIsland = max(size.values(), default=0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return largestIsland
+```
+
 
 
 ## 133. Clone Graph ::2:: - Medium
@@ -479,7 +825,7 @@ Given a graph represented by an adjacency matrix, return a deep copy.
 ```python
 ```
 
-### Solution 1: DFS - Graph/something
+### Solution 1: Recursive DFS - Graph/something
 ```python
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         # Note:
@@ -487,52 +833,76 @@ Given a graph represented by an adjacency matrix, return a deep copy.
         # 2. Use a hashmap to store already cloned nodes
         # 3. For each node, recursively clone its neighbors
         # 4. Return the cloned node corresponding to the input
-
+        
+        # Empty check
         if not node:
             return None
 
-        cloned = {}  # maps original node -> cloned node
+        # original -> deep copy
+        cloned = {}
 
-        def dfs(n: Node) -> Node:
+        def dfs(n) -> Node:
+
+            # Early Prune -> node already cloned
             if n in cloned:
                 return cloned[n]
 
+            # Process Root -> clone current node
             copy = Node(n.val)
             cloned[n] = copy
 
+            # Process Candidates -> recursively clone all neighbors
             for neighbor in n.neighbors:
                 copy.neighbors.append(dfs(neighbor))
 
+            # Backtrack -> return cloned node
             return copy
 
-        return dfs(node)
+        # grab root of cloned graph
+        cloneRoot = dfs(node)
 
         # overall: time complexity O(V + E), visit each node and edge once
         # overall: space complexity O(V), for hashmap + recursion stack
+        return cloneRoot
 ```
 
-### Solution 2: BFS - Graph/something
+### Solution 2: Iterative BFS - Graph/something
 ```python
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
-         # Note:
-        # 1. Use BFS to traverse the graph iteratively
-        # 2. Use a hashmap to track cloned nodes
-        # 3. For each node dequeued, clone its neighbors if not already cloned
-        # 4. Return the cloned node corresponding to the input
+        
+        # Note:
+        # 1. Iterative BFS traversal to clone graph nodes
+        # 2. Use hashmap to track original -> cloned node
+        # 3. Process Root -> start with input node in queue
+        # 4. Process Candidates -> clone neighbors iteratively
+        # 5. Early Prune -> skip already cloned neighbors
+        # 6. Backtrack -> queue ensures all reachable nodes are processed
 
+        # Empty check
         if not node:
             return None
 
+        # clone root
         cloned = {node: Node(node.val)}
+
+        # iterative queue
         queue = deque([node])
 
+        # iterate over all nodes
         while queue:
+
+            # get previous roots neighbor
             current = queue.popleft()
 
+            # iterate over neighbors
             for neighbor in current.neighbors:
+
+                # Early Prune -> neighbor already cloned
                 if neighbor not in cloned:
                     cloned[neighbor] = Node(neighbor.val)
                     queue.append(neighbor)
+
+                # Process Candidate -> connect cloned neighbor
                 cloned[current].neighbors.append(cloned[neighbor])
 
         # overall: time complexity O(V + E), each node and edge visited once
@@ -601,7 +971,7 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
 ```python
 ```
 
-### Solution 1: Multi Source BFS - Graph/something
+### Solution 1: Iterative BFS Rotten Multi Source with Global Minutes Overwrite - Graph/something
 ```python
     def orangesRotting(self, grid: List[List[int]]) -> int:
         # Note:
@@ -610,80 +980,131 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
         # 3. Track fresh oranges count, decrement when they rot
         # 4. Return minutes if all fresh rot, else -1
 
+        # Empty check
         if not grid:
             return -1
 
+        # boundaries
         m, n = len(grid), len(grid[0])
+
+        # count
         fresh = 0
+
+        # time
+        minutes = 0
+
+        # iterative queue
         queue = deque()
 
-        # collect initial state
+        # set up multi source BFS
         for r in range(m):
             for c in range(n):
+
+                # Append Rotten Source to BFS
                 if grid[r][c] == 2:
-                    queue.append((r, c, 0))  # (row, col, minute)
+                    # (row, col, minute)
+                    queue.append((r, c, 0))
+                
+                # Add to fresh count
                 elif grid[r][c] == 1:
                     fresh += 1
 
-        minutes = 0
-        directions = [(1,0), (-1,0), (0,1), (0,-1)]
-
-        # BFS
+        # iterate over rotten sources
         while queue:
+
+            # next rotten orange
+            # minutes will be overwritten by pop,
+            # last pop will have the longest and final minute count
             r, c, minutes = queue.popleft()
 
-            for dr, dc in directions:
+            # Process Choices -> 
+            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                 nr, nc = r + dr, c + dc
+
+                # Early Prune -> : valid boundary and fresh orange
                 if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
                     grid[nr][nc] = 2
                     fresh -= 1
+                    
+                    # add to time and pass down
                     queue.append((nr, nc, minutes + 1))
 
-        # all fresh must rot
-        return minutes if fresh == 0 else -1
+        # total time taken if no oranges remain, else fresh orange remain so -1
+        res = minutes if fresh == 0 else -1
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
-### Solution 2: BFS with Level Processing - Graph/something
+### Solution 2: Iterative BFS Rotten Multi Source with Level Processing Minutes Trigger - Graph/something
 ```python
     def orangesRotting(self, grid: List[List[int]]) -> int:
+        
         # Note:
         # 1. Instead of storing time in queue, process BFS by levels
         # 2. Each level of queue expansion corresponds to +1 minute
         # 3. Track number of fresh oranges, ensure all rot or return -1
 
+        # Empty check
         if not grid:
             return -1
 
+        # boundaries
         m, n = len(grid), len(grid[0])
+
+        # count
         fresh = 0
+
+        # time
+        minutes = 0
+
+        # iterative
         queue = deque()
 
+        # set up multi source BFS
         for r in range(m):
             for c in range(n):
+
+                # append rotten source to queue
                 if grid[r][c] == 2:
                     queue.append((r, c))
+
+                # add to fresh count
                 elif grid[r][c] == 1:
                     fresh += 1
 
-        minutes = 0
-        directions = [(1,0), (-1,0), (0,1), (0,-1)]
-
+        # iterate over rotten sources
         while queue and fresh > 0:
+
+            # Process roots -> process all sources at this level
             for _ in range(len(queue)):
+
+                # next candidate
                 r, c = queue.popleft()
 
-                for dr, dc in directions:
+                # Process Choices -> : visit neighbors
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = r + dr, c + dc
+
+                    # Early Pruning -> valid bounds and fresh fruit
                     if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
                         grid[nr][nc] = 2
                         fresh -= 1
+
+                        # add next rotten source to queue
                         queue.append((nr, nc))
 
+            # iterate tick for next source level
             minutes += 1
 
-        return minutes if fresh == 0 else -1
-```
+        # total time taken if no oranges remain, else fresh orange remain so -1
+        res = minutes if fresh == 0 else -1
 
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
 
 
 ## 417. Pacific Atlantic Water Flow ::2:: - Medium
@@ -753,52 +1174,72 @@ Given a grid of heights, return which cells can flow to the ocean.
 ```python
 ```
 
-### Solution 1: DFS Reverse Flow - Graph/something
+### Solution 1: Recursive DFS Reverse Flow - Graph/something
 ```python
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        
         # Note:
         # 1. Instead of simulating water flow forward (downhill), reverse the process:
-        #    - Start from the oceans and "climb uphill" (to neighbors with height >= current).
+        #    Start from the oceans and "climb uphill" (to neighbors with height >= current).
         # 2. Perform DFS from Pacific edges and Atlantic edges separately.
         # 3. Any cell visited in both traversals can reach both oceans.
         # 4. Collect intersection of visited sets.
 
+        # Empty check
         if not heights:
             return []
 
+        # boundaries
         m, n = len(heights), len(heights[0])
+
+        # seen
         pacific = set()
         atlantic = set()
 
         def dfs(r: int, c: int, visited: set, prev_height: int) -> None:
-            # base case: out of bounds, visited, or downhill
+            
+            # Early Prune -> out of bounds, visited, or downhill
             if ((r, c) in visited or r < 0 or c < 0 or r >= m or c >= n 
                 or heights[r][c] < prev_height):
                 return
+
+            # Process Root -> mark as visited
             visited.add((r, c))
 
-            # explore 4 directions
+            # Process Candidates -> explore 4 directions
             dfs(r + 1, c, visited, heights[r][c])
             dfs(r - 1, c, visited, heights[r][c])
             dfs(r, c + 1, visited, heights[r][c])
             dfs(r, c - 1, visited, heights[r][c])
 
-        # Pacific edges: top row + left col
+        # Process Roots -> start from Pacific and Atlantic edges
+        # These are the edge cells adjacent to each ocean from which water can "flow uphill"
+        # just collecting outermost edge calls
+
         for i in range(m):
+            # left column
             dfs(i, 0, pacific, heights[i][0])
+            # right column
             dfs(i, n - 1, atlantic, heights[i][n - 1])
         for j in range(n):
+            # top row
             dfs(0, j, pacific, heights[0][j])
+            # bottom row
             dfs(m - 1, j, atlantic, heights[m - 1][j])
 
-        # intersection: cells reachable to both oceans
-        return list(pacific & atlantic)
+        # Late Prune -> intersection: cells reachable to both oceans
+        intersection = list(pacific & atlantic)
+
+        # overall: time complexity
+        # overall: space complexity
+        return intersection
 ```
 
 
-### Solution 2: BFS Reverse Flow - Graph/something
+### Solution 2: Iterative BFS Reverse Flow - Graph/something
 ```python
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        
         # Note:
         # 1. Same reverse flow idea, but BFS is used instead of DFS.
         # 2. BFS avoids recursion depth issues and may be easier to reason about.
@@ -806,32 +1247,52 @@ Given a grid of heights, return which cells can flow to the ocean.
         # 4. Traverse "uphill" from oceans, track visited cells for each.
         # 5. Answer = intersection of both visited sets.
 
+        # Empty check
         if not heights:
             return []
 
+        # boundaries
         m, n = len(heights), len(heights[0])
 
+        #
         def bfs(starts: List[Tuple[int,int]]) -> set:
             visited = set(starts)
             queue = deque(starts)
 
             while queue:
+                # Process Root -> current cell
                 r, c = queue.popleft()
+
+                # Process Choices -> explore neighbors
                 for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = r + dr, c + dc
+
+                    # Early Prune -> bounds, visited, uphill condition
                     if (0 <= nr < m and 0 <= nc < n and (nr, nc) not in visited
                         and heights[nr][nc] >= heights[r][c]):
                         visited.add((nr, nc))
                         queue.append((nr, nc))
             return visited
 
+        # Process Roots -> edge cells for each ocean
+        # These are the edge cells adjacent to each ocean from which water can "flow uphill"
+        # just collecting outermost edge calls
+
+        # pacific_starts = all cells on the top row (0, j) and all cells on the left column (i, 0)
         pacific_starts = [(0, j) for j in range(n)] + [(i, 0) for i in range(m)]
+        
+        # atlantic_starts = all cells on the bottom row (m-1, j) and all cells on the right column (i, n-1)
         atlantic_starts = [(m - 1, j) for j in range(n)] + [(i, n - 1) for i in range(m)]
 
         pacific = bfs(pacific_starts)
         atlantic = bfs(atlantic_starts)
 
-        return list(pacific & atlantic)
+        # return intersection between
+        intersection = list(pacific & atlantic)
+
+        # overall: time complexity
+        # overall: space complexity
+        return intersection
 ```
 
 
@@ -896,75 +1357,100 @@ Given a board, find all surrounded regions, capture and return them.
 ```python
 ```
 
-### Solution 1: DFS Flood Fill from Borders - Graph/something
+### Solution 1: Recursive DFS with Flood Fill from Borders - Graph/something
 ```python
     def solve(self, board: List[List[str]]) -> None:
+        
         # Note:
         # 1. Any 'O' connected to the border cannot be captured.
         # 2. Mark all border-connected 'O's with DFS (temporary marker 'T').
         # 3. After traversal:
-        #    - Flip all remaining 'O' to 'X' (they are surrounded).
-        #    - Flip all 'T' back to 'O'.
+        #    Flip all remaining 'O' to 'X' (they are surrounded).
+        #    Flip all 'T' back to 'O'.
         # 4. Mutates board in-place, no return required.
 
+        # Empty check
         if not board:
             return
 
+        # boundaries
         m, n = len(board), len(board[0])
 
-        def dfs(r: int, c: int) -> None:
+        def dfs(r, c):
+
+            # Early Prune -> : out of bounds or not a 'O'
             if r < 0 or c < 0 or r >= m or c >= n or board[r][c] != 'O':
                 return
-            board[r][c] = 'T'  # mark as safe
+
+            # Process Root -> mark as safe
+            board[r][c] = 'T'
+
+            # Process Candidates -> explore neighbors
             dfs(r + 1, c)
             dfs(r - 1, c)
             dfs(r, c + 1)
             dfs(r, c - 1)
 
-        # Step 1: DFS from borders
+        # Process Roots -> start DFS from border cells
         for i in range(m):
+            # left column
             dfs(i, 0)
+            # right column
             dfs(i, n - 1)
         for j in range(n):
+            # top row
             dfs(0, j)
+            # bottom row
             dfs(m - 1, j)
 
-        # Step 2: Flip surrounded regions
+        # Late Prune -> Flip surrounded 'O' -> 'X', safe 'T' -> 'O'
         for i in range(m):
             for j in range(n):
                 if board[i][j] == 'O':
                     board[i][j] = 'X'
                 elif board[i][j] == 'T':
                     board[i][j] = 'O'
+
+        
+        # overall: time complexity
+        # overall: space complexity
 ```
 
 
-### Solution 2: BFS Flood Fill from Borders - Graph/something
+### Solution 2: Iterative BFS with Flood Fill from Borders - Graph/something
 ```python
     def solve(self, board: List[List[str]]) -> None:
+        
         # Note:
         # 1. Same idea as DFS, but BFS is used to avoid recursion depth issues.
         # 2. Traverse from border 'O's, mark as 'T'.
         # 3. After BFS, flip surrounded 'O' -> 'X' and 'T' -> 'O'.
 
+        # Empty Check
         if not board:
             return
 
+        # Boundaries
         m, n = len(board), len(board[0])
-        directions = [(1,0), (-1,0), (0,1), (0,-1)]
 
-        def bfs(r: int, c: int) -> None:
+        def bfs(r, c):
+
+            # Process Root -> initialize BFS from this cell
             queue = deque([(r, c)])
             board[r][c] = 'T'
+            
             while queue:
                 cr, cc = queue.popleft()
-                for dr, dc in directions:
+                # Process Candidates -> explore neighbors
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = cr + dr, cc + dc
+
+                    # Early Prune -> valid bounds and 'O'
                     if 0 <= nr < m and 0 <= nc < n and board[nr][nc] == 'O':
                         board[nr][nc] = 'T'
                         queue.append((nr, nc))
 
-        # Step 1: BFS from borders
+        # Process Roots -> start BFS from border 'O's
         for i in range(m):
             if board[i][0] == 'O':
                 bfs(i, 0)
@@ -976,7 +1462,7 @@ Given a board, find all surrounded regions, capture and return them.
             if board[m - 1][j] == 'O':
                 bfs(m - 1, j)
 
-        # Step 2: Flip surrounded regions
+        # Late Prune -> Flip surrounded 'O' -> 'X', safe 'T' -> 'O'
         for i in range(m):
             for j in range(n):
                 if board[i][j] == 'O':
@@ -997,40 +1483,54 @@ Given a board, find all surrounded regions, capture and return them.
         # 5. After unions, any 'O' connected to dummy is safe.
         # 6. Flip all other 'O' to 'X'.
 
+        # Empty check
         if not board:
             return
 
+        # Boundaries
         m, n = len(board), len(board[0])
+
+        # 
         parent = {}
 
+        # Find Path Compression
         def find(x: int) -> int:
             parent.setdefault(x, x)
             if parent[x] != x:
                 parent[x] = find(parent[x])
             return parent[x]
 
+        # Union two Sets
         def union(x: int, y: int) -> None:
             parent[find(x)] = find(y)
 
-        dummy = m * n  # special node for border
+        # Special node for border
+        dummy = m * n 
 
-        # Step 1: Union border 'O's with dummy, and connect neighbors
+        # Process Roots and Candidates -> Union Border 'O's and neighbors
         for i in range(m):
             for j in range(n):
                 if board[i][j] == 'O':
                     idx = i * n + j
+
+                    # Union border cells with dummy
                     if i in (0, m - 1) or j in (0, n - 1):
                         union(idx, dummy)
+
+                    # Union neighbors
                     for di, dj in [(1,0), (-1,0), (0,1), (0,-1)]:
                         ni, nj = i + di, j + dj
                         if 0 <= ni < m and 0 <= nj < n and board[ni][nj] == 'O':
                             union(idx, ni * n + nj)
 
-        # Step 2: Flip non-connected 'O's
+        # Late Prune -> flip 'O' not connected to dummy to 'X'
         for i in range(m):
             for j in range(n):
                 if board[i][j] == 'O' and find(i * n + j) != find(dummy):
                     board[i][j] = 'X'
+
+        # overall: time complexity
+        # overall: space complexity
 ```
 
 
@@ -1096,56 +1596,93 @@ determine if you can finish all courses.
 ```python
 ```
 
-### Solution 1: DFS Cycle Detection - Graph/something
+### Solution 1: Recursive DFS Cycle Detection - Graph/something
 ```python
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        
+        # Note:
+        # 1. Build a graph from prerequisites (course -> list of courses depending on it).
+        # 2. Use DFS to detect cycles.
+        #    visited[course] = 0: unvisited
+        #    visited[course] = 1: visiting (currently in recursion stack)
+        #    visited[course] = 2: visited (safe, no cycles in this path)
+        # 3. If a cycle is found, return False (cannot finish all courses).
+        # 4. Otherwise, all courses can be completed.
+
+        # Build graph
         graph = {i: [] for i in range(numCourses)}
         for course, prereq in prerequisites:
             graph[prereq].append(course)
 
-        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited
+        # State array
+        # 0 = unvisited, 1 = visiting, 2 = visited
+        visited = [0] * numCourses
 
         def dfs(course):
-            if visited[course] == 1:  # cycle detected
+            # Early Prune -> cycle detected
+            if visited[course] == 1:
                 return False
-            if visited[course] == 2:  # already processed
+            # Late Prune -> already processed
+            if visited[course] == 2:
                 return True
 
-            visited[course] = 1  # mark as visiting
+            # Process Root -> mark as visiting
+            visited[course] = 1
+
+            # Process Candidates -> traverse neighbors
             for nei in graph[course]:
                 if not dfs(nei):
                     return False
-            visited[course] = 2  # mark as visited
+            
+            # LAte Prune -> mark as visited
+            visited[course] = 2
             return True
 
+        # Process Roots -> traverse all courses
         for c in range(numCourses):
             if not dfs(c):
                 return False
+
+        # All courses processed, no cycles
+
+        # overall: time complexity
+        # overall: space complexity
         return True
 ```
 
 
-### Solution 2: BFS Topological Sort - Graph/something
+### Solution 2: Iterative BFS Topological Sort - Graph/something
 ```python
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        
+        # Note:
+        # 1. Build graph (course -> list of dependent courses) and indegree array.
+        # 2. BFS from courses with indegree 0 (no prerequisites).
+        # 3. Reduce indegree of neighbors; add to queue when indegree becomes 0.
+        # 4. Count processed courses; if count == numCourses, return True.
+
+        # Init graph and indegree
         indegree = [0] * numCourses
         graph = {i: [] for i in range(numCourses)}
-
         for course, prereq in prerequisites:
             graph[prereq].append(course)
             indegree[course] += 1
 
+        # Process Roots -> start with courses without prerequisites
         queue = deque([i for i in range(numCourses) if indegree[i] == 0])
         count = 0
 
+        # Process Candidates -> BFS topological sort
         while queue:
             curr = queue.popleft()
             count += 1
             for nei in graph[curr]:
                 indegree[nei] -= 1
+                # Early Prune -> neighbor ready to process
                 if indegree[nei] == 0:
                     queue.append(nei)
 
+        # Late Prune -> if all courses processed, no cycles
         return count == numCourses
 ```
 
