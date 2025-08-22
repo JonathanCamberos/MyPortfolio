@@ -85,8 +85,8 @@
       "application": "algorithm",
       "code": "def longestPalindrome(self, s: str) -> str:\n\n        # Note: \n        # Preprocessing with #, ^, and $:\n        # '#': ensures uniform expansion, for both odd and even length palindromes\n        # '^' and '$': sentinel characters don't match valid input characters, serve as true start and end markers\n        # '#': ensures all palindromes start and end with '#'\n        # '#': occur on odd indexes\n\n        # Mapping:\n        # we can map odd '#' indexes to their even character:\n        # mapping '#' at index 1 to char pair 'a' at index 2, to original 'a' at index 0\n        # [ ^ # a # b # a # $ ] -> [ a b a ]    via : originalStart = (expandedCenter - radius) / 2\n        #   0 1 2 3 4 5 6 7 8        0 1 2      thus: originalStart = (4 - 3) / 2 = 0\n        \n        # Boundary expansion: \n        # For any index i, center of palindrome at i can either be: \n        # - character from the original string\n        # - placeholder '#'\n        # Center definition allows even length palindromes such as \"abba\", see below,\n        # to have a single middle point, allowing the same expanding logic \n        # for even and odd strings for palindrome validation\n\n        # Ex:\n        # ^ # a # b # b # a # $    || new string len 11,\n        # 0 1 2 3 4 5 6 7 8 9 10   ||\n        #           ^              || index 5 center for even length \"abba\"\n\n        # index 1 palindrome: \"#\"\n        # index 2 palindrome: \"#a#\"\n        # index 5 palindrome: \"#a#b#b#a#\"\n        # etc...\n\n        expandedStr = \"#\".join(f\"^{s}$\")\n        n = len(expandedStr)\n\n        # Right Most Palindrome and Mirror Trick: \n        # Iteration tracks the right boundary for the current farthest right palindromic substring, \n        # which allows us to take advantage of the mirror radius trick.\n        # It speeds up palindrome expansion by starting the current palindrome radius\n        # at the radius value of its mirror\n\n        # p[i]: radius of palindrome centered at some index i\n        p = [0] * n\n\n        # mirror radius validation: tracking right boundary\n        # right: right boundary of the current right most palindrome\n        right = 0\n\n        # mirror radius validation: tracking center of right most in order to calculate mirror index\n        # center: center index of the current right most palindrome\n        center = 0 \n\n        # iteration range ignores sentinel indexes 0 and (n-1): ^ and $\n        # i: center of current palindrome\n        # time complexity: iterate over list of n length O(n)\n        for i in range(1, n - 1):\n\n            # mirror:\n            # i is current index being processed\n            # i is to the right of center and has a mirror to the left of center\n            # ex: center = 6, i = 7 => mirror = (2 * 6) - 7 = 5\n            mirror = (2 * center) - i \n\n            # mirror radius validation:\n            # if i lies within bounds of the right most palindrome,\n            # the right most palindrome symmetry guarantees that the palindrome radius\n            # for the mirror of i, is applicable to i as well,\n            # while within the bounds of the right most palindrome\n            if i < right:\n\n                # mirror radius is either:\n                # - less than the distance between i and right bound,\n                #   in which case all of the radius is valid\n                # - exceeds bounds and is farther than right bound,\n                #   in which case only the radius up until the right bound is valid\n                \n                # i radius is thus, bounded by minimum between: \n                # - mirror radius\n                # - distance from i to the right bound\n                p[i] = min(right - i, p[mirror])\n\n            # assumption: if valid mirror, we pre-set p[i] to p[mirror]\n            # now expand: expand radius p[i] until palindromic status is broken\n            while expandedStr[i + p[i] + 1] == expandedStr[i - p[i] - 1]:\n                p[i] += 1\n\n            # p[i]: radius for palindrome at i\n            # i: center for palindrome at i\n            # check: if we have a new right most boundary, update center and right \n            if i + p[i] > right:\n                right = i + p[i]\n                center = i\n\n        # expandedStr iteration complete:\n        # p[] stores radius of palindrome centered at each index\n\n        # scan p[] grabbing max palindrome radius alongside its center\n        maxRadius, centerIndex = max((palindromeRadius, i) for (i, palindromeRadius) in enumerate(p))\n\n        # Note:\n        # index and radius are relative to expandedStr, not the original string\n        # thus, we need to translate to original string indexes\n\n        # Notice, how in the expanded string, \n        #  - all original characters are on even index\n        #  - all original characters have matching # on the left odd index\n\n        # abba =>  ^ # a # b # b # a # $   | a=2, b=4, b=6, a=8\n        # 0123 =>  0 1 2 3 4 5 6 7 8 9 10  | #=1, #=3, #=5, #=7\n\n        # aba =>   ^ # a # b # a # $       | a=2, b=4, a=6\n        # 012 =>   0 1 2 3 4 5 6 7 8       | #=1, #=3, #=5\n\n        # any palindrome will always end with a '#'.\n        # so if we divide the starting odd position by 2, it will always map\n        # to an original character.\n        # so an easy translation formula is:\n\n        start = (centerIndex - maxRadius) // 2\n        \n        # splice longest substring\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return s[start: start + maxRadius]",
       "questionNumber": 5,
-      "solutionLink": "/Notes/leetcode-two-pointers#solution-1-manacher-s-algorithm-iterate-mirror-radius-optimization-and-expand---two-pointersalgorithm",
-      "blog": "LeetCode: Two Pointers"
+      "solutionLink": "/Notes/dynamic-programming#solution-1-manacher-s-algorithm-iterate-mirror-radius-optimization-and-expand---two-pointersalgorithm",
+      "blog": "Dynamic Programming"
     },
     {
       "number": 2,
@@ -95,8 +95,18 @@
       "application": "algorithm",
       "code": "def longestPalindrome(self, s: str) -> str:\n\n        # expand from a given left and right while \n        # maintaining palindrome property\n        def expandAroundCenter(left, right):\n            while left >= 0 and right < n and s[left] == s[right]:\n                left -= 1\n                right += 1\n\n            # curr iteration is not valid:\n            # ignore left: incrementing index\n            # ignore right: noninclusive right slicing\n            return s[left+1:right] \n         \n        n = len(s)\n        maxPalindrome = \"\"\n\n        # time complexity: iterate over list of n length O(n)\n        for i in range(n):\n            # odd expansion, centered at i\n            oddPalindrome = expandAroundCenter(i, i)      \n            # even expansion, centered at i and i + 1\n            evenPalindrome = expandAroundCenter(i, i+1)\n\n            # update longest\n            if len(oddPalindrome) > len(maxPalindrome):\n                maxPalindrome = oddPalindrome\n            if len(evenPalindrome) > len(maxPalindrome):\n                maxPalindrome = evenPalindrome\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(1)\n        return maxPalindrome",
       "questionNumber": 5,
-      "solutionLink": "/Notes/leetcode-two-pointers#solution-2-expand-around-center-checking-for-odd-and-even-palindromes-constant-space---two-pointersalgorithm",
-      "blog": "LeetCode: Two Pointers"
+      "solutionLink": "/Notes/dynamic-programming#solution-2-expand-around-center-checking-for-odd-and-even-palindromes-constant-space---two-pointersalgorithm",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "Dynamic Programming",
+      "type": "two-pointers",
+      "application": "algorithm",
+      "code": "def longestPalindrome(self, s: str) -> str:\n        \n        n = len(s)\n        dp = [[False]*n for _ in range(n)]\n        start, max_len = 0, 1\n\n        for i in range(n):\n            dp[i][i] = True\n\n        for length in range(2, n+1):  # substring length\n            for i in range(n - length + 1):\n                j = i + length - 1\n                if s[i] == s[j]:\n                    if length == 2 or dp[i+1][j-1]:\n                        dp[i][j] = True\n                        if length > max_len:\n                            start, max_len = i, length\n\n        return s[start:start+max_len]",
+      "questionNumber": 5,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-dynamic-programming---two-pointersalgorithm",
+      "blog": "Dynamic Programming"
     }
   ],
   "11": [
@@ -483,6 +493,28 @@
       "blog": "LeetCode: Backtracking"
     }
   ],
+  "70": [
+    {
+      "number": 1,
+      "name": "Recursive with Memoization Top Down",
+      "type": "graph",
+      "application": "something",
+      "code": "def climbStairs(self, n: int) -> int:\n        memo = {}\n\n        def dfs(i):\n            if i in memo:\n                return memo[i]\n            \n            # Base cases\n            if i == n:\n                return 1   # Found valid path\n            if i > n:\n                return 0   # Overshoot\n            \n            # Recursive branching\n            memo[i] = dfs(i + 1) + dfs(i + 2)\n            return memo[i]\n\n        return dfs(0)",
+      "questionNumber": 70,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-recursive-with-memoization-top-down---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Iterative DP Bottom Up Optimal",
+      "type": "graph",
+      "application": "something",
+      "code": "def climbStairs(self, n: int) -> int:\n        \n        if n == 1:\n            return 1\n        if n == 2:\n            return 2\n\n        prev2, prev1 = 1, 2  # f(1), f(2)\n        \n        for i in range(3, n + 1):\n            curr = prev1 + prev2\n            prev2, prev1 = prev1, curr  # Slide window forward\n        \n        return prev1",
+      "questionNumber": 70,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-iterative-dp-bottom-up-optimal---graphsomething",
+      "blog": "Dynamic Programming"
+    }
+  ],
   "74": [
     {
       "number": 1,
@@ -603,6 +635,28 @@
       "questionNumber": 90,
       "solutionLink": "/Notes/leetcode-backtracking#solution-1-recursive-dfs-backtracking-on-current-subset-path-with-duplicate-skipping---backtrackinggenerate-while-constraint-satisfaction",
       "blog": "LeetCode: Backtracking"
+    }
+  ],
+  "91": [
+    {
+      "number": 1,
+      "name": "Dynamic Programming Bottom Up",
+      "type": "graph",
+      "application": "something",
+      "code": "def numDecodings(self, s: str) -> int:\n        n = len(s)\n        if not s or s[0] == '0':\n            return 0\n\n        dp = [0] * (n + 1)\n        dp[0] = 1  # empty string has 1 way\n        dp[1] = 1  # first char is valid (not '0')\n\n        for i in range(2, n + 1):\n            # check one-digit\n            if s[i-1] != '0':\n                dp[i] += dp[i-1]\n\n            # check two-digit\n            two_digit = int(s[i-2:i])\n            if 10 <= two_digit <= 26:\n                dp[i] += dp[i-2]\n\n        return dp[n]",
+      "questionNumber": 91,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-dynamic-programming-bottom-up---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Space Optimized DP",
+      "type": "graph",
+      "application": "something",
+      "code": "def numDecodings(self, s: str) -> int:\n        if not s or s[0] == '0':\n            return 0\n\n        n = len(s)\n        prev2, prev1 = 1, 1  # dp[0], dp[1]\n\n        for i in range(1, n):\n            curr = 0\n            if s[i] != '0':\n                curr += prev1\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                curr += prev2\n            prev2, prev1 = prev1, curr\n\n        return prev1",
+      "questionNumber": 91,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-space-optimized-dp---graphsomething",
+      "blog": "Dynamic Programming"
     }
   ],
   "98": [
@@ -1005,6 +1059,38 @@
       "blog": "LeetCode: Linked List"
     }
   ],
+  "139": [
+    {
+      "number": 1,
+      "name": "Dynamic Programming",
+      "type": "graph",
+      "application": "something",
+      "code": "def wordBreak(self, s: str, wordDict: List[str]) -> bool:\n        word_set = set(wordDict)\n        n = len(s)\n        dp = [False] * (n + 1)\n        dp[0] = True  # empty string is segmentable\n\n        for i in range(1, n + 1):\n            for j in range(i):\n                if dp[j] and s[j:i] in word_set:\n                    dp[i] = True\n                    break  # early prune, found valid segmentation\n\n        return dp[n]",
+      "questionNumber": 139,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-dynamic-programming---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Recursive DFS with Memoization",
+      "type": "graph",
+      "application": "something",
+      "code": "def wordBreak(self, s: str, wordDict: List[str]) -> bool:\n        word_set = set(wordDict)\n        memo = {}\n\n        def dfs(start: int) -> bool:\n            if start == len(s):\n                return True\n            if start in memo:\n                return memo[start]\n\n            for end in range(start + 1, len(s) + 1):\n                if s[start:end] in word_set and dfs(end):\n                    memo[start] = True\n                    return True\n\n            memo[start] = False\n            return False\n\n        return dfs(0)",
+      "questionNumber": 139,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-recursive-dfs-with-memoization---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "optimal dfs check why",
+      "type": "graph",
+      "application": "something",
+      "code": "def wordBreak(self, s: str, wordDict: List[str]) -> bool:\n        cache = {}\n        def dfs(i):\n            if i == len(s):\n                return True\n            if i > len(s):\n                return False\n            if i in cache:\n                return cache[i]\n            for word in wordDict:\n                if i + len(word) <= len(s) and s[i:i+len(word)] == word:\n                    cache[i] = dfs(i+len(word))\n                    if cache[i]:\n                        return True\n            return False\n        return dfs(0)",
+      "questionNumber": 139,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-optimal-dfs-check-why---graphsomething",
+      "blog": "Dynamic Programming"
+    }
+  ],
   "141": [
     {
       "number": 1,
@@ -1103,6 +1189,28 @@
       "blog": "LeetCode: Stacks"
     }
   ],
+  "152": [
+    {
+      "number": 1,
+      "name": "DP with Rolling Max Min",
+      "type": "graph",
+      "application": "something",
+      "code": "def maxProduct(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 0:\n            return 0\n\n        max_prod = min_prod = result = nums[0]\n\n        for i in range(1, n):\n            num = nums[i]\n            temp_max = max(num, max_prod * num, min_prod * num)\n            min_prod = min(num, max_prod * num, min_prod * num)\n            max_prod = temp_max\n            result = max(result, max_prod)\n\n        return result",
+      "questionNumber": 152,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-dp-with-rolling-max-min---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "DP Array Version",
+      "type": "graph",
+      "application": "something",
+      "code": "def maxProduct(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 0:\n            return 0\n\n        max_dp = [0] * n\n        min_dp = [0] * n\n        max_dp[0] = min_dp[0] = result = nums[0]\n\n        for i in range(1, n):\n            num = nums[i]\n            max_dp[i] = max(num, max_dp[i-1] * num, min_dp[i-1] * num)\n            min_dp[i] = min(num, max_dp[i-1] * num, min_dp[i-1] * num)\n            result = max(result, max_dp[i])\n\n        return result",
+      "questionNumber": 152,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-dp-array-version---graphsomething",
+      "blog": "Dynamic Programming"
+    }
+  ],
   "153": [
     {
       "number": 1,
@@ -1169,6 +1277,38 @@
       "questionNumber": 167,
       "solutionLink": "/Notes/leetcode-two-pointers#solution-1-binarysearch-per-element-for-complement---two-pointersone-pointer-with-auxiliary-state",
       "blog": "LeetCode: Two Pointers"
+    }
+  ],
+  "198": [
+    {
+      "number": 1,
+      "name": "Recursive with Explicit Memoization Top Down",
+      "type": "graph",
+      "application": "something",
+      "code": "def rob(self, nums: List[int]) -> int:\n        memo = {}\n\n        def dfs(i):\n            if i < 0:  # No houses left\n                return 0\n            if i in memo:\n                return memo[i]\n            \n            # Two choices: rob current or skip it\n            memo[i] = max(dfs(i-1), nums[i] + dfs(i-2))\n            return memo[i]\n\n        return dfs(len(nums) - 1)",
+      "questionNumber": 198,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-recursive-with-explicit-memoization-top-down---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Iterative DP Bottom Up",
+      "type": "graph",
+      "application": "something",
+      "code": "def rob(self, nums: List[int]) -> int:\n        \n        n = len(nums)\n        if n == 1:\n            return nums[0]\n\n        dp = [0] * n\n        dp[0], dp[1] = nums[0], max(nums[0], nums[1])\n\n        for i in range(2, n):\n            dp[i] = max(dp[i-1], nums[i] + dp[i-2])\n\n        return dp[-1]",
+      "questionNumber": 198,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-iterative-dp-bottom-up---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "Space Optimized DP",
+      "type": "graph",
+      "application": "something",
+      "code": "def rob(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 1:\n            return nums[0]\n\n        prev2, prev1 = nums[0], max(nums[0], nums[1])\n\n        for i in range(2, n):\n            curr = max(prev1, nums[i] + prev2)\n            prev2, prev1 = prev1, curr  # Slide window\n\n        return prev1",
+      "questionNumber": 198,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-space-optimized-dp---graphsomething",
+      "blog": "Dynamic Programming"
     }
   ],
   "199": [
@@ -1293,7 +1433,7 @@
       "name": "Iterative BFS Topological Sort",
       "type": "graph",
       "application": "something",
-      "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. Build graph (course -> list of dependent courses) and indegree array.\n        # 2. BFS from courses with indegree 0 (no prerequisites).\n        # 3. Reduce indegree of neighbors; add to queue when indegree becomes 0.\n        # 4. Count processed courses; if count == numCourses, return True.\n\n        # Init graph and indegree\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        # Process Roots -> start with courses without prerequisites\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        count = 0\n\n        # Process Candidates -> BFS topological sort\n        while queue:\n            curr = queue.popleft()\n            count += 1\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                # Early Prune -> neighbor ready to process\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        # Late Prune -> if all courses processed, no cycles\n        return count == numCourses",
+      "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. Build graph (course -> list of dependent courses) and indegree array.\n        # 2. BFS from courses with indegree 0 (no prerequisites).\n        # 3. Reduce indegree of neighbors; add to queue when indegree becomes 0.\n        # 4. Count processed courses; if count == numCourses, return True.\n\n        # Init graph and indegree\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        # Process Roots -> start with courses without prerequisites (0 indegree)\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        count = 0\n\n        # Process Candidates -> BFS topological sort\n        while queue:\n            curr = queue.popleft()\n            count += 1\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                # Early Prune -> neighbor ready to process\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        # Late Prune -> if all courses processed, no cycles\n        return count == numCourses",
       "questionNumber": 207,
       "solutionLink": "/Notes/leetcode-graphs#solution-2-iterative-bfs-topological-sort---graphsomething",
       "blog": "LeetCode: Graphs"
@@ -1317,19 +1457,19 @@
       "name": "DFS Topological Sort with Cycle Detection",
       "type": "graph",
       "application": "something",
-      "code": "def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n\n        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited\n        res = []\n        self.is_possible = True\n\n        def dfs(course):\n            if visited[course] == 1:  # cycle detected\n                self.is_possible = False\n                return\n            if visited[course] == 2:  # already processed\n                return\n\n            visited[course] = 1\n            for nei in graph[course]:\n                dfs(nei)\n                if not self.is_possible:\n                    return\n            visited[course] = 2\n            res.append(course)\n\n        for c in range(numCourses):\n            if visited[c] == 0:\n                dfs(c)\n                if not self.is_possible:\n                    return []\n        return res[::-1]  # reverse postorder",
+      "code": "def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n        \n        # Note:\n        # 1. Build graph (prereq -> list of courses that depend on it).\n        # 2. Use DFS to perform topological sort and detect cycles.\n        #    visited[course] = 0: unvisited\n        #    visited[course] = 1: visiting\n        #    visited[course] = 2: visited\n        # 3. Append course to result post DFS (postorder).\n        # 4. If a cycle is detected, return [].\n        # 5. Reverse postorder to get valid course order.\n        \n        # Graph setup\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n\n        # Status array\n        visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited\n        res = []\n        self.is_possible = True\n\n        def dfs(course):\n            # Early Prune -> cycle detected\n            if visited[course] == 1:\n                self.is_possible = False\n                return\n\n            # Late Prune -> already processed\n            if visited[course] == 2:\n                return\n\n            # Process Root -> mark as visited\n            visited[course] = 1\n\n            # Process Choices -> neighbors and dependent courses\n            for nei in graph[course]:\n                dfs(nei)\n\n                # Early exit if cycle\n                if not self.is_possible:\n                    return\n\n            # Post order append\n            visited[course] = 2\n            res.append(course)\n\n        # Iterate over all Roots\n        for c in range(numCourses):\n            if visited[c] == 0:\n                dfs(c)\n                if not self.is_possible:\n                    return []\n\n        # Reverse post order to get correct order\n        return res[::-1]",
       "questionNumber": 210,
       "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-topological-sort-with-cycle-detection---graphsomething",
       "blog": "LeetCode: Graphs"
     },
     {
       "number": 2,
-      "name": "DFS Topological Sort with Cycle Detection",
+      "name": "BFS Topological Sort",
       "type": "graph",
       "application": "something",
-      "code": "def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        res = []\n\n        while queue:\n            curr = queue.popleft()\n            res.append(curr)\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        return res if len(res) == numCourses else []",
+      "code": "def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n        \n        # Note:\n        # 1. Build graph (prereq -> dependent courses) and indegree array.\n        # 2. BFS from courses with indegree 0 (roots).\n        # 3. For each root, decrement indegree of neighbors.\n        # 4. Add neighbor to queue if indegree becomes 0.\n        # 5. Return order if all courses processed, else [] (cycle detected).\n        \n        # Graph and indegree setup\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        # Process Roots -> courses with no prerequisites\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        res = []\n\n        while queue:\n            curr = queue.popleft()\n            res.append(curr)\n\n            # Early Choices -> decrement indegree of neighbors \n            for nei in graph[curr]:\n                indegree[nei] -= 1\n\n                # Early Prune -> add to queue when indegree is 0\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        # Check for cycles -> if all courses processed\n        return res if len(res) == numCourses else []",
       "questionNumber": 210,
-      "solutionLink": "/Notes/leetcode-graphs#solution-2-dfs-topological-sort-with-cycle-detection---graphsomething",
+      "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-topological-sort---graphsomething",
       "blog": "LeetCode: Graphs"
     }
   ],
@@ -1365,6 +1505,38 @@
       "questionNumber": 212,
       "solutionLink": "/Notes/leetcode-tries#solution-2-trie-implementation-optimal---trietrie-insert-and-search-recursive",
       "blog": "LeetCode: Tries"
+    }
+  ],
+  "213": [
+    {
+      "number": 1,
+      "name": "Recursive with Explicit Memoization Top Down",
+      "type": "graph",
+      "application": "something",
+      "code": "def rob(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 1:\n            return nums[0]\n\n        def rob_range(start, end):\n            memo = {}\n            def dfs(i):\n                if i < start:  # no house left\n                    return 0\n                if i in memo:\n                    return memo[i]\n                # rob current or skip\n                memo[i] = max(dfs(i-1), nums[i] + dfs(i-2))\n                return memo[i]\n            return dfs(end)\n\n        # exclude last OR exclude first\n        return max(rob_range(0, n-2), rob_range(1, n-1))",
+      "questionNumber": 213,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-recursive-with-explicit-memoization-top-down---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Iterative DP Bottom Up",
+      "type": "graph",
+      "application": "something",
+      "code": "def rob(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 1:\n            return nums[0]\n\n        def rob_linear(arr):\n            m = len(arr)\n            if m == 1:\n                return arr[0]\n            dp = [0] * m\n            dp[0], dp[1] = arr[0], max(arr[0], arr[1])\n            for i in range(2, m):\n                dp[i] = max(dp[i-1], arr[i] + dp[i-2])\n            return dp[-1]\n\n        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))",
+      "questionNumber": 213,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-iterative-dp-bottom-up---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "Space Optimized DP",
+      "type": "graph",
+      "application": "something",
+      "code": "def rob(self, nums: List[int]) -> int:\n\n        n = len(nums)\n        if n == 1:\n            return nums[0]\n\n        def rob_linear(arr):\n            prev2, prev1 = 0, 0\n            for num in arr:\n                curr = max(prev1, num + prev2)\n                prev2, prev1 = prev1, curr\n            return prev1\n\n        # Exclude first house OR exclude last house\n        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))",
+      "questionNumber": 213,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-space-optimized-dp---graphsomething",
+      "blog": "Dynamic Programming"
     }
   ],
   "215": [
@@ -1569,7 +1741,7 @@
       "name": "DFS Cycle Detection + Connectivity Check",
       "type": "graph",
       "application": "something",
-      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        if len(edges) != n - 1:  # a tree must have exactly n-1 edges\n            return False\n\n        graph = {i: [] for i in range(n)}\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n\n        visited = set()\n\n        def dfs(node, parent):\n            if node in visited:\n                return False\n            visited.add(node)\n            for nei in graph[node]:\n                if nei == parent:\n                    continue\n                if not dfs(nei, node):\n                    return False\n            return True\n\n        return dfs(0, -1) and len(visited) == n",
+      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. A valid tree must have exactly n-1 edges.\n        # 2. Use DFS to check for cycles and connectivity.\n        # 3. visited set tracks nodes we've seen.\n        # 4. parent parameter prevents backtracking to previous node.\n        \n        # Early Prune -> must have n-1 edges\n        if len(edges) != n - 1:\n            return False\n\n        # Graph setup\n        graph = {i: [] for i in range(n)}\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n\n        # seen\n        visited = set()\n\n        def dfs(node, parent):\n            # Early Prune -> cycle detected\n            if node in visited:\n                return False\n\n            # Process Root -> mark as visited\n            visited.add(node)\n\n            # Process Choices -> neighbors\n            for nei in graph[node]:\n                if nei == parent:\n                    continue\n                if not dfs(nei, node):\n                    return False\n            return True\n\n        # Start DFS from node 0 and check connectivity\n        return dfs(0, -1) and len(visited) == n",
       "questionNumber": 261,
       "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs-cycle-detection-connectivity-check---graphsomething",
       "blog": "LeetCode: Graphs"
@@ -1579,7 +1751,7 @@
       "name": "BFS Cycle Detection + Connectivity Check",
       "type": "graph",
       "application": "something",
-      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        if len(edges) != n - 1:\n            return False\n\n        graph = {i: [] for i in range(n)}\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n\n        visited = set()\n        queue = deque([(0, -1)])\n\n        while queue:\n            node, parent = queue.popleft()\n            if node in visited:\n                return False\n            visited.add(node)\n            for nei in graph[node]:\n                if nei != parent:\n                    queue.append((nei, node))\n\n        return len(visited) == n",
+      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n\n        # Note:\n        # 1. A valid tree must have exactly n-1 edges.\n        # 2. Use BFS to check for cycles and connectivity.\n        # 3. visited set tracks nodes we've seen.\n        # 4. parent in queue prevents revisiting previous node.\n\n        # Early prune -> must have n-1 edges\n        if len(edges) != n - 1:\n            return False\n\n        # Graph setup\n        graph = {i: [] for i in range(n)}\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n\n        # seen\n        visited = set()\n        queue = deque([(0, -1)])\n\n        while queue:\n            node, parent = queue.popleft()\n\n            # Early Prune -> cycle detected\n            if node in visited:\n                return False\n\n            # Process Root -> mark as visited\n            visited.add(node)\n\n            # Process Choices -> neighbors\n            for nei in graph[node]:\n                if nei != parent:\n                    queue.append((nei, node))\n\n        # Check connectivity\n        return len(visited) == n",
       "questionNumber": 261,
       "solutionLink": "/Notes/leetcode-graphs#solution-2-bfs-cycle-detection-connectivity-check---graphsomething",
       "blog": "LeetCode: Graphs"
@@ -1589,7 +1761,7 @@
       "name": "Union Find Disjoint Set Union",
       "type": "graph",
       "application": "something",
-      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n        if len(edges) != n - 1:\n            return False\n\n        parent = [i for i in range(n)]\n        rank = [1] * n\n\n        def find(x):\n            while x != parent[x]:\n                parent[x] = parent[parent[x]]  # path compression\n                x = parent[x]\n            return x\n\n        def union(x, y):\n            rootX, rootY = find(x), find(y)\n            if rootX == rootY:\n                return False  # cycle detected\n            if rank[rootX] > rank[rootY]:\n                parent[rootY] = rootX\n            elif rank[rootX] < rank[rootY]:\n                parent[rootX] = rootY\n            else:\n                parent[rootY] = rootX\n                rank[rootX] += 1\n            return True\n\n        for u, v in edges:\n            if not union(u, v):\n                return False\n\n        return True",
+      "code": "def validTree(self, n: int, edges: List[List[int]]) -> bool:\n\n        # Note:\n        # 1. A valid tree must have exactly n-1 edges.\n        # 2. Union Find detects cycles efficiently.\n        # 3. Path compression + union by rank for optimization.\n        # 4. If union fails, cycle detected -> return False.\n\n        # Early Prune -> must have n-1 edges\n        if len(edges) != n - 1:\n            return False\n\n        parent = [i for i in range(n)]\n        rank = [1] * n\n\n        # Find with Path Compression\n        def find(x):\n            while x != parent[x]:\n                parent[x] = parent[parent[x]]  # path compression\n                x = parent[x]\n            return x\n\n        # Union by Rank\n        def union(x, y):\n            rootX, rootY = find(x), find(y)\n            # Early Prune -> cycle detected\n            if rootX == rootY:\n                return False\n\n            # Merge trees\n            if rank[rootX] > rank[rootY]:\n                parent[rootY] = rootX\n            elif rank[rootX] < rank[rootY]:\n                parent[rootX] = rootY\n            else:\n                parent[rootY] = rootX\n                rank[rootX] += 1\n            return True\n\n        # Process all edges\n        for u, v in edges:\n            if not union(u, v):\n                return False\n\n        # overall: time complexity\n        # overall: space complexity\n        return True",
       "questionNumber": 261,
       "solutionLink": "/Notes/leetcode-graphs#solution-3-union-find-disjoint-set-union---graphsomething",
       "blog": "LeetCode: Graphs"
@@ -1683,13 +1855,77 @@
       "blog": "LeetCode: Trees"
     }
   ],
+  "300": [
+    {
+      "number": 1,
+      "name": "Dynamic Programming",
+      "type": "graph",
+      "application": "something",
+      "code": "def lengthOfLIS(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 0:\n            return 0\n\n        dp = [1] * n  # dp[i] = length of LIS ending at i\n\n        for i in range(n):\n            for j in range(i):\n                if nums[i] > nums[j]:\n                    dp[i] = max(dp[i], dp[j] + 1)\n\n        return max(dp)",
+      "questionNumber": 300,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-dynamic-programming---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Binary Search Patience Sorting",
+      "type": "graph",
+      "application": "something",
+      "code": "def lengthOfLIS(self, nums: List[int]) -> int:\n        tails = []\n\n        for num in nums:\n            # find insertion point in tails\n            index = bisect.bisect_left(tails, num)\n            if index == len(tails):\n                tails.append(num)  # extend LIS\n            else:\n                tails[index] = num  # replace to keep minimal tail\n\n        return len(tails)",
+      "questionNumber": 300,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-binary-search-patience-sorting---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "Binary Search",
+      "type": "graph",
+      "application": "something",
+      "code": "def lengthOfLIS(self, nums: List[int]) -> int:\n        tails = []\n\n        for num in nums:\n            left, right = 0, len(tails) - 1\n            # binary search for the first tail >= num\n            while left <= right:\n                mid = (left + right) // 2\n                if tails[mid] < num:\n                    left = mid + 1\n                else:\n                    right = mid - 1\n            # left is the correct insertion/replacement index\n            if left == len(tails):\n                tails.append(num)\n            else:\n                tails[left] = num\n\n        return len(tails)",
+      "questionNumber": 300,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-binary-search---graphsomething",
+      "blog": "Dynamic Programming"
+    }
+  ],
+  "322": [
+    {
+      "number": 1,
+      "name": "Dynamic Programming Bottom Up",
+      "type": "graph",
+      "application": "something",
+      "code": "def coinChange(self, coins: List[int], amount: int) -> int:\n        # large value for initialization\n        max_val = amount + 1\n        dp = [max_val] * (amount + 1)\n        dp[0] = 0  # zero coins needed for amount 0\n\n        for a in range(1, amount + 1):\n            for coin in coins:\n                if a - coin >= 0:\n                    dp[a] = min(dp[a], dp[a - coin] + 1)\n\n        return dp[amount] if dp[amount] != max_val else -1",
+      "questionNumber": 322,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-dynamic-programming-bottom-up---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Recursive DP with Memoization",
+      "type": "graph",
+      "application": "something",
+      "code": "def coinChange(self, coins: List[int], amount: int) -> int:\n        \n        memo = {}\n\n        def dfs(rem: int) -> int:\n            if rem < 0:\n                return -1\n            if rem == 0:\n                return 0\n            if rem in memo:\n                return memo[rem]\n\n            min_coins = float('inf')\n            for coin in coins:\n                res = dfs(rem - coin)\n                if res >= 0:\n                    min_coins = min(min_coins, res + 1)\n\n            memo[rem] = -1 if min_coins == float('inf') else min_coins\n            return memo[rem]\n\n        return dfs(amount)",
+      "questionNumber": 322,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-recursive-dp-with-memoization---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def coinChange(self, coins: List[int], amount: int) -> int:\n        \n        if amount == 0:\n            return 0\n\n        queue = deque([(amount, 0)])  # (remaining amount, steps)\n        visited = set([amount])\n\n        while queue:\n            rem, steps = queue.popleft()\n            for coin in coins:\n                next_rem = rem - coin\n                if next_rem == 0:\n                    return steps + 1  # reached amount 0\n                elif next_rem > 0 and next_rem not in visited:\n                    visited.add(next_rem)\n                    queue.append((next_rem, steps + 1))\n\n        return -1  # impossible to reach",
+      "questionNumber": 322,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-bfs---graphsomething",
+      "blog": "Dynamic Programming"
+    }
+  ],
   "323": [
     {
       "number": 1,
       "name": "DFS",
       "type": "graph",
       "application": "something",
-      "code": "def countComponents(self, n: int, edges: List[List[int]]) -> int:\n        # build adjacency list\n        graph = defaultdict(list)\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n        \n        visited = set()\n        \n        def dfs(node):\n            for nei in graph[node]:\n                if nei not in visited:\n                    visited.add(nei)\n                    dfs(nei)\n        \n        components = 0\n        for i in range(n):\n            if i not in visited:\n                visited.add(i)\n                dfs(i)\n                components += 1\n        return components",
+      "code": "def countComponents(self, n: int, edges: List[List[int]]) -> int:\n        \n        # Note:\n        # 1. Build adjacency list for graph representation.\n        # 2. DFS explores all nodes in a connected component.\n        # 3. Track visited nodes in a set.\n        # 4. Increment components count when starting DFS from unvisited node.\n        \n        # build adjacency list, graph setup\n        graph = defaultdict(list)\n        for u, v in edges:\n            graph[u].append(v)\n            graph[v].append(u)\n        \n        visited = set()\n        \n        def dfs(node):\n            for nei in graph[node]:\n                if nei not in visited:\n                    visited.add(nei)\n                    dfs(nei)\n        \n        components = 0\n        for i in range(n):\n            if i not in visited:\n                visited.add(i)\n                dfs(i)\n                components += 1\n        return components",
       "questionNumber": 323,
       "solutionLink": "/Notes/leetcode-graphs#solution-1-dfs---graphsomething",
       "blog": "LeetCode: Graphs"
@@ -1809,6 +2045,28 @@
       "questionNumber": 402,
       "solutionLink": "/Notes/leetcode-stacks#solution-1-forward-iteration-monotonic-increasing-digits-stack---stackmonotonic-property-maintenance",
       "blog": "LeetCode: Stacks"
+    }
+  ],
+  "416": [
+    {
+      "number": 1,
+      "name": "Dynamic Programming Subset Sum",
+      "type": "graph",
+      "application": "something",
+      "code": "def canPartition(self, nums: List[int]) -> bool:\n        total = sum(nums)\n        # If total sum is odd, cannot partition equally\n        if total % 2 != 0:\n            return False\n\n        target = total // 2\n        n = len(nums)\n\n        # dp[i] = True if sum i is achievable with some subset\n        dp = [False] * (target + 1)\n        dp[0] = True  # sum 0 is always achievable\n\n        for num in nums:\n            # iterate backwards to avoid using the same number twice\n            for i in range(target, num - 1, -1):\n                dp[i] = dp[i] or dp[i - num]\n\n        return dp[target]",
+      "questionNumber": 416,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-dynamic-programming-subset-sum---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Bitmask Bitset DP",
+      "type": "graph",
+      "application": "something",
+      "code": "def canPartition(self, nums: List[int]) -> bool:\n        total = sum(nums)\n        # If total sum is odd, cannot partition equally\n        if total % 2 != 0:\n            return False\n\n        target = total // 2\n        n = len(nums)\n\n        # dp[i] = True if sum i is achievable with some subset\n        dp = [False] * (target + 1)\n        dp[0] = True  # sum 0 is always achievable\n\n        for num in nums:\n            # iterate backwards to avoid using the same number twice\n            for i in range(target, num - 1, -1):\n                dp[i] = dp[i] or dp[i - num]\n\n        return dp[target]",
+      "questionNumber": 416,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-bitmask-bitset-dp---graphsomething",
+      "blog": "Dynamic Programming"
     }
   ],
   "417": [
@@ -1993,6 +2251,28 @@
       "blog": "LeetCode: Heaps"
     }
   ],
+  "647": [
+    {
+      "number": 1,
+      "name": "Two Pointers Expand Around Center",
+      "type": "graph",
+      "application": "something",
+      "code": "def countSubstrings(self, s: str) -> int:\n        n = len(s)\n        count = 0\n\n        # helper: expand from center\n        def expand(l: int, r: int) -> int:\n            local_count = 0\n            while l >= 0 and r < n and s[l] == s[r]:\n                local_count += 1   # found a palindrome\n                l -= 1\n                r += 1\n            return local_count\n\n        # expand around all possible centers\n        for i in range(n):\n            count += expand(i, i)     # odd-length palindromes\n            count += expand(i, i + 1) # even-length palindromes\n\n        return count",
+      "questionNumber": 647,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-two-pointers-expand-around-center---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Dynamic Programming",
+      "type": "graph",
+      "application": "something",
+      "code": "def countSubstrings(self, s: str) -> int:\n        n = len(s)\n        dp = [[False] * n for _ in range(n)]\n        count = 0\n\n        # single characters\n        for i in range(n):\n            dp[i][i] = True\n            count += 1\n\n        # substring lengths 2 -> n\n        for length in range(2, n + 1):\n            for i in range(n - length + 1):\n                j = i + length - 1\n                if s[i] == s[j]:\n                    if length == 2 or dp[i + 1][j - 1]:\n                        dp[i][j] = True\n                        count += 1\n\n        return count",
+      "questionNumber": 647,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-dynamic-programming---graphsomething",
+      "blog": "Dynamic Programming"
+    }
+  ],
   "684": [
     {
       "number": 1,
@@ -2121,6 +2401,38 @@
       "questionNumber": 739,
       "solutionLink": "/Notes/leetcode-stacks#solution-3-dynamic-programming-jump-traversal-using-future-warm-temperatures---stackalgorithm",
       "blog": "LeetCode: Stacks"
+    }
+  ],
+  "746": [
+    {
+      "number": 1,
+      "name": "Recursive with Explicit Memoization Top Down",
+      "type": "graph",
+      "application": "something",
+      "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        n = len(cost)\n        memo = {}\n\n        def dfs(i):\n            if i >= n:  # Reached or passed top\n                return 0\n            if i in memo:  # Avoid recomputation\n                return memo[i]\n            \n            memo[i] = cost[i] + min(dfs(i+1), dfs(i+2))\n            return memo[i]\n\n        # Can start from index 0 or 1\n        return min(dfs(0), dfs(1))",
+      "questionNumber": 746,
+      "solutionLink": "/Notes/dynamic-programming#solution-1-recursive-with-explicit-memoization-top-down---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 2,
+      "name": "Iterative DP Bottom Up",
+      "type": "graph",
+      "application": "something",
+      "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        \n        n = len(cost)\n        dp = [0] * n\n        dp[0], dp[1] = cost[0], cost[1]\n\n        for i in range(2, n):\n            dp[i] = cost[i] + min(dp[i-1], dp[i-2])\n\n        return min(dp[n-1], dp[n-2])",
+      "questionNumber": 746,
+      "solutionLink": "/Notes/dynamic-programming#solution-2-iterative-dp-bottom-up---graphsomething",
+      "blog": "Dynamic Programming"
+    },
+    {
+      "number": 3,
+      "name": "Space Optimized DP",
+      "type": "graph",
+      "application": "something",
+      "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        \n        n = len(cost)\n        prev2, prev1 = cost[0], cost[1]  # dp[0], dp[1]\n\n        for i in range(2, n):\n            curr = cost[i] + min(prev1, prev2)\n            prev2, prev1 = prev1, curr  # slide window forward\n\n        return min(prev1, prev2)",
+      "questionNumber": 746,
+      "solutionLink": "/Notes/dynamic-programming#solution-3-space-optimized-dp---graphsomething",
+      "blog": "Dynamic Programming"
     }
   ],
   "853": [

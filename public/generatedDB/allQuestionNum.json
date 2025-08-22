@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "2": {
     "questionNum": 2,
@@ -60,7 +60,7 @@
   },
   "5": {
     "questionNum": 5,
-    "questionTitle": "Longest Palindromic Substring ::2::",
+    "questionTitle": "Longest Palindromic Substring ::3::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a string s, return the longest palindromic substring in s.",
     "questionTopics": [
@@ -68,10 +68,10 @@
       "String",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/leetcode-two-pointers#5-longest-palindromic-substring-2---medium",
-    "blog": "LeetCode: Two Pointers",
+    "questionLink": "/Notes/dynamic-programming#5-longest-palindromic-substring-3---medium",
+    "blog": "Dynamic Programming",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "11": {
     "questionNum": 11,
@@ -86,7 +86,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "15": {
     "questionNum": 15,
@@ -102,7 +102,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "17": {
     "questionNum": 17,
@@ -145,7 +145,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 39
+    "coldnessCount": 40
   },
   "21": {
     "questionNum": 21,
@@ -219,7 +219,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 28
+    "coldnessCount": 29
   },
   "36": {
     "questionNum": 36,
@@ -234,7 +234,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "39": {
     "questionNum": 39,
@@ -279,7 +279,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "46": {
     "questionNum": 46,
@@ -309,7 +309,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "51": {
     "questionNum": 51,
@@ -322,6 +322,21 @@
     ],
     "questionLink": "/Notes/leetcode-backtracking#51-n-queens-1---hard",
     "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "70": {
+    "questionNum": 70,
+    "questionTitle": "Climbing Stairs ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "questionTopics": [
+      "Math",
+      "Dynamic Programming",
+      "Memoization"
+    ],
+    "questionLink": "/Notes/dynamic-programming#70-climbing-stairs-2---easy",
+    "blog": "Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -338,7 +353,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 28
+    "coldnessCount": 29
   },
   "76": {
     "questionNum": 76,
@@ -414,6 +429,20 @@
     ],
     "questionLink": "/Notes/leetcode-backtracking#90-subsets-ii-1---medium",
     "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "91": {
+    "questionNum": 91,
+    "questionTitle": "Decode Ways ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You have intercepted a secret message encoded as a string of numbers. The message is decoded via the following mapping: \"1\" -> 'A' \"2\" -> 'B' ... \"25\" -> 'Y' \"26\" -> 'Z' However, while decoding the message, you realize that there are many different ways you can decode the message because some codes are contained in other codes (\"2\" and \"5\" vs \"25\"). For example, \"11106\" can be decoded into: \"AAJF\" with the grouping (1, 1, 10, 6) \"KJF\" with the grouping (11, 10, 6) The grouping (1, 11, 06) is invalid because \"06\" is not a valid code (only \"6\" is valid). Note: there may be strings that are impossible to decode. Given a string s containing only digits, return the number of ways to decode it. If the entire string cannot be decoded in any valid way, return 0. The test cases are generated so that the answer fits in a 32-bit integer.",
+    "questionTopics": [
+      "String",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#91-decode-ways-2---medium",
+    "blog": "Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -555,7 +584,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "127": {
     "questionNum": 127,
@@ -585,7 +614,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "130": {
     "questionNum": 130,
@@ -646,6 +675,24 @@
     ],
     "questionLink": "/Notes/leetcode-linked-list#138-copy-list-with-random-pointer-3---medium",
     "blog": "LeetCode: Linked List",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "139": {
+    "questionNum": 139,
+    "questionTitle": "Word Break ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space separated sequence of one or more dictionary words. Note that the same word in the dictionary may be reused multiple times in the segmentation.",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "String",
+      "Dynamic Programming",
+      "Trie",
+      "Memoization"
+    ],
+    "questionLink": "/Notes/dynamic-programming#139-word-break-3---medium",
+    "blog": "Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -710,7 +757,21 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 40
+    "coldnessCount": 41
+  },
+  "152": {
+    "questionNum": 152,
+    "questionTitle": "Maximum Product Subarray ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums, find a subarray that has the largest product, and return the product. The test cases are generated so that the answer will fit in a 32-bit integer.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#152-maximum-product-subarray-2---medium",
+    "blog": "Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "153": {
     "questionNum": 153,
@@ -724,7 +785,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 28
+    "coldnessCount": 29
   },
   "155": {
     "questionNum": 155,
@@ -738,7 +799,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 39
+    "coldnessCount": 40
   },
   "162": {
     "questionNum": 162,
@@ -767,7 +828,21 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-sorted-array-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
+  },
+  "198": {
+    "questionNum": 198,
+    "questionTitle": "House Robber ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night. Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#198-house-robber-3---medium",
+    "blog": "Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "199": {
     "questionNum": 199,
@@ -895,6 +970,20 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "213": {
+    "questionNum": 213,
+    "questionTitle": "House Robber II ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night. Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#213-house-robber-ii-2---medium",
+    "blog": "Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "215": {
     "questionNum": 215,
     "questionTitle": "Kth Largest Element in an Array ::2::",
@@ -927,7 +1016,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "226": {
     "questionNum": 226,
@@ -989,7 +1078,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "239": {
     "questionNum": 239,
@@ -1021,7 +1110,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "261": {
     "questionNum": 261,
@@ -1051,7 +1140,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "287": {
     "questionNum": 287,
@@ -1104,6 +1193,36 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "300": {
+    "questionNum": 300,
+    "questionTitle": "Longest Increasing Subsequence ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums, return the length of the longest strictly increasing subsequence. Follow up: Can you come up with an algorithm that runs in O(n log(n)) time complexity?",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#300-longest-increasing-subsequence-2---medium",
+    "blog": "Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "322": {
+    "questionNum": 322,
+    "questionTitle": "Coin Change ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money. Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1. You may assume that you have an infinite number of each kind of coin.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Breadth First Search"
+    ],
+    "questionLink": "/Notes/dynamic-programming#322-coin-change-2---medium",
+    "blog": "Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "323": {
     "questionNum": 323,
     "questionTitle": "Number of Connected Components in an Undirected Graph ::3::",
@@ -1138,7 +1257,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 42
+    "coldnessCount": 43
   },
   "355": {
     "questionNum": 355,
@@ -1169,6 +1288,20 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#402-remove-k-digits-1---medium",
     "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "416": {
+    "questionNum": 416,
+    "questionTitle": "Partition Equal Subset Sum ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#416-partition-equal-subset-sum-2---medium",
+    "blog": "Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1268,6 +1401,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "647": {
+    "questionNum": 647,
+    "questionTitle": "Palindromic Substrings ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string s, return the number of palindromic substrings in it. A string is a palindrome when it reads the same backward as forward. A substring is a contiguous sequence of characters within the string.",
+    "questionTopics": [
+      "Two Pointers",
+      "String",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#647-palindromic-substrings-2---medium",
+    "blog": "Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "684": {
     "questionNum": 684,
     "questionTitle": "Redundant Connection ::3::",
@@ -1331,7 +1479,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 28
+    "coldnessCount": 29
   },
   "739": {
     "questionNum": 739,
@@ -1347,6 +1495,20 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#739-daily-temperatures-3---medium",
     "blog": "LeetCode: Stacks",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "746": {
+    "questionNum": 746,
+    "questionTitle": "Min Cost Climbing Stairs ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an integer array cost where cost[i] is the cost of ith step on a staircase. Once you pay the cost, you can either climb one or two steps. You can either start from the step with index 0, or the step with index 1. Return the minimum cost to reach the top of the floor.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/dynamic-programming#746-min-cost-climbing-stairs-3---medium",
+    "blog": "Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1381,7 +1543,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 28
+    "coldnessCount": 29
   },
   "973": {
     "questionNum": 973,

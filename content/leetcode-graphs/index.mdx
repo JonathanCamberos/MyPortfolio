@@ -1668,7 +1668,7 @@ determine if you can finish all courses.
             graph[prereq].append(course)
             indegree[course] += 1
 
-        # Process Roots -> start with courses without prerequisites
+        # Process Roots -> start with courses without prerequisites (0 indegree)
         queue = deque([i for i in range(numCourses) if indegree[i] == 0])
         count = 0
 
@@ -1758,40 +1758,75 @@ and return the order to finish all courses.
 ### Solution 1: DFS Topological Sort with Cycle Detection - Graph/something
 ```python
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        
+        # Note:
+        # 1. Build graph (prereq -> list of courses that depend on it).
+        # 2. Use DFS to perform topological sort and detect cycles.
+        #    visited[course] = 0: unvisited
+        #    visited[course] = 1: visiting
+        #    visited[course] = 2: visited
+        # 3. Append course to result post DFS (postorder).
+        # 4. If a cycle is detected, return [].
+        # 5. Reverse postorder to get valid course order.
+        
+        # Graph setup
         graph = {i: [] for i in range(numCourses)}
         for course, prereq in prerequisites:
             graph[prereq].append(course)
 
+        # Status array
         visited = [0] * numCourses  # 0 = unvisited, 1 = visiting, 2 = visited
         res = []
         self.is_possible = True
 
         def dfs(course):
-            if visited[course] == 1:  # cycle detected
+            # Early Prune -> cycle detected
+            if visited[course] == 1:
                 self.is_possible = False
                 return
-            if visited[course] == 2:  # already processed
+
+            # Late Prune -> already processed
+            if visited[course] == 2:
                 return
 
+            # Process Root -> mark as visited
             visited[course] = 1
+
+            # Process Choices -> neighbors and dependent courses
             for nei in graph[course]:
                 dfs(nei)
+
+                # Early exit if cycle
                 if not self.is_possible:
                     return
+
+            # Post order append
             visited[course] = 2
             res.append(course)
 
+        # Iterate over all Roots
         for c in range(numCourses):
             if visited[c] == 0:
                 dfs(c)
                 if not self.is_possible:
                     return []
-        return res[::-1]  # reverse postorder
+
+        # Reverse post order to get correct order
+        return res[::-1]
 ```
 
-### Solution 2: DFS Topological Sort with Cycle Detection - Graph/something
+### Solution 2: BFS Topological Sort - Graph/something
 ```python
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        
+        # Note:
+        # 1. Build graph (prereq -> dependent courses) and indegree array.
+        # 2. BFS from courses with indegree 0 (roots).
+        # 3. For each root, decrement indegree of neighbors.
+        # 4. Add neighbor to queue if indegree becomes 0.
+        # 5. Return order if all courses processed, else [] (cycle detected).
+        
+        # Graph and indegree setup
         indegree = [0] * numCourses
         graph = {i: [] for i in range(numCourses)}
 
@@ -1799,17 +1834,23 @@ and return the order to finish all courses.
             graph[prereq].append(course)
             indegree[course] += 1
 
+        # Process Roots -> courses with no prerequisites
         queue = deque([i for i in range(numCourses) if indegree[i] == 0])
         res = []
 
         while queue:
             curr = queue.popleft()
             res.append(curr)
+
+            # Early Choices -> decrement indegree of neighbors 
             for nei in graph[curr]:
                 indegree[nei] -= 1
+
+                # Early Prune -> add to queue when indegree is 0
                 if indegree[nei] == 0:
                     queue.append(nei)
 
+        # Check for cycles -> if all courses processed
         return res if len(res) == numCourses else []
 ```
 
@@ -1869,20 +1910,35 @@ Given a list of undirected edges, check if valid tree is made.
 ### Solution 1: DFS Cycle Detection + Connectivity Check - Graph/something
 ```python
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
-        if len(edges) != n - 1:  # a tree must have exactly n-1 edges
+        
+        # Note:
+        # 1. A valid tree must have exactly n-1 edges.
+        # 2. Use DFS to check for cycles and connectivity.
+        # 3. visited set tracks nodes we've seen.
+        # 4. parent parameter prevents backtracking to previous node.
+        
+        # Early Prune -> must have n-1 edges
+        if len(edges) != n - 1:
             return False
 
+        # Graph setup
         graph = {i: [] for i in range(n)}
         for u, v in edges:
             graph[u].append(v)
             graph[v].append(u)
 
+        # seen
         visited = set()
 
         def dfs(node, parent):
+            # Early Prune -> cycle detected
             if node in visited:
                 return False
+
+            # Process Root -> mark as visited
             visited.add(node)
+
+            # Process Choices -> neighbors
             for nei in graph[node]:
                 if nei == parent:
                     continue
@@ -1890,54 +1946,85 @@ Given a list of undirected edges, check if valid tree is made.
                     return False
             return True
 
+        # Start DFS from node 0 and check connectivity
         return dfs(0, -1) and len(visited) == n
 ```
 
 ### Solution 2: BFS Cycle Detection + Connectivity Check - Graph/something
 ```python
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
+
+        # Note:
+        # 1. A valid tree must have exactly n-1 edges.
+        # 2. Use BFS to check for cycles and connectivity.
+        # 3. visited set tracks nodes we've seen.
+        # 4. parent in queue prevents revisiting previous node.
+
+        # Early prune -> must have n-1 edges
         if len(edges) != n - 1:
             return False
 
+        # Graph setup
         graph = {i: [] for i in range(n)}
         for u, v in edges:
             graph[u].append(v)
             graph[v].append(u)
 
+        # seen
         visited = set()
         queue = deque([(0, -1)])
 
         while queue:
             node, parent = queue.popleft()
+
+            # Early Prune -> cycle detected
             if node in visited:
                 return False
+
+            # Process Root -> mark as visited
             visited.add(node)
+
+            # Process Choices -> neighbors
             for nei in graph[node]:
                 if nei != parent:
                     queue.append((nei, node))
 
+        # Check connectivity
         return len(visited) == n
 ```
 
 ### Solution 3: Union Find Disjoint Set Union - Graph/something
 ```python
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
+
+        # Note:
+        # 1. A valid tree must have exactly n-1 edges.
+        # 2. Union Find detects cycles efficiently.
+        # 3. Path compression + union by rank for optimization.
+        # 4. If union fails, cycle detected -> return False.
+
+        # Early Prune -> must have n-1 edges
         if len(edges) != n - 1:
             return False
 
         parent = [i for i in range(n)]
         rank = [1] * n
 
+        # Find with Path Compression
         def find(x):
             while x != parent[x]:
                 parent[x] = parent[parent[x]]  # path compression
                 x = parent[x]
             return x
 
+        # Union by Rank
         def union(x, y):
             rootX, rootY = find(x), find(y)
+            # Early Prune -> cycle detected
             if rootX == rootY:
-                return False  # cycle detected
+                return False
+
+            # Merge trees
             if rank[rootX] > rank[rootY]:
                 parent[rootY] = rootX
             elif rank[rootX] < rank[rootY]:
@@ -1947,10 +2034,13 @@ Given a list of undirected edges, check if valid tree is made.
                 rank[rootX] += 1
             return True
 
+        # Process all edges
         for u, v in edges:
             if not union(u, v):
                 return False
 
+        # overall: time complexity
+        # overall: space complexity
         return True
 ```
 
@@ -2010,7 +2100,14 @@ Given a list of undirected edges, return number of connected components.
 ### Solution 1: DFS - Graph/something
 ```python
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
-        # build adjacency list
+        
+        # Note:
+        # 1. Build adjacency list for graph representation.
+        # 2. DFS explores all nodes in a connected component.
+        # 3. Track visited nodes in a set.
+        # 4. Increment components count when starting DFS from unvisited node.
+        
+        # build adjacency list, graph setup
         graph = defaultdict(list)
         for u, v in edges:
             graph[u].append(v)

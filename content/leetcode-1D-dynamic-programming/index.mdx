@@ -1,0 +1,1605 @@
+---
+title: "Dynamic Programming"
+description: "dynamic programming"
+image: "../../public/Notes/dynamic-programming.png"
+publishedAt: "2025-05-03"
+updatedAt: "2025-05-03" 
+author: "jonathancamberos"
+isPublished: true
+tags: 
+- data structures and algorithms
+---
+
+## Intro
+
+Dynamic Programming is a technique aimed at taking advantage 
+of overlapping subproblems. 
+
+It involves breaking down a problem into its subproblems,
+solving each subproblem only once, and storing its result to avoid redundant calculations
+
+Here is a good refresher video to [dynamic programming.](https://www.youtube.com/watch?v=r4-cftqTcdI)
+
+First easy steps to Dynamic Programming:
+
+1. Define Subproblems
+2. Guess (part of sol.)
+3. Recurrence (time/sub)
+4. Recurse and memoize (check recurrence is acyclic) or Build it Botton-up (need a topological order)
+We get the total running time = # subproblems * time/subproblem
+5. Solve Original Problem
+
+## 70. Climbing Stairs ::2:: - Easy
+
+Topics:  Math, Dynamic Programming, Memoization
+
+### Intro
+> You are climbing a staircase. It takes n steps to reach   
+> the top.
+> Each time you can either climb 1 or 2 steps. In how 
+> many distinct ways can you climb to the top?
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 2 | 2 |
+| n = 3 | 3 |
+
+Constraints:
+
+1 &leq; n &leq; 45
+
+### Abstraction
+Given a number of steps, return the number of unique ways to reach the top,
+by either climbing 1 or 2 steps at a time.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive with Memoization Top Down - Graph/something
+```python
+    def climbStairs(self, n: int) -> int:
+        memo = {}
+
+        def dfs(i):
+            if i in memo:
+                return memo[i]
+            
+            # Base cases
+            if i == n:
+                return 1   # Found valid path
+            if i > n:
+                return 0   # Overshoot
+            
+            # Recursive branching
+            memo[i] = dfs(i + 1) + dfs(i + 2)
+            return memo[i]
+
+        return dfs(0)
+
+```
+
+### Solution 2: Iterative DP Bottom Up Optimal - Graph/something
+```python
+    def climbStairs(self, n: int) -> int:
+        
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+
+        prev2, prev1 = 1, 2  # f(1), f(2)
+        
+        for i in range(3, n + 1):
+            curr = prev1 + prev2
+            prev2, prev1 = prev1, curr  # Slide window forward
+        
+        return prev1
+```
+
+
+## 746. Min Cost Climbing Stairs ::3:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are given an integer array cost where cost[i] is 
+> the cost of ith step on a staircase. Once you pay the 
+> cost, you can either climb one or two steps.
+> You can either start from the step with index 0, or the 
+> step with index 1.
+> Return the minimum cost to reach the top of the floor.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| cost = [10,15,20] | 15 |
+| [1,100,1,1,1,100,1,1,100,1] | 6 |
+
+Constraints:
+
+2 &leq; cost.length &leq; 1000
+
+0 &leq; cost[i] &leq; 999
+
+### Abstraction
+Given a number of steps, and the cost to process a step,
+find the cheapest cost to climb to the top.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive with Explicit Memoization Top Down - Graph/something
+```python
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        n = len(cost)
+        memo = {}
+
+        def dfs(i):
+            if i >= n:  # Reached or passed top
+                return 0
+            if i in memo:  # Avoid recomputation
+                return memo[i]
+            
+            memo[i] = cost[i] + min(dfs(i+1), dfs(i+2))
+            return memo[i]
+
+        # Can start from index 0 or 1
+        return min(dfs(0), dfs(1))
+
+```
+
+### Solution 2: Iterative DP Bottom Up - Graph/something
+```python
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        
+        n = len(cost)
+        dp = [0] * n
+        dp[0], dp[1] = cost[0], cost[1]
+
+        for i in range(2, n):
+            dp[i] = cost[i] + min(dp[i-1], dp[i-2])
+
+        return min(dp[n-1], dp[n-2])
+```
+
+### Solution 3: Space Optimized DP - Graph/something
+```python
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        
+        n = len(cost)
+        prev2, prev1 = cost[0], cost[1]  # dp[0], dp[1]
+
+        for i in range(2, n):
+            curr = cost[i] + min(prev1, prev2)
+            prev2, prev1 = prev1, curr  # slide window forward
+
+        return min(prev1, prev2)
+```
+
+## 198. House Robber ::3:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are a professional robber planning to rob houses 
+> along a street. Each house has a certain amount of 
+> money stashed, the only constraint stopping you from 
+> robbing each of them is that adjacent houses have 
+> security systems connected and it will automatically 
+> contact the police if two adjacent houses were 
+> broken into on the same night.
+> Given an integer array nums representing the amount 
+> of money of each house, return the maximum amount 
+> of money you can rob tonight without alerting the police.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,2,3,1] | 4 |
+| nums = [2,7,9,3,1] | 12 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 100
+
+0 &leq; nums[i] &leq; 400
+
+### Abstraction
+Given an array of cash, determine the max you can steal when you
+cannot steal from two adjacent entries.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive with Explicit Memoization Top Down - Graph/something
+```python
+    def rob(self, nums: List[int]) -> int:
+        memo = {}
+
+        def dfs(i):
+            if i < 0:  # No houses left
+                return 0
+            if i in memo:
+                return memo[i]
+            
+            # Two choices: rob current or skip it
+            memo[i] = max(dfs(i-1), nums[i] + dfs(i-2))
+            return memo[i]
+
+        return dfs(len(nums) - 1)
+```
+
+### Solution 2: Iterative DP Bottom Up - Graph/something
+```python
+    def rob(self, nums: List[int]) -> int:
+        
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+
+        dp = [0] * n
+        dp[0], dp[1] = nums[0], max(nums[0], nums[1])
+
+        for i in range(2, n):
+            dp[i] = max(dp[i-1], nums[i] + dp[i-2])
+
+        return dp[-1]
+```
+
+### Solution 3: Space Optimized DP - Graph/something
+```python
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+
+        prev2, prev1 = nums[0], max(nums[0], nums[1])
+
+        for i in range(2, n):
+            curr = max(prev1, nums[i] + prev2)
+            prev2, prev1 = prev1, curr  # Slide window
+
+        return prev1
+```
+
+
+## 213. House Robber II ::2:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are a professional robber planning to rob houses 
+> along a street. Each house has a certain amount of 
+> money stashed. All houses at this place are arranged 
+> in a circle. That means the first house is the neighbor 
+> of the last one. Meanwhile, adjacent houses have a 
+> security system connected, and it will automatically 
+> contact the police if two adjacent houses were 
+> broken into on the same night.
+> Given an integer array nums representing the amount 
+> of money of each house, return the maximum amount 
+> of money you can rob tonight without alerting the police.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = nums = [2,3,2] | 3 |
+| nums = [1,2,3,1] | 4 |
+| nums = [1,2,3] | 3 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 100
+
+0 &leq; nums[i] &leq; 1000
+
+### Abstraction
+Given an array of cash, determine the max you can steal when you
+cannot steal from two adjacent entries, when array is circular.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive with Explicit Memoization Top Down - Graph/something
+```python
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+
+        def rob_range(start, end):
+            memo = {}
+            def dfs(i):
+                if i < start:  # no house left
+                    return 0
+                if i in memo:
+                    return memo[i]
+                # rob current or skip
+                memo[i] = max(dfs(i-1), nums[i] + dfs(i-2))
+                return memo[i]
+            return dfs(end)
+
+        # exclude last OR exclude first
+        return max(rob_range(0, n-2), rob_range(1, n-1))
+```
+
+
+### Solution 2: Iterative DP Bottom Up - Graph/something
+```python
+    def rob(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+
+        def rob_linear(arr):
+            m = len(arr)
+            if m == 1:
+                return arr[0]
+            dp = [0] * m
+            dp[0], dp[1] = arr[0], max(arr[0], arr[1])
+            for i in range(2, m):
+                dp[i] = max(dp[i-1], arr[i] + dp[i-2])
+            return dp[-1]
+
+        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+```
+
+### Solution 3: Space Optimized DP - Graph/something
+```python
+    def rob(self, nums: List[int]) -> int:
+
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+
+        def rob_linear(arr):
+            prev2, prev1 = 0, 0
+            for num in arr:
+                curr = max(prev1, num + prev2)
+                prev2, prev1 = prev1, curr
+            return prev1
+
+        # Exclude first house OR exclude last house
+        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+```
+
+## 5. Longest Palindromic Substring ::3:: - Medium
+
+Topics: Two Pointers, String, Dynamic Programming
+
+### Intro
+> Given a string s, return the longest palindromic substring in s. 
+
+|  Input | Output  |  
+| ------- | ------- | 
+| "cbbd"  | "bb"           |
+| "babad" | "bab" or "aba" |
+
+
+Constraints: 
+
+1  &leq; s.length &leq; 1000 
+
+s consists of only digits and English letters.
+
+### Abstraction 
+
+Find the longest palindrome in a string.
+
+### Find the Bug: Did not create Expanded String
+```python
+    def longestPalindrome(self, s: str) -> str:
+        
+        # INCORRECT:
+        # did not create expandedStr
+        # did not solve odd vs even palindrome problem
+        # missing:
+        # expandedStr = "#".join(f"^{s}$")
+        
+        center = 0
+        right = 0
+        n = len(s)
+        p = [0] * n
+
+        for i in range(1, n-1):
+            
+            # 1 
+            mirror = (2*center) - i
+
+            # 2 
+            if i < right:
+                p[i] = min(right-i, p[mirror])
+
+            # 3
+            while s[i + p[i] + 1] == s[i - p[i] - 1]:
+                p[i] += 1
+
+            # 4
+            if i + p[i] > right:
+                center = i
+                right = i + p[i]
+        
+        (maxRadius, center) = max((maxRadius, i) for (i, maxRadius) in enumerate(p))
+        start = (center-maxRadius) // 2 
+
+        return s[start:start+maxRadius]
+```
+
+### Find the Bug: Defined List instead of Slicing
+```python
+    def longestPalindrome(self, s: str) -> str:
+        
+        def expandAroundCenter(left, right):
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+
+            # INCORRECT:
+            # defined list instead of slicing
+            # should be: s[left+1:right]
+            return s[left+1, right]
+        
+        n = len(s)
+        maxPalin = ""
+
+        for i in range(n):
+            oddPalin = expandAroundCenter(i, i)
+            evenPalin = expandAroundCenter(i, i+1)
+
+            if len(oddPalin) > len(maxPalin):
+                maxPalin = oddPalin
+            if len(evenPalin) > len(maxPalin):
+                maxPalin = evenPalin
+                
+        return maxPalin
+```
+
+### Find the Bug: Bad iteration leading to out of bounds on string expansion
+```python
+    def longestPalindrome(self, s: str) -> str:
+        
+        expandedStr = "#".join(f"^{s}$")
+        n = len(expandedStr)
+        p = [0] * n
+        center = 0
+        right = 0
+
+        # INCORRECT:
+        # iteration will also expand from the sentinals '^' and '$'
+        for i in range(n):
+
+            # grab mirror
+            mirror = (2*center)-i
+
+            # validate mirror
+            if i < right:
+                p[i] = min(p[mirror], (right-i))
+
+            # expand
+            # INCORRECT:
+            # due to iteration, expansion is not guaranteed and prevent
+            # out of bounds grab, since we are missing the eventual
+            # '^' != '$'
+            while expandedStr[i - p[i] - 1] == expandedStr[i + p[i] + 1]:
+                p[i] += 1
+
+            # find new right most
+            if p[i] + i > right:
+                center = i
+                right = p[i] + i
+
+        # translate back to height
+        maxRadi, center = max((maxRadi, center) for (center, maxRadi) in enumerate(p))
+
+        startIndex = (center-maxRadi)//2
+
+
+        return s[startIndex:startIndex+maxRadi]
+```
+
+### Find the Bug: Bad enumerate method:
+```python
+    def longestPalindrome(self, s: str) -> str:
+        
+        expandedStr = "#".join(f"^{s}$")
+        n = len(expandedStr)
+        p = [0] * n
+        center = 0
+        right = 0
+
+        for i in range(1, n-1):
+
+            # grab mirror
+            mirror = (2*center)-i
+
+            # validate mirror
+            if i < right:
+                p[i] = min(p[mirror], (right-i))
+
+            # expand
+            while expandedStr[i - p[i] - 1] == expandedStr[i + p[i] + 1]:
+                p[i] += 1
+
+            # find new right most
+            if p[i] + i > right:
+                center = i
+                right = p[i] + i
+
+        # translate back to height
+        # INCORRECT:
+        # should be 
+        # enumerate(p)
+        # instead of p.enumerate()
+        maxRadi, center = max((maxRadi, center) for (center, maxRadi) in p.enumerate())
+
+        startIndex = (center-maxRadi)//2
+
+
+        return s[startIndex:startIndex+maxRadi]
+```
+
+### Solution 1: Manacher's Algorithm (iterate, mirror radius optimization, and expand) - Two Pointers/Algorithm
+```python
+    def longestPalindrome(self, s: str) -> str:
+
+        # Note: 
+        # Preprocessing with #, ^, and $:
+        # '#': ensures uniform expansion, for both odd and even length palindromes
+        # '^' and '$': sentinel characters don't match valid input characters, serve as true start and end markers
+        # '#': ensures all palindromes start and end with '#'
+        # '#': occur on odd indexes
+
+        # Mapping:
+        # we can map odd '#' indexes to their even character:
+        # mapping '#' at index 1 to char pair 'a' at index 2, to original 'a' at index 0
+        # [ ^ # a # b # a # $ ] -> [ a b a ]    via : originalStart = (expandedCenter - radius) / 2
+        #   0 1 2 3 4 5 6 7 8        0 1 2      thus: originalStart = (4 - 3) / 2 = 0
+        
+        # Boundary expansion: 
+        # For any index i, center of palindrome at i can either be: 
+        # - character from the original string
+        # - placeholder '#'
+        # Center definition allows even length palindromes such as "abba", see below,
+        # to have a single middle point, allowing the same expanding logic 
+        # for even and odd strings for palindrome validation
+
+        # Ex:
+        # ^ # a # b # b # a # $    || new string len 11,
+        # 0 1 2 3 4 5 6 7 8 9 10   ||
+        #           ^              || index 5 center for even length "abba"
+
+        # index 1 palindrome: "#"
+        # index 2 palindrome: "#a#"
+        # index 5 palindrome: "#a#b#b#a#"
+        # etc...
+
+        expandedStr = "#".join(f"^{s}$")
+        n = len(expandedStr)
+
+        # Right Most Palindrome and Mirror Trick: 
+        # Iteration tracks the right boundary for the current farthest right palindromic substring, 
+        # which allows us to take advantage of the mirror radius trick.
+        # It speeds up palindrome expansion by starting the current palindrome radius
+        # at the radius value of its mirror
+
+        # p[i]: radius of palindrome centered at some index i
+        p = [0] * n
+
+        # mirror radius validation: tracking right boundary
+        # right: right boundary of the current right most palindrome
+        right = 0
+
+        # mirror radius validation: tracking center of right most in order to calculate mirror index
+        # center: center index of the current right most palindrome
+        center = 0 
+
+        # iteration range ignores sentinel indexes 0 and (n-1): ^ and $
+        # i: center of current palindrome
+        # time complexity: iterate over list of n length O(n)
+        for i in range(1, n - 1):
+
+            # mirror:
+            # i is current index being processed
+            # i is to the right of center and has a mirror to the left of center
+            # ex: center = 6, i = 7 => mirror = (2 * 6) - 7 = 5
+            mirror = (2 * center) - i 
+
+            # mirror radius validation:
+            # if i lies within bounds of the right most palindrome,
+            # the right most palindrome symmetry guarantees that the palindrome radius
+            # for the mirror of i, is applicable to i as well,
+            # while within the bounds of the right most palindrome
+            if i < right:
+
+                # mirror radius is either:
+                # - less than the distance between i and right bound,
+                #   in which case all of the radius is valid
+                # - exceeds bounds and is farther than right bound,
+                #   in which case only the radius up until the right bound is valid
+                
+                # i radius is thus, bounded by minimum between: 
+                # - mirror radius
+                # - distance from i to the right bound
+                p[i] = min(right - i, p[mirror])
+
+            # assumption: if valid mirror, we pre-set p[i] to p[mirror]
+            # now expand: expand radius p[i] until palindromic status is broken
+            while expandedStr[i + p[i] + 1] == expandedStr[i - p[i] - 1]:
+                p[i] += 1
+
+            # p[i]: radius for palindrome at i
+            # i: center for palindrome at i
+            # check: if we have a new right most boundary, update center and right 
+            if i + p[i] > right:
+                right = i + p[i]
+                center = i
+
+        # expandedStr iteration complete:
+        # p[] stores radius of palindrome centered at each index
+
+        # scan p[] grabbing max palindrome radius alongside its center
+        maxRadius, centerIndex = max((palindromeRadius, i) for (i, palindromeRadius) in enumerate(p))
+
+        # Note:
+        # index and radius are relative to expandedStr, not the original string
+        # thus, we need to translate to original string indexes
+
+        # Notice, how in the expanded string, 
+        #  - all original characters are on even index
+        #  - all original characters have matching # on the left odd index
+
+        # abba =>  ^ # a # b # b # a # $   | a=2, b=4, b=6, a=8
+        # 0123 =>  0 1 2 3 4 5 6 7 8 9 10  | #=1, #=3, #=5, #=7
+
+        # aba =>   ^ # a # b # a # $       | a=2, b=4, a=6
+        # 012 =>   0 1 2 3 4 5 6 7 8       | #=1, #=3, #=5
+
+        # any palindrome will always end with a '#'.
+        # so if we divide the starting odd position by 2, it will always map
+        # to an original character.
+        # so an easy translation formula is:
+
+        start = (centerIndex - maxRadius) // 2
+        
+        # splice longest substring
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return s[start: start + maxRadius]
+```
+
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Preprocessing | O(n) | O(n) | Building expanded string | Memory allocation for processed string O(n) |
+| Iterating | O(n) | O(1) | Iterate over processed string of n length O(n) | No additional memory allocation for iteration O(1) |
+| Expanding radii | O(n) | O(n) | Radius expansion over processed string of n length O(n) | Radius array to store radii for each index for string of n length O(n) |
+| Updating mirror bounds | O(1) | O(1) | Updating center and right for right most palindrome in constant O(1) | No additional memory allocation for center and right variables O(1) |
+| Overall | O(n) | O(n) | Iterating over expanded string dominates, leading to O(n) time complexity. | Expanding string dominates, leading to O(n) space complexity. |
+
+
+### Solution 2: Expand Around Center checking for Odd and Even palindromes (constant space) - Two Pointers/Algorithm
+```python
+    def longestPalindrome(self, s: str) -> str:
+
+        # expand from a given left and right while 
+        # maintaining palindrome property
+        def expandAroundCenter(left, right):
+            while left >= 0 and right < n and s[left] == s[right]:
+                left -= 1
+                right += 1
+
+            # curr iteration is not valid:
+            # ignore left: incrementing index
+            # ignore right: noninclusive right slicing
+            return s[left+1:right] 
+         
+        n = len(s)
+        maxPalindrome = ""
+
+        # time complexity: iterate over list of n length O(n)
+        for i in range(n):
+            # odd expansion, centered at i
+            oddPalindrome = expandAroundCenter(i, i)      
+            # even expansion, centered at i and i + 1
+            evenPalindrome = expandAroundCenter(i, i+1)
+
+            # update longest
+            if len(oddPalindrome) > len(maxPalindrome):
+                maxPalindrome = oddPalindrome
+            if len(evenPalindrome) > len(maxPalindrome):
+                maxPalindrome = evenPalindrome
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
+        return maxPalindrome
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iterating | O(n) | O(1) | Iterating over list of n length O(n) | No additional memory allocation for iteration O(1) |
+| Odd expansion | O(n^2) | O(1) | For each center, expands outward for odd length palindromes n length O(n), for each outer iteration O(n), leading to O(n^2) | No additional memory allocation needed during expansion O(1) |
+| Even expansion | O(n^2) | O(1) | For each center, expands outward for even length palindromes n length O(n), for each outer iteration O(n), leading to O(n^2) | No additional memory allocation needed during expansion O(1) |
+| Updating longest | O(1) | O(1) | Comparing odd and even length palindrome to current max in constant O(1) | No additional memory allocation needed for comparison to current max O(1) |
+| Overall | O(n^2) | O(1) | Even and odd expansion per outer iteration dominate, leading to O(n<sup>2</sup>) | No additional memory allocation required for in place expansion or iteration, leading to constant O(1) |
+
+
+### Solution 3: Dynamic Programming - Two Pointers/Algorithm
+```python
+        def longestPalindrome(self, s: str) -> str:
+        
+        n = len(s)
+        dp = [[False]*n for _ in range(n)]
+        start, max_len = 0, 1
+
+        for i in range(n):
+            dp[i][i] = True
+
+        for length in range(2, n+1):  # substring length
+            for i in range(n - length + 1):
+                j = i + length - 1
+                if s[i] == s[j]:
+                    if length == 2 or dp[i+1][j-1]:
+                        dp[i][j] = True
+                        if length > max_len:
+                            start, max_len = i, length
+
+        return s[start:start+max_len]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+
+## 647. Palindromic Substrings ::2:: - Medium
+
+Topics:  Two Pointers, String, Dynamic Programming
+
+### Intro
+> Given a string s, return the number of palindromic 
+> substrings in it.
+> A string is a palindrome when it reads the same 
+> backward as forward.
+> A substring is a contiguous sequence of characters 
+> within the string.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "abc" | 3 |
+| s = "aaa" | 6 |
+
+Constraints:
+
+1 &leq; s.length &leq; 1000
+
+s consists of lowercase English letters.
+
+### Abstraction
+Given a string, determine how many palindromic substrings exist.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Two Pointers Expand Around Center - Graph/something
+```python
+    def countSubstrings(self, s: str) -> int:
+        n = len(s)
+        count = 0
+
+        # helper: expand from center
+        def expand(l: int, r: int) -> int:
+            local_count = 0
+            while l >= 0 and r < n and s[l] == s[r]:
+                local_count += 1   # found a palindrome
+                l -= 1
+                r += 1
+            return local_count
+
+        # expand around all possible centers
+        for i in range(n):
+            count += expand(i, i)     # odd-length palindromes
+            count += expand(i, i + 1) # even-length palindromes
+
+        return count
+```
+
+### Solution 2: Dynamic Programming - Graph/something
+```python
+    def countSubstrings(self, s: str) -> int:
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+        count = 0
+
+        # single characters
+        for i in range(n):
+            dp[i][i] = True
+            count += 1
+
+        # substring lengths 2 -> n
+        for length in range(2, n + 1):
+            for i in range(n - length + 1):
+                j = i + length - 1
+                if s[i] == s[j]:
+                    if length == 2 or dp[i + 1][j - 1]:
+                        dp[i][j] = True
+                        count += 1
+
+        return count
+```
+
+
+## 91. Decode Ways ::2:: - Medium
+
+Topics:  String, Dynamic Programming
+
+### Intro
+> You have intercepted a secret message encoded as a 
+> string of numbers. The message is decoded via the 
+> following mapping:
+> "1" -> 'A'
+> "2" -> 'B'
+> ...
+> "25" -> 'Y'
+> "26" -> 'Z'
+> However, while decoding the message, you realize that 
+> there are many different ways you can decode the 
+> message because some codes are contained in other
+> codes ("2" and "5" vs "25").
+> For example, "11106" can be decoded into:
+> "AAJF" with the grouping (1, 1, 10, 6)
+> "KJF" with the grouping (11, 10, 6)
+> The grouping (1, 11, 06) is invalid because 
+> "06" is not a valid code (only "6" is valid).
+> Note: there may be strings that are impossible to decode.
+> Given a string s containing only digits, return the 
+> number of ways to decode it. If the entire string 
+> cannot be decoded in any valid way, return 0.
+> The test cases are generated so that the answer fits in
+> a 32-bit integer.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "12" | 2 |
+| s = "226" | 3 |
+| s = "06" | 0 |
+
+Constraints:
+
+1 &leq; s.length &leq; 100
+
+s contains only digits and may contain leading zero(s).
+
+### Abstraction
+Given a string, determine how many ways there to decode the string.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dynamic Programming Bottom Up - Graph/something
+```python
+    def numDecodings(self, s: str) -> int:
+        n = len(s)
+        if not s or s[0] == '0':
+            return 0
+
+        dp = [0] * (n + 1)
+        dp[0] = 1  # empty string has 1 way
+        dp[1] = 1  # first char is valid (not '0')
+
+        for i in range(2, n + 1):
+            # check one-digit
+            if s[i-1] != '0':
+                dp[i] += dp[i-1]
+
+            # check two-digit
+            two_digit = int(s[i-2:i])
+            if 10 <= two_digit <= 26:
+                dp[i] += dp[i-2]
+
+        return dp[n]
+```
+
+
+### Solution 2: Space Optimized DP - Graph/something
+```python
+    def numDecodings(self, s: str) -> int:
+        if not s or s[0] == '0':
+            return 0
+
+        n = len(s)
+        prev2, prev1 = 1, 1  # dp[0], dp[1]
+
+        for i in range(1, n):
+            curr = 0
+            if s[i] != '0':
+                curr += prev1
+            two_digit = int(s[i-1:i+1])
+            if 10 <= two_digit <= 26:
+                curr += prev2
+            prev2, prev1 = prev1, curr
+
+        return prev1
+```
+
+
+## 322. Coin Change ::2:: - Medium
+
+Topics:  Array, Dynamic Programming, Breadth First Search
+
+### Intro
+> You are given an integer array coins representing
+> coins of different denominations and an integer 
+> amount representing a total amount of money.
+> Return the fewest number of coins that you need to 
+> make up that amount. If that amount of money cannot 
+> be made up by any combination of the coins, return -1.
+> You may assume that you have an infinite number of 
+> each kind of coin.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| coins = [1,2,5], amount = 11 | 3 |
+| coins = [2], amount = 3 | -1 |
+| coins = [1], amount = 0 | 0 |
+
+Constraints:
+
+1 &leq; coins.length &leq; 12
+
+1 &leq; coins[i] &leq; 2<sup>31</sup> - 1
+
+0 &leq; amount &leq; 10<sup>4</sup>
+
+
+### Abstraction
+Given a array of coin cost and a price, determine the minimum number
+of coins needed to make the price.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dynamic Programming Bottom Up - Graph/something
+```python
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # large value for initialization
+        max_val = amount + 1
+        dp = [max_val] * (amount + 1)
+        dp[0] = 0  # zero coins needed for amount 0
+
+        for a in range(1, amount + 1):
+            for coin in coins:
+                if a - coin >= 0:
+                    dp[a] = min(dp[a], dp[a - coin] + 1)
+
+        return dp[amount] if dp[amount] != max_val else -1
+```
+
+### Solution 2: Recursive DP with Memoization - Graph/something
+```python
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        
+        memo = {}
+
+        def dfs(rem: int) -> int:
+            if rem < 0:
+                return -1
+            if rem == 0:
+                return 0
+            if rem in memo:
+                return memo[rem]
+
+            min_coins = float('inf')
+            for coin in coins:
+                res = dfs(rem - coin)
+                if res >= 0:
+                    min_coins = min(min_coins, res + 1)
+
+            memo[rem] = -1 if min_coins == float('inf') else min_coins
+            return memo[rem]
+
+        return dfs(amount)
+```
+
+### Solution 3: BFS - Graph/something
+```python
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        
+        if amount == 0:
+            return 0
+
+        queue = deque([(amount, 0)])  # (remaining amount, steps)
+        visited = set([amount])
+
+        while queue:
+            rem, steps = queue.popleft()
+            for coin in coins:
+                next_rem = rem - coin
+                if next_rem == 0:
+                    return steps + 1  # reached amount 0
+                elif next_rem > 0 and next_rem not in visited:
+                    visited.add(next_rem)
+                    queue.append((next_rem, steps + 1))
+
+        return -1  # impossible to reach
+```
+
+
+
+
+## 152. Maximum Product Subarray ::2:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> Given an integer array nums, find a subarray that has 
+> the largest product, and return the product.
+> The test cases are generated so that the answer will fit 
+> in a 32-bit integer.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [2,3,-2,4] | 6 |
+| nums = [-2,0,-1] | 0 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 2 * 10<sup>4</sup>
+
+-10 &leq; nums[i] &leq; 10
+
+The product of any subarray of nums is guaranteed 
+to fit in a 32-bit integer.
+
+
+### Abstraction
+Given a array, find the subarray with the largest product 
+and return the product.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DP with Rolling Max Min - Graph/something
+```python
+    def maxProduct(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0:
+            return 0
+
+        max_prod = min_prod = result = nums[0]
+
+        for i in range(1, n):
+            num = nums[i]
+            temp_max = max(num, max_prod * num, min_prod * num)
+            min_prod = min(num, max_prod * num, min_prod * num)
+            max_prod = temp_max
+            result = max(result, max_prod)
+
+        return result
+```
+
+### Solution 2: DP Array Version - Graph/something
+```python
+    def maxProduct(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0:
+            return 0
+
+        max_dp = [0] * n
+        min_dp = [0] * n
+        max_dp[0] = min_dp[0] = result = nums[0]
+
+        for i in range(1, n):
+            num = nums[i]
+            max_dp[i] = max(num, max_dp[i-1] * num, min_dp[i-1] * num)
+            min_dp[i] = min(num, max_dp[i-1] * num, min_dp[i-1] * num)
+            result = max(result, max_dp[i])
+
+        return result
+```
+
+
+## 139. Word Break ::3:: - Medium
+
+Topics:  Array, Hash Table, String, Dynamic Programming, Trie, Memoization
+
+### Intro
+> Given a string s and a dictionary of strings wordDict,
+> return true if s can be segmented into a space 
+> separated sequence of one or more dictionary words. 
+> Note that the same word in the dictionary may be 
+> reused multiple times in the segmentation.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "leetcode", wordDict = ["leet","code"] | true |
+| s = "applepenapple", wordDict = ["apple","pen"] | true |
+| s = "catsandog", wordDict = ["cats","dog","sand","and","cat"] | false |
+
+Constraints:
+
+1 &leq; s.length &leq; 300
+
+1 &leq; wordDict.length &leq; 1000
+
+1 &leq; wordDict[i].length &leq; 20
+
+s and wordDict[i] consist of only lowercase English letters.
+
+All the strings of wordDict are unique.
+
+### Abstraction
+Given a string and an array of strings, determine if the string
+can be separated into some combination of strings from the array.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dynamic Programming - Graph/something
+```python
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        word_set = set(wordDict)
+        n = len(s)
+        dp = [False] * (n + 1)
+        dp[0] = True  # empty string is segmentable
+
+        for i in range(1, n + 1):
+            for j in range(i):
+                if dp[j] and s[j:i] in word_set:
+                    dp[i] = True
+                    break  # early prune, found valid segmentation
+
+        return dp[n]
+```
+
+### Solution 2: Recursive DFS with Memoization - Graph/something
+```python
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        word_set = set(wordDict)
+        memo = {}
+
+        def dfs(start: int) -> bool:
+            if start == len(s):
+                return True
+            if start in memo:
+                return memo[start]
+
+            for end in range(start + 1, len(s) + 1):
+                if s[start:end] in word_set and dfs(end):
+                    memo[start] = True
+                    return True
+
+            memo[start] = False
+            return False
+
+        return dfs(0)
+```
+
+### Solution 3: optimal dfs check why - Graph/something
+```python
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        cache = {}
+        def dfs(i):
+            if i == len(s):
+                return True
+            if i > len(s):
+                return False
+            if i in cache:
+                return cache[i]
+            for word in wordDict:
+                if i + len(word) <= len(s) and s[i:i+len(word)] == word:
+                    cache[i] = dfs(i+len(word))
+                    if cache[i]:
+                        return True
+            return False
+        return dfs(0)
+```
+
+
+## 300. Longest Increasing Subsequence ::2:: - Medium
+
+Topics:  Array, Binary Search, Dynamic Programming
+
+### Intro
+> Given an integer array nums, return the length of the 
+> longest strictly increasing subsequence.
+> Follow up: Can you come up with an algorithm that runs
+> in O(n log(n)) time complexity?
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [10,9,2,5,3,7,101,18] | 4 |
+| nums = [0,1,0,3,2,3] | 4 |
+| nums = [7,7,7,7,7,7,7] | 1 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 2500
+
+-10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
+
+### Abstraction
+Given an integer array, find the longest increasing subsequence.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dynamic Programming - Graph/something
+```python
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0:
+            return 0
+
+        dp = [1] * n  # dp[i] = length of LIS ending at i
+
+        for i in range(n):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+
+        return max(dp)
+```
+
+### Solution 2: Binary Search Patience Sorting - Graph/something
+```python
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        tails = []
+
+        for num in nums:
+            # find insertion point in tails
+            index = bisect.bisect_left(tails, num)
+            if index == len(tails):
+                tails.append(num)  # extend LIS
+            else:
+                tails[index] = num  # replace to keep minimal tail
+
+        return len(tails)
+```
+
+### Solution 3: Binary Search - Graph/something
+```python
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        tails = []
+
+        for num in nums:
+            left, right = 0, len(tails) - 1
+            # binary search for the first tail >= num
+            while left <= right:
+                mid = (left + right) // 2
+                if tails[mid] < num:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+            # left is the correct insertion/replacement index
+            if left == len(tails):
+                tails.append(num)
+            else:
+                tails[left] = num
+
+        return len(tails)
+
+```
+
+
+## 416. Partition Equal Subset Sum ::2:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> Given an integer array nums, return true if you can 
+> partition the array into two subsets such that the sum
+> of the elements in both subsets is equal or false 
+> otherwise.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,5,11,5] | true |
+| nums = [1,2,3,5] | false |
+
+Constraints:
+
+1 &leq; nums.length &leq; 200
+
+1 &leq; nums[i] &leq; 100
+
+### Abstraction
+Given an integer array, determine if you can split it into two arrays
+such that the sum of each arrays is equal.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dynamic Programming Subset Sum - Graph/something
+```python
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+        # If total sum is odd, cannot partition equally
+        if total % 2 != 0:
+            return False
+
+        target = total // 2
+        n = len(nums)
+
+        # dp[i] = True if sum i is achievable with some subset
+        dp = [False] * (target + 1)
+        dp[0] = True  # sum 0 is always achievable
+
+        for num in nums:
+            # iterate backwards to avoid using the same number twice
+            for i in range(target, num - 1, -1):
+                dp[i] = dp[i] or dp[i - num]
+
+        return dp[target]
+```
+
+
+### Solution 2: Bitmask Bitset DP - Graph/something
+```python
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+        # If total sum is odd, cannot partition equally
+        if total % 2 != 0:
+            return False
+
+        target = total // 2
+        n = len(nums)
+
+        # dp[i] = True if sum i is achievable with some subset
+        dp = [False] * (target + 1)
+        dp[0] = True  # sum 0 is always achievable
+
+        for num in nums:
+            # iterate backwards to avoid using the same number twice
+            for i in range(target, num - 1, -1):
+                dp[i] = dp[i] or dp[i - num]
+
+        return dp[target]
+```
