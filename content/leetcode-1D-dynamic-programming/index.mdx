@@ -433,42 +433,88 @@ by either climbing 1 or 2 steps at a time.
 ### Solution 1: Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
+
+        # Note:
+        # Top Down DP (memoized recursion)
+        # Start from top and make recursive call creating left/right subtrees
+        # 1. Process root -> current step index i
+        # 2. Explore choices -> move 1 step or 2 steps
+        # 3. Build -> accumulate number of ways to reach n
+        # 4. Memoize -> store results to avoid recomputation
+        # Result: number of ways to climb to the nth step
+
+        # store number of ways from step i to n
         memo = {}
 
         def dfs(i):
+
+            # Process Root -> memoized check
             if i in memo:
                 return memo[i]
             
-            # Base cases
+            # Base Cases -> if step index reaches or overshoots
             if i == n:
-                return 1   # Found valid path
+                # valid path
+                return 1
             if i > n:
+                # overshoot
                 return 0   # Overshoot
             
-            # Recursive branching
-            memo[i] = dfs(i + 1) + dfs(i + 2)
+            # Explore Choices -> move 1 or 2 steps
+            left = dfs(i + 1)
+            right = dfs(i + 2)
+
+            # Build: sum of paths from next steps 
+            memo[i] = left + right
+
+            # Backtrack: return ith
             return memo[i]
 
-        return dfs(0)
+        # initial call from step 0
+        res = dfs(0)
 
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 2: Iterative DP Bottom Up Optimal - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
         
+        # Note:
+        # Bottom-up DP (iterative, optimal space)
+        # Start from bottom, the ways to climb to the ith step, 
+        # is the number of ways to climb to the ith-1 + ith-2 step.
+        # 1. Process root -> initialize base cases f(1), f(2)
+        # 2. Explore choices -> each i-th step = sum of ways to reach i-1 and i-2
+        # 3. Build -> slide window for space optimization
+        # Result: number of ways to climb to the nth step
+
+        # Base cases
         if n == 1:
             return 1
         if n == 2:
             return 2
 
-        prev2, prev1 = 1, 2  # f(1), f(2)
-        
+        # Initialize Sliding Window for f(1) and f(2)
+        prev2, prev1 = 1, 2
+
+        # Process -> compute f(3) to f(n)
         for i in range(3, n + 1):
+
+            # build: sum of previous two
             curr = prev1 + prev2
-            prev2, prev1 = prev1, curr  # Slide window forward
+
+            # Slide Window Forward
+            prev2, prev1 = prev1, curr
         
-        return prev1
+        # f(n)
+        res = prev1
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 
@@ -528,49 +574,115 @@ find the cheapest cost to climb to the top.
 ### Solution 1: Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
+        
+        # Note:
+        # Top-down DP (recursive with memoization)
+        # 1. Process root -> current step index i
+        # 2. Explore choices -> move 1 or 2 steps
+        # 3. Build -> add cost at current step + min cost from next steps
+        # 4. Memoize -> store results to avoid recomputation
+        
         n = len(cost)
+
+        # store min cost from step i to top
         memo = {}
 
         def dfs(i):
-            if i >= n:  # Reached or passed top
-                return 0
-            if i in memo:  # Avoid recomputation
+
+            # Memoized check
+            if i in memo:
                 return memo[i]
+
+            # Base case -> reached or passed top
+            if i >= n:
+                return 0
             
+            # Explore choices -> move 1 or 2 steps
+            left = dfs(i+1)
+            right = dfs(i+2)
+
+            # Build: cost at current step + min of next steps
+            minNext = min(left, right)
             memo[i] = cost[i] + min(dfs(i+1), dfs(i+2))
+
+            # Backtrack: return min at ith
             return memo[i]
 
-        # Can start from index 0 or 1
-        return min(dfs(0), dfs(1))
+        # initial call from step 0 and 1 (can start from either)
+        res1, res2 = dfs(0), dfs(1)
+        res = min(res1, res2)
 
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 2: Iterative DP Bottom Up - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
+        # Note:
+        # Bottom-up DP
+        # 1. Process root -> initialize base costs dp[0], dp[1]
+        # 2. Explore choices -> dp[i] = cost[i] + min(dp[i-1], dp[i-2])
+        # 3. Build -> fill dp array sequentially
+
         n = len(cost)
         dp = [0] * n
+
+        # Base cases:
         dp[0], dp[1] = cost[0], cost[1]
 
+        # Build DP array
         for i in range(2, n):
+
+            # Explore Choices -> previous 2
+            left = dp[i-1]
+            right = dp[i-2]
+
+            # Build -> Cost for current
+            minNext = min(left, right)
             dp[i] = cost[i] + min(dp[i-1], dp[i-2])
 
-        return min(dp[n-1], dp[n-2])
+        # Build -> cost for nth
+        res1, res2 = dp[n-1], dp[n-2]
+        res = min(res1, res2)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 3: Space Optimized DP - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
+        # Note:
+        # Bottom-up DP with space optimization
+        # Only previous two steps are needed for recurrence
+        # 1. Initialize prev2, prev1 -> cost of first two steps
+        # 2. Iterate -> compute current step cost using prev1, prev2
+        # 3. Slide window -> update prev2, prev1
+
         n = len(cost)
-        prev2, prev1 = cost[0], cost[1]  # dp[0], dp[1]
+
+        # Base cases
+        prev2, prev1 = cost[0], cost[1]
 
         for i in range(2, n):
+            
+            # Build -> previous two + current
             curr = cost[i] + min(prev1, prev2)
-            prev2, prev1 = prev1, curr  # slide window forward
 
-        return min(prev1, prev2)
+            # slide window forward
+            prev2, prev1 = prev1, curr
+
+        # build for nth
+        res = min(prev1, prev2)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ## 198. House Robber ::3:: - Medium
@@ -633,52 +745,119 @@ cannot steal from two adjacent entries.
 ### Solution 1: Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
+        
+        # Note:
+        # Top-down DP (recursive with memoization)
+        # 1. Process root -> current house index i
+        # 2. Explore choices -> rob current house or skip it
+        # 3. Build -> max of robbing current + dfs(i-2) vs skipping dfs(i-1)
+        # 4. Memoize -> store results to avoid recomputation
+
+        # store max loot from house i to start
         memo = {}
 
         def dfs(i):
-            if i < 0:  # No houses left
+            # Process Root -> overshoot, no houses left
+            if i < 0:
                 return 0
+
+            # Process Root -> memo check
             if i in memo:
                 return memo[i]
             
-            # Two choices: rob current or skip it
-            memo[i] = max(dfs(i-1), nums[i] + dfs(i-2))
+            # Explore Choices:
+            # 1. Skip current house dfs(i-1)
+            left = dfs(i-1)
+
+            # 2. Rob current house: nums[i] + dfs(i-2)
+            right = nums[i] + dfs(i-2)
+
+            # Build -> choose max of two options
+            memo[i] = max(left, right)
+
+            # Backtrack -> return max loot from this house
             return memo[i]
 
-        return dfs(len(nums) - 1)
+        # max loot for nth house
+        res = dfs(len(nums)-1)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 2: Iterative DP Bottom Up - 1D Dynamic Programming/Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
         
+        # Note:
+        # Bottom-up DP
+        # 1. Process root -> initialize base cases dp[0], dp[1]
+        # 2. Explore choices -> dp[i] = max(dp[i-1], nums[i] + dp[i-2])
+        # 3. Build -> fill dp array sequentially
+
         n = len(nums)
+
+        # Base case check
         if n == 1:
             return nums[0]
 
         dp = [0] * n
+
+        # Base cases
         dp[0], dp[1] = nums[0], max(nums[0], nums[1])
 
         for i in range(2, n):
-            dp[i] = max(dp[i-1], nums[i] + dp[i-2])
 
-        return dp[-1]
+            # Explore Choices -> 
+            left = dp[i-1]
+            right = nums[i] + dp[i-2]
+
+            # Build -> choose max between options
+            dp[i] = max(left + right)
+
+        # Build -> max for nth
+        res = dp[-1]
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 3: Space Optimized DP - 1D Dynamic Programming/Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
+
+        # Note:
+        # Bottom-up DP with space optimization
+        # Only previous two houses needed for recurrence
+        # 1. Initialize prev2, prev1 -> max loot at first two houses
+        # 2. Iterate -> compute current max using prev1, prev2
+        # 3. Slide window -> update prev2, prev1
+
         n = len(nums)
+
+        # Base case check
         if n == 1:
             return nums[0]
 
+        # Base cases
         prev2, prev1 = nums[0], max(nums[0], nums[1])
 
         for i in range(2, n):
-            curr = max(prev1, nums[i] + prev2)
-            prev2, prev1 = prev1, curr  # Slide window
 
-        return prev1
+            # Build -> max from previous two
+            curr = max(prev1, nums[i] + prev2)
+
+            # Explore -> Slide Window
+            prev2, prev1 = prev1, curr
+
+        # max for nth
+        res = prev1
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 
@@ -744,64 +923,163 @@ cannot steal from two adjacent entries, when array is circular.
 ### Solution 1: Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
+
+        # Note:
+        # Top-down DP (recursive with memoization) for circular houses
+        # 1. Process root -> current house index i in linear range
+        # 2. Explore choices -> rob current house or skip it
+        # 3. Build -> max of robbing current + dfs(i-2) vs skipping dfs(i-1)
+        # 4. Memoize -> store results to avoid recomputation
+        # 5. Handle circular constraint -> cannot rob both first and last
+
         n = len(nums)
+
+        # Base case check
         if n == 1:
             return nums[0]
 
         def rob_range(start, end):
+
+            # build max loot from start - end houses
             memo = {}
+
             def dfs(i):
-                if i < start:  # no house left
+                
+                # overshoot
+                if i < start:
                     return 0
+
+                # memo check
                 if i in memo:
                     return memo[i]
-                # rob current or skip
-                memo[i] = max(dfs(i-1), nums[i] + dfs(i-2))
+
+                # Explore Choices -> 
+                # 1. rob current
+                left = dfs(i-1)
+
+                # 2. skip
+                right = nums[i] + dfs(i-2)
+
+                # Build -> max loot at ith
+                memo[i] = max(left, right)
+
+                # Backtrack -> return max loot at ith
                 return memo[i]
+
+            # max loot from endth house
             return dfs(end)
 
-        # exclude last OR exclude first
-        return max(rob_range(0, n-2), rob_range(1, n-1))
+        # consider houses from first to second to last, exclude last house
+        res1 = rob_range(0, n-2)
+
+        # consider houses from second to last, exclude the first house
+        res2 = rob_range(1, n-1)
+
+        # by disconnecting the circle, we are able to solve
+        res = max(res1, res2)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 
 ### Solution 2: Iterative DP Bottom Up - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
+        
+        # Note:
+        # Bottom-up DP for circular houses
+        # 1. Process root -> compute linear DP for given subarray
+        # 2. Explore choices -> dp[i] = max(dp[i-1], arr[i] + dp[i-2])
+        # 3. Build -> fill dp array sequentially
+        # 4. Handle circular constraint -> two linear runs
+
         n = len(nums)
+
+        # Base case check
         if n == 1:
             return nums[0]
 
         def rob_linear(arr):
+
+            #
             m = len(arr)
+            
+            # 
             if m == 1:
                 return arr[0]
+
+            # 
             dp = [0] * m
+
+            # Base cases
             dp[0], dp[1] = arr[0], max(arr[0], arr[1])
+
             for i in range(2, m):
-                dp[i] = max(dp[i-1], arr[i] + dp[i-2])
+                
+                # Explore Choices ->
+                left = dp[i-1]
+                right = arr[i] + dp[i-2]
+
+                # Build -> max current
+                dp[i] = max(left, right)
+
+            # Max for last house
             return dp[-1]
 
-        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+        # exclude last
+        res1 = rob_linear(nums[:-1])
+
+        # exclude first
+        res2 = rob_linear(nums[1:])
+
+        # max for both permutations
+        res = max(res1, res2)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 3: Space Optimized DP - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
 
+        # Note:
+        # Bottom-up DP with space optimization
+        # Only previous two houses needed for recurrence
+        # Handle circular constraint by two linear runs with sliding window
+
         n = len(nums)
         if n == 1:
             return nums[0]
 
         def rob_linear(arr):
+
+            # dp[i-2], dp[i-1] for linear run
             prev2, prev1 = 0, 0
             for num in arr:
+
+                # Build -> : max for ith house
                 curr = max(prev1, num + prev2)
+
+                # slide window
                 prev2, prev1 = prev1, curr
+
+            # max for last house
             return prev1
 
-        # Exclude first house OR exclude last house
-        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+        # Exclude last house
+        res1 = rob_linear(nums[:-1])
+        # Exclude first house
+        res2 = rob_linear(nums[1:])
+        # Max from permutations
+        res = max(res1, res2)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ## 5. Longest Palindromic Substring ::3:: - Medium
@@ -1366,47 +1644,88 @@ Given a string, determine how many ways there to decode the string.
 ### Solution 1: Dynamic Programming Bottom Up - 1D Dynamic Programming/Sequential State Transition
 ```python
     def numDecodings(self, s: str) -> int:
+
+        # Note:
+        # Bottom-up DP (1D array)
+        # 1. Process root -> dp[i] = number of ways to decode first i characters
+        # 2. Explore choices -> single-digit and two-digit decoding
+        # 3. Build -> accumulate valid ways using previous dp values
+
         n = len(s)
+
+        # Invalid string
         if not s or s[0] == '0':
             return 0
 
         dp = [0] * (n + 1)
-        dp[0] = 1  # empty string has 1 way
-        dp[1] = 1  # first char is valid (not '0')
+
+        # Base cases:
+        # empty string has 1 way
+        dp[0] = 1
+        # first char is valid (not '0') 
+        dp[1] = 1
 
         for i in range(2, n + 1):
-            # check one-digit
+            # Explore Choices -> single digit
             if s[i-1] != '0':
                 dp[i] += dp[i-1]
 
-            # check two-digit
+            # Explore Choices -> double digit
             two_digit = int(s[i-2:i])
             if 10 <= two_digit <= 26:
                 dp[i] += dp[i-2]
 
-        return dp[n]
+        # Build -> dp[n] has total decoding ways
+        res = dp[n]
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 
 ### Solution 2: Space Optimized DP - 1D Dynamic Programming/Sequential State Transition
 ```python
     def numDecodings(self, s: str) -> int:
+
+        # Note:
+        # Bottom-up DP with space optimization
+        # Only previous two dp values needed
+        # 1. prev2 = dp[i-2], prev1 = dp[i-1]
+        # 2. For current index, accumulate ways from single-digit and two-digit checks
+        # 3. Slide window forward to maintain only two previous states
+
+        # Invalid check
         if not s or s[0] == '0':
             return 0
 
         n = len(s)
+
+        # Base cases
         prev2, prev1 = 1, 1  # dp[0], dp[1]
 
         for i in range(1, n):
+
             curr = 0
+
+            # Explore Choices -> single digit
             if s[i] != '0':
                 curr += prev1
+
+            # Explore Choices -> double digit
             two_digit = int(s[i-1:i+1])
             if 10 <= two_digit <= 26:
                 curr += prev2
+
+            # Slide Window ->
             prev2, prev1 = prev1, curr
 
-        return prev1
+        # Decode ways for nth
+        res = prev1
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 
@@ -1471,69 +1790,146 @@ of coins needed to make the price.
 ### Solution 1: Dynamic Programming Bottom Up - 1D Dynamic Programming/Min Max with Choices (Unbounded Knapsack style)
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
-        # large value for initialization
+        
+        # Note:
+        # Bottom-up DP (1D array)
+        # 1. Process root -> dp[a] = minimum coins needed for amount a
+        # 2. Explore choices -> for each coin, consider using it
+        # 3. Build -> dp[a] = min(dp[a], dp[a-coin] + 1)
+        # 4. Result -> dp[amount] contains minimum coins if possible
+        
+        # sentinel for impossible
         max_val = amount + 1
+
         dp = [max_val] * (amount + 1)
-        dp[0] = 0  # zero coins needed for amount 0
+        
+        # Base case -> zero coins needed for 0
+        dp[0] = 0 
 
+        # Process price from 1 to target
         for a in range(1, amount + 1):
-            for coin in coins:
-                if a - coin >= 0:
-                    dp[a] = min(dp[a], dp[a - coin] + 1)
 
-        return dp[amount] if dp[amount] != max_val else -1
+            # Explore Choices -> try each coin
+            for coin in coins:
+
+                # Valid choice
+                if a - coin >= 0:
+                    
+                    # Explore Choices ->
+                    # 1. ignore coin
+                    left = dp[a]
+                    # 2. use coin
+                    right = dp[a-coin] + 1
+
+                    # Build -> min between two options
+                    dp[a] = min(left, right)
+
+        res = dp[amount] if dp[amount] != max_val else -1
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 2: Recursive DP with Memoization - 1D Dynamic Programming/Min Max with Choices (Unbounded Knapsack style)
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
+
+        # Note:
+        # Top-down DP (recursive with memoization)
+        # 1. Process root -> remaining amount rem
+        # 2. Explore choices -> recursively subtract each coin
+        # 3. Build -> minimum coins among all choices
+        # 4. Memoize -> store min coins for rem to avoid recomputation
         
         memo = {}
 
         def dfs(rem: int) -> int:
+            # Process Root -> Base cases
+
+            # Overshoot
             if rem < 0:
                 return -1
+            
+            # Exact Match
             if rem == 0:
                 return 0
+
+            # Memoized
             if rem in memo:
                 return memo[rem]
 
             min_coins = float('inf')
+
+            # Explore Choices -> try each coin
             for coin in coins:
+                
+                # ??????
                 res = dfs(rem - coin)
+
                 if res >= 0:
+                    # Build -> take min among all valid choices
                     min_coins = min(min_coins, res + 1)
 
+            # Memoize result
             memo[rem] = -1 if min_coins == float('inf') else min_coins
+
+            # Backtrack -> return value
             return memo[rem]
 
-        return dfs(amount)
+        # initial call with full amount
+        res = dfs(amount)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
 ### Solution 3: BFS - 1D Dynamic Programming/Min Max with Choices (Unbounded Knapsack style)
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
         
+        # Note:
+        # BFS (level-order) to find min coins
+        # 1. Process root -> start with remaining amount = amount
+        # 2. Explore choices -> subtract each coin to get next remaining amounts
+        # 3. Build -> increment steps (coins used) at each BFS level
+        # 4. Early stop -> return steps+1 when remaining reaches 0
+        # 5. Result -> -1 if queue exhausted (impossible)
+
         if amount == 0:
             return 0
 
-        queue = deque([(amount, 0)])  # (remaining amount, steps)
+        # (remaining amount, coins used so far)
+        queue = deque([(amount, 0)])
+
+        # avoid revisiting same amount
         visited = set([amount])
 
         while queue:
+
+            # Process Root -> current state
             rem, steps = queue.popleft()
+
+            # Explore Choices -> try each coin
             for coin in coins:
+
                 next_rem = rem - coin
+
+                # Explore Choices -> rob/subtract each coin
+
+                # target
                 if next_rem == 0:
-                    return steps + 1  # reached amount 0
+                    return steps + 1
+                
                 elif next_rem > 0 and next_rem not in visited:
+                    # Build -> add next state to queue
                     visited.add(next_rem)
                     queue.append((next_rem, steps + 1))
 
-        return -1  # impossible to reach
+        # impossible to reach target
+        return -1
 ```
-
-
 
 
 ## 152. Maximum Product Subarray ::2:: - Medium
@@ -1590,45 +1986,89 @@ and return the product.
 ```python
 ```
 
-### Solution 1: DP with Rolling Max Min - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+### Solution 1: DP Array Version - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
 ```python
     def maxProduct(self, nums: List[int]) -> int:
+
+        # Note:
+        # Bottom-up DP with arrays
+        # At each index, we conceptually explore 3 choices:
+        # 1. Start new subarray with current num (root)
+        # 2. Extend previous max product subarray (left)
+        # 3. Extend previous min product subarray (right)
+        # Then pick the max/min result to continue
+
         n = len(nums)
         if n == 0:
             return 0
 
-        max_prod = min_prod = result = nums[0]
-
-        for i in range(1, n):
-            num = nums[i]
-            temp_max = max(num, max_prod * num, min_prod * num)
-            min_prod = min(num, max_prod * num, min_prod * num)
-            max_prod = temp_max
-            result = max(result, max_prod)
-
-        return result
-```
-
-### Solution 2: DP Array Version - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
-```python
-    def maxProduct(self, nums: List[int]) -> int:
-        n = len(nums)
-        if n == 0:
-            return 0
-
+        # Initialize DP arrays and result
         max_dp = [0] * n
         min_dp = [0] * n
         max_dp[0] = min_dp[0] = result = nums[0]
 
         for i in range(1, n):
             num = nums[i]
-            max_dp[i] = max(num, max_dp[i-1] * num, min_dp[i-1] * num)
-            min_dp[i] = min(num, max_dp[i-1] * num, min_dp[i-1] * num)
+
+            # Explore Choices:
+            left = max_dp[i-1] * num       # extend previous max subarray
+            right = min_dp[i-1] * num      # extend previous min subarray
+            root = num                      # start new subarray at current index
+
+            # Build: pick max/min product at this index
+            max_dp[i] = max(root, left, right)
+            min_dp[i] = min(root, left, right)
+
+            # Update overall result
             result = max(result, max_dp[i])
 
+        # overall: 
         return result
 ```
 
+
+
+### Solution 2: DP with Rolling Max Min - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+```python
+    def maxProduct(self, nums: List[int]) -> int:
+
+        # Note:
+        # Bottom-up DP with rolling variables (space optimized)
+        # 1. Process root -> current element nums[i]
+        # 2. Explore choices -> multiply current with previous max or min
+        # 3. Build -> track max_prod and min_prod at each step
+        #    (min_prod important due to negative numbers flipping sign)
+        # 4. Result -> update overall max product seen so far
+
+        n = len(nums)
+        if n == 0:
+            return 0
+
+        # Initialize rolling max, min, and result
+        max_prod = min_prod = result = nums[0]
+
+        for i in range(1, n):
+            num = nums[i]
+
+            # Explore Choices:
+            # left = extend previous max_prod
+            left = max_prod * num
+            # right = extend previous min_prod
+            right = min_prod * num
+            # root = start new subarray
+            root = num
+
+            # Build: compute current max/min at this index
+            temp_max = max(root, left, right)
+            min_prod = min(root, left, right)
+            max_prod = temp_max
+
+            # Update overall result
+            result = max(result, max_prod)
+
+
+        return result
+```
 
 ## 139. Word Break ::3:: - Medium
 
@@ -1691,55 +2131,112 @@ can be separated into some combination of strings from the array.
 ### Solution 1: Dynamic Programming - 1D Dynamic Programming/Sequential Segment Choice Validation
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        
+        # Note:
+        # Bottom-up DP
+        # 1. Process root -> current substring ending at i
+        # 2. Explore choices -> partition at every possible previous index j
+        # 3. Build -> dp[i] = True if any dp[j] is True and s[j:i] in wordDict
+        # 4. Early prune -> break if valid segment found
+
+        # quick lookup
         word_set = set(wordDict)
         n = len(s)
         dp = [False] * (n + 1)
-        dp[0] = True  # empty string is segmentable
+
+        # Base case: empty string is segmentable
+        dp[0] = True
 
         for i in range(1, n + 1):
             for j in range(i):
+                
+                # Explore Choice: segment s[j:i]
                 if dp[j] and s[j:i] in word_set:
-                    dp[i] = True
-                    break  # early prune, found valid segmentation
 
+                    # Build -> segmentable
+                    dp[i] = True 
+                    # early prune, found valid segmentation
+                    break  
+
+        # Result: can full string be segmented
         return dp[n]
 ```
 
 ### Solution 2: Recursive DFS with Memoization - 1D Dynamic Programming/Sequential Segment Choice Validation
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+
+        # Note:
+        # Top-down DP (memoized recursion)
+        # 1. Process root -> current start index
+        # 2. Explore Choices -> try every end index forming s[start:end]
+        # 3. Build -> if s[start:end] in word_set and dfs(end) is True, memo[start] = True
+        # 4. Backtrack -> store False if no valid segmentation
+
+        # quick lookup
         word_set = set(wordDict)
         memo = {}
 
         def dfs(start: int) -> bool:
+
+            # Process Root -> Base cases
+
+            # Reached end
             if start == len(s):
                 return True
+
+            # Memo check
             if start in memo:
                 return memo[start]
 
             for end in range(start + 1, len(s) + 1):
+                # Explore Choices -> s[start:end] as a segment
                 if s[start:end] in word_set and dfs(end):
+
+                    # Build: segmentable from start
                     memo[start] = True
                     return True
 
+            # Backtrack: cannot segment from this start
             memo[start] = False
             return False
 
-        return dfs(0)
+        # original call from top
+        res = dfs(0)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
-### Solution 3: optimal dfs check why - 1D Dynamic Programming/Sequential Segment Choice Validation
+### Solution 3: Optimized DFS by Matching Words - 1D Dynamic Programming/Sequential Segment Choice Validation
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+
+        # Note:
+        # Optimized top-down DFS
+        # 1. Process root -> current index i
+        # 2. Explore choices -> iterate only over words in wordDict
+        # 3. Build -> if s[i:i+len(word)] == word and dfs(i+len(word)) True, cache[i] = True
+        # 4. Backtrack -> store False if no valid segmentation
+
         cache = {}
         def dfs(i):
+            # Process Root -> base cases
+
+            # reached end
             if i == len(s):
                 return True
+
+            # overshoot
             if i > len(s):
                 return False
+
+            # memo check
             if i in cache:
                 return cache[i]
             for word in wordDict:
+                # Explore Choice -> try matching void
                 if i + len(word) <= len(s) and s[i:i+len(word)] == word:
                     cache[i] = dfs(i+len(word))
                     if cache[i]:
@@ -1803,15 +2300,28 @@ Given an integer array, find the longest increasing subsequence.
 ### Solution 1: Dynamic Programming - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
+
+        # Note:
+        # Classic DP for LIS
+        # 1. Process root -> current index i (end of subsequence)
+        # 2. Explore choices -> for all j < i, check if nums[i] can extend subsequence ending at j
+        # 3. Build -> dp[i] = max(dp[i], dp[j]+1)
+        # 4. Result -> maximum of dp array
+
         n = len(nums)
         if n == 0:
             return 0
 
-        dp = [1] * n  # dp[i] = length of LIS ending at i
+        # dp[i] = length of LIS ending at i
+        dp = [1] * n
 
         for i in range(n):
             for j in range(i):
+
+                # Explore Choice -> extend subsequence ending at j
                 if nums[i] > nums[j]:
+
+                    # Build -> max between current and extending j
                     dp[i] = max(dp[i], dp[j] + 1)
 
         return max(dp)
@@ -1820,15 +2330,28 @@ Given an integer array, find the longest increasing subsequence.
 ### Solution 2: Binary Search Patience Sorting - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
+
+        # Note:
+        # Patience sorting method (efficient O(n log n))
+        # 1. Process root -> current number in nums
+        # 2. Explore choices -> find insertion point in current LIS tails
+        # 3. Build -> append if new tail is larger, else replace to minimize tail
+        # 4. Result -> length of tails array = length of LIS
+
+        # tails[i] = smallest possible tail of LIS of length 
         tails = []
 
         for num in nums:
-            # find insertion point in tails
+            
+            # Explore Choice -> find where num fits
             index = bisect.bisect_left(tails, num)
+
             if index == len(tails):
-                tails.append(num)  # extend LIS
+                # Build: extend LIS with new larger tail
+                tails.append(num)
             else:
-                tails[index] = num  # replace to keep minimal tail
+                # Build: replace to keep minimal tail (better chance for future extension)
+                tails[index] = num
 
         return len(tails)
 ```
@@ -1836,25 +2359,34 @@ Given an integer array, find the longest increasing subsequence.
 ### Solution 3: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
+
+        # Note:
+        # Same as Solution 2, but manual binary search instead of bisect
+        # 1. Process root -> current number
+        # 2. Explore choices -> search for first tail >= num
+        # 3. Build -> append if end, replace otherwise
+        # 4. Result -> length of tails = LIS length
+
         tails = []
 
         for num in nums:
             left, right = 0, len(tails) - 1
-            # binary search for the first tail >= num
+            
+            # Explore Choices -> find insertion/replacement index
             while left <= right:
                 mid = (left + right) // 2
                 if tails[mid] < num:
                     left = mid + 1
                 else:
                     right = mid - 1
-            # left is the correct insertion/replacement index
+            
+            # Build: insert or replace
             if left == len(tails):
                 tails.append(num)
             else:
                 tails[left] = num
 
         return len(tails)
-
 ```
 
 
@@ -1912,6 +2444,14 @@ such that the sum of each arrays is equal.
 ### Solution 1: Dynamic Programming Subset Sum - 1D Dynamic Programming/Subset Sum Linear Choice Selection
 ```python
     def canPartition(self, nums: List[int]) -> bool:
+        
+        # Note:
+        # 1D DP for subset sum
+        # 1. Process root -> current number in nums
+        # 2. Explore choices -> include current number or skip it
+        # 3. Build -> update achievable sums in dp
+        # 4. Result -> check if target sum is achievable
+        
         total = sum(nums)
         # If total sum is odd, cannot partition equally
         if total % 2 != 0:
@@ -1922,13 +2462,16 @@ such that the sum of each arrays is equal.
 
         # dp[i] = True if sum i is achievable with some subset
         dp = [False] * (target + 1)
-        dp[0] = True  # sum 0 is always achievable
+        # sum 0 is always achievable (root/base case)
+        dp[0] = True
 
         for num in nums:
-            # iterate backwards to avoid using the same number twice
+            # Explore choices in reverse to avoid using same number twice
             for i in range(target, num - 1, -1):
+                # Build: include num if sum i-num was achievable
                 dp[i] = dp[i] or dp[i - num]
 
+        # Result: can we achieve target sum?
         return dp[target]
 ```
 
@@ -1936,22 +2479,27 @@ such that the sum of each arrays is equal.
 ### Solution 2: Bitmask Bitset DP - 1D Dynamic Programming/Subset Sum Linear Choice Selection
 ```python
     def canPartition(self, nums: List[int]) -> bool:
+        
+        # Note:
+        # Bitmask DP (bitset)
+        # 1. Process root -> each number
+        # 2. Explore choices -> include or skip number, track sums as bits
+        # 3. Build -> shift bits to represent new achievable sums
+        # 4. Result -> check if target sum bit is set
+
         total = sum(nums)
-        # If total sum is odd, cannot partition equally
         if total % 2 != 0:
             return False
 
         target = total // 2
-        n = len(nums)
 
-        # dp[i] = True if sum i is achievable with some subset
-        dp = [False] * (target + 1)
-        dp[0] = True  # sum 0 is always achievable
+        # bitset where i-th bit = True if sum i achievable
+        bits = 1  # only 0 sum is achievable initially
 
         for num in nums:
-            # iterate backwards to avoid using the same number twice
-            for i in range(target, num - 1, -1):
-                dp[i] = dp[i] or dp[i - num]
+            # Build: shift current bits by num to represent including it
+            bits |= bits << num
 
-        return dp[target]
+        # Result: check if target sum is achievable
+        return (bits >> target) & 1 == 1
 ```
