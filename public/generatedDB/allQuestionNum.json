@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "2": {
     "questionNum": 2,
@@ -68,10 +68,10 @@
       "String",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#5-longest-palindromic-substring-3---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#5-longest-palindromic-substring-3---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "11": {
     "questionNum": 11,
@@ -86,7 +86,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "15": {
     "questionNum": 15,
@@ -102,7 +102,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "17": {
     "questionNum": 17,
@@ -145,7 +145,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 40
+    "coldnessCount": 41
   },
   "21": {
     "questionNum": 21,
@@ -219,7 +219,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "36": {
     "questionNum": 36,
@@ -234,7 +234,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "39": {
     "questionNum": 39,
@@ -279,7 +279,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "46": {
     "questionNum": 46,
@@ -309,7 +309,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "51": {
     "questionNum": 51,
@@ -335,8 +335,8 @@
       "Dynamic Programming",
       "Memoization"
     ],
-    "questionLink": "/Notes/dynamic-programming#70-climbing-stairs-2---easy",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#70-climbing-stairs-2---easy",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -353,7 +353,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "76": {
     "questionNum": 76,
@@ -441,8 +441,8 @@
       "String",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#91-decode-ways-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#91-decode-ways-2---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -584,7 +584,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "127": {
     "questionNum": 127,
@@ -614,7 +614,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "130": {
     "questionNum": 130,
@@ -691,8 +691,8 @@
       "Trie",
       "Memoization"
     ],
-    "questionLink": "/Notes/dynamic-programming#139-word-break-3---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#139-word-break-3---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -757,7 +757,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 41
+    "coldnessCount": 42
   },
   "152": {
     "questionNum": 152,
@@ -768,8 +768,8 @@
       "Array",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#152-maximum-product-subarray-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#152-maximum-product-subarray-2---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -785,7 +785,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "155": {
     "questionNum": 155,
@@ -799,7 +799,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 40
+    "coldnessCount": 41
   },
   "162": {
     "questionNum": 162,
@@ -828,7 +828,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-sorted-array-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "198": {
     "questionNum": 198,
@@ -839,8 +839,8 @@
       "Array",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#198-house-robber-3---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#198-house-robber-3---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -972,15 +972,15 @@
   },
   "213": {
     "questionNum": 213,
-    "questionTitle": "House Robber II ::2::",
+    "questionTitle": "House Robber II ::3::",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night. Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.",
     "questionTopics": [
       "Array",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#213-house-robber-ii-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#213-house-robber-ii-3---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1016,7 +1016,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "226": {
     "questionNum": 226,
@@ -1078,7 +1078,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "239": {
     "questionNum": 239,
@@ -1110,7 +1110,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "261": {
     "questionNum": 261,
@@ -1140,7 +1140,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "287": {
     "questionNum": 287,
@@ -1203,14 +1203,14 @@
       "Binary Search",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#300-longest-increasing-subsequence-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#300-longest-increasing-subsequence-2---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
   "322": {
     "questionNum": 322,
-    "questionTitle": "Coin Change ::2::",
+    "questionTitle": "Coin Change ::3::",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money. Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1. You may assume that you have an infinite number of each kind of coin.",
     "questionTopics": [
@@ -1218,8 +1218,8 @@
       "Dynamic Programming",
       "Breadth First Search"
     ],
-    "questionLink": "/Notes/dynamic-programming#322-coin-change-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#322-coin-change-3---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1257,7 +1257,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 43
+    "coldnessCount": 44
   },
   "355": {
     "questionNum": 355,
@@ -1300,8 +1300,8 @@
       "Array",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#416-partition-equal-subset-sum-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#416-partition-equal-subset-sum-2---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1411,8 +1411,8 @@
       "String",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#647-palindromic-substrings-2---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#647-palindromic-substrings-2---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1479,7 +1479,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "739": {
     "questionNum": 739,
@@ -1507,8 +1507,8 @@
       "Array",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/dynamic-programming#746-min-cost-climbing-stairs-3---medium",
-    "blog": "Dynamic Programming",
+    "questionLink": "/Notes/1d-dynamic-programming#746-min-cost-climbing-stairs-3---medium",
+    "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1543,7 +1543,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 29
+    "coldnessCount": 30
   },
   "973": {
     "questionNum": 973,
