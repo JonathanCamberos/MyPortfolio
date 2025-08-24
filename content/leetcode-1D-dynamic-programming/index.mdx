@@ -522,11 +522,11 @@ by either climbing 1 or 2 steps at a time.
 
         # Note:
         # Top Down DP (memoized recursion)
-        # Start from top and make recursive call creating left/right subtrees
         # 1. Memo Check -> computed previously
-        # 2. Boundary Check -> Reached N
-        # 3. Boundary Check -> Overshot
-        # 4. Build -> Save ways from i to N
+        # 2. Boundary Check -> reached n or overshot
+        # 3. Explore Choices -> grab num of ways from +1 or +2 to n
+        # 4. Build -> sum paths from +1 and +2 steps to current step
+        # 5. Memo Return -> return ways from i to nth step, calculated once
         # Result: Ways to climb from 0 to nth step
 
         # Ways to get climb from i to nth
@@ -546,18 +546,17 @@ by either climbing 1 or 2 steps at a time.
             if i == n:
                 return 1
             
-            # Explore Choices -> jump to either of next 1 or 2 steps
+            # Explore Choices -> grab num of ways from +1 or +2 to n
             left = dfs(i + 1)
             right = dfs(i + 2)
 
-            # Build: sum of paths from next sub problems 
+            # Build: sum paths from +1 and +2 steps to current step
             memo[i] = left + right
 
-            # Sole Memo Return: only return upon first calculation for i
-            # the rest will be grabbed from memo check
+            # Memo return: return ways from i to nth step, calculated once
             return memo[i]
 
-        # initial call from step 0
+        # ways to get from 0 to nth step
         res = dfs(0)
 
         # overall: time complexity
@@ -573,11 +572,11 @@ by either climbing 1 or 2 steps at a time.
         # Top Down DP (memoized recursion)
         # Start from target n and recursively reduce to smaller sub problems.
         # 1. Memo Check -> computed previously
-        # 2. Boundary Check -> Reached Bottom 0
-        # 3. Boundary Check -> Reached Bottom 1
-        # 4. Boundary Check -> Reached Bottom 2 
-        # 4. Memoize -> store results to avoid recomputation
-        # Result: number of ways to climb to the nth step
+        # 2. Boundary Check -> base case 1 and 2
+        # 3. Explore Choices ->  grab num of ways from 0 to -2 or -1 steps
+        # 4. Build -> sum paths from -2 and -1 steps to current step
+        # 5. Memo return -> return ways from 0 to ith step, calculated once
+        # Result: Ways to climb from 0 to nth step
 
         # Ways to climb from 0 to ith step
         memo = {}
@@ -596,18 +595,17 @@ by either climbing 1 or 2 steps at a time.
             if i == 2:
                 return 2
 
-            # Explore Choices -> arrive from either of previous 1 or 2 steps
+            # Explore Choices -> grab num of ways from 0 to -2 or -1 steps
             left = dfs(i - 1)
             right = dfs(i - 2)
 
-            # Build: sum of paths from previous sub problems
+            # Build: sum paths from -2 and -1 steps to current step
             memo[i] = left + right
 
-            # Sole Memo Return: only return upon first calculation for i
-            # the rest will be grabbed from memo check
+            # Memo return -> return ways from 0 to ith step, calculated once
             return memo[i]
 
-        # initial call for n
+        # ways to climb from 0 to nth step
         res = dfs(n)
 
         # overall: time complexity O(n)
@@ -615,19 +613,20 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-### Solution 3: Iterative Bottom Up Optimal - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
         
         # Note:
         # Iterative Bottom Up Tabulation
-        # Build dp array for number of ways to climb from 0 to ith
-        # 1. Base Set Up -> initial cases of dp[1], dp[2]
-        # 2. Iterate Explore 3 to nth -> dp[i] = dp[i-1] + dp[i-2]
-        # 3. Build -> fill array iteratively
-        # Result: dp[n] is number of ways to climb to nth step
+        # 1. Catch Initialize -> cover n=1 case
+        # 2. Base Set Up -> 1 and 2
+        # 3. Iterate -> 3 to n
+        # 4. Explore -> grab num of ways from 0 to -2 or -1 steps
+        # 5. Build -> sum paths from -2 and -1 steps to current step
+        # Result: ways to climb to nth step
 
-        # Initialize case: for n=1 assign n=2 will fail
+        # Catch Initialize -> for n=1 assign n=2 will fail
         if n == 1:
             return 1
 
@@ -641,11 +640,11 @@ by either climbing 1 or 2 steps at a time.
         # Process -> 3 to nth
         for i in range(3, n + 1):
 
-            # Explore Choices ->
-            left = dp[i-1]
-            right = dp[i-2]
+            # Explore Choices -> grab num of ways from 0 to -2 or -1 steps
+            left = dp[i-2]
+            right = dp[i-1]
 
-            # Build -> sum of paths from previous sub problems 
+            # Build -> sum paths from -2 and -1 steps to current step
             dp[i] = left + right
 
         # ways to climb to nth step
@@ -656,37 +655,38 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-### Solution 4: Iterative Bottom Up Optimal - 1D Dynamic Programming/Sequential State Transition
+### Solution 4: Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
         
         # Note:
-        # Iterative Bottom Up Optimal
-        # Build dp variables for number of ways to climb from 0 to ith
-        # 1. Base Set Up -> initial cases of prev2, prev1
-        # 2. Iterate Explore 3 to nth -> dp[i] = prev2 + prev1
-        # 3. Build -> fill ans iteratively
-        # 4. Slide Window -> iterate variables
+        # Iterative Bottom Up Variables
+        # 1. Catch Initialize -> cover n=1 case
+        # 2. Base Set Up -> 1 and 2
+        # 3. Iterate -> 3 to n
+        # 4. Explore + Build -> grab num of ways from 0 to -2 or -1 steps, sum to current
+        # 5. Slide Window -> iterate variables
         # Result: ways to climb to nth step
 
-        # Initialize case: for n=1 assign n=2 will fail
+        # Catch Initialize -> for n=1 assign n=2 will fail
         if n == 1:
             return 1
 
         # Base Set Up -> 1 and 2 
-        prev2, prev1 = 1, 2
+        TwoPrev = 1
+        OnePrev = 2
 
         # Process -> 3 to nth
         for i in range(3, n + 1):
 
-            # Build -> sum of paths from previous sub problems
-            curr = prev1 + prev2
+            # Explore + Build -> grab num of ways from 0 to -2 or -1 steps, sum to current
+            curr = TwoPrev + OnePrev
 
             # Slide Window -> iterate variables
-            prev2, prev1 = prev1, curr
+            TwoPrev, OnePrev = OnePrev, curr
         
         # ways to climb to nth step
-        res = prev1
+        res = OnePrev
 
         # overall: time complexity
         # overall: space complexity
@@ -694,7 +694,7 @@ by either climbing 1 or 2 steps at a time.
 ```
 
 
-## 746. Min Cost Climbing Stairs ::3:: - Medium
+## 746. Min Cost Climbing Stairs ::3:: - Easy
 
 Topics:  Array, Dynamic Programming
 
@@ -752,11 +752,12 @@ find the cheapest cost to climb to the top.
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
         # Note:
-        # Top-down DP (recursive with memoization)
-        # 1. Process root -> current step index i
-        # 2. Explore choices -> move 1 or 2 steps
-        # 3. Build -> add cost at current step + min cost from next steps
-        # 4. Memoize -> store results to avoid recomputation
+        # Top Down DP (recursive with memoization)
+        # 1. Memo Check -> avoid recomputation
+        # 2. Boundary Check -> reached or passed top
+        # 3. Explore Choices -> jump 1 or 2 steps
+        # 4. Build -> add cost at current step + min of next steps
+        # Result: min cost to reach top step from step 0 or 1
         
         n = len(cost)
 
@@ -769,95 +770,94 @@ find the cheapest cost to climb to the top.
             if i in memo:
                 return memo[i]
 
-            # Base case -> reached or passed top
+            # Boundary Check -> reached/passed tpo, 0 additional cost
             if i >= n:
                 return 0
             
-            # Explore choices -> move 1 or 2 steps
+            # Explore choices -> jump to next 1 or 2 steps
             left = dfs(i+1)
             right = dfs(i+2)
 
-            # Build: cost at current step + min of next steps
-            minNext = min(left, right)
-            memo[i] = cost[i] + min(dfs(i+1), dfs(i+2))
+            # Build: cost at current step + min cost between either next steps
+            memo[i] = cost[i] + min(left, right)
 
-            # Backtrack: return min at ith
+            # Memo Return: computed value for current step, calculated once
             return memo[i]
 
-        # initial call from step 0 and 1 (can start from either)
-        res1, res2 = dfs(0), dfs(1)
-        res = min(res1, res2)
+        # initial call: can start from step 0 or 1
+        res = min(dfs(0), dfs(1))
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) memo + recursive stack
         return res
 ```
 
-### Solution 2: Iterative DP Bottom Up - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+### Solution 2: Iterative Bottom Up Array - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
         # Note:
-        # Bottom-up DP
+        # Bottom Up Tabulation
         # 1. Process root -> initialize base costs dp[0], dp[1]
         # 2. Explore choices -> dp[i] = cost[i] + min(dp[i-1], dp[i-2])
         # 3. Build -> fill dp array sequentially
+        # Result: min cost to reach top from step 0 or 1
 
         n = len(cost)
         dp = [0] * n
 
-        # Base cases:
+        # Base Set Up -> 0 and 1
         dp[0], dp[1] = cost[0], cost[1]
 
-        # Build DP array
+        # Process -> steps 2 to n-1
         for i in range(2, n):
 
-            # Explore Choices -> previous 2
-            left = dp[i-1]
-            right = dp[i-2]
+            # Explore Choices -> previous 2 steps
+            left = dp[i-2]
+            right = dp[i-1]
 
-            # Build -> Cost for current
-            minNext = min(left, right)
-            dp[i] = cost[i] + min(dp[i-1], dp[i-2])
+            # Build -> cost for current step
+            dp[i] = cost[i] + min(left, right)
 
         # Build -> cost for nth
         res1, res2 = dp[n-1], dp[n-2]
         res = min(res1, res2)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 
-### Solution 3: Space Optimized DP - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+### Solution 3: Iterative Bottom Up Variables - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
         # Note:
-        # Bottom-up DP with space optimization
-        # Only previous two steps are needed for recurrence
-        # 1. Initialize prev2, prev1 -> cost of first two steps
-        # 2. Iterate -> compute current step cost using prev1, prev2
+        # Bottom Up Variables
+        # 1. Base Set Up -> prev2, prev1
+        # 2. Explore 2 to n-1 -> compute current step cost
         # 3. Slide window -> update prev2, prev1
+        # Result: min cost to reach top from step 0 or 1
 
         n = len(cost)
 
-        # Base cases
+        # Base Set Up -> 0 and 1
         prev2, prev1 = cost[0], cost[1]
 
+        # Process -> 2 to n-1
         for i in range(2, n):
             
-            # Build -> previous two + current
+            # Explore + Build -> cost at current step + min cost from previous 2
             curr = cost[i] + min(prev1, prev2)
 
-            # slide window forward
+            # Slide Window- > move variables forward
             prev2, prev1 = prev1, curr
 
-        # build for nth
+        # Result -> min cost to reach top
         res = min(prev1, prev2)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return res
 ```
 
@@ -923,42 +923,43 @@ cannot steal from two adjacent entries.
     def rob(self, nums: List[int]) -> int:
         
         # Note:
-        # Top-down DP (recursive with memoization)
-        # 1. Process root -> current house index i
-        # 2. Explore choices -> rob current house or skip it
-        # 3. Build -> max of robbing current + dfs(i-2) vs skipping dfs(i-1)
-        # 4. Memoize -> store results to avoid recomputation
+        # Top down recursive with memoization
+        # 1. Memo Check -> avoid recomputation
+        # 2. Boundary Checks -> no houses left i < 0
+        # 3. Explore Choices -> rob current house or skip it
+        # 4. Build -> max of robbing current + dfs(i-2) vs skipping dfs(i-1)
+        # Result: max loop from first to last house
 
-        # store max loot from house i to start
+        # store max loot from house start to ith house
         memo = {}
 
         def dfs(i):
-            # Process Root -> overshoot, no houses left
-            if i < 0:
-                return 0
 
-            # Process Root -> memo check
+            # Memo Check ->
             if i in memo:
                 return memo[i]
-            
-            # Explore Choices:
-            # 1. Skip current house dfs(i-1)
-            left = dfs(i-1)
 
-            # 2. Rob current house: nums[i] + dfs(i-2)
+            # Boundary Check -> no houses left
+            if i < 0:
+                return 0
+            
+            # Explore Choices -> Rob current, skip neighbor: nums[i] + dfs(i-2)
             right = nums[i] + dfs(i-2)
 
-            # Build -> choose max of two options
+            # Explore Choices -> Skip current house dfs(i-1)
+            left = dfs(i-1)
+
+            # Build -> choose max between rob and skip
             memo[i] = max(left, right)
 
-            # Backtrack -> return max loot from this house
+            # Memo return -> return max loot from 0 to ith, computed once
             return memo[i]
 
-        # max loot for nth house
+        # initial call for last house
         res = dfs(len(nums)-1)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) (memo + recursion stack)
         return res
 ```
 
@@ -967,36 +968,39 @@ cannot steal from two adjacent entries.
     def rob(self, nums: List[int]) -> int:
         
         # Note:
-        # Bottom-up DP
-        # 1. Process root -> initialize base cases dp[0], dp[1]
+        # Bottom Up Tabulation
+        # 1. Base Set Up -> 0 and 1
+        # 2. Explore -> 2 to n-1
         # 2. Explore choices -> dp[i] = max(dp[i-1], nums[i] + dp[i-2])
         # 3. Build -> fill dp array sequentially
+        # Result: max loot from first to last house
 
         n = len(nums)
 
-        # Base case check
+        # Catch Initialize: for n=1 assign n=2 will fail
         if n == 1:
             return nums[0]
 
         dp = [0] * n
 
-        # Base cases
+        # Base Set Up -> 0 and 1
         dp[0], dp[1] = nums[0], max(nums[0], nums[1])
 
+        # Process -> houses 2 to n-1
         for i in range(2, n):
 
-            # Explore Choices -> 
-            left = dp[i-1]
-            right = nums[i] + dp[i-2]
+            # Explore Choices -> rob current house or skip
+            left = nums[i] + dp[i-2]
+            right = dp[i-1]
 
-            # Build -> choose max between options
+            # Build -> choose max between rob or skip
             dp[i] = max(left + right)
 
-        # Build -> max for nth
+        # Result -> max loot at last house
         res = dp[-1]
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 
@@ -1005,34 +1009,35 @@ cannot steal from two adjacent entries.
     def rob(self, nums: List[int]) -> int:
 
         # Note:
-        # Bottom-up DP with space optimization
-        # Only previous two houses needed for recurrence
-        # 1. Initialize prev2, prev1 -> max loot at first two houses
-        # 2. Iterate -> compute current max using prev1, prev2
+        # Bottom Up Variables
+        # 1. Base Set Up -> prev2, prev1
+        # 2. Explore 2 to n-1-> compute current max loot
         # 3. Slide window -> update prev2, prev1
+        # Result: max loot first to last house
 
         n = len(nums)
 
-        # Base case check
+        # Catch Initialize: for n=1 assign n=2 will fail
         if n == 1:
             return nums[0]
 
-        # Base cases
+        # Base Set Up -> 0 and 1
         prev2, prev1 = nums[0], max(nums[0], nums[1])
 
+        # Process -> houses 2 to n-1
         for i in range(2, n):
 
-            # Build -> max from previous two
+            # Explore + Build -> max between rob and skip
             curr = max(prev1, nums[i] + prev2)
 
-            # Explore -> Slide Window
+            # Slide Window -> update variables
             prev2, prev1 = prev1, curr
 
-        # max for nth
+        # Result -> max loot at last house
         res = prev1
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return res
 ```
 
@@ -1101,12 +1106,13 @@ cannot steal from two adjacent entries, when array is circular.
     def rob(self, nums: List[int]) -> int:
 
         # Note:
-        # Top-down DP (recursive with memoization) for circular houses
-        # 1. Process root -> current house index i in linear range
-        # 2. Explore choices -> rob current house or skip it
-        # 3. Build -> max of robbing current + dfs(i-2) vs skipping dfs(i-1)
-        # 4. Memoize -> store results to avoid recomputation
+        # Top down recursive with memoization
+        # 1. Memo Check -> avoid recomputation
+        # 2. Boundary Check -> i < start
+        # 3. Explore Choices -> rob or skip
+        # 4. Build -> max between robbing current + dfs(i-2) vs skipping dfs(i-1)
         # 5. Handle circular constraint -> cannot rob both first and last
+        # Result: max loot for circular house array
 
         n = len(nums)
 
@@ -1114,147 +1120,164 @@ cannot steal from two adjacent entries, when array is circular.
         if n == 1:
             return nums[0]
 
+        # Workaround circular constrain by robbing houses start -> end
         def rob_range(start, end):
 
-            # build max loot from start - end houses
+            # build max loot from start to end
             memo = {}
 
             def dfs(i):
-                
-                # overshoot
-                if i < start:
-                    return 0
 
-                # memo check
+                # Memo check ->
                 if i in memo:
                     return memo[i]
 
-                # Explore Choices -> 
-                # 1. rob current
-                left = dfs(i-1)
+                # Boundary Check -> no houses left
+                if i < start:
+                    return 0
 
-                # 2. skip
-                right = nums[i] + dfs(i-2)
+                # Explore Choices -> 1. rob current
+                left = nums[i] + dfs(i-2)
 
-                # Build -> max loot at ith
+                # Explore Choices -> 2. skip
+                right = dfs(i-1)
+
+                # Build -> max between rob and skip
                 memo[i] = max(left, right)
 
-                # Backtrack -> return max loot at ith
+                # Memo return -> return max loot at ith, calculated once
                 return memo[i]
 
-            # max loot from endth house
+            # Initial call for last house within range start -> end
             return dfs(end)
 
-        # consider houses from first to second to last, exclude last house
+        # Avoid circular constraint
+        # Rob houses from 'first' -> 'second to last', then 'second' -> 'last'
         res1 = rob_range(0, n-2)
-
-        # consider houses from second to last, exclude the first house
         res2 = rob_range(1, n-1)
 
-        # by disconnecting the circle, we are able to solve
+        # Result -> Max loot from both ranges
         res = max(res1, res2)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) (memo + recursion stack)
         return res
 ```
 
-
-### Solution 2: Iterative DP Bottom Up - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
+### Solution 2: Iterative Bottom Up Stack - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
         
         # Note:
-        # Bottom-up DP for circular houses
-        # 1. Process root -> compute linear DP for given subarray
-        # 2. Explore choices -> dp[i] = max(dp[i-1], arr[i] + dp[i-2])
-        # 3. Build -> fill dp array sequentially
-        # 4. Handle circular constraint -> two linear runs
+        # Bottom up array
+        # 1. Memo Check root -> compute linear DP for given subarray
+        # 2. Boundary Check -> handle single house cases
+        # 2. Explore choices -> max between rob current or skip
+        # 3. Build -> max from start to ith
+        # 4. Handle circular constraint -> 2 subsets to break circular array
+        # Result: max loot from circular houses array
 
         n = len(nums)
 
-        # Base case check
+        # Empty check:
         if n == 1:
             return nums[0]
 
-        def rob_linear(arr):
+        # Break Circular Array: find max loot from start -> endth house 
+        def rob_range(start, end):
 
-            #
-            m = len(arr)
-            
-            # 
-            if m == 1:
-                return arr[0]
+            # number of houses in subarray
+            numHouses = end - start + 1
 
-            # 
-            dp = [0] * m
+            # Empty check:
+            if numHouses == 1:
+                return nums[start]
 
-            # Base cases
-            dp[0], dp[1] = arr[0], max(arr[0], arr[1])
+            # Init array (houses 0 indexed)
+            dp = [0] * numHouses
 
-            for i in range(2, m):
-                
-                # Explore Choices ->
-                left = dp[i-1]
-                right = arr[i] + dp[i-2]
+            # Base Set Up -> 0 and 1
+            dp[0] = nums[start]
+            dp[1] = max(nums[start], nums[start + 1])
 
-                # Build -> max current
+            # Process from 2 to numHouses-1
+            for i in range(2, numHouses):
+
+                # Explore Choices -> 1. rob current
+                left = nums[i + start] + dp[i-2]
+
+                # Explore Choices -> 2. skip
+                right = dp[i-1]
+
+                # Build -> max between rob and skip
                 dp[i] = max(left, right)
 
-            # Max for last house
-            return dp[-1]
+            # Memo return -> return max loot at ith, calculated once
+            return dp[end]
 
-        # exclude last
-        res1 = rob_linear(nums[:-1])
+        # Avoid circular constraint
+        # Rob houses from 'first' -> 'second to last', then 'second' -> 'last'
+        res1 = rob_range(0, n-2)
+        res2 = rob_range(1, n-1)
 
-        # exclude first
-        res2 = rob_linear(nums[1:])
-
-        # max for both permutations
         res = max(res1, res2)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return res
 ```
 
-### Solution 3: Space Optimized DP - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
+### Solution 3: Iterative Bottom Up Variables - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
 ```python
     def rob(self, nums: List[int]) -> int:
 
         # Note:
-        # Bottom-up DP with space optimization
-        # Only previous two houses needed for recurrence
-        # Handle circular constraint by two linear runs with sliding window
-
+        # Bottom up variables
+        # 1. Memo Check -> 
+        # 2. Explore Choices -> rob current or skip
+        # 3. Build -> only previous two variables needed
+        # 4. Handle Circular Constraint -> two subarray
+        # Result: max loot from circular houses array
+        
         n = len(nums)
         if n == 1:
             return nums[0]
 
-        def rob_linear(arr):
+        # max loot from subarray start -> en
+        def rob_range(start, end):
 
-            # dp[i-2], dp[i-1] for linear run
-            prev2, prev1 = 0, 0
-            for num in arr:
+            # Number of houses in subarray
+            numHouses = end - start + 1
 
-                # Build -> : max for ith house
-                curr = max(prev1, num + prev2)
+            # Edge case: single house
+            if numHouses == 1:
+                return nums[start]
 
-                # slide window
+            # Base setup -> first two houses
+            prev2 = nums[start]
+            prev1 = max(nums[start], nums[start + 1])
+
+            # Process houses 2 to numHouses-1
+            for i in range(2, numHouses):
+
+                # Explore + Build -> max loot at ith house
+                curr = max(prev1, nums[start + i] + prev2)
+
+                # Slide window -> update previous two
                 prev2, prev1 = prev1, curr
 
-            # max for last house
+            # Memo return -> last variable holds max loot
             return prev1
 
-        # Exclude last house
-        res1 = rob_linear(nums[:-1])
-        # Exclude first house
-        res2 = rob_linear(nums[1:])
-        # Max from permutations
+        # Avoid circular constraint: exclude last house, exclude first house
+        res1 = rob_range(0, n-2)
+        res2 = rob_range(1, n-1)
+
+        # Max loot from either permutation
         res = max(res1, res2)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return res
 ```
 
@@ -1816,8 +1839,58 @@ Given a string, determine how many ways there to decode the string.
 ### Find the Bug:
 ```python
 ```
+### Solution 1: Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
+```python
+    def numDecodings(self, s: str) -> int:
 
-### Solution 1: Dynamic Programming Bottom Up - 1D Dynamic Programming/Sequential State Transition
+        # Note:
+        # Top down (recursive with memoization)
+        # 1. Memo Check ->
+        # 2. Boundary Check -> 
+        # 2. Explore choices -> single-digit and two-digit decoding
+        # 3. Build -> sum of valid decodings from current index onward
+        # 4. Memoize -> store results to avoid recomputation
+        # Result: total decode ways from index 0 to end
+
+        n = len(s)
+        memo = {}
+
+        def dfs(i):
+            # Boundary Check -> reached end, one valid decoding
+            if i == n:
+                return 1
+
+            # Memo check
+            if i in memo:
+                return memo[i]
+
+            # Invalid start -> cannot decode
+            if s[i] == '0':
+                return 0
+
+            # Explore Choices -> single digit
+            count = dfs(i + 1)
+
+            # Explore Choices -> two-digit
+            if i + 1 < n and 10 <= int(s[i:i+2]) <= 26:
+                count += dfs(i + 2)
+
+            # Build -> memoize result for index i
+            memo[i] = count
+
+            # Backtrack -> return total count from i
+            return count
+
+        res = dfs(0)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) (memo + recursion stack)
+        return res
+```
+
+
+
+### Solution 2: Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
 ```python
     def numDecodings(self, s: str) -> int:
 
@@ -1860,7 +1933,7 @@ Given a string, determine how many ways there to decode the string.
 ```
 
 
-### Solution 2: Space Optimized DP - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
 ```python
     def numDecodings(self, s: str) -> int:
 
