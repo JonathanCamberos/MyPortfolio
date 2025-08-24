@@ -2,8 +2,8 @@
 title: "1D Dynamic Programming"
 description: "1D dynamic programming"
 image: "../../public/Notes/1d-dynamic-programming.png"
-publishedAt: "2025-05-03"
-updatedAt: "2025-05-03" 
+publishedAt: "2025-08-29"
+updatedAt: "2025-08-29" 
 author: "jonathancamberos"
 isPublished: true
 tags: 
@@ -467,7 +467,7 @@ Ex: Partition Equal Subset Sum
 
 
 
-## 70. Climbing Stairs ::2:: - Easy
+## 70. Climbing Stairs ::4:: - Easy
 
 Topics:  Math, Dynamic Programming, Memoization
 
@@ -538,22 +538,23 @@ by either climbing 1 or 2 steps at a time.
             if i in memo:
                 return memo[i]
             
-            # Boundary Check -> reached nth
-            if i == n:
-                return 1
-
-            # Boundary Check -> overshot
+            # Boundary Check -> overshot, 0 ways to reach out of bounds
             if i > n:
                 return 0
+
+            # Boundary Check -> reached nth, 1 way to reach n from n-1
+            if i == n:
+                return 1
             
-            # Explore Choices -> move 1 or 2 steps
+            # Explore Choices -> jump to either of next 1 or 2 steps
             left = dfs(i + 1)
             right = dfs(i + 2)
 
             # Build: sum of paths from next sub problems 
             memo[i] = left + right
 
-            # Backtrack: return i to nth result
+            # Sole Memo Return: only return upon first calculation for i
+            # the rest will be grabbed from memo check
             return memo[i]
 
         # initial call from step 0
@@ -564,7 +565,7 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-### Solution 2: 0 to N Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
 
@@ -587,22 +588,23 @@ by either climbing 1 or 2 steps at a time.
             if i in memo:
                 return memo[i]
             
-            # Boundary Check -> Reached Bottom 1
+            # Boundary Check -> bottom, 1 way to reach step 1
             if i == 1:
                 return 1
 
-            # Boundary Check -> Reached Bottom 2
+            # Boundary Check -> bottom, 2 ways to reach step 2
             if i == 2:
                 return 2
 
-            # Explore Choices -> arrived from 1 or 2 steps
+            # Explore Choices -> arrive from either of previous 1 or 2 steps
             left = dfs(i - 1)
             right = dfs(i - 2)
 
             # Build: sum of paths from previous sub problems
             memo[i] = left + right
 
-            # Backtrack: return 0 to ith result
+            # Sole Memo Return: only return upon first calculation for i
+            # the rest will be grabbed from memo check
             return memo[i]
 
         # initial call for n
@@ -661,16 +663,17 @@ by either climbing 1 or 2 steps at a time.
         # Note:
         # Iterative Bottom Up Optimal
         # Build dp variables for number of ways to climb from 0 to ith
-        # 1. Variable Set Up -> initial cases of prev2, prev1
+        # 1. Base Set Up -> initial cases of prev2, prev1
         # 2. Iterate Explore 3 to nth -> dp[i] = prev2 + prev1
         # 3. Build -> fill ans iteratively
-        # Result: dp[n] is number of ways to climb to nth step
+        # 4. Slide Window -> iterate variables
+        # Result: ways to climb to nth step
 
         # Initialize case: for n=1 assign n=2 will fail
         if n == 1:
             return 1
 
-        # Initialize Sliding Window for f(1) and f(2)
+        # Base Set Up -> 1 and 2 
         prev2, prev1 = 1, 2
 
         # Process -> 3 to nth
@@ -679,7 +682,7 @@ by either climbing 1 or 2 steps at a time.
             # Build -> sum of paths from previous sub problems
             curr = prev1 + prev2
 
-            # Iterate -> slide window forward
+            # Slide Window -> iterate variables
             prev2, prev1 = prev1, curr
         
         # ways to climb to nth step

@@ -327,7 +327,7 @@
   },
   "70": {
     "questionNum": 70,
-    "questionTitle": "Climbing Stairs ::2::",
+    "questionTitle": "Climbing Stairs ::4::",
     "questionDifficulty": "Easy",
     "questionBlurb": "You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
     "questionTopics": [
@@ -335,7 +335,7 @@
       "Dynamic Programming",
       "Memoization"
     ],
-    "questionLink": "/Notes/1d-dynamic-programming#70-climbing-stairs-2---easy",
+    "questionLink": "/Notes/1d-dynamic-programming#70-climbing-stairs-4---easy",
     "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
