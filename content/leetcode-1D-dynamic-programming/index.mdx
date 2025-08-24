@@ -25,25 +25,111 @@ Instead of solving the same subproblem repeatedly, DP stores
 solutions in a table via memorization or a bottom up array,
 to avoid redundant work.
 
-### 1D Dynamic Programming Characteristics
+### Memoization: Improving Recursion
 
-- Optimal Substructure: global optimum is constructed from local optima.
-- Overlapping Sub Problems: same subproblem is solved multiple times
-when using naive recursion
-- Memoization Top Down vs Tabulation Bottom Up
-- Time complexity is typically: # of sub problems * time per sub problem
+Many 1D Dynamic Programming problems naturally arise from recursion.
+In climbing stairs problem, a naive recursive solutions explores all paths:
 
-### 1D Dynamic Programming Representation
+```
+dfs(i) = dfs(i+1) + dfs(i+2)
+```
 
-- 1D Array: climbing stairs, Fibonacci
-- 2D Grid: edit distance, unique paths
-- HashMap: Sparse states (like coin change with memoization)
+While this recursion works logically, it recomputes overlapping sub problems.
+
+1. dfs(i) calls dfs(i+1) and dfs(i+2).
+2. dfs(i+1) recomputes dfs(i+2), with its own dfs(i+1) -> dfs(i+1+1)
+3. dfs(i+2) is computed twice, as n grows, recursion trees grows to O(2<sup>n</sup>)
+
+Memoization solves this by caching results of sub problems to avoid recomputation.
+
+
+### Tabulation vs Optimal
+
+Dynamic Programming can also be implemented iteratively via bottom up
+by computing solutions from small sub problems to larger ones.
+
+1. Tabulation Full Array
+
+Here we store the solution of ever sub problem in an array dp[].
+Each state depends on previous states, and we compute all of them 
+sequentially from 0 -> N.
+Leads to an array of O(n)
+
+2. Optimal
+
+Often, each state depends on a fixed number of previous states,
+usually the last 1 or 2.
+Here, we replace the tabulation array with variables, reducing
+the space form O(n) to O(1).
 
 ### 1D Dynamic Programming IRL
-- Shortest paths: Bellman-Ford
-- Resource Allocation: Knapsack
-- String Processing: Edit Distance, LCS
-- Game Theory: minimax DP
+- Finance: Maximize profit in trading tracking best profit up to day if
+- Resource Allocation: Task scheduling with constraints (eg, cannot pick consecutive tasks)
+- Networking: Optimize packet processing sequences with limited buffers.
+
+
+### 1D Dynamic Programming Application: DFS with Caching Top Down with Memoization
+Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation.
+Use When: Natural recursive definition exists (e.g., subsequences, partitioning, path problems).
+Recurrence: dfs(state) = combine(dfs(substate1), dfs(substate2), ...)
+
+Ex: Fibonacci (Top Down Memoization)
+```python
+    def climbStairs(n: int) -> int:
+        
+        memo = {}
+
+        def dfs(i: int) -> int:
+            if i <= 1:
+                return i
+            if i in memo:
+                return memo[i]
+
+            # recursive relation with memoization
+            memo[i] = dfs(i-1) + dfs(i-2)
+            return memo[i]
+
+        return dfs(n)
+```
+
+### 1D Dynamic Programming Application: Iterative Tabulation Bottom Up
+Pattern: Iteratively fill a DP array from base case to target.
+Use When: Clear order of dependencies, can compute sequentially.
+Recurrence: dp[i] = dp[i-1] + dp[i-2] (or problem-specific relation).
+
+Ex: Fibonacci (Bottom Up Tabulation)
+```python
+    def fib(n: int) -> int:
+        if n <= 1:
+            return n
+        dp = [0] * (n + 1)
+        dp[0], dp[1] = 0, 1
+
+        for i in range(2, n + 1):
+            dp[i] = dp[i-1] + dp[i-2]
+
+        return dp[n]
+```
+
+### 1D Dynamic Programming Application: Optimal Iterative Variables Bottom Up
+Pattern: Reduce DP array to a few variables if each state depends only on recent ones.
+Use When: DP only needs O(1) rolling state, no need to keep full history.
+Recurrence: curr = prev1 + prev2 → shift forward each step.
+
+Ex: Fibonacci (Optimal Bottom Up)
+```python
+    def fib(n: int) -> int:
+        if n <= 1:
+            return n
+        prev2, prev1 = 0, 1
+
+        for _ in range(2, n + 1):
+            curr = prev1 + prev2
+            prev2, prev1 = prev1, curr
+
+        return prev1
+```
+
 
 ### 1D Dynamic Programming Application: Sequential State Transition
 Pattern: Each state depends on one or two prior states (linear recurrence).
@@ -430,44 +516,44 @@ by either climbing 1 or 2 steps at a time.
 ```python
 ```
 
-### Solution 1: Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
 
         # Note:
         # Top Down DP (memoized recursion)
         # Start from top and make recursive call creating left/right subtrees
-        # 1. Process root -> current step index i
-        # 2. Explore choices -> move 1 step or 2 steps
-        # 3. Build -> accumulate number of ways to reach n
-        # 4. Memoize -> store results to avoid recomputation
-        # Result: number of ways to climb to the nth step
+        # 1. Memo Check -> computed previously
+        # 2. Boundary Check -> Reached N
+        # 3. Boundary Check -> Overshot
+        # 4. Build -> Save ways from i to N
+        # Result: Ways to climb from 0 to nth step
 
-        # store number of ways from step i to n
+        # Ways to get climb from i to nth
         memo = {}
 
         def dfs(i):
 
-            # Process Root -> memoized check
+            # Memoized check
             if i in memo:
                 return memo[i]
             
-            # Base Cases -> if step index reaches or overshoots
+            # Boundary Check -> reached nth
             if i == n:
-                # valid path
                 return 1
+
+            # Boundary Check -> overshot
             if i > n:
-                # overshoot
-                return 0   # Overshoot
+                return 0
             
             # Explore Choices -> move 1 or 2 steps
             left = dfs(i + 1)
             right = dfs(i + 2)
 
-            # Build: sum of paths from next steps 
+            # Build: sum of paths from next sub problems 
             memo[i] = left + right
 
-            # Backtrack: return ith
+            # Backtrack: return i to nth result
             return memo[i]
 
         # initial call from step 0
@@ -478,38 +564,125 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-### Solution 2: Iterative DP Bottom Up Optimal - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to N Recursive with Memoization Top Down - 1D Dynamic Programming/Sequential State Transition
+```python
+    def climbStairs(self, n: int) -> int:
+
+        # Note:
+        # Top Down DP (memoized recursion)
+        # Start from target n and recursively reduce to smaller sub problems.
+        # 1. Memo Check -> computed previously
+        # 2. Boundary Check -> Reached Bottom 0
+        # 3. Boundary Check -> Reached Bottom 1
+        # 4. Boundary Check -> Reached Bottom 2 
+        # 4. Memoize -> store results to avoid recomputation
+        # Result: number of ways to climb to the nth step
+
+        # Ways to climb from 0 to ith step
+        memo = {}
+
+        def dfs(i):
+
+            # Memo Check -> computed previously
+            if i in memo:
+                return memo[i]
+            
+            # Boundary Check -> Reached Bottom 1
+            if i == 1:
+                return 1
+
+            # Boundary Check -> Reached Bottom 2
+            if i == 2:
+                return 2
+
+            # Explore Choices -> arrived from 1 or 2 steps
+            left = dfs(i - 1)
+            right = dfs(i - 2)
+
+            # Build: sum of paths from previous sub problems
+            memo[i] = left + right
+
+            # Backtrack: return 0 to ith result
+            return memo[i]
+
+        # initial call for n
+        res = dfs(n)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return res
+```
+
+### Solution 3: Iterative Bottom Up Optimal - 1D Dynamic Programming/Sequential State Transition
 ```python
     def climbStairs(self, n: int) -> int:
         
         # Note:
-        # Bottom-up DP (iterative, optimal space)
-        # Start from bottom, the ways to climb to the ith step, 
-        # is the number of ways to climb to the ith-1 + ith-2 step.
-        # 1. Process root -> initialize base cases f(1), f(2)
-        # 2. Explore choices -> each i-th step = sum of ways to reach i-1 and i-2
-        # 3. Build -> slide window for space optimization
-        # Result: number of ways to climb to the nth step
+        # Iterative Bottom Up Tabulation
+        # Build dp array for number of ways to climb from 0 to ith
+        # 1. Base Set Up -> initial cases of dp[1], dp[2]
+        # 2. Iterate Explore 3 to nth -> dp[i] = dp[i-1] + dp[i-2]
+        # 3. Build -> fill array iteratively
+        # Result: dp[n] is number of ways to climb to nth step
 
-        # Base cases
+        # Initialize case: for n=1 assign n=2 will fail
         if n == 1:
             return 1
-        if n == 2:
-            return 2
+
+        # Initialize dp array (n is indexed 1)
+        dp = [0] * (n + 1)
+
+        # Base Set Up -> 1 and 2 
+        dp[1] = 1
+        dp[2] = 2
+
+        # Process -> 3 to nth
+        for i in range(3, n + 1):
+
+            # Explore Choices ->
+            left = dp[i-1]
+            right = dp[i-2]
+
+            # Build -> sum of paths from previous sub problems 
+            dp[i] = left + right
+
+        # ways to climb to nth step
+        res = dp[n]
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return res
+```
+
+### Solution 4: Iterative Bottom Up Optimal - 1D Dynamic Programming/Sequential State Transition
+```python
+    def climbStairs(self, n: int) -> int:
+        
+        # Note:
+        # Iterative Bottom Up Optimal
+        # Build dp variables for number of ways to climb from 0 to ith
+        # 1. Variable Set Up -> initial cases of prev2, prev1
+        # 2. Iterate Explore 3 to nth -> dp[i] = prev2 + prev1
+        # 3. Build -> fill ans iteratively
+        # Result: dp[n] is number of ways to climb to nth step
+
+        # Initialize case: for n=1 assign n=2 will fail
+        if n == 1:
+            return 1
 
         # Initialize Sliding Window for f(1) and f(2)
         prev2, prev1 = 1, 2
 
-        # Process -> compute f(3) to f(n)
+        # Process -> 3 to nth
         for i in range(3, n + 1):
 
-            # build: sum of previous two
+            # Build -> sum of paths from previous sub problems
             curr = prev1 + prev2
 
-            # Slide Window Forward
+            # Iterate -> slide window forward
             prev2, prev1 = prev1, curr
         
-        # f(n)
+        # ways to climb to nth step
         res = prev1
 
         # overall: time complexity

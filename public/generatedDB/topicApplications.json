@@ -602,6 +602,33 @@
   "1d-dynamic-programming": [
     {
       "type": "1D Dynamic Programming",
+      "title": "DFS with Caching Top Down with Memoization",
+      "summary": "Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation. Use When: Natural recursive definition exists (e.g., subsequences, partitioning, path problems). Recurrence: dfs(state) = combine(dfs(substate1), dfs(substate2), ...)",
+      "exampleIntro": "Fibonacci (Top Down Memoization)",
+      "codeExample": "def climbStairs(n: int) -> int:\n        \n        memo = {}\n\n        def dfs(i: int) -> int:\n            if i <= 1:\n                return i\n            if i in memo:\n                return memo[i]\n\n            # recursive relation with memoization\n            memo[i] = dfs(i-1) + dfs(i-2)\n            return memo[i]\n\n        return dfs(n)",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-dfs-with-caching-top-down-with-memoization",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
+      "title": "Iterative Tabulation Bottom Up",
+      "summary": "Pattern: Iteratively fill a DP array from base case to target. Use When: Clear order of dependencies, can compute sequentially. Recurrence: dp[i] = dp[i-1] + dp[i-2] (or problem-specific relation).",
+      "exampleIntro": "Fibonacci (Bottom Up Tabulation)",
+      "codeExample": "def fib(n: int) -> int:\n        if n <= 1:\n            return n\n        dp = [0] * (n + 1)\n        dp[0], dp[1] = 0, 1\n\n        for i in range(2, n + 1):\n            dp[i] = dp[i-1] + dp[i-2]\n\n        return dp[n]",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-iterative-tabulation-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
+      "title": "Optimal Iterative Variables Bottom Up",
+      "summary": "Pattern: Reduce DP array to a few variables if each state depends only on recent ones. Use When: DP only needs O(1) rolling state, no need to keep full history. Recurrence: curr = prev1 + prev2 → shift forward each step.",
+      "exampleIntro": "Fibonacci (Optimal Bottom Up)",
+      "codeExample": "def fib(n: int) -> int:\n        if n <= 1:\n            return n\n        prev2, prev1 = 0, 1\n\n        for _ in range(2, n + 1):\n            curr = prev1 + prev2\n            prev2, prev1 = prev1, curr\n\n        return prev1",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-optimal-iterative-variables-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
       "title": "Sequential State Transition",
       "summary": "Pattern: Each state depends on one or two prior states (linear recurrence). Use When: Counting paths, sequences, or arrangements (Fibonacci, climbing stairs). Recurrence: dp[i] = dp[i-1] + dp[i-2]",
       "exampleIntro": "Climbing Stairs",
