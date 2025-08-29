@@ -2,8 +2,8 @@
 title: "1D Dynamic Programming"
 description: "1D dynamic programming"
 image: "../../public/Notes/1d-dynamic-programming.png"
-publishedAt: "2025-08-29"
-updatedAt: "2025-08-29" 
+publishedAt: "2025-09-05"
+updatedAt: "2025-09-05" 
 author: "jonathancamberos"
 isPublished: true
 tags: 
@@ -103,10 +103,14 @@ Visual Comparison:
     computed iteratively
 ```
 
-### DP Array Size
+### DP Array Size Shifting
 
 The choice of a DP array size of (N) or (N+1) depends on 
 what the state of an index represents:
+
+Or just use a mental trick: 
+If we do size (N) we need dp[n-1] as final answer.
+If we do size (N+1) we need dp[n] as final answer.
 
 1. Prefix View (N+1)
 
@@ -180,7 +184,7 @@ Since you need to compute dp[n], you need n+1 states.
     def climbStairs(n: int) -> int:
 
         # dp[i] = ways to reach step i
-        # Rule (2): "element i itself"
+        # Rule (1): "the first i elements"
         dp = [0] * (n+1)
         dp[0] = 1
         dp[1] = 1 
@@ -204,7 +208,7 @@ So the DP array is only of length n (last index n-1 = ways to reach step n).
             return 1
 
         # dp[i] = ways to reach step (i+1)
-        # Rule (1): "the first i elements"
+        # Rule (2): "element i itself"
         dp = [0] * n
         dp[0] = 1  # ways to reach step 1
         dp[1] = 2  # ways to reach step 2
@@ -216,9 +220,11 @@ So the DP array is only of length n (last index n-1 = ways to reach step n).
 ```
 
 ### 1D Dynamic Programming IRL
-- Finance: Maximize profit in trading tracking best profit up to day if
-- Resource Allocation: Task scheduling with constraints (eg, cannot pick consecutive tasks)
-- Networking: Optimize packet processing sequences with limited buffers.
+Networking: Optimize packet processing sequences with limited buffers.
+
+Resource Allocation: Task scheduling with constraints (eg, cannot pick consecutive tasks)
+
+Finance: Maximize profit in trading tracking best profit up to day if
 
 
 ### 1D Dynamic Programming Application: DFS with Caching Top Down with Memoization
