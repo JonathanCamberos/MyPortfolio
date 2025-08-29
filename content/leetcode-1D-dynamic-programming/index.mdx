@@ -103,6 +103,117 @@ Visual Comparison:
     computed iteratively
 ```
 
+### DP Array Size
+
+The choice of a DP array size of (N) or (N+1) depends on 
+what the state of an index represents:
+
+1. Prefix View (N+1)
+
+dp[i] is defined as the answer for the first i elements
+(e.g., houses[0..i-1] or steps[0..i-1])
+dp[0] = answer for [] elements (empty case)
+dp[n] = answer for first [0, n-1] elements (all of them)
+Size must be dp[n+1]
+
+2. Element View (N)
+
+dp[i] is defined as the answer for element i itself (houses[i] or step i)
+dp[0] = answer for 1 element (first element)
+dp[n-1] = answer for last element
+Size must be dp[n]
+
+House Robber:
+(N) Natural + (N+1) Shifted:
+
+(N) Natural
+Here, dp[i] represents maximum money that can be robbed from houses 0..i
+```python
+    def rob(self, nums: List[int]) -> int:
+
+        n = len(nums)
+
+        # Edge case: only 1 house
+        # Without this, accessing nums[1] would cause IndexError
+        if n == 1:
+            return nums[0]
+
+        # dp[i] = max money robbed from houses 0..i
+        # Rule (2): "element i itself"
+        dp = [0] * n
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+
+        for i in range(2, n):
+            dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+
+        return dp[n-1]
+```
+
+(N+1) Shifted
+Here, dp[i] represents the max money robbed from the first i houses.
+This shifts the definition forward by 1 and naturally uses n+1 size.
+```python
+    def rob(nums: List[int]) -> int:
+
+        n = len(nums)
+
+        # dp[i] = max money robbed from the first i houses
+        # Rule (1): "the first i elements"
+        dp = [0] * (n+1)
+        dp[0] = 0
+        dp[1] = nums[0]
+
+        for i in range(2, n+1):
+            dp[i] = max(dp[i-1], dp[i-2] + nums[i-1])
+
+        return dp[n]
+```
+
+
+Climbing stairs: (N+1) + (N)
+
+(N+1) Natural
+Here, dp[i] represents the number of ways to climb to step i
+Since you need to compute dp[n], you need n+1 states.
+```python
+    def climbStairs(n: int) -> int:
+
+        # dp[i] = ways to reach step i
+        # Rule (2): "element i itself"
+        dp = [0] * (n+1)
+        dp[0] = 1
+        dp[1] = 1 
+
+        for i in range(2, n+1):
+            dp[i] = dp[i-1] + dp[i-2]
+
+        return dp[n]
+```
+
+(N) Shifted
+Here, dp[i] represents the number of ways to reach steps (i+1).
+So the DP array is only of length n (last index n-1 = ways to reach step n).
+```python
+    def climbStairs(n: int) -> int:
+        
+        # Edge cases:
+        # n == 1 → only 1 way (one step)
+        # Without this, dp[1] would cause IndexError
+        if n == 1:
+            return 1
+
+        # dp[i] = ways to reach step (i+1)
+        # Rule (1): "the first i elements"
+        dp = [0] * n
+        dp[0] = 1  # ways to reach step 1
+        dp[1] = 2  # ways to reach step 2
+
+        for i in range(2, n):
+            dp[i] = dp[i-1] + dp[i-2]
+
+        return dp[n-1]
+```
 
 ### 1D Dynamic Programming IRL
 - Finance: Maximize profit in trading tracking best profit up to day if
@@ -909,6 +1020,181 @@ find the cheapest cost to climb to the top.
         # overall: space complexity O(1)
         return res
 ```
+
+
+## 1137. Nth Tribonacci Number ::3:: - Easy
+
+Topics:  Math, Dynamic Programming, Memoization
+
+### Intro
+> The Tribonacci sequence Tn is defined as follows: 
+> T0 = 0, T1 = 1, T2 = 1,
+> Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+> Given n, return the value of Tn.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 4 | 4 |
+| n = 25 | 1389537 |
+
+Constraints:
+
+0 &leq; n &leq; 37
+
+The answer is guaranteed to fit within a 32-bit integer, ie.
+answer &leq; 2<sup>31</sup> - 1
+
+### Abstraction
+Find the Tribonacci for n.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+```python
+    def tribonacci(self, n: int) -> int:
+
+        # Note:
+        # Top Down DP (memoized recursion)
+        # 1. Memo Check -> computed previously
+        # 2. Boundary Check -> reached base case
+        # 3. Explore Choices -> grab num of ways from i+1, i+2, i+3
+        # 4. Build -> sum paths from three previous steps
+        # 5. Memo Return -> return ways from i to nth step, calculated once
+        # Result: T_i in Tribonacci sequence
+
+        memo = {}
+
+        def dfs(i):
+
+            # Memoized check
+            if i in memo:
+                return memo[i]
+
+            # Boundary Check -> base cases
+            if i == 0:
+                return 0
+            if i == 1 or i == 2:
+                return 1
+
+            # Explore Choices -> sum of previous three steps
+            left = dfs(i-1)
+            mid = dfs(i-2)
+            right = dfs(i-3)
+
+            # Build -> sum paths
+            memo[i] = left + mid + right
+
+            # Memo return
+            return memo[i]
+
+        # ways to get T_n
+        res = dfs(n)
+        return res
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+```python
+    def tribonacci(self, n: int) -> int:
+
+        # Note:
+        # Top Down DP (memoized recursion)
+        # 1. Memo Check -> computed previously
+        # 2. Boundary Check -> base cases 0,1,2
+        # 3. Explore Choices -> sum of previous three
+        # 4. Build -> T_i = sum(T_{i-1}, T_{i-2}, T_{i-3})
+        # 5. Memo Return -> return T_i, calculated once
+        # Result: T_n in Tribonacci sequence
+
+        memo = {}
+
+        def dfs(i):
+
+            # Memoized check
+            if i in memo:
+                return memo[i]
+
+            # Boundary check
+            if i == 0:
+                return 0
+            if i == 1 or i == 2:
+                return 1
+
+            # Explore Choices
+            left = dfs(i-1)
+            mid = dfs(i-2)
+            right = dfs(i-3)
+
+            # Build
+            memo[i] = left + mid + right
+
+            # Memo Return
+            return memo[i]
+
+        # compute T_n
+        res = dfs(n)
+        return res
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+```python
+    def tribonacci(self, n: int) -> int:
+
+        # Note:
+        # Iterative Bottom Up Variables
+        # 1. Catch Initialize -> n = 0,1,2 base cases
+        # 2. Base Set Up -> T0, T1, T2
+        # 3. Iterate -> 3 to n
+        # 4. Explore + Build -> T[i] = sum of previous three
+        # 5. Slide Window -> update variables
+        # Result: T_n in Tribonacci sequence
+
+        # Catch Initialize -> base cases
+        if n == 0:
+            return 0
+        if n == 1 or n == 2:
+            return 1
+
+        # Base Set Up -> previous three values
+        T0, T1, T2 = 0, 1, 1
+
+        # Iterate -> compute from 3 to n
+        for i in range(3, n + 1):
+
+            # Explore + Build -> sum of previous three
+            curr = T0 + T1 + T2
+
+            # Slide Window -> shift variables
+            T0, T1, T2 = T1, T2, curr
+
+        # Result -> nth Tribonacci number
+        res = T2
+        return res
+```
+
+
 
 ## 198. House Robber ::3:: - Medium
 
