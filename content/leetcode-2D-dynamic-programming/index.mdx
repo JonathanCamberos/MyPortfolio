@@ -2,16 +2,65 @@
 title: "2D Dynamic Programming"
 description: "2D dynamic programming"
 image: "../../public/Notes/2d-dynamic-programming.png"
-publishedAt: "2025-05-03"
-updatedAt: "2025-05-03" 
+publishedAt: "2025-09-16"
+updatedAt: "2025-09-16" 
 author: "jonathancamberos"
 isPublished: true
 tags: 
 - data structures and algorithms
 ---
 
+## 2D Dynamic Programming Intro
 
-hello!
+LeetCode problems solved with dynamic programming
+
+### What is 2D Dynamic Programming 
+
+DP intro in 1D Dynamic Programming intro section. 
+
+Some problems cannot be solved by tracking just a single dimension (like index i).
+Instead, the state depends on two parameters, often representing 
+ranges, pairs, or choices.
+
+We use a 2D table dp[i][j] where each entry stores the solution to a subproblem
+defined by indices i and j.
+
+Common situations where 2D dynamic programming arises:
+
+1. Interval DP (e.g., substrings, subarray)
+
+dp[i][j] = answer for interval nums[i..j]
+
+e.g., Longest Palindromic Subsequence, Matrix Chain Multiplication
+
+2. Two Sequence Alignment
+
+dp[i][j] = answer for first i of A, first j of B
+
+e.g., Edit Distance, Longest Common Subsequence
+
+### Recursive Memoization: 2D Recursion 
+
+Just like in 1D, many 2D DP problems begin as recursion.
+
+Here, overlapping sub problems appear because (i, j) is revisited many times.
+Memoization caches dfs(i, j) resulting in a 2D table to avoid recomputation.
+
+
+### Iterative: Tabulation
+
+We can also fill in a 2D table iteratively
+
+### DP Array Size Shifting
+
+As in 1D DP, the choice of array size depends on what the state represents
+
+Same mental trick as 1D:
+
+1. Prefix View (N+1, M+1) -> answer at dp[n][m]
+
+2. Element View (N, M) -> answer at dp[n-1][m-1]
+
 
 ### Dynamic Programming Application: 2D Grid Traversal
 Each cell depends on top and or left neighbors (classic grid DP)
@@ -134,4 +183,1617 @@ Ex: Traveling Salesman or Visit All Nodes
         return best
 
     answer = min(dp(1 << i, i) for i in range(n))
+```
+
+## 62. Unique Paths ::2:: - Medium
+
+Topics:  Math, Dynamic Programming, Combinatorics
+
+### Intro
+> There is a robot on an m x n grid. The robot is initially  
+> located at the top-left corner (i.e., grid[0][0]). The robot 
+> tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]).
+> The robot can only move either down or right at any point in time.
+> Given the two integers m and n, return the number of 
+> possible unique paths that the robot can take to reach the 
+> bottom-right corner.
+> The test cases are generated so that the answer will be 
+> less than or equal to 2 * 10^9.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| m = 3, n = 7 | 28 |
+| m = 3, n = 2 | 3 |
+
+Constraints:
+
+1 &leq; m, n &leq; 100
+
+### Abstraction
+Given a grid and a robot, determine how many unique paths
+there are to the end.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        # Note:
+        # Bottom Up Tabulation
+        # 1. Initialize Array -> dp[i][j] = number of ways to reach cell (i,j)
+        # 2. Base Set Up -> first row and first column = 1 (only one way)
+        # 3. Explore -> fill dp for all cells from (1,1) to (m-1,n-1)
+        # 4. Build -> dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        # Result: dp[m-1][n-1] = unique paths to bottom-right corner
+
+        # Initialize Array -> m x n grid
+        dp = [[0] * n for _ in range(m)]
+
+        # Base Set Up -> first row and first col = 1
+        for i in range(m):
+            dp[i][0] = 1
+        for j in range(n):
+            dp[0][j] = 1
+
+        # Process -> from (1,1) to (m-1,n-1)
+        for i in range(1, m):
+            for j in range(1, n):
+                # Explore Choices -> from top or left
+                top = dp[i-1][j]
+                left = dp[i][j-1]
+
+                # Build -> total ways
+                dp[i][j] = top + left
+
+        # Result -> bottom-right cell
+        res = dp[m-1][n-1]
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(m*n)
+        return res
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
+```python
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        # Note:
+        # Bottom Up Variables (row compression)
+        # 1. Initialize Row -> dp[j] = number of ways to reach column j in current row
+        # 2. Base Set Up -> first row = all 1's
+        # 3. Explore -> update row from left to right
+        # 4. Build -> dp[j] = dp[j] + dp[j-1]
+        # Result: dp[n-1] = unique paths to bottom-right corner
+
+        # Initialize Row -> all 1's for first row
+        dp = [1] * n
+
+        # Process -> rows 1 to m-1
+        for i in range(1, m):
+            for j in range(1, n):
+                # Explore + Build -> update in-place
+                dp[j] = dp[j] + dp[j-1]
+
+        # Result -> bottom-right cell
+        res = dp[n-1]
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(n)
+        return res
+```
+
+
+## 1143. Longest Common Subsequence ::3:: - Medium
+
+Topics:  String, Dynamic Programming
+
+### Intro
+> Given two strings text1 and text2, return the length 
+> of their longest common subsequence. If there is no 
+> common subsequence, return 0.
+> A subsequence of a string is a new string generated 
+> from the original string with some characters (can be
+> none) deleted without changing the relative order of the 
+> remaining characters.
+> For example, "ace" is a subsequence of "abcde".
+> A common subsequence of two strings is a 
+> subsequence that is common to both strings.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| text1 = "abcde", text2 = "ace"  | 3 |
+| text1 = "abc", text2 = "abc" | 3 |
+| text1 = "abc", text2 = "def" | 0 |
+
+Constraints:
+
+1 &leq; text.length, text2.length &leq; 1000
+
+text1 and text2 consist of only lowercase English characters.
+
+### Abstraction
+Given two strings, return the length of the longest common substring.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        # Note:
+        # Bottom Up Tabulation
+        # 1. Initialize 2D Array -> dp[i][j] = LCS length for first i chars of text1, first j chars of text2
+        # 2. Base Set Up -> dp[0][*] = 0, dp[*][0] = 0 (empty string has LCS = 0)
+        # 3. Explore -> iterate i=1..m, j=1..n
+        # 4. Explore Choices:
+        #       if text1[i-1] == text2[j-1]: dp[i][j] = 1 + dp[i-1][j-1]
+        #       else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+        # 5. Build -> fill dp row by row
+        # Result: dp[m][n] = LCS length for full strings
+
+        m, n = len(text1), len(text2)
+
+        # Initialize Array -> size (m+1) x (n+1) for base row/col
+        dp = [[0] * (n+1) for _ in range(m+1)]
+
+        # Process -> iterate through chars of both strings
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+
+                # Explore Choices
+                if text1[i-1] == text2[j-1]:
+                    # Characters match -> extend subsequence
+                    dp[i][j] = 1 + dp[i-1][j-1]
+                else:
+                    # Skip one from either string
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+
+        # Result -> LCS length for full strings
+        res = dp[m][n]
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(m*n)
+        return res
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
+```python
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        # Note:
+        # Bottom Up Variables (row compression)
+        # 1. Only previous row is needed at any time
+        # 2. Initialize two rows -> prev, curr
+        # 3. Explore -> for each i, build row j=1..n
+        # 4. Explore Choices:
+        #       if text1[i-1] == text2[j-1]: curr[j] = 1 + prev[j-1]
+        #       else: curr[j] = max(prev[j], curr[j-1])
+        # 5. Slide -> prev = curr
+        # Result: prev[n] = LCS length for full strings
+
+        m, n = len(text1), len(text2)
+
+        # Initialize two rows
+        prev = [0] * (n+1)
+
+        # Process -> iterate rows
+        for i in range(1, m+1):
+            curr = [0] * (n+1)
+            for j in range(1, n+1):
+
+                # Explore Choices
+                if text1[i-1] == text2[j-1]:
+                    curr[j] = 1 + prev[j-1]
+                else:
+                    curr[j] = max(prev[j], curr[j-1])
+
+            # Slide -> update row
+            prev = curr
+
+        # Result -> LCS length
+        res = prev[n]
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(n)
+        return res
+```
+
+### Solution 3: black magic - 1D Dynamic Programming/Sequential State Transition
+```python
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        intersection = set(text1) & set(text2)
+        if len(intersection) == 0: return 0
+        t1 = [char for char in text1 if char in intersection]
+        t2 = [char for char in text2 if char in intersection]
+        dp = [0] * len(t2)
+        for char in t1:
+            count = 0
+            for j in range(len(t2)):
+                if dp[j]>count:
+                    count=dp[j]
+                elif t2[j] == char:
+                    dp[j] = count + 1
+        return max(dp)
+```
+
+
+## 309. Best Time to Buy and Sell Stock with Cool Down ::3:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are given an array prices where prices[i] is the 
+> price of a given stock on the ith day.
+> Find the maximum profit you can achieve. You may 
+> complete as many transactions as you like (i.e., buy one 
+> and sell one share of the stock multiple times) with the
+> following restrictions:
+> After you sell your stock, you cannot buy stock on 
+> the next day (i.e., cooldown one day).
+> Note: You may not engage in multiple transactions 
+> simultaneously (i.e., you must sell the stock before you 
+> buy again).
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| prices = [1,2,3,0,2]  | 3 |
+| prices = [1] | 0 |
+
+Constraints:
+
+1 &leq; prices.length &leq; 5000
+
+0 &leq; prices[i] &leq; 1000
+
+### Abstraction
+Given an array of prices, find the max profit, given the restrictions of
+as many transactions as you like, with a sell to buy cool down of one day,
+and no multiple transactions simultaneously so you must sell before you 
+can buy again.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # Bottom Up Tabulation
+        # Three states per day:
+        #   1. hold[i]    -> max profit at day i if holding stock
+        #   2. sold[i]    -> max profit at day i if just sold stock (cooldown next day)
+        #   3. rest[i]    -> max profit at day i if in cooldown or not holding
+        #
+        # Transitions:
+        #   hold[i] = max(hold[i-1], rest[i-1] - prices[i])   # buy or continue holding
+        #   sold[i] = hold[i-1] + prices[i]                   # sell today
+        #   rest[i] = max(rest[i-1], sold[i-1])               # cooldown or stay at rest
+        #
+        # Base Set Up:
+        #   hold[0] = -prices[0]   # buy first day
+        #   sold[0] = 0            # cannot sell on day 0
+        #   rest[0] = 0            # do nothing
+        #
+        # Result: max(sold[n-1], rest[n-1])  # must end not holding stock
+
+        n = len(prices)
+
+        # Initialize Arrays -> track 3 states per day
+        hold = [0] * n
+        sold = [0] * n
+        rest = [0] * n
+
+        # Base Set Up -> day 0
+        hold[0] = -prices[0]
+        sold[0] = 0
+        rest[0] = 0
+
+        # Process -> day 1 to n-1
+        for i in range(1, n):
+
+            # Transition: continue holding or buy today
+            hold[i] = max(hold[i-1], rest[i-1] - prices[i])
+
+            # Transition: sell today
+            sold[i] = hold[i-1] + prices[i]
+
+            # Transition: cooldown or rest
+            rest[i] = max(rest[i-1], sold[i-1])
+
+        # Result -> max profit if not holding stock
+        res = max(sold[n-1], rest[n-1])
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return res
+
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def maxProfit(self, prices: List[int]) -> int:
+
+        n = len(prices)
+        if n == 1: return 0
+        b = [-10 ** 9] * n
+        s = [0] * n
+        for i in range(n):
+            s[i] = max(s[i - 1], prices[i] + b[i - 1])
+            b[i] = max(b[i - 1], s[i - 2] - prices[i])
+        return s[-1]
+
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
+```python
+def maxProfit(self, prices: List[int]) -> int:
+
+        # Note:
+        # Bottom Up Variables (rolling states)
+        # Three states tracked in variables:
+        #   hold -> max profit holding stock
+        #   sold -> max profit just sold (cooldown next day)
+        #   rest -> max profit cooldown / not holding
+        #
+        # Transitions:
+        #   new_hold = max(hold, rest - prices[i])
+        #   new_sold = hold + prices[i]
+        #   new_rest = max(rest, sold)
+        #
+        # Base Set Up:
+        #   hold = -prices[0]
+        #   sold = 0
+        #   rest = 0
+        #
+        # Result: max(sold, rest)
+
+        n = len(prices)
+
+        # Base Set Up -> day 0
+        hold = -prices[0]
+        sold = 0
+        rest = 0
+
+        # Process -> day 1 to n-1
+        for i in range(1, n):
+
+            # Save previous states
+            prev_hold, prev_sold, prev_rest = hold, sold, rest
+
+            # Transitions
+            hold = max(prev_hold, prev_rest - prices[i])
+            sold = prev_hold + prices[i]
+            rest = max(prev_rest, prev_sold)
+
+        # Result -> max profit not holding stock
+        res = max(sold, rest)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return res
+```
+
+
+## 518. Coin Change II ::3:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are given an integer array coins representing coins of different 
+> denominations and an integer amount representing a total amount of money.
+> Return the number of combinations that make up that amount. If that 
+> amount of money cannot be made up by any combination of the coins, return 0.
+> You may assume that you have an infinite number of each kind of coin.
+> The answer is guaranteed to fit into a signed 32-bit integer.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| amount = 5, coins = [1,2,5]  | 4 |
+| amount = 3, coins = [2] | 0 |
+| amount = 10, coins = [10] | 1 |
+
+Constraints:
+
+1 &leq; coins.length &leq; 300
+
+1 &leq; coins[i] &leq; 5000
+
+All the values of coins are unique.
+
+0 &leq; amount &leq; 5000
+
+### Abstraction
+Given an array of coins and a target, return how the total number of
+combinations of coins that can add up to the target, assuming you can use
+any coin infinite times. 
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def change(self, amount: int, coins: List[int]) -> int:
+        # Note:
+        # Bottom Up Tabulation (2D DP)
+        # dp[i][j] = number of ways to make sum j using first i coins
+        #
+        # Transitions:
+        #   if coin value > j:
+        #       dp[i][j] = dp[i-1][j]            # cannot take coin i
+        #   else:
+        #       dp[i][j] = dp[i-1][j] + dp[i][j-coin] 
+        #           -> ways without this coin + ways including this coin
+        #
+        # Base Set Up:
+        #   dp[0][0] = 1    # one way to make amount 0 (use no coins)
+        #   dp[0][j>0] = 0  # cannot make positive amount with 0 coins
+        #
+        # Result: dp[n][amount]
+
+        n = len(coins)
+        dp = [[0] * (amount + 1) for _ in range(n + 1)]
+        
+        # base setup: one way to make 0
+        for i in range(n + 1):
+            dp[i][0] = 1
+        
+        # process
+        for i in range(1, n + 1):
+            for j in range(1, amount + 1):
+                if j < coins[i-1]:
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    dp[i][j] = dp[i-1][j] + dp[i][j - coins[i-1]]
+        
+        return dp[n][amount]
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def change(self, amount: int, coins: List[int]) -> int:
+        # Note:
+        # Optimized Bottom Up (1D DP)
+        # dp[j] = number of ways to make sum j
+        #
+        # Transitions:
+        #   dp[j] += dp[j - coin]   # add ways using this coin
+        #
+        # Base Set Up:
+        #   dp[0] = 1  # one way to make amount 0
+        #
+        # Result: dp[amount]
+
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        
+        for coin in coins:
+            for j in range(coin, amount + 1):
+                dp[j] += dp[j - coin]
+        
+        return dp[amount]
+```
+
+## 494. Target Sum ::3:: - Medium
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are given an integer array nums and an integer target.
+> You want to build an expression out of nums by adding one 
+> of the symbols '+' and '-' before each integer in nums 
+> and then concatenate all the integers.
+> For example, if nums = [2, 1], you can add a '+' 
+> before 2 and a '-' before 1 and concatenate them 
+> to build the expression "+2-1".
+> Return the number of different expressions that you can 
+> build, which evaluates to target.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [1,1,1,1,1], target = 3  | 5 |
+| nums = [1], target = 1 | 1 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 20
+
+1 &leq; nums[i] &leq; 1000
+
+0 &leq; sum(nums[i]) &leq; 1000
+
+-1000 &leq; target &leq; 1000
+
+### Abstraction
+Given an array, the ability to assign '+' or '-' symbols between characters,
+and a target, determine how many unique combinations of symbols exist 
+to add up to target using the array.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def change(self, amount: int, coins: List[int]) -> int:
+        # Note:
+        # DP State is "first i elements" style -> dp[i][sum]
+        # dp[i][s] = number of ways to reach sum s using nums[0..i-1]
+        #
+        # Transition:
+        #   dp[i][s] = dp[i-1][s - nums[i-1]] + dp[i-1][s + nums[i-1]]
+        #
+        # Base:
+        #   dp[0][0] = 1  (no numbers, only one way to make sum 0)
+        #
+        # Result:
+        #   dp[n][target]
+        #
+        # DP size:
+        #   total sum range = [-total, total] → shift by offset = total
+        #   index = s + offset
+
+        total = sum(nums)
+        if abs(target) > total: return 0
+        offset = total
+        n = len(nums)
+
+        dp = [[0] * (2 * total + 1) for _ in range(n + 1)]
+        dp[0][0 + offset] = 1
+
+        for i in range(1, n + 1):
+            num = nums[i - 1]
+            for s in range(-total, total + 1):
+                if dp[i - 1][s + offset] != 0:
+                    dp[i][s + num + offset] += dp[i - 1][s + offset]
+                    dp[i][s - num + offset] += dp[i - 1][s + offset]
+
+        return dp[n][target + offset]
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+
+        # Note:
+        # Same as Solution 1, but optimize to 1D array (rolling state)
+        # dp[s] = number of ways to reach sum s at current step
+        # Must use temp array to avoid overwriting
+
+        total = sum(nums)
+        if abs(target) > total: return 0
+        offset = total
+
+        dp = [0] * (2 * total + 1)
+        dp[0 + offset] = 1
+
+        for num in nums:
+            next_dp = [0] * (2 * total + 1)
+            for s in range(-total, total + 1):
+                if dp[s + offset] != 0:
+                    next_dp[s + num + offset] += dp[s + offset]
+                    next_dp[s - num + offset] += dp[s + offset]
+            dp = next_dp
+
+        return dp[target + offset]
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+
+        # Note:
+        # Transform into subset sum:
+        # Let P = sum(positive nums), N = sum(negative nums)
+        # Then P - N = target and P + N = total
+        # → P = (target + total) / 2
+        #
+        # Count number of subsets that sum to P
+        #
+        # dp[s] = number of ways to reach sum s using subset of nums
+
+        total = sum(nums)
+        if total < abs(target) or (target + total) % 2 != 0: return 0
+        P = (target + total) // 2
+
+        dp = [0] * (P + 1)
+        dp[0] = 1
+
+        for num in nums:
+            for s in range(P, num - 1, -1):
+                dp[s] += dp[s - num]
+
+        return dp[P]
+```
+
+
+## 97. Interleaving String ::2:: - Medium
+
+Topics:  String, Dynamic Programming
+
+### Intro
+> Given strings s1, s2, and s3, find whether s3 is formed by 
+> an interleaving of s1 and s2.
+> An interleaving of two strings s and t is a configuration 
+> where s and t are divided into n and m substrings 
+> respectively, such that:
+> s = s1 + s2 + ... + sn
+> t = t1 + t2 + ... + tm
+> |n - m| < = 1
+> The interleaving is s1 + t1 + s2 + t2 + s3 + t3 + ... 
+> or t1 + s1 + t2 + s2 + t3 + s3 + ...
+> Note: a + b is the concatenation of strings a and b.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"  | true |
+| s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc" | false |
+| s1 = "", s2 = "", s3 = "" | true |
+
+Constraints:
+
+0 &leq; s1.length, s2.length &leq; 100
+
+0 &leq; s3.length &leq; 200
+
+s1, s2, and s3 consist of lowercase English letters.
+
+### Abstraction
+Given three strings, determine if the third string can be created by
+interweaving the characters of strings one and two.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        # Note:
+        # DP State:
+        #   dp[i][j] = True if s3[0..i+j-1] can be formed 
+        #              by interleaving s1[0..i-1] and s2[0..j-1]
+        #
+        # Transition:
+        #   dp[i][j] = (dp[i-1][j] and s1[i-1] == s3[i+j-1]) 
+        #            or (dp[i][j-1] and s2[j-1] == s3[i+j-1])
+        #
+        # Base:
+        #   dp[0][0] = True
+        #
+        # Result:
+        #   dp[len(s1)][len(s2)]
+
+        n1, n2, n3 = len(s1), len(s2), len(s3)
+        if n1 + n2 != n3: return False
+
+        dp = [[False] * (n2 + 1) for _ in range(n1 + 1)]
+        dp[0][0] = True
+
+        for i in range(n1 + 1):
+            for j in range(n2 + 1):
+                if i > 0 and s1[i-1] == s3[i+j-1]:
+                    dp[i][j] |= dp[i-1][j]
+                if j > 0 and s2[j-1] == s3[i+j-1]:
+                    dp[i][j] |= dp[i][j-1]
+
+        return dp[n1][n2]
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        # Note:
+        # Space optimized version of Solution 1
+        # dp[j] = True if prefix of s1[0..i-1] and s2[0..j-1]
+        #         can form s3[0..i+j-1]
+        #
+        # Roll through s1, update dp in place
+
+        n1, n2, n3 = len(s1), len(s2), len(s3)
+        if n1 + n2 != n3: return False
+
+        dp = [False] * (n2 + 1)
+        dp[0] = True
+
+        for j in range(1, n2 + 1):
+            dp[j] = dp[j-1] and s2[j-1] == s3[j-1]
+
+        for i in range(1, n1 + 1):
+            dp[0] = dp[0] and s1[i-1] == s3[i-1]
+            for j in range(1, n2 + 1):
+                dp[j] = (dp[j] and s1[i-1] == s3[i+j-1]) or \
+                        (dp[j-1] and s2[j-1] == s3[i+j-1])
+
+        return dp[n2]
+
+```
+
+## 329. Longest Increasing Path in a Matrix ::3:: - Hard
+
+Topics:  Array, Dynamic Programming, Depth First Search, Breadth First Search, Graph, Topological Sort, Memoization, Matrix
+
+### Intro
+> Given an m x n integers matrix, return the length of 
+> the longest increasing path in matrix.
+> From each cell, you can either move in four directions: 
+> left, right, up, or down. You may not move diagonally 
+> or move outside the boundary (i.e., wrap-around is 
+> not allowed).
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| matrix = [[9,9,4],[6,6,8],[2,1,1]]  | 4 |
+| matrix = [[3,4,5],[3,2,6],[2,2,1]] | 4 |
+| matrix = [[1]] | 1 |
+
+Constraints:
+
+m == matrix.length
+
+n == matrix[i].length
+
+1 &leq; m, n &leq; 200
+
+0 &leq; matrix[i][j] &leq; 2<sup>31</sup> - 1
+
+### Abstraction
+Given a matrix, find the length of the longest increasing path.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS + Memoization - 1D Dynamic Programming/Sequential State Transition
+```python
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        # Notes:
+        # - Use DFS with memoization to avoid recomputation.
+        # - Each cell (i, j) stores the length of the longest increasing path starting there.
+        # - Explore 4 directions: up, down, left, right if the next cell is larger.
+        #
+        # Result: max value across all cells in memo
+
+        if not matrix or not matrix[0]:
+            return 0
+        
+        m, n = len(matrix), len(matrix[0])
+        memo = [[0] * n for _ in range(m)]  # memo[i][j] = longest path starting from (i, j)
+
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        def dfs(i, j):
+            # Return cached result
+            if memo[i][j] != 0:
+                return memo[i][j]
+            
+            # At least the cell itself
+            best = 1
+            for dx, dy in directions:
+                x, y = i + dx, j + dy
+                if 0 <= x < m and 0 <= y < n and matrix[x][y] > matrix[i][j]:
+                    best = max(best, 1 + dfs(x, y))
+            
+            memo[i][j] = best
+            return best
+
+        res = 0
+        for i in range(m):
+            for j in range(n):
+                res = max(res, dfs(i, j))
+        return res
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        # Notes:
+        # - Treat each cell as a node in a DAG.
+        # - Edges go from smaller value -> larger value neighbor.
+        # - Topological sorting via Kahn's algorithm counts layers = path length.
+        #
+        # Result: number of BFS layers processed.
+
+        if not matrix or not matrix[0]:
+            return 0
+
+        m, n = len(matrix), len(matrix[0])
+        indegree = [[0] * n for _ in range(m)]
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        # Compute indegree for each cell
+        for i in range(m):
+            for j in range(n):
+                for dx, dy in directions:
+                    x, y = i + dx, j + dy
+                    if 0 <= x < m and 0 <= y < n and matrix[x][y] > matrix[i][j]:
+                        indegree[x][y] += 1
+
+        # Collect nodes with indegree 0
+        q = deque()
+        for i in range(m):
+            for j in range(n):
+                if indegree[i][j] == 0:
+                    q.append((i, j))
+
+        res = 0
+        # BFS layer by layer
+        while q:
+            res += 1
+            for _ in range(len(q)):
+                i, j = q.popleft()
+                for dx, dy in directions:
+                    x, y = i + dx, j + dy
+                    if 0 <= x < m and 0 <= y < n and matrix[x][y] > matrix[i][j]:
+                        indegree[x][y] -= 1
+                        if indegree[x][y] == 0:
+                            q.append((x, y))
+        return res
+```
+
+
+## 115. Distinct Subsequences ::3:: - Hard
+
+Topics:  String, Dynamic Programming
+
+### Intro
+> Given two strings s and t, return the number of distinct 
+> subsequences of s which equals t.
+> The test cases are generated so that the answer fits on a 
+> 32-bit signed integer.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "rabbbit", t = "rabbit"  | 3 |
+| s = "babgbag", t = "bag" | 5 |
+
+Constraints:
+
+1 &leq; s.length, t.length &leq; 1000
+
+s and t consist of English letters.
+
+### Abstraction
+Given two strings, determine the number of subsequences that
+string one will equal string two.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def numDistinct(self, s: str, t: str) -> int:
+        # Notes:
+        # - dp[i][j] = number of subsequences of s[:i] that equals t[:j]
+        # - Transitions:
+        #     if s[i-1] == t[j-1]:
+        #         dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+        #     else:
+        #         dp[i][j] = dp[i-1][j]
+        # - Base cases:
+        #     dp[i][0] = 1   (empty t can always be formed)
+        #     dp[0][j] = 0   (non-empty t cannot be formed from empty s)
+        #
+        # Result: dp[m][n]
+
+        m, n = len(s), len(t)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        # Base: empty t
+        for i in range(m + 1):
+            dp[i][0] = 1
+
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]
+                else:
+                    dp[i][j] = dp[i - 1][j]
+        
+        return dp[m][n]
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def numDistinct(self, s: str, t: str) -> int:
+        # Notes:
+        # - Optimize to 1D by rolling over dp for target string.
+        # - Iterate j backwards to avoid overwriting needed states.
+        #
+        # Result: dp[n] (subsequences of s forming full t)
+
+        m, n = len(s), len(t)
+        dp = [0] * (n + 1)
+        dp[0] = 1  # empty t
+
+        for i in range(1, m + 1):
+            # iterate backwards for correctness
+            for j in range(n, 0, -1):
+                if s[i - 1] == t[j - 1]:
+                    dp[j] += dp[j - 1]
+        
+        return dp[n]
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def numDistinct(self, s: str, t: str) -> int:
+        n, m = len(s), len(t)
+        cache = {}
+        def rec(x=0, y=0) -> int:
+            if y == m:
+                return 1
+            
+            if (n - x) < (m - y):
+                return 0
+
+            if (x, y) not in cache:
+                cache[(x, y)] = rec(x+1, y) + (rec(x+1, y+1) if s[x] == t[y] else 0)
+            return cache[(x, y)]
+        return rec()
+```
+
+
+## 72. Edit Distance ::3:: - Medium
+
+Topics:  String, Dynamic Programming
+
+### Intro
+> Given two strings word1 and word2, return the minimum  
+> number of operations required to convert word1 to word2.
+> You have the following three operations permitted on a word:
+> Insert a character
+> Delete a character
+> Replace a character
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| word1 = "horse", word2 = "ros" | 3 |
+| word1 = "intention", word2 = "execution" | 5 |
+
+Constraints:
+
+0 &leq; word1.length, word2.length &leq; 500
+
+word1 and word2 consist of lowercase English letters.
+
+### Abstraction
+Given two strings, return the minimum number of operations needed
+to convert string one into string two.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def minDistance(self, word1: str, word2: str) -> int:
+        # Notes:
+        # - dp[i][j] = minimum edit distance to convert word1[:i] to word2[:j]
+        # - Operations:
+        #     1. Insert:  dp[i][j-1] + 1
+        #     2. Delete:  dp[i-1][j] + 1
+        #     3. Replace: dp[i-1][j-1] + (0 if same else 1)
+        #
+        # Base cases:
+        # - dp[0][j] = j (convert empty word1 to word2[:j] by inserting)
+        # - dp[i][0] = i (convert word1[:i] to empty by deleting)
+        #
+        # Result: dp[m][n]
+
+        m, n = len(word1), len(word2)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        # Base initialization
+        for i in range(m + 1):
+            dp[i][0] = i
+        for j in range(n + 1):
+            dp[0][j] = j
+
+        # Fill dp table
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if word1[i - 1] == word2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = min(
+                        dp[i - 1][j] + 1,     # delete
+                        dp[i][j - 1] + 1,     # insert
+                        dp[i - 1][j - 1] + 1  # replace
+                    )
+
+        return dp[m][n]
+
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def minDistance(self, word1: str, word2: str) -> int:
+        # Notes:
+        # - Optimize to 1D DP by rolling rows.
+        # - Keep prev row and update current row iteratively.
+        #
+        # Result: dp[n]
+
+        m, n = len(word1), len(word2)
+
+        prev = list(range(n + 1))  # dp[0][j]
+        curr = [0] * (n + 1)
+
+        for i in range(1, m + 1):
+            curr[0] = i  # base: delete all chars of word1[:i]
+            for j in range(1, n + 1):
+                if word1[i - 1] == word2[j - 1]:
+                    curr[j] = prev[j - 1]
+                else:
+                    curr[j] = min(
+                        prev[j] + 1,     # delete
+                        curr[j - 1] + 1, # insert
+                        prev[j - 1] + 1  # replace
+                    )
+            prev, curr = curr, prev  # swap
+
+        return prev[n]
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def minDistance(self, word1: str, word2: str) -> int:
+        # Notes:
+        # - Recursive definition:
+        #   dfs(i, j) = min edit distance between word1[:i] and word2[:j]
+        # - Base cases:
+        #   if i == 0: return j  (insert all j chars)
+        #   if j == 0: return i  (delete all i chars)
+        # - If last chars equal: dfs(i, j) = dfs(i-1, j-1)
+        # - Else: min(insert, delete, replace)
+        #
+        # - Manual memoization using dictionary
+
+        memo = {}
+        m, n = len(word1), len(word2)
+
+        def dfs(i, j):
+            if (i, j) in memo:
+                return memo[(i, j)]
+
+            if i == 0:
+                return j
+            if j == 0:
+                return i
+
+            if word1[i - 1] == word2[j - 1]:
+                memo[(i, j)] = dfs(i - 1, j - 1)
+            else:
+                memo[(i, j)] = min(
+                    dfs(i - 1, j) + 1,     # delete
+                    dfs(i, j - 1) + 1,     # insert
+                    dfs(i - 1, j - 1) + 1  # replace
+                )
+            return memo[(i, j)]
+
+        return dfs(m, n)
+```
+
+
+## 312. Burst Balloons ::3:: - Hard
+
+Topics:  Array, Dynamic Programming
+
+### Intro
+> You are given n balloons, indexed from 0 to n - 1. Each 
+> balloon is painted with a number on it represented by an array 
+> nums. You are asked to burst all the balloons.
+> If you burst the ith balloon, you will get
+> nums[i - 1] * nums[i] * nums[i + 1] coins.
+> If i - 1 or i + 1 goes out of bounds of the array,
+> then treat it as if there is a balloon with a 1 painted on it.
+> Return the maximum coins you can collect by bursting the balloons wisely.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [3,1,5,8] | 167 |
+| nums = [1,5] | 10 |
+
+Constraints:
+
+n == nums.length
+
+1 &leq; n &leq; 300
+
+0 &leq; nums[i] &leq; 100
+
+### Abstraction
+Given an array representing balloons, each with a number, which when popped
+will return a certain amount of coins, determine the max number of coins.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def maxCoins(self, nums: List[int]) -> int:
+        # Note:
+        # Bottom Up DP / Interval DP
+        # 1. Pad Array -> add 1 to both ends to simplify edge calculations
+        # 2. dp[i][j] -> max coins from bursting balloons in nums[i:j+1] exclusive
+        # 3. Iterate -> all intervals length 1 to n
+        # 4. Explore Choices -> last balloon to burst in interval k
+        # 5. Build -> dp[i][j] = max(dp[i][k-1] + nums[i]*nums[k]*nums[j] + dp[k+1][j])
+        # Result: dp[0][n-1] holds max coins for full interval
+
+        n = len(nums)
+        # Pad nums with 1 at both ends
+        nums = [1] + nums + [1]
+        n += 2
+
+        # Initialize dp array -> max coins for interval i->j
+        dp = [[0] * n for _ in range(n)]
+
+        # Process -> interval lengths 1 to n-2 (excluding padded 1s)
+        for length in range(1, n-1):
+            for left in range(1, n - length):
+                right = left + length - 1
+
+                # Explore Choices -> last balloon to burst in interval
+                for k in range(left, right + 1):
+                    # Build -> max coins considering bursting k last
+                    dp[left][right] = max(
+                        dp[left][right],
+                        nums[left-1]*nums[k]*nums[right+1] + dp[left][k-1] + dp[k+1][right]
+                    )
+
+        # Result -> max coins for interval 1 -> n-2
+        res = dp[1][n-2]
+        return res
+
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def maxCoins(self, nums: List[int]) -> int:
+        # Note:
+        # Bottom Up Interval DP
+        # 1. Pad Array -> simplify edge cases
+        # 2. dp[i][j] -> max coins interval i->j exclusive
+        # 3. Iterate -> interval lengths 1 to n-2
+        # 4. Explore Choices -> last balloon k to burst in interval
+        # 5. Build -> dp[i][j] = max(dp[i][k-1] + nums[i]*nums[k]*nums[j] + dp[k+1][j])
+        # Result: dp[1][n-2] holds max coins
+
+        n = len(nums)
+        nums = [1] + nums + [1]
+        n += 2
+
+        dp = [[0]*n for _ in range(n)]
+
+        for length in range(1, n-1):
+            for left in range(1, n - length):
+                right = left + length - 1
+                for k in range(left, right+1):
+                    dp[left][right] = max(
+                        dp[left][right],
+                        nums[left-1]*nums[k]*nums[right+1] + dp[left][k-1] + dp[k+1][right]
+                    )
+
+        res = dp[1][n-2]
+        return res
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def maxCoins(self, nums: List[int]) -> int:
+        # Note:
+        # Bottom Up Interval DP Space Optimized
+        # 1. Pad Array -> simplify edge cases
+        # 2. Process intervals iteratively using 2D dp
+        # 3. Explore Choices -> last balloon k to burst
+        # 4. Build -> dp[left][right] = max(dp[left][k-1] + nums[left-1]*nums[k]*nums[right+1] + dp[k+1][right])
+        # 5. Use only necessary interval slices to reduce memory footprint
+        # Result: max coins for full interval
+
+        n = len(nums)
+        nums = [1] + nums + [1]
+        n += 2
+
+        dp = [[0]*n for _ in range(n)]
+
+        for length in range(1, n-1):
+            for left in range(1, n - length):
+                right = left + length - 1
+                max_coins = 0
+                for k in range(left, right+1):
+                    coins = nums[left-1]*nums[k]*nums[right+1] + dp[left][k-1] + dp[k+1][right]
+                    if coins > max_coins:
+                        max_coins = coins
+                dp[left][right] = max_coins
+
+        res = dp[1][n-2]
+        return res
+```
+
+
+## 10. Regular Expression Matching ::3:: - Hard
+
+Topics:  String, Dynamic Programming, Recursion
+
+### Intro
+> Given an input string s and a pattern p, implement regular 
+> expression matching with support for '.' and '*' where:
+> '.' Matches any single character.
+> '*' Matches zero or more of the preceding element.
+> The matching should cover the entire input string (not partial).
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "aa", p = "a" | false |
+| s = "aa", p = "a*" | true |
+| s = "ab", p = ".*" | true |
+
+Constraints:
+
+1 &leq; s.length &leq; 20
+
+1 &leq; p.length &leq; 20
+
+s contains only lowercase English letters.
+
+p contains only lowercase English letters, '.', and '*'.
+
+It is guaranteed for each appearance of the character '*', 
+there will be a previous valid character to match.
+
+### Abstraction
+Given a string and pattern, determine if the string fits in the pattern.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def isMatch(self, s: str, p: str) -> bool:
+        # Note:
+        # Top Down DP / Memoized Recursion
+        # 1. dfs(i,j) -> does s[i:] match p[j:]
+        # 2. Explore Choices -> '*' zero or more preceding char, '.' single char
+        # 3. Build -> check match current char and recurse
+        # 4. Memo Return -> store result for (i,j) to avoid recomputation
+        # Result: match for full strings
+
+        memo = {}
+
+        def dfs(i, j):
+            if (i,j) in memo:
+                return memo[(i,j)]
+            if j == len(p):
+                memo[(i,j)] = i == len(s)
+                return memo[(i,j)]
+            match = i < len(s) and (s[i] == p[j] or p[j] == '.')
+            if j+1 < len(p) and p[j+1] == '*':
+                memo[(i,j)] = dfs(i, j+2) or (match and dfs(i+1, j))
+            else:
+                memo[(i,j)] = match and dfs(i+1, j+1)
+            return memo[(i,j)]
+
+        res = dfs(0,0)
+        return res
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def isMatch(self, s: str, p: str) -> bool:
+        # Note:
+        # Bottom Up DP / Tabulation
+        # 1. dp[i][j] -> does s[0..i-1] match p[0..j-1]
+        # 2. Base Set Up -> dp[0][0] = True (empty matches empty)
+        # 3. Explore -> fill dp table considering '*' and '.' rules
+        # 4. Build -> handle '*' zero or more, '.' matches any char
+        # Result: dp[len(s)][len(p)]
+
+        m, n = len(s), len(p)
+        dp = [[False]*(n+1) for _ in range(m+1)]
+        dp[0][0] = True
+
+        for j in range(2, n+1):
+            if p[j-1] == '*':
+                dp[0][j] = dp[0][j-2]
+
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+                if p[j-1] == '*':
+                    dp[i][j] = dp[i][j-2] or (dp[i-1][j] and (s[i-1]==p[j-2] or p[j-2]=='.'))
+                else:
+                    dp[i][j] = dp[i-1][j-1] and (s[i-1]==p[j-1] or p[j-1]=='.')
+
+        res = dp[m][n]
+        return res
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+```python
+    def isMatch(self, s: str, p: str) -> bool:
+        # Note:
+        # Bottom Up DP Space Optimized
+        # 1. Use two rows to store dp[i-1] and dp[i] to save space
+        # 2. dp[j] -> does current row s[0..i] match p[0..j-1]
+        # 3. Explore -> '*' and '.' rules applied for each column
+        # 4. Slide window -> update previous row after each s[i]
+        # Result: dp[len(s)][len(p)]
+
+        m, n = len(s), len(p)
+        prev = [False]*(n+1)
+        curr = [False]*(n+1)
+        prev[0] = True
+
+        for j in range(2, n+1):
+            if p[j-1] == '*':
+                prev[j] = prev[j-2]
+
+        for i in range(1, m+1):
+            curr[0] = False
+            for j in range(1, n+1):
+                if p[j-1] == '*':
+                    curr[j] = curr[j-2] or (prev[j] and (s[i-1]==p[j-2] or p[j-2]=='.'))
+                else:
+                    curr[j] = prev[j-1] and (s[i-1]==p[j-1] or p[j-1]=='.')
+            prev, curr = curr, [False]*(n+1)
+
+        res = prev[n]
+        return res
+```
+
+### Solution 4: space optimized - 1D Dynamic Programming/Sequential State Transition
+```python
+    def isMatch(self, s: str, p: str) -> bool:
+        if not p:
+            return not s
+        first = bool(s) and (s[0] == p[0] or p[0] == '.')
+        if len(p) >= 2 and p[1] == '*':
+            return self.isMatch(s, p[2:]) or (first and self.isMatch(s[1:], p))
+        return first and self.isMatch(s[1:], p[1:])
 ```
