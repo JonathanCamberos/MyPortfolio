@@ -602,29 +602,56 @@
   "1d-dynamic-programming": [
     {
       "type": "1D Dynamic Programming",
-      "title": "DFS with Caching Top Down with Memoization",
-      "summary": "Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation. Use When: Natural recursive definition exists (e.g., subsequences, partitioning, path problems). Recurrence: dfs(state) = combine(dfs(substate1), dfs(substate2), ...)",
-      "exampleIntro": "Fibonacci (Top Down Memoization)",
-      "codeExample": "def climbStairs(n: int) -> int:\n        \n        memo = {}\n\n        def dfs(i: int) -> int:\n            if i <= 1:\n                return i\n            if i in memo:\n                return memo[i]\n\n            # recursive relation with memoization\n            memo[i] = dfs(i-1) + dfs(i-2)\n            return memo[i]\n\n        return dfs(n)",
-      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-dfs-with-caching-top-down-with-memoization",
+      "title": "DFS with Caching (Padded/N+1) Top Down with Memoization",
+      "summary": "Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation. Extra base 'padding' simplifies boundary checks. Use When: Problem naturally needs a “ground” or empty state. Recurrence: dfs(i) = dfs(i-1) + dfs(i-2)",
+      "exampleIntro": "Climbing Stairs (Top Down, Padded)",
+      "codeExample": "def climbStairs(n: int) -> int:\n\n        memo = {}\n\n        def dfs(i: int) -> int:\n\n            if i in memo:\n                return memo[i]\n\n            if i == 0:  # padding: ground, 1 way to do nothing\n                return 1\n            if i == 1:  # padded: first step\n                return 1\n\n            # recursive relation: sum of previous two steps\n            memo[i] = dfs(i-1) + dfs(i-2)\n            return memo[i]\n\n        return dfs(n)",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-dfs-with-caching-paddedn1-top-down-with-memoization",
       "blog": "1D Dynamic Programming"
     },
     {
       "type": "1D Dynamic Programming",
-      "title": "Iterative Tabulation Bottom Up",
-      "summary": "Pattern: Iteratively fill a DP array from base case to target. Use When: Clear order of dependencies, can compute sequentially. Recurrence: dp[i] = dp[i-1] + dp[i-2] (or problem-specific relation).",
-      "exampleIntro": "Fibonacci (Bottom Up Tabulation)",
-      "codeExample": "def fib(n: int) -> int:\n        if n <= 1:\n            return n\n        dp = [0] * (n + 1)\n        dp[0], dp[1] = 0, 1\n\n        for i in range(2, n + 1):\n            dp[i] = dp[i-1] + dp[i-2]\n\n        return dp[n]",
-      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-iterative-tabulation-bottom-up",
+      "title": "DFS with Caching (Direct/N) Top Down with Memoization",
+      "summary": "Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation. Direct mapping aligns base cases with the first elements. Use When: Problem naturally aligns 1:1 with input array elements. Recurrence: dfs(i) = dfs(i-1) + dfs(i-2)",
+      "exampleIntro": "Climbing Stairs (Top Down, Direct)",
+      "codeExample": "def climbStairs(n: int) -> int:\n        \n        memo = {}\n\n        def dfs(i: int) -> int:\n\n            if i in memo:\n                return memo[i]\n\n            if i == 1:   # direct: 1st element\n                return 1\n            if i == 2:   # direct: 2nd element\n                return 2\n\n            # recursive relation: sum of previous two steps\n            memo[i] = dfs(i-1) + dfs(i-2)\n            return memo[i]\n\n        return dfs(n)",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-dfs-with-caching-directn-top-down-with-memoization",
       "blog": "1D Dynamic Programming"
     },
     {
       "type": "1D Dynamic Programming",
-      "title": "Optimal Iterative Variables Bottom Up",
-      "summary": "Pattern: Reduce DP array to a few variables if each state depends only on recent ones. Use When: DP only needs O(1) rolling state, no need to keep full history. Recurrence: curr = prev1 + prev2 → shift forward each step.",
-      "exampleIntro": "Fibonacci (Optimal Bottom Up)",
-      "codeExample": "def fib(n: int) -> int:\n        if n <= 1:\n            return n\n        prev2, prev1 = 0, 1\n\n        for _ in range(2, n + 1):\n            curr = prev1 + prev2\n            prev2, prev1 = prev1, curr\n\n        return prev1",
-      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-optimal-iterative-variables-bottom-up",
+      "title": "Iterative Tabulation (Padded/N+1) Bottom Up",
+      "summary": "Pattern: Iteratively fill a DP array with extra padding for base/empty case. Use When: Problem naturally needs a “ground” or empty state and empty state was not given in original array. Recurrence: dp[i] = dp[i-1] + dp[i-2] (or problem-specific relation).",
+      "exampleIntro": "Climbing Stairs (Bottom Up, Padded)",
+      "codeExample": "def climbStairs(n: int):\n\n        # no length == 1 check, since using pad + 1st element\n        # 1st element will always exist, pad is made up\n\n        dp = [0] * (n + 1)  # padding:\n        dp[0] = 1           # padding: (ground, 1 way to do nothing), \n                            # does not exist in original array\n\n        dp[1] = 1           # padded: first element, n=0 -> dp[1]\n\n        for i in range(2, n + 1):\n            dp[i] = dp[i-1] + dp[i-2]\n\n        return dp[n]",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-iterative-tabulation-paddedn1-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
+      "title": "Iterative Tabulation (Direct/N) Bottom Up",
+      "summary": "Pattern: Iteratively fill a DP array with direct mapping to the original array elements. Use When: Problem naturally aligns 1:1 with input array. Recurrence: dp[i] = max(dp[i-1], dp[i-2] + nums[i])",
+      "exampleIntro": "House Robber (Bottom Up, Direct)",
+      "codeExample": "def rob(nums):\n        n = len(nums)\n\n        # length == 1 check needed since using 1st + 2nd element\n        # 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        dp = [0] * n                   # direct:\n        dp[0] = nums[0]                # direct: 1st element\n        dp[1] = max(nums[0], nums[1])  # direct: 2nd element\n\n        for i in range(2, n):\n            dp[i] = max(dp[i-1], dp[i-2] + nums[i])\n\n        return dp[n-1]",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-iterative-tabulation-directn-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
+      "title": "Optimal Iterative (Padded/N+1) Rolling State Variables Bottom Up",
+      "summary": "Pattern: Reduce DP array to a few variables while padding for base/ground case. Use When: Problem naturally needs a “ground” or empty state and you want O(1) space. Recurrence: curr = prev1 + prev2 -> shift forward each step.",
+      "exampleIntro": "Climbing Stairs (Optimal Bottom Up, Padded)",
+      "codeExample": "def climbStairs(n: int) -> int:\n\n        # no length == 1 check, since using pad + 1st element\n        # 1st element will always exist, pad is made up\n\n        # padded variables\n        prev2 = 1  # padding: ground (0 steps, 1 way to do nothing)\n        prev1 = 1  # first step\n\n        # no length check needed since prev1 and prev2 already cover n=1\n        for i in range(2, n + 1):\n            curr = prev1 + prev2\n            prev2, prev1 = prev1, curr\n\n        return prev1",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-optimal-iterative-paddedn1-rolling-state-variables-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
+      "title": "Optimal Iterative (Direct/N) Rolling State Variables Bottom Up",
+      "summary": "Pattern: Reduce DP array to a few variables with direct mapping to the original array. Use When: Problem naturally aligns 1:1 with input array and O(1) space is desired. Recurrence: curr = prev1 + prev2 → shift forward each step.",
+      "exampleIntro": "House Robber (Optimal Bottom Up, Direct)",
+      "codeExample": "def rob(nums) -> int:\n        n = len(nums)\n        \n        # length == 1 check needed since using 1st + 2nd element\n        # 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        prev2 = nums[0]                # direct: first element\n        prev1 = max(nums[0], nums[1])  # direct: second element\n\n        for i in range(2, n):\n            curr = max(prev1, prev2 + nums[i])\n            prev2, prev1 = prev1, curr\n\n        return prev1",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-optimal-iterative-directn-rolling-state-variables-bottom-up",
       "blog": "1D Dynamic Programming"
     },
     {

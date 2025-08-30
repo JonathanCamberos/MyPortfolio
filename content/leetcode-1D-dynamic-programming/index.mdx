@@ -790,6 +790,7 @@ by either climbing 1 or 2 steps at a time.
 
         # Note:
         # Top Down DP (memoized recursion)
+        # 0. Direct Length -> no need for len == n check, recursive padding boundary covers it
         # 1. Memo Check -> computed previously
         # 2. Pad Boundaries -> overshot case case
         # 3. Padded Boundary -> last element n
@@ -833,6 +834,7 @@ by either climbing 1 or 2 steps at a time.
 
         # Note:
         # Top Down DP (memoized recursion)
+        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it
         # 1. Memo Check -> computed previously
         # 2. Pad Boundaries -> 0 ground case
         # 3. Padded Boundary -> 1st element
@@ -995,6 +997,7 @@ find the cheapest cost to climb to the top.
         
         # Note:
         # Top Down DP (memoized recursion)
+        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it
         # 1. Memo Check -> computed previously
         # 2. Padding Boundary -> ground step 0
         # 3. Padded Boundary -> first element
@@ -1039,10 +1042,11 @@ find the cheapest cost to climb to the top.
         
         # Note:
         # Top Down DP (memoized recursion)
+        # 0. Direct Length -> no need for len == 1 check, recursive direct boundary covers it
         # 1. Memo Check -> computed previously
-        # 2. Boundary -> 1st element
-        # 3. Boundary -> 2nd element
-        # 4. Build From Previous -> grab from previous two steps and sum paths
+        # 2. Direct Boundary -> 1st element
+        # 3. Direct Boundary -> 2nd element
+        # 4. Direct Build From Previous -> grab from previous two steps and sum paths
         # 5. Memo return -> return ways, calculated once
         # Result: min cost to reach n from last or 2nd to last step
 
@@ -1056,11 +1060,11 @@ find the cheapest cost to climb to the top.
             if i in memo:
                 return memo[i]
 
-            # Boundary -> 1st element
+            # Direct Boundary -> 1st element
             if i == 0:
                 return cost[0]
 
-            # Boundary -> 2nd element
+            # Direct Boundary -> 2nd element
             if i == 1:
                 return cost[1]
 
@@ -1082,18 +1086,18 @@ find the cheapest cost to climb to the top.
         
         # Note:
         # Bottom Up Tabulation
-        # 0. Direct Boundary -> no need for len == 1 check, description says min length == 2
+        # 0. Direct Length -> no need for len == 1 check, description says min length == 2
         # 1. Direct Array -> 1st + 2nd element
         # 3. Iterate -> 2 to n-1
         # 4. Build From Previous -> grab from previous two steps and sum paths
         # Result: min cost to reach n via continuing from step n-1 or n-2
 
+        # 0. Direct Length -> no need for len == 1 check, description says min length == 2
+
         n = len(cost)
 
         # Direct Array -> 1st + 2nd element
         dp = [0] * n
-
-        # Base Set Up -> 0 and 1
         dp[0], dp[1] = cost[0], cost[1]
 
         # Iterate -> steps 2 to n-1
@@ -1116,12 +1120,14 @@ find the cheapest cost to climb to the top.
         
         # Note:
         # Bottom Up Variables
-        # 0. Direct Boundary -> no need for len == 1 check, description says min length == 2
+        # 0. Direct Length -> no need for len == 1 check, description says min length == 2
         # 1. Direct Variables -> 1st + 2nd element
         # 2. Iterate -> 2 to n-1
         # 3. Build From Previous -> grab from previous two steps and sum paths
         # 3. Roll Variables -> Iterate Variables
         # Result: min cost to reach n via continuing from last or 2nd to last step (n-1, or n-2)
+
+        # 0. Direct Length -> no need for len == 1 check, description says min length == 2
 
         n = len(cost)
 
@@ -1196,125 +1202,129 @@ Find the Tribonacci for n.
 ```python
 ```
 
-### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct/N) Top Down with Memoization
 ```python
     def tribonacci(self, n: int) -> int:
 
         # Note:
         # Top Down DP (memoized recursion)
         # 1. Memo Check -> computed previously
-        # 2. Boundary Check -> reached base case
-        # 3. Explore Choices -> grab num of ways from i+1, i+2, i+3
-        # 4. Build -> sum paths from three previous steps
-        # 5. Memo Return -> return ways from i to nth step, calculated once
+        # 2. Direct Boundary -> 1st element
+        # 3. Direct Boundary -> 2nd element
+        # 4. Direct Boundary -> 3rd element
+        # 5. Build From Previous -> grab from previous two steps and sum paths
+        # 6. Memo return -> return ways, calculated once
         # Result: T_i in Tribonacci sequence
 
         memo = {}
 
         def dfs(i):
 
-            # Memoized check
+            # Memo Check -> computed previously
             if i in memo:
                 return memo[i]
 
-            # Boundary Check -> base cases
+            # Boundary -> 1st element
             if i == 0:
                 return 0
-            if i == 1 or i == 2:
+            # Boundary -> 2nd element
+            if i == 1:
+                return 1
+            # Boundary -> 3rd element
+            if i == 2:
                 return 1
 
-            # Explore Choices -> sum of previous three steps
-            left = dfs(i-1)
-            mid = dfs(i-2)
-            right = dfs(i-3)
-
-            # Build -> sum paths
-            memo[i] = left + mid + right
-
-            # Memo return
+            # Build From Previous -> grab from previous two steps and sum paths
+            memo[i] = dfs(i-1) + dfs(i-2) + dfs(i-3)
             return memo[i]
 
-        # ways to get T_n
+        # res -> T_n value
         res = dfs(n)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n) (memo + recursion stack)
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct/N) Bottom Up
+```python
+    def tribonacci(n: int) -> int:
+
+        # Note:
+        # this is a unique case where Direct/N, requires an array of (N+1)
+        # since we have 0 -> N fib solutions
+
+        # Note:
+        # Iterative Bottom Up Tabulation
+        # 1. Direct Boundary -> need for len == 0, len == 1, and len == 2, as 3rd element may not exist
+        # 2. Direct Array -> 1st, 2nd, and 3rd element
+        # 3. Iterate -> 2 to n-1
+        # 4. Iterate -> 3 to n
+        # 5. Build From Previous -> sum previous three DP entries
+        # Result: T_n in Tribonacci sequence
+
+        # Direct Boundary -> len == 0, len == 1, and len == 2, as 3rd element may not exist
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        if n == 2:
+            return 1
+
+        # Direct Array -> 1st, 2nd, and 3rd element
+        dp = [0] * (n+1)
+        dp[0], dp[1], dp[2] = 0, 1, 1
+
+        # Iterate -> 3 to n
+        for i in range(3, n+1):
+
+            # Build From Previous -> sum of last three
+            dp[i] = dp[i-1] + dp[i-2] + dp[i-3]
+
+        # Result -> nth tribonacci
+        return dp[n]
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct/N) Rolling State Variables Bottom Up
 ```python
     def tribonacci(self, n: int) -> int:
 
         # Note:
-        # Top Down DP (memoized recursion)
-        # 1. Memo Check -> computed previously
-        # 2. Boundary Check -> base cases 0,1,2
-        # 3. Explore Choices -> sum of previous three
-        # 4. Build -> T_i = sum(T_{i-1}, T_{i-2}, T_{i-3})
-        # 5. Memo Return -> return T_i, calculated once
-        # Result: T_n in Tribonacci sequence
-
-        memo = {}
-
-        def dfs(i):
-
-            # Memoized check
-            if i in memo:
-                return memo[i]
-
-            # Boundary check
-            if i == 0:
-                return 0
-            if i == 1 or i == 2:
-                return 1
-
-            # Explore Choices
-            left = dfs(i-1)
-            mid = dfs(i-2)
-            right = dfs(i-3)
-
-            # Build
-            memo[i] = left + mid + right
-
-            # Memo Return
-            return memo[i]
-
-        # compute T_n
-        res = dfs(n)
-        return res
-```
-
-### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Min Max Path Sum in Linear Sequence
-```python
-    def tribonacci(self, n: int) -> int:
+        # this is a unique case where Direct/N, requires an array of (N+1)
+        # since we have 0 -> N fib solutions
 
         # Note:
         # Iterative Bottom Up Variables
-        # 1. Catch Initialize -> n = 0,1,2 base cases
-        # 2. Base Set Up -> T0, T1, T2
+        # 1. Direct Boundary -> need len == 1 check, elements 2 and 3 may not exist
+        # 2. Direct Variables -> 1st + 2nd + 3rd elements
         # 3. Iterate -> 3 to n
-        # 4. Explore + Build -> T[i] = sum of previous three
-        # 5. Slide Window -> update variables
+        # 4. Build From Previous -> grab from previous two steps and sum paths
+        # 5. Roll Variables -> Iterate Variables
         # Result: T_n in Tribonacci sequence
 
-        # Catch Initialize -> base cases
+        # Direct Boundary -> need len == 1 check, elements 2 and 3 may not exist
         if n == 0:
             return 0
-        if n == 1 or n == 2:
-            return 1
+        if n == 1:
+            return 1 
 
-        # Base Set Up -> previous three values
+        # Direct Variables -> 1st + 2nd + 3rd elements
         T0, T1, T2 = 0, 1, 1
 
-        # Iterate -> compute from 3 to n
-        for i in range(3, n + 1):
+        # Iterate -> 3 to n
+        for i in range(3, n+1):
 
-            # Explore + Build -> sum of previous three
+            # Build From Previous -> grab from previous two steps and sum paths
             curr = T0 + T1 + T2
 
-            # Slide Window -> shift variables
+            # Roll Variables -> Iterate Variables
             T0, T1, T2 = T1, T2, curr
 
-        # Result -> nth Tribonacci number
+        # res -> nth tribonacci
         res = T2
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return res
 ```
 
@@ -1377,50 +1387,43 @@ cannot steal from two adjacent entries.
 ```python
 ```
 
-### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/Choose or Skip Non Adjacent
+### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct/N) Top Down with Memoization
 ```python
     def rob(self, nums: List[int]) -> int:
         
         # Note:
         # Top down recursive with memoization
-        # 1. Memo Check -> avoid recomputation
-        # 2. Boundary Checks -> no houses left i < 0
-        # 3. Explore Choices -> rob current house or skip it
-        # 4. Build -> max of robbing current + dfs(i-2) vs skipping dfs(i-1)
+        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it
+        # 1. Memo Check -> computed previously
+        # 2. Direct Boundary -> 1st element
+        # 3. Direct Boundary -> 2nd element
+        # 3. Build From Previous -> grab from previous two steps and sum paths
         # Result: max loop from first to last house
 
         n = len(nums)
 
-        # max loot from house start to ith house
         memo = {}
 
         def dfs(i):
 
-            # Memo Check ->
+            # Memo Check -> computed previously
             if i in memo:
                 return memo[i]
 
-            # Boundary Check -> max between first house
+            # Direct Boundary -> 1st element
             if i == 0:
                 return nums[0]
 
-            # Boundary Check -> max between first and second house
+            # Direct Boundary -> 2nd element
             if i == 1:
                 return max(nums[0], nums[1])
             
-            # Explore Choices -> Rob current, skip neighbor: nums[i] + dfs(i-2)
-            right = nums[i] + dfs(i-2)
-
-            # Explore Choices -> Skip current house dfs(i-1)
-            left = dfs(i-1)
-
-            # Build -> choose max between rob and skip
-            memo[i] = max(left, right)
-
-            # Memo return -> return max loot from 0 to ith, computed once
+            # Direct Build From Previous -> grab from previous two steps and sum paths
+            # choose max between rob or skipping current house
+            memo[i] = max(nums[i] + dfs(i-2), dfs(i-1))
             return memo[i]
 
-        # initial call for last house
+        # res -> max loot for nth house
         res = dfs(n-1)
 
         # overall: time complexity O(n)
@@ -1428,43 +1431,36 @@ cannot steal from two adjacent entries.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Choose or Skip Non Adjacent
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct/N) Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
         
         # Note:
         # Bottom Up Tabulation
-        # 1. Catch Initialize -> case 0
-        # 2. Initialize Array -> max loot for 0 to ith house, size n (n indexed 0)
-        # 3. Base Set Up -> 0 and 1
-        # 4. Explore -> 2 to n-1
-        # 5. Explore choices -> dp[i] = max(dp[i-1], nums[i] + dp[i-2])
-        # 6. Build -> fill dp array sequentially
-        # Result: max loot from 0 to nth house
+        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist
+        # 1. Direct Array -> 1st + 2nd element
+        # 2. Iterate -> 2 to n-1
+        # 3. Build From Previous -> grab from previous two steps and sum paths
+        # Result: max loot from nth house
 
         n = len(nums)
 
-        # Catch Initialize: for n=1 assign n=2 will fail
+        # Direct Length -> need for len == 1 check, 2nd element may not exist
         if n == 1:
             return nums[0]
 
-        # Initialize Array -> max loot for 0 to ith house, size n (n indexed 0)
+        # Direct Array -> 1st + 2nd element
         dp = [0] * n
-
-        # Base Set Up -> 0 and 1
         dp[0], dp[1] = nums[0], max(nums[0], nums[1])
 
-        # Process -> houses 2 to n-1
+        # Iterate -> 2 to n-1
         for i in range(2, n):
 
-            # Explore Choices -> rob current house or skip
-            left = nums[i] + dp[i-2]
-            right = dp[i-1]
+            # Build From Previous -> grab from previous two steps and sum paths
+            # choose max between rob or skipping current house
+            dp[i] = max(nums[i] + dp[i-2], dp[i-1])
 
-            # Build -> choose max between rob or skip
-            dp[i] = max(left, right)
-
-        # Result -> max loot at last house
+        # res -> max loot at nth house
         res = dp[n-1]
 
         # overall: time complexity O(n)
@@ -1472,36 +1468,38 @@ cannot steal from two adjacent entries.
         return res
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Choose or Skip Non Adjacent
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct/N) Rolling State Variables Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
 
         # Note:
         # Bottom Up Variables
-        # 1. Base Set Up -> prev2, prev1
-        # 2. Explore 2 to n-1-> compute current max loot
-        # 3. Slide window -> update prev2, prev1
+        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist
+        # 1. Direct Variables -> 1st + 2nd element
+        # 2. Iterate -> 2 to n-1
+        # 3. Build From Previous -> grab from previous two steps and sum paths
+        # 4. Roll Variables -> Iterate Variables
         # Result: max loot first to last house
 
         n = len(nums)
 
-        # Catch Initialize: for n=1 assign n=2 will fail
+        # Direct Length -> need for len == 1 check, 2nd element may not exist
         if n == 1:
             return nums[0]
 
-        # Base Set Up -> 0 and 1
+        # Direct Variables -> 1st + 2nd element
         prev2, prev1 = nums[0], max(nums[0], nums[1])
 
-        # Process -> houses 2 to n-1
+        # Iterate -> 2 to n-1
         for i in range(2, n):
 
-            # Explore + Build -> max between rob and skip
+            # Build From Previous -> grab from previous two steps and sum paths
             curr = max(prev1, nums[i] + prev2)
 
-            # Slide Window -> update variables
+            # Roll Variables -> Iterate Variables
             prev2, prev1 = prev1, curr
 
-        # Result -> max loot at last house
+        # res -> max loot at nth house
         res = prev1
 
         # overall: time complexity O(n)
@@ -1569,62 +1567,55 @@ cannot steal from two adjacent entries, when array is circular.
 ```python
 ```
 
-### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct/N) Top Down with Memoization
 ```python
     def rob(self, nums: List[int]) -> int:
 
         # Note:
-        # Top down recursive with memoization
-        # 1. Memo Check -> avoid recomputation
-        # 2. Boundary Check -> i < start
-        # 3. Explore Choices -> rob or skip
-        # 4. Build -> max between robbing current + dfs(i-2) vs skipping dfs(i-1)
-        # 5. Handle circular constraint -> cannot rob both first and last
+        # Top down (recursive with memoization)
+        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist
+        # 1. Memo Check -> computed previously
+        # 2. Direct Boundary -> 1st + 2nd element
+        # 3. Build From Previous -> grab from previous two steps and sum paths
+        # 4. Handle circular constraint -> cannot rob both first and last
         # Result: max loot for circular house array
 
         n = len(nums)
 
-        # Base case check
+        # Direct Length -> need for len == 1 check, 2nd element may not exist
         if n == 1:
             return nums[0]
 
-        # Workaround circular constrain by robbing houses start -> end
         def rob_range(start, end):
 
-            # build max loot from start to end
             memo = {}
 
             def dfs(i):
 
-                # Memo check ->
+                # Memo Check -> computed previously
                 if i in memo:
                     return memo[i]
 
-                # Boundary Check -> no houses left
-                if i < start:
-                    return 0
+                # Direct Boundary -> 1st element
+                if i == start:
+                    return nums[start]
 
-                # Explore Choices -> 1. rob current
-                left = nums[i] + dfs(i-2)
+                # Direct Boundary -> 2nd element
+                if i == start + 1:
+                    return max(nums[start], nums[start + 1])
 
-                # Explore Choices -> 2. skip
-                right = dfs(i-1)
-
-                # Build -> max between rob and skip
-                memo[i] = max(left, right)
-
-                # Memo return -> return max loot at ith, calculated once
+                # Build From Previous -> grab from previous two steps and sum paths
+                memo[i] = max(nums[i] + dfs(i-2), dfs(i-1))
                 return memo[i]
 
-            # Initial call for last house within range start -> end
+            # res -> max loot at last house in subarray
             return dfs(end)
 
-        # Avoid circular constraint
-        # Rob houses from 'first' -> 'second to last', then 'second' -> 'last'
+        # Handle circular constraint -> cannot rob both first and last
         res1 = rob_range(0, n-2)
         res2 = rob_range(1, n-1)
 
-        # Result -> Max loot from both ranges
+        # res -> max loot from circular houses
         res = max(res1, res2)
 
         # overall: time complexity O(n)
@@ -1632,63 +1623,53 @@ cannot steal from two adjacent entries, when array is circular.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct/N) Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
         
         # Note:
         # Bottom up array
-        # 1. Memo Check root -> compute linear DP for given subarray
-        # 2. Boundary Check -> handle single house cases
-        # 2. Explore choices -> max between rob current or skip
-        # 3. Build -> max from start to ith
-        # 4. Handle circular constraint -> 2 subsets to break circular array
+        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist
+        # 1. Direct Length (subarray) -> need for len == 1 check, 2nd element may not exist
+        # 2. Direct Array -> 1st + 2nd element
+        # 3. Iterate -> 2 to numHouses-1
+        # 4. Build From Previous -> grab from previous two steps and sum paths
+        # 5. Handle circular constraint -> 2 subsets to break circular array
         # Result: max loot from circular houses array
 
         n = len(nums)
 
-        # Catch Initialize -> amount 1
+        # Direct Length -> need for len == 1 check, 2nd element may not exist
         if n == 1:
             return nums[0]
 
-        # max loot from subarray start -> end
         def rob_range(start, end):
 
-            # Boundary Set -> number of houses in subarray
+            # Direct Length -> need for len == 1 check, 2nd element may not exist
             numHouses = end - start + 1
-
-            # Boundary Check -> single house, max loot is robbing
             if numHouses == 1:
                 return nums[start]
 
-            # Initialize Array -> max loot from start to ith house, size numHouse (0 indexed)
-            dp = [0] * numHouses
-
-            # Base Set Up -> 0 and 1
+            # Direct Array -> 1st + 2nd element
             dp[0] = nums[start]
             dp[1] = max(nums[start], nums[start + 1])
 
-            # Process from 2 to numHouses-1
+            # Iterate -> 2 to numHouses-1
             for i in range(2, numHouses):
 
-                # Explore Choices -> 1. rob current
-                left = nums[i + start] + dp[i-2]
+                # Build From Previous -> grab from previous two steps and sum paths
+                # choose max between rob or skipping current house
+                dp[i] = max(nums[i + start] + dp[i-2], dp[i-1])
 
-                # Explore Choices -> 2. skip
-                right = dp[i-1]
-
-                # Build -> max between rob and skip
-                dp[i] = max(left, right)
-
-            # Memo return -> max loot at ith, calculated once
+            # res -> max loot at last house in subarray
             return dp[numHouses-1]
 
 
-        # Break circular constraint -> exclude last house, exclude first house
+        # Handle circular constraint -> cannot rob both first and last
         res1 = rob_range(0, n-2)
         res2 = rob_range(1, n-1)
 
-        # Result -> max loot between ignore either first or last house
+        # res -> max loot from circular houses
         res = max(res1, res2)
 
         # overall: time complexity O(n)
@@ -1696,55 +1677,55 @@ cannot steal from two adjacent entries, when array is circular.
         return res
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Circular Choose or Skip Non Adjacent
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct/N) Rolling State Variables Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
 
         # Note:
         # Bottom up variables
-        # 1. Memo Check -> 
-        # 2. Explore Choices -> rob current or skip
-        # 3. Build -> only previous two variables needed
-        # 4. Handle Circular Constraint -> two subarray
-        # Result: max loot from circular houses array
-        
-        # max loot from subarray start -> end
+        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist
+        # 1. Direct Length (subarray) -> need for len == 1 check, 2nd element may not exist
+        # 2. Direct Variables -> 1st + 2nd element
+        # 3. Iterate -> 2 to numHouses-1
+        # 4. Build From Previous -> grab from previous two steps and sum paths
+        # 5. Roll Variables -> Iterate Variables
+        # 6. Handle circular constraint -> cannot rob both first and last
+        # Result: max loot from circular houses
+
+        n = len(nums)
+
+        # Direct Length -> need for len == 1 check, 2nd element may not exist
+        if n == 1:
+            return nums[0]
+
         def rob_range(start, end):
 
-            # Boundary Set -> number of houses in subarray
+            # Direct Length -> need for len == 1 check, 2nd element may not exist
             numHouses = end - start + 1
-
-            # Boundary Check -> single house, max loot is robbing
             if numHouses == 1:
                 return nums[start]
 
-            # Base Set Up -> 0 and 1
+            # Direct Variables -> 1st + 2nd element
             prev2 = nums[start]
             prev1 = max(nums[start], nums[start + 1])
 
             # Iterate -> 2 to numHouses-1
             for i in range(2, numHouses):
 
-                # Explore + Build -> max loot at ith house
+                # Build From Previous -> grab from previous two steps and sum paths
                 curr = max(prev1, nums[start + i] + prev2)
 
-                # Slide window -> update previous two
+                # Roll Variables -> Iterate Variables
                 prev2, prev1 = prev1, curr
 
-            # Memo return -> last variable holds max loot
+            # res -> max loot at last house in subarray
             return prev1
 
-        n = len(nums)
-
-        # Initialize Check -> 
-        if n == 1:
-            return nums[0]
-
-        # Break circular constraint: exclude last house, exclude first house
+        # Handle circular constraint -> cannot rob both first and last
         res1 = rob_range(0, n-2)
         res2 = rob_range(1, n-1)
 
-        # Result -> max loot between ignore either first or last house
+        # res -> max loot from circular houses
         res = max(res1, res2)
 
         # overall: time complexity O(n)

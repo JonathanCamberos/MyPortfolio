@@ -1500,14 +1500,14 @@
   },
   "746": {
     "questionNum": 746,
-    "questionTitle": "Min Cost Climbing Stairs ::3::",
+    "questionTitle": "Min Cost Climbing Stairs ::4::",
     "questionDifficulty": "Easy",
     "questionBlurb": "You are given an integer array cost where cost[i] is the cost of ith step on a staircase. Once you pay the cost, you can either climb one or two steps. You can either start from the step with index 0, or the step with index 1. Return the minimum cost to reach the top of the floor.",
     "questionTopics": [
       "Array",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/1d-dynamic-programming#746-min-cost-climbing-stairs-3---easy",
+    "questionLink": "/Notes/1d-dynamic-programming#746-min-cost-climbing-stairs-4---easy",
     "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
