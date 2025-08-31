@@ -2194,185 +2194,215 @@
     ]
   },
   "1d-dynamic-programming": {
-    "dfs-with-caching-padded": [
+    "dfs-with-caching-padded-n-1-top-down-with-memoization": [
       {
         "number": 1,
         "name": "i to N Recursive with Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-padded",
+        "application": "dfs-with-caching-padded-n-1-top-down-with-memoization",
         "code": "def climbStairs(self, n: int) -> int:\n\n        # Note:\n        # Top Down DP (memoized recursion)\n        # 0. Direct Length -> no need for len == n check, recursive padding boundary covers it\n        # 1. Memo Check -> computed previously\n        # 2. Pad Boundaries -> overshot case case\n        # 3. Padded Boundary -> last element n\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Memo Return -> return ways, calculated once\n        # Result: Ways to climb from 0 to nth step\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n            \n            # Pad Boundaries -> overshot case case\n            if i > n:\n                return 0\n\n            # Padded Boundary -> last element n\n            if i == n:\n                return 1\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            memo[i] = dfs(i + 1) + dfs(i + 2)\n\n            # Memo return: return ways, calculated once\n            return memo[i]\n\n        # res -> ways to get from 0 to nth step\n        res = dfs(0)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursion stack)\n        return res",
         "questionNumber": 70,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-padded",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-padded-n-1-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 2,
         "name": "0 to i Recursive with Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-padded",
+        "application": "dfs-with-caching-padded-n-1-top-down-with-memoization",
         "code": "def climbStairs(self, n: int) -> int:\n\n        # Note:\n        # Top Down DP (memoized recursion)\n        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it\n        # 1. Memo Check -> computed previously\n        # 2. Pad Boundaries -> 0 ground case\n        # 3. Padded Boundary -> 1st element\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Memo return -> return ways, calculated once\n        # Result: Ways to climb from 0 to nth step\n\n        # Ways to climb from 0 to ith step\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n            \n            # Pad Boundaries -> 0 ground case\n            if i == 0:\n                return 1\n\n            # Padded Boundary -> 1st element\n            if i == 1:\n                return 1\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            memo[i] = dfs(i - 1) + dfs(i - 2)\n\n            # Memo return -> return ways, calculated once\n            return memo[i]\n\n        # res -> ways to climb from 0 to nth step\n        res = dfs(n)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursion stack)\n        return res",
         "questionNumber": 70,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-padded",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-padded-n-1-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 1,
         "name": "i to N Recursive with Explicit Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-padded",
+        "application": "dfs-with-caching-padded-n-1-top-down-with-memoization",
         "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        \n        # Note:\n        # Top Down DP (memoized recursion)\n        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it\n        # 1. Memo Check -> computed previously\n        # 2. Padding Boundary -> ground step 0\n        # 3. Padded Boundary -> first element\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Memo return -> return ways, calculated once\n        # Result: min cost to reach n from last or 2nd to last step\n\n        n = len(cost)\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n\n            # Padding Boundary -> ground step 0\n            if i == 0:\n                return 0\n\n            # Padded Boundary -> first element\n            if i == 1:\n                return cost[0]\n\n            # Build From Previous -> min cost to reach current step\n            memo[i] = cost[i-1] + min(dfs(i-1), dfs(i-2))\n            return memo[i]\n\n        # res -> reach step n by coming from last two steps\n        res = min(dfs(n), dfs(n-1))\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursive stack)\n        return res",
         "questionNumber": 746,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-padded",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-padded-n-1-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       }
     ],
-    "iterative-tabulation-padded": [
+    "iterative-tabulation-padded-n-1-bottom-up": [
       {
         "number": 3,
         "name": "0 to i Iterative Bottom Up Array",
         "type": "1d-dynamic-programming",
-        "application": "iterative-tabulation-padded",
+        "application": "iterative-tabulation-padded-n-1-bottom-up",
         "code": "def climbStairs(self, n: int) -> int:\n        \n        # Note:\n        # Iterative Bottom Up Tabulation\n        # 1. Pad Array -> 0 ground case, dp size (N+1)\n        # 2. Padded -> grab 1st element\n        # 3. Iterate -> 2 to n\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # Result: ways to climb to nth step\n\n        # Pad Array -> 0 ground case, dp size (N+1)\n        dp = [0] * (n + 1)   # padding:\n        dp[0] = 1            # padding: ground case, does not exist in array\n        dp[1] = 1            # padded: first step\n\n        # Iterate -> 2 to nth\n        for i in range(2, n+1):\n            # Build From Previous -> grab from previous two steps and sum paths\n            dp[i] = dp[i-1] + dp[i-2]\n\n        # res -> nth step\n        res = dp[n]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
         "questionNumber": 70,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-padded",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-padded-n-1-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
-    "optimal-iterative-padded": [
+    "optimal-iterative-padded-n-1-rolling-state-variables-bottom-up": [
       {
         "number": 4,
         "name": "0 to i Iterative Bottom Up Variables",
         "type": "1d-dynamic-programming",
-        "application": "optimal-iterative-padded",
+        "application": "optimal-iterative-padded-n-1-rolling-state-variables-bottom-up",
         "code": "def climbStairs(self, n: int) -> int:\n        \n        # Note:\n        # Iterative Bottom Up Variables\n        # 1. Pad Variables -> 0 ground case\n        # 2. Padded -> grab 2st element\n        # 3. Iterate -> 2 to n\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Roll Variables -> Iterate Variables\n        # Result: ways to climb to nth step\n\n        # Pad Variables -> 0 ground case\n        TwoPrev = 1  # padding:\n        OnePrev = 1  # padded: 1st element\n\n        # Iterate -> 2 to n\n        for i in range(2, n+1):\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            curr = TwoPrev + OnePrev\n\n            # Slide Window -> Roll Variables\n            TwoPrev, OnePrev = OnePrev, curr\n        \n        # res -> ways to climb to n step\n        res = OnePrev\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
         "questionNumber": 70,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-4-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-padded",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-4-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-padded-n-1-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
-    "dfs-with-caching-direct": [
+    "dfs-with-caching-direct-n-top-down-with-memoization": [
       {
         "number": 2,
         "name": "i to N Recursive with Explicit Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-direct",
+        "application": "dfs-with-caching-direct-n-top-down-with-memoization",
         "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        \n        # Note:\n        # Top Down DP (memoized recursion)\n        # 0. Direct Length -> no need for len == 1 check, recursive direct boundary covers it\n        # 1. Memo Check -> computed previously\n        # 2. Direct Boundary -> 1st element\n        # 3. Direct Boundary -> 2nd element\n        # 4. Direct Build From Previous -> grab from previous two steps and sum paths\n        # 5. Memo return -> return ways, calculated once\n        # Result: min cost to reach n from last or 2nd to last step\n\n        n = len(cost)\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n\n            # Direct Boundary -> 1st element\n            if i == 0:\n                return cost[0]\n\n            # Direct Boundary -> 2nd element\n            if i == 1:\n                return cost[1]\n\n            # Build -> min cost to reach + cost to continue\n            memo[i] = cost[i] + min(dfs(i-1), dfs(i-2))\n            return memo[i]\n\n        # res -> reach n by continuing from nth or nth-1 step (since we step 1 or 2 steps)\n        res = min(dfs(n-1), dfs(n-2))\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursive stack)\n        return res",
         "questionNumber": 746,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 1,
         "name": "i to N Recursive with Explicit Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-direct",
+        "application": "dfs-with-caching-direct-n-top-down-with-memoization",
         "code": "def tribonacci(self, n: int) -> int:\n\n        # Note:\n        # Top Down DP (memoized recursion)\n        # 1. Memo Check -> computed previously\n        # 2. Direct Boundary -> 1st element\n        # 3. Direct Boundary -> 2nd element\n        # 4. Direct Boundary -> 3rd element\n        # 5. Build From Previous -> grab from previous two steps and sum paths\n        # 6. Memo return -> return ways, calculated once\n        # Result: T_i in Tribonacci sequence\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n\n            # Boundary -> 1st element\n            if i == 0:\n                return 0\n            # Boundary -> 2nd element\n            if i == 1:\n                return 1\n            # Boundary -> 3rd element\n            if i == 2:\n                return 1\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            memo[i] = dfs(i-1) + dfs(i-2) + dfs(i-3)\n            return memo[i]\n\n        # res -> T_n value\n        res = dfs(n)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursion stack)\n        return res",
         "questionNumber": 1137,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 1,
         "name": "i to N Recursive with Explicit Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-direct",
+        "application": "dfs-with-caching-direct-n-top-down-with-memoization",
         "code": "def rob(self, nums: List[int]) -> int:\n        \n        # Note:\n        # Top down recursive with memoization\n        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it\n        # 1. Memo Check -> computed previously\n        # 2. Direct Boundary -> 1st element\n        # 3. Direct Boundary -> 2nd element\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # Result: max loop from first to last house\n\n        n = len(nums)\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n\n            # Direct Boundary -> 1st element\n            if i == 0:\n                return nums[0]\n\n            # Direct Boundary -> 2nd element\n            if i == 1:\n                return max(nums[0], nums[1])\n            \n            # Direct Build From Previous -> grab from previous two steps and sum paths\n            # choose max between rob or skipping current house\n            memo[i] = max(nums[i] + dfs(i-2), dfs(i-1))\n            return memo[i]\n\n        # res -> max loot for nth house\n        res = dfs(n-1)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursion stack)\n        return res",
         "questionNumber": 198,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-explicit-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 1,
         "name": "i to N Recursive with Memoization Top Down",
         "type": "1d-dynamic-programming",
-        "application": "dfs-with-caching-direct",
+        "application": "dfs-with-caching-direct-n-top-down-with-memoization",
         "code": "def rob(self, nums: List[int]) -> int:\n\n        # Note:\n        # Top down (recursive with memoization)\n        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist\n        # 1. Memo Check -> computed previously\n        # 2. Direct Boundary -> 1st + 2nd element\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # 4. Handle circular constraint -> cannot rob both first and last\n        # Result: max loot for circular house array\n\n        n = len(nums)\n\n        # Direct Length -> need for len == 1 check, 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        def rob_range(start, end):\n\n            memo = {}\n\n            def dfs(i):\n\n                # Memo Check -> computed previously\n                if i in memo:\n                    return memo[i]\n\n                # Direct Boundary -> 1st element\n                if i == start:\n                    return nums[start]\n\n                # Direct Boundary -> 2nd element\n                if i == start + 1:\n                    return max(nums[start], nums[start + 1])\n\n                # Build From Previous -> grab from previous two steps and sum paths\n                memo[i] = max(nums[i] + dfs(i-2), dfs(i-1))\n                return memo[i]\n\n            # res -> max loot at last house in subarray\n            return dfs(end)\n\n        # Handle circular constraint -> cannot rob both first and last\n        res1 = rob_range(0, n-2)\n        res2 = rob_range(1, n-1)\n\n        # res -> max loot from circular houses\n        res = max(res1, res2)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n) (memo + recursion stack)\n        return res",
         "questionNumber": 213,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
+        "blog": "1D Dynamic Programming"
+      },
+      {
+        "number": 1,
+        "name": "i to N Recursive with Memoization Top Down",
+        "type": "1d-dynamic-programming",
+        "application": "dfs-with-caching-direct-n-top-down-with-memoization",
+        "code": "def numDecodings(self, s: str) -> int:\n\n        # Note:\n        # Top Down DP (recursive with memoization)\n        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it\n        # 1. Memo Check -> computed previously\n        # 2. Direct Boundary -> 1st element: empty string\n        # 3. Direct Boundary -> 2nd element: first char\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # Result: total decode ways from start (0) to end (n-1)\n\n        n = len(s)\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n\n            # Direct Boundary -> 1st element: empty string\n            if i < 0:\n                return 1\n\n            # Direct Boundary -> 2nd element: first char\n            if i == 0:\n                return 1 if s[0] != '0' else 0\n\n            count = 0\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            # decode ignoring single digit\n            if s[i] != '0':\n                count += dfs(i-1)\n            # decode ignoring double digit\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                count += dfs(i-2)\n\n            memo[i] = count\n            return memo[i]\n\n        # res -> number of decode ways for nth\n        res = dfs(n-1)\n\n        # overall: time complexity\n        # overall: space complexity\n        return res",
+        "questionNumber": 91,
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       }
     ],
-    "iterative-tabulation-direct": [
+    "iterative-tabulation-direct-n-bottom-up": [
       {
         "number": 3,
         "name": "0 to i Iterative Bottom Up Array",
         "type": "1d-dynamic-programming",
-        "application": "iterative-tabulation-direct",
+        "application": "iterative-tabulation-direct-n-bottom-up",
         "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        \n        # Note:\n        # Bottom Up Tabulation\n        # 0. Direct Length -> no need for len == 1 check, description says min length == 2\n        # 1. Direct Array -> 1st + 2nd element\n        # 3. Iterate -> 2 to n-1\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # Result: min cost to reach n via continuing from step n-1 or n-2\n\n        # 0. Direct Length -> no need for len == 1 check, description says min length == 2\n\n        n = len(cost)\n\n        # Direct Array -> 1st + 2nd element\n        dp = [0] * n\n        dp[0], dp[1] = cost[0], cost[1]\n\n        # Iterate -> steps 2 to n-1\n        for i in range(2, n):\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            dp[i] = cost[i] + min(dp[i-1], dp[i-2])\n\n        # res -> min cost to reach n\n        res = min(dp[n-1], dp[n-2])\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
         "questionNumber": 746,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 2,
         "name": "0 to i Iterative Bottom Up Array",
         "type": "1d-dynamic-programming",
-        "application": "iterative-tabulation-direct",
+        "application": "iterative-tabulation-direct-n-bottom-up",
         "code": "def tribonacci(n: int) -> int:\n\n        # Note:\n        # this is a unique case where Direct/N, requires an array of (N+1)\n        # since we have 0 -> N fib solutions\n\n        # Note:\n        # Iterative Bottom Up Tabulation\n        # 1. Direct Boundary -> need for len == 0, len == 1, and len == 2, as 3rd element may not exist\n        # 2. Direct Array -> 1st, 2nd, and 3rd element\n        # 3. Iterate -> 2 to n-1\n        # 4. Iterate -> 3 to n\n        # 5. Build From Previous -> sum previous three DP entries\n        # Result: T_n in Tribonacci sequence\n\n        # Direct Boundary -> len == 0, len == 1, and len == 2, as 3rd element may not exist\n        if n == 0:\n            return 0\n        if n == 1:\n            return 1\n        if n == 2:\n            return 1\n\n        # Direct Array -> 1st, 2nd, and 3rd element\n        dp = [0] * (n+1)\n        dp[0], dp[1], dp[2] = 0, 1, 1\n\n        # Iterate -> 3 to n\n        for i in range(3, n+1):\n\n            # Build From Previous -> sum of last three\n            dp[i] = dp[i-1] + dp[i-2] + dp[i-3]\n\n        # Result -> nth tribonacci\n        return dp[n]",
         "questionNumber": 1137,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 2,
         "name": "0 to i Iterative Bottom Up Array",
         "type": "1d-dynamic-programming",
-        "application": "iterative-tabulation-direct",
+        "application": "iterative-tabulation-direct-n-bottom-up",
         "code": "def rob(self, nums: List[int]) -> int:\n        \n        # Note:\n        # Bottom Up Tabulation\n        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist\n        # 1. Direct Array -> 1st + 2nd element\n        # 2. Iterate -> 2 to n-1\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # Result: max loot from nth house\n\n        n = len(nums)\n\n        # Direct Length -> need for len == 1 check, 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        # Direct Array -> 1st + 2nd element\n        dp = [0] * n\n        dp[0], dp[1] = nums[0], max(nums[0], nums[1])\n\n        # Iterate -> 2 to n-1\n        for i in range(2, n):\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            # choose max between rob or skipping current house\n            dp[i] = max(nums[i] + dp[i-2], dp[i-1])\n\n        # res -> max loot at nth house\n        res = dp[n-1]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
         "questionNumber": 198,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 2,
         "name": "0 to i Iterative Bottom Up Array",
         "type": "1d-dynamic-programming",
-        "application": "iterative-tabulation-direct",
+        "application": "iterative-tabulation-direct-n-bottom-up",
         "code": "def rob(self, nums: List[int]) -> int:\n        \n        # Note:\n        # Bottom up array\n        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist\n        # 1. Direct Length (subarray) -> need for len == 1 check, 2nd element may not exist\n        # 2. Direct Array -> 1st + 2nd element\n        # 3. Iterate -> 2 to numHouses-1\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Handle circular constraint -> 2 subsets to break circular array\n        # Result: max loot from circular houses array\n\n        n = len(nums)\n\n        # Direct Length -> need for len == 1 check, 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        def rob_range(start, end):\n\n            # Direct Length -> need for len == 1 check, 2nd element may not exist\n            numHouses = end - start + 1\n            if numHouses == 1:\n                return nums[start]\n\n            # Direct Array -> 1st + 2nd element\n            dp[0] = nums[start]\n            dp[1] = max(nums[start], nums[start + 1])\n\n            # Iterate -> 2 to numHouses-1\n            for i in range(2, numHouses):\n\n                # Build From Previous -> grab from previous two steps and sum paths\n                # choose max between rob or skipping current house\n                dp[i] = max(nums[i + start] + dp[i-2], dp[i-1])\n\n            # res -> max loot at last house in subarray\n            return dp[numHouses-1]\n\n\n        # Handle circular constraint -> cannot rob both first and last\n        res1 = rob_range(0, n-2)\n        res2 = rob_range(1, n-1)\n\n        # res -> max loot from circular houses\n        res = max(res1, res2)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
         "questionNumber": 213,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
+        "blog": "1D Dynamic Programming"
+      },
+      {
+        "number": 2,
+        "name": "0 to i Iterative Bottom Up Array",
+        "type": "1d-dynamic-programming",
+        "application": "iterative-tabulation-direct-n-bottom-up",
+        "code": "def numDecodings(self, s: str) -> int:\n\n        # Note:\n        # Iteration here is unique here because we cant initialize/skip i = 1, \n        # because it introduces the first valid two digit choice. \n        # If we jumped directly to i = 2, we’d miss the case where the answer \n        # depends entirely on that first double digit decode.\n\n        # Note:\n        # Bottom Up DP\n        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist\n        # 1. Direct Array -> 1st element\n        # 2. Iterate -> 1 to n-1\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # Result: total decode ways nth\n\n        n = len(s)\n\n        # Direct Length -> need for len == 0 check, 2nd element/first char, maybe not exist\n        if not s:\n            return 0\n\n        # Direct Array -> 1st element\n        dp = [0] * n\n        dp[0] = 1 if s[0] != '0' else 0\n\n        # Iterate -> 1 to n-1\n        for i in range(1, n):\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            # decode ignoring single digit\n            if s[i] != '0':\n                dp[i] += dp[i-1]\n            # decode ignoring double digit\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                # Add ways from two steps back if i >= 2, otherwise 1\n                dp[i] += dp[i-2] if i >= 2 else 1\n\n        # res -> number of decode ways for nth\n        res = dp[n-1]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
+        "questionNumber": 91,
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
-    "optimal-iterative-direct": [
+    "optimal-iterative-direct-n-rolling-state-variables-bottom-up": [
       {
         "number": 4,
         "name": "0 to i Iterative Bottom Up Variables",
         "type": "1d-dynamic-programming",
-        "application": "optimal-iterative-direct",
+        "application": "optimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "code": "def minCostClimbingStairs(self, cost: List[int]) -> int:\n        \n        # Note:\n        # Bottom Up Variables\n        # 0. Direct Length -> no need for len == 1 check, description says min length == 2\n        # 1. Direct Variables -> 1st + 2nd element\n        # 2. Iterate -> 2 to n-1\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # 3. Roll Variables -> Iterate Variables\n        # Result: min cost to reach n via continuing from last or 2nd to last step (n-1, or n-2)\n\n        # 0. Direct Length -> no need for len == 1 check, description says min length == 2\n\n        n = len(cost)\n\n        # Direct Variables -> 1st + 2nd element\n        prev2, prev1 = cost[0], cost[1]\n\n        # Iterate -> 2 to n-1\n        for i in range(2, n):\n            \n            # Build From Previous -> grab from previous two steps and sum paths\n            curr = cost[i] + min(prev1, prev2)\n\n            # Roll Variables -> Iterate Variables\n            prev2, prev1 = prev1, curr\n\n        # res -> min cost to reach n\n        res = min(prev1, prev2)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
         "questionNumber": 746,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-4-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-4-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 3,
         "name": "0 to i Iterative Bottom Up Variables",
         "type": "1d-dynamic-programming",
-        "application": "optimal-iterative-direct",
+        "application": "optimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "code": "def tribonacci(self, n: int) -> int:\n\n        # Note:\n        # this is a unique case where Direct/N, requires an array of (N+1)\n        # since we have 0 -> N fib solutions\n\n        # Note:\n        # Iterative Bottom Up Variables\n        # 1. Direct Boundary -> need len == 1 check, elements 2 and 3 may not exist\n        # 2. Direct Variables -> 1st + 2nd + 3rd elements\n        # 3. Iterate -> 3 to n\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Roll Variables -> Iterate Variables\n        # Result: T_n in Tribonacci sequence\n\n        # Direct Boundary -> need len == 1 check, elements 2 and 3 may not exist\n        if n == 0:\n            return 0\n        if n == 1:\n            return 1 \n\n        # Direct Variables -> 1st + 2nd + 3rd elements\n        T0, T1, T2 = 0, 1, 1\n\n        # Iterate -> 3 to n\n        for i in range(3, n+1):\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            curr = T0 + T1 + T2\n\n            # Roll Variables -> Iterate Variables\n            T0, T1, T2 = T1, T2, curr\n\n        # res -> nth tribonacci\n        res = T2\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
         "questionNumber": 1137,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 3,
         "name": "0 to i Iterative Bottom Up Variables",
         "type": "1d-dynamic-programming",
-        "application": "optimal-iterative-direct",
+        "application": "optimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "code": "def rob(self, nums: List[int]) -> int:\n\n        # Note:\n        # Bottom Up Variables\n        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist\n        # 1. Direct Variables -> 1st + 2nd element\n        # 2. Iterate -> 2 to n-1\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # 4. Roll Variables -> Iterate Variables\n        # Result: max loot first to last house\n\n        n = len(nums)\n\n        # Direct Length -> need for len == 1 check, 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        # Direct Variables -> 1st + 2nd element\n        prev2, prev1 = nums[0], max(nums[0], nums[1])\n\n        # Iterate -> 2 to n-1\n        for i in range(2, n):\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            curr = max(prev1, nums[i] + prev2)\n\n            # Roll Variables -> Iterate Variables\n            prev2, prev1 = prev1, curr\n\n        # res -> max loot at nth house\n        res = prev1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
         "questionNumber": 198,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       },
       {
         "number": 3,
         "name": "0 to i Iterative Bottom Up Variables",
         "type": "1d-dynamic-programming",
-        "application": "optimal-iterative-direct",
+        "application": "optimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "code": "def rob(self, nums: List[int]) -> int:\n\n        # Note:\n        # Bottom up variables\n        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist\n        # 1. Direct Length (subarray) -> need for len == 1 check, 2nd element may not exist\n        # 2. Direct Variables -> 1st + 2nd element\n        # 3. Iterate -> 2 to numHouses-1\n        # 4. Build From Previous -> grab from previous two steps and sum paths\n        # 5. Roll Variables -> Iterate Variables\n        # 6. Handle circular constraint -> cannot rob both first and last\n        # Result: max loot from circular houses\n\n        n = len(nums)\n\n        # Direct Length -> need for len == 1 check, 2nd element may not exist\n        if n == 1:\n            return nums[0]\n\n        def rob_range(start, end):\n\n            # Direct Length -> need for len == 1 check, 2nd element may not exist\n            numHouses = end - start + 1\n            if numHouses == 1:\n                return nums[start]\n\n            # Direct Variables -> 1st + 2nd element\n            prev2 = nums[start]\n            prev1 = max(nums[start], nums[start + 1])\n\n            # Iterate -> 2 to numHouses-1\n            for i in range(2, numHouses):\n\n                # Build From Previous -> grab from previous two steps and sum paths\n                curr = max(prev1, nums[start + i] + prev2)\n\n                # Roll Variables -> Iterate Variables\n                prev2, prev1 = prev1, curr\n\n            # res -> max loot at last house in subarray\n            return prev1\n\n        # Handle circular constraint -> cannot rob both first and last\n        res1 = rob_range(0, n-2)\n        res2 = rob_range(1, n-1)\n\n        # res -> max loot from circular houses\n        res = max(res1, res2)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
         "questionNumber": 213,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
+        "blog": "1D Dynamic Programming"
+      },
+      {
+        "number": 3,
+        "name": "0 to i Iterative Bottom Up Variables",
+        "type": "1d-dynamic-programming",
+        "application": "optimal-iterative-direct-n-rolling-state-variables-bottom-up",
+        "code": "def numDecodings(self, s: str) -> int:\n\n        # Note:\n        # Iteration here is unique here because we cant initialize/skip i = 1, \n        # because it introduces the first valid two digit choice. \n        # If we jumped directly to i = 2, we’d miss the case where the answer \n        # depends entirely on that first double digit decode.\n\n        # Note:\n        # Bottom-up DP with space optimization\n        # 0. Direct Length -> need for len == 0 check, 2nd element/first char, maybe not exist\n        # 1. Direct Variables -> 1st element\n        # 2. Iterate -> 1 to n-1\n        # 3. Build From Previous -> grab from previous two steps and sum paths\n        # 4. Roll Variables -> Iterate Variables\n        # Result -> total decode ways nth\n\n        # Direct Length -> need for len == 0 check, 2nd element/first char, maybe not exist\n        if not s:\n            return 0\n\n        n = len(s)\n\n        # Direct Variables -> 1st element\n        prev2 = 0 \n        prev1 = 1 if s[0] != '0' else 0\n\n        # Iterate -> 1 to n-1\n        for i in range(1, n):\n\n            curr = 0\n\n            # Build From Previous -> grab from previous two steps and sum paths\n            # decode ignoring single digit\n            if s[i] != '0':\n                curr += prev1\n            # decode ignoring double digit\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                curr += prev2 if i >= 2 else 1\n\n            # Roll Variables -> Iterate Variables\n            prev2, prev1 = prev1, curr\n\n        # res -> number of decode ways for nth\n        res = prev1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
+        "questionNumber": 91,
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
@@ -2405,38 +2435,6 @@
         "code": "def countSubstrings(self, s: str) -> int:\n        n = len(s)\n        dp = [[False] * n for _ in range(n)]\n        count = 0\n\n        # single characters\n        for i in range(n):\n            dp[i][i] = True\n            count += 1\n\n        # substring lengths 2 -> n\n        for length in range(2, n + 1):\n            for i in range(n - length + 1):\n                j = i + length - 1\n                if s[i] == s[j]:\n                    if length == 2 or dp[i + 1][j - 1]:\n                        dp[i][j] = True\n                        count += 1\n\n        return count",
         "questionNumber": 647,
         "solutionLink": "/Notes/1d-dynamic-programming#solution-2-dynamic-programming---1d-dynamic-programminglinear-property-tracking",
-        "blog": "1D Dynamic Programming"
-      }
-    ],
-    "sequential-state-transition": [
-      {
-        "number": 1,
-        "name": "0 to i Recursive with Memoization Top Down",
-        "type": "1d-dynamic-programming",
-        "application": "sequential-state-transition",
-        "code": "def numDecodings(self, s: str) -> int:\n\n        # Note:\n        # Top Down DP (recursive with memoization)\n        # 1. Memo Check -> avoid recomputation\n        # 2. Boundary Check -> base cases for empty string and first char\n        # 3. Explore Choices -> to reach i, decode single or double digit ending at i\n        # 4. Build -> sum of decoding ways from valid previous states\n        # 5. Memo Return -> total decode ways for prefix [0..i]\n        # Result: total decode ways from start (0) to end (n-1)\n\n        n = len(s)\n        memo = {}\n\n        def dfs(i):\n\n            # Memo check ->\n            if i in memo:\n                return memo[i]\n\n            # Boundary Check -> empty \"\" has 1 way\n            if i < 0:\n                return 1\n\n            # Boundary Check -> single char has 1 way, cannot be '0'\n            if i == 0:\n                return 1 if s[0] != '0' else 0\n\n            count = 0\n\n            # Explore Choices -> decode ignoring single digit\n            if s[i] != '0':\n                count += dfs(i-1)\n\n            # Explore Choices -> decode ignoring double digit\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                count += dfs(i-2)\n\n            # Memo Return -> count for [0, i]\n            memo[i] = count\n            return count\n\n        # Decode ways for full string (0..n-1)\n        return dfs(n-1)",
-        "questionNumber": 91,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-0-to-i-recursive-with-memoization-top-down---1d-dynamic-programmingsequential-state-transition",
-        "blog": "1D Dynamic Programming"
-      },
-      {
-        "number": 2,
-        "name": "0 to i Iterative Bottom Up Array",
-        "type": "1d-dynamic-programming",
-        "application": "sequential-state-transition",
-        "code": "def numDecodings(self, s: str) -> int:\n\n        # Note:\n        # Bottom Up DP (array version, aligned with recursive definition)\n        # dp[i] = number of ways to decode prefix s[0..i]\n        # 1. Initialize Catch -> empty string\n        # 2. Base Set Up -> dp[0] for first character\n        # 3. Iterate -> compute dp[i] for i = 1..n-1\n        # 4. Explore Choices -> single-digit and double-digit decoding\n        # 5. Build -> sum valid decodings from previous states\n        # 6. Result -> dp[n-1] contains total decode ways for full string\n\n        n = len(s)\n        if not s:\n            return 0\n\n        # Initialize Array -> number of ways to decode prefix s[0..i]\n        dp = [0] * n\n\n        # Base Set Up -> first char\n        dp[0] = 1 if s[0] != '0' else 0\n\n        # Iterate -> fill dp from left to right\n        for i in range(1, n):\n\n            # Explore Choices -> single digit (s[i])\n            if s[i] != '0':\n                dp[i] += dp[i-1]\n\n            # Explore Choices -> double digit (s[i-1:i+1])\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                # Add ways from two steps back if i >= 2, otherwise 1\n                dp[i] += dp[i-2] if i >= 2 else 1\n\n        # Result -> total decoding ways for full string s[0..n-1]\n        res = dp[n-1]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
-        "questionNumber": 91,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingsequential-state-transition",
-        "blog": "1D Dynamic Programming"
-      },
-      {
-        "number": 3,
-        "name": "0 to i Iterative Bottom Up Variables",
-        "type": "1d-dynamic-programming",
-        "application": "sequential-state-transition",
-        "code": "def numDecodings(self, s: str) -> int:\n\n        # Note:\n        # Bottom-up DP with space optimization\n        # Only previous two dp values needed\n        # 1. prev2 = dp[i-2], prev1 = dp[i-1]\n        # 2. For current index, accumulate ways from single-digit and two-digit checks\n        # 3. Slide window forward to maintain only two previous states\n        # 4. Result -> prev1 contains total decode ways for full string\n\n        # Invalid check -> empty string\n        if not s:\n            return 0\n\n        n = len(s)\n\n        # Base cases -> first character\n        prev2 = 0  # dp[-2], used for two-digit calculation at i = 1\n        prev1 = 1 if s[0] != '0' else 0  # dp[0], ways to decode s[0]\n\n        # Iterate -> from second character to last\n        for i in range(1, n):\n\n            curr = 0\n\n            # Explore Choices -> single digit (s[i])\n            if s[i] != '0':\n                curr += prev1\n\n            # Explore Choices -> double digit (s[i-1:i+1])\n            two_digit = int(s[i-1:i+1])\n            if 10 <= two_digit <= 26:\n                curr += prev2 if i >= 2 else 1\n\n            # Slide Window -> update previous two states\n            prev2, prev1 = prev1, curr\n\n        # Result -> total decoding ways for full string s[0..n-1]\n        res = prev1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
-        "questionNumber": 91,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingsequential-state-transition",
         "blog": "1D Dynamic Programming"
       }
     ],
