@@ -1,0 +1,210 @@
+---
+title: "Designing Data Intensive Applications"
+description: "designing data intensive applications"
+image: "../../public/Notes/ddia-2.png"
+publishedAt: "2025-09-18"
+updatedAt: "2025-09-18"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- system design
+---
+
+
+## Preface
+
+### Intro
+
+If you have worked as a swe in recent years, specifically in server side 
+and backend systems, you may have come many common buzz words relating
+to the storage and processing of data.
+
+NoSQL! BIG DATA! Web scale, Sharing, EvEnTuAl CoNsIsTeNcY, ACID!!!
+The Cap Theorem, Clooooud services, (you get the point).
+
+Data intensive applications are pushing the boundaries of what is possible
+by inventing and making use of these technological developments.
+
+Fortunately, regardless of the rapid changes in technology,
+there are enduring principles that remain true, no matter which tool or
+which version of a tool you are using. Understanding those principles
+will teach you the 'why' and expand your boundaries of writing good software.
+
+The goal of these notes is to organize my thoughts and process the 
+way the 'Designing Data-Intensive Applications' textbook explains these concepts.
+
+Feel free to follow along! :)
+
+### Who Should Read This Book?
+
+Fellow developers, old friends, random strangers on the internet who
+have stumbled upon my chicken scratch of notes. Welcome all!
+
+But specifically, if you develop server/backend for storing or processing
+data, and you applications use the internet (e.g., web apps, mobile apps,
+internet connected sensors), then these notes are for you.
+
+1. Role wise, this is for 
+
+- software engineers
+
+- software architects 
+
+- technical managers who code
+
+- basically anybody making decisions on the 
+architecture of the systems you are building.
+
+2. App wise, this is for 
+
+- learning how to make data systems scalable 
+(e.g., supporting web or mobile apps with millions of users).
+
+- making applications available (minimizing downtime) and operationally robust
+
+- making systems easier to maintain in the long run as they scale and technologies change
+
+- for people with natural curiosity for what is going on under the hood,
+rule number 1: its never magic (thanks bobby ;) )
+rule number 2: i will not bail you out of jail (also thank you bobby rip cmsc417 gang)
+
+3. Counter Argument wise, this is for
+
+- when someone complains "you're not google or amazon, stop worrying about scale
+and just use a relational database". You can slap them with a fish and say
+"fair, while building for scale you don't need is wasted effort, it may lock you
+into an inflexible design. You should know its important to choose the right tool 
+for the job and while relational databases are important, they are not the final word
+on dealing with data". They will then view you as a worthy advisory and challenge
+you to a fight to the death (dont forget what you learned in your 4 years of computer science
+undergrad and give them the classic fork() and os.kill_child() leading to instant victory, for
+legal reasons this is a joke please dont stop reading its like 4 in the morning im sorry,
+also if you laughed at that youre a nerd :) )
+
+
+### Scope Of This Book
+This book discussing various principles and tradeoffs that are fundamental
+to data systems, and we explore the different design decisions taken by different products.
+
+This book looks primarily at *architecture* of data systems.
+We will leave deployment, operations, security, management, and other areas,
+equally complex and important, to be covered by other books.
+
+### Outline Of This Book
+
+1. Part I: The Basics: our bearings, and definitions
+
+We discuss the fundamental ideas that underpin the design of data intensive
+applications.
+
+|  Chapter  | Topic |
+| -------- | --------------- |
+| 1 | Top down point of view. What are we trying to achieve? Reliability, scalability, maintainability. |
+| 2 | Start by comparing different data models and query languages, and see how they are appropriate to different situations |
+| 3 | Storage engines. How databases arrange data on disk so that we can find it again efficiently |
+| 4 | Formats for data encoding (serialization) and evolution of schemas over time |
+
+2. Part II: From a single machine to a distributed system
+
+Shift from data stored on a single machine, to data that is distributed
+across multiple machines, as often necessary for scalability, which brings
+in a variety of unique challenges
+
+|  Chapter  | Topic |
+| -------- | --------------- |
+| 5 | Replication |
+| 6 | Partitioning and sharding |
+| 7 | Transactions |
+| 8 | Dive into more details on the problems prevalent with distributed systems |
+| 9 | What is means to achieve consistency and consensus in a distributed system |
+
+3. Part III: Heterogeneous systems, where no one data base can do it all
+
+We discuss systems that derive some datasets from other datasets.
+Derived data often occurs in heterogenous systems: when no one database
+that can do everything well, applications need to integrate several
+different databases, caches, indexes and so on.
+
+|  Chapter  | Topic |
+| -------- | --------------- |
+| 10 | Batch processing approach to derived data. |
+| 11 | Build upon batch processing with stream processing. |
+| 12 | Tape everything together and discuss approaches for building reliable, scalable, and maintainable applications in the future. |
+
+### References and Further Reading
+Most of everything in this book has been said before.
+Free references and links as we go along.
+
+
+## Part I: Foundations of Data Systems
+
+### Chapters
+
+The first four chapters go through the fundamental ideas that apply to all data systems,
+whether running on a single machine or distributed across a cluster of machines.
+
+Chapter 1:
+
+Introduces terminology and approach that we are going to use throughout the book.
+Examining what we actually mean by words like *reliability, scalability, and maintainability*
+and how we can try to achieve these goals.
+
+Chapter 2:
+
+We compare several different data models and query languages, both of which are the most visible
+distinguishing factor between database from a developer's point of view.
+We will see how different models are appropriate to different situations.
+
+
+Chapter 3:
+
+We turn to the internals of storage engines and look at how database put data on disk.
+Different storage engines are optimized for different workloads, and how choosing
+the right one can have a huge effect on performance.
+
+Chapter 4: 
+
+Compare various formats for data encoding (serialization) and especially examine how they
+fare in an environment where application requirements change and schemas need to adapt over time.
+
+### Reliable, Scalable, and Maintainable Applications
+
+Many applications today are data intensive, as opposed to compute intensive.
+Raw CPU power is rarely a limiting factor vs the amount of data, complexity of data, 
+and speed at which it is changing.
+
+Data intensive applications are typically built from standard building blocks for functionality.
+
+- Databases: Storing data, for other apps or later use 
+
+- Caches: Remember result of expensive operations, to speed up reads
+
+- Search Indexes: Allowing users to search data by keywords or filter in various ways
+
+- Batch Process: Periodically crunching a large amount of accumulated data
+
+These are all obvious because these *data systems* are such a successful abstraction,
+that most engineers wouldn't think of writing a new data storage engine from scratch
+because perfectly good ones already exists.
+
+But its not that simple.
+While there are many database systems, each have different characteristics because
+different applications have different requirements.
+
+### Thinking About Data Systems
+
+Why do we lump databases, queues, caches, etc, each with different patterns, performance, 
+and implementations under the umbrella term data systems?
+
+Many new tools for data storage and processing have emerged in recent years leading to more
+trouble as they no longer neatly fit into traditional categories and boundaries blur.
+Ex: Redis, both datastores and message queue. Apaches Kafka, both message queues with database
+durability.
+
+No single tool can meet all data processing and storage needs as applications
+have such demanding and wide ranging requirements.
+
+Now instead, work is broken down into tasks that can be performed on a single tool,
+while different tools are stitched together using application code.
+Ex: Application managed caching layer (using Memcached) and full text search server
+(using Elasticsearch).
