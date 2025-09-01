@@ -398,6 +398,43 @@ Ex: House Robber (Optimal Bottom Up, Direct)
         return prev1
 ```
 
+### 1D Dynamic Programming Application: BFS Visited Memo Level Order
+Pattern: Treat problem as shortest-path search; each state represents “remaining target” or “current subproblem.” Use a queue for BFS and a visited set as memoization to avoid recomputation.
+Use When: Problem can be framed as reaching a target with choices at each step (e.g., coin change, min steps). BFS guarantees the first solution found is minimal (shortest path).
+Recurrence: For each state curr, explore all valid next states curr - choice. Steps to reach next = steps[curr] + 1.
+
+Ex: Coin Change (BFS with Memo)
+```python
+    def coinChange(coins, amount):
+        if amount == 0:
+            return 0
+
+        # Queue stores (remaining amount, coins used so far)
+        queue = deque([(amount, 0)])
+        visited = set([amount])  # memo: avoid revisiting same remaining amount
+
+        while queue:
+            rem, steps = queue.popleft()
+
+            # Explore choices
+            for coin in coins:
+                next_rem = rem - coin
+
+                # Early stop: minimal coins found
+                if next_rem == 0:
+                    return steps + 1
+
+                # Valid state & not visited
+                if next_rem > 0 and next_rem not in visited:
+                    visited.add(next_rem)
+                    queue.append((next_rem, steps + 1))
+
+        # Impossible to reach target
+        return -1
+```
+
+
+
 
 ### 1D Dynamic Programming Application: Sequential State Transition
 Pattern: Each state depends on one or two prior states (linear recurrence).
@@ -2330,10 +2367,16 @@ Given a string, determine how many ways there to decode the string.
             count = 0
 
             # Build From Previous -> grab from previous two steps and sum paths
-            # decode ignoring single digit
+            
+            # 'How many total ways can I decode up to here if I decide to treat 
+            # the current group as a valid single or valid double digit?'
+            # Add corresponding counts from single: i-1 and double: i-2
+
+            # check previous char, if single is valid
             if s[i] != '0':
                 count += dfs(i-1)
-            # decode ignoring double digit
+            
+            # check double via previous char, if double is valid
             two_digit = int(s[i-1:i+1])
             if 10 <= two_digit <= 26:
                 count += dfs(i-2)
@@ -2362,7 +2405,7 @@ Given a string, determine how many ways there to decode the string.
 
         # Note:
         # Bottom Up DP
-        # 0. Direct Length -> need for len == 1 check, 2nd element may not exist
+        # 0. Direct Length -> need for len == 1 check, 2nd element/first char may not exist
         # 1. Direct Array -> 1st element
         # 2. Iterate -> 1 to n-1
         # 3. Build From Previous -> grab from previous two steps and sum paths
@@ -2370,7 +2413,7 @@ Given a string, determine how many ways there to decode the string.
 
         n = len(s)
 
-        # Direct Length -> need for len == 0 check, 2nd element/first char, maybe not exist
+        # Direct Length -> need for len == 0 check, 2nd element/first char may not exist
         if not s:
             return 0
 
@@ -2382,13 +2425,18 @@ Given a string, determine how many ways there to decode the string.
         for i in range(1, n):
 
             # Build From Previous -> grab from previous two steps and sum paths
-            # decode ignoring single digit
+
+            # 'How many total ways can I decode up to here if I decide to treat 
+            # the current group as a valid single or valid double digit?'
+            # Add corresponding counts from single: i-1 and double: i-2
+
+            # check previous char, if single is valid
             if s[i] != '0':
                 dp[i] += dp[i-1]
-            # decode ignoring double digit
+
+            # check double via previous char, if double is valid
             two_digit = int(s[i-1:i+1])
             if 10 <= two_digit <= 26:
-                # Add ways from two steps back if i >= 2, otherwise 1
                 dp[i] += dp[i-2] if i >= 2 else 1
 
         # res -> number of decode ways for nth
@@ -2435,9 +2483,15 @@ Given a string, determine how many ways there to decode the string.
             curr = 0
 
             # Build From Previous -> grab from previous two steps and sum paths
-            # decode ignoring single digit
+
+            # 'How many total ways can I decode up to here if I decide to treat 
+            # the current group as a valid single or valid double digit?'
+            # Add corresponding counts from single: i-1 and double: i-2
+
+            # check previous char, if single is valid
             if s[i] != '0':
                 curr += prev1
+
             # decode ignoring double digit
             two_digit = int(s[i-1:i+1])
             if 10 <= two_digit <= 26:
@@ -2513,155 +2567,148 @@ of coins needed to make the price.
 ```python
 ```
 
-### Solution 1: Recursive with Memoization Top Down - 1D Dynamic Programming/Min Max with Choices (Unbounded Knapsack style)
+### Solution 1: Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
 
         # Note:
         # Top down (recursive with memoization)
-        # 1. Memo Check -> recomputation
-        # 2. Boundary Check -> overshoot or exact match
-        # 3. Explore Choices -> recursively subtract each coin
-        # 4. Build -> take min coins among all valid choices
-        # 5. Memo Return -> return result for current remaining amount
+        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it
+        # 1. Memo Check -> computed previously
+        # 2. Boundary Check -> exact match
+        # 3. Build From Previous -> grab from previous two steps and sum paths
+        # 4. Early Prune -> check if current coin leads to possible, else skip
         # Result: min coins to reach amount if possible 
+
+        sentinel = float('inf')
 
         memo = {}
 
-        def dfs(remaining) -> int:
+        def dfs(curr_amount) -> int:
 
-            # Memo Check -> 
-            if remaining in memo:
-                return memo[remaining]
-
-            # Boundary Check -> overshot
-            if remaining < 0:
-                return -1
+            # Memo Check -> computed previously
+            if curr_amount in memo:
+                return memo[curr_amount]
             
             # Boundary Check -> exact match
-            if remaining == 0:
+            if curr_amount == 0:
                 return 0
 
-            # Explore Choices -> try each coin
-            min_coins = float('inf')
+            curr_min = sentinel
+            
+            # Build From Previous -> grab from previous two steps and sum paths
             for coin in coins:
-                
-                # Explore -> subtract coin value from remaining to check if valid combo exists
-                left = dfs(remaining - coin)
 
-                # Explore -> non -1 means valid number of coins)
-                if left >= 0:
+                # Early Prune -> check if current coin leads to possible, else skip
+                new_remaining = curr_amount - coin
+                if new_remaining >= 0:
 
-                    # Build -> min among valid choices
-                    min_coins = min(min_coins, left + 1)
+                    # check if new min coin beats previous
+                    use_coin = dfs(new_remaining)
+                    curr_min = min(curr_min, use_coin+1)
 
-            # Memo Result -> store result for remaining amount
-            memo[remaining] = -1 if min_coins == float('inf') else min_coins
-            return memo[remaining]
+            # res -> min coins to reach current amount
+            memo[curr_amount] = curr_min
+            return memo[curr_amount]
 
         # Result -> remaining amount set to full, grab min number of coins
         res = dfs(amount)
 
         # overall: time complexity 
         # overall: space complexity
-        return res
+        return -1 if res == float('inf') else res
 ```
 
-### Solution 2: Iterative Bottom Up Array - 1D Dynamic Programming/Min Max with Choices (Unbounded Knapsack style)
+### Solution 2: Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
         
         # Note:
-        # Iterative Bottom Up Array
-        # 1. Catch Initialize -> for amount=0
-        # 2. Base Set Up -> 0
+        # Bottom Up Array
+        # 0. Direct Length -> amount=0 check, needs no coins
+        # 1. Direct Array -> dp[0] = 0
         # 3. Iterate -> 1 to amount
         # 4. Explore Choices -> try each coin (coin multiple times possible)
         # 5. Build -> min between 
         # Result: min coins to reach amount if possible
 
-        # sentinel for impossible
-        max_val = amount + 1
+        sentinel = float('inf')
 
-        # Array set 
-        dp = [max_val] * (amount + 1)
-        
-        # Base case -> zero coins needed for 0
+        # Direct Array -> 1st element
+        dp = [0] * (amount + 1)
         dp[0] = 0 
 
-        # Process price from 1 to target
-        for a in range(1, amount + 1):
+        # Iterate -> 1 to amount
+        for amount in range(1, amount + 1):
 
-            # Explore Choices -> try each coin
+            curr_min = sentinel
+
+            # Build From Previous -> grab from previous two steps and sum paths
             for coin in coins:
 
-                # Valid choice
-                if a - coin >= 0:
-                    
-                    # Explore Choices ->
-                    # 1. ignore coin
-                    left = dp[a]
-                    # 2. use coin
-                    right = dp[a-coin] + 1
+                # Early Prune -> check if current coin leads to possible, else skip
+                new_remaining = amount - coin
+                if new_remaining >= 0:
 
-                    # Build -> min between two options
-                    dp[a] = min(left, right)
+                    # check if new min coin beats previous
+                    use_coin = dp[new_remaining] + 1
+                    curr_min = min(curr_min, use_coin)
 
-        res = dp[amount] if dp[amount] != max_val else -1
+            dp[amount] = curr_min
+
+        # 
+        res = dp[amount] if dp[amount] != sentinel else -1
 
         # overall: time complexity
         # overall: space complexity
         return res
 ```
 
-```python
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        
-```
-
-### Solution 3: BFS Level Order Search - 1D Dynamic Programming/Min Max with Choices (Unbounded Knapsack style)
+### Solution 3: BFS Memo Coin Number Level Order Search - 1D Dynamic Programming/BFS Visited Memo Level Order
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
         
         # Note:
-        # BFS (level-order) to find min coins
-        # 1. Process root -> start with remaining amount = amount
+        # BFS Level Order (shortest path) to find min coins
+        # 0. Direct Length -> if amount is 0, no coins needed
+        # 1. Iterative stack -> (remaining_amount, coins_used_so_far)
+        # 2. Visited set -> no revisiting amount
+        # 1. Process root -> current state (amount, coins)
         # 2. Explore choices -> subtract each coin to get next remaining amounts
         # 3. Build -> increment steps (coins used) at each BFS level
         # 4. Early stop -> return steps+1 when remaining reaches 0
         # 5. Result -> -1 if queue exhausted (impossible)
 
+        # Direct Length -> if amount is 0, no coins needed
         if amount == 0:
             return 0
 
-        # (remaining amount, coins used so far)
+        # Iterative stack -> (remaining_amount, coins_used_so_far)
         queue = deque([(amount, 0)])
 
-        # avoid revisiting same amount
-        visited = set([amount])
+        # memo_visited set -> no revisiting amount
+        memo_visited = set([amount])
 
         while queue:
 
-            # Process Root -> current state
+            # Process Root -> current state (amount, coins)
             rem, steps = queue.popleft()
 
-            # Explore Choices -> try each coin
+            # Build -> increment steps (coins used) at each BFS level
             for coin in coins:
 
                 next_rem = rem - coin
 
-                # Explore Choices -> rob/subtract each coin
-
-                # target
+                # Early stop -> found a valid combination
                 if next_rem == 0:
                     return steps + 1
                 
+                # Build -> enqueue next remaining if valid and not visited
                 elif next_rem > 0 and next_rem not in visited:
-                    # Build -> add next state to queue
                     visited.add(next_rem)
                     queue.append((next_rem, steps + 1))
 
-        # impossible to reach target
+        # No combination found
         return -1
 ```
 
@@ -2720,7 +2767,69 @@ and return the product.
 ```python
 ```
 
-### Solution 1: DP Array Version - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+```python
+    def maxProduct(self, nums: List[int]) -> int:
+        
+        # Note:
+        # Top Down (recursive with memoization)
+        # 0. Direct Length -> empty check
+        # 1. Recursive function dfs(i) returns (max_ending_here, min_ending_here)
+        # 2. Explore Choices -> extend previous max, extend previous min, start new
+        # 3. Memoization -> store results per index
+        # Result -> track overall maximum from all dfs calls
+
+        n = len(nums)
+
+        # Direct Length -> empty array check
+        if n == 0:
+            return 0
+
+        memo = {}
+
+        def dfs(i):
+
+            # Memo Check -> computed previously
+            if i in memo:
+                return memo[i]
+
+            # Direct Boundary -> 1st element
+            if i == 0:
+                memo[0] = (nums[0], nums[0])
+                return memo[0]
+
+            # Build From Previous -> grab previous max/min and calculate new max/min at i
+            prev_max, prev_min = dfs(i-1)
+            
+            # three possibilities
+            # 1. start new subarray at i -> num
+            # 2. extend previous max subarray -> num * prev_max
+            # 3. extend previous min subarray -> num * prev_min
+            num = nums[i]
+            curr_max = max(num, num * prev_max, num * prev_min)
+            curr_min = min(num, num * prev_max, num * prev_min)
+
+            # res -> max decision/subarray up to index i
+            memo[i] = (curr_max, curr_min)
+            return memo[i]
+
+        # start with max subarray at 0
+        result = nums[0]
+
+        for i in range(n):
+            
+            # max subarray at i
+            curr_max, curr_min = dfs(i)
+
+            # res -> overall max subarray
+            result = max(result, curr_max)
+
+        # overall: time complexity
+        # overall: space complexity
+        return result
+```
+
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
@@ -2756,13 +2865,12 @@ and return the product.
             # Update overall result
             result = max(result, max_dp[i])
 
-        # overall: 
+        # overall: time complexity
+        # overall: space complexity
         return result
 ```
 
-
-
-### Solution 2: DP with Rolling Max Min - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
@@ -2800,7 +2908,8 @@ and return the product.
             # Update overall result
             result = max(result, max_prod)
 
-
+        # overall: time complexity
+        # overall: space complexity
         return result
 ```
 

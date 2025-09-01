@@ -656,6 +656,15 @@
     },
     {
       "type": "1D Dynamic Programming",
+      "title": "BFS Visited Memo Level Order",
+      "summary": "Pattern: Treat problem as shortest-path search; each state represents “remaining target” or “current subproblem.” Use a queue for BFS and a visited set as memoization to avoid recomputation. Use When: Problem can be framed as reaching a target with choices at each step (e.g., coin change, min steps). BFS guarantees the first solution found is minimal (shortest path). Recurrence: For each state curr, explore all valid next states curr - choice. Steps to reach next = steps[curr] + 1.",
+      "exampleIntro": "Coin Change (BFS with Memo)",
+      "codeExample": "def coinChange(coins, amount):\n        if amount == 0:\n            return 0\n\n        # Queue stores (remaining amount, coins used so far)\n        queue = deque([(amount, 0)])\n        visited = set([amount])  # memo: avoid revisiting same remaining amount\n\n        while queue:\n            rem, steps = queue.popleft()\n\n            # Explore choices\n            for coin in coins:\n                next_rem = rem - coin\n\n                # Early stop: minimal coins found\n                if next_rem == 0:\n                    return steps + 1\n\n                # Valid state & not visited\n                if next_rem > 0 and next_rem not in visited:\n                    visited.add(next_rem)\n                    queue.append((next_rem, steps + 1))\n\n        # Impossible to reach target\n        return -1",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-bfs-visited-memo-level-order",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
       "title": "Sequential State Transition",
       "summary": "Pattern: Each state depends on one or two prior states (linear recurrence). Use When: Counting paths, sequences, or arrangements (Fibonacci, climbing stairs). Recurrence: dp[i] = dp[i-1] + dp[i-2]",
       "exampleIntro": "Climbing Stairs",
