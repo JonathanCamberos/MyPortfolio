@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 export default function About() {
-  const personalStatement = `I’m Jonathan, a Software Engineer in the Bank of America Security Operations and Threat Response (SOTR) group. My current work focuses on building internal SIEM/SOAR applications.`;
+  const personalStatement = `I’m Jonathan, a backend software engineer in the Bank of America Security Operations and Threat Response (SOTR) group. My current work focuses on building internal siem/soar applications in c#/.net.`;
 
-  const educationStatement = `I completed my B.S. in Computer Science at the University of Maryland, College Park with a concentration in Cybersecurity and a minor in ACES, Advanced Cybersecurity Experience for Students.`;
+  const educationStatement = `I completed my B.S. in Computer Science with a concentration in Cybersecurity at the University of Maryland, College Park alongside a minor in Advanced Cybersecurity Experience for Students (ACES).`;
 
   const currentRole = {
     title: "Software Engineer",

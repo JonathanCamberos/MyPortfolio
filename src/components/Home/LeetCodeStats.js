@@ -52,10 +52,10 @@ const LeetCodeStats = () => {
         <span className="text-red-600 dark:text-red-400">hard</span>:{" "}
         <span className="text-blue-500 dark:text-blue-300">{stats.hard};</span>
       </p>
-        <p className="ml-4">
+      {/* <p className="ml-4">
         <span className="text-orange-500 dark:text-orange-400">solutions</span>:{" "}
         <span className="text-blue-500 dark:text-blue-300">{stats.totalSolutions};</span>
-      </p>
+      </p> */}
       <p className="ml-4">
         <span className="text-purple-600 dark:text-purple-400">sanity</span>:{" "}
         <span className="text-blue-500 dark:text-blue-300">

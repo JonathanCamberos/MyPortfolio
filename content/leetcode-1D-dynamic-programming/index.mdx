@@ -398,6 +398,75 @@ Ex: House Robber (Optimal Bottom Up, Direct)
         return prev1
 ```
 
+### 1D Dynamic Programming Application: Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up
+Pattern: Maintain rolling cumulative products from both ends of the array to capture subarrays affected by negative numbers.
+Use When: Problem involves products/subarrays where negative numbers can flip the max/min, and O(1) space is desired.
+Recurrence: left_prod *= nums[i], right_prod *= nums[n-1-i], reset to 1 if zero.
+
+Ex: Maximum Product Subarray (Opposite Ends Rolling Variables)
+```python
+    def maxProduct(nums: List[int]) -> int:
+        n = len(nums)
+        
+        # Direct Variables -> rolling left and right products
+        left_prod = right_prod = 1
+        res = float('-inf')
+
+        for i in range(n):
+            # Build From Previous -> roll from left and right ends
+            left_prod *= nums[i]
+            right_prod *= nums[n-1-i]
+
+            # Three Possibilities -> compare overall max
+            res = max(res, left_prod, right_prod)
+
+            # Direct Boundary -> reset rolling on zero
+            if left_prod == 0:
+                left_prod = 1
+            if right_prod == 0:
+                right_prod = 1
+
+        return res
+```
+
+
+### 1D Dynamic Programming Application: Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up
+Pattern: Maintain a rolling DP window of fixed size instead of the full DP array to reduce space.
+Use When: Problem involves checking previous k states (e.g., word lengths in Word Break) and you want O(k) space instead of O(n).
+Recurrence: dp[i % (k+1)] = any(dp[(i-l) % (k+1)] and segment_valid for l in 1..k)                                   od *= nums[n-1-i], reset to 1 if zero.
+
+Ex: Word Break (Sliding Window Rolling Variables)
+```python
+    def wordBreak(s: str, wordDict: List[str]) -> bool:
+        n = len(s)
+        
+        # Direct Length -> empty string check
+        if n == 0:
+            return True
+
+        word_set = set(wordDict)
+        max_len = max(map(len, wordDict)) if wordDict else 0
+
+        # Direct Variables -> initialize rolling DP window
+        dp = [False] * (max_len + 1)
+        dp[0] = True  # base case: empty string
+
+        # Iterate -> 1 to n
+        for i in range(1, n + 1):
+            dp[i % (max_len + 1)] = False
+
+            # Build From Previous -> look back up to max_len positions
+            for l in range(1, min(i, max_len) + 1):
+                # Three Possibilities -> valid segmentation from previous l positions
+                if dp[(i - l) % (max_len + 1)] and s[i - l:i] in word_set:
+                    dp[i % (max_len + 1)] = True
+                    break  # early stop, valid segmentation found
+
+        # Result -> final DP state
+        return dp[n % (max_len + 1)]
+```
+
+
 ### 1D Dynamic Programming Application: BFS Visited Memo Level Order
 Pattern: Treat problem as shortest-path search; each state represents “remaining target” or “current subproblem.” Use a queue for BFS and a visited set as memoization to avoid recomputation.
 Use When: Problem can be framed as reaching a target with choices at each step (e.g., coin change, min steps). BFS guarantees the first solution found is minimal (shortest path).
@@ -2567,7 +2636,7 @@ of coins needed to make the price.
 ```python
 ```
 
-### Solution 1: Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
 
@@ -2619,7 +2688,7 @@ of coins needed to make the price.
         return -1 if res == float('inf') else res
 ```
 
-### Solution 2: Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
         
@@ -2767,16 +2836,17 @@ and return the product.
 ```python
 ```
 
-### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def maxProduct(self, nums: List[int]) -> int:
         
         # Note:
         # Top Down (recursive with memoization)
         # 0. Direct Length -> empty check
-        # 1. Recursive function dfs(i) returns (max_ending_here, min_ending_here)
-        # 2. Explore Choices -> extend previous max, extend previous min, start new
-        # 3. Memoization -> store results per index
+        # 1. Memo Check -> computed previously
+        # 1. Direct Boundary -> 1st element
+        # 2. Build From Previous -> grab previous max/min and calculate new max/min at i
+        # 3. Three Possibilities -> infer max subarray
         # Result -> track overall maximum from all dfs calls
 
         n = len(nums)
@@ -2824,96 +2894,142 @@ and return the product.
             # res -> overall max subarray
             result = max(result, curr_max)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return result
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
         # Note:
-        # Bottom-up DP with arrays
-        # At each index, we conceptually explore 3 choices:
-        # 1. Start new subarray with current num (root)
-        # 2. Extend previous max product subarray (left)
-        # 3. Extend previous min product subarray (right)
-        # Then pick the max/min result to continue
+        # Bottom Up DP with arrays
+        # 0. Direct Length -> empty array check
+        # 1. Direct Array -> initialize max_dp, min_dp at index 0
+        # 2. Iterate -> 1 to n-1
+        # 3. Build From Previous -> grab previous max/min and calculate new max/min at i
+        # 4. Three Possibilities -> infer max subarray
+        # Result -> grab overall max subarray
 
         n = len(nums)
+
+        # Direct Length -> empty array check
         if n == 0:
             return 0
 
-        # Initialize DP arrays and result
+        # Direct Array -> initialize max_dp, min_dp at index 0
         max_dp = [0] * n
         min_dp = [0] * n
         max_dp[0] = min_dp[0] = result = nums[0]
 
+        # Iterate -> 1 to n-1
         for i in range(1, n):
+
+            # three possibilities
+            # 1. start new subarray at i -> num
+            # 2. extend previous max subarray -> num * prev_max
+            # 3. extend previous min subarray -> num * prev_min
             num = nums[i]
+            max_dp[i] = max(num, max_dp[i-1] * num, min_dp[i-1] * num)
+            min_dp[i] = min(num, max_dp[i-1] * num, min_dp[i-1] * num)
 
-            # Explore Choices:
-            left = max_dp[i-1] * num       # extend previous max subarray
-            right = min_dp[i-1] * num      # extend previous min subarray
-            root = num                      # start new subarray at current index
-
-            # Build: pick max/min product at this index
-            max_dp[i] = max(root, left, right)
-            min_dp[i] = min(root, left, right)
-
-            # Update overall result
+            # res -> overall max subarray
             result = max(result, max_dp[i])
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return result
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Track Multiple States per Index (Max Min Tracking)
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
         # Note:
-        # Bottom-up DP with rolling variables (space optimized)
-        # 1. Process root -> current element nums[i]
-        # 2. Explore choices -> multiply current with previous max or min
-        # 3. Build -> track max_prod and min_prod at each step
-        #    (min_prod important due to negative numbers flipping sign)
-        # 4. Result -> update overall max product seen so far
+        # Bottom Up DP (rolling variables)
+        # 0. Direct Length -> empty array check
+        # 1. Direct Variables -> initialize max_dp, min_dp at index 0
+        # 2. Iterate -> 1 to n-1
+        # 3. Build From Previous -> grab previous max/min and calculate new max/min at i
+        # 4. Three Possibilities -> infer max subarray
+        # Result -> grab overall max subarray
 
         n = len(nums)
+
+        # Direct Length -> empty array check
         if n == 0:
             return 0
 
-        # Initialize rolling max, min, and result
+        # Direct Variables -> initialize max_dp, min_dp at index 0
         max_prod = min_prod = result = nums[0]
 
+        # Iterate -> 1 to n-1
         for i in range(1, n):
+
+            # Store previous rolling values
+            prev_max, prev_min = max_prod, min_prod
+
+            # Build From Previous -> grab previous max/min and calculate new max/min at i
             num = nums[i]
-
-            # Explore Choices:
-            # left = extend previous max_prod
-            left = max_prod * num
-            # right = extend previous min_prod
-            right = min_prod * num
-            # root = start new subarray
-            root = num
-
-            # Build: compute current max/min at this index
-            temp_max = max(root, left, right)
-            min_prod = min(root, left, right)
-            max_prod = temp_max
+            max_prod = max(num, prev_max * num, prev_min * num)
+            min_prod = min(num, prev_max * num, prev_min * num)
 
             # Update overall result
             result = max(result, max_prod)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return result
 ```
 
-## 139. Word Break ::3:: - Medium
+### Solution 4: Forward Backward Scan - 1D Dynamic Programming/Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up
+```python
+    def maxProduct(self, nums: List[int]) -> int:
+
+        # Note:
+        # Forward-Backward Scan (cumulative products)
+        # 0. Direct Length -> empty array check
+        # 1. Direct Variables -> initialize left and right
+        # 2. Iterate -> forward and backward in the same loop
+        # 4. Build -> update result with max(left_prod, right_prod)
+        # 5. Three Possibilities -> max subarray
+        # Result -> grab overall max subarray
+
+        n = len(nums)
+
+        # Direct Length -> empty array check
+        if n == 0:
+            return 0
+
+        # Direct Variables -> initialize left and right
+        left_prod = right_prod = 1
+        result = float('-inf')
+
+        # Iterate -> forward and backward in the same loop
+        for i in range(n):
+
+            # left scan -> contiguous subarray ending here 
+            # right scan -> contiguous subarray starting from here
+            # new subarray after zero -> start of new subarray after zero  
+            left_prod *= nums[i]
+            right_prod *= nums[n - 1 - i]
+
+            # Three Possibilities -> max subarray
+            result = max(result, left_prod, right_prod)
+
+            # Reset if zero encountered
+            if left_prod == 0:
+                left_prod = 1
+            if right_prod == 0:
+                right_prod = 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return result
+```
+
+## 139. Word Break ::4:: - Medium
 
 Topics:  Array, Hash Table, String, Dynamic Programming, Trie, Memoization
 
@@ -2971,29 +3087,147 @@ can be separated into some combination of strings from the array.
 ```python
 ```
 
-### Solution 1: Dynamic Programming - 1D Dynamic Programming/Sequential Segment Choice Validation
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+```python
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+
+        # Note:
+        # Top Down DP (recursive with memoization)
+        # 0. Direct Length -> empty string boundary covered by recursion
+        # 1. Memo Check -> computed previously
+        # 2. Direct Boundary -> empty string is valid segmentation
+        # 2. Iterate -> 0 to i, try every partition ending at i
+        # 3. Build From Previous -> if s[j:i] in dict and dfs(j) is True
+        # 4. Backtrack -> store False if no valid segmentation
+        # Result: can full string be segmented
+
+        n = len(s)
+
+        # int -> bool
+        memo = {}
+
+        # lookup
+        word_set = set(wordDict)
+
+        def dfs(i) -> bool:
+
+            # Direct Boundary -> empty string is valid segmentation
+            if i == 0:
+                return True
+
+            # Memo Check -> computed previously
+            if i in memo:
+                return memo[i]
+
+            # Iterate -> 0 to i, try every partition ending at i
+            for j in range(i):
+
+                # Build From Previous -> valid segmentation
+                # check if s[j:i] is valid dictionary word
+                # checks if remaining substring before segment (start to j) can be segmented
+                if s[j:i] in word_set and dfs(j):
+                    memo[i] = True
+                    return True
+
+            # Backtrack -> no valid segmentation
+            memo[i] = False
+            return False
+
+        # res -> can segment full string
+        res = dfs(n)
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(n)
+        return res
+```
+
+### Solution 2: Optimized i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+```python
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+
+        # Note:
+        # Optimized Top Down DP (recursive with memoization)
+        # 0. Direct Length -> empty string boundary covered by recursion
+        # 1. Memo Check -> computed previously
+        # 2. Direct Boundary -> empty string is valid segmentation
+
+        # 2. Explore Choices -> iterate only over words in wordDict
+        # 3. Build From Previous -> if s[i-len(word):i] matches and dfs(i-len(word)) is True
+        # 4. Backtrack -> store False if no valid segmentation
+        # Result: can full string be segmented
+
+        n = len(s)
+
+        memo = {}
+
+        # lookup
+        word_set = set(wordDict)
+
+        def dfs(i) -> bool:
+
+            # Direct Boundary -> empty string is valid segmentation
+            if i == 0:
+                return True
+
+            # Memo Check -> computed previously
+            if i in memo:
+                return memo[i]
+
+            # Iterate -> try every word in dictionary
+            for word in word_set:
+
+                # Build From Previous -> valid segmentation
+                # i >= len(word) -> avoid nonsense negative slice: i = 3 -> substring = "app" -> s[i - len(word):i] == s[-2:3] == "pp"
+                # s[] -> check if word matches
+                if i >= len(word) and s[i - len(word):i] == word:
+                    # check if left side after word is segmentable
+                    if dfs(i - len(word)):
+                        memo[i] = True
+                        return True
+
+            # Backtrack -> no valid segmentation
+            memo[i] = False
+            return False
+
+        # res -> can segment full string
+        res = dfs(n)
+
+        # overall: time complexity O(n * m)  (m = #words)
+        # overall: space complexity O(n)
+        return res
+```
+
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         
         # Note:
-        # Bottom-up DP
-        # 1. Process root -> current substring ending at i
-        # 2. Explore choices -> partition at every possible previous index j
-        # 3. Build -> dp[i] = True if any dp[j] is True and s[j:i] in wordDict
-        # 4. Early prune -> break if valid segment found
+        # Bottom Up DP (tabulation)
+        # 0. Direct Length -> need len == 0 check
+        # 1. Direct Array -> empty string is segmentable
+        # 2. Iterate -> 1 to n
+        # 3. Explore Choices -> try all j < i
+        # 4. Build From Previous -> dp[i] = True if dp[j] is True and s[j:i] in dict
+        # 5. Early Prune -> break if segmentation found
+        # Result: can full string be segmented
+ 
+        n = len(s)
+
+        dp = [False] * (n + 1)
 
         # quick lookup
         word_set = set(wordDict)
-        n = len(s)
-        dp = [False] * (n + 1)
 
-        # Base case: empty string is segmentable
+        # Direct Array -> empty string is segmentable
         dp[0] = True
 
-        for i in range(1, n + 1):
+        # Iterate -> 1 to n
+        for i in range(1, n+1):
+
+            # Explore Choices -> try all j < i
             for j in range(i):
                 
-                # Explore Choice: segment s[j:i]
+                # Build From Previous -> dp[i] = True if dp[j] is True and s[j:i] in dict
                 if dp[j] and s[j:i] in word_set:
 
                     # Build -> segmentable
@@ -3002,94 +3236,58 @@ can be separated into some combination of strings from the array.
                     break  
 
         # Result: can full string be segmented
-        return dp[n]
-```
-
-### Solution 2: Recursive DFS with Memoization - 1D Dynamic Programming/Sequential Segment Choice Validation
-```python
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-
-        # Note:
-        # Top-down DP (memoized recursion)
-        # 1. Process root -> current start index
-        # 2. Explore Choices -> try every end index forming s[start:end]
-        # 3. Build -> if s[start:end] in word_set and dfs(end) is True, memo[start] = True
-        # 4. Backtrack -> store False if no valid segmentation
-
-        # quick lookup
-        word_set = set(wordDict)
-        memo = {}
-
-        def dfs(start: int) -> bool:
-
-            # Process Root -> Base cases
-
-            # Reached end
-            if start == len(s):
-                return True
-
-            # Memo check
-            if start in memo:
-                return memo[start]
-
-            for end in range(start + 1, len(s) + 1):
-                # Explore Choices -> s[start:end] as a segment
-                if s[start:end] in word_set and dfs(end):
-
-                    # Build: segmentable from start
-                    memo[start] = True
-                    return True
-
-            # Backtrack: cannot segment from this start
-            memo[start] = False
-            return False
-
-        # original call from top
-        res = dfs(0)
+        res = dp[n]
 
         # overall: time complexity
         # overall: space complexity
         return res
 ```
 
-### Solution 3: Optimized DFS by Matching Words - 1D Dynamic Programming/Sequential Segment Choice Validation
+### Solution 4: 0 to i Iterative Bottom Up Rolling Variables Sliding Window - 1D Dynamic Programming/Sequential Segment Choice Validation
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-
+        
         # Note:
-        # Optimized top-down DFS
-        # 1. Process root -> current index i
-        # 2. Explore choices -> iterate only over words in wordDict
-        # 3. Build -> if s[i:i+len(word)] == word and dfs(i+len(word)) True, cache[i] = True
-        # 4. Backtrack -> store False if no valid segmentation
+        # Bottom Up DP with rolling variables (sliding window)
+        # 0. Direct Length -> empty string check
+        # 1. Window Size -> track last max_word_length states only
+        # 2. Initialize -> dp[0] = True for empty string
+        # 3. Iterate -> 1 to n
+        # 4. Build From Previous -> check previous positions within window
+        # 5. Early stop -> break if valid segmentation found
+        # Result -> dp[n % (max_len + 1)] gives final result
 
-        cache = {}
-        def dfs(i):
-            # Process Root -> base cases
+        n = len(s)
 
-            # reached end
-            if i == len(s):
-                return True
+        if n == 0:
+            return True
 
-            # overshoot
-            if i > len(s):
-                return False
+        word_set = set(wordDict)
+        max_len = max(map(len, wordDict)) if wordDict else 0
 
-            # memo check
-            if i in cache:
-                return cache[i]
-            for word in wordDict:
-                # Explore Choice -> try matching void
-                if i + len(word) <= len(s) and s[i:i+len(word)] == word:
-                    cache[i] = dfs(i+len(word))
-                    if cache[i]:
-                        return True
-            return False
-        return dfs(0)
+        # Initialize DP rolling window
+        dp = [False] * (max_len + 1)
+        dp[0] = True  # empty string
+
+        # Iterate over string positions
+        for i in range(1, n + 1):
+            dp[i % (max_len + 1)] = False
+
+            # Build From Previous -> look back up to max_len
+            for l in range(1, min(i, max_len) + 1):
+                if dp[(i - l) % (max_len + 1)] and s[i - l:i] in word_set:
+                    dp[i % (max_len + 1)] = True
+                    break  # early stop, found valid segmentation
+
+        # Result -> can full string be segmented
+        res = dp[n % (max_len + 1)]
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
-
-## 300. Longest Increasing Subsequence ::2:: - Medium
+## 300. Longest Increasing Subsequence ::4:: - Medium
 
 Topics:  Array, Binary Search, Dynamic Programming
 
@@ -3145,13 +3343,61 @@ Given an integer array, find the longest increasing subsequence.
     def lengthOfLIS(self, nums: List[int]) -> int:
 
         # Note:
-        # Classic DP for LIS
-        # 1. Process root -> current index i (end of subsequence)
-        # 2. Explore choices -> for all j < i, check if nums[i] can extend subsequence ending at j
-        # 3. Build -> dp[i] = max(dp[i], dp[j]+1)
-        # 4. Result -> maximum of dp array
+        # Top Down DP (recursive with memoization)
+        # 0. Direct Length -> empty array boundary covered by recursion
+        # 1. Memo Check -> computed previously
+        # 2. Direct Boundary -> single element subsequence has length 1
+        # 3. Explore Choices -> check all j > i to extend subsequence
+        # 4. Build From Previous -> max length using future extensions
+        # Result -> maximum LIS starting from index 0 to n-1
 
         n = len(nums)
+
+        memo = {}
+
+        def dfs(i):
+
+            # Memo Check -> computed previously
+            if i in memo:
+                return memo[i]
+
+            # Direct Boundary -> single element
+            max_len = 1
+
+            # Explore Choices -> try to extend from i to future indices
+            for j in range(i + 1, n):
+                if nums[j] > nums[i]:
+                    max_len = max(max_len, 1 + dfs(j))
+
+            memo[i] = max_len
+            return max_len
+
+        # Result -> try starting from every index
+        res = max(dfs(i) for i in range(n))
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
+
+
+### Solution 2: Dynamic Programming - 1D Dynamic Programming/Subsequence Optimization Constrained
+```python
+    def lengthOfLIS(self, nums: List[int]) -> int:
+
+        # Note:
+        # Top Down DP (recursive memoization)
+        # 0. Direct Length -> empty array boundary covered by recursion
+        # 1. Direct array 
+        # 2.
+        # 2. Direct Boundary -> single element subsequence has length 1
+        # 3. Explore Choices -> check all j > i to extend subsequence
+        # 4. Build From Previous -> max length using future extensions
+        # Result -> maximum LIS starting from index 0 to n-1
+
+        n = len(nums)
+
+        # Direct Length -> empty array boundary covered by recursion
         if n == 0:
             return 0
 
@@ -3167,10 +3413,15 @@ Given an integer array, find the longest increasing subsequence.
                     # Build -> max between current and extending j
                     dp[i] = max(dp[i], dp[j] + 1)
 
-        return max(dp)
+        # res -> max from array
+        res = max(dp)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
-### Solution 2: Binary Search Patience Sorting - 1D Dynamic Programming/Subsequence Optimization Constrained
+### Solution 3: Binary Search Patience Sorting - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
 
@@ -3196,10 +3447,15 @@ Given an integer array, find the longest increasing subsequence.
                 # Build: replace to keep minimal tail (better chance for future extension)
                 tails[index] = num
 
-        return len(tails)
+        # res ->
+        res = len(tails)
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
 ```
 
-### Solution 3: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
+### Solution 4: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
 
