@@ -656,6 +656,24 @@
     },
     {
       "type": "1D Dynamic Programming",
+      "title": "Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up",
+      "summary": "Pattern: Maintain rolling cumulative products from both ends of the array to capture subarrays affected by negative numbers. Use When: Problem involves products/subarrays where negative numbers can flip the max/min, and O(1) space is desired. Recurrence: left_prod *= nums[i], right_prod *= nums[n-1-i], reset to 1 if zero.",
+      "exampleIntro": "Maximum Product Subarray (Opposite Ends Rolling Variables)",
+      "codeExample": "def maxProduct(nums: List[int]) -> int:\n        n = len(nums)\n        \n        # Direct Variables -> rolling left and right products\n        left_prod = right_prod = 1\n        res = float('-inf')\n\n        for i in range(n):\n            # Build From Previous -> roll from left and right ends\n            left_prod *= nums[i]\n            right_prod *= nums[n-1-i]\n\n            # Three Possibilities -> compare overall max\n            res = max(res, left_prod, right_prod)\n\n            # Direct Boundary -> reset rolling on zero\n            if left_prod == 0:\n                left_prod = 1\n            if right_prod == 0:\n                right_prod = 1\n\n        return res",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-opposite-ends-iterative-direct-n-rolling-state-variables-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
+      "title": "Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up",
+      "summary": "Pattern: Maintain a rolling DP window of fixed size instead of the full DP array to reduce space. Use When: Problem involves checking previous k states (e.g., word lengths in Word Break) and you want O(k) space instead of O(n). Recurrence: dp[i % (k+1)] = any(dp[(i-l) % (k+1)] and segment_valid for l in 1..k)                                   od *= nums[n-1-i], reset to 1 if zero.",
+      "exampleIntro": "Word Break (Sliding Window Rolling Variables)",
+      "codeExample": "def wordBreak(s: str, wordDict: List[str]) -> bool:\n        n = len(s)\n        \n        # Direct Length -> empty string check\n        if n == 0:\n            return True\n\n        word_set = set(wordDict)\n        max_len = max(map(len, wordDict)) if wordDict else 0\n\n        # Direct Variables -> initialize rolling DP window\n        dp = [False] * (max_len + 1)\n        dp[0] = True  # base case: empty string\n\n        # Iterate -> 1 to n\n        for i in range(1, n + 1):\n            dp[i % (max_len + 1)] = False\n\n            # Build From Previous -> look back up to max_len positions\n            for l in range(1, min(i, max_len) + 1):\n                # Three Possibilities -> valid segmentation from previous l positions\n                if dp[(i - l) % (max_len + 1)] and s[i - l:i] in word_set:\n                    dp[i % (max_len + 1)] = True\n                    break  # early stop, valid segmentation found\n\n        # Result -> final DP state\n        return dp[n % (max_len + 1)]",
+      "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-sliding-window-iterative-direct-n-rolling-state-variables-bottom-up",
+      "blog": "1D Dynamic Programming"
+    },
+    {
+      "type": "1D Dynamic Programming",
       "title": "BFS Visited Memo Level Order",
       "summary": "Pattern: Treat problem as shortest-path search; each state represents “remaining target” or “current subproblem.” Use a queue for BFS and a visited set as memoization to avoid recomputation. Use When: Problem can be framed as reaching a target with choices at each step (e.g., coin change, min steps). BFS guarantees the first solution found is minimal (shortest path). Recurrence: For each state curr, explore all valid next states curr - choice. Steps to reach next = steps[curr] + 1.",
       "exampleIntro": "Coin Change (BFS with Memo)",

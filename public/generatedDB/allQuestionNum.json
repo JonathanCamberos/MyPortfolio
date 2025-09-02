@@ -680,7 +680,7 @@
   },
   "139": {
     "questionNum": 139,
-    "questionTitle": "Word Break ::3::",
+    "questionTitle": "Word Break ::4::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space separated sequence of one or more dictionary words. Note that the same word in the dictionary may be reused multiple times in the segmentation.",
     "questionTopics": [
@@ -691,7 +691,7 @@
       "Trie",
       "Memoization"
     ],
-    "questionLink": "/Notes/1d-dynamic-programming#139-word-break-3---medium",
+    "questionLink": "/Notes/1d-dynamic-programming#139-word-break-4---medium",
     "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -1195,7 +1195,7 @@
   },
   "300": {
     "questionNum": 300,
-    "questionTitle": "Longest Increasing Subsequence ::2::",
+    "questionTitle": "Longest Increasing Subsequence ::4::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given an integer array nums, return the length of the longest strictly increasing subsequence. Follow up: Can you come up with an algorithm that runs in O(n log(n)) time complexity?",
     "questionTopics": [
@@ -1203,7 +1203,7 @@
       "Binary Search",
       "Dynamic Programming"
     ],
-    "questionLink": "/Notes/1d-dynamic-programming#300-longest-increasing-subsequence-2---medium",
+    "questionLink": "/Notes/1d-dynamic-programming#300-longest-increasing-subsequence-4---medium",
     "blog": "1D Dynamic Programming",
     "lastSubmittedDate": null,
     "coldnessCount": -1
