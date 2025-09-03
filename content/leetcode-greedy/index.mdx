@@ -161,8 +161,44 @@ Given an array, return the sum of the largest subarray.
         return res
 ```
 
+### Solution 3: Greedy Kadane Algorithm Version 3 - Greedy/Greedy
+```python
+    def maxSubArray(self, nums: List[int]) -> int:
 
-### Solution 3: Divide and Conquer - Greedy/Greedy
+        # Note:
+        # Greedy (Kadane’s Algorithm)
+        # 0. Direct Length -> array guaranteed non-empty
+        # 1. Process root -> iterate through nums
+        # 2. Build From Previous -> accumulate current sum
+        # 3. Explore Choices -> if current sum < 0, reset to 0 (start new subarray)
+        # 4. Result -> track maximum sum seen across iterations
+
+        # Direct Variables -> initialize
+        max_sum = nums[0]
+        current_sum = 0
+
+        # Iterate -> traverse all numbers
+        for num in nums:
+
+            # Build From Previous -> extend subarray
+            current_sum += num
+
+            # Result -> update max sum
+            if current_sum > max_sum:
+                max_sum = current_sum
+
+            # Explore Choices -> drop negative prefix
+            if current_sum < 0:
+                current_sum = 0
+
+        # Result -> maximum subarray sum
+        return max_sum
+```
+
+
+
+
+### Solution 4: Divide and Conquer - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
         # Note:
@@ -209,4 +245,692 @@ Given an array, return the sum of the largest subarray.
         # overall: time complexity O(n log n)
         # overall: space complexity O(log n) recursion depth
         return res
+```
+
+## 55. Jump Game ::1:: - Medium
+
+Topics:  Array, Dynamic Programming, Greedy
+
+### Intro
+> You are given an integer array nums. You are initially positioned at 
+> the array's first index, and each element in the array represents 
+> your maximum jump length at that position.
+> Return true if you can reach the last index, or false otherwise.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [2,3,1,1,4] | true |
+| nums = [3,2,1,0,4] | false |
+
+Constraints:
+
+1 &leq; nums.length &leq; 10<sup>4</sup>
+
+0 &leq; nums[i] &leq; 10<sup>5</sup>
+
+### Abstraction
+Given an array, starting at the first index, determine if its possible to
+reach the end of the array, if a number at an index represents that max jump
+index possible from that index.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy sol - Greedy/Greedy
+```python
+    def canJump(self, nums: List[int]) -> bool:
+        # Note:
+        # Greedy
+        # 0. Direct Length -> array guaranteed non-empty
+        # 1. Process root -> iterate through nums
+        # 2. Build From Previous -> maintain farthest reachable index so far
+        # 3. Explore Choices -> if current index > farthest, return False (stuck)
+        # 4. Result -> if iteration completes, last index is reachable
+
+        n = len(nums)
+
+        # Direct Variable -> farthest index reachable
+        farthest = 0
+
+        # Iterate -> traverse array
+        for i in range(n):
+
+            # Explore Choice -> stuck, cannot reach index i
+            if i > farthest:
+                return False
+
+            # Build From Previous -> update farthest reachable
+            farthest = max(farthest, i + nums[i])
+
+        # Result -> last index is reachable
+        return True
+```
+
+
+## 45. Jump Game II ::1:: - Medium
+
+Topics:  Array, Dynamic Programming, Greedy
+
+### Intro
+> You are given a 0-indexed array of integers nums of length n.  
+> You are initially positioned at index 0.
+> Each element nums[i] represents the maximum length of a 
+> forward jump from index i. In other words, if you are at index i, 
+> you can jump to any index (i + j) where:
+> 0 < = j < = nums[i] and
+> i + j < n
+> Return the minimum number of jumps to reach index n - 1.
+> The test cases are generated such that you can reach index n - 1.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [2,3,1,1,4] | 2 |
+| nums = [2,3,0,1,4] | 2 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 10<sup>4</sup>
+
+0 &leq; nums[i] &leq; 1000
+
+It's guaranteed that you can reach nums[n - 1].
+
+### Abstraction
+Given an array, starting at the first index, determine if its possible to
+reach the end of the array, if a number at an index represents that max jump
+index possible from that index.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy Layer By Layer - Greedy/Greedy
+```python
+    def jump(self, nums: List[int]) -> int:
+        # Note:
+        # Greedy (layer expansion like BFS)
+        # 0. Direct Length -> if single element, no jumps needed
+        # 1. Process root -> iterate through array
+        # 2. Build From Previous -> track farthest reachable index in current "layer"
+        # 3. Explore Choices -> when reaching end of current layer, increase jump count
+        # 4. Result -> minimum jumps to reach last index
+
+        n = len(nums)
+        if n == 1:
+            return 0
+
+        # Direct Variables
+        jumps = 0          # result: number of jumps
+        current_end = 0    # boundary of current layer
+        farthest = 0       # farthest index reachable in next layer
+
+        # Iterate -> stop at n-1 since last index does not need to jump further
+        for i in range(n - 1):
+
+            # Build From Previous -> update farthest reachable index
+            farthest = max(farthest, i + nums[i])
+
+            # Explore Choices -> end of current layer
+            if i == current_end:
+                jumps += 1          # need to jump
+                current_end = farthest  # move to next layer
+
+        # Result -> total jumps
+        return jumps
+```
+
+
+## 134. Gas Station ::1:: - Medium
+
+Topics:  Array, Greedy
+
+### Intro
+> There are n gas stations along a circular route, where the amount
+> of gas at the ith station is gas[i].
+> You have a car with an unlimited gas tank and it costs cost[i] of 
+> gas to travel from the ith station to its next (i + 1)th station. You 
+> begin the journey with an empty tank at one of the gas stations.
+> Given two integer arrays gas and cost, return the starting gas 
+> station's index if you can travel around the circuit once in the 
+> clockwise direction, otherwise return -1. If there exists a solution,
+> it is guaranteed to be unique.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| gas = [1,2,3,4,5], cost = [3,4,5,1,2] | 3 |
+| gas = [2,3,4], cost = [3,4,3] | -1 |
+
+Constraints:
+
+n == gas.length == cost.length
+
+1 &leq; nums[i] &leq; 10<sup>5</sup>
+
+0 &leq; gas[i], cost[i] &leq; 10<sup>4</sup>
+
+The input is generated such that the answer is unique.
+
+### Abstraction
+Given two arrays gas[i] and cost[i], find the starting index where if you 
+begin with 0 fuel, you can travel the entire circle without running out of gas. 
+Return -1 if not possible.
+
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy - Greedy/Greedy
+```python
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        # Note:
+        # Greedy Linear Scan
+        # 0. Direct Boundary -> if total gas < total cost, impossible (-1)
+        # 1. Process root -> traverse stations
+        # 2. Build From Previous -> track current tank balance
+        # 3. Explore Choices -> if tank < 0, reset start to next station
+        # 4. Result -> return start index (guaranteed unique if feasible)
+
+        n = len(gas)
+
+        # Check feasibility
+        if sum(gas) < sum(cost):
+            return -1
+
+        # Greedy scan variables
+        tank = 0      # current gas in tank
+        start = 0     # candidate starting station
+
+        for i in range(n):
+            # Build From Previous -> update tank balance
+            tank += gas[i] - cost[i]
+
+            # Explore Choice -> reset start if tank is negative
+            if tank < 0:
+                tank = 0
+                start = i + 1
+
+        # Result -> guaranteed unique if feasible
+        return start
+```
+
+
+## 846. Hand of Straights ::1:: - Medium
+
+Topics:  Array, Hash Table, Greedy, Sorting
+
+### Intro
+> Alice has some number of cards and she wants to rearrange the 
+> cards into groups so that each group is of size groupSize, and 
+> consists of groupSize consecutive cards.
+> Given an integer array hand where hand[i] is the value written on 
+> the ith card and an integer groupSize, return true if she can 
+> rearrange the cards, or false otherwise.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| hand = [1,2,3,6,2,3,4,7,8], groupSize = 3 | true |
+| hand = [1,2,3,4,5], groupSize = 4 | false |
+
+Constraints:
+
+1 &leq; hand.length &leq; 10<sup>4</sup>
+
+0 &leq; hand[i] &leq; 10<sup>9</sup>
+
+1 &leq; groupSize &leq; hand.length
+
+### Abstraction
+Given an array and a run length, determine if its possible to rearrange 
+the cards of run length that are increasing.
+
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy - Greedy/Greedy
+```python
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        # Note:
+        # Greedy with HashMap
+        # 0. Direct Boundary -> total cards must be divisible by groupSize
+        # 1. Process root -> sort unique card values
+        # 2. Explore Choices -> greedily build groups from smallest card
+        # 3. Build From Previous -> for each card, decrement counts for next groupSize - 1
+        # 4. Backtrack -> if count not available, return False
+        # Result -> return True if all groups formed
+
+        n = len(hand)
+        if n % groupSize != 0:
+            return False
+
+        # frequency of each card
+        count = Counter(hand)
+
+        # process cards in ascending order
+        for card in sorted(count):
+            while count[card] > 0:
+                # attempt to form group starting at card
+                for nxt in range(card, card + groupSize):
+                    if count[nxt] == 0:
+                        return False
+                    count[nxt] -= 1
+
+        return True
+```
+
+
+## 1899. Merge Triplets to Form Target Triplet ::1:: - Medium
+
+Topics:  Array, Greedy
+
+### Intro
+> A triplet is an array of three integers. You are given a 2D
+> integer array triplets, where triplets[i] = [ai, bi, ci]
+> describes the ith triplet. You are also given an
+> integer array target = [x, y, z] that describes the  
+> triplet you want to obtain.
+> To obtain target, you may apply the following operation
+> on triplets any number of times (possibly zero):
+> Choose two indices (0-indexed) i and j (i != j)
+> and update triplets[j] to become 
+> [max(ai, aj), max(bi, bj), max(ci, cj)]. 
+> For example, if triplets[i] = [2, 5, 3] and 
+> triplets[j] = [1, 7, 5], triplets[j] will 
+> be updated to [max(2, 1), max(5, 7), max(3, 5)] = [2, 7, 5].
+> Return true if it is possible to obtain the target 
+> triplet [x, y, z] as an element of triplets, or false otherwise.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| triplets = [[2,5,3],[1,8,4],[1,7,5]], target = [2,7,5] | true |
+| triplets = [[3,4,5],[4,5,6]], target = [3,2,5] | false |
+| triplets = [[2,5,3],[2,3,4],[1,2,5],[5,2,3]], target = [5,5,5] | true |
+
+Constraints:
+
+1 &leq; triplets.length &leq; 10<sup>5</sup>
+
+triplets[i].length == target.length == 3
+
+1 &leq; ai, bi, ci, x, y, z &leq; 1000
+
+### Abstraction
+Given a list of triplets and a target triplet, determine if you can 
+select and merge triplets such that each element of the target is 
+matched exactly by taking the maximum across chosen triplets.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy - Greedy/Greedy
+```python
+    def mergeTriplets(self, triplets: List[List[int]], target: List[int]) -> bool:
+
+        # Note:
+        # Greedy validation
+        # 0. Direct Boundary -> ignore triplets that exceed target in any coordinate
+        # 1. Process root -> check each valid triplet
+        # 2. Build From Previous -> mark if triplet contributes to matching (x, y, z)
+        # 3. Result -> success if all three dimensions are covered
+
+        x, y, z = target
+        good = [False, False, False]  # track coverage of each target coordinate
+
+        for a, b, c in triplets:
+            # skip if triplet exceeds target in any dimension
+            if a > x or b > y or c > z:
+                continue
+
+            # mark contribution toward target dimensions
+            if a == x:
+                good[0] = True
+            if b == y:
+                good[1] = True
+            if c == z:
+                good[2] = True
+
+            # early exit: all dimensions matched
+            if all(good):
+                return True
+
+        return all(good)
+```
+
+
+## 763. Partition Labels ::1:: - Medium
+
+Topics:  Hash Table, Two Pointers, String, Greedy
+
+### Intro
+> You are given a string s. We want to partition the string 
+> string into as many parts as possible so that each letter
+> appears in at most one part. For example, the string 
+> "ababcc" can be partitioned into ["abab", "cc"], but 
+> partitions such as ["aba", "bcc"] or ["ab", "ab", "cc"] 
+> are invalid.
+> Note that the partition is done so that after concatenating 
+> all the parts in order, the resultant string should be s.
+> Return a list of integers representing the size of these parts.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "ababcbacadefegdehijhklij" | [9, 7, 8] |
+| s = "eccbbbbdec" | [10] |
+
+Constraints:
+
+1 &leq; s.length &leq; 500
+
+s consists of lowercase English letters.
+
+### Abstraction
+Given a string, determine what length the subarray should be 
+in order to have every character appear in each subarray
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy - Greedy/Greedy
+```python
+    def partitionLabels(self, s: str) -> List[int]:
+        # Note:
+        # Greedy partitioning
+        # 0. Direct Length -> empty string boundary covered implicitly
+        # 1. Precompute last occurrence of each character
+        # 2. Process root -> scan through string with two pointers
+        # 3. Expand window -> current partition must at least reach the furthest last occurrence seen so far
+        # 4. Build Partition -> when current index == window end, cut partition
+        # 5. Result -> return lengths of all partitions
+
+        # Step 1: store last index for each character
+        last_index = {char: i for i, char in enumerate(s)}
+
+        partitions = []
+        start = end = 0
+
+        # Step 2: scan string
+        for i, char in enumerate(s):
+            # Expand window to cover this char’s last occurrence
+            end = max(end, last_index[char])
+
+            # Partition cut -> reached end of window
+            if i == end:
+                partitions.append(end - start + 1)
+                start = i + 1
+
+        return partitions   
+```
+
+### Solution 2: Greedy - Greedy/Greedy
+```python
+    def partitionLabels(self, s: str) -> List[int]:
+        lookup = {}
+        answer = []
+
+        for i in range(len(s)):
+            lookup[s[i]] = i
+
+        i = 0
+        j = 0
+        end_val = lookup[s[0]]
+
+        while j < len(s):
+
+            if lookup[s[j]] > end_val:
+                end_val = lookup[s[j]]
+
+            if end_val == j:
+                answer.append(j-i+1)
+                i = j + 1
+                if i == len(s):
+                    break
+                end_val = lookup[s[i]]
+            j += 1
+
+        return answer
+```
+
+
+## 678. Valid Parenthesis String ::1:: - Medium
+
+Topics:  String, Dynamic Programming, Stack, Greedy
+
+### Intro
+> Given a string s containing only three types of 
+> characters: '(', ')' and '*', return true if s is valid. 
+> The following rules define a valid string:
+> Any left parenthesis '(' must have a 
+> corresponding right parenthesis ')'.
+> Any right parenthesis ')' must have a 
+> corresponding left parenthesis '('.
+> Left parenthesis '(' must go before the 
+> corresponding right parenthesis ')'.
+> '*' could be treated as a single right parenthesis 
+> ')' or a single left parenthesis '(' or an empty string "".
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| s = "()" | true |
+| s = "(*)" | true |
+| s = "(*))" | true |
+
+Constraints:
+
+1 &leq; s.length &leq; 100
+
+s[i] is '(', ')' or '*'
+
+### Abstraction
+Given a string, determine if the parenthesis are valid.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy - Greedy/Greedy
+```python
+    def checkValidString(self, s: str) -> bool:
+        # Note:
+        # Greedy balance with range tracking
+        # 0. Direct Length -> empty string is valid (covered implicitly)
+        # 1. Process root -> scan each character
+        # 2. Explore Choices -> maintain lower and upper bound of open '(' count
+        # 3. Build Bounds:
+        #    '(' increases both lower and upper
+        #    ')' decreases both (but lower cannot go below 0)
+        #    '*' can be '(', ')' or empty
+        #         -> lower decreases by 1 (min 0), upper increases by 1
+        # 4. Prune -> if upper < 0 at any point, invalid
+        # 5. Result -> valid if lower == 0 at the end
+
+        lower = upper = 0
+
+        for char in s:
+            if char == "(":
+                lower += 1
+                upper += 1
+            elif char == ")":
+                lower = max(lower - 1, 0)
+                upper -= 1
+            else:  # '*'
+                lower = max(lower - 1, 0)  # treat as ')'
+                upper += 1                 # treat as '('
+
+            # Prune -> too many ')'
+            if upper < 0:
+                return False
+
+        # Result: lower == 0 means all opens can be matched
+        return lower == 0
+```
+
+### Solution 2: Greedy - Greedy/Greedy
+```python
+    def checkValidString(self, s: str) -> bool:
+        leftMin = 0
+        leftMax = 0
+        for letter in s:
+            if letter == "(":
+                leftMin, leftMax = leftMin + 1, leftMax + 1
+            elif letter == ")":
+                leftMin, leftMax = leftMin - 1, leftMax - 1
+            else:
+                leftMin, leftMax = leftMin - 1, leftMax + 1
+            if leftMax < 0:
+                return False
+            if leftMin < 0:
+                leftMin = 0
+        return leftMin == 0
 ```
