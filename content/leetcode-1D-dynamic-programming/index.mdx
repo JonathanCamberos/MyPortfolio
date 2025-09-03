@@ -505,341 +505,6 @@ Ex: Coin Change (BFS with Memo)
 
 
 
-### 1D Dynamic Programming Application: Sequential State Transition
-Pattern: Each state depends on one or two prior states (linear recurrence).
-Use When: Counting paths, sequences, or arrangements (Fibonacci, climbing stairs).
-Recurrence: dp[i] = dp[i-1] + dp[i-2]
-
-Ex: Climbing Stairs
-```python
-    def climbStairs(n: int) -> int:
-        dp = [0] * (n + 1)
-        dp[0], dp[1] = 1, 1
-
-        for i in range(2, n + 1):
-            dp[i] = dp[i-1] + dp[i-2]
-
-        return dp[n]
-```
-
-### 1D Dynamic Programming Application: Choose or Skip Non Adjacent
-Pattern: Decide whether to take or skip the current element.
-Use When: Problems disallow consecutive selections (House Robber, Max Non-Adjacent Sum).
-Recurrence: dp[i] = max(dp[i-1], dp[i-2] + nums[i])
-
-Ex: House Robber
-```python
-    def rob(nums: list[int]) -> int:
-        n = len(nums)
-        if n == 0: return 0
-        if n == 1: return nums[0]
-
-        dp = [0] * n
-        dp[0], dp[1] = nums[0], max(nums[0], nums[1])
-
-        for i in range(2, n):
-            dp[i] = max(dp[i-1], dp[i-2] + nums[i])
-
-        return dp[-1]
-```
-
-### 1D Dynamic Programming Application: Circular Choose or Skip Non Adjacent
-Pattern: Linear sequence with a circular constraint — first and last elements are considered adjacent. Solve by splitting into two linear subproblems (exclude first or exclude last).
-Use When: Problems where selections are from a circular array (e.g., House Robber II, max non-adjacent circular sums).
-Recurrence: Apply standard choose-or-skip recurrence on each linear subarray.
-
-Ex: House Robber II 
-```python
-    def rob(nums: list[int]) -> int:
-        n = len(nums)
-        if n == 1:
-            return nums[0]
-
-        def rob_linear(arr):
-            prev2, prev1 = 0, 0
-            for num in arr:
-                curr = max(prev1, num + prev2)
-                prev2, prev1 = prev1, curr
-            return prev1
-
-        # Exclude first house OR exclude last house
-        return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
-```
-
-### 1D Dynamic Programming Application: Min Max Contiguous Segment
-Pattern: Track the best contiguous subarray sum (Kadane’s style).
-Use When: Maximum sum, minimum sum, or subarray optimization problems.
-Recurrence: dp[i] = max(nums[i], dp[i-1] + nums[i])
-
-Ex: Maximum Subarray
-```python
-    def maxResult(nums: list[int], k: int) -> int:
-        n = len(nums)
-        dp = [0] * n
-        dp[0] = nums[0]
-        dq = deque([0])
-
-        for i in range(1, n):
-            while dq and dq[0] < i - k:
-                dq.popleft()
-            dp[i] = nums[i] + dp[dq[0]]
-            while dq and dp[dq[-1]] <= dp[i]:
-                dq.pop()
-            dq.append(i)
-
-        return dp[-1]
-```
-
-### 1D Dynamic Programming Application: Sliding Window Monotonic Queue
-Pattern: Linear scan using a sliding window to track the best state efficiently.
-Use When: DP recurrence depends on the best value in a recent window.
-Recurrence: dp[i] = nums[i] + max(dp[j] for j in i-k..i-1)
-
-Ex: Jump Game VI
-```python
-    def maxResult(nums: list[int], k: int) -> int:
-        n = len(nums)
-        dp = [0] * n
-        dp[0] = nums[0]
-
-        dq = deque([0])  # indices of "best" dp values
-
-        for i in range(1, n):
-            # Remove indices outside the window [i-k, i-1]
-            while dq and dq[0] < i - k:
-                dq.popleft()
-            
-            # Current dp depends on best in window
-            dp[i] = nums[i] + dp[dq[0]]
-            
-            # Maintain deque in decreasing order of dp values
-            while dq and dp[dq[-1]] <= dp[i]:
-                dq.pop()
-            dq.append(i)
-        
-        return dp[-1]
-```
-
-### 1D Dynamic Programming Application: Min Max Path Sum in Linear Sequence
-Pattern: Track the cumulative minimum or maximum along a sequence.
-Use When: Optimize total cost or reward along a linear path.
-Recurrence: dp[i] = nums[i] + min/max(dp[i-1], dp[i-2], ...)
-
-Ex: Minimum Cost Climbing Stairs
-```python
-    def minCostClimbingStairs(cost: list[int]) -> int:
-        n = len(cost)
-        dp = [0] * n
-        dp[0], dp[1] = cost[0], cost[1]
-
-        for i in range(2, n):
-            dp[i] = cost[i] + min(dp[i-1], dp[i-2])
-
-        return min(dp[-1], dp[-2])
-```
-
-### 1D Dynamic Programming Application: Bitmask Subset Linear
-Pattern: Encode chosen elements as a bitmask for linear sequences of small size (n ≤ 20-25).
-Use When: Problems involve selecting subsets or combinations with constraints.
-Recurrence: dp[mask] = max(dp[mask ^ (1 < < i)] + nums[i])
-
-Ex: Max Subset Sum with No Adjacent Selected
-```python
-    def maxSubsetSum(nums: list[int]) -> int:
-        n = len(nums)
-        dp = [0] * (1 << n)
-
-        for mask in range(1, 1 << n):
-            for i in range(n):
-                if mask & (1 << i):
-                    if i == 0 or not (mask & (1 << (i-1))):
-                        dp[mask] = max(dp[mask], dp[mask ^ (1 << i)] + nums[i])
-
-        return max(dp)
-```
-
-### 1D Dynamic Programming Application: Prefix Sum
-Pattern: Use cumulative sums to speed up range-dependent DP.
-Use When: DP depends on sums of ranges in a 1D array.
-Recurrence: dp[i] = max(dp[j] + prefix[i] - prefix[j])
-
-Ex: Maximum Subarray Sum with Length Constraint
-```python
-def maxSubarrayLenK(nums: list[int], k: int) -> int:
-    n = len(nums)
-    prefix = [0] * (n+1)
-    for i in range(n):
-        prefix[i+1] = prefix[i] + nums[i]
-
-    dp = [0] * (n+1)
-    for i in range(1, n+1):
-        if i >= k:
-            dp[i] = max(dp[i-1], prefix[i] - prefix[i-k])
-        else:
-            dp[i] = dp[i-1]
-
-    return dp[n]
-```
-
-### 1D Dynamic Programming Application: Linear Decision with Multiple States
-Pattern: Track multiple states per index when multiple choices exist (take/skip, hold/sell, etc.)
-Use When: Problems have several options per position with state transitions.
-Recurrence: dp[i][state] = max/min(choice1, choice2, ...)
-
-Ex: Best Time to Buy/Sell Stock with Cooldown
-```python
-    def maxProfit(prices: list[int]) -> int:
-        n = len(prices)
-        if n == 0: return 0
-
-        hold, sold, rest = -prices[0], 0, 0
-
-        for i in range(1, n):
-            prev_sold = sold
-            sold = hold + prices[i]
-            hold = max(hold, rest - prices[i])
-            rest = max(rest, prev_sold)
-
-        return max(sold, rest)
-```
-
-### 1D Dynamic Programming Application: Linear Property Tracking
-Pattern: Track whether a property holds for each position in a sequence (true/false, max/min, count, etc.) using prior information.
-Use When: You need to know if a subarray or subsequence satisfies a property at each index (palindrome, valid sum, valid jump, etc.).
-Recurrence: dp[i] = f(dp[prev_indices], sequence[i])
-
-Ex: Longest Palindromic Substring (DP Table)
-```python
-    def longestPalindrome(s: str) -> str:
-        n = len(s)
-        dp = [[False]*n for _ in range(n)]
-        start, max_len = 0, 1
-
-        for i in range(n):
-            dp[i][i] = True
-
-        for length in range(2, n+1):
-            for i in range(n - length + 1):
-                j = i + length - 1
-                if s[i] == s[j]:
-                    if length == 2 or dp[i+1][j-1]:
-                        dp[i][j] = True
-                        if length > max_len:
-                            start, max_len = i, length
-
-        return s[start:start+max_len]
-```
-
-### 1D Dynamic Programming Application: Min Max with Choices (Unbounded Knapsack style)
-Pattern: Track the optimal value (minimum or maximum) for a linear state where each state can consider multiple choices repeatedly.
-Use When: Problems involve selecting from a set of options multiple times to optimize a total, e.g., minimum coins, maximum value, maximum sum.
-Recurrence: dp[i] = min/max(dp[i - choice] + value_of_choice for choice in choices if i - choice >= 0)
-
-Ex: Coin Change (Minimum Coins)
-```python
-    def coinChange(coins: list[int], amount: int) -> int:
-        max_val = amount + 1
-        dp = [max_val] * (amount + 1)
-        dp[0] = 0
-
-        for a in range(1, amount + 1):
-            for coin in coins:
-                if a - coin >= 0:
-                    dp[a] = min(dp[a], dp[a - coin] + 1)
-
-        return dp[amount] if dp[amount] != max_val else -1
-```
-
-### 1D Dynamic Programming Application: Track Multiple States per Index (Max Min Tracking)
-Pattern: Maintain multiple states per position when a single state cannot capture all possibilities. For example, track both maximum and minimum values at each step because future states depend on both.
-Use When: Problems involve sequences where each element can affect multiple outcomes depending on prior states, such as max/min product subarray, stock problems with multiple options, or sequences with sign changes.
-Recurrence:
-max[i] = max(nums[i], max[i-1]*nums[i], min[i-1]*nums[i])
-min[i] = min(nums[i], max[i-1]*nums[i], min[i-1]*nums[i])
-
-Ex: Maximum Product Subarray
-```python
-    def maxProduct(nums: list[int]) -> int:
-        n = len(nums)
-        if n == 0: return 0
-
-        max_prod = min_prod = result = nums[0]
-
-        for i in range(1, n):
-            num = nums[i]
-            temp_max = max(num, max_prod * num, min_prod * num)
-            min_prod = min(num, max_prod * num, min_prod * num)
-            max_prod = temp_max
-            result = max(result, max_prod)
-
-        return result
-```
-
-
-### 1D Dynamic Programming Application: Sequential Segment Choice Validation
-Pattern: Determine if a linear sequence can be segmented or satisfies a condition by checking all possible prior segments or choices.
-Use When: Problems involve checking if a prefix/subsequence is valid based on previous valid segments (Word Break, Jump Game reachability, sequence segmentation).
-Recurrence: dp[i] = any(dp[j] and valid_segment(j, i) for j in 0..i-1)
-
-Ex: Word Break
-```python
-    def wordBreak(s: str, wordDict: list[str]) -> bool:
-        word_set = set(wordDict)
-        n = len(s)
-        dp = [False] * (n + 1)
-        dp[0] = True  # empty string is segmentable
-
-        for i in range(1, n + 1):
-            for j in range(i):
-                if dp[j] and s[j:i] in word_set:
-                    dp[i] = True
-                    break  # early prune, found valid segmentation
-
-        return dp[n]
-
-```
-
-
-### 1D Dynamic Programming Application: Subsequence Optimization Constrained
-Pattern: Track the best subsequence ending at each index, respecting a relational/order constraint between elements.
-Use When: Problems involve subsequences (not necessarily contiguous) where selected elements must satisfy a specific order or relational condition.
-Recurrence: dp[i] = best(dp[j] + contribution[i]) for all j < i satisfying relation(nums[j], nums[i])
-
-Ex: Longest Increasing Subsequence
-```python
-    def lengthOfLIS(nums: List[int]) -> int:
-        n = len(nums)
-        if n == 0: return 0
-
-        dp = [1] * n  # dp[i] = length of LIS ending at i
-        for i in range(n):
-            for j in range(i):
-                if nums[i] > nums[j]:
-                    dp[i] = max(dp[i], dp[j] + 1)
-        return max(dp)
-```
-
-### 1D Dynamic Programming Application: Subset Sum Linear Choice Selection
-Pattern: Track achievable sums or states when choosing elements sequentially, often under a “pick or skip” or additive constraint.
-Use When: Problems involve deciding which elements to include/exclude to satisfy a global condition (subset sum, partitioning, knapsack with 0/1 choices, bitmask DP, etc.).
-Recurrence Template: dp[i] = combine(dp[i], dp[i - contribution[j]])   # update achievable state
-
-Ex: Partition Equal Subset Sum
-```python
-    def canPartition(nums: List[int]) -> bool:
-        total = sum(nums)
-        if total % 2 != 0:
-            return False
-        target = total // 2
-        dp = [False] * (target + 1)
-        dp[0] = True
-        for num in nums:
-            for i in range(target, num - 1, -1):
-                dp[i] = dp[i] or dp[i - num]
-        return dp[target]
-```
-
-
 
 ## 70. Climbing Stairs ::4:: - Easy
 
@@ -3287,7 +2952,7 @@ can be separated into some combination of strings from the array.
         return res
 ```
 
-## 300. Longest Increasing Subsequence ::4:: - Medium
+## 300. Longest Increasing Subsequence ::3:: - Medium
 
 Topics:  Array, Binary Search, Dynamic Programming
 
@@ -3416,46 +3081,12 @@ Given an integer array, find the longest increasing subsequence.
         # res -> max from array
         res = max(dp)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: time complexity O(n^2)
+        # overall: space complexity. O(n) (memo + recursion stack)
         return res
 ```
 
-### Solution 3: Binary Search Patience Sorting - 1D Dynamic Programming/Subsequence Optimization Constrained
-```python
-    def lengthOfLIS(self, nums: List[int]) -> int:
-
-        # Note:
-        # Patience sorting method (efficient O(n log n))
-        # 1. Process root -> current number in nums
-        # 2. Explore choices -> find insertion point in current LIS tails
-        # 3. Build -> append if new tail is larger, else replace to minimize tail
-        # 4. Result -> length of tails array = length of LIS
-
-        # tails[i] = smallest possible tail of LIS of length 
-        tails = []
-
-        for num in nums:
-            
-            # Explore Choice -> find where num fits
-            index = bisect.bisect_left(tails, num)
-
-            if index == len(tails):
-                # Build: extend LIS with new larger tail
-                tails.append(num)
-            else:
-                # Build: replace to keep minimal tail (better chance for future extension)
-                tails[index] = num
-
-        # res ->
-        res = len(tails)
-
-        # overall: time complexity
-        # overall: space complexity
-        return res
-```
-
-### Solution 4: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
+### Solution 3: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
 
@@ -3468,12 +3099,17 @@ Given an integer array, find the longest increasing subsequence.
 
         tails = []
 
+        # 
         for num in nums:
             left, right = 0, len(tails) - 1
             
             # Explore Choices -> find insertion/replacement index
             while left <= right:
+
+                # 
                 mid = (left + right) // 2
+                
+                # 
                 if tails[mid] < num:
                     left = mid + 1
                 else:

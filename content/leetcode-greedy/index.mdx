@@ -1,0 +1,212 @@
+---
+title: "Greedy"
+description: "greedy"
+image: "../../public/Notes/greedy-3.png"
+publishedAt: "2025-09-20"
+updatedAt: "2025-09-20" 
+author: "jonathancamberos"
+isPublished: true
+tags: 
+- data structures and algorithms
+---
+
+
+## Greedy Intro
+
+LeetCode problems solved with Greedy solutions.
+
+### What is Greedy
+
+Money!
+
+### Greedy IRL
+Money!
+
+### Greedy Application: Greedy
+Pattern: money! 
+
+Ex: money!!
+```python
+    def money!(n: int) -> int:
+
+        return n+1
+```
+
+
+## 53. Maximum Subarray ::4:: - Medium
+
+Topics:  Array, Divide and Conquer, Dynamic Programming
+
+### Intro
+> Given an integer array nums, find the with the largest sum,
+> and return its sum.  
+> Follow up: If you have figured out the O(n) solution, try coding 
+> another solution using the divide and conquer approach, 
+> which is more subtle.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [-2,1,-3,4,-1,2,1,-5,4] | 6 |
+| nums = [1] | 1 |
+| nums = [5,4,-1,7,8] | 23 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 10<sup>5</sup>
+
+-10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
+
+### Abstraction
+Given an array, return the sum of the largest subarray.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Greedy Kadane Algorithm Version 1 - Greedy/Greedy
+```python
+    def maxSubArray(self, nums: List[int]) -> int:
+        # Note:
+        # Kadane's Algorithm (Greedy / DP)
+        # 1. Process root -> current number in nums
+        # 2. Explore Choices -> extend previous subarray OR start new subarray
+        # 3. Build -> local_max = max(nums[i], local_max + nums[i])
+        # 4. Result -> track global maximum across all local_max
+
+        n = len(nums)
+
+        # Direct Boundary -> first element
+        local_max = global_max = nums[0]
+
+        for i in range(1, n):
+
+            # Explore Choices -> either continue subarray or start fresh at nums[i]
+            local_max = max(nums[i], local_max + nums[i])
+
+            # Build Result -> update global maximum
+            global_max = max(global_max, local_max)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return global_max
+```
+
+### Solution 2: Greedy Kadane Algorithm Version 2 - Greedy/Greedy
+```python
+    def maxSubArray(self, nums: List[int]) -> int:
+        # Note:
+        # Divide & Conquer approach
+        # 1. Process root -> split array into halves
+        # 2. Explore Choices -> max subarray is:
+        #    - entirely in left half
+        #    - entirely in right half
+        #    - crosses the midpoint
+        # 3. Build -> recursively compute left, right, cross sums
+        # 4. Result -> maximum of the three
+
+        def helper(left, right):
+            # Direct Boundary -> single element
+            if left == right:
+                return nums[left]
+
+            mid = (left + right) // 2
+
+            # Build -> recursive left and right solutions
+            left_max = helper(left, mid)
+            right_max = helper(mid + 1, right)
+
+            # Build -> crossing subarray
+            left_sum = float('-inf')
+            curr = 0
+            for i in range(mid, left - 1, -1):
+                curr += nums[i]
+                left_sum = max(left_sum, curr)
+
+            right_sum = float('-inf')
+            curr = 0
+            for i in range(mid + 1, right + 1):
+                curr += nums[i]
+                right_sum = max(right_sum, curr)
+
+            cross_max = left_sum + right_sum
+
+            return max(left_max, right_max, cross_max)
+
+        # res -> full array range
+        res = helper(0, len(nums) - 1)
+
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(log n) recursion depth
+        return res
+```
+
+
+### Solution 3: Divide and Conquer - Greedy/Greedy
+```python
+    def maxSubArray(self, nums: List[int]) -> int:
+        # Note:
+        # Divide & Conquer approach
+        # 1. Process root -> split array into halves
+        # 2. Explore Choices -> max subarray is:
+        #    - entirely in left half
+        #    - entirely in right half
+        #    - crosses the midpoint
+        # 3. Build -> recursively compute left, right, cross sums
+        # 4. Result -> maximum of the three
+
+        def helper(left, right):
+            # Direct Boundary -> single element
+            if left == right:
+                return nums[left]
+
+            mid = (left + right) // 2
+
+            # Build -> recursive left and right solutions
+            left_max = helper(left, mid)
+            right_max = helper(mid + 1, right)
+
+            # Build -> crossing subarray
+            left_sum = float('-inf')
+            curr = 0
+            for i in range(mid, left - 1, -1):
+                curr += nums[i]
+                left_sum = max(left_sum, curr)
+
+            right_sum = float('-inf')
+            curr = 0
+            for i in range(mid + 1, right + 1):
+                curr += nums[i]
+                right_sum = max(right_sum, curr)
+
+            cross_max = left_sum + right_sum
+
+            return max(left_max, right_max, cross_max)
+
+        # res -> full array range
+        res = helper(0, len(nums) - 1)
+
+        # overall: time complexity O(n log n)
+        # overall: space complexity O(log n) recursion depth
+        return res
+```
