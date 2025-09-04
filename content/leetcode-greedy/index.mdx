@@ -15,6 +15,24 @@ tags:
 
 LeetCode problems solved with Greedy solutions.
 
+> Greedy problems may be the hardest because as they all follow a pattern, 
+> nor are they always intuitive. You just have to come up with a solution 
+> that you think should work and hope that it works for all test cases.
+
+and the counter point: 
+
+> in greedy, you always start off by using key observations and reasoning 
+> to narrow down your "search space" by eliminating possibilities to get to 
+> the answer, i.e. finding scenarios where getting the answer is impossible.
+> in this example, it would be realizing a triplet whose value(s) exceed the 
+> target are unusable in the merging process and hence can be skipped.
+> from there, you can derive what's possible / what are the "search spaces"
+> that you actually care about and code up the solution accordingly.
+> greedy problems can be quite unstructured, but the code implementation isn't 
+> challenging to grasp (like backtracking) or the solution particularly 
+> hard to come by (like dp and figuring out the recurrence relation) so it 
+> can be a good and fun topic to practice.
+
 ### What is Greedy
 
 Money!
@@ -33,7 +51,7 @@ Ex: money!!
 ```
 
 
-## 53. Maximum Subarray ::4:: - Medium
+## 53. Maximum Subarray ::3:: - Medium
 
 Topics:  Array, Divide and Conquer, Dynamic Programming
 
@@ -84,27 +102,29 @@ Given an array, return the sum of the largest subarray.
 ```python
 ```
 
-### Solution 1: Greedy Kadane Algorithm Version 1 - Greedy/Greedy
+### Solution 1: Greedy Kadane Algorithm Textbook Version - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
+
         # Note:
         # Kadane's Algorithm (Greedy / DP)
-        # 1. Process root -> current number in nums
-        # 2. Explore Choices -> extend previous subarray OR start new subarray
-        # 3. Build -> local_max = max(nums[i], local_max + nums[i])
-        # 4. Result -> track global maximum across all local_max
+        # iterate over array
+        # at every step either extend subarray or start new subarray
+        # Result -> max sum
 
         n = len(nums)
 
-        # Direct Boundary -> first element
-        local_max = global_max = nums[0]
+        local_max = nums[0]
+        global_max = nums[0]
 
+        # iterate over array
         for i in range(1, n):
 
-            # Explore Choices -> either continue subarray or start fresh at nums[i]
+            # nums[i]: start new subarray at i
+            # local_max + nums[i]: extend previous subarray
             local_max = max(nums[i], local_max + nums[i])
 
-            # Build Result -> update global maximum
+            # compare to global max
             global_max = max(global_max, local_max)
 
         # overall: time complexity O(n)
@@ -112,134 +132,85 @@ Given an array, return the sum of the largest subarray.
         return global_max
 ```
 
-### Solution 2: Greedy Kadane Algorithm Version 2 - Greedy/Greedy
-```python
-    def maxSubArray(self, nums: List[int]) -> int:
-        # Note:
-        # Divide & Conquer approach
-        # 1. Process root -> split array into halves
-        # 2. Explore Choices -> max subarray is:
-        #    - entirely in left half
-        #    - entirely in right half
-        #    - crosses the midpoint
-        # 3. Build -> recursively compute left, right, cross sums
-        # 4. Result -> maximum of the three
-
-        def helper(left, right):
-            # Direct Boundary -> single element
-            if left == right:
-                return nums[left]
-
-            mid = (left + right) // 2
-
-            # Build -> recursive left and right solutions
-            left_max = helper(left, mid)
-            right_max = helper(mid + 1, right)
-
-            # Build -> crossing subarray
-            left_sum = float('-inf')
-            curr = 0
-            for i in range(mid, left - 1, -1):
-                curr += nums[i]
-                left_sum = max(left_sum, curr)
-
-            right_sum = float('-inf')
-            curr = 0
-            for i in range(mid + 1, right + 1):
-                curr += nums[i]
-                right_sum = max(right_sum, curr)
-
-            cross_max = left_sum + right_sum
-
-            return max(left_max, right_max, cross_max)
-
-        # res -> full array range
-        res = helper(0, len(nums) - 1)
-
-        # overall: time complexity O(n log n)
-        # overall: space complexity O(log n) recursion depth
-        return res
-```
-
-### Solution 3: Greedy Kadane Algorithm Version 3 - Greedy/Greedy
+### Solution 2: Greedy Kadane Algorithm Practical Version - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
 
         # Note:
         # Greedy (Kadane’s Algorithm)
-        # 0. Direct Length -> array guaranteed non-empty
-        # 1. Process root -> iterate through nums
-        # 2. Build From Previous -> accumulate current sum
-        # 3. Explore Choices -> if current sum < 0, reset to 0 (start new subarray)
-        # 4. Result -> track maximum sum seen across iterations
+        # iterate over array
+        # at every step either extend subarray or start new subarray
+        # Result -> max sum
 
-        # Direct Variables -> initialize
         max_sum = nums[0]
         current_sum = 0
 
-        # Iterate -> traverse all numbers
+        # iterate over array
         for num in nums:
 
-            # Build From Previous -> extend subarray
+
+            # extend subarray: current_sum + num
             current_sum += num
 
-            # Result -> update max sum
-            if current_sum > max_sum:
-                max_sum = current_sum
-
-            # Explore Choices -> drop negative prefix
+            # start new subarray at i
             if current_sum < 0:
                 current_sum = 0
 
-        # Result -> maximum subarray sum
+            # compare to global max
+            if current_sum > max_sum:
+                max_sum = current_sum
+
+        # overall: time complexity
+        # overall: space complexity
         return max_sum
 ```
 
-
-
-
-### Solution 4: Divide and Conquer - Greedy/Greedy
+### Solution 3: Divide and Conquer - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
         # Note:
         # Divide & Conquer approach
         # 1. Process root -> split array into halves
         # 2. Explore Choices -> max subarray is:
-        #    - entirely in left half
-        #    - entirely in right half
-        #    - crosses the midpoint
+        #    entirely in left half
+        #    entirely in right half
+        #    crosses the midpoint (ending at mid and starting at mid+1)
         # 3. Build -> recursively compute left, right, cross sums
-        # 4. Result -> maximum of the three
+        # Result -> max sum of array
 
         def helper(left, right):
-            # Direct Boundary -> single element
+            
+            # single element, return element
             if left == right:
                 return nums[left]
 
+            # midpoint for split and cross_max
             mid = (left + right) // 2
 
-            # Build -> recursive left and right solutions
+            # check left and right subarray
             left_max = helper(left, mid)
             right_max = helper(mid + 1, right)
 
-            # Build -> crossing subarray
+            # maximum suffix sum of the left half: best sum ending at mid
             left_sum = float('-inf')
             curr = 0
             for i in range(mid, left - 1, -1):
                 curr += nums[i]
                 left_sum = max(left_sum, curr)
 
+            # maximum prefix sum of the right half: best sum starting at mid+1
             right_sum = float('-inf')
             curr = 0
             for i in range(mid + 1, right + 1):
                 curr += nums[i]
                 right_sum = max(right_sum, curr)
 
+            # maximum subarray sum that spans across the midpoint.
             cross_max = left_sum + right_sum
 
+            # pass max from left, right, and cross section to parent
             return max(left_max, right_max, cross_max)
 
-        # res -> full array range
         res = helper(0, len(nums) - 1)
 
         # overall: time complexity O(n log n)
@@ -298,34 +269,42 @@ index possible from that index.
 ```python
 ```
 
-### Solution 1: Greedy sol - Greedy/Greedy
+### Solution 1: Greedy Dynamic Programming Rolling Variable Early Exit - Greedy/Greedy
 ```python
     def canJump(self, nums: List[int]) -> bool:
+        
         # Note:
-        # Greedy
-        # 0. Direct Length -> array guaranteed non-empty
-        # 1. Process root -> iterate through nums
+        # 
+        # Rolling Variable -> tracks farthest possible index we can reach
+        # Iterate over array -> 
         # 2. Build From Previous -> maintain farthest reachable index so far
         # 3. Explore Choices -> if current index > farthest, return False (stuck)
         # 4. Result -> if iteration completes, last index is reachable
 
         n = len(nums)
 
-        # Direct Variable -> farthest index reachable
+        # rolling variable
         farthest = 0
 
-        # Iterate -> traverse array
+        # iterate array
         for i in range(n):
 
-            # Explore Choice -> stuck, cannot reach index i
+            # reached an unreachable index, cannot reach end
             if i > farthest:
                 return False
 
             # Build From Previous -> update farthest reachable
             farthest = max(farthest, i + nums[i])
 
-        # Result -> last index is reachable
-        return True
+            # Early exit -> can already reach or surpass last index
+            if farthest >= n - 1:
+                return True
+
+        # last index is not reachable
+
+        # overall: time complexity
+        # overall: space complexity
+        return False
 ```
 
 
@@ -390,35 +369,49 @@ index possible from that index.
 ### Solution 1: Greedy Layer By Layer - Greedy/Greedy
 ```python
     def jump(self, nums: List[int]) -> int:
+        
         # Note:
         # Greedy (layer expansion like BFS)
-        # 0. Direct Length -> if single element, no jumps needed
-        # 1. Process root -> iterate through array
-        # 2. Build From Previous -> track farthest reachable index in current "layer"
-        # 3. Explore Choices -> when reaching end of current layer, increase jump count
-        # 4. Result -> minimum jumps to reach last index
 
+        # A layer in this context is a BFS level of the array.
+        # Each level contains all indices you can reach with the same number
+        # of jumps. 
+        
         n = len(nums)
+
+        # no jumps needed
         if n == 1:
             return 0
 
-        # Direct Variables
-        jumps = 0          # result: number of jumps
-        current_end = 0    # boundary of current layer
-        farthest = 0       # farthest index reachable in next layer
+        # Each level contains all indices you can reach with the same number
+        # of jumps. 
+        jumps = 0
 
-        # Iterate -> stop at n-1 since last index does not need to jump further
-        for i in range(n - 1):
+        # current_end marks the rightmost index in the current layer. 
+        # So when we reach current_end, it means we have finished exploring the
+        # current layer, and current_end holds the best next move for this layer.
+        current_end = 0
 
-            # Build From Previous -> update farthest reachable index
+        # keeps track of the furthest index we can reach in this layer.
+        farthest = 0
+
+        # iterate -> 0 to n-2
+        # problem guarantees we can always reach the last index,
+        # so we don't need to check for unreachable branches
+        for i in range(n-1):
+
+            # update farthest reachable index for index
             farthest = max(farthest, i + nums[i])
 
-            # Explore Choices -> end of current layer
+            # reach end of current layer, go to next layer
             if i == current_end:
                 jumps += 1          # need to jump
                 current_end = farthest  # move to next layer
 
         # Result -> total jumps
+
+        # overall: time complexity
+        # overall: space complexity
         return jumps
 ```
 
@@ -487,6 +480,7 @@ Return -1 if not possible.
 ### Solution 1: Greedy - Greedy/Greedy
 ```python
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        
         # Note:
         # Greedy Linear Scan
         # 0. Direct Boundary -> if total gas < total cost, impossible (-1)
@@ -497,24 +491,37 @@ Return -1 if not possible.
 
         n = len(gas)
 
-        # Check feasibility
+        # not enough total gas to cover total cost
         if sum(gas) < sum(cost):
             return -1
 
-        # Greedy scan variables
-        tank = 0      # current gas in tank
-        start = 0     # candidate starting station
+        # current gas
+        tank = 0
+        # candidate starting station
+        start = 0
 
+        # try each starting station
         for i in range(n):
-            # Build From Previous -> update tank balance
+
+            # Question guarantees solution to be unique, so:
+            # you don't need to try every starting point individually.
+            # As you iterate, you maintain a running tank balance.
+            # You never actually traverse every “branch”, but the greedy 
+            # reset logic ensures the feasible branch is picked.
+
+            # update tank balance
             tank += gas[i] - cost[i]
 
-            # Explore Choice -> reset start if tank is negative
+            # reset start if tank is negative
+            # try next start candidate
             if tank < 0:
                 tank = 0
                 start = i + 1
 
         # Result -> guaranteed unique if feasible
+
+        # overall: time complexity 
+        # overall: space complexity
         return start
 ```
 
@@ -577,16 +584,18 @@ the cards of run length that are increasing.
 ### Solution 1: Greedy - Greedy/Greedy
 ```python
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        
         # Note:
         # Greedy with HashMap
-        # 0. Direct Boundary -> total cards must be divisible by groupSize
-        # 1. Process root -> sort unique card values
-        # 2. Explore Choices -> greedily build groups from smallest card
-        # 3. Build From Previous -> for each card, decrement counts for next groupSize - 1
-        # 4. Backtrack -> if count not available, return False
+        # total cards must be divisible by groupSize
+        # sort cards
+        # group cards from low to high
+        # for each group start, grab all cards needed in group
         # Result -> return True if all groups formed
 
         n = len(hand)
+
+        # total cards must be divisible by groupSize
         if n % groupSize != 0:
             return False
 
@@ -594,14 +603,79 @@ the cards of run length that are increasing.
         count = Counter(hand)
 
         # process cards in ascending order
-        for card in sorted(count):
-            while count[card] > 0:
-                # attempt to form group starting at card
-                for nxt in range(card, card + groupSize):
-                    if count[nxt] == 0:
-                        return False
-                    count[nxt] -= 1
+        for runStartCard in sorted(count):
 
+            # attempt to form group starting at card
+            while count[runStartCard] > 0:
+
+                # attempt to grab all cards for current run starting from card
+                for nextCard in range(runStartCard, runStartCard + groupSize):
+
+                    # no run is possible 
+                    if count[nextCard] == 0:
+                        return False
+
+                    # decrease count
+                    count[nextCard] -= 1
+
+        # overall: time complexity 
+        # overall: space complexity
+        return True
+```
+
+### Solution 2: Greedy Heap - Greedy/Greedy
+```python
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        # Note:
+        # Greedy using min heap and frequency map
+        # 0. Direct Boundary -> total cards must be divisible by groupSize
+        # 1. Process root -> build frequency map and min-heap of unique cards
+        # 2. Build From Previous -> repeatedly form groups starting from smallest card
+        # 3. Explore Choices -> check consecutive cards and update frequencies
+        # Result -> return True if all groups can be formed
+
+        n = len(hand)
+
+        # check if total cards can be divided into complete groups
+        if n % groupSize != 0:
+            return False
+
+        # frequency map of cards
+        counter = {}
+        for h in hand:
+            counter[h] = 1 + counter.get(h, 0)
+
+        # min heap of unique cards
+        heap = list(counter.keys())
+        heapq.heapify(heap)
+
+        # repeatedly form groups
+        while heap:
+
+            first = heap[0]  # smallest available card
+
+            # try to form a consecutive run starting from first
+            for h in range(first, first + groupSize):
+
+                # cannot form run if card missing
+                if h not in counter:
+                    return False
+
+                # decrement frequency
+                counter[h] -= 1
+
+                # remove from heap if no cards left
+                if counter[h] == 0:
+
+                    # ensure heap order is maintained
+                    if h != heap[0]:
+                        return False
+                    heapq.heappop(heap)
+
+        # all runs successfully formed
+
+        # overall: time complexity
+        # overall: space complexity
         return True
 ```
 
@@ -677,16 +751,21 @@ matched exactly by taking the maximum across chosen triplets.
 
         # Note:
         # Greedy validation
-        # 0. Direct Boundary -> ignore triplets that exceed target in any coordinate
-        # 1. Process root -> check each valid triplet
-        # 2. Build From Previous -> mark if triplet contributes to matching (x, y, z)
-        # 3. Result -> success if all three dimensions are covered
 
+        # instead of simulating all operations, you just need to 
+        # ensure that for each coordinate of the target, there is at least 
+        # one triplet that contributes the required value without exceeding it.
+
+        # grab target values
         x, y, z = target
-        good = [False, False, False]  # track coverage of each target coordinate
+
+        # coverage of each target index
+        good = [False, False, False]
 
         for a, b, c in triplets:
-            # skip if triplet exceeds target in any dimension
+
+            # skip if triplet exceeds target in any dimension as 
+            # merging triplet would overshoot the target since we use max()
             if a > x or b > y or c > z:
                 continue
 
@@ -698,15 +777,17 @@ matched exactly by taking the maximum across chosen triplets.
             if c == z:
                 good[2] = True
 
-            # early exit: all dimensions matched
+            # early exit -> all dimensions matched
             if all(good):
                 return True
 
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
         return all(good)
 ```
 
 
-## 763. Partition Labels ::1:: - Medium
+## 763. Partition Labels ::2:: - Medium
 
 Topics:  Hash Table, Two Pointers, String, Greedy
 
@@ -764,6 +845,7 @@ in order to have every character appear in each subarray
 ### Solution 1: Greedy - Greedy/Greedy
 ```python
     def partitionLabels(self, s: str) -> List[int]:
+
         # Note:
         # Greedy partitioning
         # 0. Direct Length -> empty string boundary covered implicitly
@@ -773,56 +855,45 @@ in order to have every character appear in each subarray
         # 4. Build Partition -> when current index == window end, cut partition
         # 5. Result -> return lengths of all partitions
 
-        # Step 1: store last index for each character
+        # effectively gives the last occurrence of each character in the string,
+        # as last occurrence of char will overwrite index previous 
         last_index = {char: i for i, char in enumerate(s)}
 
         partitions = []
-        start = end = 0
 
-        # Step 2: scan string
+        # starting index of current partition
+        start = 0 
+
+        # Furthest index that the current partition must reach to 
+        # include all characters seen so far
+        # Thus, when the iteration index i reaches end, it means the 
+        # current partition contains all occurrences of the characters seen 
+        # in this window, so you can "cut" the partition:
+        end = 0
+
+        # iterate left to right
         for i, char in enumerate(s):
-            # Expand window to cover this char’s last occurrence
+
+            # As we go left to right, if a character appears multiple times, 
+            # the dictionary keeps updating its value to the latest index
+
+            # ensures the current partition extends at least until the 
+            # last occurrence of every character seen so far.
             end = max(end, last_index[char])
 
-            # Partition cut -> reached end of window
+            # reached the last occurrence of every character seen so far,
+            # safe to cut
             if i == end:
                 partitions.append(end - start + 1)
                 start = i + 1
 
+        # overall: time complexity
+        # overall: space complexity
         return partitions   
 ```
 
-### Solution 2: Greedy - Greedy/Greedy
-```python
-    def partitionLabels(self, s: str) -> List[int]:
-        lookup = {}
-        answer = []
 
-        for i in range(len(s)):
-            lookup[s[i]] = i
-
-        i = 0
-        j = 0
-        end_val = lookup[s[0]]
-
-        while j < len(s):
-
-            if lookup[s[j]] > end_val:
-                end_val = lookup[s[j]]
-
-            if end_val == j:
-                answer.append(j-i+1)
-                i = j + 1
-                if i == len(s):
-                    break
-                end_val = lookup[s[i]]
-            j += 1
-
-        return answer
-```
-
-
-## 678. Valid Parenthesis String ::1:: - Medium
+## 678. Valid Parenthesis String ::2:: - Medium
 
 Topics:  String, Dynamic Programming, Stack, Greedy
 
@@ -884,53 +955,46 @@ Given a string, determine if the parenthesis are valid.
     def checkValidString(self, s: str) -> bool:
         # Note:
         # Greedy balance with range tracking
-        # 0. Direct Length -> empty string is valid (covered implicitly)
-        # 1. Process root -> scan each character
-        # 2. Explore Choices -> maintain lower and upper bound of open '(' count
-        # 3. Build Bounds:
+        # empty string is valid (covered implicitly)
+        # maintain lower and upper bound of open '(' count
+        # Bounds:
         #    '(' increases both lower and upper
         #    ')' decreases both (but lower cannot go below 0)
         #    '*' can be '(', ')' or empty
         #         -> lower decreases by 1 (min 0), upper increases by 1
-        # 4. Prune -> if upper < 0 at any point, invalid
-        # 5. Result -> valid if lower == 0 at the end
+        # if upper < 0 at any point, invalid
+        # Result -> valid if lower == 0 at the end
 
-        lower = upper = 0
+        # parenthesis count
+        lower = 0 
+        upper = 0
 
+        # iterate
         for char in s:
+
+            # '(' increases both lower and upper
             if char == "(":
                 lower += 1
                 upper += 1
+
+            # ')' decreases both (but lower cannot go below 0)
             elif char == ")":
                 lower = max(lower - 1, 0)
                 upper -= 1
-            else:  # '*'
+
+            # '*' can be '(', ')' or empty
+            # lower decreases by 1 (min 0), upper increases by 1
+            else:
                 lower = max(lower - 1, 0)  # treat as ')'
                 upper += 1                 # treat as '('
 
-            # Prune -> too many ')'
+            # if upper < 0 at any point, invalid
             if upper < 0:
                 return False
 
-        # Result: lower == 0 means all opens can be matched
-        return lower == 0
-```
+        # lower == 0 means all opens can be matched
 
-### Solution 2: Greedy - Greedy/Greedy
-```python
-    def checkValidString(self, s: str) -> bool:
-        leftMin = 0
-        leftMax = 0
-        for letter in s:
-            if letter == "(":
-                leftMin, leftMax = leftMin + 1, leftMax + 1
-            elif letter == ")":
-                leftMin, leftMax = leftMin - 1, leftMax - 1
-            else:
-                leftMin, leftMax = leftMin - 1, leftMax + 1
-            if leftMax < 0:
-                return False
-            if leftMin < 0:
-                leftMin = 0
-        return leftMin == 0
+        # overall: time complexity
+        # overall: space complexity
+        return lower == 0
 ```

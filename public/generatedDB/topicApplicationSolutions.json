@@ -2313,12 +2313,12 @@
       },
       {
         "number": 1,
-        "name": "i to N Recursive with Memoization Top Down",
+        "name": "(Modified Kadane) i to N Recursive with Memoization Top Down",
         "type": "1d-dynamic-programming",
         "application": "dfs-with-caching-direct-n-top-down-with-memoization",
         "code": "def maxProduct(self, nums: List[int]) -> int:\n        \n        # Note:\n        # Top Down (recursive with memoization)\n        # 0. Direct Length -> empty check\n        # 1. Memo Check -> computed previously\n        # 1. Direct Boundary -> 1st element\n        # 2. Build From Previous -> grab previous max/min and calculate new max/min at i\n        # 3. Three Possibilities -> infer max subarray\n        # Result -> track overall maximum from all dfs calls\n\n        n = len(nums)\n\n        # Direct Length -> empty array check\n        if n == 0:\n            return 0\n\n        memo = {}\n\n        def dfs(i):\n\n            # Memo Check -> computed previously\n            if i in memo:\n                return memo[i]\n\n            # Direct Boundary -> 1st element\n            if i == 0:\n                memo[0] = (nums[0], nums[0])\n                return memo[0]\n\n            # Build From Previous -> grab previous max/min and calculate new max/min at i\n            prev_max, prev_min = dfs(i-1)\n            \n            # three possibilities\n            # 1. start new subarray at i -> num\n            # 2. extend previous max subarray -> num * prev_max\n            # 3. extend previous min subarray -> num * prev_min\n            num = nums[i]\n            curr_max = max(num, num * prev_max, num * prev_min)\n            curr_min = min(num, num * prev_max, num * prev_min)\n\n            # res -> max decision/subarray up to index i\n            memo[i] = (curr_max, curr_min)\n            return memo[i]\n\n        # start with max subarray at 0\n        result = nums[0]\n\n        for i in range(n):\n            \n            # max subarray at i\n            curr_max, curr_min = dfs(i)\n\n            # res -> overall max subarray\n            result = max(result, curr_max)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return result",
         "questionNumber": 152,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-1-modified-kadane-i-to-n-recursive-with-memoization-top-down---1d-dynamic-programmingdfs-with-caching-direct-n-top-down-with-memoization",
         "blog": "1D Dynamic Programming"
       },
       {
@@ -2405,12 +2405,12 @@
       },
       {
         "number": 2,
-        "name": "0 to i Iterative Bottom Up Array",
+        "name": "(Modified Kadane) 0 to i Iterative Bottom Up Array",
         "type": "1d-dynamic-programming",
         "application": "iterative-tabulation-direct-n-bottom-up",
         "code": "def maxProduct(self, nums: List[int]) -> int:\n\n        # Note:\n        # Bottom Up DP with arrays\n        # 0. Direct Length -> empty array check\n        # 1. Direct Array -> initialize max_dp, min_dp at index 0\n        # 2. Iterate -> 1 to n-1\n        # 3. Build From Previous -> grab previous max/min and calculate new max/min at i\n        # 4. Three Possibilities -> infer max subarray\n        # Result -> grab overall max subarray\n\n        n = len(nums)\n\n        # Direct Length -> empty array check\n        if n == 0:\n            return 0\n\n        # Direct Array -> initialize max_dp, min_dp at index 0\n        max_dp = [0] * n\n        min_dp = [0] * n\n        max_dp[0] = min_dp[0] = result = nums[0]\n\n        # Iterate -> 1 to n-1\n        for i in range(1, n):\n\n            # three possibilities\n            # 1. start new subarray at i -> num\n            # 2. extend previous max subarray -> num * prev_max\n            # 3. extend previous min subarray -> num * prev_min\n            num = nums[i]\n            max_dp[i] = max(num, max_dp[i-1] * num, min_dp[i-1] * num)\n            min_dp[i] = min(num, max_dp[i-1] * num, min_dp[i-1] * num)\n\n            # res -> overall max subarray\n            result = max(result, max_dp[i])\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return result",
         "questionNumber": 152,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-2-modified-kadane-0-to-i-iterative-bottom-up-array---1d-dynamic-programmingiterative-tabulation-direct-n-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
@@ -2467,12 +2467,12 @@
       },
       {
         "number": 3,
-        "name": "0 to i Iterative Bottom Up Variables",
+        "name": "(Modified Kadane) 0 to i Iterative Bottom Up Variables",
         "type": "1d-dynamic-programming",
         "application": "optimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "code": "def maxProduct(self, nums: List[int]) -> int:\n\n        # Note:\n        # Bottom Up DP (rolling variables)\n        # 0. Direct Length -> empty array check\n        # 1. Direct Variables -> initialize max_dp, min_dp at index 0\n        # 2. Iterate -> 1 to n-1\n        # 3. Build From Previous -> grab previous max/min and calculate new max/min at i\n        # 4. Three Possibilities -> infer max subarray\n        # Result -> grab overall max subarray\n\n        n = len(nums)\n\n        # Direct Length -> empty array check\n        if n == 0:\n            return 0\n\n        # Direct Variables -> initialize max_dp, min_dp at index 0\n        max_prod = min_prod = result = nums[0]\n\n        # Iterate -> 1 to n-1\n        for i in range(1, n):\n\n            # Store previous rolling values\n            prev_max, prev_min = max_prod, min_prod\n\n            # Build From Previous -> grab previous max/min and calculate new max/min at i\n            num = nums[i]\n            max_prod = max(num, prev_max * num, prev_min * num)\n            min_prod = min(num, prev_max * num, prev_min * num)\n\n            # Update overall result\n            result = max(result, max_prod)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
         "questionNumber": 152,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-3-modified-kadane-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-direct-n-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
@@ -2523,12 +2523,12 @@
     "opposite-ends-iterative-direct-n-rolling-state-variables-bottom-up": [
       {
         "number": 4,
-        "name": "Forward Backward Scan",
+        "name": "(Modified Kadane) Forward Backward Scan",
         "type": "1d-dynamic-programming",
         "application": "opposite-ends-iterative-direct-n-rolling-state-variables-bottom-up",
         "code": "def maxProduct(self, nums: List[int]) -> int:\n\n        # Note:\n        # Forward-Backward Scan (cumulative products)\n        # 0. Direct Length -> empty array check\n        # 1. Direct Variables -> initialize left and right\n        # 2. Iterate -> forward and backward in the same loop\n        # 4. Build -> update result with max(left_prod, right_prod)\n        # 5. Three Possibilities -> max subarray\n        # Result -> grab overall max subarray\n\n        n = len(nums)\n\n        # Direct Length -> empty array check\n        if n == 0:\n            return 0\n\n        # Direct Variables -> initialize left and right\n        left_prod = right_prod = 1\n        result = float('-inf')\n\n        # Iterate -> forward and backward in the same loop\n        for i in range(n):\n\n            # left scan -> contiguous subarray ending here \n            # right scan -> contiguous subarray starting from here\n            # new subarray after zero -> start of new subarray after zero  \n            left_prod *= nums[i]\n            right_prod *= nums[n - 1 - i]\n\n            # Three Possibilities -> max subarray\n            result = max(result, left_prod, right_prod)\n\n            # Reset if zero encountered\n            if left_prod == 0:\n                left_prod = 1\n            if right_prod == 0:\n                right_prod = 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
         "questionNumber": 152,
-        "solutionLink": "/Notes/1d-dynamic-programming#solution-4-forward-backward-scan---1d-dynamic-programmingopposite-ends-iterative-direct-n-rolling-state-variables-bottom-up",
+        "solutionLink": "/Notes/1d-dynamic-programming#solution-4-modified-kadane-forward-backward-scan---1d-dynamic-programmingopposite-ends-iterative-direct-n-rolling-state-variables-bottom-up",
         "blog": "1D Dynamic Programming"
       }
     ],
@@ -2608,6 +2608,120 @@
         "questionNumber": 416,
         "solutionLink": "/Notes/1d-dynamic-programming#solution-2-bitmask-bitset-dp---1d-dynamic-programmingsubset-sum-linear-choice-selection",
         "blog": "1D Dynamic Programming"
+      }
+    ]
+  },
+  "greedy": {
+    "greedy": [
+      {
+        "number": 1,
+        "name": "Greedy Kadane Algorithm Textbook Version",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def maxSubArray(self, nums: List[int]) -> int:\n\n        # Note:\n        # Kadane's Algorithm (Greedy / DP)\n        # iterate over array\n        # at every step either extend subarray or start new subarray\n        # Result -> max sum\n\n        n = len(nums)\n\n        local_max = nums[0]\n        global_max = nums[0]\n\n        # iterate over array\n        for i in range(1, n):\n\n            # nums[i]: start new subarray at i\n            # local_max + nums[i]: extend previous subarray\n            local_max = max(nums[i], local_max + nums[i])\n\n            # compare to global max\n            global_max = max(global_max, local_max)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return global_max",
+        "questionNumber": 53,
+        "solutionLink": "/Notes/greedy#solution-1-greedy-kadane-algorithm-textbook-version---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 2,
+        "name": "Greedy Kadane Algorithm Practical Version",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def maxSubArray(self, nums: List[int]) -> int:\n\n        # Note:\n        # Greedy (Kadane’s Algorithm)\n        # iterate over array\n        # at every step either extend subarray or start new subarray\n        # Result -> max sum\n\n        max_sum = nums[0]\n        current_sum = 0\n\n        # iterate over array\n        for num in nums:\n\n\n            # extend subarray: current_sum + num\n            current_sum += num\n\n            # start new subarray at i\n            if current_sum < 0:\n                current_sum = 0\n\n            # compare to global max\n            if current_sum > max_sum:\n                max_sum = current_sum\n\n        # overall: time complexity\n        # overall: space complexity\n        return max_sum",
+        "questionNumber": 53,
+        "solutionLink": "/Notes/greedy#solution-2-greedy-kadane-algorithm-practical-version---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 3,
+        "name": "Divide and Conquer",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def maxSubArray(self, nums: List[int]) -> int:\n        # Note:\n        # Divide & Conquer approach\n        # 1. Process root -> split array into halves\n        # 2. Explore Choices -> max subarray is:\n        #    entirely in left half\n        #    entirely in right half\n        #    crosses the midpoint (ending at mid and starting at mid+1)\n        # 3. Build -> recursively compute left, right, cross sums\n        # Result -> max sum of array\n\n        def helper(left, right):\n            \n            # single element, return element\n            if left == right:\n                return nums[left]\n\n            # midpoint for split and cross_max\n            mid = (left + right) // 2\n\n            # check left and right subarray\n            left_max = helper(left, mid)\n            right_max = helper(mid + 1, right)\n\n            # maximum suffix sum of the left half: best sum ending at mid\n            left_sum = float('-inf')\n            curr = 0\n            for i in range(mid, left - 1, -1):\n                curr += nums[i]\n                left_sum = max(left_sum, curr)\n\n            # maximum prefix sum of the right half: best sum starting at mid+1\n            right_sum = float('-inf')\n            curr = 0\n            for i in range(mid + 1, right + 1):\n                curr += nums[i]\n                right_sum = max(right_sum, curr)\n\n            # maximum subarray sum that spans across the midpoint.\n            cross_max = left_sum + right_sum\n\n            # pass max from left, right, and cross section to parent\n            return max(left_max, right_max, cross_max)\n\n        res = helper(0, len(nums) - 1)\n\n        # overall: time complexity O(n log n)\n        # overall: space complexity O(log n) recursion depth\n        return res",
+        "questionNumber": 53,
+        "solutionLink": "/Notes/greedy#solution-3-divide-and-conquer---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy Dynamic Programming Rolling Variable Early Exit",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def canJump(self, nums: List[int]) -> bool:\n        \n        # Note:\n        # \n        # Rolling Variable -> tracks farthest possible index we can reach\n        # Iterate over array -> \n        # 2. Build From Previous -> maintain farthest reachable index so far\n        # 3. Explore Choices -> if current index > farthest, return False (stuck)\n        # 4. Result -> if iteration completes, last index is reachable\n\n        n = len(nums)\n\n        # rolling variable\n        farthest = 0\n\n        # iterate array\n        for i in range(n):\n\n            # reached an unreachable index, cannot reach end\n            if i > farthest:\n                return False\n\n            # Build From Previous -> update farthest reachable\n            farthest = max(farthest, i + nums[i])\n\n            # Early exit -> can already reach or surpass last index\n            if farthest >= n - 1:\n                return True\n\n        # last index is not reachable\n\n        # overall: time complexity\n        # overall: space complexity\n        return False",
+        "questionNumber": 55,
+        "solutionLink": "/Notes/greedy#solution-1-greedy-dynamic-programming-rolling-variable-early-exit---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy Layer By Layer",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def jump(self, nums: List[int]) -> int:\n        \n        # Note:\n        # Greedy (layer expansion like BFS)\n\n        # A layer in this context is a BFS level of the array.\n        # Each level contains all indices you can reach with the same number\n        # of jumps. \n        \n        n = len(nums)\n\n        # no jumps needed\n        if n == 1:\n            return 0\n\n        # Each level contains all indices you can reach with the same number\n        # of jumps. \n        jumps = 0\n\n        # current_end marks the rightmost index in the current layer. \n        # So when we reach current_end, it means we have finished exploring the\n        # current layer, and current_end holds the best next move for this layer.\n        current_end = 0\n\n        # keeps track of the furthest index we can reach in this layer.\n        farthest = 0\n\n        # iterate -> 0 to n-2\n        # problem guarantees we can always reach the last index,\n        # so we don't need to check for unreachable branches\n        for i in range(n-1):\n\n            # update farthest reachable index for index\n            farthest = max(farthest, i + nums[i])\n\n            # reach end of current layer, go to next layer\n            if i == current_end:\n                jumps += 1          # need to jump\n                current_end = farthest  # move to next layer\n\n        # Result -> total jumps\n\n        # overall: time complexity\n        # overall: space complexity\n        return jumps",
+        "questionNumber": 45,
+        "solutionLink": "/Notes/greedy#solution-1-greedy-layer-by-layer---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:\n        \n        # Note:\n        # Greedy Linear Scan\n        # 0. Direct Boundary -> if total gas < total cost, impossible (-1)\n        # 1. Process root -> traverse stations\n        # 2. Build From Previous -> track current tank balance\n        # 3. Explore Choices -> if tank < 0, reset start to next station\n        # 4. Result -> return start index (guaranteed unique if feasible)\n\n        n = len(gas)\n\n        # not enough total gas to cover total cost\n        if sum(gas) < sum(cost):\n            return -1\n\n        # current gas\n        tank = 0\n        # candidate starting station\n        start = 0\n\n        # try each starting station\n        for i in range(n):\n\n            # Question guarantees solution to be unique, so:\n            # you don't need to try every starting point individually.\n            # As you iterate, you maintain a running tank balance.\n            # You never actually traverse every “branch”, but the greedy \n            # reset logic ensures the feasible branch is picked.\n\n            # update tank balance\n            tank += gas[i] - cost[i]\n\n            # reset start if tank is negative\n            # try next start candidate\n            if tank < 0:\n                tank = 0\n                start = i + 1\n\n        # Result -> guaranteed unique if feasible\n\n        # overall: time complexity \n        # overall: space complexity\n        return start",
+        "questionNumber": 134,
+        "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:\n        \n        # Note:\n        # Greedy with HashMap\n        # total cards must be divisible by groupSize\n        # sort cards\n        # group cards from low to high\n        # for each group start, grab all cards needed in group\n        # Result -> return True if all groups formed\n\n        n = len(hand)\n\n        # total cards must be divisible by groupSize\n        if n % groupSize != 0:\n            return False\n\n        # frequency of each card\n        count = Counter(hand)\n\n        # process cards in ascending order\n        for runStartCard in sorted(count):\n\n            # attempt to form group starting at card\n            while count[runStartCard] > 0:\n\n                # attempt to grab all cards for current run starting from card\n                for nextCard in range(runStartCard, runStartCard + groupSize):\n\n                    # no run is possible \n                    if count[nextCard] == 0:\n                        return False\n\n                    # decrease count\n                    count[nextCard] -= 1\n\n        # overall: time complexity \n        # overall: space complexity\n        return True",
+        "questionNumber": 846,
+        "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 2,
+        "name": "Greedy Heap",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:\n        # Note:\n        # Greedy using min heap and frequency map\n        # 0. Direct Boundary -> total cards must be divisible by groupSize\n        # 1. Process root -> build frequency map and min-heap of unique cards\n        # 2. Build From Previous -> repeatedly form groups starting from smallest card\n        # 3. Explore Choices -> check consecutive cards and update frequencies\n        # Result -> return True if all groups can be formed\n\n        n = len(hand)\n\n        # check if total cards can be divided into complete groups\n        if n % groupSize != 0:\n            return False\n\n        # frequency map of cards\n        counter = {}\n        for h in hand:\n            counter[h] = 1 + counter.get(h, 0)\n\n        # min heap of unique cards\n        heap = list(counter.keys())\n        heapq.heapify(heap)\n\n        # repeatedly form groups\n        while heap:\n\n            first = heap[0]  # smallest available card\n\n            # try to form a consecutive run starting from first\n            for h in range(first, first + groupSize):\n\n                # cannot form run if card missing\n                if h not in counter:\n                    return False\n\n                # decrement frequency\n                counter[h] -= 1\n\n                # remove from heap if no cards left\n                if counter[h] == 0:\n\n                    # ensure heap order is maintained\n                    if h != heap[0]:\n                        return False\n                    heapq.heappop(heap)\n\n        # all runs successfully formed\n\n        # overall: time complexity\n        # overall: space complexity\n        return True",
+        "questionNumber": 846,
+        "solutionLink": "/Notes/greedy#solution-2-greedy-heap---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def mergeTriplets(self, triplets: List[List[int]], target: List[int]) -> bool:\n\n        # Note:\n        # Greedy validation\n\n        # instead of simulating all operations, you just need to \n        # ensure that for each coordinate of the target, there is at least \n        # one triplet that contributes the required value without exceeding it.\n\n        # grab target values\n        x, y, z = target\n\n        # coverage of each target index\n        good = [False, False, False]\n\n        for a, b, c in triplets:\n\n            # skip if triplet exceeds target in any dimension as \n            # merging triplet would overshoot the target since we use max()\n            if a > x or b > y or c > z:\n                continue\n\n            # mark contribution toward target dimensions\n            if a == x:\n                good[0] = True\n            if b == y:\n                good[1] = True\n            if c == z:\n                good[2] = True\n\n            # early exit -> all dimensions matched\n            if all(good):\n                return True\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return all(good)",
+        "questionNumber": 1899,
+        "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def partitionLabels(self, s: str) -> List[int]:\n\n        # Note:\n        # Greedy partitioning\n        # 0. Direct Length -> empty string boundary covered implicitly\n        # 1. Precompute last occurrence of each character\n        # 2. Process root -> scan through string with two pointers\n        # 3. Expand window -> current partition must at least reach the furthest last occurrence seen so far\n        # 4. Build Partition -> when current index == window end, cut partition\n        # 5. Result -> return lengths of all partitions\n\n        # effectively gives the last occurrence of each character in the string,\n        # as last occurrence of char will overwrite index previous \n        last_index = {char: i for i, char in enumerate(s)}\n\n        partitions = []\n\n        # starting index of current partition\n        start = 0 \n\n        # Furthest index that the current partition must reach to \n        # include all characters seen so far\n        # Thus, when the iteration index i reaches end, it means the \n        # current partition contains all occurrences of the characters seen \n        # in this window, so you can \"cut\" the partition:\n        end = 0\n\n        # iterate left to right\n        for i, char in enumerate(s):\n\n            # As we go left to right, if a character appears multiple times, \n            # the dictionary keeps updating its value to the latest index\n\n            # ensures the current partition extends at least until the \n            # last occurrence of every character seen so far.\n            end = max(end, last_index[char])\n\n            # reached the last occurrence of every character seen so far,\n            # safe to cut\n            if i == end:\n                partitions.append(end - start + 1)\n                start = i + 1\n\n        # overall: time complexity\n        # overall: space complexity\n        return partitions",
+        "questionNumber": 763,
+        "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
+        "blog": "Greedy"
+      },
+      {
+        "number": 1,
+        "name": "Greedy",
+        "type": "greedy",
+        "application": "greedy",
+        "code": "def checkValidString(self, s: str) -> bool:\n        # Note:\n        # Greedy balance with range tracking\n        # empty string is valid (covered implicitly)\n        # maintain lower and upper bound of open '(' count\n        # Bounds:\n        #    '(' increases both lower and upper\n        #    ')' decreases both (but lower cannot go below 0)\n        #    '*' can be '(', ')' or empty\n        #         -> lower decreases by 1 (min 0), upper increases by 1\n        # if upper < 0 at any point, invalid\n        # Result -> valid if lower == 0 at the end\n\n        # parenthesis count\n        lower = 0 \n        upper = 0\n\n        # iterate\n        for char in s:\n\n            # '(' increases both lower and upper\n            if char == \"(\":\n                lower += 1\n                upper += 1\n\n            # ')' decreases both (but lower cannot go below 0)\n            elif char == \")\":\n                lower = max(lower - 1, 0)\n                upper -= 1\n\n            # '*' can be '(', ')' or empty\n            # lower decreases by 1 (min 0), upper increases by 1\n            else:\n                lower = max(lower - 1, 0)  # treat as ')'\n                upper += 1                 # treat as '('\n\n            # if upper < 0 at any point, invalid\n            if upper < 0:\n                return False\n\n        # lower == 0 means all opens can be matched\n\n        # overall: time complexity\n        # overall: space complexity\n        return lower == 0",
+        "questionNumber": 678,
+        "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
+        "blog": "Greedy"
       }
     ]
   }

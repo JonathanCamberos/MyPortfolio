@@ -7,7 +7,8 @@ import Link from "next/link";
 
 const ApplicationSection = () => {
   // useCase categories
-  const useCaseCategories = ["all", "array", "hashmap", "stack", "two-pointers", "binary-search", "sliding-window", "linked-list", "tree", "trie", "heap", "backtracking", "graph", "1d-dynamic-programming"];
+  const useCaseCategories = ["all", "array", "hashmap", "stack", "two-pointers", "binary-search", "sliding-window", 
+      "linked-list", "tree", "trie", "heap", "backtracking", "graph", "1d-dynamic-programming", "greedy"];
 
   const [useCasesData, setUseCasesData] = useState({});
   const [filteredUseCases, setFilteredUseCases] = useState([]);

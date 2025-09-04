@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "2": {
     "questionNum": 2,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/1d-dynamic-programming#5-longest-palindromic-substring-3---medium",
     "blog": "1D Dynamic Programming",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "11": {
     "questionNum": 11,
@@ -86,7 +86,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "15": {
     "questionNum": 15,
@@ -102,7 +102,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "17": {
     "questionNum": 17,
@@ -145,7 +145,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 52
+    "coldnessCount": 53
   },
   "21": {
     "questionNum": 21,
@@ -219,7 +219,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 41
+    "coldnessCount": 42
   },
   "36": {
     "questionNum": 36,
@@ -234,7 +234,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "39": {
     "questionNum": 39,
@@ -279,7 +279,22 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
+  },
+  "45": {
+    "questionNum": 45,
+    "questionTitle": "Jump Game II ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a 0-indexed array of integers nums of length n. You are initially positioned at index 0. Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at index i, you can jump to any index (i + j) where: 0 < = j < = nums[i] and i + j < n Return the minimum number of jumps to reach index n - 1. The test cases are generated such that you can reach index n - 1.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy"
+    ],
+    "questionLink": "/Notes/greedy#45-jump-game-ii-1---medium",
+    "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "46": {
     "questionNum": 46,
@@ -309,7 +324,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "51": {
     "questionNum": 51,
@@ -322,6 +337,36 @@
     ],
     "questionLink": "/Notes/leetcode-backtracking#51-n-queens-1---hard",
     "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "53": {
+    "questionNum": 53,
+    "questionTitle": "Maximum Subarray ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an integer array nums, find the with the largest sum, and return its sum. Follow up: If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.",
+    "questionTopics": [
+      "Array",
+      "Divide and Conquer",
+      "Dynamic Programming"
+    ],
+    "questionLink": "/Notes/greedy#53-maximum-subarray-3---medium",
+    "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "55": {
+    "questionNum": 55,
+    "questionTitle": "Jump Game ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position. Return true if you can reach the last index, or false otherwise.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy"
+    ],
+    "questionLink": "/Notes/greedy#55-jump-game-1---medium",
+    "blog": "Greedy",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -353,7 +398,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 41
+    "coldnessCount": 42
   },
   "76": {
     "questionNum": 76,
@@ -584,7 +629,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "127": {
     "questionNum": 127,
@@ -614,7 +659,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "130": {
     "questionNum": 130,
@@ -661,6 +706,20 @@
     ],
     "questionLink": "/Notes/leetcode-graphs#133-clone-graph-2---medium",
     "blog": "LeetCode: Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "134": {
+    "questionNum": 134,
+    "questionTitle": "Gas Station ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i]. You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. You begin the journey with an empty tank at one of the gas stations. Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1. If there exists a solution, it is guaranteed to be unique.",
+    "questionTopics": [
+      "Array",
+      "Greedy"
+    ],
+    "questionLink": "/Notes/greedy#134-gas-station-1---medium",
+    "blog": "Greedy",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -757,7 +816,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 53
+    "coldnessCount": 54
   },
   "152": {
     "questionNum": 152,
@@ -785,7 +844,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 41
+    "coldnessCount": 42
   },
   "155": {
     "questionNum": 155,
@@ -799,7 +858,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 52
+    "coldnessCount": 53
   },
   "162": {
     "questionNum": 162,
@@ -828,7 +887,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-sorted-array-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "198": {
     "questionNum": 198,
@@ -1016,7 +1075,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "226": {
     "questionNum": 226,
@@ -1078,7 +1137,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "239": {
     "questionNum": 239,
@@ -1110,7 +1169,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "261": {
     "questionNum": 261,
@@ -1140,7 +1199,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "287": {
     "questionNum": 287,
@@ -1257,7 +1316,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 55
+    "coldnessCount": 56
   },
   "355": {
     "questionNum": 355,
@@ -1416,6 +1475,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "678": {
+    "questionNum": 678,
+    "questionTitle": "Valid Parenthesis String ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid. The following rules define a valid string: Any left parenthesis '(' must have a corresponding right parenthesis ')'. Any right parenthesis ')' must have a corresponding left parenthesis '('. Left parenthesis '(' must go before the corresponding right parenthesis ')'. '*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string \"\".",
+    "questionTopics": [
+      "String",
+      "Dynamic Programming",
+      "Stack",
+      "Greedy"
+    ],
+    "questionLink": "/Notes/greedy#678-valid-parenthesis-string-2---medium",
+    "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "684": {
     "questionNum": 684,
     "questionTitle": "Redundant Connection ::3::",
@@ -1479,7 +1554,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 41
+    "coldnessCount": 42
   },
   "739": {
     "questionNum": 739,
@@ -1509,6 +1584,38 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#746-min-cost-climbing-stairs-4---easy",
     "blog": "1D Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "763": {
+    "questionNum": 763,
+    "questionTitle": "Partition Labels ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a string s. We want to partition the string string into as many parts as possible so that each letter appears in at most one part. For example, the string \"ababcc\" can be partitioned into [\"abab\", \"cc\"], but partitions such as [\"aba\", \"bcc\"] or [\"ab\", \"ab\", \"cc\"] are invalid. Note that the partition is done so that after concatenating all the parts in order, the resultant string should be s. Return a list of integers representing the size of these parts.",
+    "questionTopics": [
+      "Hash Table",
+      "Two Pointers",
+      "String",
+      "Greedy"
+    ],
+    "questionLink": "/Notes/greedy#763-partition-labels-2---medium",
+    "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "846": {
+    "questionNum": 846,
+    "questionTitle": "Hand of Straights ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards. Given an integer array hand where hand[i] is the value written on the ith card and an integer groupSize, return true if she can rearrange the cards, or false otherwise.",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Greedy",
+      "Sorting"
+    ],
+    "questionLink": "/Notes/greedy#846-hand-of-straights-1---medium",
+    "blog": "Greedy",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1543,7 +1650,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 41
+    "coldnessCount": 42
   },
   "973": {
     "questionNum": 973,
@@ -1637,6 +1744,20 @@
     ],
     "questionLink": "/Notes/leetcode-trees#1448-count-good-nodes-in-binary-tree-2---medium",
     "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1899": {
+    "questionNum": 1899,
+    "questionTitle": "Merge Triplets to Form Target Triplet ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "A triplet is an array of three integers. You are given a 2D integer array triplets, where triplets[i] = [ai, bi, ci] describes the ith triplet. You are also given an integer array target = [x, y, z] that describes the triplet you want to obtain. To obtain target, you may apply the following operation on triplets any number of times (possibly zero): Choose two indices (0-indexed) i and j (i != j) and update triplets[j] to become [max(ai, aj), max(bi, bj), max(ci, cj)]. For example, if triplets[i] = [2, 5, 3] and triplets[j] = [1, 7, 5], triplets[j] will be updated to [max(2, 1), max(5, 7), max(3, 5)] = [2, 7, 5]. Return true if it is possible to obtain the target triplet [x, y, z] as an element of triplets, or false otherwise.",
+    "questionTopics": [
+      "Array",
+      "Greedy"
+    ],
+    "questionLink": "/Notes/greedy#1899-merge-triplets-to-form-target-triplet-1---medium",
+    "blog": "Greedy",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }

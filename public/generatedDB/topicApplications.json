@@ -681,5 +681,16 @@
       "useCaseLink": "/Notes/1d-dynamic-programming#1d-dynamic-programming-application-bfs-visited-memo-level-order",
       "blog": "1D Dynamic Programming"
     }
+  ],
+  "greedy": [
+    {
+      "type": "Greedy",
+      "title": "Greedy",
+      "summary": "Pattern: money!",
+      "exampleIntro": "money!!",
+      "codeExample": "def money!(n: int) -> int:\n\n        return n+1",
+      "useCaseLink": "/Notes/greedy#greedy-application-greedy",
+      "blog": "Greedy"
+    }
   ]
 }
