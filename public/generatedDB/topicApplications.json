@@ -692,5 +692,16 @@
       "useCaseLink": "/Notes/greedy#greedy-application-greedy",
       "blog": "Greedy"
     }
+  ],
+  "intervals": [
+    {
+      "type": "Intervals",
+      "title": "Intervals",
+      "summary": "Pattern: Numbers!",
+      "exampleIntro": "Numbers numbers!!",
+      "codeExample": "def wow!(n: int) -> int:\n\n        return n+1",
+      "useCaseLink": "/Notes/intervals#intervals-application-intervals",
+      "blog": "Intervals"
+    }
   ]
 }

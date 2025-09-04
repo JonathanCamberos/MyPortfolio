@@ -549,6 +549,40 @@
       "blog": "Greedy"
     }
   ],
+  "56": [
+    {
+      "number": 1,
+      "name": "array",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def merge(self, intervals: List[List[int]]) -> List[List[int]]:\n        # Note:\n        # Greedy / Sorting approach\n        # 0. Direct Boundary -> empty input returns empty list\n        # 1. Process root -> sort intervals by start time\n        # 2. Build -> iterate through sorted intervals, merging overlapping ones\n        # 3. Explore Choices -> if current interval overlaps previous, merge; else, append\n        # 4. Result -> list of merged, non-overlapping intervals\n\n        if not intervals:\n            return []\n\n        # Step 1: sort intervals by start time\n        intervals.sort(key=lambda x: x[0])\n\n        merged = [intervals[0]]  # initialize with first interval\n\n        # Step 2: iterate through sorted intervals\n        for i in range(1, len(intervals)):\n            current = intervals[i]\n            last_merged = merged[-1]\n\n            # Step 3: overlapping intervals -> merge\n            if current[0] <= last_merged[1]:\n                last_merged[1] = max(last_merged[1], current[1])\n            else:\n                # non-overlapping -> add new interval\n                merged.append(current)\n\n        # overall: time complexity O(n log n) due to sorting\n        # overall: space complexity O(n) for merged list\n        return merged",
+      "questionNumber": 56,
+      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "blog": "Intervals"
+    }
+  ],
+  "57": [
+    {
+      "number": 1,
+      "name": "array",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n        # Note:\n        # Greedy merge\n        # 0. Direct Length -> empty intervals, just return [newInterval]\n        # 1. Process root -> iterate through intervals\n        # 2. Explore Choices:\n        #    - Current interval ends before newInterval starts -> add as is\n        #    - Current interval starts after newInterval ends -> add newInterval, then rest\n        #    - Overlapping intervals -> merge into newInterval\n        # 3. Result -> merged list of intervals\n        \n        result = []\n        i = 0\n        n = len(intervals)\n        start, end = newInterval\n\n        # Step 1: add all intervals that end before newInterval starts\n        while i < n and intervals[i][1] < start:\n            result.append(intervals[i])\n            i += 1\n\n        # Step 2: merge overlapping intervals\n        while i < n and intervals[i][0] <= end:\n            start = min(start, intervals[i][0])\n            end = max(end, intervals[i][1])\n            i += 1\n        result.append([start, end])\n\n        # Step 3: add remaining intervals\n        while i < n:\n            result.append(intervals[i])\n            i += 1\n\n        return result",
+      "questionNumber": 57,
+      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "blog": "Intervals"
+    },
+    {
+      "number": 2,
+      "name": "array 2",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n        # Note:\n        # Greedy / Linear Scan\n        # 0. Direct Boundary -> handle empty intervals\n        # 1. Process root -> iterate through existing intervals\n        # 2. Explore Choices:\n        #    - Current interval ends before newInterval starts -> keep as is\n        #    - Current interval starts after newInterval ends -> insert newInterval here\n        #    - Current interval overlaps newInterval -> merge intervals\n        # 3. Build -> append intervals to result array\n        # 4. Result -> merged list of non-overlapping intervals including newInterval\n\n        n = len(intervals)\n        merged = []\n        i = 0\n        intervalAdded = False\n\n        # Iterate through intervals\n        while i < n:\n            curr = intervals[i]\n\n            # Case 1: No overlap, current interval ends before newInterval starts\n            if curr[1] < newInterval[0]:\n                merged.append(curr)\n                i += 1\n\n            # Case 2: No overlap, current interval starts after newInterval ends\n            elif curr[0] > newInterval[1]:\n                merged.append(newInterval)\n                merged.append(curr)\n                intervalAdded = True\n                i += 1\n                break\n\n            # Case 3: Overlapping intervals -> merge\n            else:\n                newStart = min(newInterval[0], curr[0])\n                newEnd = max(newInterval[1], curr[1])\n                i += 1\n                # Merge with any subsequent overlapping intervals\n                while i < n and intervals[i][0] <= newEnd:\n                    newEnd = max(newEnd, intervals[i][1])\n                    i += 1\n                merged.append([newStart, newEnd])\n                intervalAdded = True\n                break\n\n        # Append remaining intervals after insertion/merging\n        merged += intervals[i:]\n\n        # If newInterval was never added (it belongs at the end)\n        if not intervalAdded:\n            merged.append(newInterval)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return merged",
+      "questionNumber": 57,
+      "solutionLink": "/Notes/intervals#solution-2-array-2---intervalsintervals",
+      "blog": "Intervals"
+    }
+  ],
   "70": [
     {
       "number": 1,
@@ -1863,6 +1897,30 @@
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],
+  "252": [
+    {
+      "number": 1,
+      "name": "array",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def canAttendMeetings(self, intervals: List[Interval]) -> bool:\n        # Direct boundary -> empty or single meeting: always feasible\n        if not intervals:\n            return True\n\n        # Sort intervals by start time\n        intervals.sort(key=lambda x: x.start)\n\n        # Check for overlaps\n        for i in range(1, len(intervals)):\n            if intervals[i].start < intervals[i-1].end:\n                return False\n\n        return True",
+      "questionNumber": 252,
+      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "blog": "Intervals"
+    }
+  ],
+  "253": [
+    {
+      "number": 1,
+      "name": "array",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def minMeetingRooms(self, intervals: List[Interval]) -> int:\n        # Note:\n        # Greedy + Min-Heap\n        # 0. Direct boundary -> empty intervals require 0 rooms\n        # 1. Sort intervals by start time\n        # 2. Use a min-heap to track meeting end times\n        # 3. Iterate intervals:\n        #    - if current meeting starts after earliest ending, reuse room (pop heap)\n        #    - push current meeting end time into heap\n        # 4. Result -> size of heap = min rooms required\n\n        if not intervals:\n            return 0\n\n        # Sort intervals by start time\n        intervals.sort(key=lambda x: x.start)\n\n        # Min-heap to track current meeting end times\n        import heapq\n        heap = []\n\n        for interval in intervals:\n            # Reuse room if possible\n            if heap and interval.start >= heap[0]:\n                heapq.heappop(heap)\n            # Push current meeting end time\n            heapq.heappush(heap, interval.end)\n\n        # Number of rooms = maximum simultaneous meetings\n        return len(heap)",
+      "questionNumber": 253,
+      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "blog": "Intervals"
+    }
+  ],
   "261": [
     {
       "number": 1,
@@ -2229,6 +2287,38 @@
       "questionNumber": 424,
       "solutionLink": "/Notes/leetcode-sliding-window#solution-1-explicit-two-pointer-sliding-window---sliding-windowvariable-size-window",
       "blog": "LeetCode: Sliding Window"
+    }
+  ],
+  "435": [
+    {
+      "number": 1,
+      "name": "array",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:\n        # Note:\n        # Greedy / Sorting approach\n        # 0. Direct boundary -> empty or single interval: no removals needed\n        # 1. Sort intervals by end time\n        # 2. Process root -> iterate through intervals\n        # 3. Build -> track end of last kept interval\n        # 4. Explore choices -> if current interval overlaps last, remove it\n        # 5. Result -> count of removed intervals\n\n        if not intervals:\n            return 0\n\n        # Step 1: sort intervals by end time (earliest finishing first)\n        intervals.sort(key=lambda x: x[1])\n\n        # Step 2: initialize\n        end = intervals[0][1]  # end of the first interval we keep\n        removals = 0\n\n        # Step 3: iterate through the rest\n        for i in range(1, len(intervals)):\n            start_i, end_i = intervals[i]\n\n            # Step 4: check overlap\n            if start_i < end:\n                # current interval overlaps -> remove it\n                removals += 1\n            else:\n                # no overlap -> update end to current interval's end\n                end = end_i\n\n        # Step 5: return number of removals\n        return removals",
+      "questionNumber": 435,
+      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "blog": "Intervals"
+    },
+    {
+      "number": 2,
+      "name": "array 2",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:\n        intervals.sort()\n        res = 0\n        prevEnd = intervals[0][1]\n\n        for start, end in intervals[1:]:\n            if start >= prevEnd:\n                prevEnd = end\n            else:\n                res += 1\n                prevEnd = min(end, prevEnd)\n        return res",
+      "questionNumber": 435,
+      "solutionLink": "/Notes/intervals#solution-2-array-2---intervalsintervals",
+      "blog": "Intervals"
+    },
+    {
+      "number": 3,
+      "name": "array 3",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:\n        n = len(intervals)\n        if n <= 1:\n            return 0\n\n        intervals.sort(key=itemgetter(1))  # sort by end\n        keep = 0\n        end = float(\"-inf\")\n        for s, e in intervals:             # no slicing (no extra list)\n            if s >= end:                   # non-overlapping -> keep it\n                keep += 1\n                end = e\n        return n - keep                    # deletions = total - kept",
+      "questionNumber": 435,
+      "solutionLink": "/Notes/intervals#solution-3-array-3---intervalsintervals",
+      "blog": "Intervals"
     }
   ],
   "543": [
@@ -2803,6 +2893,28 @@
       "questionNumber": 1448,
       "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-iterative-pass-root-max-so-far-tuple-down---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
+    }
+  ],
+  "1851": [
+    {
+      "number": 1,
+      "name": "array",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        # Note:\n        # Greedy + Heap\n        # 0. Direct Boundary -> empty inputs handled implicitly\n        # 1. Sort intervals by start\n        # 2. Sort queries but store original indices\n        # 3. Iterate queries in ascending order\n        # 4. Add intervals starting before or at query to min-heap (by size)\n        # 5. Remove intervals ending before query\n        # 6. Result -> if heap non-empty, top is smallest interval covering query, else -1\n\n        # Step 1: sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        # Step 2: sort queries with indices\n        sorted_queries = sorted([(q, i) for i, q in enumerate(queries)])\n\n        res = [-1] * len(queries)\n        heap = []  # min-heap: (size, end)\n        j = 0      # pointer for intervals\n\n        # Step 3: iterate queries in ascending order\n        for q_val, q_idx in sorted_queries:\n\n            # Step 4: add intervals whose start <= query to heap\n            while j < len(intervals) and intervals[j][0] <= q_val:\n                start, end = intervals[j]\n                size = end - start + 1\n                heapq.heappush(heap, (size, end))\n                j += 1\n\n            # Step 5: remove intervals whose end < query\n            while heap and heap[0][1] < q_val:\n                heapq.heappop(heap)\n\n            # Step 6: record result\n            if heap:\n                res[q_idx] = heap[0][0]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
+      "questionNumber": 1851,
+      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "blog": "Intervals"
+    },
+    {
+      "number": 2,
+      "name": "array 2",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        # Note:\n        # Greedy + Heap\n        # 0. Direct Boundary -> empty inputs handled implicitly\n        # 1. Sort intervals by start\n        # 2. Sort queries but maintain original indices using a map\n        # 3. Iterate queries in ascending order\n        # 4. Add intervals starting before or at query to min-heap (by size)\n        # 5. Remove intervals ending before query\n        # 6. Result -> if heap non-empty, top is smallest interval covering query, else -1\n\n        # Step 1: sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        res_map = defaultdict(int)\n        min_heap = []\n        i = 0\n\n        # Step 2 & 3: iterate queries in ascending order\n        for q in sorted(queries):\n\n            # Step 4: push all intervals starting <= query into heap\n            while i < len(intervals) and intervals[i][0] <= q:\n                l, r = intervals[i]\n                heapq.heappush(min_heap, (r - l + 1, r))  # (size, end)\n                i += 1\n\n            # Step 5: pop intervals ending before query\n            while min_heap and min_heap[0][1] < q:\n                heapq.heappop(min_heap)\n\n            # Step 6: record result\n            res_map[q] = min_heap[0][0] if min_heap else -1\n\n        # Map results back to original query order\n        return [res_map[q] for q in queries]",
+      "questionNumber": 1851,
+      "solutionLink": "/Notes/intervals#solution-2-array-2---intervalsintervals",
+      "blog": "Intervals"
     }
   ],
   "1899": [

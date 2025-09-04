@@ -370,6 +370,33 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "56": {
+    "questionNum": 56,
+    "questionTitle": "Merge Intervals ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.",
+    "questionTopics": [
+      "Array",
+      "Sorting"
+    ],
+    "questionLink": "/Notes/intervals#56-merge-intervals-1---medium",
+    "blog": "Intervals",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "57": {
+    "questionNum": 57,
+    "questionTitle": "Insert Interval ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. You are also given an interval newInterval = [start, end] that represents the start and end of another interval. Insert newInterval into intervals such that intervals is still sorted in ascending order by starti and intervals still does not have any overlapping intervals (merge overlapping intervals if necessary). Return intervals after the insertion. Note that you don't need to modify intervals in-place. You can make a new array and return it.",
+    "questionTopics": [
+      "Array"
+    ],
+    "questionLink": "/Notes/intervals#57-insert-interval-2---medium",
+    "blog": "Intervals",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "70": {
     "questionNum": 70,
     "questionTitle": "Climbing Stairs ::4::",
@@ -1171,6 +1198,38 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 56
   },
+  "252": {
+    "questionNum": 252,
+    "questionTitle": "Meeting Rooms ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given an array of meeting time interval objects consisting of start and end times [[start_1,end_1],[start_2,end_2],...] (start_i < end_i) of the intervals non-overlapping. determine if a person could add all meetings to their schedule without any conflicts.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy",
+      "Sorting"
+    ],
+    "questionLink": "/Notes/intervals#252-meeting-rooms-1---easy",
+    "blog": "Intervals",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "253": {
+    "questionNum": 253,
+    "questionTitle": "Meeting Rooms II ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of meeting time interval objects consisting of start and end times [[start_1,end_1],[start_2,end_2],...] (start_i < end_i), find the minimum number of days required to schedule all meetings without any conflicts.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy",
+      "Sorting"
+    ],
+    "questionLink": "/Notes/intervals#253-meeting-rooms-ii-1---medium",
+    "blog": "Intervals",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "261": {
     "questionNum": 261,
     "questionTitle": "Graph Valid Tree ::3::",
@@ -1394,6 +1453,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "435": {
+    "questionNum": 435,
+    "questionTitle": "Non Overlapping Intervals ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping. Note that intervals which only touch at a point are non-overlapping. For example, [1, 2] and [2, 3] are non-overlapping.",
+    "questionTopics": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy",
+      "Sorting"
+    ],
+    "questionLink": "/Notes/intervals#435-non-overlapping-intervals-1---medium",
+    "blog": "Intervals",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "543": {
     "questionNum": 543,
     "questionTitle": "Diameter of Binary Tree ::2::",
@@ -1589,7 +1664,7 @@
   },
   "763": {
     "questionNum": 763,
-    "questionTitle": "Partition Labels ::2::",
+    "questionTitle": "Partition Labels ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "You are given a string s. We want to partition the string string into as many parts as possible so that each letter appears in at most one part. For example, the string \"ababcc\" can be partitioned into [\"abab\", \"cc\"], but partitions such as [\"aba\", \"bcc\"] or [\"ab\", \"ab\", \"cc\"] are invalid. Note that the partition is done so that after concatenating all the parts in order, the resultant string should be s. Return a list of integers representing the size of these parts.",
     "questionTopics": [
@@ -1598,7 +1673,7 @@
       "String",
       "Greedy"
     ],
-    "questionLink": "/Notes/greedy#763-partition-labels-2---medium",
+    "questionLink": "/Notes/greedy#763-partition-labels-1---medium",
     "blog": "Greedy",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -1744,6 +1819,23 @@
     ],
     "questionLink": "/Notes/leetcode-trees#1448-count-good-nodes-in-binary-tree-2---medium",
     "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1851": {
+    "questionNum": 1851,
+    "questionTitle": "Minimum Interval to Include Each Query ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given a 2D integer array intervals, where intervals[i] = [lefti, righti] describes the ith interval starting at lefti and ending at righti (inclusive). The size of an interval is defined as the number of integers it contains, or more formally righti - lefti + 1. You are also given an integer array queries. The answer to the jth query is the size of the smallest interval i such that lefti < = queries[j] < = righti. If no such interval exists, the answer is -1. Return an array containing the answers to the queries.",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Line Sweep",
+      "Sorting",
+      "Heap (Priority Queue)"
+    ],
+    "questionLink": "/Notes/intervals#1851-minimum-interval-to-include-each-query-1---hard",
+    "blog": "Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
