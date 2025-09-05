@@ -109,6 +109,18 @@
       "blog": "1D Dynamic Programming"
     }
   ],
+  "7": [
+    {
+      "number": 1,
+      "name": "Iterative Math Approach",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def reverse(self, x: int) -> int:\n        # Note:\n        # 1. Extract digits one by one using modulo 10\n        # 2. Append to result using multiply by 10 + digit\n        # 3. Handle negative numbers\n        # 4. Check for 32-bit overflow\n\n        INT_MAX = 2**31 - 1\n        INT_MIN = -2**31\n\n        res = 0\n        sign = 1 if x >= 0 else -1\n        x = abs(x)\n\n        while x != 0:\n            digit = x % 10\n            x //= 10\n\n            # Check overflow before multiplying by 10\n            if res > (INT_MAX - digit) // 10:\n                return 0\n\n            res = res * 10 + digit\n\n        return sign * res\n\n        # Time Complexity: O(log10(x)) - number of digits\n        # Space Complexity: O(1)",
+      "questionNumber": 7,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-iterative-math-approach---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    }
+  ],
   "11": [
     {
       "number": 1,
@@ -1159,6 +1171,28 @@
       "blog": "Greedy"
     }
   ],
+  "136": [
+    {
+      "number": 1,
+      "name": "HashSet Counting With Extra Space",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def singleNumber(self, nums: List[int]) -> int:\n        # Note:\n        # XOR Approach\n        # 1. XOR of a number with itself is 0\n        # 2. XOR of a number with 0 is the number itself\n        # 3. XOR is commutative and associative\n        # 4. So XORing all numbers leaves only the unique number\n\n        result = 0\n\n        for num in nums:\n            result ^= num  # XOR accumulates the unique number\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
+      "questionNumber": 136,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-hashset-counting-with-extra-space---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    },
+    {
+      "number": 2,
+      "name": "Bit Manipulation XOR Trick",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def singleNumber(self, nums: List[int]) -> int:\n        # Note:\n        # XOR Approach\n        # 1. XOR of a number with itself is 0\n        # 2. XOR of a number with 0 is the number itself\n        # 3. XOR is commutative and associative\n        # 4. So XORing all numbers leaves only the unique number\n\n        result = 0\n\n        for num in nums:\n            result ^= num  # XOR accumulates the unique number\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
+      "questionNumber": 136,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-bit-manipulation-xor-trick---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    }
+  ],
   "138": [
     {
       "number": 1,
@@ -1439,6 +1473,40 @@
       "questionNumber": 167,
       "solutionLink": "/Notes/leetcode-two-pointers#solution-1-binarysearch-per-element-for-complement---two-pointersone-pointer-with-auxiliary-state",
       "blog": "LeetCode: Two Pointers"
+    }
+  ],
+  "190": [
+    {
+      "number": 1,
+      "name": "Iterative Bit Manipulation",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def reverseBits(self, n: int) -> int:\n        result = 0\n        for i in range(32):\n            # Shift result left to make room for next bit\n            result <<= 1\n            # Add least significant bit of n\n            result |= n & 1\n            # Shift n right to process next bit\n            n >>= 1\n        return result",
+      "questionNumber": 190,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-iterative-bit-manipulation---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    }
+  ],
+  "191": [
+    {
+      "number": 1,
+      "name": "Bit Manipulation Brian Kernighan’s Algorithm",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def hammingWeight(self, n: int) -> int:\n        # Note:\n        # Brian Kernighan's Approach\n        # 1. Each iteration removes the lowest set bit: n & (n-1)\n        # 2. Count iterations until n becomes 0\n        # 3. Efficient: runs in O(k) where k = # of set bits\n\n        count = 0\n\n        while n:\n            n &= n - 1  # remove the lowest set bit\n            count += 1\n\n        # overall: time complexity O(k), k = number of set bits\n        # overall: space complexity O(1)\n        return count",
+      "questionNumber": 191,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation-brian-kernighan-s-algorithm---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    },
+    {
+      "number": 2,
+      "name": "Bit Manipulation Shift and Mask",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def hammingWeight(self, n: int) -> int:\n        # Note:\n        # Shift & Mask Approach\n        # 1. Check each bit from LSB to MSB\n        # 2. Increment count if the bit is 1\n        # 3. Repeat until all 32 bits are processed\n\n        count = 0\n        for _ in range(32):\n            count += n & 1\n            n >>= 1  # shift right by 1\n\n        # overall: time complexity O(32) = O(1)\n        # overall: space complexity O(1)\n        return count",
+      "questionNumber": 191,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-bit-manipulation-shift-and-mask---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
     }
   ],
   "198": [
@@ -1953,6 +2021,28 @@
       "blog": "LeetCode: Graphs"
     }
   ],
+  "268": [
+    {
+      "number": 1,
+      "name": "Sum Formula Math O(1) space",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def missingNumber(self, nums: List[int]) -> int:\n        # Note:\n        # Math approach\n        # 0. The sum of numbers 0..n = n*(n+1)/2\n        # 1. Sum all elements in nums\n        # 2. Missing number = expected sum - actual sum\n\n        n = len(nums)\n        expected_sum = n * (n + 1) // 2\n        actual_sum = sum(nums)\n        return expected_sum - actual_sum\n        # Time Complexity: O(n)\n        # Space Complexity: O(1)",
+      "questionNumber": 268,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-sum-formula-math-o-1-space---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    },
+    {
+      "number": 2,
+      "name": "XOR Trick Bit Manipulation O(1) space",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def missingNumber(self, nums: List[int]) -> int:\n        # Note:\n        # XOR approach\n        # 0. XOR all numbers in nums and all numbers 0..n\n        # 1. Because x^x=0, all paired numbers cancel out\n        # 2. Remaining number = missing number\n\n        missing = len(nums)  # start with n\n        for i, num in enumerate(nums):\n            missing ^= i ^ num\n        return missing\n        # Time Complexity: O(n)\n        # Space Complexity: O(1)",
+      "questionNumber": 268,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-xor-trick-bit-manipulation-o-1-space---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    }
+  ],
   "271": [
     {
       "number": 1,
@@ -2219,6 +2309,28 @@
       "questionNumber": 355,
       "solutionLink": "/Notes/leetcode-heaps#solution-3-store-tweets-as-arrays-deques-dynamic-heap-merge---heapheap",
       "blog": "LeetCode: Heaps"
+    }
+  ],
+  "371": [
+    {
+      "number": 1,
+      "name": "Bit Manipulation (Iterative)",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def getSum(self, a: int, b: int) -> int:\n        # Note:\n        # Bitwise approach\n        # 1. Use XOR (^) to sum bits without carry\n        # 2. Use AND (&) + left shift (<<) to compute carry\n        # 3. Repeat until carry is 0\n        # 4. Handle negative numbers with 32-bit mask\n\n        MASK = 0xFFFFFFFF  # limit to 32 bits\n        while b != 0:\n            # sum without carry\n            sum_ = (a ^ b) & MASK\n            # carry\n            carry = ((a & b) << 1) & MASK\n            # update a and b\n            a, b = sum_, carry\n\n        # if a > 2^31-1, it's negative in 32-bit signed\n        return a if a <= 0x7FFFFFFF else ~(a ^ MASK)\n\n        # Time Complexity: O(1)  - at most 32 iterations\n        # Space Complexity: O(1)",
+      "questionNumber": 371,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation-iterative---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    },
+    {
+      "number": 2,
+      "name": "Recursive Bitwise",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def getSum(self, a: int, b: int) -> int:\n        # Note:\n        # Recursive version of XOR + carry\n        MASK = 0xFFFFFFFF\n\n        if b == 0:\n            return a if a <= 0x7FFFFFFF else ~(a ^ MASK)\n\n        sum_ = (a ^ b) & MASK\n        carry = ((a & b) << 1) & MASK\n        return self.getSum(sum_, carry)\n\n        # Time Complexity: O(1)\n        # Space Complexity: O(1) for iterative, O(1) recursive stack depth",
+      "questionNumber": 371,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-recursive-bitwise---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
     }
   ],
   "402": [
@@ -2888,22 +3000,32 @@
   "1851": [
     {
       "number": 1,
-      "name": "array",
+      "name": "Greedy MinHeap 1",
       "type": "intervals",
       "application": "intervals",
-      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Greedy + Min-Heap\n        # 1. Sort intervals by start\n        # 2. Sort queries with original indices\n        # 3. Iterate queries in ascending order\n        # 4. push all intervals starting <= query into heap\n        # 5. pop intervals ending before query\n        # 6. record result\n        # Result -> top of heap is smallest interval covering query, else -1\n\n        # Sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        # Sort queries with original indices\n        sorted_queries = sorted([(q, i) for i, q in enumerate(queries)])\n\n        res = [-1] * len(queries)\n\n        # MinHeap: (size, end)\n        heap = []\n        \n        # pointer for intervals\n        j = 0\n\n        # Iterate queries in ascending order\n        for q_val, q_idx in sorted_queries:\n\n            # push all intervals starting <= query into heap\n            while j < len(intervals) and intervals[j][0] <= q_val:\n                start, end = intervals[j]\n                size = end - start + 1\n                heapq.heappush(heap, (size, end))\n                j += 1\n\n            # pop intervals ending before query\n            while heap and heap[0][1] < q_val:\n                heapq.heappop(heap)\n\n            # record result\n            if heap:\n                res[q_idx] = heap[0][0]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
+      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Uses sorted queries with indices for mapping results.\n\n        # Note:\n        # Greedy + Min-Heap\n        # 1. Sort intervals by start\n        # 2. Sort queries with original indices\n        # 3. Iterate queries in ascending order\n        # 4. Intervals <= query -> push to heap\n        # 5. Intervals > query -> pop\n        # 6. record result\n        # Result -> top of heap is smallest interval covering query, else -1\n\n        # Sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        # Sort queries with original indices\n        sorted_queries = sorted([(q, i) for i, q in enumerate(queries)])\n\n        res = [-1] * len(queries)\n\n        # MinHeap: (size, end)\n        heap = []\n        \n        # pointer for intervals\n        j = 0\n\n        # Iterate queries in ascending order\n        for q_val, q_idx in sorted_queries:\n\n            # push all intervals starting <= query into heap\n            while j < len(intervals) and intervals[j][0] <= q_val:\n                start, end = intervals[j]\n                size = end - start + 1\n                heapq.heappush(heap, (size, end))\n                j += 1\n\n            # pop intervals ending before query\n            while heap and heap[0][1] < q_val:\n                heapq.heappop(heap)\n\n            # record result\n            if heap:\n                res[q_idx] = heap[0][0]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
       "questionNumber": 1851,
-      "solutionLink": "/Notes/intervals#solution-1-array---intervalsintervals",
+      "solutionLink": "/Notes/intervals#solution-1-greedy-minheap-1---intervalsintervals",
       "blog": "Intervals"
     },
     {
       "number": 2,
-      "name": "array 2",
+      "name": "Greedy MinHeap 2",
       "type": "intervals",
       "application": "intervals",
-      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Greedy + Min-Heap\n        # 0. Direct Boundary -> empty inputs handled implicitly\n        # 1. Sort intervals by start\n        # 2. Iterate queries in ascending order\n        # 3. Push intervals whose start <= query into min-heap (ordered by size)\n        # 4. Remove intervals whose end < query\n        # 5. Result -> top of heap is smallest interval covering query, else -1\n        # 6. Map results back to original query order\n\n        # Sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        res_map = defaultdict(int)\n        # MinHeap of (size, end)\n        min_heap = []\n        # Pointer for intervals\n        i = 0\n\n        # Iterate queries in ascending order\n        for q in sorted(queries):\n\n            # Push all intervals starting <= query into heap\n            while i < len(intervals) and intervals[i][0] <= q:\n                l, r = intervals[i]\n                heapq.heappush(min_heap, (r - l + 1, r))  # (size, end)\n                i += 1\n\n            # Pop intervals ending before query\n            while min_heap and min_heap[0][1] < q:\n                heapq.heappop(min_heap)\n\n            # Record result\n            res_map[q] = min_heap[0][0] if min_heap else -1\n\n        # Map results back to original query order\n        res = [res_map[q] for q in queries]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
+      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Uses a defaultdict map for clarity.\n\n        # Note:\n        # Greedy + Min-Heap\n        # 0. Direct Boundary -> empty inputs handled implicitly\n        # 1. Sort intervals by start\n        # 2. Iterate queries in ascending order\n        # 3. Push intervals whose start <= query into min-heap (ordered by size)\n        # 4. Remove intervals whose end < query\n        # 5. Result -> top of heap is smallest interval covering query, else -1\n        # 6. Map results back to original query order\n\n        # Sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        res_map = defaultdict(int)\n        # MinHeap of (size, end)\n        min_heap = []\n        # Pointer for intervals\n        i = 0\n\n        # Iterate queries in ascending order\n        for q in sorted(queries):\n\n            # Push all intervals starting <= query into heap\n            while i < len(intervals) and intervals[i][0] <= q:\n                l, r = intervals[i]\n                heapq.heappush(min_heap, (r - l + 1, r))  # (size, end)\n                i += 1\n\n            # Pop intervals ending before query\n            while min_heap and min_heap[0][1] < q:\n                heapq.heappop(min_heap)\n\n            # Record result\n            res_map[q] = min_heap[0][0] if min_heap else -1\n\n        # Map results back to original query order\n        res = [res_map[q] for q in queries]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
       "questionNumber": 1851,
-      "solutionLink": "/Notes/intervals#solution-2-array-2---intervalsintervals",
+      "solutionLink": "/Notes/intervals#solution-2-greedy-minheap-2---intervalsintervals",
+      "blog": "Intervals"
+    },
+    {
+      "number": 3,
+      "name": "Greedy MinHeap 3",
+      "type": "intervals",
+      "application": "intervals",
+      "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Uses a hash to avoid recomputation and pushes intervals \n        # into heap lazily.\n        \n        soq = sorted(queries)\n        out = []\n        intervals.sort(key=lambda x: x[0])\n        hsh = {}\n        i=0\n        pq = []\n        for q in soq:\n            if hsh.get(q,-1) != -1:\n                continue\n            \n            while i<len(intervals) and q>=intervals[i][0]:\n                l,r = intervals[i]\n                heapq.heappush(pq,(r-l+1,r))\n                i+=1\n            \n            while pq:\n                pr,end = pq[0]\n                if q>end:\n                    heapq.heappop(pq)\n                else:\n                    hsh[q]=pr\n                    break\n\n            \n        \n        return [hsh.get(p,-1) for p in queries]",
+      "questionNumber": 1851,
+      "solutionLink": "/Notes/intervals#solution-3-greedy-minheap-3---intervalsintervals",
       "blog": "Intervals"
     }
   ],

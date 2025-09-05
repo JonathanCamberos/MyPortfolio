@@ -595,7 +595,7 @@ the meetings without conflicts.
         return res
 ```
 
-## 1851. Minimum Interval to Include Each Query ::2:: - Hard
+## 1851. Minimum Interval to Include Each Query ::3:: - Hard
 
 Topics:  Array, Binary Search, Line Sweep, Sorting, Heap (Priority Queue)
 
@@ -660,17 +660,20 @@ covers a query, return -1.
 ```python
 ```
 
-### Solution 1: array - Intervals/Intervals
+### Solution 1: Greedy MinHeap 1 - Intervals/Intervals
 ```python
     def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
         
+        # Note:
+        # Uses sorted queries with indices for mapping results.
+
         # Note:
         # Greedy + Min-Heap
         # 1. Sort intervals by start
         # 2. Sort queries with original indices
         # 3. Iterate queries in ascending order
-        # 4. push all intervals starting <= query into heap
-        # 5. pop intervals ending before query
+        # 4. Intervals <= query -> push to heap
+        # 5. Intervals > query -> pop
         # 6. record result
         # Result -> top of heap is smallest interval covering query, else -1
 
@@ -711,10 +714,13 @@ covers a query, return -1.
         return res
 ```
 
-### Solution 2: array 2 - Intervals/Intervals
+### Solution 2: Greedy MinHeap 2 - Intervals/Intervals
 ```python
     def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
         
+        # Note:
+        # Uses a defaultdict map for clarity.
+
         # Note:
         # Greedy + Min-Heap
         # 0. Direct Boundary -> empty inputs handled implicitly
@@ -760,9 +766,41 @@ covers a query, return -1.
 
 
 
+### Solution 3: Greedy MinHeap 3 - Intervals/Intervals
+```python
+    def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
+        
+        # Note:
+        # Uses a hash to avoid recomputation and pushes intervals 
+        # into heap lazily.
+        
+        soq = sorted(queries)
+        out = []
+        intervals.sort(key=lambda x: x[0])
+        hsh = {}
+        i=0
+        pq = []
+        for q in soq:
+            if hsh.get(q,-1) != -1:
+                continue
+            
+            while i<len(intervals) and q>=intervals[i][0]:
+                l,r = intervals[i]
+                heapq.heappush(pq,(r-l+1,r))
+                i+=1
+            
+            while pq:
+                pr,end = pq[0]
+                if q>end:
+                    heapq.heappop(pq)
+                else:
+                    hsh[q]=pr
+                    break
 
-
-
+            
+        
+        return [hsh.get(p,-1) for p in queries]
+```
 
 
 

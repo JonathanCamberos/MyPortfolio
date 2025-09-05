@@ -73,6 +73,19 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 57
   },
+  "7": {
+    "questionNum": 7,
+    "questionTitle": "Reverse Integer ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-2^31, 2^31 - 1], then return 0. Assume the environment does not allow you to store 64-bit integers (signed or unsigned).",
+    "questionTopics": [
+      "Math"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#7-reverse-integer-2---medium",
+    "blog": "LeetCode: Bit Manipulation",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "11": {
     "questionNum": 11,
     "questionTitle": "Container With Most Water ::1::",
@@ -750,6 +763,20 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "136": {
+    "questionNum": 136,
+    "questionTitle": "Single Number ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given a non-empty array of integers nums, every element appears twice except for one. Find that single one. You must implement a solution with a linear runtime complexity and use only constant extra space.",
+    "questionTopics": [
+      "Array",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#136-single-number-2---easy",
+    "blog": "LeetCode: Bit Manipulation",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "138": {
     "questionNum": 138,
     "questionTitle": "Copy List with Random Pointer ::3::",
@@ -915,6 +942,34 @@
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 57
+  },
+  "190": {
+    "questionNum": 190,
+    "questionTitle": "Reverse Bits ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Reverse bits of a given 32 bits signed integer. Follow up: If this function is called many times, how would you optimize it?",
+    "questionTopics": [
+      "Divide and Conquer",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#190-reverse-bits-1---easy",
+    "blog": "LeetCode: Bit Manipulation",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "191": {
+    "questionNum": 191,
+    "questionTitle": "Number of 1 Bits ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given a positive integer n, write a function that returns the number of set bits in its binary representation (also known as the Hamming weight). A set bit refers to a bit in the binary representation of a number that has a value of 1. Follow up: If this function is called many times, how would you optimize it?",
+    "questionTopics": [
+      "Divide and Conquer",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#191-number-of-1-bits-2---easy",
+    "blog": "LeetCode: Bit Manipulation",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "198": {
     "questionNum": 198,
@@ -1246,6 +1301,24 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "268": {
+    "questionNum": 268,
+    "questionTitle": "Missing Number ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array. Follow up: Could you implement a solution using only O(1) extra space complexity and O(n) runtime complexity?",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Math",
+      "Binary Search",
+      "Bit Manipulation",
+      "Sorting"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#268-missing-number-2---easy",
+    "blog": "LeetCode: Bit Manipulation",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "271": {
     "questionNum": 271,
     "questionTitle": "String Encode and Decode ::2::",
@@ -1390,6 +1463,20 @@
     ],
     "questionLink": "/Notes/leetcode-heaps#355-design-twitter-2---medium",
     "blog": "LeetCode: Heaps",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "371": {
+    "questionNum": 371,
+    "questionTitle": "Sum of Two Integers ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given two integers a and b, return the sum of the two integers without using the operators + and -.",
+    "questionTopics": [
+      "Math",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#371-sum-of-two-integers-2---medium",
+    "blog": "LeetCode: Bit Manipulation",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1824,7 +1911,7 @@
   },
   "1851": {
     "questionNum": 1851,
-    "questionTitle": "Minimum Interval to Include Each Query ::2::",
+    "questionTitle": "Minimum Interval to Include Each Query ::3::",
     "questionDifficulty": "Hard",
     "questionBlurb": "You are given a 2D integer array intervals, where intervals[i] = [lefti, righti] describes the ith interval starting at lefti and ending at righti (inclusive). The size of an interval is defined as the number of integers it contains, or more formally righti - lefti + 1. You are also given an integer array queries. The answer to the jth query is the size of the smallest interval i such that lefti < = queries[j] < = righti. If no such interval exists, the answer is -1. Return an array containing the answers to the queries.",
     "questionTopics": [
@@ -1834,7 +1921,7 @@
       "Sorting",
       "Heap (Priority Queue)"
     ],
-    "questionLink": "/Notes/intervals#1851-minimum-interval-to-include-each-query-2---hard",
+    "questionLink": "/Notes/intervals#1851-minimum-interval-to-include-each-query-3---hard",
     "blog": "Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1

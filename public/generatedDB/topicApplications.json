@@ -703,5 +703,16 @@
       "useCaseLink": "/Notes/intervals#intervals-application-intervals",
       "blog": "Intervals"
     }
+  ],
+  "bit-manipulation": [
+    {
+      "type": "Bit Manipulation",
+      "title": "Bit Manipulation",
+      "summary": "Pattern: bits!",
+      "exampleIntro": "bits numbers!!",
+      "codeExample": "def bitss!(n: int) -> int:\n\n        return n+1",
+      "useCaseLink": "/Notes/leetcode-bit-manipulation#bit-manipulation-application-bit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    }
   ]
 }

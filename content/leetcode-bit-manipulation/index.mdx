@@ -1,0 +1,539 @@
+---
+title: "LeetCode: Bit Manipulation"
+description: "bit manipulation"
+image: "../../public/Notes/bit-manipulation.png"
+publishedAt: "2025-10-04"
+updatedAt: "2025-10-04"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- data structures and algorithms
+---
+
+## Bit Manipulation Intro
+
+### What is Bit Manipulation
+
+bits!
+
+### Bit Manipulation IRL
+
+bits!
+
+### Bit Manipulation Application: Bit Manipulation
+Pattern: bits! 
+
+Ex: bits numbers!!
+```python
+    def bitss!(n: int) -> int:
+
+        return n+1
+```
+
+
+## 136. Single Number ::2:: - Easy
+
+Topics:  Array, Bit Manipulation
+
+### Intro
+> Given a non-empty array of integers nums, every element 
+> appears twice except for one. Find that single one.
+> You must implement a solution with a linear runtime 
+> complexity and use only constant extra space.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [2,2,1] | 1 |
+| nums = [4,1,2,1,2] | 4 |
+| nums = [1] | 1 |
+
+Constraints:
+
+1 &leq; nums.length &leq; 3 * 10<sup>4</sup>
+
+-3 * 10<sup>4</sup> &leq; nums[i] &leq; 3 * 10<sup>4</sup>
+
+Each element in the array appears twice except for one element which appears only once.
+
+### Abstraction
+Given a list of integers, find the integer that only appears once.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: HashSet Counting With Extra Space - Bit Manipulation/Bit Manipulation
+```python
+    def singleNumber(self, nums: List[int]) -> int:
+        # Note:
+        # XOR Approach
+        # 1. XOR of a number with itself is 0
+        # 2. XOR of a number with 0 is the number itself
+        # 3. XOR is commutative and associative
+        # 4. So XORing all numbers leaves only the unique number
+
+        result = 0
+
+        for num in nums:
+            result ^= num  # XOR accumulates the unique number
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return result
+```
+
+### Solution 2: Bit Manipulation XOR Trick - Bit Manipulation/Bit Manipulation
+```python
+    def singleNumber(self, nums: List[int]) -> int:
+        # Note:
+        # XOR Approach
+        # 1. XOR of a number with itself is 0
+        # 2. XOR of a number with 0 is the number itself
+        # 3. XOR is commutative and associative
+        # 4. So XORing all numbers leaves only the unique number
+
+        result = 0
+
+        for num in nums:
+            result ^= num  # XOR accumulates the unique number
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return result
+```
+
+
+## 191. Number of 1 Bits ::2:: - Easy
+
+Topics:  Divide and Conquer, Bit Manipulation
+
+### Intro
+> Given a positive integer n, write a function that returns the 
+> number of set bits in its binary representation (also known 
+> as the Hamming weight).
+> A set bit refers to a bit in the binary representation of a 
+> number that has a value of 1.
+> Follow up: If this function is called many times, 
+> how would you optimize it?
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 11 | 3 |
+| n = 128 | 1 |
+| n = 2147483645 | 30 |
+
+Constraints:
+
+1 &leq; n &leq; 2<sup>31</sup> - 1
+
+### Abstraction
+Given an integer, find the hamming weight.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Bit Manipulation Brian Kernighan’s Algorithm - Bit Manipulation/Bit Manipulation
+```python
+    def hammingWeight(self, n: int) -> int:
+        # Note:
+        # Brian Kernighan's Approach
+        # 1. Each iteration removes the lowest set bit: n & (n-1)
+        # 2. Count iterations until n becomes 0
+        # 3. Efficient: runs in O(k) where k = # of set bits
+
+        count = 0
+
+        while n:
+            n &= n - 1  # remove the lowest set bit
+            count += 1
+
+        # overall: time complexity O(k), k = number of set bits
+        # overall: space complexity O(1)
+        return count
+```
+
+### Solution 2: Bit Manipulation Shift and Mask - Bit Manipulation/Bit Manipulation
+```python
+    def hammingWeight(self, n: int) -> int:
+        # Note:
+        # Shift & Mask Approach
+        # 1. Check each bit from LSB to MSB
+        # 2. Increment count if the bit is 1
+        # 3. Repeat until all 32 bits are processed
+
+        count = 0
+        for _ in range(32):
+            count += n & 1
+            n >>= 1  # shift right by 1
+
+        # overall: time complexity O(32) = O(1)
+        # overall: space complexity O(1)
+        return count
+```
+
+## 190. Reverse Bits ::1:: - Easy
+
+Topics:  Divide and Conquer, Bit Manipulation
+
+### Intro
+> Reverse bits of a given 32 bits signed integer.
+> Follow up: If this function is called many times, 
+> how would you optimize it?
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 43261596 | 964176192 |
+| n = 2147483644 | 1073741822 |
+
+Constraints:
+
+0 &leq; n &leq; 2<sup>31</sup> - 2
+
+n is even
+
+### Abstraction
+Reverse bits of a 32 signed integer.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Iterative Bit Manipulation  - Bit Manipulation/Bit Manipulation
+```python
+    def reverseBits(self, n: int) -> int:
+        result = 0
+        for i in range(32):
+            # Shift result left to make room for next bit
+            result <<= 1
+            # Add least significant bit of n
+            result |= n & 1
+            # Shift n right to process next bit
+            n >>= 1
+        return result
+```
+
+## 268. Missing Number ::2:: - Easy
+
+Topics:  Array, Hash Table, Math, Binary Search, Bit Manipulation, Sorting
+
+### Intro
+> Given an array nums containing n distinct numbers in 
+> the range [0, n], return the only number in the range 
+> that is missing from the array.
+> Follow up: Could you implement a solution using only 
+> O(1) extra space complexity and O(n) runtime complexity?
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| nums = [3,0,1] | 2 |
+| nums = [0,1] | 2 |
+| nums = [9,6,4,2,3,5,7,0,1] | 8 |
+
+Constraints:
+
+n == nums.length
+
+1 &leq; n &leq; 10<sup>4</sup>
+
+0 &leq; nums[i] &leq; n
+
+All the numbers of nums are unique.
+
+### Abstraction
+Given an array of n distinct numbers, in range [0, n],
+return the only number that is missing from the range.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Sum Formula Math O(1) space  - Bit Manipulation/Bit Manipulation
+```python
+    def missingNumber(self, nums: List[int]) -> int:
+        # Note:
+        # Math approach
+        # 0. The sum of numbers 0..n = n*(n+1)/2
+        # 1. Sum all elements in nums
+        # 2. Missing number = expected sum - actual sum
+
+        n = len(nums)
+        expected_sum = n * (n + 1) // 2
+        actual_sum = sum(nums)
+        return expected_sum - actual_sum
+        # Time Complexity: O(n)
+        # Space Complexity: O(1)
+```
+
+### Solution 2: XOR Trick Bit Manipulation O(1) space  - Bit Manipulation/Bit Manipulation
+```python
+    def missingNumber(self, nums: List[int]) -> int:
+        # Note:
+        # XOR approach
+        # 0. XOR all numbers in nums and all numbers 0..n
+        # 1. Because x^x=0, all paired numbers cancel out
+        # 2. Remaining number = missing number
+
+        missing = len(nums)  # start with n
+        for i, num in enumerate(nums):
+            missing ^= i ^ num
+        return missing
+        # Time Complexity: O(n)
+        # Space Complexity: O(1)
+```
+
+
+## 371. Sum of Two Integers ::2:: - Medium
+
+Topics:  Math, Bit Manipulation
+
+### Intro
+> Given two integers a and b, return the sum of the two
+> integers without using the operators + and -. 
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| a = 1, b = 2 | 3 |
+| a = 2, b = 3 | 5 |
+
+Constraints:
+
+### Abstraction
+Given two integers, return the sum without using operators.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Bit Manipulation (Iterative)  - Bit Manipulation/Bit Manipulation
+```python
+    def getSum(self, a: int, b: int) -> int:
+        # Note:
+        # Bitwise approach
+        # 1. Use XOR (^) to sum bits without carry
+        # 2. Use AND (&) + left shift (<<) to compute carry
+        # 3. Repeat until carry is 0
+        # 4. Handle negative numbers with 32-bit mask
+
+        MASK = 0xFFFFFFFF  # limit to 32 bits
+        while b != 0:
+            # sum without carry
+            sum_ = (a ^ b) & MASK
+            # carry
+            carry = ((a & b) << 1) & MASK
+            # update a and b
+            a, b = sum_, carry
+
+        # if a > 2^31-1, it's negative in 32-bit signed
+        return a if a <= 0x7FFFFFFF else ~(a ^ MASK)
+
+        # Time Complexity: O(1)  - at most 32 iterations
+        # Space Complexity: O(1)
+```
+
+### Solution 2: Recursive Bitwise  - Bit Manipulation/Bit Manipulation
+```python
+def getSum(self, a: int, b: int) -> int:
+        # Note:
+        # Recursive version of XOR + carry
+        MASK = 0xFFFFFFFF
+
+        if b == 0:
+            return a if a <= 0x7FFFFFFF else ~(a ^ MASK)
+
+        sum_ = (a ^ b) & MASK
+        carry = ((a & b) << 1) & MASK
+        return self.getSum(sum_, carry)
+
+        # Time Complexity: O(1)
+        # Space Complexity: O(1) for iterative, O(1) recursive stack depth
+```
+
+
+## 7. Reverse Integer ::2:: - Medium
+
+Topics:  Math
+
+### Intro
+> Given a signed 32-bit integer x, return x with its digits 
+> reversed. If reversing x causes the value to go outside the 
+> signed 32-bit integer range [-2^31, 2^31 - 1], then return 0.
+> Assume the environment does not allow you to store
+> 64-bit integers (signed or unsigned).
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| x = 123 | 321 |
+| x = -123 | -321 |
+| x = 120 | 21 |
+
+Constraints:
+
+-2<sup>31</sup> &leq; x &leq; 2<sup>31</sup> - 1
+
+### Abstraction
+Given a 32-bit integer, reverse it.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Iterative Math Approach  - Bit Manipulation/Bit Manipulation
+```python
+    def reverse(self, x: int) -> int:
+        # Note:
+        # 1. Extract digits one by one using modulo 10
+        # 2. Append to result using multiply by 10 + digit
+        # 3. Handle negative numbers
+        # 4. Check for 32-bit overflow
+
+        INT_MAX = 2**31 - 1
+        INT_MIN = -2**31
+
+        res = 0
+        sign = 1 if x >= 0 else -1
+        x = abs(x)
+
+        while x != 0:
+            digit = x % 10
+            x //= 10
+
+            # Check overflow before multiplying by 10
+            if res > (INT_MAX - digit) // 10:
+                return 0
+
+            res = res * 10 + digit
+
+        return sign * res
+
+        # Time Complexity: O(log10(x)) - number of digits
+        # Space Complexity: O(1)
+```
+
