@@ -101,9 +101,9 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="hidden sm:flex items-center dark:text-light transform -translate-x-8">
-          <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
+          {/* <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
-          </Link>
+          </Link> */}
           <Link href="/SearchNotes/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             Notes
           </Link>
@@ -170,13 +170,13 @@ const Header = () => {
       ur not supposed to see this :)
     </div>
         <nav className="flex flex-col items-start text-dark dark:text-light">
-          <Link
+          {/* <Link
             href="/"
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
             onClick={toggle}
           >
             Home
-          </Link>
+          </Link> */}
           <Link
             href="/SearchNotes/all-categories"
             className="mb-2 hover:text-accent dark:hover:text-accentDark"
