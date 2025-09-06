@@ -75,13 +75,13 @@
   },
   "7": {
     "questionNum": 7,
-    "questionTitle": "Reverse Integer ::2::",
+    "questionTitle": "Reverse Integer ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-2^31, 2^31 - 1], then return 0. Assume the environment does not allow you to store 64-bit integers (signed or unsigned).",
     "questionTopics": [
       "Math"
     ],
-    "questionLink": "/Notes/leetcode-bit-manipulation#7-reverse-integer-2---medium",
+    "questionLink": "/Notes/leetcode-bit-manipulation#7-reverse-integer-1---medium",
     "blog": "LeetCode: Bit Manipulation",
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -1468,14 +1468,14 @@
   },
   "371": {
     "questionNum": 371,
-    "questionTitle": "Sum of Two Integers ::2::",
+    "questionTitle": "Sum of Two Integers ::1::",
     "questionDifficulty": "Medium",
     "questionBlurb": "Given two integers a and b, return the sum of the two integers without using the operators + and -.",
     "questionTopics": [
       "Math",
       "Bit Manipulation"
     ],
-    "questionLink": "/Notes/leetcode-bit-manipulation#371-sum-of-two-integers-2---medium",
+    "questionLink": "/Notes/leetcode-bit-manipulation#371-sum-of-two-integers-1---medium",
     "blog": "LeetCode: Bit Manipulation",
     "lastSubmittedDate": null,
     "coldnessCount": -1

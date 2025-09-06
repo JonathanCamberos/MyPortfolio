@@ -115,7 +115,7 @@
       "name": "Iterative Math Approach",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def reverse(self, x: int) -> int:\n        # Note:\n        # 1. Extract digits one by one using modulo 10\n        # 2. Append to result using multiply by 10 + digit\n        # 3. Handle negative numbers\n        # 4. Check for 32-bit overflow\n\n        INT_MAX = 2**31 - 1\n        INT_MIN = -2**31\n\n        res = 0\n        sign = 1 if x >= 0 else -1\n        x = abs(x)\n\n        while x != 0:\n            digit = x % 10\n            x //= 10\n\n            # Check overflow before multiplying by 10\n            if res > (INT_MAX - digit) // 10:\n                return 0\n\n            res = res * 10 + digit\n\n        return sign * res\n\n        # Time Complexity: O(log10(x)) - number of digits\n        # Space Complexity: O(1)",
+      "code": "def reverse(self, x: int) -> int:\n        \n        # -----------------------------------------\n        # Iterative process: process each digit from right to left\n\n        # Example: x = 123\n        # Iteration 1:\n        #   digit = 123 % 10 = 3\n        #   x = 123 // 10 = 12\n        #   res = 0 * 10 + 3 = 3\n        #\n        # Iteration 2:\n        #   digit = 12 % 10 = 2\n        #   x = 12 // 10 = 1\n        #   res = 3 * 10 + 2 = 32\n        #\n        # Iteration 3:\n        #   digit = 1 % 10 = 1\n        #   x = 1 // 10 = 0\n        #   res = 32 * 10 + 1 = 321\n        #\n        # Done, x == 0 → final reversed number = 321\n\n        # -----------------------------------------\n        # Note:\n        # 1. Extract digits one by one using modulo 10\n        # 2. Append to result using multiply by 10 + digit\n        # 3. Handle negative numbers\n        # 4. Check for 32-bit overflow\n        # Result -> \n\n\n        INT_MAX = 2**31 - 1 # 2147483647\n        INT_MIN = -2**31    # -2147483648\n\n        res = 0\n        sign = 1 if x >= 0 else -1\n        x = abs(x)\n\n        while x != 0:\n            digit = x % 10\n            x //= 10\n\n            # Check overflow before multiplying by 10\n            if res > (INT_MAX - digit) // 10:\n            \n                # would overflow 32-bit signed integer\n                return 0\n\n            res = res * 10 + digit\n\n        # Apply original sign\n        res1 = sign * res\n\n        # overall: time complexity O(log10(x))\n        # overall: space complexity O(1)\n        return res1",
       "questionNumber": 7,
       "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-iterative-math-approach---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
@@ -1471,7 +1471,7 @@
       "name": "Iterative Bit Manipulation",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def reverseBits(self, n: int) -> int:\n        result = 0\n        for i in range(32):\n            # Shift result left to make room for next bit\n            result <<= 1\n            # Add least significant bit of n\n            result |= n & 1\n            # Shift n right to process next bit\n            n >>= 1\n        return result",
+      "code": "def reverseBits(self, n: int) -> int:\n\n        # Note:\n        # 1. Given a 32-bit signed integer\n        # 2. Iterate res left by 1 and n right by 1 to continuing copying right most bit\n        # Result -> reversed n\n\n        result = 0\n\n        # Iterate over 32 bits\n        for _ in range(32):\n\n            # shift result left by 1, making space for new rightmost bit\n            result <<= 1\n\n            # copy n's rightmost bit (least significant) to res\n            result |= n & 1\n            \n            # shift n right by 1, preparing next bit for copy\n            n >>= 1\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return result",
       "questionNumber": 190,
       "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-iterative-bit-manipulation---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
@@ -2014,22 +2014,22 @@
   "268": [
     {
       "number": 1,
-      "name": "Sum Formula Math O(1) space",
+      "name": "Verify Against Math Formula",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def missingNumber(self, nums: List[int]) -> int:\n        # Note:\n        # Math approach\n        # 0. The sum of numbers 0..n = n*(n+1)/2\n        # 1. Sum all elements in nums\n        # 2. Missing number = expected sum - actual sum\n\n        n = len(nums)\n        expected_sum = n * (n + 1) // 2\n        actual_sum = sum(nums)\n        return expected_sum - actual_sum\n        # Time Complexity: O(n)\n        # Space Complexity: O(1)",
+      "code": "def missingNumber(self, nums: List[int]) -> int:\n        \n        # Note:\n        # Math approach\n        # 0. The sum of numbers 0 -> n is (n * (n+1)/2)\n        # 1. Sum all elements in nums\n        # 2. Missing = expected sum - actual sum\n\n        n = len(nums)\n        \n        expected_sum = n * (n + 1) // 2\n        \n        sum = 0\n        for n in nums:\n            sum += n\n\n        missing = expected_sum - sum\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return missing",
       "questionNumber": 268,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-sum-formula-math-o-1-space---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-verify-against-math-formula---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     },
     {
       "number": 2,
-      "name": "XOR Trick Bit Manipulation O(1) space",
+      "name": "XOR Trick",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def missingNumber(self, nums: List[int]) -> int:\n        # Note:\n        # XOR approach\n        # 0. XOR all numbers in nums and all numbers 0..n\n        # 1. Because x^x=0, all paired numbers cancel out\n        # 2. Remaining number = missing number\n\n        missing = len(nums)  # start with n\n        for i, num in enumerate(nums):\n            missing ^= i ^ num\n        return missing\n        # Time Complexity: O(n)\n        # Space Complexity: O(1)",
+      "code": "def missingNumber(self, nums: List[int]) -> int:\n        \n        # Note:\n        # XOR approach\n        # 1. num XOR num -> 0, all paired numbers cancel out\n        # 2. Iterate over range -> num XOR index -> 0\n        # 3. Missing number -> will not XOR correctly, will remain at end\n        # Result -> missing number\n\n        n = len(nums)\n\n        missing = 0\n\n        # loop from 0 to n inclusive\n        for i in range(n + 1):\n\n            # XOR index and array value\n            if i < n:\n                missing ^= i ^ nums[i]\n\n            # i == n, just XOR the number n, avoid out of bounds index\n            else:\n                missing ^= i\n\n        # Time Complexity: O(n)\n        # Space Complexity: O(1)\n        return missing",
       "questionNumber": 268,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-xor-trick-bit-manipulation-o-1-space---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-xor-trick---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
@@ -2304,22 +2304,12 @@
   "371": [
     {
       "number": 1,
-      "name": "Bit Manipulation (Iterative)",
+      "name": "Bit Manipulation",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def getSum(self, a: int, b: int) -> int:\n        # Note:\n        # Bitwise approach\n        # 1. Use XOR (^) to sum bits without carry\n        # 2. Use AND (&) + left shift (<<) to compute carry\n        # 3. Repeat until carry is 0\n        # 4. Handle negative numbers with 32-bit mask\n\n        MASK = 0xFFFFFFFF  # limit to 32 bits\n        while b != 0:\n            # sum without carry\n            sum_ = (a ^ b) & MASK\n            # carry\n            carry = ((a & b) << 1) & MASK\n            # update a and b\n            a, b = sum_, carry\n\n        # if a > 2^31-1, it's negative in 32-bit signed\n        return a if a <= 0x7FFFFFFF else ~(a ^ MASK)\n\n        # Time Complexity: O(1)  - at most 32 iterations\n        # Space Complexity: O(1)",
+      "code": "def getSum(self, a: int, b: int) -> int:\n        \n        # -----------------------------------------\n        # a  b  '^' sum (without carry)  carry\n        # 0  0        0                    0\n        # 0  1        1                    0\n        # 1  0        1                    0\n        # 1  1        0                    1\n\n        # -----------------------------------------\n        # Note:\n        # all bits are processed in parallel, one bit at a time\n\n        # Iteration 1: sum bits 0 and 1 (rightmost two bits) \n        # a = 0110\n        # b = 0011\n        # sum_ = a ^ b = 0101\n        # carry = (a & b) << 1 = 0100  (carry from bit 1 moves to bit 2)\n\n        # Iteration 2: sum bits 2 and 2 (carry affecting bit 2)\n        # a = sum_ = 0101\n        # b = carry = 0100\n        # sum_ = a ^ b = 0001\n        # carry = (a & b) << 1 = 0100 << 1 = 1000  (carry from bit 2 moves to bit 3)\n\n        # Iteration 3: sum bits 3 and 3 (carry affecting highest bit)\n        # a = 0001\n        # b = 1000\n        # sum_ = 1001\n        # carry = (a & b) << 1 = 0000  (no more carry)\n\n        # Done, carry is 0 → final sum = 1001 (9)\n\n        # -----------------------------------------\n\n        # Note:\n        # 1. (a ^ b) -> acts as sum without carry, mask ensures all operations are restricted to 32 bits\n        # 2. (a & b) << 1 -> Carry is 1 only when both bits are 1, otherwise 0\n        # 2. carry -> Use AND (&) + left shift (<<)\n        # 3. Repeat until carry is 0 -> no value left\n        # 4. Handle negative numbers with 32-bit mask\n        # Result ->\n\n        # limit to 32 bits\n        MASK = 0xFFFFFFFF\n        maxInt = 2**31 - 1\n\n        # while carry is not 0\n        while b != 0:\n\n            # sum without carry\n            sum_ = (a ^ b) & MASK\n\n            # carry\n            carry = ((a & b) << 1) & MASK\n            \n            # update a and b\n            a, b = sum_, carry\n\n        # if a > 2^31-1, it's negative in 32-bit signed\n        res = a if a <= maxInt else ~(a ^ MASK)\n\n        # overall: time complexity O(1)\n        # overall: space complexity O(1)\n        return res",
       "questionNumber": 371,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation-iterative---bit-manipulationbit-manipulation",
-      "blog": "LeetCode: Bit Manipulation"
-    },
-    {
-      "number": 2,
-      "name": "Recursive Bitwise",
-      "type": "bit-manipulation",
-      "application": "bit-manipulation",
-      "code": "def getSum(self, a: int, b: int) -> int:\n        # Note:\n        # Recursive version of XOR + carry\n        MASK = 0xFFFFFFFF\n\n        if b == 0:\n            return a if a <= 0x7FFFFFFF else ~(a ^ MASK)\n\n        sum_ = (a ^ b) & MASK\n        carry = ((a & b) << 1) & MASK\n        return self.getSum(sum_, carry)\n\n        # Time Complexity: O(1)\n        # Space Complexity: O(1) for iterative, O(1) recursive stack depth",
-      "questionNumber": 371,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-recursive-bitwise---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
