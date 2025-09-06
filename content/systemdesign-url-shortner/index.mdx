@@ -10,5 +10,328 @@ tags:
 - system design
 ---
 
+## Functional Requirements
 
-url shortner! 
+> Features needed to satisfy the needs of the user.
+
+### URL Shortener Functional Requirements
+
+1. Users should be able to submit a long URL and receive a shortened URL.
+
+- Optionally, users should be able to specify a custom alias.
+
+- Optionally, users should be able to specify an expiration date.
+
+2. Users should be able to access the original URL by using the shortened URL.
+
+
+### Out of Scope Requirements
+
+1. User authentication and account management
+
+2. Analytics on link clicks (e.g., click counts, geographic data).
+
+
+## Non Functional Requirements
+
+> Specifications about how a system operates, rather than what tasks it performs.
+> Define system attributes like scalability, latency, security, availability,
+> and are often framed as specific benchmarks.
+> (e.g., system's ability to handle 100 million daily active users,
+> response to queries within 200 milliseconds)
+
+### Requirements
+
+1. System should ensure uniqueness for short codes (no two long URLs should
+map to the same short URL)
+
+2. Redirection should occur with minimal delay (< 100 ms)
+
+3. System should be reliable and available 99.99% of the time
+(availability > consistency)
+
+4. System should scale to support 1B shortened URLs and 100M DAU
+
+### Out of Scope
+
+- Data consistency in real time analytics
+
+- Advanced security features like spam detection and malicious URL filtering.
+
+Note: important consideration in this system is significant imbalance 
+between reads and write operations.
+Read to write ratio is heavily skewed towards reads, as user frequently
+access the shortened URLs.
+The creation of new short URLs is comparatively rare.
+We might see an average of 1000 clicks (reads) for every 1 new short URL
+created (writes).
+We will keep this in mind during caching strategies, database choice, and
+overall architecture.
+
+## TLDR Requirements
+
+1. Functional Requirements
+
+- Users can create short urls from original urls  
+- Optional custom alias  
+- optional expiration time
+- users can access the original url by visiting the short url
+
+2. Non-functional Requirements
+
+- Ensure uniqueness of short urls
+- Low latency redirection
+- Availability >> consistency 
+- Scalable to 1B urls and 100M DAU
+
+## Set Up
+
+### Core Entities
+
+- Original URL
+- Short URL
+- User
+
+### API: the delivery framework
+
+> This sets up a contract between the client and the server
+> and is the first point of reference for high level design.
+
+Usually map 1:1 to functional requirements, but may need 
+multiple endpoints to satisfy and individual functional requirement.
+
+9/10 times we will use a REST API and simply map the functional requirement
+to the correct HTTP method:
+- POST: Create a new resource
+- GET: Read an existing resource
+- PUT: Update an existing resource
+- DELETE: Delete an existing resource
+
+1. POST: Create a new resource
+
+> To shorten a URL, we'll need a POST endpoint that takes in the long URL
+> and the optional alias and expiration date, then returning the shortened URL.
+
+```json
+    // Shorten a URL
+    POST /urls
+    {
+    "long_url": "https://www.example.com/some/very/long/url",
+    "custom_alias": "optional_custom_alias",
+    "expiration_date": "optional_expiration_date"
+    }
+    ->
+    {
+    "short_url": "http://short.ly/abc123"
+    }
+```
+
+2. GET: Read an existing resource
+
+> For redirection, we'll need a GET endpoint that takes in the short code
+> and redirects the user to the original long URL.
+
+```json
+    // Redirect to Original URL
+    GET /{short_code}
+    -> HTTP 302 Redirect to the original long URL
+```
+
+
+## High Level Design
+
+> Start the design by going one by one through our functional requirements
+> and designing a single system to satisfy them.
+> Once we have this abstraction, we can layer on depth via our 
+> deep dives
+
+### Functional Requirement: User submits a long URL and receives a short URL
+
+### Diagram
+Core components high level:
+- Client: Users interact with system through web or mobile app
+- Primary Server: Receives requests from client and handles logic
+- Database: Stores mapping of short URLs to long URLs, user generated aliases, and expiration dates
+
+```python
+    def POST():
+
+                        Write: 1) generate short URL
+                               2) save to DB
+    +--------+  POST:URL +----------------+    SQL Query    +-----------+   Urls
+    | Client | --------> | Primary Server | --------------> | Database  |   - short url code (or custom alias)
+    +--------+           +----------------+                 +-----------+   - original url
+                                                                            - creationTime
+                                                                            - expirationTime?
+                                                                            - createdBy
+```
+
+### Processing
+
+1. Client sends a POST request to */urls*:
+
+Sends long URL, custom alias, expiration dates.
+
+2. Primary Server receives request: 
+
+Validates that is a real URL (to avoid unnecessary shortening),
+via open-source library like is-url or our own validation
+
+Validates that it does not already exist in our system (to avoid collisions),
+via querying our database to check if long URL is already present
+
+3. If URL is valid and does not already exist, we can generate a short URL
+
+Abstract this to magic function for now
+
+If user specified alias, we can use that as short code
+
+4. Once short URL is generated, we insert it into our database
+
+Store short URL, long URL, and expiration date
+
+5. Return short URL to client
+
+Send back response to client with short URL
+
+
+### Functional Requirement: User can access original long URL by using short URL
+
+### Diagram
+```python
+    def GET():
+
+                        Write: 1) generate short URL
+                               2) save to DB
+    +--------+    POST   +----------------+    SQL Query    +-----------+   Urls
+    | Client | --------> | Primary Server | --------------> | Database  |   - short url code (or custom alias)
+    +--------+           +----------------+                 +-----------+   - original url
+                                                                            - creationTime
+                                                                            - expirationTime?
+                                                                            - createdBy
+```
+
+### Processing
+
+1. User browser sends a GET request to serve with short URL *GET /abc123*
+
+2. Primary server receives this request and looks up the short code in database
+
+3. If short code is found and not expired, server retrieves corresponding long URL.
+
+4. Server sends HTTP redirect response to user's browser, sending it to long URL.
+
+There are two main HTTP redirects we could use for this purpose
+
+301 (Permanent Redirect):
+Indicate resource has permanently moved to target URL, which will typically
+cause browsers to cache this responses, leading to future requests for
+the short URL to go directly to the long URL, bypassing the server.
+
+```h
+HTTP/1.1 301 Moved Permanently
+Location: https://www.original-long-url.com
+```
+
+301 (Temporary Redirect):
+Indicate resource has temporary moved to target URL, which browsers
+do not cache this response, leading to future requests for the short URL 
+to go through our primary server first.
+
+```h
+HTTP/1.1 302 Found
+Location: https://www.original-long-url.com
+```
+
+For our case, we prefer 302 redirect because:
+
+- Prevents browser caching and gives us direct control over redirection 
+process, in case we need to update or expire links as needed
+
+- Allows us to track click statistics for each short URL, since it is
+forced to go through our primary server
+
+
+## Deep Dives: Short Urls
+
+### Ensuring URLS are unique
+
+The constraints we need to ensure:
+
+1. Each short URLs should be unique
+2. Keep short URLs as short as possible
+3. Efficiently generate short URLs
+
+### Bad Solution: Long URL Prefix
+
+Approach:
+
+The simplest thing we could do is take a prefix of the input as the short code.
+
+```h
+www.linkedin.com/ -> www.short.ly/www.link
+```
+
+Challenges: 
+
+This would break constraint 1. as different URLs could have the same short URL.
+
+
+### Good Solution: Random Number Generator or Hash Function
+
+Approach:
+
+To add entropy (randomness) to ensure our codes our unique, we could
+try a random number generator or hash function.
+
+Challenges:
+
+Even with entropy, there is a non negligible changes of generating duplicate
+short codes, due to our constraint 2 of short codes.
+Tis leads to a necessity of either generating longer short codes (breaking 
+constraint 2) or adding a check for already existing code which becomes a 
+bottleneck as the system scales (breaking constraint 3)
+
+### Great Solution: Unique Counter with Base62 Encoding
+
+Approach:
+
+One solution to guaranteeing no collisions is to increment a counter for each 
+new url. We would then take the output and encode it using base62 encoding
+to ensure short representation.
+
+Each counter value would be unique which then eliminates the risk of collisions.
+
+Challenges: 
+
+In a distributed environment, maintaining a single global counter can be 
+challenging due to synchronization issues. 
+All instances of our primary server would need to agree on the counter value.
+
+Challenges:
+
+With length, if we have 1B urls, when base62 encoded will lead to 6 character
+strings. 
+
+So we would need to move to 7 character codes once we hit the trillions.
+
+
+## Deep Dives: Fast Redirection
+
+### Ensuring user redirection is fast
+
+When dealing with a large database of shortened URLs,
+our constraints are:
+
+1. Find the right match quickly for smooth user experience
+2. Add optimization to avoid 'full table scans' checking every 
+single pair of short and original URLs in the database
+
+### Good Solution: Add an Index
+
+### Great Solution: Implementing an In Memory Cache (e.g, Redis)
+
+### Great Solution: Leveraging Content Deliver Networks (CDNs) and Edge Computing
+
+
+## Deep Dives: Scaling to 1B shortened URLs and 100M DAU
