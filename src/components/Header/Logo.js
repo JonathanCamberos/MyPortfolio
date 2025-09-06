@@ -20,7 +20,7 @@ const Logo = () => {
 
         {/*  ##### Span Div for name #####*/}
         <span className="font-bold dark:font-semibold text-md sm:text-sm md:text-lg">
-          jonathancamberos
+          jc
         </span>
     </Link>
   )

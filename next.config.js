@@ -2,7 +2,7 @@
 
 const {withContentlayer} = require("next-contentlayer")
 const fs = require('fs');
-const path = require('path'); // <--- Add this line
+const path = require('path');
 
 const filePaths = [
   'content/leetcode-arrays-and-hashing/index.mdx',

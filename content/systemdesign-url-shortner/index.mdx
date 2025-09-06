@@ -1,5 +1,5 @@
 ---
-title: "URL Shortener"
+title: "Design: URL Shortener"
 description: "url shortener"
 image: "../../public/Notes/url-shortener.png"
 publishedAt: "2025-10-13"
@@ -9,6 +9,10 @@ isPublished: true
 tags:
 - system design
 ---
+
+## 1. Design Bit.ly
+
+Topics: Scaling Reads Pattern
 
 ## Functional Requirements
 
@@ -23,7 +27,6 @@ tags:
 - Optionally, users should be able to specify an expiration date.
 
 2. Users should be able to access the original URL by using the shortened URL.
-
 
 ### Out of Scope Requirements
 
@@ -201,9 +204,9 @@ Send back response to client with short URL
 ```python
     def GET():
 
-                        Write: 1) generate short URL
-                               2) save to DB
-    +--------+    POST   +----------------+    SQL Query    +-----------+   Urls
+                        Read: 1) look up original url in DB
+                              2) return with 302 redirect
+    +--------+GET/{short}+----------------+    SQL Query    +-----------+   Urls
     | Client | --------> | Primary Server | --------------> | Database  |   - short url code (or custom alias)
     +--------+           +----------------+                 +-----------+   - original url
                                                                             - creationTime

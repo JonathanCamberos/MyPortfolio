@@ -100,7 +100,7 @@ const Header = () => {
         </button>
 
         {/* Navigation */}
-        <nav className="hidden sm:flex items-center dark:text-light transform -translate-x-8">
+        <nav className="hidden sm:flex items-center dark:text-light transform translate-x-8">
           {/* <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link> */}
@@ -109,6 +109,9 @@ const Header = () => {
           </Link>
           <Link href="/LeetCode" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             LeetCode
+          </Link>
+          <Link href="/SystemDesign" className="mx-2 hover:text-accent dark:hover:text-accentDark">
+            System Design
           </Link>
           <Link href="/About" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             About
@@ -190,6 +193,13 @@ const Header = () => {
             onClick={toggle}
           >
             LeetCode
+          </Link>
+          <Link
+            href="/SystemDesign"
+            className="mb-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={toggle}
+          >
+            System Design
           </Link>
           <Link
             href="/About"

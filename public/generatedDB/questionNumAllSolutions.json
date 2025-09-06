@@ -1174,22 +1174,12 @@
   "136": [
     {
       "number": 1,
-      "name": "HashSet Counting With Extra Space",
-      "type": "bit-manipulation",
-      "application": "bit-manipulation",
-      "code": "def singleNumber(self, nums: List[int]) -> int:\n        # Note:\n        # XOR Approach\n        # 1. XOR of a number with itself is 0\n        # 2. XOR of a number with 0 is the number itself\n        # 3. XOR is commutative and associative\n        # 4. So XORing all numbers leaves only the unique number\n\n        result = 0\n\n        for num in nums:\n            result ^= num  # XOR accumulates the unique number\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
-      "questionNumber": 136,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-hashset-counting-with-extra-space---bit-manipulationbit-manipulation",
-      "blog": "LeetCode: Bit Manipulation"
-    },
-    {
-      "number": 2,
       "name": "Bit Manipulation XOR Trick",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def singleNumber(self, nums: List[int]) -> int:\n        # Note:\n        # XOR Approach\n        # 1. XOR of a number with itself is 0\n        # 2. XOR of a number with 0 is the number itself\n        # 3. XOR is commutative and associative\n        # 4. So XORing all numbers leaves only the unique number\n\n        result = 0\n\n        for num in nums:\n            result ^= num  # XOR accumulates the unique number\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
+      "code": "def singleNumber(self, nums: List[int]) -> int:\n        \n        # Note:\n        # 1. num XOR num -> 0\n        # 2. num XOR 0 -> num\n        # 3. XOR is commutative and associative\n        # 4. Iterate XOR over all pairs of numbers to leave the unique number\n\n        result = 0\n\n        # Accumulative XOR to generate the unique number\n        for num in nums:\n            result ^= num\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
       "questionNumber": 136,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-bit-manipulation-xor-trick---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation-xor-trick---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
@@ -1490,22 +1480,22 @@
   "191": [
     {
       "number": 1,
-      "name": "Bit Manipulation Brian Kernighan’s Algorithm",
+      "name": "Basic Shift and Mask",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def hammingWeight(self, n: int) -> int:\n        # Note:\n        # Brian Kernighan's Approach\n        # 1. Each iteration removes the lowest set bit: n & (n-1)\n        # 2. Count iterations until n becomes 0\n        # 3. Efficient: runs in O(k) where k = # of set bits\n\n        count = 0\n\n        while n:\n            n &= n - 1  # remove the lowest set bit\n            count += 1\n\n        # overall: time complexity O(k), k = number of set bits\n        # overall: space complexity O(1)\n        return count",
+      "code": "def hammingWeight(self, n: int) -> int:\n        \n        # Note:\n        # 1. Given a 32-bit signed integer, check all bits for set\n        # 2. Set bit check -> check lowest bit\n        # 3. Iterate -> shift binary representation by 1\n        # Result -> count of set bits of binary representation\n\n        count = 0\n\n        for _ in range(32):\n            \n            # set bit check -> validate if lowest bit is 1\n            count += n & 1 \n\n            # iterate -> shift right by 1 regardless\n            n >>= 1\n\n        # overall: time complexity O(32) = O(1)\n        # overall: space complexity O(1)\n        return count",
       "questionNumber": 191,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation-brian-kernighan-s-algorithm---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-basic-shift-and-mask---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     },
     {
       "number": 2,
-      "name": "Bit Manipulation Shift and Mask",
+      "name": "Brian Kernighan Algorithm",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def hammingWeight(self, n: int) -> int:\n        # Note:\n        # Shift & Mask Approach\n        # 1. Check each bit from LSB to MSB\n        # 2. Increment count if the bit is 1\n        # 3. Repeat until all 32 bits are processed\n\n        count = 0\n        for _ in range(32):\n            count += n & 1\n            n >>= 1  # shift right by 1\n\n        # overall: time complexity O(32) = O(1)\n        # overall: space complexity O(1)\n        return count",
+      "code": "def hammingWeight(self, n: int) -> int:\n        \n        # Note:\n        # 1. Iterate while some bit is set\n        # 2. Removes the lowest/rightmost set bit\n        # 3. Add to count\n        # Result -> count number of set bits\n\n        count = 0\n\n        # continues while some bit is set\n        while n:\n            \n            # clears the right most 1 and everything to the right of it\n            # n      = 101000\n            # n - 1  = 100111\n            # ----------------\n            # n&(n-1)= 100000\n\n            n &= (n - 1)\n\n            # add to set bit count\n            count += 1\n\n        # overall: time complexity O(k), k = number of set bits\n        # overall: space complexity O(1)\n        return count",
       "questionNumber": 191,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-bit-manipulation-shift-and-mask---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-brian-kernighan-algorithm---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
