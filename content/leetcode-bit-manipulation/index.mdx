@@ -265,16 +265,31 @@ Reverse bits of a 32 signed integer.
 ### Solution 1: Iterative Bit Manipulation  - Bit Manipulation/Bit Manipulation
 ```python
     def reverseBits(self, n: int) -> int:
+
+        # Note:
+        # 1. Given a 32-bit signed integer
+        # 2. Iterate res left by 1 and n right by 1 to continuing copying right most bit
+        # Result -> reversed n
+
         result = 0
-        for i in range(32):
-            # Shift result left to make room for next bit
+
+        # Iterate over 32 bits
+        for _ in range(32):
+
+            # shift result left by 1, making space for new rightmost bit
             result <<= 1
-            # Add least significant bit of n
+
+            # copy n's rightmost bit (least significant) to res
             result |= n & 1
-            # Shift n right to process next bit
+            
+            # shift n right by 1, preparing next bit for copy
             n >>= 1
+        
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
         return result
 ```
+
 
 ## 268. Missing Number ::2:: - Easy
 
@@ -332,42 +347,63 @@ return the only number that is missing from the range.
 ```python
 ```
 
-### Solution 1: Sum Formula Math O(1) space  - Bit Manipulation/Bit Manipulation
+### Solution 1: Verify Against Math Formula - Bit Manipulation/Bit Manipulation
 ```python
     def missingNumber(self, nums: List[int]) -> int:
+        
         # Note:
         # Math approach
-        # 0. The sum of numbers 0..n = n*(n+1)/2
+        # 0. The sum of numbers 0 -> n is (n * (n+1)/2)
         # 1. Sum all elements in nums
-        # 2. Missing number = expected sum - actual sum
+        # 2. Missing = expected sum - actual sum
 
         n = len(nums)
+        
         expected_sum = n * (n + 1) // 2
-        actual_sum = sum(nums)
-        return expected_sum - actual_sum
-        # Time Complexity: O(n)
-        # Space Complexity: O(1)
+        
+        sum = 0
+        for n in nums:
+            sum += n
+
+        missing = expected_sum - sum
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1)
+        return missing
 ```
 
-### Solution 2: XOR Trick Bit Manipulation O(1) space  - Bit Manipulation/Bit Manipulation
+### Solution 2: XOR Trick  - Bit Manipulation/Bit Manipulation
 ```python
     def missingNumber(self, nums: List[int]) -> int:
+        
         # Note:
         # XOR approach
-        # 0. XOR all numbers in nums and all numbers 0..n
-        # 1. Because x^x=0, all paired numbers cancel out
-        # 2. Remaining number = missing number
+        # 1. num XOR num -> 0, all paired numbers cancel out
+        # 2. Iterate over range -> num XOR index -> 0
+        # 3. Missing number -> will not XOR correctly, will remain at end
+        # Result -> missing number
 
-        missing = len(nums)  # start with n
-        for i, num in enumerate(nums):
-            missing ^= i ^ num
-        return missing
+        n = len(nums)
+
+        missing = 0
+
+        # loop from 0 to n inclusive
+        for i in range(n + 1):
+
+            # XOR index and array value
+            if i < n:
+                missing ^= i ^ nums[i]
+
+            # i == n, just XOR the number n, avoid out of bounds index
+            else:
+                missing ^= i
+
         # Time Complexity: O(n)
         # Space Complexity: O(1)
+        return missing
 ```
 
-
-## 371. Sum of Two Integers ::2:: - Medium
+## 371. Sum of Two Integers ::1:: - Medium
 
 Topics:  Math, Bit Manipulation
 
@@ -410,52 +446,76 @@ Given two integers, return the sum without using operators.
 ```python
 ```
 
-### Solution 1: Bit Manipulation (Iterative)  - Bit Manipulation/Bit Manipulation
+### Solution 1: Bit Manipulation - Bit Manipulation/Bit Manipulation
 ```python
     def getSum(self, a: int, b: int) -> int:
-        # Note:
-        # Bitwise approach
-        # 1. Use XOR (^) to sum bits without carry
-        # 2. Use AND (&) + left shift (<<) to compute carry
-        # 3. Repeat until carry is 0
-        # 4. Handle negative numbers with 32-bit mask
+        
+        # -----------------------------------------
+        # a  b  '^' sum (without carry)  carry
+        # 0  0        0                    0
+        # 0  1        1                    0
+        # 1  0        1                    0
+        # 1  1        0                    1
 
-        MASK = 0xFFFFFFFF  # limit to 32 bits
+        # -----------------------------------------
+        # Note:
+        # all bits are processed in parallel, one bit at a time
+
+        # Iteration 1: sum bits 0 and 1 (rightmost two bits) 
+        # a = 0110
+        # b = 0011
+        # sum_ = a ^ b = 0101
+        # carry = (a & b) << 1 = 0100  (carry from bit 1 moves to bit 2)
+
+        # Iteration 2: sum bits 2 and 2 (carry affecting bit 2)
+        # a = sum_ = 0101
+        # b = carry = 0100
+        # sum_ = a ^ b = 0001
+        # carry = (a & b) << 1 = 0100 << 1 = 1000  (carry from bit 2 moves to bit 3)
+
+        # Iteration 3: sum bits 3 and 3 (carry affecting highest bit)
+        # a = 0001
+        # b = 1000
+        # sum_ = 1001
+        # carry = (a & b) << 1 = 0000  (no more carry)
+
+        # Done, carry is 0 → final sum = 1001 (9)
+
+        # -----------------------------------------
+
+        # Note:
+        # 1. (a ^ b) -> acts as sum without carry, mask ensures all operations are restricted to 32 bits
+        # 2. (a & b) << 1 -> Carry is 1 only when both bits are 1, otherwise 0
+        # 2. carry -> Use AND (&) + left shift (<<)
+        # 3. Repeat until carry is 0 -> no value left
+        # 4. Handle negative numbers with 32-bit mask
+        # Result ->
+
+        # limit to 32 bits
+        MASK = 0xFFFFFFFF
+        maxInt = 2**31 - 1
+
+        # while carry is not 0
         while b != 0:
+
             # sum without carry
             sum_ = (a ^ b) & MASK
+
             # carry
             carry = ((a & b) << 1) & MASK
+            
             # update a and b
             a, b = sum_, carry
 
         # if a > 2^31-1, it's negative in 32-bit signed
-        return a if a <= 0x7FFFFFFF else ~(a ^ MASK)
+        res = a if a <= maxInt else ~(a ^ MASK)
 
-        # Time Complexity: O(1)  - at most 32 iterations
-        # Space Complexity: O(1)
+        # overall: time complexity O(1)
+        # overall: space complexity O(1)
+        return res
 ```
 
-### Solution 2: Recursive Bitwise  - Bit Manipulation/Bit Manipulation
-```python
-def getSum(self, a: int, b: int) -> int:
-        # Note:
-        # Recursive version of XOR + carry
-        MASK = 0xFFFFFFFF
-
-        if b == 0:
-            return a if a <= 0x7FFFFFFF else ~(a ^ MASK)
-
-        sum_ = (a ^ b) & MASK
-        carry = ((a & b) << 1) & MASK
-        return self.getSum(sum_, carry)
-
-        # Time Complexity: O(1)
-        # Space Complexity: O(1) for iterative, O(1) recursive stack depth
-```
-
-
-## 7. Reverse Integer ::2:: - Medium
+## 7. Reverse Integer ::1:: - Medium
 
 Topics:  Math
 
@@ -507,14 +567,39 @@ Given a 32-bit integer, reverse it.
 ### Solution 1: Iterative Math Approach  - Bit Manipulation/Bit Manipulation
 ```python
     def reverse(self, x: int) -> int:
+        
+        # -----------------------------------------
+        # Iterative process: process each digit from right to left
+
+        # Example: x = 123
+        # Iteration 1:
+        #   digit = 123 % 10 = 3
+        #   x = 123 // 10 = 12
+        #   res = 0 * 10 + 3 = 3
+        #
+        # Iteration 2:
+        #   digit = 12 % 10 = 2
+        #   x = 12 // 10 = 1
+        #   res = 3 * 10 + 2 = 32
+        #
+        # Iteration 3:
+        #   digit = 1 % 10 = 1
+        #   x = 1 // 10 = 0
+        #   res = 32 * 10 + 1 = 321
+        #
+        # Done, x == 0 → final reversed number = 321
+
+        # -----------------------------------------
         # Note:
         # 1. Extract digits one by one using modulo 10
         # 2. Append to result using multiply by 10 + digit
         # 3. Handle negative numbers
         # 4. Check for 32-bit overflow
+        # Result -> 
 
-        INT_MAX = 2**31 - 1
-        INT_MIN = -2**31
+
+        INT_MAX = 2**31 - 1 # 2147483647
+        INT_MIN = -2**31    # -2147483648
 
         res = 0
         sign = 1 if x >= 0 else -1
@@ -526,13 +611,17 @@ Given a 32-bit integer, reverse it.
 
             # Check overflow before multiplying by 10
             if res > (INT_MAX - digit) // 10:
+            
+                # would overflow 32-bit signed integer
                 return 0
 
             res = res * 10 + digit
 
-        return sign * res
+        # Apply original sign
+        res1 = sign * res
 
-        # Time Complexity: O(log10(x)) - number of digits
-        # Space Complexity: O(1)
+        # overall: time complexity O(log10(x))
+        # overall: space complexity O(1)
+        return res1
 ```
 
