@@ -19,7 +19,8 @@ const filePaths = [
   'content/leetcode-1D-dynamic-programming/index.mdx',
   'content/leetcode-greedy/index.mdx',
   'content/leetcode-intervals/index.mdx',
-  'content/leetcode-bit-manipulation/index.mdx'
+  'content/leetcode-bit-manipulation/index.mdx',
+  'content/leetcode-math-and-geometry/index.mdx'
 ];
 
 function syncWarmness() {

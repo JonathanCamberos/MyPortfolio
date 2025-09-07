@@ -294,6 +294,20 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 59
   },
+  "43": {
+    "questionNum": 43,
+    "questionTitle": "Multiply Strings ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string. Note: You must not use any built-in BigInteger library or convert the inputs to integer directly.",
+    "questionTopics": [
+      "Math",
+      "Recursion"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#43-multiply-strings-2---medium",
+    "blog": "LeetCode: Math and Geometry",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "45": {
     "questionNum": 45,
     "questionTitle": "Jump Game II ::1::",
@@ -323,6 +337,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "48": {
+    "questionNum": 48,
+    "questionTitle": "Rotate Image ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise). You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.",
+    "questionTopics": [
+      "Array",
+      "Math",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#48-rotate-image-1---medium",
+    "blog": "LeetCode: Math and Geometry",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "49": {
     "questionNum": 49,
     "questionTitle": "Group Anagrams ::2::",
@@ -338,6 +367,20 @@
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 59
+  },
+  "50": {
+    "questionNum": 50,
+    "questionTitle": "Pow(x, n) ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Implement pow(x, n), which calculates x raised to the power n (i.e., xn).",
+    "questionTopics": [
+      "Math",
+      "Recursion"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#50-powx-n-1---medium",
+    "blog": "LeetCode: Math and Geometry",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "51": {
     "questionNum": 51,
@@ -365,6 +408,21 @@
     ],
     "questionLink": "/Notes/greedy#53-maximum-subarray-3---medium",
     "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "54": {
+    "questionNum": 54,
+    "questionTitle": "Spiral Matrix ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an m x n matrix, return all elements of the matrix in spiral order.",
+    "questionTopics": [
+      "Array",
+      "Matrix",
+      "Simulation"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#54-spiral-matrix-1---medium",
+    "blog": "LeetCode: Math and Geometry",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -410,6 +468,20 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "66": {
+    "questionNum": 66,
+    "questionTitle": "Plus One ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "You are given a large integer represented as an integer array digits, where each digits[i] is the ith digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading 0's. Increment the large integer by one and return the resulting array of digits.",
+    "questionTopics": [
+      "Array",
+      "Math"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#66-plus-one-1---easy",
+    "blog": "LeetCode: Math and Geometry",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "70": {
     "questionNum": 70,
     "questionTitle": "Climbing Stairs ::4::",
@@ -422,6 +494,21 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#70-climbing-stairs-4---easy",
     "blog": "1D Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "73": {
+    "questionNum": 73,
+    "questionTitle": "Set Matrix Zeroes ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's. You must do it in place. Follow up: A straightforward solution using O(mn) space is probably a bad idea. A simple improvement uses O(m + n) space, but still not the best solution. Could you devise a constant space solution?",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#73-set-matrix-zeroes-1---medium",
+    "blog": "LeetCode: Math and Geometry",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1014,6 +1101,21 @@
     ],
     "questionLink": "/Notes/leetcode-graphs#200-number-of-islands-4---medium",
     "blog": "LeetCode: Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "202": {
+    "questionNum": 202,
+    "questionTitle": "Happy Number ::1::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Write an algorithm to determine if a number n is happy. A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits. Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1. Those numbers for which this process ends in 1 are happy. Return true if n is a happy number, and false if not.",
+    "questionTopics": [
+      "Hash Table",
+      "Math",
+      "Two Pointers"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#202-happy-number-1---easy",
+    "blog": "LeetCode: Math and Geometry",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1937,6 +2039,22 @@
     ],
     "questionLink": "/Notes/greedy#1899-merge-triplets-to-form-target-triplet-1---medium",
     "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "2013": {
+    "questionNum": 2013,
+    "questionTitle": "Detect Squares ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a stream of points on the X-Y plane. Design an algorithm that: Adds new points from the stream into a data structure. Duplicate points are allowed and should be treated as different points. Given a query point, counts the number of ways such that the three points and the query point form an axis-aligned square with positive area. An axis-aligned square is a square whose edges are all the same length and are either parallel or perpendicular to the x-axis and y-axis. Implement the DetectSquares class: DetectSquares() Initializes the object with an empty data structure. void add(int[] point) Adds a new point point = [x, y] to the data structure. int count(int[] point) Counts the number of ways to form axis-aligned squares with point point = [x, y] as described above.",
+    "questionTopics": [
+      "Array",
+      "Hash Table",
+      "Design",
+      "Counting"
+    ],
+    "questionLink": "/Notes/leetcode-math-and-geometry#2013-detect-squares-1---medium",
+    "blog": "LeetCode: Math and Geometry",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }

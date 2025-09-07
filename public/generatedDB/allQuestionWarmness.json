@@ -79,6 +79,10 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 59
   },
+  "43": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "45": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
@@ -87,15 +91,27 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "48": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "49": {
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 59
+  },
+  "50": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "51": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
   "53": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "54": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -111,7 +127,15 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "66": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "70": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "73": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -268,6 +292,10 @@
     "coldnessCount": -1
   },
   "200": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "202": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -504,6 +532,10 @@
     "coldnessCount": -1
   },
   "2000": {
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "2013": {
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }

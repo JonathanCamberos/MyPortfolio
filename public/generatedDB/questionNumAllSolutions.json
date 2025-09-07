@@ -449,6 +449,28 @@
       "blog": "LeetCode: Two Pointers"
     }
   ],
+  "43": [
+    {
+      "number": 1,
+      "name": "Simulate Grade-School Multiplication",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def multiply(self, num1: str, num2: str) -> str:\n        # Note:\n        # 1. Multiply each digit of num1 by each digit of num2\n        # 2. Store intermediate sums in an array of length len(num1) + len(num2)\n        # 3. Handle carry for each position\n        # 4. Convert array to string, skipping leading zeros\n\n        if num1 == \"0\" or num2 == \"0\":\n            return \"0\"\n\n        m, n = len(num1), len(num2)\n        pos = [0] * (m + n)  # store multiplication results\n\n        # multiply digits from right to left\n        for i in range(m - 1, -1, -1):\n            for j in range(n - 1, -1, -1):\n                mul = int(num1[i]) * int(num2[j])\n                p1, p2 = i + j, i + j + 1  # positions in pos array\n                total = mul + pos[p2]\n\n                pos[p2] = total % 10       # current digit\n                pos[p1] += total // 10     # carry\n\n        # convert to string, skipping leading zeros\n        result = []\n        for p in pos:\n            if not result and p == 0:\n                continue\n            result.append(str(p))\n\n        return \"\".join(result)\n        \n        # overall: time complexity O(m*n)\n        # overall: space complexity O(m+n)",
+      "questionNumber": 43,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-simulate-grade-school-multiplication---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    },
+    {
+      "number": 2,
+      "name": "Something",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def multiply(self, num1: str, num2: str) -> str:\n        def strToInt(s):\n            l = len(s)\n            res = 0\n            for c in s:\n                res*=10\n                res+=int(c)%(10**l)\n            return res\n        ans = strToInt(num1)*strToInt(num2)\n        return str(ans)",
+      "questionNumber": 43,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-2-something---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    }
+  ],
   "45": [
     {
       "number": 1,
@@ -473,6 +495,18 @@
       "blog": "LeetCode: Backtracking"
     }
   ],
+  "48": [
+    {
+      "number": 1,
+      "name": "Layer by Layer Rotation",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def rotate(self, matrix: List[List[int]]) -> None:\n        \n        # Note:\n        # Rotate n x n matrix 90 degrees clockwise in-place\n        # Approach:\n        # 1. Process the matrix layer by layer (outermost to innermost)\n        # 2. For each layer, rotate elements in four-way swaps:\n        #    top -> right -> bottom -> left -> top\n        # 3. Repeat for all layers\n        # 4. No extra matrix allocation, in-place modification\n\n        n = len(matrix)\n\n        # There are n//2 layers\n        for layer in range(n // 2):\n            first = layer\n            last = n - 1 - layer\n\n            # Iterate over elements in current layer\n            for i in range(first, last):\n                offset = i - first\n\n                # Save top element\n                top = matrix[first][i]\n\n                # left -> top\n                matrix[first][i] = matrix[last - offset][first]\n\n                # bottom -> left\n                matrix[last - offset][first] = matrix[last][last - offset]\n\n                # right -> bottom\n                matrix[last][last - offset] = matrix[i][last]\n\n                # top -> right\n                matrix[i][last] = top\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(1)",
+      "questionNumber": 48,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-layer-by-layer-rotation---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    }
+  ],
   "49": [
     {
       "number": 1,
@@ -493,6 +527,28 @@
       "questionNumber": 49,
       "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-array-of-26-to-string-key---hashmapgrouping-by-criteria",
       "blog": "LeetCode: Arrays and Hashing"
+    }
+  ],
+  "50": [
+    {
+      "number": 1,
+      "name": "Recursive Fast Exponentiation",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def myPow(self, x: float, n: int) -> float:\n        # Note:\n        # 1. Use divide-and-conquer (fast exponentiation)\n        # 2. Recursively compute half power to reduce computation\n        # 3. If exponent is negative, use reciprocal: x^-n = 1 / x^n\n        # 4. Base case: n == 0 → return 1\n\n        if n == 0:\n            return 1.0\n        if n < 0:\n            return 1 / self.myPow(x, -n)\n\n        half = self.myPow(x, n // 2)\n        \n        if n % 2 == 0:\n            return half * half\n        else:\n            return half * half * x\n\n        # overall: time complexity O(log n)\n        # overall: space complexity O(log n) due to recursion stack",
+      "questionNumber": 50,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-recursive-fast-exponentiation---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    },
+    {
+      "number": 2,
+      "name": "Iterative Fast Exponentiation",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def myPow(self, x: float, n: int) -> float:\n        # Note:\n        # 1. Use binary exponentiation iteratively\n        # 2. Convert negative exponent to positive and invert at end\n        # 3. Multiply result by x whenever the current bit of n is 1\n        # 4. Shift exponent right each iteration\n\n        N = n\n        if N < 0:\n            x = 1 / x\n            N = -N\n\n        result = 1.0\n        current_product = x\n\n        while N > 0:\n            if N % 2 == 1:  # current bit is 1\n                result *= current_product\n            current_product *= current_product  # square for next bit\n            N //= 2\n\n        return result\n\n        # overall: time complexity O(log n)\n        # overall: space complexity O(1)",
+      "questionNumber": 50,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-2-iterative-fast-exponentiation---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
     }
   ],
   "51": [
@@ -549,6 +605,18 @@
       "blog": "Greedy"
     }
   ],
+  "54": [
+    {
+      "number": 1,
+      "name": "Layer by Layer Spiral Traversal",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def spiralOrder(self, matrix: List[List[int]]) -> List[int]:\n        # Note:\n        # Traverse the matrix in a clockwise spiral order\n        # Approach:\n        # 1. Define boundaries: top, bottom, left, right\n        # 2. Iterate while top <= bottom and left <= right\n        # 3. Traverse in order: top row, right column, bottom row, left column\n        # 4. After traversing a side, move the boundary inward\n        # 5. Continue until all elements are processed\n\n        if not matrix or not matrix[0]:\n            return []\n\n        res = []\n\n        top, bottom = 0, len(matrix) - 1\n        left, right = 0, len(matrix[0]) - 1\n\n        while top <= bottom and left <= right:\n\n            # Traverse top row from left to right\n            for col in range(left, right + 1):\n                res.append(matrix[top][col])\n            top += 1  # move top boundary downward\n\n            # Traverse right column from top to bottom\n            for row in range(top, bottom + 1):\n                res.append(matrix[row][right])\n            right -= 1  # move right boundary leftward\n\n            # Traverse bottom row from right to left (if still within boundaries)\n            if top <= bottom:\n                for col in range(right, left - 1, -1):\n                    res.append(matrix[bottom][col])\n                bottom -= 1  # move bottom boundary upward\n\n            # Traverse left column from bottom to top (if still within boundaries)\n            if left <= right:\n                for row in range(bottom, top - 1, -1):\n                    res.append(matrix[row][left])\n                left += 1  # move left boundary rightward\n\n        # overall: time complexity O(m*n)\n        # overall: space complexity O(m*n) for output list\n        return res",
+      "questionNumber": 54,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-layer-by-layer-spiral-traversal---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    }
+  ],
   "55": [
     {
       "number": 1,
@@ -595,6 +663,18 @@
       "blog": "Intervals"
     }
   ],
+  "66": [
+    {
+      "number": 1,
+      "name": "Hash Set Detection",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def plusOne(self, digits: List[int]) -> List[int]:\n        # Note:\n        # 1. Process digits from least significant to most significant\n        # 2. Add 1 to the last digit\n        # 3. Propagate carry if sum >= 10\n        # 4. If carry remains after the most significant digit, insert at front\n        # 5. Time complexity O(n), space O(1) extra (besides output)\n\n        n = len(digits)\n\n        # iterate from last digit to first\n        for i in range(n - 1, -1, -1):\n            digits[i] += 1          # add 1 to current digit\n            if digits[i] < 10:      # no carry, done\n                return digits\n            digits[i] = 0           # carry = 1, set current to 0 and continue\n\n        # if carry remains after processing all digits\n        return [1] + digits  # prepend 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1) extra (output array still required)",
+      "questionNumber": 66,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-hash-set-detection---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    }
+  ],
   "70": [
     {
       "number": 1,
@@ -635,6 +715,38 @@
       "questionNumber": 70,
       "solutionLink": "/Notes/1d-dynamic-programming#solution-4-0-to-i-iterative-bottom-up-variables---1d-dynamic-programmingoptimal-iterative-padded-n-1-rolling-state-variables-bottom-up",
       "blog": "1D Dynamic Programming"
+    }
+  ],
+  "73": [
+    {
+      "number": 1,
+      "name": "Brute Force O(m*n) Space",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def setZeroes(self, matrix: List[List[int]]) -> None:\n        # Note:\n        # Brute force: create a copy of the matrix\n        # 1. Iterate through original matrix\n        # 2. If cell is 0, set corresponding row and column in copy to 0\n        # 3. Copy back to original matrix\n\n        m, n = len(matrix), len(matrix[0])\n        \n        # Create a copy\n        copy = [row[:] for row in matrix]  # O(m*n) space\n\n        for i in range(m):\n            for j in range(n):\n                if copy[i][j] == 0:\n                    # Zero entire row\n                    for col in range(n):\n                        matrix[i][col] = 0\n                    # Zero entire column\n                    for row in range(m):\n                        matrix[row][j] = 0\n\n        # overall: time complexity O(m*n*(m+n)) due to nested zeroing loops\n        # overall: space complexity O(m*n) for copy",
+      "questionNumber": 73,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-brute-force-o-m-n-space---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    },
+    {
+      "number": 2,
+      "name": "Using O(m+n) Space",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def setZeroes(self, matrix: List[List[int]]) -> None:\n        # Note:\n        # Use two arrays to track zero rows and zero columns\n        # 1. row_flag[m] -> True if row i should be zero\n        # 2. col_flag[n] -> True if column j should be zero\n        # 3. Iterate matrix, set flags\n        # 4. Iterate matrix again, zero out flagged rows and columns\n\n        m, n = len(matrix), len(matrix[0])\n        row_flag = [False] * m\n        col_flag = [False] * n\n\n        # Pass 1: mark zeros\n        for i in range(m):\n            for j in range(n):\n                if matrix[i][j] == 0:\n                    row_flag[i] = True\n                    col_flag[j] = True\n\n        # Pass 2: zero out flagged rows and columns\n        for i in range(m):\n            for j in range(n):\n                if row_flag[i] or col_flag[j]:\n                    matrix[i][j] = 0\n\n        # overall: time complexity O(m*n)\n        # overall: space complexity O(m+n)",
+      "questionNumber": 73,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-2-using-o-m-n-space---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    },
+    {
+      "number": 3,
+      "name": "Constant Space O(1)",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def setZeroes(self, matrix: List[List[int]]) -> None:\n        # Note:\n        # Optimized constant space solution\n        # 1. Use first row and first column as markers\n        # 2. Track separately if first row/column should be zeroed\n        # 3. Iterate matrix to set markers\n        # 4. Zero out cells based on markers\n        # 5. Finally zero out first row/column if needed\n\n        m, n = len(matrix), len(matrix[0])\n\n        # Track if first row/column need zero\n        first_row_zero = any(matrix[0][j] == 0 for j in range(n))\n        first_col_zero = any(matrix[i][0] == 0 for i in range(m))\n\n        # Use first row/column as markers\n        for i in range(1, m):\n            for j in range(1, n):\n                if matrix[i][j] == 0:\n                    matrix[i][0] = 0\n                    matrix[0][j] = 0\n\n        # Zero cells based on markers\n        for i in range(1, m):\n            for j in range(1, n):\n                if matrix[i][0] == 0 or matrix[0][j] == 0:\n                    matrix[i][j] = 0\n\n        # Zero first row if needed\n        if first_row_zero:\n            for j in range(n):\n                matrix[0][j] = 0\n\n        # Zero first column if needed\n        if first_col_zero:\n            for i in range(m):\n                matrix[i][0] = 0\n\n        # overall: time complexity O(m*n)\n        # overall: space complexity O(1)",
+      "questionNumber": 73,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-3-constant-space-o-1---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
     }
   ],
   "74": [
@@ -1593,6 +1705,28 @@
       "questionNumber": 200,
       "solutionLink": "/Notes/leetcode-graphs#solution-4-union-find---graphsomething",
       "blog": "LeetCode: Graphs"
+    }
+  ],
+  "202": [
+    {
+      "number": 1,
+      "name": "Hash Set Detection",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def isHappy(self, n: int) -> bool:\n        # Note:\n        # 1. Compute sum of squares of digits repeatedly\n        # 2. Keep track of numbers seen in a hash set\n        # 3. If we see a number again, a cycle exists → not happy\n        # 4. If we reach 1, number is happy\n\n        seen = set()  # store numbers to detect cycles\n\n        while n != 1:\n\n            if n in seen:  # cycle detected\n                return False\n            seen.add(n)\n\n            # compute sum of squares of digits\n            n = sum(int(digit) ** 2 for digit in str(n))\n\n        # reached 1 → happy number\n        return True\n\n        # overall: time complexity O(log n) per iteration * number of unique sums\n        # overall: space complexity O(log n) for hash set",
+      "questionNumber": 202,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-hash-set-detection---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    },
+    {
+      "number": 2,
+      "name": "Hash Set Detection",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "def isHappy(self, n: int) -> bool:\n        # Note:\n        # 1. Treat sum-of-squares transformation as a linked list\n        # 2. Use two pointers (slow, fast) to detect cycle\n        # 3. If fast or fast.next reaches 1 → happy\n        # 4. If slow == fast → cycle exists → not happy\n\n        def next_number(num):\n            return sum(int(d) ** 2 for d in str(num))\n\n        slow = n\n        fast = next_number(n)\n\n        while fast != 1 and slow != fast:\n            slow = next_number(slow)         # move one step\n            fast = next_number(next_number(fast))  # move two steps\n\n        return fast == 1\n\n        # overall: time complexity O(log n) per iteration * number of iterations before cycle\n        # overall: space complexity O(1)",
+      "questionNumber": 202,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-2-hash-set-detection---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
     }
   ],
   "206": [
@@ -3019,6 +3153,18 @@
       "questionNumber": 1899,
       "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
       "blog": "Greedy"
+    }
+  ],
+  "2013": [
+    {
+      "number": 1,
+      "name": "Hash Map Counting",
+      "type": "math-and-geometry",
+      "application": "math-and-geometry",
+      "code": "class DetectSquares:\n\n        def __init__(self):\n            # Note:\n            # Use a nested hash map: counts[x][y] = number of points at (x, y)\n            # This allows O(1) insertion and O(k) count queries\n            self.counts = defaultdict(lambda: defaultdict(int))\n\n        def add(self, point: List[int]) -> None:\n            x, y = point\n            # Increment count for point (x, y)\n            self.counts[x][y] += 1\n\n        def count(self, point: List[int]) -> int:\n            x, y = point\n            total = 0\n\n            # For each possible y-coordinate that shares the same x (column)\n            for col_y, c in self.counts[x].items():\n                if col_y == y:\n                    continue  # skip same point\n                # side length of potential square\n                d = col_y - y\n\n                # Check left square (x - d, y) and (x - d, col_y)\n                total += c * self.counts.get(x - d, {}).get(y, 0) * self.counts.get(x - d, {}).get(col_y, 0)\n                # Check right square (x + d, y) and (x + d, col_y)\n                total += c * self.counts.get(x + d, {}).get(y, 0) * self.counts.get(x + d, {}).get(col_y, 0)\n\n            return total\n\n        # overall: add O(1), count O(k) where k = # points sharing same x\n        # overall: space complexity O(n) for n points stored",
+      "questionNumber": 2013,
+      "solutionLink": "/Notes/leetcode-math-and-geometry#solution-1-hash-map-counting---math-and-geometrymath-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
     }
   ]
 }

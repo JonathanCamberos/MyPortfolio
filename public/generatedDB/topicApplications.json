@@ -714,5 +714,16 @@
       "useCaseLink": "/Notes/leetcode-bit-manipulation#bit-manipulation-application-bit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
+  ],
+  "math-and-geometry": [
+    {
+      "type": "Math and Geometry",
+      "title": "Math and Geometry",
+      "summary": "Pattern: math!",
+      "exampleIntro": "bits numbers!!",
+      "codeExample": "def math!(n: int) -> int:\n\n        return n+1",
+      "useCaseLink": "/Notes/leetcode-math-and-geometry#math-and-geometry-application-math-and-geometry",
+      "blog": "LeetCode: Math and Geometry"
+    }
   ]
 }
