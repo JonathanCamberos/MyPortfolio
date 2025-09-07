@@ -215,54 +215,71 @@ by iterating in a clockwise rotation.
 
 ### Solution 1: Layer by Layer Spiral Traversal - Math and Geometry/Math and Geometry
 ```python
-def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
-       
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        
         # Note:
-        # Traverse the matrix in a clockwise spiral order
-        # Approach:
-        # 1. Define boundaries: top, bottom, left, right
-        # 2. Iterate while top <= bottom and left <= right
-        # 3. Traverse in order: top row, right column, bottom row, left column
-        # 4. After traversing a side, move the boundary inward
-        # 5. Continue until all elements are processed
+        # Traverse the matrix in clockwise spiral order using layers
+        # 1. Treat each layer as a shrinking “frame” around the matrix
+        # 2. For each layer, traverse top row, right column, bottom row, left column
+        # 3. Increment layer and repeat until all elements are processed
 
+        # Empty check
         if not matrix or not matrix[0]:
             return []
 
         res = []
 
-        top, bottom = 0, len(matrix) - 1
-        left, right = 0, len(matrix[0]) - 1
+        # boundaries
+        m, n = len(matrix), len(matrix[0])
 
-        while top <= bottom and left <= right:
+        # number of layer -> min between rows and columns
+        # There are (min(row, col) // 2) layers
+        # Odd sized matrix -> one single center cell
+        # Even sized matrix -> no single center cell
+        layers = (min(m, n) + 1) // 2
 
-            # Traverse top row from left to right
-            for col in range(left, right + 1):
-                res.append(matrix[top][col])
-            top += 1  # move top boundary downward
+        for layer in range(layers):
 
-            # Traverse right column from top to bottom
-            for row in range(top, bottom + 1):
-                res.append(matrix[row][right])
-            right -= 1  # move right boundary leftward
+            # boundaries of current layer
+            first_row = layer
+            first_col = layer
 
-            # Traverse bottom row from right to left (if still within boundaries)
-            if top <= bottom:
-                for col in range(right, left - 1, -1):
-                    res.append(matrix[bottom][col])
-                bottom -= 1  # move bottom boundary upward
+            # inclusive via last element
 
-            # Traverse left column from bottom to top (if still within boundaries)
-            if left <= right:
-                for row in range(bottom, top - 1, -1):
-                    res.append(matrix[row][left])
-                left += 1  # move left boundary rightward
+            # layer 1:
+            # [ 1, 1, 1, 1, 1, 1]
+            # [ 1, 1, 1, 1, 1, 1]
+            #     f^.       l^
+            # ... 
+            # ...
+            last_row = m - 1 - layer
+            last_col = n - 1 - layer
+
+            # Top and Right sides always exist in every layer
+            # Bottom and left may not always exist
+
+            # Top row: left -> right
+            for col in range(first_col, last_col + 1):
+                res.append(matrix[first_row][col])
+
+            # Right column: top+1 -> bottom
+            for row in range(first_row + 1, last_row + 1):
+                res.append(matrix[row][last_col])
+
+            # Bottom row: right-1 -> left (if more than one row)
+            if last_row > first_row:
+                for col in range(last_col - 1, first_col - 1, -1):
+                    res.append(matrix[last_row][col])
+
+            # Left column: bottom-1 -> top+1 (if more than one column)
+            if last_col > first_col:
+                for row in range(last_row - 1, first_row, -1):
+                    res.append(matrix[row][first_col])
 
         # overall: time complexity O(m*n)
         # overall: space complexity O(m*n) for output list
         return res
 ```
-
 
 ## 73. Set Matrix Zeroes ::1:: - Medium
 
@@ -324,11 +341,14 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 ### Solution 1: Brute Force O(m*n) Space - Math and Geometry/Math and Geometry
 ```python
     def setZeroes(self, matrix: List[List[int]]) -> None:
+        
         # Note:
-        # Brute force: create a copy of the matrix
+        # Separate iterating from writing via creating copy of matrix using O(m*n)
+        # We read over the copy while updating the original in place
         # 1. Iterate through original matrix
         # 2. If cell is 0, set corresponding row and column in copy to 0
         # 3. Copy back to original matrix
+        # Result -> original matrix set correctly in place
 
         m, n = len(matrix), len(matrix[0])
         
@@ -353,25 +373,29 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 ### Solution 2: Using O(m+n) Space - Math and Geometry/Math and Geometry
 ```python
     def setZeroes(self, matrix: List[List[int]]) -> None:
+        
         # Note:
-        # Use two arrays to track zero rows and zero columns
+        # Separate iterating from writing via creating copy of matrix using O(m+n)
+        # Use two arrays to store flags to track zero rows and zero columns
         # 1. row_flag[m] -> True if row i should be zero
         # 2. col_flag[n] -> True if column j should be zero
         # 3. Iterate matrix, set flags
         # 4. Iterate matrix again, zero out flagged rows and columns
+        # Result -> original matrix set correctly in place
+
 
         m, n = len(matrix), len(matrix[0])
         row_flag = [False] * m
         col_flag = [False] * n
 
-        # Pass 1: mark zeros
+        # Flag zero rows and columns
         for i in range(m):
             for j in range(n):
                 if matrix[i][j] == 0:
                     row_flag[i] = True
                     col_flag[j] = True
 
-        # Pass 2: zero out flagged rows and columns
+        # Zero out flagged rows and columns in original matrix
         for i in range(m):
             for j in range(n):
                 if row_flag[i] or col_flag[j]:
@@ -385,39 +409,53 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 ### Solution 3: Constant Space O(1) - Math and Geometry/Math and Geometry
 ```python
     def setZeroes(self, matrix: List[List[int]]) -> None:
+        
         # Note:
-        # Optimized constant space solution
-        # 1. Use first row and first column as markers
-        # 2. Track separately if first row/column should be zeroed
-        # 3. Iterate matrix to set markers
-        # 4. Zero out cells based on markers
-        # 5. Finally zero out first row/column if needed
+        # Separate iterating from writing via creating copy of matrix using O(m+n)
+        # We use the first row and first column of the matrix itself
+        # 1. row_flag[m] -> True if row i should be zero
+        # 2. col_flag[n] -> True if column j should be zero
+        # 4. Iterate matrix again, zero out flagged rows and columns
+        # Result -> original matrix set correctly in place
 
+        # Boundaries
         m, n = len(matrix), len(matrix[0])
 
-        # Track if first row/column need zero
-        first_row_zero = any(matrix[0][j] == 0 for j in range(n))
-        first_col_zero = any(matrix[i][0] == 0 for i in range(m))
+        # Pre check if first row has any zeros
+        first_row_zero = False
+        for j in range(n):
+            if matrix[0][j] == 0:
+                first_row_zero = True
+                break
 
-        # Use first row/column as markers
+        # Pre check if first column has any zeros
+        first_col_zero = False
+        for i in range(m):
+            if matrix[i][0] == 0:
+                first_col_zero = True
+                break
+
+        # Set zero flags using first row and column
         for i in range(1, m):
             for j in range(1, n):
                 if matrix[i][j] == 0:
-                    matrix[i][0] = 0
-                    matrix[0][j] = 0
+                    matrix[i][0] = 0  # mark row
+                    matrix[0][j] = 0  # mark column
 
-        # Zero cells based on markers
+        # Using zero flags, zero out rows and cols
         for i in range(1, m):
             for j in range(1, n):
                 if matrix[i][0] == 0 or matrix[0][j] == 0:
                     matrix[i][j] = 0
 
-        # Zero first row if needed
+        # Afterwards:
+        # Zero out the first row if needed
         if first_row_zero:
             for j in range(n):
                 matrix[0][j] = 0
 
-        # Zero first column if needed
+        # Afterwards:
+        # Zero out the first column if needed
         if first_col_zero:
             for i in range(m):
                 matrix[i][0] = 0
@@ -425,7 +463,6 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
         # overall: time complexity O(m*n)
         # overall: space complexity O(1)
 ```
-
 
 ## 202. Happy Number ::1:: - Easy
 
@@ -482,53 +519,69 @@ Given a number and constraints, determine if number fits constraints.
 ### Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
 ```python
     def isHappy(self, n: int) -> bool:
+        
         # Note:
         # 1. Compute sum of squares of digits repeatedly
         # 2. Keep track of numbers seen in a hash set
         # 3. If we see a number again, a cycle exists → not happy
         # 4. If we reach 1, number is happy
+        # Result -> Determine if number is happy
 
-        seen = set()  # store numbers to detect cycles
+        # store numbers to detect cycles
+        seen = set()
+
+        # cycle formula
+        def next_number(num):
+            return sum(int(d) ** 2 for d in str(num))
 
         while n != 1:
 
-            if n in seen:  # cycle detected
+            # cycle detected
+            if n in seen:
                 return False
             seen.add(n)
 
             # compute sum of squares of digits
-            n = sum(int(digit) ** 2 for digit in str(n))
+            n = next_number(n)
 
-        # reached 1 → happy number
-        return True
+        # reached 1 = happy number
+        res = True
 
-        # overall: time complexity O(log n) per iteration * number of unique sums
-        # overall: space complexity O(log n) for hash set
+        # overall: time complexity O(log n) (per iteration * number of unique sums)
+        # overall: space complexity O(log n) (for hash set)
+        return res
 ```
 
-### Solution 2: Hash Set Detection - Math and Geometry/Math and Geometry
+### Solution 2: Slow Fast Pointer - Math and Geometry/Math and Geometry
 ```python
     def isHappy(self, n: int) -> bool:
+        
         # Note:
-        # 1. Treat sum-of-squares transformation as a linked list
-        # 2. Use two pointers (slow, fast) to detect cycle
-        # 3. If fast or fast.next reaches 1 → happy
-        # 4. If slow == fast → cycle exists → not happy
+        # Treat sum-of-squares transformation as a linked list
+        # 2. Slow and fast pointers to detect cycle
+        # 3. If fast or fast.next reaches 1 -> happy
+        # 4. If slow == fast → cycle exists -> not happy
+        # Result -> Determine if number is happy
 
+        # cycle formula
         def next_number(num):
             return sum(int(d) ** 2 for d in str(num))
 
+        # set pointers
         slow = n
         fast = next_number(n)
 
+        # slow and fast pointer to check happy number requirements
         while fast != 1 and slow != fast:
-            slow = next_number(slow)         # move one step
-            fast = next_number(next_number(fast))  # move two steps
+            slow = next_number(slow)
+            fast = next_number(next_number(fast))
 
-        return fast == 1
+        # happy number == 1
+        res = fast == 1
 
-        # overall: time complexity O(log n) per iteration * number of iterations before cycle
+        # overall: time complexity O(log n) (per iteration * number of iterations before cycle)
         # overall: space complexity O(1)
+        return res
 ```
 
 ## 66. Plus One ::1:: - Easy
@@ -591,8 +644,10 @@ return the resulting array of digits.
 ### Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
 ```python
     def plusOne(self, digits: List[int]) -> List[int]:
+        
         # Note:
-        # 1. Process digits from least significant to most significant
+        # Process digits from least significant to most significant
+        # 1. Iterate right to left in array
         # 2. Add 1 to the last digit
         # 3. Propagate carry if sum >= 10
         # 4. If carry remains after the most significant digit, insert at front
@@ -602,16 +657,24 @@ return the resulting array of digits.
 
         # iterate from last digit to first
         for i in range(n - 1, -1, -1):
-            digits[i] += 1          # add 1 to current digit
-            if digits[i] < 10:      # no carry, done
+            
+            # add to current digit
+            digits[i] += 1
+            
+            # if no carry, finished array, else continue
+            if digits[i] < 10:
                 return digits
-            digits[i] = 0           # carry = 1, set current to 0 and continue
+
+            # if carry, set current to zero, continue
+            digits[i] = 0
 
         # if carry remains after processing all digits
-        return [1] + digits  # prepend 1
+        # prepend [1] to array
+        res = [1] + digits
 
         # overall: time complexity O(n)
-        # overall: space complexity O(1) extra (output array still required)
+        # overall: space complexity O(1)
+        return res
 ```
 
 
@@ -672,11 +735,24 @@ Implement pow(x, n).
 ### Solution 1: Recursive Fast Exponentiation - Math and Geometry/Math and Geometry
 ```python
     def myPow(self, x: float, n: int) -> float:
+        
         # Note:
-        # 1. Use divide-and-conquer (fast exponentiation)
-        # 2. Recursively compute half power to reduce computation
-        # 3. If exponent is negative, use reciprocal: x^-n = 1 / x^n
-        # 4. Base case: n == 0 → return 1
+        # Math behind Fast Exponentiation:
+
+        # x^n -> even -> [x^(n/2)]^2
+        #     -> odd  -> x * (x^[(n-1)/2])^2
+
+        # Example:
+        # x^6 = (x^3)^2
+        # x^7 = x * (x^3)^2
+
+        # Now simply apply some recursion
+
+        # Note:
+        # 1. Recursively compute half power to reduce computation
+        # 2. If exponent is negative, use reciprocal: x^-n = 1 / x^n
+        # 3. Base case: n == 0 → return 1
+        # Result -> pow() calculation
 
         if n == 0:
             return 1.0
@@ -695,9 +771,21 @@ Implement pow(x, n).
 ```
 
 
-### Solution 2: Iterative Fast Exponentiation - Math and Geometry/Math and Geometry
+### Solution 2: Iterative Fast Binary Exponentiation - Math and Geometry/Math and Geometry
 ```python
     def myPow(self, x: float, n: int) -> float:
+        
+        # Note:
+        # Binary Exponentiation uses the binary representation of n
+        # n = 13 -> 1101
+
+        # Start with result = 1 and current_product = x. 
+        # Then for each bit from LSB to MSB:
+
+        # If bit is 1 → multiply result by current_product
+        # Square current_product each step
+        # Shift to next bit
+
         # Note:
         # 1. Use binary exponentiation iteratively
         # 2. Convert negative exponent to positive and invert at end
@@ -718,10 +806,9 @@ Implement pow(x, n).
             current_product *= current_product  # square for next bit
             N //= 2
 
-        return result
-
         # overall: time complexity O(log n)
         # overall: space complexity O(1)
+        return result
 ```
 
 
@@ -779,56 +866,70 @@ return the product of the two numbers.
 ```python
 ```
 
-### Solution 1: Simulate Grade-School Multiplication - Math and Geometry/Math and Geometry
+### Solution 1: Simulate Grade School Multiplication - Math and Geometry/Math and Geometry
 ```python
     def multiply(self, num1: str, num2: str) -> str:
+        
         # Note:
         # 1. Multiply each digit of num1 by each digit of num2
         # 2. Store intermediate sums in an array of length len(num1) + len(num2)
         # 3. Handle carry for each position
         # 4. Convert array to string, skipping leading zeros
 
+        # Zero Check
         if num1 == "0" or num2 == "0":
             return "0"
 
         m, n = len(num1), len(num2)
-        pos = [0] * (m + n)  # store multiplication results
+
+        # max number of digits the product can have when multiplying two integers
+        pos = [0] * (m + n)
 
         # multiply digits from right to left
         for i in range(m - 1, -1, -1):
             for j in range(n - 1, -1, -1):
+
+                # i -> index of digit in num1 
+                # j -> index of digit in num2
+
+                # single digit multiplication
                 mul = int(num1[i]) * int(num2[j])
-                p1, p2 = i + j, i + j + 1  # positions in pos array
+
+                # stores the carry that will affect the next higher digit
+                p1 = i + j
+
+                # stores the ones place for this multiplication
+                p2 = i + j + 1
+
+                # pos[p2] holds previous carry that contributes to new multiplication
                 total = mul + pos[p2]
 
-                pos[p2] = total % 10       # current digit
-                pos[p1] += total // 10     # carry
+                # new current digit
+                pos[p2] = total % 10
+
+                # new carry
+                pos[p1] += total // 10
 
         # convert to string, skipping leading zeros
         result = []
+        
+        # to skip leading zeros in final result
         for p in pos:
+
+            # if result == empty, ensures we haven't added any non-zero digits yet
+            # which ensures we only skip leading zeros, not inner zeros
             if not result and p == 0:
                 continue
+
+            # append inner zeros or values
             result.append(str(p))
 
-        return "".join(result)
-        
+        # more efficient of concatenating strings
+        res = "".join(result)
+
         # overall: time complexity O(m*n)
         # overall: space complexity O(m+n)
-```
-
-### Solution 2: Something - Math and Geometry/Math and Geometry
-```python
-    def multiply(self, num1: str, num2: str) -> str:
-        def strToInt(s):
-            l = len(s)
-            res = 0
-            for c in s:
-                res*=10
-                res+=int(c)%(10**l)
-            return res
-        ans = strToInt(num1)*strToInt(num2)
-        return str(ans)
+        return res
 ```
 
 
@@ -906,31 +1007,41 @@ Efficiently handle up to 3000 add and count calls.
     class DetectSquares:
 
         def __init__(self):
+
             # Note:
-            # Use a nested hash map: counts[x][y] = number of points at (x, y)
+            # counts[x][y] -> tracks how many times point (x,y) has been added
             # This allows O(1) insertion and O(k) count queries
             self.counts = defaultdict(lambda: defaultdict(int))
 
         def add(self, point: List[int]) -> None:
-            x, y = point
-            # Increment count for point (x, y)
-            self.counts[x][y] += 1
+
+            # Increment point count
+            x_col, y_row = point
+            self.counts[x_col][y_row] += 1
 
         def count(self, point: List[int]) -> int:
-            x, y = point
+            x_col, y_row = point
             total = 0
 
-            # For each possible y-coordinate that shares the same x (column)
-            for col_y, c in self.counts[x].items():
-                if col_y == y:
-                    continue  # skip same point
-                # side length of potential square
-                d = col_y - y
+            # Look for all points in same column x, but with different y
+            for curr_y_row, count_at_point in self.counts[x_col].items():
+                if curr_y_row == y_row:  # skip the query point itself
+                    continue
 
-                # Check left square (x - d, y) and (x - d, col_y)
-                total += c * self.counts.get(x - d, {}).get(y, 0) * self.counts.get(x - d, {}).get(col_y, 0)
-                # Check right square (x + d, y) and (x + d, col_y)
-                total += c * self.counts.get(x + d, {}).get(y, 0) * self.counts.get(x + d, {}).get(col_y, 0)
+                # distance = side length
+                d = curr_y_row - y_row
+
+                # Left square
+                left_x = x_col - d
+                count_left_top = self.counts.get(left_x, {}).get(y_row, 0)
+                count_left_bottom = self.counts.get(left_x, {}).get(curr_y_row, 0)
+                total += count_at_point * count_left_top * count_left_bottom
+
+                # Right square
+                right_x = x_col + d
+                count_right_top = self.counts.get(right_x, {}).get(y_row, 0)
+                count_right_bottom = self.counts.get(right_x, {}).get(curr_y_row, 0)
+                total += count_at_point * count_right_top * count_right_bottom
 
             return total
 
