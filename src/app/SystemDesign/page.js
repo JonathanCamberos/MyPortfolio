@@ -34,7 +34,7 @@ const LeetCodePage = ({ params }) => {
       <QuestionSection />
       <DifficultySection /> */}
 
-      System design!
+      System design! (to-do create search page -jonathan 09/07/25)
     </article>
   );
 };

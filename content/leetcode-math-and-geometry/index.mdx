@@ -88,44 +88,78 @@ Given an 2D array, rotate the 2D array 90 degrees.
     def rotate(self, matrix: List[List[int]]) -> None:
         
         # Note:
-        # Rotate n x n matrix 90 degrees clockwise in-place
-        # Approach:
+        # Rotate n x n matrix 90 degrees clockwise in place
         # 1. Process the matrix layer by layer (outermost to innermost)
-        # 2. For each layer, rotate elements in four-way swaps:
-        #    top -> right -> bottom -> left -> top
+        # 2. For each layer, rotate elements in four way swaps:
+        #       Top -> Right -> Bottom -> Left -> Top
         # 3. Repeat for all layers
-        # 4. No extra matrix allocation, in-place modification
+        # Result -> No extra matrix allocation, in place modification
+
+        # Example (n=3, outer layer rotation):
+        # [1, 2, 3]         [7, 4, 1]
+        # [4, 5, 6]   --->  [8, 5, 2]
+        # [7, 8, 9]         [9, 6, 3]
 
         n = len(matrix)
 
         # There are n//2 layers
-        for layer in range(n // 2):
+        # Odd sized matrix -> one single center cell, inner does not rotate
+        # Even sized matrix -> no single center cell, all layers rotate
+        layers = n//2
+
+        for layer in range(layers):
+
+            # first -> start index of current ring (top-left corner)
             first = layer
+
+            # last -> end index of current ring (bottom-right corner)
+
+            # layer 1:
+            # [ 1, 1, 1, 1, 1, 1]
+            # [ 1, 1, 1, 1, 1, 1]
+            #     f^.       l^
+            # ... 
+            # ...
             last = n - 1 - layer
 
-            # Iterate over elements in current layer
-            for i in range(first, last):
-                offset = i - first
+            # length of current ring - 1
+            # notice we only need 3 swaps as 4th swap is 1 swap of next switch
+            # [1,  2,  3,  4 ]
+            # [5,  6,  7,  8 ]
+            # [9,  10, 11, 12]
+            # [13, 14, 15, 16]
+            
+            # we only swap, 1, 2, 3, as 4 will be taken care of 
+            # by the next iteration, therefore ringLen is -1 its actual length
+            # thus ring len of 4 goes to 3
+            ringLen = last - first            
 
-                # Save top element
-                top = matrix[first][i]
+            # iterate -> 0 to ringLen-1 
+            for i in range(ringLen):
 
                 # left -> top
-                matrix[first][i] = matrix[last - offset][first]
-
                 # bottom -> left
-                matrix[last - offset][first] = matrix[last][last - offset]
-
                 # right -> bottom
-                matrix[last][last - offset] = matrix[i][last]
+                # saved top -> right
 
-                # top -> right
-                matrix[i][last] = top
+                # save top
+                top_val = matrix[first][first + i]
+
+                # top: left right via row    || left: bottom up via column
+                matrix[first][first + i] = matrix[last - i][first]
+
+                # left: bottom up via column ||  bottom: right left via row
+                matrix[last - i][first] = matrix[last][last - i]
+
+                # bottom: right left via row ||  right: top down via column
+                matrix[last][last - i] = matrix[first + i][last]
+
+                # right: top down via column ||  top: left right via row
+                matrix[first + i][last] = top_val
 
         # overall: time complexity O(n^2)
         # overall: space complexity O(1)
 ```
-
 
 ## 54. Spiral Matrix ::1:: - Medium
 
@@ -182,6 +216,7 @@ by iterating in a clockwise rotation.
 ### Solution 1: Layer by Layer Spiral Traversal - Math and Geometry/Math and Geometry
 ```python
 def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+       
         # Note:
         # Traverse the matrix in a clockwise spiral order
         # Approach:
