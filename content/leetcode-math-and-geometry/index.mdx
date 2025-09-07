@@ -1,0 +1,905 @@
+---
+title: "LeetCode: Math and Geometry"
+description: "math and Geometry"
+image: "../../public/Notes/math.png"
+publishedAt: "2025-10-15"
+updatedAt: "2025-10-15"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- data structures and algorithms
+---
+
+
+## Math and Geometry Intro
+
+### What is Math and Geometry
+
+math!
+
+### Math and Geometry IRL
+
+math!
+
+### Math and Geometry Application: Math and Geometry
+Pattern: math! 
+
+Ex: bits numbers!!
+```python
+    def math!(n: int) -> int:
+
+        return n+1
+```
+
+
+## 48. Rotate Image ::1:: - Medium
+
+Topics:  Array, Math, Matrix
+
+### Intro
+> You are given an n x n 2D matrix representing an 
+> image, rotate the image by 90 degrees (clockwise).
+> You have to rotate the image in-place, which means you 
+> have to modify the input 2D matrix directly. DO NOT 
+> allocate another 2D matrix and do the rotation.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| matrix = [[1,2,3],[4,5,6],[7,8,9]] | [[7,4,1],[8,5,2],[9,6,3]] |
+| matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]] | [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]] |
+
+Constraints:
+
+n == matrix.length == matrix[i].length
+
+1 &leq; n &leq; 20
+
+-1000 &leq; matrix[i][j] &leq; 1000
+
+### Abstraction
+Given an 2D array, rotate the 2D array 90 degrees.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Layer by Layer Rotation - Math and Geometry/Math and Geometry
+```python
+    def rotate(self, matrix: List[List[int]]) -> None:
+        
+        # Note:
+        # Rotate n x n matrix 90 degrees clockwise in-place
+        # Approach:
+        # 1. Process the matrix layer by layer (outermost to innermost)
+        # 2. For each layer, rotate elements in four-way swaps:
+        #    top -> right -> bottom -> left -> top
+        # 3. Repeat for all layers
+        # 4. No extra matrix allocation, in-place modification
+
+        n = len(matrix)
+
+        # There are n//2 layers
+        for layer in range(n // 2):
+            first = layer
+            last = n - 1 - layer
+
+            # Iterate over elements in current layer
+            for i in range(first, last):
+                offset = i - first
+
+                # Save top element
+                top = matrix[first][i]
+
+                # left -> top
+                matrix[first][i] = matrix[last - offset][first]
+
+                # bottom -> left
+                matrix[last - offset][first] = matrix[last][last - offset]
+
+                # right -> bottom
+                matrix[last][last - offset] = matrix[i][last]
+
+                # top -> right
+                matrix[i][last] = top
+
+        # overall: time complexity O(n^2)
+        # overall: space complexity O(1)
+```
+
+
+## 54. Spiral Matrix ::1:: - Medium
+
+Topics:  Array, Matrix, Simulation
+
+### Intro
+> Given an m x n matrix, return all elements of the
+> matrix in spiral order.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| matrix = [[1,2,3],[4,5,6],[7,8,9]] | [1,2,3,6,9,8,7,4,5] |
+| matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]] | [1,2,3,4,8,12,11,10,9,5,6,7] |
+
+Constraints:
+
+m == matrix.length
+
+n == matrix[i].length
+
+1 &leq; m, n &leq; 10
+
+-100 &leq; matrix[i][j] &leq; 100
+
+### Abstraction
+Given a 2D array, return a list of all the elements in the matrix
+by iterating in a clockwise rotation.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Layer by Layer Spiral Traversal - Math and Geometry/Math and Geometry
+```python
+def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # Note:
+        # Traverse the matrix in a clockwise spiral order
+        # Approach:
+        # 1. Define boundaries: top, bottom, left, right
+        # 2. Iterate while top <= bottom and left <= right
+        # 3. Traverse in order: top row, right column, bottom row, left column
+        # 4. After traversing a side, move the boundary inward
+        # 5. Continue until all elements are processed
+
+        if not matrix or not matrix[0]:
+            return []
+
+        res = []
+
+        top, bottom = 0, len(matrix) - 1
+        left, right = 0, len(matrix[0]) - 1
+
+        while top <= bottom and left <= right:
+
+            # Traverse top row from left to right
+            for col in range(left, right + 1):
+                res.append(matrix[top][col])
+            top += 1  # move top boundary downward
+
+            # Traverse right column from top to bottom
+            for row in range(top, bottom + 1):
+                res.append(matrix[row][right])
+            right -= 1  # move right boundary leftward
+
+            # Traverse bottom row from right to left (if still within boundaries)
+            if top <= bottom:
+                for col in range(right, left - 1, -1):
+                    res.append(matrix[bottom][col])
+                bottom -= 1  # move bottom boundary upward
+
+            # Traverse left column from bottom to top (if still within boundaries)
+            if left <= right:
+                for row in range(bottom, top - 1, -1):
+                    res.append(matrix[row][left])
+                left += 1  # move left boundary rightward
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(m*n) for output list
+        return res
+```
+
+
+## 73. Set Matrix Zeroes ::1:: - Medium
+
+Topics:  Array, Hash Table, Matrix
+
+### Intro
+> Given an m x n integer matrix matrix, if an element is 
+> 0, set its entire row and column to 0's.
+> You must do it in place.
+> Follow up: A straightforward solution using O(mn) space is 
+> probably a bad idea.
+> A simple improvement uses O(m + n) space, but 
+> still not the best solution.
+> Could you devise a constant space solution?
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| matrix = [[1,1,1],[1,0,1],[1,1,1]] | [[1,0,1],[0,0,0],[1,0,1]] |
+| matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]] | [[0,0,0,0],[0,4,5,0],[0,3,1,0]] |
+
+Constraints:
+
+m == matrix.length
+
+n == matrix[i].length
+
+1 &leq; m, n &leq; 200
+
+-2<sup>31</sup> &leq; matrix[i][j] &leq; 2<sup>31</sup> - 1
+
+### Abstraction
+Given a 2D array, if a cell has 0, zero out its adjacent row and column.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Brute Force O(m*n) Space - Math and Geometry/Math and Geometry
+```python
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        # Note:
+        # Brute force: create a copy of the matrix
+        # 1. Iterate through original matrix
+        # 2. If cell is 0, set corresponding row and column in copy to 0
+        # 3. Copy back to original matrix
+
+        m, n = len(matrix), len(matrix[0])
+        
+        # Create a copy
+        copy = [row[:] for row in matrix]  # O(m*n) space
+
+        for i in range(m):
+            for j in range(n):
+                if copy[i][j] == 0:
+                    # Zero entire row
+                    for col in range(n):
+                        matrix[i][col] = 0
+                    # Zero entire column
+                    for row in range(m):
+                        matrix[row][j] = 0
+
+        # overall: time complexity O(m*n*(m+n)) due to nested zeroing loops
+        # overall: space complexity O(m*n) for copy
+```
+
+
+### Solution 2: Using O(m+n) Space - Math and Geometry/Math and Geometry
+```python
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        # Note:
+        # Use two arrays to track zero rows and zero columns
+        # 1. row_flag[m] -> True if row i should be zero
+        # 2. col_flag[n] -> True if column j should be zero
+        # 3. Iterate matrix, set flags
+        # 4. Iterate matrix again, zero out flagged rows and columns
+
+        m, n = len(matrix), len(matrix[0])
+        row_flag = [False] * m
+        col_flag = [False] * n
+
+        # Pass 1: mark zeros
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == 0:
+                    row_flag[i] = True
+                    col_flag[j] = True
+
+        # Pass 2: zero out flagged rows and columns
+        for i in range(m):
+            for j in range(n):
+                if row_flag[i] or col_flag[j]:
+                    matrix[i][j] = 0
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(m+n)
+```
+
+
+### Solution 3: Constant Space O(1) - Math and Geometry/Math and Geometry
+```python
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        # Note:
+        # Optimized constant space solution
+        # 1. Use first row and first column as markers
+        # 2. Track separately if first row/column should be zeroed
+        # 3. Iterate matrix to set markers
+        # 4. Zero out cells based on markers
+        # 5. Finally zero out first row/column if needed
+
+        m, n = len(matrix), len(matrix[0])
+
+        # Track if first row/column need zero
+        first_row_zero = any(matrix[0][j] == 0 for j in range(n))
+        first_col_zero = any(matrix[i][0] == 0 for i in range(m))
+
+        # Use first row/column as markers
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][j] == 0:
+                    matrix[i][0] = 0
+                    matrix[0][j] = 0
+
+        # Zero cells based on markers
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][0] == 0 or matrix[0][j] == 0:
+                    matrix[i][j] = 0
+
+        # Zero first row if needed
+        if first_row_zero:
+            for j in range(n):
+                matrix[0][j] = 0
+
+        # Zero first column if needed
+        if first_col_zero:
+            for i in range(m):
+                matrix[i][0] = 0
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(1)
+```
+
+
+## 202. Happy Number ::1:: - Easy
+
+Topics:  Hash Table, Math, Two Pointers
+
+### Intro
+> Write an algorithm to determine if a number n is happy.
+> A happy number is a number defined by the following process:
+> Starting with any positive integer, replace the number by 
+> the sum of the squares of its digits.
+> Repeat the process until the number equals 1 (where it will 
+> stay), or it loops endlessly in a cycle which does not 
+> include 1.
+> Those numbers for which this process ends in 1 are happy.
+> Return true if n is a happy number, and false if not.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 19 | true |
+| n = 2 | false |
+
+Constraints:
+
+1 &leq; n &leq; 2<sup>31</sup> - 1
+
+### Abstraction
+Given a number and constraints, determine if number fits constraints.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
+```python
+    def isHappy(self, n: int) -> bool:
+        # Note:
+        # 1. Compute sum of squares of digits repeatedly
+        # 2. Keep track of numbers seen in a hash set
+        # 3. If we see a number again, a cycle exists → not happy
+        # 4. If we reach 1, number is happy
+
+        seen = set()  # store numbers to detect cycles
+
+        while n != 1:
+
+            if n in seen:  # cycle detected
+                return False
+            seen.add(n)
+
+            # compute sum of squares of digits
+            n = sum(int(digit) ** 2 for digit in str(n))
+
+        # reached 1 → happy number
+        return True
+
+        # overall: time complexity O(log n) per iteration * number of unique sums
+        # overall: space complexity O(log n) for hash set
+```
+
+### Solution 2: Hash Set Detection - Math and Geometry/Math and Geometry
+```python
+    def isHappy(self, n: int) -> bool:
+        # Note:
+        # 1. Treat sum-of-squares transformation as a linked list
+        # 2. Use two pointers (slow, fast) to detect cycle
+        # 3. If fast or fast.next reaches 1 → happy
+        # 4. If slow == fast → cycle exists → not happy
+
+        def next_number(num):
+            return sum(int(d) ** 2 for d in str(num))
+
+        slow = n
+        fast = next_number(n)
+
+        while fast != 1 and slow != fast:
+            slow = next_number(slow)         # move one step
+            fast = next_number(next_number(fast))  # move two steps
+
+        return fast == 1
+
+        # overall: time complexity O(log n) per iteration * number of iterations before cycle
+        # overall: space complexity O(1)
+```
+
+## 66. Plus One ::1:: - Easy
+
+Topics:  Array, Math
+
+### Intro
+> You are given a large integer represented as an integer 
+> array digits, where each digits[i] is the ith digit of the 
+> integer. The digits are ordered from most significant to 
+> least significant in left-to-right order. The large integer 
+> does not contain any leading 0's.
+> Increment the large integer by one and return the resulting 
+> array of digits.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| digits = [1,2,3] | [1,2,4] |
+| digits = [4,3,2,1] | [4,3,2,2] |
+| digits = [9] | [1,0] |
+
+Constraints:
+
+1 &leq; digits.length &leq; 100
+
+0 &leq; digits[i] &leq; 9
+
+digits does not contain any leading 0's.
+
+### Abstraction
+Given a number represented as an array of digits 
+(most significant digit first), increment the number by 1 and 
+return the resulting array of digits.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
+```python
+    def plusOne(self, digits: List[int]) -> List[int]:
+        # Note:
+        # 1. Process digits from least significant to most significant
+        # 2. Add 1 to the last digit
+        # 3. Propagate carry if sum >= 10
+        # 4. If carry remains after the most significant digit, insert at front
+        # 5. Time complexity O(n), space O(1) extra (besides output)
+
+        n = len(digits)
+
+        # iterate from last digit to first
+        for i in range(n - 1, -1, -1):
+            digits[i] += 1          # add 1 to current digit
+            if digits[i] < 10:      # no carry, done
+                return digits
+            digits[i] = 0           # carry = 1, set current to 0 and continue
+
+        # if carry remains after processing all digits
+        return [1] + digits  # prepend 1
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(1) extra (output array still required)
+```
+
+
+## 50. Pow(x, n) ::1:: - Medium
+
+Topics:  Math, Recursion
+
+### Intro
+> Implement pow(x, n), which calculates x raised to the 
+> power n (i.e., xn).
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| x = 2.00000, n = 10 | 1024.00000 |
+| x = 2.10000, n = 3 | 9.26100 |
+| x = 2.00000, n = -2 | 0.25000 |
+
+Constraints:
+
+-100.0 &lt; x &lt; 100.0
+
+-2<sup>31</sup> &leq; n &leq; 2<sup>31</sup> - 1
+
+n is an integer.
+
+Either x is not zero or n > 0.
+
+-10<sup>4</sup> &leq; x<sup>n</sup> &leq; 10<sup>4</sup>
+
+### Abstraction
+Implement pow(x, n).
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Recursive Fast Exponentiation - Math and Geometry/Math and Geometry
+```python
+    def myPow(self, x: float, n: int) -> float:
+        # Note:
+        # 1. Use divide-and-conquer (fast exponentiation)
+        # 2. Recursively compute half power to reduce computation
+        # 3. If exponent is negative, use reciprocal: x^-n = 1 / x^n
+        # 4. Base case: n == 0 → return 1
+
+        if n == 0:
+            return 1.0
+        if n < 0:
+            return 1 / self.myPow(x, -n)
+
+        half = self.myPow(x, n // 2)
+        
+        if n % 2 == 0:
+            return half * half
+        else:
+            return half * half * x
+
+        # overall: time complexity O(log n)
+        # overall: space complexity O(log n) due to recursion stack
+```
+
+
+### Solution 2: Iterative Fast Exponentiation - Math and Geometry/Math and Geometry
+```python
+    def myPow(self, x: float, n: int) -> float:
+        # Note:
+        # 1. Use binary exponentiation iteratively
+        # 2. Convert negative exponent to positive and invert at end
+        # 3. Multiply result by x whenever the current bit of n is 1
+        # 4. Shift exponent right each iteration
+
+        N = n
+        if N < 0:
+            x = 1 / x
+            N = -N
+
+        result = 1.0
+        current_product = x
+
+        while N > 0:
+            if N % 2 == 1:  # current bit is 1
+                result *= current_product
+            current_product *= current_product  # square for next bit
+            N //= 2
+
+        return result
+
+        # overall: time complexity O(log n)
+        # overall: space complexity O(1)
+```
+
+
+## 43. Multiply Strings ::2:: - Medium
+
+Topics:  Math, Recursion
+
+### Intro
+> Given two non-negative integers num1 and num2 
+> represented as strings, return the product of num1 and
+> num2, also represented as a string.
+> Note: You must not use any built-in BigInteger library
+> or convert the inputs to integer directly.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| num1 = "2", num2 = "3" | "6" |
+| num1 = "123", num2 = "456" | "56088" |
+
+Constraints:
+
+1 &leq; num1.length, num2.length &leq; 200
+
+num1 and num2 consist of digits only.
+
+Both num1 and num2 do not contain any leading zero, 
+except the number 0 itself.
+
+### Abstraction
+Given two numbers represented as strings,
+return the product of the two numbers.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Simulate Grade-School Multiplication - Math and Geometry/Math and Geometry
+```python
+    def multiply(self, num1: str, num2: str) -> str:
+        # Note:
+        # 1. Multiply each digit of num1 by each digit of num2
+        # 2. Store intermediate sums in an array of length len(num1) + len(num2)
+        # 3. Handle carry for each position
+        # 4. Convert array to string, skipping leading zeros
+
+        if num1 == "0" or num2 == "0":
+            return "0"
+
+        m, n = len(num1), len(num2)
+        pos = [0] * (m + n)  # store multiplication results
+
+        # multiply digits from right to left
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                mul = int(num1[i]) * int(num2[j])
+                p1, p2 = i + j, i + j + 1  # positions in pos array
+                total = mul + pos[p2]
+
+                pos[p2] = total % 10       # current digit
+                pos[p1] += total // 10     # carry
+
+        # convert to string, skipping leading zeros
+        result = []
+        for p in pos:
+            if not result and p == 0:
+                continue
+            result.append(str(p))
+
+        return "".join(result)
+        
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(m+n)
+```
+
+### Solution 2: Something - Math and Geometry/Math and Geometry
+```python
+    def multiply(self, num1: str, num2: str) -> str:
+        def strToInt(s):
+            l = len(s)
+            res = 0
+            for c in s:
+                res*=10
+                res+=int(c)%(10**l)
+            return res
+        ans = strToInt(num1)*strToInt(num2)
+        return str(ans)
+```
+
+
+## 2013. Detect Squares ::1:: - Medium
+
+Topics:  Array, Hash Table, Design, Counting
+
+### Intro
+> You are given a stream of points on the X-Y plane.  
+> Design an algorithm that:
+> Adds new points from the stream into a data 
+> structure. Duplicate points are allowed and 
+> should be treated as different points.
+> Given a query point, counts the number of ways 
+> such that the three points and the query point 
+> form an axis-aligned square with positive area.
+> An axis-aligned square is a square whose edges are 
+> all the same length and are either parallel or 
+> perpendicular to the x-axis and y-axis.
+> Implement the DetectSquares class:
+> DetectSquares() Initializes the object with an 
+> empty data structure.
+> void add(int[] point) Adds a new point point
+> = [x, y] to the data structure.
+> int count(int[] point) Counts the number of 
+> ways to form axis-aligned squares with point 
+> point = [x, y] as described above.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| too long | [null, null, null, null, 1, 0, null, 2] |
+
+Constraints:
+
+point.length == 2
+
+0 &leq; x, y, &leq; 1000
+
+At most 3000 calls in total will be made to add and count.
+
+### Abstraction
+Design a data structure to store points on a 2D grid and count the 
+number of axis-aligned squares that can be formed with a given query point.
+Points can be added multiple times.
+Squares must have edges parallel to axes and positive area.
+Efficiently handle up to 3000 add and count calls.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Hash Map Counting - Math and Geometry/Math and Geometry
+```python
+    class DetectSquares:
+
+        def __init__(self):
+            # Note:
+            # Use a nested hash map: counts[x][y] = number of points at (x, y)
+            # This allows O(1) insertion and O(k) count queries
+            self.counts = defaultdict(lambda: defaultdict(int))
+
+        def add(self, point: List[int]) -> None:
+            x, y = point
+            # Increment count for point (x, y)
+            self.counts[x][y] += 1
+
+        def count(self, point: List[int]) -> int:
+            x, y = point
+            total = 0
+
+            # For each possible y-coordinate that shares the same x (column)
+            for col_y, c in self.counts[x].items():
+                if col_y == y:
+                    continue  # skip same point
+                # side length of potential square
+                d = col_y - y
+
+                # Check left square (x - d, y) and (x - d, col_y)
+                total += c * self.counts.get(x - d, {}).get(y, 0) * self.counts.get(x - d, {}).get(col_y, 0)
+                # Check right square (x + d, y) and (x + d, col_y)
+                total += c * self.counts.get(x + d, {}).get(y, 0) * self.counts.get(x + d, {}).get(col_y, 0)
+
+            return total
+
+        # overall: add O(1), count O(k) where k = # points sharing same x
+        # overall: space complexity O(n) for n points stored
+```
