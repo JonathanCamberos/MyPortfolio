@@ -1,0 +1,866 @@
+---
+title: "LeetCode: Advanced Graphs"
+description: "advanced graphs"
+image: "../../public/Notes/advanced-graphs.png"
+publishedAt: "2025-10-29"
+updatedAt: "2025-10-29"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- data structures and algorithms
+---
+
+## Advanced Graphs Intro
+
+### What is Advanced Graphs
+
+graphs 2!
+
+### Advanced Graphs IRL
+
+graphs2!
+
+### Advanced Graphs Application: Advanced Graphs
+Pattern: grahps2 ! 
+
+Ex: bits numbers!!
+```python
+    def graaaph!(n: int) -> int:
+
+        return n+1
+```
+
+
+## 743. Network Delay Time ::1:: - Medium
+
+Topics:  Depth First Search, Breadth First Search, Graph, Heap (Priority Queue), Shortest Path
+
+### Intro
+> You are given a network of n nodes, labeled from 1 to n. 
+> You are also given times, a list of travel times as directed 
+> edges times[i] = (ui, vi, wi), where ui is the source 
+> node, vi is the target node, and wi is the time it takes for 
+> a signal to travel from source to target.
+> We will send a signal from a given node k. Return the
+> minimum time it takes for all the n nodes to receive the 
+> signal. If it is impossible for all the n nodes to receive the 
+> signal, return -1.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2 | 2 |
+| times = [[1,2,1]], n = 2, k = 1 | 1 |
+| times = [[1,2,1]], n = 2, k = 2 | -1 |
+
+Constraints:
+
+1 &leq; k &leq; n &leq; 100
+
+1 &leq; times.length &leq; 6000
+
+times[i].length == 3
+
+1 &leq; ui, vi &leq; n
+
+ui != vi
+
+0 &leq; wi &leq; 100
+
+All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
+
+### Abstraction
+Given a graph, each node with 1 edges, determine how much time is needed
+to get from start node to target node.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dijkstras Algorithm - Advanced Graphs/Advanced Graphs
+```python
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        # Note:
+        # 1. Build adjacency list: graph[src] = list of (dest, time)
+        # 2. Use min-heap to always expand node with smallest current time
+        # 3. Track shortest times to each node in a dictionary
+        # 4. If all nodes are reached, return max shortest time
+        # 5. If some node is unreachable, return -1
+        
+        # Build adjacency list
+        graph = defaultdict(list)
+        for u, v, w in times:
+            graph[u].append((v, w))
+        
+        # Min-heap: (time_to_reach_node, node)
+        heap = [(0, k)]
+        
+        # Track shortest known times to nodes
+        shortest_time = {}
+        
+        while heap:
+            time, node = heapq.heappop(heap)
+            
+            if node in shortest_time:
+                continue  # already visited with shorter time
+            
+            # Record shortest time to reach node
+            shortest_time[node] = time
+            
+            # Explore neighbors
+            for neighbor, wt in graph[node]:
+                if neighbor not in shortest_time:
+                    heapq.heappush(heap, (time + wt, neighbor))
+        
+        # Check if all nodes were reached
+        if len(shortest_time) != n:
+            return -1
+        
+        # Maximum time among all shortest times
+        return max(shortest_time.values())
+
+        # overall: time complexity O(E log N) for min-heap operations
+        # overall: space complexity O(N + E) for graph and shortest_time
+```
+
+
+## 332. Reconstruct Itinerary ::1:: - Hard
+
+Topics:  Depth First Search, Graph, Eulerian Circuit
+
+### Intro
+> You are given a list of airline tickets where 
+> tickets[i] = [fromi, toi] represent the departure and the
+> arrival airports of one flight. Reconstruct the
+> itinerary in order and return it.
+> All of the tickets belong to a man who departs from 
+> "JFK", thus, the itinerary must begin with "JFK". If 
+> there are multiple valid itineraries, you should return 
+> the itinerary that has the smallest lexical order when 
+> read as a single string.
+> For example, the itinerary ["JFK", "LGA"] has a 
+> smaller lexical order than ["JFK", "LGB"].
+> You may assume all tickets form at least one valid 
+> itinerary. You must use all the tickets once and only once.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]] | ["JFK","MUC","LHR","SFO","SJC"] |
+| tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]] | ["JFK","ATL","JFK","SFO","ATL","SFO"] |
+
+Constraints:
+
+1 &leq; tickets.length &leq; 300
+
+tickets[i].length == 2
+
+fromi.length == 2
+
+toi.length == 3
+
+fromi and toi consist of uppercase English letters.
+
+fromi != toi
+
+### Abstraction
+Given a graph, determine the flight path.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DFS + Lexical Order - Advanced Graphs/Advanced Graphs
+```python
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        # Note:
+        # 1. Build graph: graph[src] = min-heap of destinations
+        #    Using heap ensures lexical order traversal
+        # 2. Use DFS to traverse graph:
+        #    - Always choose the smallest lexical destination first
+        #    - Remove tickets as we use them
+        # 3. Append airports to itinerary in post-order (after visiting neighbors)
+        # 4. Reverse itinerary at the end
+
+        graph = defaultdict(list)
+        
+        # Build min-heap for each source airport
+        for src, dest in tickets:
+            heapq.heappush(graph[src], dest)
+        
+        itinerary = []
+
+        def dfs(airport):
+            while graph[airport]:
+                next_dest = heapq.heappop(graph[airport])
+                dfs(next_dest)
+            itinerary.append(airport)  # post-order append
+
+        # Start DFS from "JFK"
+        dfs("JFK")
+        
+        # Reverse to get correct order
+        return itinerary[::-1]
+
+        # overall: time complexity O(E log E) due to heap operations
+        # overall: space complexity O(E + V) for graph + recursion stack
+```
+
+
+## 1584. Min Cost to Connect All Points ::1:: - Medium
+
+Topics:  Array, Union Find, Graph, Minimum Spanning Tree
+
+### Intro
+> You are given an array points representing integer 
+> coordinates of some points on a 2D-plane, where 
+> points[i] = [xi, yi].
+> The cost of connecting two points [xi, yi] and [xj, yj] 
+> is the manhattan distance between them: 
+> |xi - xj| + |yi - yj|, where |val| denotes the absolute value of val.
+> Return the minimum cost to make all points connected. All 
+> points are connected if there is exactly one simple path 
+> between any two points.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| points = [[0,0],[2,2],[3,10],[5,2],[7,0]] | 20 |
+| points = [[3,12],[-2,5],[-4,1]] | 18 |
+
+Constraints:
+
+1 &leq; points.length &leq; 1000
+
+-10<sup>6</sup> &leq; xi, yi &leq; 10<sup>6</sup>
+
+All pairs (xi, yi) are distinct.
+
+### Abstraction
+Given a graph, determine the min cost to connect all nodes.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Kruskals Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
+```python
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x, y):
+        xr, yr = self.find(x), self.find(y)
+        if xr == yr:
+            return False  # already connected
+        # union by rank
+        if self.rank[xr] < self.rank[yr]:
+            self.parent[xr] = yr
+        elif self.rank[xr] > self.rank[yr]:
+            self.parent[yr] = xr
+        else:
+            self.parent[yr] = xr
+            self.rank[xr] += 1
+        return True
+
+class Solution:
+    def minCostConnectPoints(self, points: list[list[int]]) -> int:
+        
+        # Note:
+        # 1. Compute all pairwise edges with Manhattan distance
+        # 2. Sort edges by cost
+        # 3. Use Union-Find to connect points without forming cycles
+        # 4. Sum the costs of edges added to MST
+
+        n = len(points)
+        edges = []
+
+        # Build all edges
+        for i in range(n):
+            for j in range(i + 1, n):
+                xi, yi = points[i]
+                xj, yj = points[j]
+                cost = abs(xi - xj) + abs(yi - yj)
+                edges.append((cost, i, j))
+
+        # Sort edges by cost
+        edges.sort()
+
+        uf = UnionFind(n)
+        total_cost = 0
+        edges_used = 0
+
+        for cost, i, j in edges:
+            if uf.union(i, j):
+                total_cost += cost
+                edges_used += 1
+                if edges_used == n - 1:  # MST complete
+                    break
+
+        return total_cost
+
+        # overall: time complexity O(n^2 log n) for edge sorting
+        # overall: space complexity O(n^2) for edges
+```
+
+
+### Solution 2: Black magic - Advanced Graphs/Advanced Graphs
+```python
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        n = len(points)
+        min_dist = [float('inf')] * n
+        visited = [False] * n
+        min_dist[0] = 0
+        heap = [(0,0)]
+        total_cost = 0
+        
+
+        while heap:
+            cost, u = heapq.heappop(heap)
+            if visited[u]:
+                continue
+            visited[u] = True
+            total_cost += cost
+
+            for v in range(n):
+                if not visited[v]:
+                    dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
+                    if dist < min_dist[v]:
+                        min_dist[v] = dist
+                        heapq.heappush(heap,(dist, v))
+
+        return total_cost
+```
+
+## 1631. Path With Minimum Effort ::1:: - Medium
+
+Topics:  Array, Binary Search, Depth First Search, Breadth First Search, Union Find, Heap (Priority Queue), Matrix
+
+### Intro
+> You are a hiker preparing for an upcoming hike. You are 
+> given heights, a 2D array of size rows x columns, where 
+> heights[row][col] represents the height of cell (row, col).
+> You are situated in the top-left cell, (0, 0), and you hope
+> to travel to the bottom-right cell, (rows-1, columns-1) 
+> (i.e., 0-indexed). You can move up, down, left, or right,
+> and you wish to find a route that requires the minimum effort.
+> A route's effort is the maximum absolute difference in 
+> heights between two consecutive cells of the route.
+> Return the minimum effort required to travel from the top-
+> left cell to the bottom-right cell.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| heights = [[1,2,2],[3,8,2],[5,3,5]] | 2 |
+| heights = [[1,2,3],[3,8,4],[5,3,5]] | 1 |
+
+Constraints:
+
+rows == heights.length
+
+columns == heights[i].length
+
+1 &leq; rows, columns &leq; 100
+
+1 &leq; heights[i][j] &leq; 10<sup>6</sup>
+
+### Abstraction
+Given a graph, determine the route with minimal climbing.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
+```python
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        # Note:
+        # 1. Use min-heap to track cells by minimal effort seen so far
+        # 2. effort to reach a cell = max(absolute difference along path)
+        # 3. Track visited/effort for each cell
+        # 4. Pop cell with lowest effort from heap, update neighbors
+        # 5. Stop when reaching bottom-right cell
+
+        rows, cols = len(heights), len(heights[0])
+        efforts = [[float('inf')] * cols for _ in range(rows)]
+        efforts[0][0] = 0
+
+        min_heap = [(0, 0, 0)]  # (effort, row, col)
+        directions = [(0,1),(1,0),(-1,0),(0,-1)]
+
+        while min_heap:
+            curr_effort, r, c = heappop(min_heap)
+
+            # Reached target
+            if r == rows - 1 and c == cols - 1:
+                return curr_effort
+
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols:
+                    next_effort = max(curr_effort, abs(heights[r][c] - heights[nr][nc]))
+                    if next_effort < efforts[nr][nc]:
+                        efforts[nr][nc] = next_effort
+                        heappush(min_heap, (next_effort, nr, nc))
+
+        return 0  # default, though problem guarantees a path exists
+
+        # overall: time complexity O(R*C*log(R*C)) due to heap operations
+        # overall: space complexity O(R*C) for effort tracking and heap
+```
+
+
+## 778. Swim in Rising Water ::1:: - Hard
+
+Topics:  Array, Binary Search, Depth First Search, Breadth First Search, Union Find, Heap (Priority Queue), Matrix
+
+### Intro
+> You are given an n x n integer matrix grid where 
+> each value grid[i][j] represents the elevation at that 
+> point (i, j).
+> It starts raining, and water gradually rises over time. At
+> time t, the water level is t, meaning any cell with 
+> elevation less than equal to t is submerged or 
+> reachable.
+> You can swim from a square to another 4-directionally 
+> adjacent square if and only if the elevation of both
+> squares individually are at most t. You can swim 
+> infinite distances in zero time. Of course, you must 
+> stay within the boundaries of the grid during your 
+> swim.
+> Return the minimum time until you can reach the  
+> bottom right square (n - 1, n - 1) if you start at the
+> top left square (0, 0).
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| grid = [[0,2],[1,3]] | 3 |
+| grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]] | 16 |
+
+Constraints:
+
+n == grid.length
+
+n == grid[i].length
+
+1 &leq; n &leq; 50
+
+0 &leq; grid[i][j] &lt; n<sup>2</sup>
+
+Each value grid[i][j] is unique.
+
+### Abstraction
+Given a graph, determine the time needed to traverse from 
+top left to bottom right.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
+```python
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        # Note:
+        # 1. We want min time t to reach (n-1, n-1)
+        # 2. At any step, t = max elevation along the path
+        # 3. Use min-heap to always expand the path with lowest t so far
+        # 4. Track visited cells to avoid revisiting
+
+        n = len(grid)
+        visited = [[False] * n for _ in range(n)]
+        min_heap = [(grid[0][0], 0, 0)]  # (time_so_far, row, col)
+        directions = [(0,1),(1,0),(-1,0),(0,-1)]
+
+        while min_heap:
+            t, r, c = heappop(min_heap)
+            if visited[r][c]:
+                continue
+            visited[r][c] = True
+
+            # Reached target
+            if r == n - 1 and c == n - 1:
+                return t
+
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < n and 0 <= nc < n and not visited[nr][nc]:
+                    # time to reach neighbor = max(current path t, neighbor elevation)
+                    heappush(min_heap, (max(t, grid[nr][nc]), nr, nc))
+
+        return 0  # default, problem guarantees a path exists
+
+        # overall: time complexity O(n^2 * log(n^2)) due to heap operations
+        # overall: space complexity O(n^2) for heap and visited
+```
+
+
+## 269. Alien Dictionary ::1:: - Hard
+
+Topics:  Breadth First Search, Graph, Topological Sort
+
+### Intro
+> There is a foreign language which uses the latin 
+> alphabet, but the order among letters is not
+> "a", "b", "c" ... "z" as in English.
+> You receive a list of non-empty strings words from the
+> dictionary, where the words are sorted 
+> lexicographically based on the rules of this new 
+> language. 
+> Derive the order of letters in this language. If the order 
+> is invalid, return an empty string. If there are multiple 
+> valid order of letters, return any of them.
+> A string a is lexicographically smaller than a string b 
+> if either of the following is true:
+> The first letter where they differ is smaller in a
+> than in b.
+> a is a prefix of b and a.length < b.length.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| ["z","o"] | "zo" |
+| ["hrn","hrf","er","enn","rfnn"] | "hernf" |
+
+Constraints:
+
+The input words will contain characters only from lowercase 'a' to 'z'.
+
+1 &leq; nums.length &leq; 100
+
+1 &leq; words[i].length &leq; 100
+
+
+### Abstraction
+Given a foreign language, derive the order of letters.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
+```python
+    def foreignDictionary(self, words: List[str]) -> str:
+        # Note:
+        # 1. Build a graph of character dependencies from adjacent words
+        # 2. Count in-degrees for each character
+        # 3. Use BFS to perform topological sort
+        # 4. Detect cycles: if result length != total unique chars, return ""
+
+        # Step 0: Initialize graph and in-degree counts
+        graph = defaultdict(set)  # char -> set of chars that come after it
+        in_degree = {c: 0 for word in words for c in word}
+
+        # Step 1: Build graph edges based on adjacent words
+        for i in range(len(words) - 1):
+            word1, word2 = words[i], words[i+1]
+            min_len = min(len(word1), len(word2))
+            found_diff = False
+
+            for j in range(min_len):
+                c1, c2 = word1[j], word2[j]
+                if c1 != c2:
+                    if c2 not in graph[c1]:
+                        graph[c1].add(c2)
+                        in_degree[c2] += 1
+                    found_diff = True
+                    break
+
+            # Edge case: prefix situation invalid, e.g., "abc" before "ab"
+            if not found_diff and len(word1) > len(word2):
+                return ""
+
+        # Step 2: BFS topological sort
+        queue = deque([c for c in in_degree if in_degree[c] == 0])
+        result = []
+
+        while queue:
+            c = queue.popleft()
+            result.append(c)
+            for nei in graph[c]:
+                in_degree[nei] -= 1
+                if in_degree[nei] == 0:
+                    queue.append(nei)
+
+        # Step 3: Check for cycle
+        if len(result) != len(in_degree):
+            return ""
+
+        return "".join(result)
+
+        # overall: time complexity O(C + W*L), where
+        # C = number of unique characters, W = number of words, L = average word length
+        # overall: space complexity O(C + W*L) for graph and in-degree
+```
+
+
+
+## 787. Cheapest Flights Within K Stops ::1:: - Medium
+
+Topics:  Dynamic Programming, Depth First Search, Breadth First Search, Graph, Heap (Priority Queue), Shortest Path
+
+### Intro
+> There are n cities connected by some number of  
+> flights. You are given an array flights where 
+> flights[i] = [fromi, toi, pricei] indicates that
+> pricei.
+> You are also given three integers src, dst, and k, 
+> return the cheapest price from src to dst with at 
+> most k stops. If there is no such route, return -1.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1 | 700 |
+| n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1 | 200 |
+
+Constraints:
+
+1 &leq; n &leq; 100
+
+0 &leq; flights.length &leq; (n * (n-1) / 2)
+
+flight[i].length == 3
+
+0 &leq; fromi, toi &lt; n
+
+fromi != toi
+
+1 &leq; pricei &leq; 10<sup>4</sup>
+
+There will not be any multiple flights between two cities.
+
+0 &leq; src, dst, k &lt; n
+
+src != dst
+
+### Abstraction
+Given flights, determine the cheapest flights under k stops.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: actual black magic - Advanced Graphs/Advanced Graphs
+```python
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        adj={i:[] for i in range(n)}
+        for u,v,w in flights:
+            adj[u].append((v,w))
+        dist=[float('inf')]*n
+        dist[src]=0
+        q=[]
+        heapq.heappush(q,(0, src, 0))
+        while q:
+            stops,node,wei=heapq.heappop(q)
+            if stops>k:
+                continue
+            for nei,w in adj[node]:
+                if dist[nei]>wei+w and stops<=k:
+                    dist[nei]=wei+w
+                    heapq.heappush(q,((stops+1,nei,wei+w)))
+        print(dist)
+        if dist[dst]==float('inf'):
+            return -1
+        return dist[dst]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

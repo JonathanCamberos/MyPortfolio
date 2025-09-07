@@ -1421,6 +1421,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "269": {
+    "questionNum": 269,
+    "questionTitle": "Alien Dictionary ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "There is a foreign language which uses the latin alphabet, but the order among letters is not \"a\", \"b\", \"c\" ... \"z\" as in English. You receive a list of non-empty strings words from the dictionary, where the words are sorted lexicographically based on the rules of this new language. Derive the order of letters in this language. If the order is invalid, return an empty string. If there are multiple valid order of letters, return any of them. A string a is lexicographically smaller than a string b if either of the following is true: The first letter where they differ is smaller in a than in b. a is a prefix of b and a.length < b.length.",
+    "questionTopics": [
+      "Breadth First Search",
+      "Graph",
+      "Topological Sort"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#269-alien-dictionary-1---hard",
+    "blog": "LeetCode: Advanced Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "271": {
     "questionNum": 271,
     "questionTitle": "String Encode and Decode ::2::",
@@ -1529,6 +1544,21 @@
     ],
     "questionLink": "/Notes/leetcode-graphs#323-number-of-connected-components-in-an-undirected-graph-3---medium",
     "blog": "LeetCode: Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "332": {
+    "questionNum": 332,
+    "questionTitle": "Reconstruct Itinerary ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it. All of the tickets belong to a man who departs from \"JFK\", thus, the itinerary must begin with \"JFK\". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary [\"JFK\", \"LGA\"] has a smaller lexical order than [\"JFK\", \"LGB\"]. You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.",
+    "questionTopics": [
+      "Depth First Search",
+      "Graph",
+      "Eulerian Circuit"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#332-reconstruct-itinerary-1---hard",
+    "blog": "LeetCode: Advanced Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1837,6 +1867,23 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "743": {
+    "questionNum": 743,
+    "questionTitle": "Network Delay Time ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target. We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Heap (Priority Queue)",
+      "Shortest Path"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#743-network-delay-time-1---medium",
+    "blog": "LeetCode: Advanced Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "746": {
     "questionNum": 746,
     "questionTitle": "Min Cost Climbing Stairs ::4::",
@@ -1864,6 +1911,43 @@
     ],
     "questionLink": "/Notes/greedy#763-partition-labels-1---medium",
     "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "778": {
+    "questionNum": 778,
+    "questionTitle": "Swim in Rising Water ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j). It starts raining, and water gradually rises over time. At time t, the water level is t, meaning any cell with elevation less than equal to t is submerged or reachable. You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most t. You can swim infinite distances in zero time. Of course, you must stay within the boundaries of the grid during your swim. Return the minimum time until you can reach the bottom right square (n - 1, n - 1) if you start at the top left square (0, 0).",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Heap (Priority Queue)",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#778-swim-in-rising-water-1---hard",
+    "blog": "LeetCode: Advanced Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "787": {
+    "questionNum": 787,
+    "questionTitle": "Cheapest Flights Within K Stops ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that pricei. You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.",
+    "questionTopics": [
+      "Dynamic Programming",
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Heap (Priority Queue)",
+      "Shortest Path"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#787-cheapest-flights-within-k-stops-1---medium",
+    "blog": "LeetCode: Advanced Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -2008,6 +2092,41 @@
     ],
     "questionLink": "/Notes/leetcode-trees#1448-count-good-nodes-in-binary-tree-2---medium",
     "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1584": {
+    "questionNum": 1584,
+    "questionTitle": "Min Cost to Connect All Points ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an array points representing integer coordinates of some points on a 2D-plane, where points[i] = [xi, yi]. The cost of connecting two points [xi, yi] and [xj, yj] is the manhattan distance between them: |xi - xj| + |yi - yj|, where |val| denotes the absolute value of val. Return the minimum cost to make all points connected. All points are connected if there is exactly one simple path between any two points.",
+    "questionTopics": [
+      "Array",
+      "Union Find",
+      "Graph",
+      "Minimum Spanning Tree"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#1584-min-cost-to-connect-all-points-1---medium",
+    "blog": "LeetCode: Advanced Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1631": {
+    "questionNum": 1631,
+    "questionTitle": "Path With Minimum Effort ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort. A route's effort is the maximum absolute difference in heights between two consecutive cells of the route. Return the minimum effort required to travel from the top- left cell to the bottom-right cell.",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Heap (Priority Queue)",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-advanced-graphs#1631-path-with-minimum-effort-1---medium",
+    "blog": "LeetCode: Advanced Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },

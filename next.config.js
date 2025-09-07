@@ -20,7 +20,8 @@ const filePaths = [
   'content/leetcode-greedy/index.mdx',
   'content/leetcode-intervals/index.mdx',
   'content/leetcode-bit-manipulation/index.mdx',
-  'content/leetcode-math-and-geometry/index.mdx'
+  'content/leetcode-math-and-geometry/index.mdx',
+  'content/leetcode-advanced-graphs/index.mdx'
 ];
 
 function syncWarmness() {
