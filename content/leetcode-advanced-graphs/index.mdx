@@ -97,37 +97,52 @@ to get from start node to target node.
 ```python
 ```
 
-### Solution 1: Dijkstras Algorithm - Advanced Graphs/Advanced Graphs
+### Solution 1: Dijkstras Algorithm via BFS + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        
+        # Note:
+        # Why Dijkstras algorithm
+        # Dijkstras algorithm is designed to find the shortest path 
+        # from a single source to all nodes in a weighted graph 
+        # with non-negative edge weights, which fits this case
+
+        # Directed Edge -> signal path with weight w (time)
+        # Want minimum time for signal at k to reach all nodes
+        # If some node is unreachable, we return -1
+
         # Note:
         # 1. Build adjacency list: graph[src] = list of (dest, time)
-        # 2. Use min-heap to always expand node with smallest current time
+        # 2. MinHeap to always expand node with smallest current time
         # 3. Track shortest times to each node in a dictionary
         # 4. If all nodes are reached, return max shortest time
         # 5. If some node is unreachable, return -1
+        # Result -> min time if all nodes are reachable
         
         # Build adjacency list
         graph = defaultdict(list)
         for u, v, w in times:
             graph[u].append((v, w))
         
-        # Min-heap: (time_to_reach_node, node)
+        # MinHeap: (time_to_reach_node, node)
         heap = [(0, k)]
         
-        # Track shortest known times to nodes
+        # Track seen nodes with shortest known times
         shortest_time = {}
         
         while heap:
+
+            # next smallest time node
             time, node = heapq.heappop(heap)
             
+            # already visited neighbor with shorter time, skip
             if node in shortest_time:
-                continue  # already visited with shorter time
+                continue
             
             # Record shortest time to reach node
             shortest_time[node] = time
             
-            # Explore neighbors
+            # Explore Choices -> push adjacent neighbors onto minHeap
             for neighbor, wt in graph[node]:
                 if neighbor not in shortest_time:
                     heapq.heappush(heap, (time + wt, neighbor))
@@ -136,11 +151,12 @@ to get from start node to target node.
         if len(shortest_time) != n:
             return -1
         
-        # Maximum time among all shortest times
-        return max(shortest_time.values())
+        # max time among all shortest times -> min time required
+        res = max(shortest_time.values())
 
         # overall: time complexity O(E log N) for min-heap operations
-        # overall: space complexity O(N + E) for graph and shortest_time
+        # overall: space complexity O(N + E) for graph and shortest_time     
+        return res
 ```
 
 
@@ -210,40 +226,59 @@ Given a graph, determine the flight path.
 ```python
 ```
 
-### Solution 1: DFS + Lexical Order - Advanced Graphs/Advanced Graphs
+### Solution 1: Hierholzers Algorithm Eulerian Path via DFS + MinHeap for Lexical Order - Advanced Graphs/Advanced Graphs
 ```python
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        
         # Note:
-        # 1. Build graph: graph[src] = min-heap of destinations
-        #    Using heap ensures lexical order traversal
-        # 2. Use DFS to traverse graph:
-        #    - Always choose the smallest lexical destination first
-        #    - Remove tickets as we use them
-        # 3. Append airports to itinerary in post-order (after visiting neighbors)
-        # 4. Reverse itinerary at the end
+        # Why Hierholzers Algorithm?
+        # Hierholzers algorithm is designed to find an Eulerian path or 
+        # circuit in a graph a path that uses every edge exactly once.
+        
+        # In our case:
+        # Flight ticket -> edge
+        # Must use all tickets once -> Eulerian path
+        # Start -> "JFK"
 
+        # Note:
+        # 1. Build graph: graph[src] = MinHeap of destinations
+        #    (MinHeap ensures lexical order when multiple choices exist)
+        # 2. Use DFS to traverse graph:
+        #      Always choose the smallest lexical destination first
+        #      Remove tickets (edges) as we use them
+        # 3. Append airports to itinerary in post-order (after visiting neighbors/edges)
+        # 4. Reverse itinerary at the end to get correct order starting at JFK
+        # Result -> shortest path through all airports starting at jfk
+
+        # Build adjacency list with MinHeaps
         graph = defaultdict(list)
         
-        # Build min-heap for each source airport
+        # Build MinHeap for each source airport
         for src, dest in tickets:
             heapq.heappush(graph[src], dest)
         
+        # itinerary build in reverse (post order)
         itinerary = []
 
         def dfs(airport):
+
+            # Explore all neighbors -> left1, left2.. 
             while graph[airport]:
                 next_dest = heapq.heappop(graph[airport])
                 dfs(next_dest)
-            itinerary.append(airport)  # post-order append
+            
+            # post order append
+            itinerary.append(airport)
 
-        # Start DFS from "JFK"
+        # Start Eulerian Oath via DFS + MinHeap from "JFK"
         dfs("JFK")
         
         # Reverse to get correct order
-        return itinerary[::-1]
+        res = itinerary[::-1]
 
         # overall: time complexity O(E log E) due to heap operations
         # overall: space complexity O(E + V) for graph + recursion stack
+        return res
 ```
 
 
@@ -311,14 +346,17 @@ class UnionFind:
         self.rank = [0] * n
 
     def find(self, x):
+        # path compression
         if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])  # path compression
+            self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
 
     def union(self, x, y):
         xr, yr = self.find(x), self.find(y)
+
+        # already connected
         if xr == yr:
-            return False  # already connected
+            return False
         # union by rank
         if self.rank[xr] < self.rank[yr]:
             self.parent[xr] = yr
@@ -332,6 +370,12 @@ class UnionFind:
 class Solution:
     def minCostConnectPoints(self, points: list[list[int]]) -> int:
         
+        # Why Kruskals Algorithm?
+        # Edge Based
+        # Good when we can easily compute all pairwise edges
+        # Add edges in increasing order + avoiding cycles with Union Find
+        # Stop when MST has n-1 edges, ensures min total cost 
+
         # Note:
         # 1. Compute all pairwise edges with Manhattan distance
         # 2. Sort edges by cost
@@ -341,7 +385,7 @@ class Solution:
         n = len(points)
         edges = []
 
-        # Build all edges
+        # Build all edges (Manhattan distance)
         for i in range(n):
             for j in range(i + 1, n):
                 xi, yi = points[i]
@@ -356,27 +400,41 @@ class Solution:
         total_cost = 0
         edges_used = 0
 
+        # Kruskal’s main loop
         for cost, i, j in edges:
             if uf.union(i, j):
                 total_cost += cost
                 edges_used += 1
-                if edges_used == n - 1:  # MST complete
+
+                # MST complete
+                if edges_used == n - 1:
                     break
 
-        return total_cost
 
         # overall: time complexity O(n^2 log n) for edge sorting
         # overall: space complexity O(n^2) for edges
+        return total_cost
 ```
 
 
-### Solution 2: Black magic - Advanced Graphs/Advanced Graphs
+### Solution 2: Prim’s Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
+
+        # Why Prims Algorithm?
+        # Node Based
+        # Grow MST from starting point using smallest connecting edge
+        # Efficient when checking edges dynamically with a MinHeap
+        # Stops when all points are connected, ensures min total cost
+
         n = len(points)
+
+        # shortest edge to MST
         min_dist = [float('inf')] * n
         visited = [False] * n
         min_dist[0] = 0
+
+        # (cost, point)
         heap = [(0,0)]
         total_cost = 0
         
@@ -388,6 +446,7 @@ class Solution:
             visited[u] = True
             total_cost += cost
 
+            # Explore all possible new edges
             for v in range(n):
                 if not visited[v]:
                     dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
@@ -395,6 +454,8 @@ class Solution:
                         min_dist[v] = dist
                         heapq.heappush(heap,(dist, v))
 
+        # overall: time complexity O(n^2 log n)
+        # overall: space complexity O(n)
         return total_cost
 ```
 
@@ -461,24 +522,36 @@ Given a graph, determine the route with minimal climbing.
 ### Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        
+        # Why Dijkstras + MinHeap?
+        # Dijkstras finds shortest path from a source node to all other nodes
+        # in a weighted graph with non-negative edge weights, our case
+        
+        # Cell -> Node
+        # Effort (absolute height difference) -> Weight
+        # MinHeap ensures we always explore next cell with minimal effort first
+        # Guarantees the minimum maximum effort path to the bottom-right cell.
+        
         # Note:
-        # 1. Use min-heap to track cells by minimal effort seen so far
-        # 2. effort to reach a cell = max(absolute difference along path)
+        # 1. Use MinHeap to track cells by minimal effort seen so far
+        # 2. Effort to reach a cell -> max(absolute difference along path)
         # 3. Track visited/effort for each cell
         # 4. Pop cell with lowest effort from heap, update neighbors
         # 5. Stop when reaching bottom-right cell
+        # Result -> path of lowest effort
 
         rows, cols = len(heights), len(heights[0])
         efforts = [[float('inf')] * cols for _ in range(rows)]
         efforts[0][0] = 0
 
-        min_heap = [(0, 0, 0)]  # (effort, row, col)
+        # (effort, row, col)
+        min_heap = [(0, 0, 0)]
         directions = [(0,1),(1,0),(-1,0),(0,-1)]
 
         while min_heap:
             curr_effort, r, c = heappop(min_heap)
 
-            # Reached target
+            # Reached target -> bottom right
             if r == rows - 1 and c == cols - 1:
                 return curr_effort
 
@@ -490,10 +563,11 @@ Given a graph, determine the route with minimal climbing.
                         efforts[nr][nc] = next_effort
                         heappush(min_heap, (next_effort, nr, nc))
 
-        return 0  # default, though problem guarantees a path exists
-
+        # default, though problem guarantees a path exists
+    
         # overall: time complexity O(R*C*log(R*C)) due to heap operations
         # overall: space complexity O(R*C) for effort tracking and heap
+        return 0
 ```
 
 
@@ -568,6 +642,17 @@ top left to bottom right.
 ### Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def swimInWater(self, grid: List[List[int]]) -> int:
+        
+        # Why Dijkstras + MinHeap? 
+        # Cell -> Node
+        # Weight -> determined by max elevation along path so far
+        # Dijkstras algo finds path from source (0,0) to target (n-1,n-1)
+        # that minimizes the max elevation
+        # MinHeap ensures we always expand the path with lowest current
+        # maximum elevation
+        # Guarantees minimum time t
+        # Result -> path of minimum height
+        
         # Note:
         # 1. We want min time t to reach (n-1, n-1)
         # 2. At any step, t = max elevation along the path
@@ -576,7 +661,9 @@ top left to bottom right.
 
         n = len(grid)
         visited = [[False] * n for _ in range(n)]
-        min_heap = [(grid[0][0], 0, 0)]  # (time_so_far, row, col)
+        
+        # (time_so_far, row, col)
+        min_heap = [(grid[0][0], 0, 0)]
         directions = [(0,1),(1,0),(-1,0),(0,-1)]
 
         while min_heap:
@@ -585,20 +672,22 @@ top left to bottom right.
                 continue
             visited[r][c] = True
 
-            # Reached target
+            # Reached target cell
             if r == n - 1 and c == n - 1:
                 return t
 
             for dr, dc in directions:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < n and 0 <= nc < n and not visited[nr][nc]:
-                    # time to reach neighbor = max(current path t, neighbor elevation)
+
+                    # time to reach neighbor = max(current path t, neighbor elevation)                    
                     heappush(min_heap, (max(t, grid[nr][nc]), nr, nc))
 
-        return 0  # default, problem guarantees a path exists
-
+        # default, problem guarantees a path exists
+        
         # overall: time complexity O(n^2 * log(n^2)) due to heap operations
         # overall: space complexity O(n^2) for heap and visited
+        return 0
 ```
 
 
@@ -669,17 +758,26 @@ Given a foreign language, derive the order of letters.
 ### Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
 ```python
     def foreignDictionary(self, words: List[str]) -> str:
+        
+        # Why Topological Sort?
+        # Each character -> node in directed graph
+        # Edge (c1 -> c2) means -> c1 comes before c2 in alien dictionary
+        # Topological sort -> Finding a valid order of characters
+        # Finding a valid order of characters is equivalent to performing
+        # a topological sort on this graph.
+        # If cycle exists, no valid order exists
+
         # Note:
         # 1. Build a graph of character dependencies from adjacent words
         # 2. Count in-degrees for each character
         # 3. Use BFS to perform topological sort
         # 4. Detect cycles: if result length != total unique chars, return ""
 
-        # Step 0: Initialize graph and in-degree counts
+        # Initialize graph and in-degree counts
         graph = defaultdict(set)  # char -> set of chars that come after it
         in_degree = {c: 0 for word in words for c in word}
 
-        # Step 1: Build graph edges based on adjacent words
+        # Build graph edges based on adjacent words
         for i in range(len(words) - 1):
             word1, word2 = words[i], words[i+1]
             min_len = min(len(word1), len(word2))
@@ -698,7 +796,7 @@ Given a foreign language, derive the order of letters.
             if not found_diff and len(word1) > len(word2):
                 return ""
 
-        # Step 2: BFS topological sort
+        # BFS topological sort
         queue = deque([c for c in in_degree if in_degree[c] == 0])
         result = []
 
@@ -710,17 +808,18 @@ Given a foreign language, derive the order of letters.
                 if in_degree[nei] == 0:
                     queue.append(nei)
 
-        # Step 3: Check for cycle
+        # Check for cycle
         if len(result) != len(in_degree):
             return ""
 
-        return "".join(result)
+        res = "".join(result)
 
-        # overall: time complexity O(C + W*L), where
+
+        # overall: time complexity O(C + W*L)
         # C = number of unique characters, W = number of words, L = average word length
         # overall: space complexity O(C + W*L) for graph and in-degree
+        return res
 ```
-
 
 
 ## 787. Cheapest Flights Within K Stops ::1:: - Medium
@@ -790,28 +889,56 @@ Given flights, determine the cheapest flights under k stops.
 ```python
 ```
 
-### Solution 1: actual black magic - Advanced Graphs/Advanced Graphs
+### Solution 1: Modified Dijkstra via BFS + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        
+        # Modified Disjkstras?
+        # Modified for graphs with 'stops' constraint
+        # Each node in heap is (stops_so_far, current_node, cost_so_far)
+        # MinHeap guarantees we expand path with lowest cost so far
+        # Only continue paths that respect the stops limit (<= k)
+        
+        # Build adjacency list
         adj={i:[] for i in range(n)}
         for u,v,w in flights:
             adj[u].append((v,w))
+
+        # Initialize distance array and min-heap
         dist=[float('inf')]*n
         dist[src]=0
         q=[]
+        
+        # (stops_so_far, current_node, cost_so_far)
         heapq.heappush(q,(0, src, 0))
+
+        # Process heap
         while q:
             stops,node,wei=heapq.heappop(q)
+
+            # Skip if stops exceed limit
             if stops>k:
                 continue
+
+            # Explore neighbors 
             for nei,w in adj[node]:
-                if dist[nei]>wei+w and stops<=k:
-                    dist[nei]=wei+w
-                    heapq.heappush(q,((stops+1,nei,wei+w)))
+                next_cost = cost + w
+
+                # Only push if we improve distance
+                if dist[nei]>next_cost and stops<=k:
+                    dist[nei]=next_cost
+                    heapq.heappush(q,((stops+1,nei,next_cost)))
         print(dist)
+
+        # Check if destination reachable
         if dist[dst]==float('inf'):
             return -1
-        return dist[dst]
+
+        res = dist[dst]
+
+        # overall: time complexity O(E log N) in practice, E = # of edges
+        # overall: space complexity O(N + E) for adjacency list and heap    
+        return res
 ```
 
 

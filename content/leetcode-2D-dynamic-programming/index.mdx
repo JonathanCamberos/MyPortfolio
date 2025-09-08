@@ -16,7 +16,7 @@ LeetCode problems solved with dynamic programming
 
 ### What is 2D Dynamic Programming 
 
-DP intro in 1D Dynamic Programming intro section. 
+DP intro in 2D Dynamic Programming intro section. 
 
 Some problems cannot be solved by tracking just a single dimension (like index i).
 Instead, the state depends on two parameters, often representing 
@@ -60,6 +60,31 @@ Same mental trick as 1D:
 1. Prefix View (N+1, M+1) -> answer at dp[n][m]
 
 2. Element View (N, M) -> answer at dp[n-1][m-1]
+
+### 2D Dynamic Programming Application: 2D Dynamic Programming
+Pattern: Recursive DFS explores choices in two dimensions, memo stores results for pairs of states (e.g., indices in two sequences or matrix positions).
+Use When: Natural recursive definition exists over two parameters (e.g., subsequences, matrix paths, interleaving).
+Recurrence: dfs(state1, state2) = combine(dfs(substate1_1, substate2_1), dfs(substate1_2, substate2_2), ...)
+
+Ex: Longest Common Subsequence (Top Down Memoization)
+```python
+    def longestCommonSubsequence(text1: str, text2: str) -> int:
+    memo = {}
+
+    def dfs(i: int, j: int) -> int:
+        if i == len(text1) or j == len(text2):
+            return 0
+        if (i, j) in memo:
+            return memo[(i, j)]
+
+        if text1[i] == text2[j]:
+            memo[(i, j)] = 1 + dfs(i + 1, j + 1)
+        else:
+            memo[(i, j)] = max(dfs(i + 1, j), dfs(i, j + 1))
+        return memo[(i, j)]
+
+    return dfs(0, 0)
+```
 
 
 ### 2D Dynamic Programming Application: DFS with Caching Top Down with Memoization
@@ -310,7 +335,7 @@ there are to the end.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def uniquePaths(self, m: int, n: int) -> int:
         
@@ -349,7 +374,7 @@ there are to the end.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def uniquePaths(self, m: int, n: int) -> int:
         
@@ -436,7 +461,7 @@ Given two strings, return the length of the longest common substring.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         # Note:
@@ -475,7 +500,7 @@ Given two strings, return the length of the longest common substring.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         # Note:
@@ -516,7 +541,7 @@ Given two strings, return the length of the longest common substring.
         return res
 ```
 
-### Solution 3: black magic - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: black magic - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         intersection = set(text1) & set(text2)
@@ -595,7 +620,7 @@ can buy again.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -651,7 +676,7 @@ can buy again.
 
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -666,7 +691,7 @@ can buy again.
 
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
 def maxProfit(self, prices: List[int]) -> int:
 
@@ -775,7 +800,7 @@ any coin infinite times.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def change(self, amount: int, coins: List[int]) -> int:
         # Note:
@@ -813,7 +838,7 @@ any coin infinite times.
         return dp[n][amount]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def change(self, amount: int, coins: List[int]) -> int:
         # Note:
@@ -899,7 +924,7 @@ to add up to target using the array.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def change(self, amount: int, coins: List[int]) -> int:
         # Note:
@@ -937,7 +962,7 @@ to add up to target using the array.
         return dp[n][target + offset]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
 
@@ -964,7 +989,7 @@ to add up to target using the array.
         return dp[target + offset]
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
 
@@ -1054,7 +1079,7 @@ interweaving the characters of strings one and two.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
         # Note:
@@ -1088,7 +1113,7 @@ interweaving the characters of strings one and two.
         return dp[n1][n2]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
         # Note:
@@ -1173,7 +1198,7 @@ Given a matrix, find the length of the longest increasing path.
 ```python
 ```
 
-### Solution 1: DFS + Memoization - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: DFS + Memoization - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         # Notes:
@@ -1213,7 +1238,7 @@ Given a matrix, find the length of the longest increasing path.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         # Notes:
@@ -1311,7 +1336,7 @@ string one will equal string two.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def numDistinct(self, s: str, t: str) -> int:
         # Notes:
@@ -1344,7 +1369,7 @@ string one will equal string two.
         return dp[m][n]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def numDistinct(self, s: str, t: str) -> int:
         # Notes:
@@ -1366,7 +1391,7 @@ string one will equal string two.
         return dp[n]
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def numDistinct(self, s: str, t: str) -> int:
         n, m = len(s), len(t)
@@ -1437,7 +1462,7 @@ to convert string one into string two.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def minDistance(self, word1: str, word2: str) -> int:
         # Notes:
@@ -1478,7 +1503,7 @@ to convert string one into string two.
 
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def minDistance(self, word1: str, word2: str) -> int:
         # Notes:
@@ -1508,7 +1533,7 @@ to convert string one into string two.
         return prev[n]
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def minDistance(self, word1: str, word2: str) -> int:
         # Notes:
@@ -1604,7 +1629,7 @@ will return a certain amount of coins, determine the max number of coins.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxCoins(self, nums: List[int]) -> int:
         # Note:
@@ -1643,7 +1668,7 @@ will return a certain amount of coins, determine the max number of coins.
 
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxCoins(self, nums: List[int]) -> int:
         # Note:
@@ -1674,7 +1699,7 @@ will return a certain amount of coins, determine the max number of coins.
         return res
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxCoins(self, nums: List[int]) -> int:
         # Note:
@@ -1765,7 +1790,7 @@ Given a string and pattern, determine if the string fits in the pattern.
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         # Note:
@@ -1795,7 +1820,7 @@ Given a string and pattern, determine if the string fits in the pattern.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         # Note:
@@ -1825,7 +1850,7 @@ Given a string and pattern, determine if the string fits in the pattern.
         return res
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sequential State Transition
+### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         # Note:
@@ -1858,7 +1883,7 @@ Given a string and pattern, determine if the string fits in the pattern.
         return res
 ```
 
-### Solution 4: space optimized - 1D Dynamic Programming/Sequential State Transition
+### Solution 4: space optimized - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         if not p:
