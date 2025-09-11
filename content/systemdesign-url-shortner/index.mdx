@@ -1,5 +1,5 @@
 ---
-title: "Design: URL Shortener"
+title: "System Design: URL Shortener"
 description: "url shortener"
 image: "../../public/Notes/url-shortener.png"
 publishedAt: "2025-10-13"
@@ -218,10 +218,10 @@ User requests a short URL and is redirected to the original URL:
 
                                 +--------+
 Request:                        | Client |          Response:
-GET/lookup                      +--------+          HTTP 302: Found
-{                                   ^               {
-    "short_url" : ...               |                   "Location": "https://www.example.com/"
-}                                   |               }
+GET/{short_url}                 +--------+          HTTP 302: Found
+                                    ^               {
+                                    |                   "Location": "https://www.example.com/"
+                                    |               }
                                     |               or
                                     |               HTTP 404/410/500 (failure)
                                     |               {
@@ -288,9 +288,9 @@ forced to go through our primary server
 
 ## Deep Dive 1: Short and Unique Urls
 
-### Ensuring URLS are unique
+### Constraints
 
-The constraints we need to ensure:
+We need to ensure:
 
 1. Each short URLs should be unique
 2. Keep short URLs as short as possible
@@ -352,20 +352,183 @@ So we would need to move to 7 character codes once we hit the trillions.
 
 ## Deep Dive 2: Fast Redirection to Original URL
 
-### Ensuring user redirection is fast
+### Constraints
 
-When dealing with a large database of shortened URLs,
-our constraints are:
+Within context of a large database of shortened URLs
+we need to ensure:
 
-1. Find the right match quickly for smooth user experience
-2. Add optimization to avoid 'full table scans' checking every 
-single pair of short and original URLs in the database
+1. Find correct long URL quickly for smooth user experience
+2. Optimizations to avoid 'full table scans' on short URL keys
 
 ### Good Solution: Add an Index
 
+Approach:
+
+To avoid full table scans, we can use indexing.
+An index will create a separate, sorted list of short URLs,
+each with a pointer to the full information in the database table.
+This allows us to use efficient search methods reducing lookup time.
+
+1. B-Tree Indexing
+A B-Tree is a specialize m-way tree designed to optimize data access,
+especially on disk-based storage systems.
+
+```python
+                 +--------+
+                 | 30     |
+                 +--------+
+                /          \
+       +--------+--------+   +--------+--------+
+       | 10     | 20     |   | 40     | 50     |
+       +--------+--------+   +--------+--------+
+      /    |        |       /    |        |    
+    ...   ...      ...    ...   ...      ...   
+```
+
+B-Trees allow for fast data retrieval and updates by maintaining a 
+balanced tree.
+
+In our case, we would create a B-Tree index on the short code column 
+providing O(log n) lookup.
+
+2. Primary Key
+
+For out database, we designate the short URL as the primary key of
+our table.
+This gives the benefits of indexing and uniqueness of short URLs.
+
+3. Hash Indexing
+
+For databases that support it (e.g., PostgreSQL), we can use 
+hash indexing on the short URL column.
+This provides O(1) average lookup time.
+
+Challenges:
+
+Relying solely on a disk-based database for redirects will present 
+some challenges.
+
+A typical SSD can handle ~100,000 Input/Output Operations Per Second.
+
+The issue is the volume of read operations for our application.
+With 100M DAU, averaging each user does 5 reads() per day:
+
+```python
+100,000,000 users * 5 redirects = 500,000,000 redirects per day
+
+86,400 seconds per day
+
+500,000,000 / 86,400 seconds ~= 5,787 redirects per second
+```
+
+And this is assuming evenly distributed reads() throughout the day
+which is unrealistic. Most reads() will occur during peak hours,
+meaning we need to design for high traffic spikes.
+
+```python
+spikes 100x more traffic
+
+(500,000,000 * 100) / 86,400 seconds ~= 578,700 redirects per second
+```
+
+A single database will struggle to keep up with the volume of traffic.
+A high read load would then lead to increased response times,
+potential timeouts, and could slowdown other database operations like write().
+
+
+
 ### Great Solution: Implementing an In Memory Cache (e.g, Redis)
 
+Approach:
+
+To improve redirect speed, we can add an in-memory cache like 
+Redis or Memcached which will sit in between the primary server
+and database. 
+
+The cache will store frequently accessed mappings of short codes 
+to long URLs. When a redirect request comes in, the server will 
+first check the cache. 
+
+If short code is found (cache hit) it will grab the long URL from 
+cache. This will significantly reduce latency from reads().
+
+If short code is not found (cache miss) it will query the database,
+retrieve the long URL, and store it in the cache for future requests.
+
+Note: we are mapping directly from memory instead of disk
+```python
+    Memory access time: ~100 nanoseconds (0.0001 ms)
+
+    SSD access time: ~0.1 milliseconds
+
+    HDD access time: ~10 milliseconds
+```
+
+Which means memory access is about 1,000 times faster, which
+increases our reads() even more:
+
+```python
+    Memory: 1,000,000 IOPS 
+
+    SSD: ~100,000 IOPS
+
+    HDD: ~100-200 IOPS
+```
+
+```python
+User requests a short URL and is redirected to the original URL:
+
+                                +--------+
+Request:                        | Client |          Response:
+GET/{short_url}                 +--------+          HTTP 302: Found
+                                    ^               {
+                                    |                   "Location": "https://www.example.com/"
+                                    |               }
+                                    |               or
+                                    |               HTTP 404/410/500 (failure)
+                                    |               {
+                                    |                   "error": "..."
+                                    |               }
+                                    v
+                            +------------------+                        +-------------+
+Read():                     | Primary Server   |   < ---------------- > | Redis Cache |
+1) QUERY short URL          +------------------+                        +-------------+
+2) Redirect on match                ^               
+                                    |                  
+                                    |
+                                    |
+                                    v
+                                +-----------+
+Urls Table                      | Database  |    SQL Query:
+{                               +-----------+    SELECT * FROM Urls WHERE short_url_code = ...
+    string short_url                                
+    string original_url                             
+    datetime creation_time                          
+    datetime expiration_time                        
+    created_by                                      
+}
+```
+
+Challenges:
+
+Implementing in-memory cache offers performance improvements.
+
+It also adds the need to complex cases, such as cache invalidation
+for updates or deletions (which for us can more or less be ignored
+since URLs are read heavy).
+
+The cache would also need to 'warm-up' before the performance benefits
+kick in, leading to initial requests still hitting the database
+until cache is populated.
+
+Memory limits would also require decision s about cache size,
+eviction policies (e.g., LRU).
+
+Overall, it does offer performance benefits, but also adds
+tradeoffs and invalidation strategies that need to be worked out
+
 ### Great Solution: Leveraging Content Deliver Networks (CDNs) and Edge Computing
+
 
 
 ## Deep Dives: Scaling to 1B shortened URLs and 100M DAU

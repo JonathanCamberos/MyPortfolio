@@ -1,0 +1,73 @@
+---
+title: "System Design: Ticket Master"
+description: "ticket master"
+image: "../../public/Notes/ticket-2.png"
+publishedAt: "2025-11-03"
+updatedAt: "2025-11-03"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- system design
+---
+
+
+## 2. Design Ticket Master
+
+Topics: High Contention 
+
+## Functional Requirements ::2::
+
+> Features needed to satisfy the needs of the user.
+
+### In Scope
+
+1. Users should be able to view events
+
+2. Users should be able to search for events 
+
+3. Users should be able to book tickets to events
+
+### Out of Scope
+
+1. Users should be able to view their booked events
+
+2. Admins or event coordinators should be able to add events
+
+3. Popular events should have a dynamic pricing
+
+## Non Functional Requirements ::4::
+
+> Specifications about how a system operates, rather than what tasks it performs.
+> Defines system attributes like scalability, latency, security, availability,
+> and are often framed as specific benchmarks.
+> (e.g., system's ability to handle 100 million daily active users,
+> response to queries within 200 milliseconds)
+
+### Benchmarks
+
+1. The system should prioritize availability for searching & viewing events,
+but should prioritize consistency for booking events (no double booking)
+
+2. The system should be scalable and able to handle high throughput in the form 
+of popular events (10 million users, one event)
+
+3. The system should have low latency search (< 500 ms)
+
+4. The system is read heavy, and thus needs to be able to support high 
+read throughput (100:1)
+
+### Out of Scope
+
+1. The system should protect user data and adhere to GDPR
+
+2. The system should be fault tolerant
+
+3. The system should provide secure transactions for purchases
+
+4. The system should be well tested and easy to deploy (CI/CD pipelines)
+
+5. The system should have regular backups
+
+
+## Set Up
+
