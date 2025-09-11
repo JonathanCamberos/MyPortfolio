@@ -12,13 +12,13 @@ tags:
 
 ## 1. Design Bit.ly
 
-Topics: Scaling Reads Pattern
+Topics: Scaling Reads
 
-## Functional Requirements
+## Functional Requirements ::2::
 
 > Features needed to satisfy the needs of the user.
 
-### URL Shortener Functional Requirements
+### In Scope
 
 1. Users should be able to submit a long URL and receive a shortened URL.
 
@@ -28,22 +28,22 @@ Topics: Scaling Reads Pattern
 
 2. Users should be able to access the original URL by using the shortened URL.
 
-### Out of Scope Requirements
+### Out of Scope
 
 1. User authentication and account management
 
 2. Analytics on link clicks (e.g., click counts, geographic data).
 
 
-## Non Functional Requirements
+## Non Functional Requirements ::4::
 
 > Specifications about how a system operates, rather than what tasks it performs.
-> Define system attributes like scalability, latency, security, availability,
+> Defines system attributes like scalability, latency, security, availability,
 > and are often framed as specific benchmarks.
 > (e.g., system's ability to handle 100 million daily active users,
 > response to queries within 200 milliseconds)
 
-### Requirements
+### Benchmarks
 
 1. System should ensure uniqueness for short codes (no two long URLs should
 map to the same short URL)
@@ -57,125 +57,131 @@ map to the same short URL)
 
 ### Out of Scope
 
-- Data consistency in real time analytics
+1. Data consistency in real time analytics
 
-- Advanced security features like spam detection and malicious URL filtering.
+2. Advanced security features like spam detection and malicious URL filtering.
 
-Note: important consideration in this system is significant imbalance 
-between reads and write operations.
-Read to write ratio is heavily skewed towards reads, as user frequently
-access the shortened URLs.
-The creation of new short URLs is comparatively rare.
-We might see an average of 1000 clicks (reads) for every 1 new short URL
-created (writes).
-We will keep this in mind during caching strategies, database choice, and
-overall architecture.
-
-## TLDR Requirements
-
-1. Functional Requirements
-
-- Users can create short urls from original urls  
-- Optional custom alias  
-- optional expiration time
-- users can access the original url by visiting the short url
-
-2. Non-functional Requirements
-
-- Ensure uniqueness of short urls
-- Low latency redirection
-- Availability >> consistency 
-- Scalable to 1B urls and 100M DAU
+Note: 
+The important consideration in this system is the imbalance 
+between reads and writes.
+The ratio is skewed towards reads, 
+since users will more frequently access shortened URLs vs create new ones.
+(e.g., average pf 1000 reads to 1 create).
+Our caching strategies, database choices, and architecture
+will revolve around this.
 
 ## Set Up
 
-### Core Entities
+### Entities
 
-- Original URL
-- Short URL
-- User
+> The core objects or concepts within a system which define its 
+> functionality and data.
 
-### API: the delivery framework
+In our case simple, but still good to list out.
+The core entities are the long URL, short URL, and user.
 
-> This sets up a contract between the client and the server
-> and is the first point of reference for high level design.
+### API: the delivery framework ::2::
 
-Usually map 1:1 to functional requirements, but may need 
-multiple endpoints to satisfy and individual functional requirement.
+> The contract between the client and the server
+> and first point of reference in high level design.
 
-9/10 times we will use a REST API and simply map the functional requirement
-to the correct HTTP method:
+We simply use a REST API and map the requirement to the correct HTTP method:
 - POST: Create a new resource
 - GET: Read an existing resource
 - PUT: Update an existing resource
 - DELETE: Delete an existing resource
 
-1. POST: Create a new resource
+In our case, functional requirements and end points map 1:1 for 
+create short url -> POST and get long url -> GET.
 
-> To shorten a URL, we'll need a POST endpoint that takes in the long URL
-> and the optional alias and expiration date, then returning the shortened URL.
+1. POST: Generate a new short URL
+
+A POST endpoint to intake the long URL, 
+optional alias, optional expiration date, and return the short URL.
 
 ```json
-    // Shorten a URL
-    POST /urls
+// Generate short URL from long URL
+Request: POST/{long_url}
+Body:
     {
-    "long_url": "https://www.example.com/some/very/long/url",
-    "custom_alias": "optional_custom_alias",
-    "expiration_date": "optional_expiration_date"
+        "long_url": "https://www.example.com/some/very/long/url",
+        "custom_alias": "optional_custom_alias",
+        "expiration_date": "optional_expiration_date"
     }
-    ->
+    
+Response: HTTP/1.1 201 Created
+Body:
     {
-    "short_url": "http://short.ly/abc123"
+        "short_url": "http://short.ly/abc123"
     }
 ```
 
-2. GET: Read an existing resource
+2. GET: Retrieve an existing long URL
 
-> For redirection, we'll need a GET endpoint that takes in the short code
-> and redirects the user to the original long URL.
+A GET endpoint that intakes the short url,
+and redirects the user to the original long URL.
 
 ```json
-    // Redirect to Original URL
-    GET /{short_code}
-    -> HTTP 302 Redirect to the original long URL
+// Using short URL, redirect to original long URL
+Request: GET/{short_url}
+
+Response: HTTP 302 Redirect to the original long URL
 ```
 
 
-## High Level Design
+## High Level Design Functional Requirement 1: User submits a long URL and receives a short URL
 
-> Start the design by going one by one through our functional requirements
-> and designing a single system to satisfy them.
-> Once we have this abstraction, we can layer on depth via our 
-> deep dives
+High level design for short url creation.
 
-### Functional Requirement: User submits a long URL and receives a short URL
-
-### Diagram
 Core components high level:
-- Client: Users interact with system through web or mobile app
-- Primary Server: Receives requests from client and handles logic
-- Database: Stores mapping of short URLs to long URLs, user generated aliases, and expiration dates
+1. Client: Users interact with system through web or mobile app
+2. Primary Server: Receives requests from client and handles logic
+3. Database: Stores mapping of short URLs to long URLs, user generated aliases, and expiration dates
 
+### POST Diagram
 ```python
-    def POST():
+User submits a long URL and receives a short URL():
 
-                        Write: 1) generate short URL
-                               2) save to DB
-    +--------+  POST:URL +----------------+    SQL Query    +-----------+   Urls
-    | Client | --------> | Primary Server | --------------> | Database  |   - short url code (or custom alias)
-    +--------+           +----------------+                 +-----------+   - original url
-                                                                            - creationTime
-                                                                            - expirationTime?
-                                                                            - createdBy
+                            +--------+
+Request:                    | Client |          Response:
+POST/urls                   +--------+          HTTP 201: Created 
+{                               ^               {
+    "long_url": ...             |                   "short_url": "http://short.ly/abc123"
+    "custom_alias": ...         |               }
+    "expiration_date": ...      |                or 
+}                               |               HTTP 400/409/500 (failure)
+                                |               {
+                                |                   "error": "..."
+                                |               }
+                                v                   
+                        +------------------+
+Write():                | Primary Server   |    On Success: 
+1) generate short URL   +------------------+        Return short URL
+2) SQL Query (INSERT)           ^               On Failure:
+                                |                   Return error msg
+                                |
+                                |
+                                v
+                            +-----------+
+Urls Table                  | Database  |    SQL Insert: 
+{                           +-----------+    INSERT INTO Urls (...)     
+    string short_url                                
+    string original_url                             
+    datetime creation_time                          
+    datetime expiration_time                        
+    created_by                                      
+}
 ```
 
-### Processing
+### POST Processing Logic
 
-1. Client sends a POST request to */urls*:
 
+1. Client Request()
+
+Client sends a POST request to */urls*:
 Sends long URL, custom alias, expiration dates.
 
-2. Primary Server receives request: 
+2. Primary Server processes Request() 
 
 Validates that is a real URL (to avoid unnecessary shortening),
 via open-source library like is-url or our own validation
@@ -183,70 +189,95 @@ via open-source library like is-url or our own validation
 Validates that it does not already exist in our system (to avoid collisions),
 via querying our database to check if long URL is already present
 
-3. If URL is valid and does not already exist, we can generate a short URL
+3. Primary Server Validation()
 
+If URL is valid and does not already exist, we can generate a short URL
 Abstract this to magic function for now
 
 If user specified alias, we can use that as short code
 
-4. Once short URL is generated, we insert it into our database
+4. Primary Server Insert Database()
 
+Once short URL is generated, we insert it into our database
 Store short URL, long URL, and expiration date
 
-5. Return short URL to client
+5. Primary Server Response()
 
-Send back response to client with short URL
+Return short URL to client.
+Send back response to client with short URL.
 
 
-### Functional Requirement: User can access original long URL by using short URL
+## High Level Design Functional Requirement 2: User can access original long URL by using short URL
 
-### Diagram
+High level design for redirection to the original long url.
+
+### GET Diagram
+
 ```python
-    def GET():
+User requests a short URL and is redirected to the original URL:
 
-                        Read: 1) look up original url in DB
-                              2) return with 302 redirect
-    +--------+GET/{short}+----------------+    SQL Query    +-----------+   Urls
-    | Client | --------> | Primary Server | --------------> | Database  |   - short url code (or custom alias)
-    +--------+           +----------------+                 +-----------+   - original url
-                                                                            - creationTime
-                                                                            - expirationTime?
-                                                                            - createdBy
+                                +--------+
+Request:                        | Client |          Response:
+GET/lookup                      +--------+          HTTP 302: Found
+{                                   ^               {
+    "short_url" : ...               |                   "Location": "https://www.example.com/"
+}                                   |               }
+                                    |               or
+                                    |               HTTP 404/410/500 (failure)
+                                    |               {
+                                    |                   "error": "..."
+                                    |               }
+                                    v
+                            +------------------+
+Read():                     | Primary Server   |    On Success:
+1) QUERY short URL          +------------------+        Return 302 redirect
+2) Redirect on match                ^               On Failure:
+                                    |                   Return error msg
+                                    |
+                                    |
+                                    v
+                                +-----------+
+Urls Table                      | Database  |    SQL Query:
+{                               +-----------+    SELECT * FROM Urls WHERE short_url_code = ...
+    string short_url                                
+    string original_url                             
+    datetime creation_time                          
+    datetime expiration_time                        
+    created_by                                      
+}
 ```
 
-### Processing
+### GET Processing Logic
 
-1. User browser sends a GET request to serve with short URL *GET /abc123*
+1. User Request()
 
-2. Primary server receives this request and looks up the short code in database
+User browser sends a GET request to serve with short URL *GET /abc123*
 
-3. If short code is found and not expired, server retrieves corresponding long URL.
+2. Primary Server Processes Request()
 
-4. Server sends HTTP redirect response to user's browser, sending it to long URL.
+Primary server receives this request and looks up the short code in database
 
-There are two main HTTP redirects we could use for this purpose
+3. Primary Server Lookup and Validation()
 
-301 (Permanent Redirect):
+If short code is found and not expired, server retrieves corresponding long URL.
+
+
+4. Primary Server Response()
+
+Server sends HTTP redirect response to user's browser, sending it to long URL.
+There are two main HTTP redirects we could use for this purpose:
+
+- HTTP/1.1 301 (Permanent Redirect):
 Indicate resource has permanently moved to target URL, which will typically
 cause browsers to cache this responses, leading to future requests for
 the short URL to go directly to the long URL, bypassing the server.
 
-```h
-HTTP/1.1 301 Moved Permanently
-Location: https://www.original-long-url.com
-```
-
-301 (Temporary Redirect):
+- HTTP/1.1 302 (Temporary Redirect):
 Indicate resource has temporary moved to target URL, which browsers
 do not cache this response, leading to future requests for the short URL 
 to go through our primary server first.
 
-```h
-HTTP/1.1 302 Found
-Location: https://www.original-long-url.com
-```
-
-For our case, we prefer 302 redirect because:
+We will use 302 redirect because:
 
 - Prevents browser caching and gives us direct control over redirection 
 process, in case we need to update or expire links as needed
@@ -255,7 +286,7 @@ process, in case we need to update or expire links as needed
 forced to go through our primary server
 
 
-## Deep Dives: Short Urls
+## Deep Dive 1: Short and Unique Urls
 
 ### Ensuring URLS are unique
 
@@ -319,7 +350,7 @@ strings.
 So we would need to move to 7 character codes once we hit the trillions.
 
 
-## Deep Dives: Fast Redirection
+## Deep Dive 2: Fast Redirection to Original URL
 
 ### Ensuring user redirection is fast
 

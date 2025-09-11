@@ -669,8 +669,8 @@
       "application": "intervals",
       "code": "def merge(self, intervals: List[List[int]]) -> List[List[int]]:\n        \n        # Note:\n        # Greedy / Sorting approach\n        # 1. Process root -> sort intervals by start time\n        # 2. Build -> iterate through sorted intervals, merging overlapping ones\n        # 3. Explore Choices -> if current interval overlaps previous, merge; else, append\n        # 4. Result -> list of merged, non-overlapping intervals\n\n        # Empty check\n        if not intervals:\n            return []\n\n        # Sort intervals by start time\n        intervals.sort(key=lambda x: x[0])\n\n        # Initialize with first interval\n        merged = [intervals[0]]\n\n        # Iterate over all intervals\n        for i in range(1, len(intervals)):\n\n            # curr interval\n            current = intervals[i]\n\n            # rightmost interval\n            last_merged = merged[-1]\n\n            # if intervals overlap, merge\n            if current[0] <= last_merged[1]:\n                last_merged[1] = max(last_merged[1], current[1])\n\n            # no overlap, append interval to list\n            else:\n                merged.append(current)\n\n        # overall: time complexity O(n log n)\n        # overall: space complexity O(n)\n        return merged",
       "questionNumber": 56,
-      "solutionLink": "/Notes/intervals#solution-1-greedy-sort-merge---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-1-greedy-sort-merge---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     },
     {
       "number": 2,
@@ -679,8 +679,8 @@
       "application": "intervals",
       "code": "def merge(self, intervals: List[List[int]]) -> List[List[int]]:\n        \n        # Note:\n        # Greedy / Heap approach\n        # 1. Push all intervals into a min-heap (ordered by start)\n        # 2. Pop intervals one by one\n        # 3. Interval does not overlap with end of array, append\n        # 4. Interval overlaps with end of array, merge \n        # Result -> List of merged intervals\n\n        # Empty check\n        if not intervals:\n            return []\n\n        # 1. Push all intervals into a min-heap (ordered by start)\n        heap = [(s, e) for s, e in intervals]\n        heapq.heapify(heap)\n\n        merged = []\n\n        # 2. Pop intervals one by one\n        while heap:\n            start, end = heapq.heappop(heap)\n\n            # 3. Interval does not overlap with end of array, append\n            if not merged or merged[-1][1] < start:\n                merged.append([start, end])\n\n            # 4. Interval overlaps with end of array, merge \n            else:\n                merged[-1][1] = max(merged[-1][1], end)\n\n        # overall: time complexity O(n log n) (heapify + n pops)\n        # overall: space complexity O(n) for merged list\n        return merged",
       "questionNumber": 56,
-      "solutionLink": "/Notes/intervals#solution-2-greedy-heap-merge---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-2-greedy-heap-merge---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "57": [
@@ -691,8 +691,8 @@
       "application": "intervals",
       "code": "def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:\n        \n        # Note:\n        # Iterate over all intervals:\n        #   1. Interval ends before newInterval starts -> add to list\n        #   2. Interval overlaps -> merge into newInterval, then add\n        #   3. Interval starts after newInterval ends -> add to list\n        # Result -> merged list of intervals\n\n        n = len(intervals)\n\n        res = []\n\n        # to create merged interval\n        start = newInterval[0]\n        end = newInterval[1]\n\n        i = 0\n\n        # 1. Interval ends before newInterval starts -> add to list\n        while i < n and intervals[i][1] < start:\n            res.append(intervals[i])\n            i += 1\n\n        # 2. Interval overlaps -> merge into newInterval, then add\n        while i < n and intervals[i][0] <= end:\n\n            # update start and end of merged interval\n            start = min(start, intervals[i][0])\n            end = max(end, intervals[i][1])\n            i += 1\n\n        # Append merged interval\n        res.append([start, end])\n\n        # 3. Interval starts after newInterval ends -> add to list\n        while i < n:\n            res.append(intervals[i])\n            i += 1\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
       "questionNumber": 57,
-      "solutionLink": "/Notes/intervals#solution-1-greedy-merge---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-1-greedy-merge---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "62": [
@@ -2093,7 +2093,7 @@
       "name": "DFS Post Order Iterative Carry Up Inverted Subtrees",
       "type": "tree",
       "application": "dfs-post-order-recursive-two-sided-bottom-up",
-      "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left -> right: inverting\n        # 2. Process  -> root: swap left and right subtree\n        # Result: swapping bottom to up \n\n        if not root:\n            return None\n\n        stack = []\n\n        # current pointer\n        curr = root\n\n        # last visited\n        lastVisitde = None \n\n        while stack or curr:\n\n            # process -> left : \n            # traverse left subtree of root \n            while curr: \n                stack.append(curr)\n                curr = curr.left\n\n            # check if right subtree exists\n            peek = stack[-1]\n\n            # process  -> right : \n            # if right subtree exists and has not been visited: \n            # (remember: left subtree of right subtree will be traversed first)\n            if peek.right and lastVisited != peek.right:\n                curr = peek.right\n            \n            # process -> root : (after both subtrees)\n            else:\n                stack.pop()\n\n                # process node\n                peek.left, peek.right = peek.right, peek.left\n\n                # last visited set to curr\n                lastVisited = peek\n\n        return root",
+      "code": "def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        # Note:\n        # DFS post order: left -> right -> root\n        # 1. Process left -> right: inverting\n        # 2. Process  -> root: swap left and right subtree\n        # Result: swapping bottom to up \n\n        if not root:\n            return None\n\n        stack = []\n\n        # current pointer\n        curr = root\n\n        # last visited\n        lastVisited = None \n\n        while stack or curr:\n\n            # process -> left : \n            # traverse left subtree of root \n            while curr: \n                stack.append(curr)\n                curr = curr.left\n\n            # check if right subtree exists\n            peek = stack[-1]\n\n            # process  -> right : \n            # if right subtree exists and has not been visited: \n            # (remember: left subtree of right subtree will be traversed first)\n            if peek.right and lastVisited != peek.right:\n                curr = peek.right\n            \n            # process -> root : (after both subtrees)\n            else:\n                stack.pop()\n\n                # process node\n                peek.left, peek.right = peek.right, peek.left\n\n                # last visited set to curr\n                lastVisited = peek\n\n        return root",
       "questionNumber": 226,
       "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-post-order-iterative-carry-up-inverted-subtrees---treedfs-post-order-recursive-two-sided-bottom-up",
       "blog": "LeetCode: Trees"
@@ -2237,8 +2237,8 @@
       "application": "intervals",
       "code": "def canAttendMeetings(self, intervals: List[Interval]) -> bool:\n        \n        # Note:\n        # 1. Sort intervals by start time\n        # 2. Iterate through sorted intervals\n        # 3. Curr meeting starts before previous -> conflict\n        # Result -> Check if conflict exists\n        \n        # Empty Check\n        if not intervals:\n            return True\n\n        # Sort intervals by start time\n        intervals.sort(key=lambda x: x.start)\n\n        # Iterate through sorted intervals\n        for i in range(1, len(intervals)):\n\n            # Curr meeting starts before previous -> conflict\n            if intervals[i].start < intervals[i-1].end:\n                return False\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return True",
       "questionNumber": 252,
-      "solutionLink": "/Notes/intervals#solution-1-greedy-sort-by-start---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-1-greedy-sort-by-start---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "253": [
@@ -2249,8 +2249,8 @@
       "application": "intervals",
       "code": "def minMeetingRooms(self, intervals: List[Interval]) -> int:\n        \n        # Note:\n        # Greedy Min-Heap\n        # 1. Sort intervals by start time\n        # 2. MinHeap to track meeting end times\n        # 3. Iterate over intervals:\n        #    Curr starts after earliest ending -> reuse room (pop heap)\n        #    Curr starts before earliest ending -> new room needed, push curr end time to heap\n        # Result -> size of heap at end = min rooms required\n\n        # Empty Check\n        if not intervals:\n            return 0\n\n        # Sort intervals by start time\n        intervals.sort(key=lambda x: x.start)\n\n        # MinHeap to track meeting end times\n        heap = []\n\n        for interval in intervals:\n\n            # Curr starts after earliest ending -> reuse room (pop heap)\n            if heap and interval.start >= heap[0]:\n                heapq.heappop(heap)\n\n            # Curr starts before earliest ending -> new room needed, push curr end time to heap\n            heapq.heappush(heap, interval.end)\n\n        # size of heap at end = min rooms required\n        res = len(heap)\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
       "questionNumber": 253,
-      "solutionLink": "/Notes/intervals#solution-1-greedy-minheap---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-1-greedy-minheap---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "261": [
@@ -2339,6 +2339,18 @@
       "questionNumber": 271,
       "solutionLink": "/Notes/leetcode-two-pointers#solution-2-base-10-auxiliary-length-delimiter-with-1-pointer---two-pointersone-pointer-with-auxiliary-state",
       "blog": "LeetCode: Two Pointers"
+    }
+  ],
+  "286": [
+    {
+      "number": 1,
+      "name": "Multi Source BFS",
+      "type": "graph",
+      "application": "something",
+      "code": "def islandsAndTreasure(self, grid: List[List[int]]) -> None:\n        if not grid:\n            return\n\n        m, n = len(grid), len(grid[0])\n        INF = 2147483647\n        q = deque()\n\n        # Step 1: Collect all treasure chests (multi-source roots)\n        for r in range(m):\n            for c in range(n):\n                if grid[r][c] == 0:\n                    q.append((r, c))\n\n        # Step 2: BFS flood fill\n        while q:\n            r, c = q.popleft()\n\n            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:\n                nr, nc = r + dr, c + dc\n\n                # Late Candidate Prune: out of bounds or not INF\n                if not (0 <= nr < m and 0 <= nc < n):\n                    continue\n                if grid[nr][nc] != INF:\n                    continue\n\n                # Process Root: update distance from nearest treasure\n                grid[nr][nc] = grid[r][c] + 1\n\n                # Process Choices: explore neighbor\n                q.append((nr, nc))\n\n        # overall: time O(m * n), space O(m * n) (queue worst-case)",
+      "questionNumber": 286,
+      "solutionLink": "/Notes/leetcode-graphs#solution-1-multi-source-bfs---graphsomething",
+      "blog": "LeetCode: Graphs"
     }
   ],
   "287": [
@@ -2601,6 +2613,18 @@
       "blog": "LeetCode: Advanced Graphs"
     }
   ],
+  "338": [
+    {
+      "number": 1,
+      "name": "DP with Integer Division + Bit Shift",
+      "type": "bit-manipulation",
+      "application": "bit-manipulation",
+      "code": "def countBits(self, n: int) -> List[int]:\n        \n        # Note:\n        # 1. DP relation via bit manipulation\n        #    i >> 1 removes the least significant bit\n        #    i & 1 checks if least significant bit is set\n        # 2. Recurrence:\n        #    dp[i] = dp[i >> 1] + (i & 1)\n        # 3. Build array bottom-up from 0 to n\n\n        ans = [0] * (n + 1)\n\n        for i in range(1, n + 1):\n            ans[i] = ans[i >> 1] + (i & 1)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return ans",
+      "questionNumber": 338,
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-dp-with-integer-division-bit-shift---bit-manipulationbit-manipulation",
+      "blog": "LeetCode: Bit Manipulation"
+    }
+  ],
   "347": [
     {
       "number": 1,
@@ -2773,8 +2797,8 @@
       "application": "intervals",
       "code": "def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:\n        \n        # Note:\n        # Greedy / Sorting approach\n        # 0. Empty or single interval: no removals needed\n        # 1. Sort intervals by end time\n        # 2. Track end of last kept interval\n        # 3. Iterate through intervals\n        # 4. If current interval overlaps last, remove it\n        # 5. If no overlap, update end to end of new interval\n        # Result -> count of removed intervals\n\n        # Empty check\n        if not intervals:\n            return 0\n\n        # Sort intervals by end time (earliest finishing first)\n        intervals.sort(key=lambda x: x[1])\n\n        # Track end of first interval\n        end = intervals[0][1]\n        \n        removals = 0\n\n        # Iterate over intervals\n        for i in range(1, len(intervals)):\n\n            # curr interval\n            start_i, end_i = intervals[i]\n\n            # Interval overlaps -> remove\n            if start_i < end:\n                removals += 1\n\n            # No overlap -> update end to current interval end\n            else:\n                end = end_i\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return removals",
       "questionNumber": 435,
-      "solutionLink": "/Notes/intervals#solution-1-greedy-sort-by-end---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-1-greedy-sort-by-end---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     },
     {
       "number": 2,
@@ -2783,8 +2807,8 @@
       "application": "intervals",
       "code": "def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:\n        \n        # Note:\n        # Greedy / Sorting approach\n        # 0. Empty or single interval: no removals needed\n        # 1. Sort intervals by start time\n        # 2. Track end of last kept interval\n        # 3. Iterate through intervals\n        # 4. Overlap with last, keep the interval with smaller end\n        # 5. No overlap, update end to end of new interval\n        # Result -> count of removed intervals\n\n        # sort\n        intervals.sort()\n        \n        res = 0\n\n        # end of first interval\n        prevEnd = intervals[0][1]\n\n        # Iterate over intervals\n        for start, end in intervals[1:]:\n\n            # no overlap -> update prevEnd\n            if start >= prevEnd:\n                prevEnd = end\n\n            # overlap -> remove one interval, keep the one with smaller end\n            else:\n                res += 1\n                prevEnd = min(end, prevEnd)\n\n        # overall: time complexity\n        # overall: space complexity \n        return res",
       "questionNumber": 435,
-      "solutionLink": "/Notes/intervals#solution-2-greedy-sort-by-start---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-2-greedy-sort-by-start---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "494": [
@@ -3525,8 +3549,8 @@
       "application": "intervals",
       "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Uses sorted queries with indices for mapping results.\n\n        # Note:\n        # Greedy + Min-Heap\n        # 1. Sort intervals by start\n        # 2. Sort queries with original indices\n        # 3. Iterate queries in ascending order\n        # 4. Intervals <= query -> push to heap\n        # 5. Intervals > query -> pop\n        # 6. record result\n        # Result -> top of heap is smallest interval covering query, else -1\n\n        # Sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        # Sort queries with original indices\n        sorted_queries = sorted([(q, i) for i, q in enumerate(queries)])\n\n        res = [-1] * len(queries)\n\n        # MinHeap: (size, end)\n        heap = []\n        \n        # pointer for intervals\n        j = 0\n\n        # Iterate queries in ascending order\n        for q_val, q_idx in sorted_queries:\n\n            # push all intervals starting <= query into heap\n            while j < len(intervals) and intervals[j][0] <= q_val:\n                start, end = intervals[j]\n                size = end - start + 1\n                heapq.heappush(heap, (size, end))\n                j += 1\n\n            # pop intervals ending before query\n            while heap and heap[0][1] < q_val:\n                heapq.heappop(heap)\n\n            # record result\n            if heap:\n                res[q_idx] = heap[0][0]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
       "questionNumber": 1851,
-      "solutionLink": "/Notes/intervals#solution-1-greedy-minheap-1---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-1-greedy-minheap-1---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     },
     {
       "number": 2,
@@ -3535,8 +3559,8 @@
       "application": "intervals",
       "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Uses a defaultdict map for clarity.\n\n        # Note:\n        # Greedy + Min-Heap\n        # 0. Direct Boundary -> empty inputs handled implicitly\n        # 1. Sort intervals by start\n        # 2. Iterate queries in ascending order\n        # 3. Push intervals whose start <= query into min-heap (ordered by size)\n        # 4. Remove intervals whose end < query\n        # 5. Result -> top of heap is smallest interval covering query, else -1\n        # 6. Map results back to original query order\n\n        # Sort intervals by start\n        intervals.sort(key=lambda x: x[0])\n\n        res_map = defaultdict(int)\n        # MinHeap of (size, end)\n        min_heap = []\n        # Pointer for intervals\n        i = 0\n\n        # Iterate queries in ascending order\n        for q in sorted(queries):\n\n            # Push all intervals starting <= query into heap\n            while i < len(intervals) and intervals[i][0] <= q:\n                l, r = intervals[i]\n                heapq.heappush(min_heap, (r - l + 1, r))  # (size, end)\n                i += 1\n\n            # Pop intervals ending before query\n            while min_heap and min_heap[0][1] < q:\n                heapq.heappop(min_heap)\n\n            # Record result\n            res_map[q] = min_heap[0][0] if min_heap else -1\n\n        # Map results back to original query order\n        res = [res_map[q] for q in queries]\n\n        # overall: time complexity O(n log n + q log n)\n        # overall: space complexity O(n)\n        return res",
       "questionNumber": 1851,
-      "solutionLink": "/Notes/intervals#solution-2-greedy-minheap-2---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-2-greedy-minheap-2---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     },
     {
       "number": 3,
@@ -3545,8 +3569,8 @@
       "application": "intervals",
       "code": "def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:\n        \n        # Note:\n        # Uses a hash to avoid recomputation and pushes intervals \n        # into heap lazily.\n        \n        soq = sorted(queries)\n        out = []\n        intervals.sort(key=lambda x: x[0])\n        hsh = {}\n        i=0\n        pq = []\n        for q in soq:\n            if hsh.get(q,-1) != -1:\n                continue\n            \n            while i<len(intervals) and q>=intervals[i][0]:\n                l,r = intervals[i]\n                heapq.heappush(pq,(r-l+1,r))\n                i+=1\n            \n            while pq:\n                pr,end = pq[0]\n                if q>end:\n                    heapq.heappop(pq)\n                else:\n                    hsh[q]=pr\n                    break\n\n            \n        \n        return [hsh.get(p,-1) for p in queries]",
       "questionNumber": 1851,
-      "solutionLink": "/Notes/intervals#solution-3-greedy-minheap-3---intervalsintervals",
-      "blog": "Intervals"
+      "solutionLink": "/Notes/leetcode-intervals#solution-3-greedy-minheap-3---intervalsintervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "1899": [

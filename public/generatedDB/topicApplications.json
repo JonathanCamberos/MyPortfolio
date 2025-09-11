@@ -700,8 +700,8 @@
       "summary": "Pattern: Numbers!",
       "exampleIntro": "Numbers numbers!!",
       "codeExample": "def wow!(n: int) -> int:\n\n        return n+1",
-      "useCaseLink": "/Notes/intervals#intervals-application-intervals",
-      "blog": "Intervals"
+      "useCaseLink": "/Notes/leetcode-intervals#intervals-application-intervals",
+      "blog": "LeetCode: Intervals"
     }
   ],
   "bit-manipulation": [

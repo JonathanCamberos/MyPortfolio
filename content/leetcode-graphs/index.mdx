@@ -910,6 +910,103 @@ Given a graph represented by an adjacency matrix, return a deep copy.
         return cloned[node]
 ```
 
+## 286. Walls and Gates ::2:: - Medium
+
+Topics:  Hash Table, Depth First Search, Breadth First Search, Graph
+
+### Intro
+> You are given a (m) x (n 2D) grid initialized with 
+> these three possible values:
+> -1 - A water cell that can not be traversed.
+> 0 - A treasure chest.
+> INF - A land cell that can be traversed. 
+> We use the integer 2^31 - 1 = 2147483647 to represent INF.
+> Fill each land cell with the distance to its nearest 
+> treasure chest. If a land cell cannot reach a
+> treasure chest then the value should remain INF.
+> Assume the grid can only be traversed up, down, 
+> left, or right.
+> Modify the grid in-place.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| look at diagram | look at diagram |
+
+Constraints:
+
+m == grid.length
+
+n == grid[i].length
+
+1 &leq; m, n &leq; 100
+
+grid[i][j] is one of [-1, 0, 2147483647]
+
+### Abstraction
+Given grid, fill each land grid with the distance to the nearest treasure.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: Multi Source BFS - Graph/something
+```python
+    def islandsAndTreasure(self, grid: List[List[int]]) -> None:
+        if not grid:
+            return
+
+        m, n = len(grid), len(grid[0])
+        INF = 2147483647
+        q = deque()
+
+        # Step 1: Collect all treasure chests (multi-source roots)
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 0:
+                    q.append((r, c))
+
+        # Step 2: BFS flood fill
+        while q:
+            r, c = q.popleft()
+
+            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                nr, nc = r + dr, c + dc
+
+                # Late Candidate Prune: out of bounds or not INF
+                if not (0 <= nr < m and 0 <= nc < n):
+                    continue
+                if grid[nr][nc] != INF:
+                    continue
+
+                # Process Root: update distance from nearest treasure
+                grid[nr][nc] = grid[r][c] + 1
+
+                # Process Choices: explore neighbor
+                q.append((nr, nc))
+
+        # overall: time O(m * n), space O(m * n) (queue worst-case)
+```
 
 ## 994. Rotting Oranges ::2:: - Medium
 

@@ -11,7 +11,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "2": {
     "questionNum": 2,
@@ -71,7 +71,7 @@
     "questionLink": "/Notes/1d-dynamic-programming#5-longest-palindromic-substring-3---medium",
     "blog": "1D Dynamic Programming",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "7": {
     "questionNum": 7,
@@ -114,7 +114,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "15": {
     "questionNum": 15,
@@ -130,7 +130,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "17": {
     "questionNum": 17,
@@ -173,7 +173,7 @@
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 57
+    "coldnessCount": 60
   },
   "21": {
     "questionNum": 21,
@@ -247,7 +247,7 @@
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 46
+    "coldnessCount": 49
   },
   "36": {
     "questionNum": 36,
@@ -262,7 +262,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "39": {
     "questionNum": 39,
@@ -307,7 +307,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "43": {
     "questionNum": 43,
@@ -381,7 +381,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "50": {
     "questionNum": 50,
@@ -465,8 +465,8 @@
       "Array",
       "Sorting"
     ],
-    "questionLink": "/Notes/intervals#56-merge-intervals-1---medium",
-    "blog": "Intervals",
+    "questionLink": "/Notes/leetcode-intervals#56-merge-intervals-1---medium",
+    "blog": "LeetCode: Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -478,8 +478,8 @@
     "questionTopics": [
       "Array"
     ],
-    "questionLink": "/Notes/intervals#57-insert-interval-2---medium",
-    "blog": "Intervals",
+    "questionLink": "/Notes/leetcode-intervals#57-insert-interval-2---medium",
+    "blog": "LeetCode: Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -569,7 +569,7 @@
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 46
+    "coldnessCount": 49
   },
   "76": {
     "questionNum": 76,
@@ -828,7 +828,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "127": {
     "questionNum": 127,
@@ -858,7 +858,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "130": {
     "questionNum": 130,
@@ -1029,7 +1029,7 @@
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 58
+    "coldnessCount": 61
   },
   "152": {
     "questionNum": 152,
@@ -1057,7 +1057,7 @@
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 46
+    "coldnessCount": 49
   },
   "155": {
     "questionNum": 155,
@@ -1071,7 +1071,7 @@
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
     "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 57
+    "coldnessCount": 60
   },
   "162": {
     "questionNum": 162,
@@ -1100,7 +1100,7 @@
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-sorted-array-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "190": {
     "questionNum": 190,
@@ -1331,7 +1331,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "226": {
     "questionNum": 226,
@@ -1393,7 +1393,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "239": {
     "questionNum": 239,
@@ -1425,7 +1425,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "252": {
     "questionNum": 252,
@@ -1438,8 +1438,8 @@
       "Greedy",
       "Sorting"
     ],
-    "questionLink": "/Notes/intervals#252-meeting-rooms-1---easy",
-    "blog": "Intervals",
+    "questionLink": "/Notes/leetcode-intervals#252-meeting-rooms-1---easy",
+    "blog": "LeetCode: Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1454,8 +1454,8 @@
       "Greedy",
       "Sorting"
     ],
-    "questionLink": "/Notes/intervals#253-meeting-rooms-ii-1---medium",
-    "blog": "Intervals",
+    "questionLink": "/Notes/leetcode-intervals#253-meeting-rooms-ii-1---medium",
+    "blog": "LeetCode: Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1520,7 +1520,23 @@
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
+  },
+  "286": {
+    "questionNum": 286,
+    "questionTitle": "Walls and Gates ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a (m) x (n 2D) grid initialized with these three possible values: -1 - A water cell that can not be traversed. 0 - A treasure chest. INF - A land cell that can be traversed. We use the integer 2^31 - 1 = 2147483647 to represent INF. Fill each land cell with the distance to its nearest treasure chest. If a land cell cannot reach a treasure chest then the value should remain INF. Assume the grid can only be traversed up, down, left, or right. Modify the grid in-place.",
+    "questionTopics": [
+      "Hash Table",
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph"
+    ],
+    "questionLink": "/Notes/leetcode-graphs#286-walls-and-gates-2---medium",
+    "blog": "LeetCode: Graphs",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "287": {
     "questionNum": 287,
@@ -1682,6 +1698,20 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "338": {
+    "questionNum": 338,
+    "questionTitle": "Counting Bits ::2::",
+    "questionDifficulty": "Easy",
+    "questionBlurb": "Given an integer n, return an array ans of length n + 1 such that for each i (0 < = i < = n), ans[i] is the number of 1's in the binary representation of i.",
+    "questionTopics": [
+      "Dynamic Programming",
+      "Bit Manipulation"
+    ],
+    "questionLink": "/Notes/leetcode-bit-manipulation#338-counting-bits-2---easy",
+    "blog": "LeetCode: Bit Manipulation",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "347": {
     "questionNum": 347,
     "questionTitle": "Top K Elements in List ::3::",
@@ -1700,7 +1730,7 @@
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
     "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 60
+    "coldnessCount": 63
   },
   "355": {
     "questionNum": 355,
@@ -1803,8 +1833,8 @@
       "Greedy",
       "Sorting"
     ],
-    "questionLink": "/Notes/intervals#435-non-overlapping-intervals-1---medium",
-    "blog": "Intervals",
+    "questionLink": "/Notes/leetcode-intervals#435-non-overlapping-intervals-1---medium",
+    "blog": "LeetCode: Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1996,7 +2026,7 @@
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 46
+    "coldnessCount": 49
   },
   "739": {
     "questionNum": 739,
@@ -2146,7 +2176,7 @@
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
     "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 46
+    "coldnessCount": 49
   },
   "973": {
     "questionNum": 973,
@@ -2304,8 +2334,8 @@
       "Sorting",
       "Heap (Priority Queue)"
     ],
-    "questionLink": "/Notes/intervals#1851-minimum-interval-to-include-each-query-3---hard",
-    "blog": "Intervals",
+    "questionLink": "/Notes/leetcode-intervals#1851-minimum-interval-to-include-each-query-3---hard",
+    "blog": "LeetCode: Intervals",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },

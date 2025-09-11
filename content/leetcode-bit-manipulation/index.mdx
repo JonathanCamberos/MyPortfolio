@@ -214,6 +214,76 @@ in its binary representation.
         return count
 ```
 
+## 338. Counting Bits ::2:: - Easy
+
+Topics:  Dynamic Programming, Bit Manipulation
+
+### Intro
+> Given an integer n, return an array ans of length n + 1
+> such that for each i (0 < = i < = n), ans[i] is the 
+> number of 1's in the binary representation of i.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| n = 2 | [0,1,1] |
+| n = 5 | [0,1,1,2,1,2] |
+
+Constraints:
+
+0 &leq; n &leq; 10<sup>5</sup>
+
+### Abstraction
+Given an integer, return an array representing 0 -> n,
+where each index is the number of set bits for that integer.
+
+### Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+### Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+### Find the Bug:
+```python
+```
+
+### Solution 1: DP with Integer Division + Bit Shift - Bit Manipulation/Bit Manipulation
+```python
+    def countBits(self, n: int) -> List[int]:
+        
+        # Note:
+        # 1. DP relation via bit manipulation
+        #    i >> 1 removes the least significant bit
+        #    i & 1 checks if least significant bit is set
+        # 2. Recurrence:
+        #    dp[i] = dp[i >> 1] + (i & 1)
+        # 3. Build array bottom-up from 0 to n
+
+        ans = [0] * (n + 1)
+
+        for i in range(1, n + 1):
+            ans[i] = ans[i >> 1] + (i & 1)
+
+        # overall: time complexity O(n)
+        # overall: space complexity O(n)
+        return ans
+```
+
+
 ## 190. Reverse Bits ::1:: - Easy
 
 Topics:  Divide and Conquer, Bit Manipulation
