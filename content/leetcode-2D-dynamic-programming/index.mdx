@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-## 2D Dynamic Programming Intro
+# 2D Dynamic Programming Intro
 
 LeetCode problems solved with dynamic programming
 
-### What is 2D Dynamic Programming 
+## What is 2D Dynamic Programming 
 
 DP intro in 2D Dynamic Programming intro section. 
 
@@ -39,7 +39,7 @@ dp[i][j] = answer for first i of A, first j of B
 
 e.g., Edit Distance, Longest Common Subsequence
 
-### Recursive Memoization: 2D Recursion 
+## Recursive Memoization: 2D Recursion 
 
 Just like in 1D, many 2D DP problems begin as recursion.
 
@@ -47,11 +47,11 @@ Here, overlapping sub problems appear because (i, j) is revisited many times.
 Memoization caches dfs(i, j) resulting in a 2D table to avoid recomputation.
 
 
-### Iterative: Tabulation
+## Iterative: Tabulation
 
 We can also fill in a 2D table iteratively
 
-### DP Array Size Shifting
+## DP Array Size Shifting
 
 As in 1D DP, the choice of array size depends on what the state represents
 
@@ -61,7 +61,7 @@ Same mental trick as 1D:
 
 2. Element View (N, M) -> answer at dp[n-1][m-1]
 
-### 2D Dynamic Programming Application: 2D Dynamic Programming
+## 2D Dynamic Programming Application: 2D Dynamic Programming
 Pattern: Recursive DFS explores choices in two dimensions, memo stores results for pairs of states (e.g., indices in two sequences or matrix positions).
 Use When: Natural recursive definition exists over two parameters (e.g., subsequences, matrix paths, interleaving).
 Recurrence: dfs(state1, state2) = combine(dfs(substate1_1, substate2_1), dfs(substate1_2, substate2_2), ...)
@@ -87,7 +87,7 @@ Ex: Longest Common Subsequence (Top Down Memoization)
 ```
 
 
-### 2D Dynamic Programming Application: DFS with Caching Top Down with Memoization
+## 2D Dynamic Programming Application: DFS with Caching Top Down with Memoization
 Pattern: Recursive DFS explores choices in two dimensions, memo stores results for pairs of states (e.g., indices in two sequences or matrix positions).
 Use When: Natural recursive definition exists over two parameters (e.g., subsequences, matrix paths, interleaving).
 Recurrence: dfs(state1, state2) = combine(dfs(substate1_1, substate2_1), dfs(substate1_2, substate2_2), ...)
@@ -112,7 +112,7 @@ Ex: Longest Common Subsequence (Top Down Memoization)
     return dfs(0, 0)
 ```
 
-### 2D Dynamic Programming Application: Iterative Tabulation Bottom Up
+## 2D Dynamic Programming Application: Iterative Tabulation Bottom Up
 Pattern: Iteratively fill a 2D DP table from base case to target.
 Use When: Clear order of dependencies, can compute each cell sequentially using previous rows/columns.
 Recurrence: dp[i][j] = function(dp[i-1][j], dp[i][j-1], dp[i-1][j-1], ...)
@@ -133,7 +133,7 @@ Ex: Longest Common Subsequence (Bottom Up Tabulation)
         return dp[m][n]
 ```
 
-### 2D Dynamic Programming Application: Optimal Iterative Variables Bottom Up
+## 2D Dynamic Programming Application: Optimal Iterative Variables Bottom Up
 Pattern: Reduce 2D DP table to a few rolling rows/columns if each state depends only on previous row or column.
 Use When: Full DP table not required, space can be reduced from O(m×n) → O(n).
 Recurrence: curr[j] = function(prev[j], curr[j-1], prev[j-1], ...)
@@ -158,7 +158,7 @@ Ex: Longest Common Subsequence (Space Optimized Bottom Up)
 
 
 
-### Dynamic Programming Application: 2D Grid Traversal
+## Dynamic Programming Application: 2D Grid Traversal
 Each cell depends on top and or left neighbors (classic grid DP)
 
 Ex: Unique Paths
@@ -172,7 +172,7 @@ Ex: Unique Paths
         return dp[m-1][n-1]
 ```
 
-### Dynamic Programming Application: Knapsack Pattern
+## Dynamic Programming Application: Knapsack Pattern
 Choose or skip and item with branching recurrence.
 
 Ex: 0/1 Knapsack
@@ -189,7 +189,7 @@ Ex: 0/1 Knapsack
         return dp[n][capacity]
 ```
 
-### Dynamic Programming Application: Interval Pattern
+## Dynamic Programming Application: Interval Pattern
 Sub problems are defined over intervals [i..j], often solved 
 by increasing interval length.
 
@@ -208,7 +208,7 @@ Ex: Matrix Chain Multiplication
         return dp[0][n-1]
 ```
 
-### Dynamic Programming Application: Subsequence Pattern
+## Dynamic Programming Application: Subsequence Pattern
 Compare characters or elements -> branch on match/mismatch.
 
 Ex: Longest Common Subsequence
@@ -225,7 +225,7 @@ Ex: Longest Common Subsequence
         return dp[0][0]
 ```
 
-### Dynamic Programming Application: Tree Pattern
+## Dynamic Programming Application: Tree Pattern
 Solve each subtree, combine children’s results, bubble up
 
 Ex: House Robber III
@@ -243,7 +243,7 @@ Ex: House Robber III
     answer = max(robRoot, skipRoot)
 ```
 
-### Dynamic Programming Application: Graph Pattern
+## Dynamic Programming Application: Graph Pattern
 Each node’s dp depends on its neighbors (outgoing edges)
 via Topological sort or DFS memoization.
 
@@ -260,7 +260,7 @@ Ex: Longest Path in DAG
     answer = max(dfs(node) for node in all_nodes)
 ```
 
-### Dynamic Programming Application: Graph Pattern
+## Dynamic Programming Application: Graph Pattern
 Iterate over subsets or use bitmask recursion
 State encodes "which items are chosen"
 
@@ -281,11 +281,11 @@ Ex: Traveling Salesman or Visit All Nodes
     answer = min(dp(1 << i, i) for i in range(n))
 ```
 
-## 62. Unique Paths ::2:: - Medium
+# 62. Unique Paths ::2:: - Medium
 
 Topics:  Math, Dynamic Programming, Combinatorics
 
-### Intro
+## Intro
 > There is a robot on an m x n grid. The robot is initially  
 > located at the top-left corner (i.e., grid[0][0]). The robot 
 > tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]).
@@ -306,11 +306,11 @@ Constraints:
 
 1 &leq; m, n &leq; 100
 
-### Abstraction
+## Abstraction
 Given a grid and a robot, determine how many unique paths
 there are to the end.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -321,7 +321,7 @@ there are to the end.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -331,11 +331,11 @@ there are to the end.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def uniquePaths(self, m: int, n: int) -> int:
         
@@ -374,7 +374,7 @@ there are to the end.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def uniquePaths(self, m: int, n: int) -> int:
         
@@ -404,11 +404,11 @@ there are to the end.
 ```
 
 
-## 1143. Longest Common Subsequence ::3:: - Medium
+# 1143. Longest Common Subsequence ::3:: - Medium
 
 Topics:  String, Dynamic Programming
 
-### Intro
+## Intro
 > Given two strings text1 and text2, return the length 
 > of their longest common subsequence. If there is no 
 > common subsequence, return 0.
@@ -433,10 +433,10 @@ Constraints:
 
 text1 and text2 consist of only lowercase English characters.
 
-### Abstraction
+## Abstraction
 Given two strings, return the length of the longest common substring.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -447,7 +447,7 @@ Given two strings, return the length of the longest common substring.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -457,11 +457,11 @@ Given two strings, return the length of the longest common substring.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         # Note:
@@ -500,7 +500,7 @@ Given two strings, return the length of the longest common substring.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         # Note:
@@ -541,7 +541,7 @@ Given two strings, return the length of the longest common substring.
         return res
 ```
 
-### Solution 3: black magic - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: black magic - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         intersection = set(text1) & set(text2)
@@ -560,11 +560,11 @@ Given two strings, return the length of the longest common substring.
 ```
 
 
-## 309. Best Time to Buy and Sell Stock with Cool Down ::3:: - Medium
+# 309. Best Time to Buy and Sell Stock with Cool Down ::3:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-### Intro
+## Intro
 > You are given an array prices where prices[i] is the 
 > price of a given stock on the ith day.
 > Find the maximum profit you can achieve. You may 
@@ -589,13 +589,13 @@ Constraints:
 
 0 &leq; prices[i] &leq; 1000
 
-### Abstraction
+## Abstraction
 Given an array of prices, find the max profit, given the restrictions of
 as many transactions as you like, with a sell to buy cool down of one day,
 and no multiple transactions simultaneously so you must sell before you 
 can buy again.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -606,7 +606,7 @@ can buy again.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -616,11 +616,11 @@ can buy again.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -676,7 +676,7 @@ can buy again.
 
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -691,7 +691,7 @@ can buy again.
 
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
 def maxProfit(self, prices: List[int]) -> int:
 
@@ -741,11 +741,11 @@ def maxProfit(self, prices: List[int]) -> int:
 ```
 
 
-## 518. Coin Change II ::3:: - Medium
+# 518. Coin Change II ::3:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-### Intro
+## Intro
 > You are given an integer array coins representing coins of different 
 > denominations and an integer amount representing a total amount of money.
 > Return the number of combinations that make up that amount. If that 
@@ -770,12 +770,12 @@ All the values of coins are unique.
 
 0 &leq; amount &leq; 5000
 
-### Abstraction
+## Abstraction
 Given an array of coins and a target, return how the total number of
 combinations of coins that can add up to the target, assuming you can use
 any coin infinite times. 
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -786,7 +786,7 @@ any coin infinite times.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -796,11 +796,11 @@ any coin infinite times.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def change(self, amount: int, coins: List[int]) -> int:
         # Note:
@@ -838,7 +838,7 @@ any coin infinite times.
         return dp[n][amount]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def change(self, amount: int, coins: List[int]) -> int:
         # Note:
@@ -863,11 +863,11 @@ any coin infinite times.
         return dp[amount]
 ```
 
-## 494. Target Sum ::3:: - Medium
+# 494. Target Sum ::3:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-### Intro
+## Intro
 > You are given an integer array nums and an integer target.
 > You want to build an expression out of nums by adding one 
 > of the symbols '+' and '-' before each integer in nums 
@@ -894,12 +894,12 @@ Constraints:
 
 -1000 &leq; target &leq; 1000
 
-### Abstraction
+## Abstraction
 Given an array, the ability to assign '+' or '-' symbols between characters,
 and a target, determine how many unique combinations of symbols exist 
 to add up to target using the array.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -910,7 +910,7 @@ to add up to target using the array.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -920,11 +920,11 @@ to add up to target using the array.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def change(self, amount: int, coins: List[int]) -> int:
         # Note:
@@ -962,7 +962,7 @@ to add up to target using the array.
         return dp[n][target + offset]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
 
@@ -989,7 +989,7 @@ to add up to target using the array.
         return dp[target + offset]
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
 
@@ -1018,11 +1018,11 @@ to add up to target using the array.
 ```
 
 
-## 97. Interleaving String ::2:: - Medium
+# 97. Interleaving String ::2:: - Medium
 
 Topics:  String, Dynamic Programming
 
-### Intro
+## Intro
 > Given strings s1, s2, and s3, find whether s3 is formed by 
 > an interleaving of s1 and s2.
 > An interleaving of two strings s and t is a configuration 
@@ -1050,11 +1050,11 @@ Constraints:
 
 s1, s2, and s3 consist of lowercase English letters.
 
-### Abstraction
+## Abstraction
 Given three strings, determine if the third string can be created by
 interweaving the characters of strings one and two.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1065,7 +1065,7 @@ interweaving the characters of strings one and two.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1075,11 +1075,11 @@ interweaving the characters of strings one and two.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
         # Note:
@@ -1113,7 +1113,7 @@ interweaving the characters of strings one and two.
         return dp[n1][n2]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
         # Note:
@@ -1142,11 +1142,11 @@ interweaving the characters of strings one and two.
 
 ```
 
-## 329. Longest Increasing Path in a Matrix ::3:: - Hard
+# 329. Longest Increasing Path in a Matrix ::3:: - Hard
 
 Topics:  Array, Dynamic Programming, Depth First Search, Breadth First Search, Graph, Topological Sort, Memoization, Matrix
 
-### Intro
+## Intro
 > Given an m x n integers matrix, return the length of 
 > the longest increasing path in matrix.
 > From each cell, you can either move in four directions: 
@@ -1170,10 +1170,10 @@ n == matrix[i].length
 
 0 &leq; matrix[i][j] &leq; 2<sup>31</sup> - 1
 
-### Abstraction
+## Abstraction
 Given a matrix, find the length of the longest increasing path.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1184,7 +1184,7 @@ Given a matrix, find the length of the longest increasing path.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1194,11 +1194,11 @@ Given a matrix, find the length of the longest increasing path.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: DFS + Memoization - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: DFS + Memoization - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         # Notes:
@@ -1238,7 +1238,7 @@ Given a matrix, find the length of the longest increasing path.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         # Notes:
@@ -1286,11 +1286,11 @@ Given a matrix, find the length of the longest increasing path.
 ```
 
 
-## 115. Distinct Subsequences ::3:: - Hard
+# 115. Distinct Subsequences ::3:: - Hard
 
 Topics:  String, Dynamic Programming
 
-### Intro
+## Intro
 > Given two strings s and t, return the number of distinct 
 > subsequences of s which equals t.
 > The test cases are generated so that the answer fits on a 
@@ -1307,11 +1307,11 @@ Constraints:
 
 s and t consist of English letters.
 
-### Abstraction
+## Abstraction
 Given two strings, determine the number of subsequences that
 string one will equal string two.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1322,7 +1322,7 @@ string one will equal string two.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1332,11 +1332,11 @@ string one will equal string two.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def numDistinct(self, s: str, t: str) -> int:
         # Notes:
@@ -1369,7 +1369,7 @@ string one will equal string two.
         return dp[m][n]
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def numDistinct(self, s: str, t: str) -> int:
         # Notes:
@@ -1391,7 +1391,7 @@ string one will equal string two.
         return dp[n]
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def numDistinct(self, s: str, t: str) -> int:
         n, m = len(s), len(t)
@@ -1410,11 +1410,11 @@ string one will equal string two.
 ```
 
 
-## 72. Edit Distance ::3:: - Medium
+# 72. Edit Distance ::3:: - Medium
 
 Topics:  String, Dynamic Programming
 
-### Intro
+## Intro
 > Given two strings word1 and word2, return the minimum  
 > number of operations required to convert word1 to word2.
 > You have the following three operations permitted on a word:
@@ -1433,11 +1433,11 @@ Constraints:
 
 word1 and word2 consist of lowercase English letters.
 
-### Abstraction
+## Abstraction
 Given two strings, return the minimum number of operations needed
 to convert string one into string two.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1448,7 +1448,7 @@ to convert string one into string two.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1458,11 +1458,11 @@ to convert string one into string two.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def minDistance(self, word1: str, word2: str) -> int:
         # Notes:
@@ -1503,7 +1503,7 @@ to convert string one into string two.
 
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def minDistance(self, word1: str, word2: str) -> int:
         # Notes:
@@ -1533,7 +1533,7 @@ to convert string one into string two.
         return prev[n]
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def minDistance(self, word1: str, word2: str) -> int:
         # Notes:
@@ -1573,11 +1573,11 @@ to convert string one into string two.
 ```
 
 
-## 312. Burst Balloons ::3:: - Hard
+# 312. Burst Balloons ::3:: - Hard
 
 Topics:  Array, Dynamic Programming
 
-### Intro
+## Intro
 > You are given n balloons, indexed from 0 to n - 1. Each 
 > balloon is painted with a number on it represented by an array 
 > nums. You are asked to burst all the balloons.
@@ -1600,11 +1600,11 @@ n == nums.length
 
 0 &leq; nums[i] &leq; 100
 
-### Abstraction
+## Abstraction
 Given an array representing balloons, each with a number, which when popped
 will return a certain amount of coins, determine the max number of coins.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1615,7 +1615,7 @@ will return a certain amount of coins, determine the max number of coins.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1625,11 +1625,11 @@ will return a certain amount of coins, determine the max number of coins.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxCoins(self, nums: List[int]) -> int:
         # Note:
@@ -1668,7 +1668,7 @@ will return a certain amount of coins, determine the max number of coins.
 
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxCoins(self, nums: List[int]) -> int:
         # Note:
@@ -1699,7 +1699,7 @@ will return a certain amount of coins, determine the max number of coins.
         return res
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def maxCoins(self, nums: List[int]) -> int:
         # Note:
@@ -1732,11 +1732,11 @@ will return a certain amount of coins, determine the max number of coins.
 ```
 
 
-## 10. Regular Expression Matching ::3:: - Hard
+# 10. Regular Expression Matching ::3:: - Hard
 
 Topics:  String, Dynamic Programming, Recursion
 
-### Intro
+## Intro
 > Given an input string s and a pattern p, implement regular 
 > expression matching with support for '.' and '*' where:
 > '.' Matches any single character.
@@ -1762,10 +1762,10 @@ p contains only lowercase English letters, '.', and '*'.
 It is guaranteed for each appearance of the character '*', 
 there will be a previous valid character to match.
 
-### Abstraction
+## Abstraction
 Given a string and pattern, determine if the string fits in the pattern.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1776,7 +1776,7 @@ Given a string and pattern, determine if the string fits in the pattern.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1786,11 +1786,11 @@ Given a string and pattern, determine if the string fits in the pattern.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         # Note:
@@ -1820,7 +1820,7 @@ Given a string and pattern, determine if the string fits in the pattern.
         return res
 ```
 
-### Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         # Note:
@@ -1850,7 +1850,7 @@ Given a string and pattern, determine if the string fits in the pattern.
         return res
 ```
 
-### Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         # Note:
@@ -1883,7 +1883,7 @@ Given a string and pattern, determine if the string fits in the pattern.
         return res
 ```
 
-### Solution 4: space optimized - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 4: space optimized - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def isMatch(self, s: str, p: str) -> bool:
         if not p:

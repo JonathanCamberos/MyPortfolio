@@ -10,17 +10,17 @@ tags:
 - data structures and algorithms
 ---
 
-## Intervals Intro
+# Intervals Intro
 
-### What are Intervals
-
-Numbers!
-
-### Intervals IRL
+## What are Intervals
 
 Numbers!
 
-### Intervals Application: Intervals
+## Intervals IRL
+
+Numbers!
+
+## Intervals Application: Intervals
 Pattern: Numbers! 
 
 Ex: Numbers numbers!!
@@ -30,11 +30,11 @@ Ex: Numbers numbers!!
         return n+1
 ```
 
-## 57. Insert Interval ::2:: - Medium
+# 57. Insert Interval ::2:: - Medium
 
 Topics:  Array
 
-### Intro
+## Intro
 > You are given an array of non-overlapping intervals intervals 
 > where intervals[i] = [starti, endi] represent the start and 
 > the end of the ith interval and intervals is sorted in ascending 
@@ -66,12 +66,12 @@ newInterval.length == 2
 
 0 &leq; start &leq; end &leq; 10<sup>5</sup>
 
-### Abstraction
+## Abstraction
 Given a list of sorted, non-overlapping intervals and a new interval, 
 insert the new interval and merge any overlaps so that the resulting list 
 remains sorted and non-overlapping.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -82,7 +82,7 @@ remains sorted and non-overlapping.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -92,11 +92,11 @@ remains sorted and non-overlapping.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Greedy Merge - Intervals/Intervals
+## Solution 1: Greedy Merge - Intervals/Intervals
 ```python
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
         
@@ -143,11 +143,11 @@ remains sorted and non-overlapping.
         return res
 ```
 
-## 56. Merge Intervals ::1:: - Medium
+# 56. Merge Intervals ::1:: - Medium
 
 Topics:  Array, Sorting
 
-### Intro
+## Intro
 > Given an array of intervals where intervals[i] = [starti, endi], 
 > merge all overlapping intervals, and return an array of the
 > non-overlapping intervals that cover all the intervals in the input.
@@ -166,11 +166,11 @@ intervals[i].length == 2
 
 0 &leq; starti &leq; endi &leq; 10<sup>5</sup>
 
-### Abstraction
+## Abstraction
 Given a list of non sorted, overlapping intervals, 
 merge all overlapping intervals.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -181,7 +181,7 @@ merge all overlapping intervals.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -191,11 +191,11 @@ merge all overlapping intervals.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Greedy Sort Merge - Intervals/Intervals
+## Solution 1: Greedy Sort Merge - Intervals/Intervals
 ```python
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         
@@ -238,7 +238,7 @@ merge all overlapping intervals.
         return merged 
 ```
 
-### Solution 2: Greedy Heap Merge - Intervals/Intervals
+## Solution 2: Greedy Heap Merge - Intervals/Intervals
 ```python
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         
@@ -278,11 +278,11 @@ merge all overlapping intervals.
 ```
 
 
-## 435. Non Overlapping Intervals ::1:: - Medium
+# 435. Non Overlapping Intervals ::1:: - Medium
 
 Topics:  Array, Dynamic Programming, Greedy, Sorting
 
-### Intro
+## Intro
 > Given an array of intervals intervals where 
 > intervals[i] = [starti, endi], 
 > return the minimum number of intervals you need to remove to make the rest 
@@ -305,11 +305,11 @@ intervals[i].length == 2
 
 -5 * 10<sup>4</sup> &leq; starti &lt; endi &leq; 5 * 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Given a list intervals, determine the minimum number of intervals
 needed to be removed ot make the intervals non overlapping
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -320,7 +320,7 @@ needed to be removed ot make the intervals non overlapping
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -330,11 +330,11 @@ needed to be removed ot make the intervals non overlapping
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Greedy Sort By End - Intervals/Intervals
+## Solution 1: Greedy Sort By End - Intervals/Intervals
 ```python
     def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
         
@@ -379,7 +379,7 @@ needed to be removed ot make the intervals non overlapping
         return removals
 ```
 
-### Solution 2: Greedy Sort By Start - Intervals/Intervals
+## Solution 2: Greedy Sort By Start - Intervals/Intervals
 ```python
     def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
         
@@ -418,11 +418,11 @@ needed to be removed ot make the intervals non overlapping
         return res
 ```
 
-## 252. Meeting Rooms ::1:: - Easy
+# 252. Meeting Rooms ::1:: - Easy
 
 Topics:  Array, Dynamic Programming, Greedy, Sorting
 
-### Intro
+## Intro
 > Given an array of meeting time interval objects consisting of 
 > start and end times 
 > [[start_1,end_1],[start_2,end_2],...] (start_i < end_i)
@@ -443,11 +443,11 @@ Constraints:
 0 &leq; intervals[i].start &lt; intervals[i].end &leq; 1000000
 
 
-### Abstraction
+## Abstraction
 Given a list of intervals representing meetings,
 determine if a person can make it to all meetings without conflicts.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -458,7 +458,7 @@ determine if a person can make it to all meetings without conflicts.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -468,11 +468,11 @@ determine if a person can make it to all meetings without conflicts.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Greedy Sort By Start - Intervals/Intervals
+## Solution 1: Greedy Sort By Start - Intervals/Intervals
 ```python
     def canAttendMeetings(self, intervals: List[Interval]) -> bool:
         
@@ -501,11 +501,11 @@ determine if a person can make it to all meetings without conflicts.
         return True
 ```
 
-## 253. Meeting Rooms II ::1:: - Medium
+# 253. Meeting Rooms II ::1:: - Medium
 
 Topics:  Array, Dynamic Programming, Greedy, Sorting
 
-### Intro
+## Intro
 > Given an array of meeting time interval objects consisting of 
 > start and end times 
 > [[start_1,end_1],[start_2,end_2],...] (start_i < end_i),
@@ -525,12 +525,12 @@ Constraints:
 0 &leq; intervals[i].start &lt; intervals[i].end &leq; 1000000
 
 
-### Abstraction
+## Abstraction
 Given a list of intervals representing meetings,
 determine the minimum number of rooms or 'days' required to schedule all
 the meetings without conflicts.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -541,7 +541,7 @@ the meetings without conflicts.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -551,11 +551,11 @@ the meetings without conflicts.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Greedy MinHeap - Intervals/Intervals
+## Solution 1: Greedy MinHeap - Intervals/Intervals
 ```python
     def minMeetingRooms(self, intervals: List[Interval]) -> int:
         
@@ -595,11 +595,11 @@ the meetings without conflicts.
         return res
 ```
 
-## 1851. Minimum Interval to Include Each Query ::3:: - Hard
+# 1851. Minimum Interval to Include Each Query ::3:: - Hard
 
 Topics:  Array, Binary Search, Line Sweep, Sorting, Heap (Priority Queue)
 
-### Intro
+## Intro
 > You are given a 2D integer array intervals, where 
 > intervals[i] = [lefti, righti] describes the ith interval 
 > starting at lefti and ending at righti (inclusive). The size 
@@ -630,12 +630,12 @@ intervals[i].length == 2
 1 &leq; queries[j] &leq; 10<sup>7</sup>
 
 
-### Abstraction
+## Abstraction
 For a list of intervals and a list of queries, determine for 
 each query the smallest interval that covers it. If no interval 
 covers a query, return -1.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -646,7 +646,7 @@ covers a query, return -1.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -656,11 +656,11 @@ covers a query, return -1.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Greedy MinHeap 1 - Intervals/Intervals
+## Solution 1: Greedy MinHeap 1 - Intervals/Intervals
 ```python
     def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
         
@@ -714,7 +714,7 @@ covers a query, return -1.
         return res
 ```
 
-### Solution 2: Greedy MinHeap 2 - Intervals/Intervals
+## Solution 2: Greedy MinHeap 2 - Intervals/Intervals
 ```python
     def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
         
@@ -766,7 +766,7 @@ covers a query, return -1.
 
 
 
-### Solution 3: Greedy MinHeap 3 - Intervals/Intervals
+## Solution 3: Greedy MinHeap 3 - Intervals/Intervals
 ```python
     def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
         

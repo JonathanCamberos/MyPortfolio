@@ -10,7 +10,7 @@ tags:
 - system design
 ---
 
-## 2. Design Ticket Master
+# 2. Design Ticket Master
 
 Topics: High Contention 
 
@@ -18,11 +18,11 @@ Ticketmaster is an online platform that allows users to purchase
 tickets for concerts, sports events, theater, and other live 
 entertainment.
 
-## Functional Requirements ::3::
+# Functional Requirements ::3::
 
 > Features needed to satisfy the needs of the user.
 
-### In Scope
+## In Scope
 
 1. Users should be able to view events
 
@@ -30,7 +30,7 @@ entertainment.
 
 3. Users should be able to book tickets to events
 
-### Out of Scope
+## Out of Scope
 
 1. Users should be able to view their booked events
 
@@ -38,7 +38,7 @@ entertainment.
 
 3. Popular events should have a dynamic pricing
 
-## Non Functional Requirements ::4::
+# Non Functional Requirements ::4::
 
 > Specifications about how a system operates, rather than what tasks it performs.
 > Defines system attributes like scalability, latency, security, availability,
@@ -46,7 +46,7 @@ entertainment.
 > (e.g., system's ability to handle 100 million daily active users,
 > response to queries within 200 milliseconds)
 
-### Benchmarks
+## Benchmarks
 
 1. The system should prioritize availability for searching & viewing events,
 but should prioritize consistency for booking events (no double booking)
@@ -59,7 +59,7 @@ of popular events (10 million users, one event)
 4. The system is read heavy, and thus needs to be able to support high 
 read throughput (100:1)
 
-### Out of Scope
+## Out of Scope
 
 1. The system should protect user data and adhere to GDPR
 
@@ -72,9 +72,9 @@ read throughput (100:1)
 5. The system should have regular backups
 
 
-## Set Up
+# Set Up
 
-### Entities
+## Entities
 
 > The core objects or concepts within a system which define its 
 > functionality and data.
@@ -86,7 +86,7 @@ read throughput (100:1)
 - Ticket: record of info related to individual tickets for events
 - Booking: record of user's ticket purchase
 
-## API: the delivery framework ::3::
+# API: the delivery framework ::3::
 
 > The contract between the client and the server
 > and first point of reference in high level design.
@@ -142,9 +142,9 @@ Body:
     }
 ```
 
-## High Level Design Functional Requirement 1: Users should be able to view single events
+# High Level Design Functional Requirement 1: Users should be able to view single events
 
-### Core Components
+## Core Components
 
 Core components high level:
 
@@ -162,7 +162,7 @@ by fetching event, venue, and performer info from the database
 
 5. Events DB: Stores tables for events, performers, and venues.
 
-### GET Processing Steps
+## GET Processing Steps
 
 1. Client makes REST GET request with eventID
 
@@ -173,7 +173,7 @@ information and returns it to the client
 
 
 
-### GET Diagram
+## GET Diagram
 ```python
 User requests detail for an event():
 GET/events/{eventId} -> Event
@@ -224,9 +224,9 @@ Event Table:                | Database  |       Performer Table:
 ```
 
 
-## High Level Design Functional Requirement 2: Users should be able to search for events using parameters
+# High Level Design Functional Requirement 2: Users should be able to search for events using parameters
 
-### Core Components
+## Core Components
 
 Core components high level:
 
@@ -244,7 +244,7 @@ and querying database with parameters.
 
 5. Events DB: Stores tables for events, performers, and venues.
 
-### GET Processing Steps
+## GET Processing Steps
 
 1. Client makes REST GET request with search parameters
 
@@ -257,7 +257,7 @@ forwards the request to the Search Service
 4. Search Service queries the Events DB for the events matching the search
 parameters and returns them to the client.
 
-### GET Diagram
+## GET Diagram
 ```python
 User search events with parameters():
 GET/search?term={term}&location={location}&type={type}&date={date} -> Partial<Event>[]
@@ -308,9 +308,9 @@ Event Table:                | Database  |       Performer Table:
 ```
 
 
-## High Level Design Functional Requirement 3: Users should be able to book tickets to events
+# High Level Design Functional Requirement 3: Users should be able to book tickets to events
 
-### Core Components
+## Core Components
 
 Core components high level:
 
@@ -331,7 +331,7 @@ of the transaction status.
 5. Events DB: Stores tables for events, performers, venues, and now tickets and bookings.
 
 
-### GET Processing Steps
+## GET Processing Steps
 
 1. User is redirected to booking page/service where they can provide
 their payment details and confirm the booking.
@@ -360,16 +360,16 @@ Fundamental issue where users can get to booking page, type in payment
 details, and find out ticket they wanted is no longer available.
 To be fixed in deep dive
 
-### GET Diagram
+## GET Diagram
 
-## Deep Dive 1: Reserving Tickets
+# Deep Dive 1: Reserving Tickets
 
-## Deep Dive 2: Scaling to 10's of M Users during Popular Events
+# Deep Dive 2: Scaling to 10's of M Users during Popular Events
 
-## Deep Dive 3: Ensure good user experience during 
+# Deep Dive 3: Ensure good user experience during 
 
-## Deep Dive 4: Improve Search to Ensure Low Latency
+# Deep Dive 4: Improve Search to Ensure Low Latency
 
-## Deep Dive 5: Speed up frequently Repeated Search Queries
+# Deep Dive 5: Speed up frequently Repeated Search Queries
 
-## Deep Dive 6: 
+# Deep Dive 6: 

@@ -10,18 +10,18 @@ tags:
 - system design
 ---
 
-## 1. Design Bit.ly
+# 1. Design Bit.ly
 
 Topics: Scaling Reads
 
 Bit.ly is a URL shortening service that converts long URLs into shorter, 
 manageable links. It also provides analytics for the shortened URLs.
 
-## Functional Requirements ::2::
+# Functional Requirements ::2::
 
 > Features needed to satisfy the needs of the user.
 
-### In Scope
+## In Scope
 
 1. Users should be able to submit a long URL and receive a shortened URL.
 
@@ -31,14 +31,14 @@ manageable links. It also provides analytics for the shortened URLs.
 
 2. Users should be able to access the original URL by using the shortened URL.
 
-### Out of Scope
+## Out of Scope
 
 1. User authentication and account management
 
 2. Analytics on link clicks (e.g., click counts, geographic data).
 
 
-## Non Functional Requirements ::4::
+# Non Functional Requirements ::4::
 
 > Specifications about how a system operates, rather than what tasks it performs.
 > Defines system attributes like scalability, latency, security, availability,
@@ -46,7 +46,7 @@ manageable links. It also provides analytics for the shortened URLs.
 > (e.g., system's ability to handle 100 million daily active users,
 > response to queries within 200 milliseconds)
 
-### Benchmarks
+## Benchmarks
 
 1. System should ensure uniqueness for short codes (no two long URLs should
 map to the same short URL)
@@ -58,7 +58,7 @@ map to the same short URL)
 
 4. System should scale to support 1B shortened URLs and 100M DAU
 
-### Out of Scope
+## Out of Scope
 
 1. Data consistency in real time analytics
 
@@ -73,9 +73,9 @@ since users will more frequently access shortened URLs vs create new ones.
 Our caching strategies, database choices, and architecture
 will revolve around this.
 
-## Set Up
+# Set Up
 
-### Entities
+## Entities
 
 > The core objects or concepts within a system which define its 
 > functionality and data.
@@ -83,7 +83,7 @@ will revolve around this.
 In our case simple, but still good to list out.
 The core entities are the long URL, short URL, and user.
 
-## API: the delivery framework ::2::
+# API: the delivery framework ::2::
 
 > The contract between the client and the server
 > and first point of reference in high level design.
@@ -124,16 +124,16 @@ Response: HTTP 302 Redirect to the original long URL
 ```
 
 
-## High Level Design Functional Requirement 1: User submits a long URL and receives a short URL
+# High Level Design Functional Requirement 1: User submits a long URL and receives a short URL
 
-### Core components
+## Core components
 
 Core components high level:
 1. Client: Users interact with system through web or mobile app
 2. Primary Server: Receives requests from client and handles logic
 3. Database: Stores mapping of short URLs to long URLs, user generated aliases, and expiration dates
 
-### POST Diagram
+## POST Diagram
 ```python
 User submits a long URL and receives a short URL():
 
@@ -168,7 +168,7 @@ Urls Table                  | Database  |    SQL Insert:
 }
 ```
 
-### POST Processing Steps
+## POST Processing Steps
 
 1. Client Request()
 
@@ -201,16 +201,16 @@ Return short URL to client.
 Send back response to client with short URL.
 
 
-## High Level Design Functional Requirement 2: User can access original long URL by using short URL
+# High Level Design Functional Requirement 2: User can access original long URL by using short URL
 
-### Core components
+## Core components
 
 Core components high level:
 1. Client: Users interact with system through web or mobile app
 2. Primary Server: Receives requests from client and handles logic
 3. Database: Stores mapping of short URLs to long URLs, user generated aliases, and expiration dates
 
-### GET Processing Steps
+## GET Processing Steps
 
 1. User Request()
 
@@ -250,7 +250,7 @@ forced to go through our primary server
 
 
 
-### GET Diagram
+## GET Diagram
 
 ```python
 User requests a short URL and is redirected to the original URL:
@@ -287,9 +287,9 @@ Urls Table                      | Database  |
 ```
 
 
-## Deep Dive 1: Short and Unique Urls
+# Deep Dive 1: Short and Unique Urls
 
-### Constraints
+## Constraints
 
 We need to ensure:
 
@@ -297,7 +297,7 @@ We need to ensure:
 2. Keep short URLs as short as possible
 3. Efficiently generate short URLs
 
-### Bad Solution: Long URL Prefix
+## Bad Solution: Long URL Prefix
 
 Approach:
 
@@ -312,7 +312,7 @@ Challenges:
 This would break constraint 1. as different URLs could have the same short URL.
 
 
-### Good Solution: Random Number Generator or Hash Function
+## Good Solution: Random Number Generator or Hash Function
 
 Approach:
 
@@ -327,7 +327,7 @@ Tis leads to a necessity of either generating longer short codes (breaking
 constraint 2) or adding a check for already existing code which becomes a 
 bottleneck as the system scales (breaking constraint 3)
 
-### Great Solution: Unique Counter with Base62 Encoding
+## Great Solution: Unique Counter with Base62 Encoding
 
 Approach:
 
@@ -351,9 +351,9 @@ strings.
 So we would need to move to 7 character codes once we hit the trillions.
 
 
-## Deep Dive 2: Fast Redirection to Original URL
+# Deep Dive 2: Fast Redirection to Original URL
 
-### Constraints
+## Constraints
 
 Within context of a large database of shortened URLs
 we need to ensure:
@@ -361,7 +361,7 @@ we need to ensure:
 1. Find correct long URL quickly for smooth user experience
 2. Optimizations to avoid 'full table scans' on short URL keys
 
-### Good Solution: Add an Index
+## Good Solution: Add an Index
 
 Approach:
 
@@ -438,7 +438,7 @@ potential timeouts, and could slowdown other database operations like write().
 
 
 
-### Great Solution: Implementing an In Memory Cache (e.g, Redis)
+## Great Solution: Implementing an In Memory Cache (e.g, Redis)
 
 Approach:
 
@@ -528,11 +528,11 @@ eviction policies (e.g., LRU).
 Overall, it does offer performance benefits, but also adds
 tradeoffs and invalidation strategies that need to be worked out
 
-### Great Solution: Leveraging Content Deliver Networks (CDNs) and Edge Computing
+## Great Solution: Leveraging Content Deliver Networks (CDNs) and Edge Computing
 
-## Deep Dive 3: Scaling to 1B shortened URLs and 100M DAU
+# Deep Dive 3: Scaling to 1B shortened URLs and 100M DAU
 
-### Constraints
+## Constraints
 
 Lets start with the size of the database.
 

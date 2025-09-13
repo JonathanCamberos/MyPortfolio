@@ -1,80 +1,54 @@
-"use client";
-
-import React from "react";
-
-const ChildItem = ({ item }) => {
-  const hasChildren = item.subheadings && item.subheadings.length > 0;
-
-  return (
-    <li className="mb-1">
-      {hasChildren ? (
-        <details className="group">
-          <summary className="cursor-pointer hover:underline">
-            <a href={`#${item.slug}`}>{item.text}</a>
-          </summary>
-
-          <ul className="ml-4 mt-2">
-            {item.subheadings.map((sub) => (
-              <ChildItem key={sub.slug} item={sub} />
-            ))}
-          </ul>
-        </details>
-      ) : (
-        <a href={`#${item.slug}`} className="hover:underline block pl-2">
-          {item.text}
-        </a>
-      )}
-    </li>
-  );
-};
+import React from 'react';
 
 const NotesToc = ({ blog }) => {
-  const level2Items = React.useMemo(
-    () =>
-      Object.entries(blog?.toc || {}).map(([text, value]) => ({
-        text,
-        slug: value.slug,
-        subheadings: value.subheadings || [],
-      })),
-    [blog]
-  );
-
-  if (!level2Items.length) return null;
-
   return (
     <div className="col-span-12 lg:col-span-3">
       <details
-        className="border border-solid border-dark dark:border-light text-dark
-                   dark:text-light rounded-lg p-4 sticky top-6 max-h-[80vh]
-                   overflow-hidden overflow-y-auto"
+        className="border-[1px] border-solid border-dark dark:border-light text-dark
+        dark:text-light rounded-lg p-4 sticky top-6 max-h-[80vh] overflow-hidden overflow-y-auto"
         open
       >
         <summary className="text-lg font-semibold capitalize cursor-pointer">
-          Table Of Contents
+          Table Of Content
         </summary>
 
-        <hr className="border-t border-dark/20 dark:border-light/20 my-4" />
+        {/* Add horizontal divider after the "Table Of Content" summary */}
+        <hr className="border-t border-solid border-dark/20 dark:border-light/20 my-4" />
 
         <ul className="mt-4 font-in text-base">
-          {level2Items.map((item, idx) => (
-            <li key={item.slug} className="mb-2">
-              {/* Level 2: always toggleable, collapsed by default */}
-              <details className="group">
-                <summary className="cursor-pointer hover:underline">
-                  <a href={`#${item.slug}`}>{item.text}</a>
+          {/* Iterate over each level 2 heading */}
+          {Object.entries(blog.toc).map(([headingText, { slug, subheadings }], index) => (
+            <li key={`#${slug}`} className="mb-2">
+              <details>
+                <summary
+                  className="cursor-pointer hover:underline"
+                >
+                  <a href={`#${slug}`}>
+                    {headingText}
+                  </a>
                 </summary>
 
-                {item.subheadings.length > 0 && (
-                  <ul className="ml-4 mt-2">
-                    {item.subheadings.map((child) => (
-                      <ChildItem key={child.slug} item={child} />
-                    ))}
-                  </ul>
-                )}
+                <ul className="ml-4 mt-2">
+                  {/* Iterate over each level 3 subheading under the current level 2 heading */}
+                  {subheadings.map(({ text, slug }) => (
+                    <li key={`#${slug}`} className="py-1">
+                      <a
+                        href={`#${slug}`}
+                        data-level="three"
+                        className="pl-4 sm:pl-6 flex items-center justify-start"
+                      >
+                        <span className="flex w-1 h-1 rounded-full bg-dark dark:bg-light mr-2">
+                          &nbsp;
+                        </span>
+                        <span className="hover:underline">{text}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </details>
 
-              {/* Divider after each level 2, except last */}
-              {idx < level2Items.length - 1 && (
+              {/* Add horizontal divider after each level 2 heading, except the last one */}
+              {index < Object.entries(blog.toc).length - 1 && (
                 <hr className="border-t border-solid border-dark/20 dark:border-light/20 my-4" />
               )}
             </li>

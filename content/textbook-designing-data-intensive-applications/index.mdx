@@ -11,7 +11,7 @@ tags:
 ---
 
 
-## Preface
+# Preface
 
 > Hello! all of these notes will be in short hand form, to avoid rewriting the textbook from scratch.
 > Additionally, I am reading/writing this in my vscode, i know i know, editing text in vscode,
@@ -24,7 +24,7 @@ tags:
 > only read the notes in 2/3rds split screen and I dont have the need 
 > to fix it ¯\\_(ツ)_/¯.
 
-### Intro
+## Intro
 
 Backend swe's have new common buzz words relating
 to the storage and processing of data.
@@ -42,7 +42,7 @@ We are here to learn the 'why' of those basic principles.
 
 The goal of these notes is to organize shorthand to learn these concepts.
 
-### Who Should Read This Book?
+## Who Should Read This Book?
 
 > Fellow developers, old friends, random strangers on the internet who
 > have stumbled upon my chicken scratch of notes. Welcome all!
@@ -84,7 +84,7 @@ legal reasons this is a joke please dont stop reading its like 4 in the morning 
 also if you laughed at that youre a nerd :) )
 
 
-### Scope Of This Book
+## Scope Of This Book
 
 > Again, the *architecture* of data systems.
 
@@ -94,7 +94,7 @@ and explore design decisions taken by different products.
 We leave deployment, operations, security, management, and other areas,
 to be covered by other books.
 
-### Outline Of This Book
+## Outline Of This Book
 
 > 1. Part I: The Basics: our bearings, and definitions
 
@@ -134,7 +134,7 @@ Applications need to connect different databases, caches, indexes and so on.
 | 11 | Build upon batch processing with stream processing. |
 | 12 | Tape everything together and discuss approaches for building reliable, scalable, and maintainable applications in the future. |
 
-### References and Further Reading
+## References and Further Reading
 
 > Nothing new here!
 
@@ -142,9 +142,9 @@ Most of everything in this book has been said before!
 Free references and links as we go along.
 
 
-## Part I: Foundations of Data Systems
+# Part I: Foundations of Data Systems
 
-### Intro
+## Intro
 
 > First four chapters: fundamental ideas that apply to all data systems,
 > regardless of single machine or distributed across a cluster of machines.
@@ -171,9 +171,9 @@ Free references and links as we go along.
 - Compare data encoding and serialization formats 
 - Examine in environment where app requirements change and schemas need to adapt over time.
 
-### Chapter 1: Reliable, Scalable, and Maintainable Applications
+## Chapter 1: Reliable, Scalable, and Maintainable Applications
 
-#### Intro
+## Intro
 
 > The Internet was done so well that most people think of it like a natural resource
 > like the ocean or mountains, rather than being something man-made.
@@ -199,7 +199,7 @@ because perfectly good ones already exists.
 But while there are many existing database systems, each have different characteristics
 as maybe benefit different applications as requirements change.
 
-### Thinking About Data Systems
+## Thinking About Data Systems
 
 > We can lump databases, queues, caches, etc, each with different patterns,
 > performance and implementations under the umbrella term data systems
@@ -237,9 +237,9 @@ And this is where the interesting questions arise!
 
 Lets put that in our back pocket for now and continue.
 
-### Reliability
+## Reliability
 
-#### Intro
+## Intro
 
 > The system should continue to work correctly (performing the correct function at the
 > desired level of performance) even in the face of *gasp adversity*, either 
@@ -265,7 +265,7 @@ to the user.
 It is nearly impossible to prevent all type of faults, which is why we prefer 
 fault-tolerant systems.
 
-#### Hardware Faults
+## Hardware Faults
 
 > Common when discussing system failures
 
@@ -278,7 +278,7 @@ A good rule of thumb to explain how common it is:
 the MTTF (mean to time failure) of a hard disk is about 10 to 15 years.
 Thus, in a storage cluster with 10,000 disks around one disk dies per day.
 
-#### Software Errors
+## Software Errors
 
 Systematic errors can occur within the system, and such faults are harder to
 anticipate because they are correlated 'non-random' across nodes, and tend to 
@@ -293,7 +293,7 @@ These faults lie dormant for a long time until they are triggered by an unusual
 set of circumstances.
 
 
-#### Human Errors
+## Human Errors
 
 Humans are known to be unreliable, even with the best intentions.
 
@@ -310,7 +310,7 @@ well designed abstraction, APIs, and admin interfaces.
 - Allow quick and easy recovery from human errors to minimize impact
 - Telemetry for performance metrics and error rates 
 
-#### How Important is Reliability?
+## How Important is Reliability?
 
 Reliability is not just for power stations and air traffic control.
 More mundane applications such as photo applications for parents as an example.
@@ -318,9 +318,9 @@ More mundane applications such as photo applications for parents as an example.
 There are situations in which we can sacrifice reliability in order to reduce 
 development cost, but we should always be conscious of cutting corners.
 
-### Scalability
+## Scalability
 
-#### Intro
+## Intro
 
 > As the system grows (in data volume, traffic volume, or complexity), there should 
 > be a reasonable solution to deal with that growth
@@ -336,7 +336,7 @@ of data than before
 what are our options for coping with the growth' or 'how can we add computing 
 resources to handle the additional load'
 
-#### Describing Load Via Twitter (yes twitter not 'X')
+## Describing Load Via Twitter (yes twitter not 'X')
 
 > Load can be described with a few numbers which we call load parameters.
 > The best choice of parameters depends on the architecture of your system.
@@ -415,7 +415,7 @@ with that users' home timeline when it is read, like in approach 1.
 
 We will revisit this example in Chapter 12 after having covered more technical ground!
 
-#### Describing Performance
+## Describing Performance
 
 Once you have described load and load parameters on your architecture and system,
 you can investigate what happens when load increases.
@@ -428,9 +428,9 @@ if you want to keep performance unchanged
 
 Again, to determine this requires performance numbers, so how to describe it?
 
-### Maintainability
+## Maintainability
 
-#### Intro
+## Intro
 
 > Specifically over time, different people will build, work, and add to the system 
 > (engineering and operations, both maintaining behavior and adapting the system),

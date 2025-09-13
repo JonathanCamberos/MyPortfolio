@@ -10,17 +10,17 @@ tags:
 - data structures and algorithms
 ---
 
-## Bit Manipulation Intro
+# Bit Manipulation Intro
 
-### What is Bit Manipulation
-
-bits!
-
-### Bit Manipulation IRL
+## What is Bit Manipulation
 
 bits!
 
-### Bit Manipulation Application: Bit Manipulation
+## Bit Manipulation IRL
+
+bits!
+
+## Bit Manipulation Application: Bit Manipulation
 Pattern: bits! 
 
 Ex: bits numbers!!
@@ -31,11 +31,11 @@ Ex: bits numbers!!
 ```
 
 
-## 136. Single Number ::1:: - Easy
+# 136. Single Number ::1:: - Easy
 
 Topics:  Array, Bit Manipulation
 
-### Intro
+## Intro
 > Given a non-empty array of integers nums, every element 
 > appears twice except for one. Find that single one.
 > You must implement a solution with a linear runtime 
@@ -55,10 +55,10 @@ Constraints:
 
 Each element in the array appears twice except for one element which appears only once.
 
-### Abstraction
+## Abstraction
 Given a list of integers, find the integer that only appears once.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -69,7 +69,7 @@ Given a list of integers, find the integer that only appears once.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -79,11 +79,11 @@ Given a list of integers, find the integer that only appears once.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Bit Manipulation XOR Trick - Bit Manipulation/Bit Manipulation
+## Solution 1: Bit Manipulation XOR Trick - Bit Manipulation/Bit Manipulation
 ```python
     def singleNumber(self, nums: List[int]) -> int:
         
@@ -105,11 +105,11 @@ Given a list of integers, find the integer that only appears once.
 ```
 
 
-## 191. Number of 1 Bits ::2:: - Easy
+# 191. Number of 1 Bits ::2:: - Easy
 
 Topics:  Divide and Conquer, Bit Manipulation
 
-### Intro
+## Intro
 > Given a positive integer n, write a function that returns the 
 > number of set bits in its binary representation (also known 
 > as the Hamming weight).
@@ -129,11 +129,11 @@ Constraints:
 
 1 &leq; n &leq; 2<sup>31</sup> - 1
 
-### Abstraction
+## Abstraction
 Given an integer, return how many bits are set to 1
 in its binary representation.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -144,7 +144,7 @@ in its binary representation.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -154,11 +154,11 @@ in its binary representation.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Basic Shift and Mask - Bit Manipulation/Bit Manipulation
+## Solution 1: Basic Shift and Mask - Bit Manipulation/Bit Manipulation
 ```python
     def hammingWeight(self, n: int) -> int:
         
@@ -183,7 +183,7 @@ in its binary representation.
         return count
 ```
 
-### Solution 2: Brian Kernighan Algorithm - Bit Manipulation/Bit Manipulation
+## Solution 2: Brian Kernighan Algorithm - Bit Manipulation/Bit Manipulation
 ```python
     def hammingWeight(self, n: int) -> int:
         
@@ -214,11 +214,11 @@ in its binary representation.
         return count
 ```
 
-## 338. Counting Bits ::2:: - Easy
+# 338. Counting Bits ::2:: - Easy
 
 Topics:  Dynamic Programming, Bit Manipulation
 
-### Intro
+## Intro
 > Given an integer n, return an array ans of length n + 1
 > such that for each i (0 < = i < = n), ans[i] is the 
 > number of 1's in the binary representation of i.
@@ -232,11 +232,11 @@ Constraints:
 
 0 &leq; n &leq; 10<sup>5</sup>
 
-### Abstraction
+## Abstraction
 Given an integer, return an array representing 0 -> n,
 where each index is the number of set bits for that integer.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -247,7 +247,7 @@ where each index is the number of set bits for that integer.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -257,11 +257,11 @@ where each index is the number of set bits for that integer.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: DP with Integer Division + Bit Shift - Bit Manipulation/Bit Manipulation
+## Solution 1: DP with Integer Division + Bit Shift - Bit Manipulation/Bit Manipulation
 ```python
     def countBits(self, n: int) -> List[int]:
         
@@ -284,11 +284,11 @@ where each index is the number of set bits for that integer.
 ```
 
 
-## 190. Reverse Bits ::1:: - Easy
+# 190. Reverse Bits ::1:: - Easy
 
 Topics:  Divide and Conquer, Bit Manipulation
 
-### Intro
+## Intro
 > Reverse bits of a given 32 bits signed integer.
 > Follow up: If this function is called many times, 
 > how would you optimize it?
@@ -304,10 +304,10 @@ Constraints:
 
 n is even
 
-### Abstraction
+## Abstraction
 Reverse bits of a 32 signed integer.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -318,7 +318,7 @@ Reverse bits of a 32 signed integer.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -328,11 +328,11 @@ Reverse bits of a 32 signed integer.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Iterative Bit Manipulation  - Bit Manipulation/Bit Manipulation
+## Solution 1: Iterative Bit Manipulation  - Bit Manipulation/Bit Manipulation
 ```python
     def reverseBits(self, n: int) -> int:
 
@@ -361,11 +361,11 @@ Reverse bits of a 32 signed integer.
 ```
 
 
-## 268. Missing Number ::2:: - Easy
+# 268. Missing Number ::2:: - Easy
 
 Topics:  Array, Hash Table, Math, Binary Search, Bit Manipulation, Sorting
 
-### Intro
+## Intro
 > Given an array nums containing n distinct numbers in 
 > the range [0, n], return the only number in the range 
 > that is missing from the array.
@@ -388,11 +388,11 @@ n == nums.length
 
 All the numbers of nums are unique.
 
-### Abstraction
+## Abstraction
 Given an array of n distinct numbers, in range [0, n],
 return the only number that is missing from the range.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -403,7 +403,7 @@ return the only number that is missing from the range.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -413,11 +413,11 @@ return the only number that is missing from the range.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Verify Against Math Formula - Bit Manipulation/Bit Manipulation
+## Solution 1: Verify Against Math Formula - Bit Manipulation/Bit Manipulation
 ```python
     def missingNumber(self, nums: List[int]) -> int:
         
@@ -442,7 +442,7 @@ return the only number that is missing from the range.
         return missing
 ```
 
-### Solution 2: XOR Trick  - Bit Manipulation/Bit Manipulation
+## Solution 2: XOR Trick  - Bit Manipulation/Bit Manipulation
 ```python
     def missingNumber(self, nums: List[int]) -> int:
         
@@ -473,11 +473,11 @@ return the only number that is missing from the range.
         return missing
 ```
 
-## 371. Sum of Two Integers ::1:: - Medium
+# 371. Sum of Two Integers ::1:: - Medium
 
 Topics:  Math, Bit Manipulation
 
-### Intro
+## Intro
 > Given two integers a and b, return the sum of the two
 > integers without using the operators + and -. 
 
@@ -488,10 +488,10 @@ Topics:  Math, Bit Manipulation
 
 Constraints:
 
-### Abstraction
+## Abstraction
 Given two integers, return the sum without using operators.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -502,7 +502,7 @@ Given two integers, return the sum without using operators.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -512,11 +512,11 @@ Given two integers, return the sum without using operators.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Bit Manipulation - Bit Manipulation/Bit Manipulation
+## Solution 1: Bit Manipulation - Bit Manipulation/Bit Manipulation
 ```python
     def getSum(self, a: int, b: int) -> int:
         
@@ -585,11 +585,11 @@ Given two integers, return the sum without using operators.
         return res
 ```
 
-## 7. Reverse Integer ::1:: - Medium
+# 7. Reverse Integer ::1:: - Medium
 
 Topics:  Math
 
-### Intro
+## Intro
 > Given a signed 32-bit integer x, return x with its digits 
 > reversed. If reversing x causes the value to go outside the 
 > signed 32-bit integer range [-2^31, 2^31 - 1], then return 0.
@@ -606,10 +606,10 @@ Constraints:
 
 -2<sup>31</sup> &leq; x &leq; 2<sup>31</sup> - 1
 
-### Abstraction
+## Abstraction
 Given a 32-bit integer, reverse it.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -620,7 +620,7 @@ Given a 32-bit integer, reverse it.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -630,11 +630,11 @@ Given a 32-bit integer, reverse it.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Iterative Math Approach  - Bit Manipulation/Bit Manipulation
+## Solution 1: Iterative Math Approach  - Bit Manipulation/Bit Manipulation
 ```python
     def reverse(self, x: int) -> int:
         

@@ -10,17 +10,17 @@ tags:
 - data structures and algorithms
 ---
 
-## Advanced Graphs Intro
+# Advanced Graphs Intro
 
-### What is Advanced Graphs
+## What is Advanced Graphs
 
 graphs 2!
 
-### Advanced Graphs IRL
+## Advanced Graphs IRL
 
 graphs2!
 
-### Advanced Graphs Application: Advanced Graphs
+## Advanced Graphs Application: Advanced Graphs
 Pattern: grahps2 ! 
 
 Ex: bits numbers!!
@@ -31,11 +31,11 @@ Ex: bits numbers!!
 ```
 
 
-## 743. Network Delay Time ::1:: - Medium
+# 743. Network Delay Time ::1:: - Medium
 
 Topics:  Depth First Search, Breadth First Search, Graph, Heap (Priority Queue), Shortest Path
 
-### Intro
+## Intro
 > You are given a network of n nodes, labeled from 1 to n. 
 > You are also given times, a list of travel times as directed 
 > edges times[i] = (ui, vi, wi), where ui is the source 
@@ -68,11 +68,11 @@ ui != vi
 
 All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
 
-### Abstraction
+## Abstraction
 Given a graph, each node with 1 edges, determine how much time is needed
 to get from start node to target node.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -83,7 +83,7 @@ to get from start node to target node.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -93,11 +93,11 @@ to get from start node to target node.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Dijkstras Algorithm via BFS + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 1: Dijkstras Algorithm via BFS + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         
@@ -160,11 +160,11 @@ to get from start node to target node.
 ```
 
 
-## 332. Reconstruct Itinerary ::1:: - Hard
+# 332. Reconstruct Itinerary ::1:: - Hard
 
 Topics:  Depth First Search, Graph, Eulerian Circuit
 
-### Intro
+## Intro
 > You are given a list of airline tickets where 
 > tickets[i] = [fromi, toi] represent the departure and the
 > arrival airports of one flight. Reconstruct the
@@ -198,10 +198,10 @@ fromi and toi consist of uppercase English letters.
 
 fromi != toi
 
-### Abstraction
+## Abstraction
 Given a graph, determine the flight path.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -212,7 +212,7 @@ Given a graph, determine the flight path.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -222,11 +222,11 @@ Given a graph, determine the flight path.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Hierholzers Algorithm Eulerian Path via DFS + MinHeap for Lexical Order - Advanced Graphs/Advanced Graphs
+## Solution 1: Hierholzers Algorithm Eulerian Path via DFS + MinHeap for Lexical Order - Advanced Graphs/Advanced Graphs
 ```python
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
         
@@ -282,11 +282,11 @@ Given a graph, determine the flight path.
 ```
 
 
-## 1584. Min Cost to Connect All Points ::1:: - Medium
+# 1584. Min Cost to Connect All Points ::1:: - Medium
 
 Topics:  Array, Union Find, Graph, Minimum Spanning Tree
 
-### Intro
+## Intro
 > You are given an array points representing integer 
 > coordinates of some points on a 2D-plane, where 
 > points[i] = [xi, yi].
@@ -310,10 +310,10 @@ Constraints:
 
 All pairs (xi, yi) are distinct.
 
-### Abstraction
+## Abstraction
 Given a graph, determine the min cost to connect all nodes.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -324,7 +324,7 @@ Given a graph, determine the min cost to connect all nodes.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -334,11 +334,11 @@ Given a graph, determine the min cost to connect all nodes.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Kruskals Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
+## Solution 1: Kruskals Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
 ```python
 class UnionFind:
     def __init__(self, n):
@@ -417,7 +417,7 @@ class Solution:
 ```
 
 
-### Solution 2: Prim’s Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 2: Prim’s Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
 
@@ -459,11 +459,11 @@ class Solution:
         return total_cost
 ```
 
-## 1631. Path With Minimum Effort ::1:: - Medium
+# 1631. Path With Minimum Effort ::1:: - Medium
 
 Topics:  Array, Binary Search, Depth First Search, Breadth First Search, Union Find, Heap (Priority Queue), Matrix
 
-### Intro
+## Intro
 > You are a hiker preparing for an upcoming hike. You are 
 > given heights, a 2D array of size rows x columns, where 
 > heights[row][col] represents the height of cell (row, col).
@@ -491,10 +491,10 @@ columns == heights[i].length
 
 1 &leq; heights[i][j] &leq; 10<sup>6</sup>
 
-### Abstraction
+## Abstraction
 Given a graph, determine the route with minimal climbing.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -505,7 +505,7 @@ Given a graph, determine the route with minimal climbing.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -515,11 +515,11 @@ Given a graph, determine the route with minimal climbing.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
         
@@ -571,11 +571,11 @@ Given a graph, determine the route with minimal climbing.
 ```
 
 
-## 778. Swim in Rising Water ::1:: - Hard
+# 778. Swim in Rising Water ::1:: - Hard
 
 Topics:  Array, Binary Search, Depth First Search, Breadth First Search, Union Find, Heap (Priority Queue), Matrix
 
-### Intro
+## Intro
 > You are given an n x n integer matrix grid where 
 > each value grid[i][j] represents the elevation at that 
 > point (i, j).
@@ -610,11 +610,11 @@ n == grid[i].length
 
 Each value grid[i][j] is unique.
 
-### Abstraction
+## Abstraction
 Given a graph, determine the time needed to traverse from 
 top left to bottom right.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -625,7 +625,7 @@ top left to bottom right.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -635,11 +635,11 @@ top left to bottom right.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 1: Dijkstra + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def swimInWater(self, grid: List[List[int]]) -> int:
         
@@ -691,11 +691,11 @@ top left to bottom right.
 ```
 
 
-## 269. Alien Dictionary ::1:: - Hard
+# 269. Alien Dictionary ::1:: - Hard
 
 Topics:  Breadth First Search, Graph, Topological Sort
 
-### Intro
+## Intro
 > There is a foreign language which uses the latin 
 > alphabet, but the order among letters is not
 > "a", "b", "c" ... "z" as in English.
@@ -727,10 +727,10 @@ The input words will contain characters only from lowercase 'a' to 'z'.
 1 &leq; words[i].length &leq; 100
 
 
-### Abstraction
+## Abstraction
 Given a foreign language, derive the order of letters.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -741,7 +741,7 @@ Given a foreign language, derive the order of letters.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -751,11 +751,11 @@ Given a foreign language, derive the order of letters.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
+## Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
 ```python
     def foreignDictionary(self, words: List[str]) -> str:
         
@@ -822,11 +822,11 @@ Given a foreign language, derive the order of letters.
 ```
 
 
-## 787. Cheapest Flights Within K Stops ::1:: - Medium
+# 787. Cheapest Flights Within K Stops ::1:: - Medium
 
 Topics:  Dynamic Programming, Depth First Search, Breadth First Search, Graph, Heap (Priority Queue), Shortest Path
 
-### Intro
+## Intro
 > There are n cities connected by some number of  
 > flights. You are given an array flights where 
 > flights[i] = [fromi, toi, pricei] indicates that
@@ -861,10 +861,10 @@ There will not be any multiple flights between two cities.
 
 src != dst
 
-### Abstraction
+## Abstraction
 Given flights, determine the cheapest flights under k stops.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -875,7 +875,7 @@ Given flights, determine the cheapest flights under k stops.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -885,11 +885,11 @@ Given flights, determine the cheapest flights under k stops.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Modified Dijkstra via BFS + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 1: Modified Dijkstra via BFS + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
         
