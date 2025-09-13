@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-## Binary Search Intro:
+# Binary Search Intro:
 
 Leetcode problems with elegant solutions using binary search. 
 
-### What is Binary Search
+## What is Binary Search
 Binary Search is a divide and conquer algorithm for searching 
 sorted lists or ranges effectively.
 
@@ -22,7 +22,7 @@ It works by creating a middle value, comparing middle value to the target
 or evaluating a condition, and halving the search space 
 based on that comparison.
 
-### Why Use Binary Search
+## Why Use Binary Search
 Binary search reduces the search space by half on each iteration.
 
 |  Technique  | Time Complexity | Space Complexity | 
@@ -31,7 +31,7 @@ Binary search reduces the search space by half on each iteration.
 | Binary Search (Recursive) | O(log n) | O(log n) |
 | Binary Search (Iterative) | O(log n) | O(1) |
 
-### Target Binary Search
+## Target Binary Search
 Used to search for a specific value or index.
 
 ```python
@@ -59,7 +59,7 @@ Used to search for a specific value or index.
         return -1 
 ```
 
-### Monotonic Optimization Min/Max Binary Search
+## Monotonic Optimization Min/Max Binary Search
 Used to find the smallest or largest value that satisfies a condition.
 
 1. Find the min element greater than or equal to the target:
@@ -92,7 +92,7 @@ In ceiling search, the goal is to locate the minimal number in a sorted
         return left 
 ```
 
-### Optimization Ceiling and Floor Style Binary Search 
+## Optimization Ceiling and Floor Style Binary Search 
 Variant of Optimization Binary Search:
 
 The rule is that we can search directly for ceilings, 
@@ -155,7 +155,7 @@ def find_floor_wrong(nums, target):
     return nums[left]
 ```
 
-### Understanding Optimization Search: Min vs Max
+## Understanding Optimization Search: Min vs Max
 In optimization style binary search, we're not finding a specific value,
 but rather are finding the smallest or largest values that satisfies a condition.
 
@@ -174,7 +174,7 @@ but rather are finding the smallest or largest values that satisfies a condition
         right = mid - 1    # mid is invalid, discard it`
 ```
 
-### Why Binary Search Can Find < or > but Not < or > equal to 
+## Why Binary Search Can Find < or > but Not < or > equal to 
 Binary Search splits the space at mid and decides whether
 to include or exclude it.
 
@@ -201,7 +201,7 @@ So binary search prefers to work with
 < for upper bound, > for lower bound.
 And shift answer manually to get < and > or equal to.
 
-### Insight on Pointer Updates
+## Insight on Pointer Updates
 A basic but easily overlooked principle in binary search is that 
 the search space must shrink with every iteration.
 
@@ -227,7 +227,7 @@ hit each other and we have found our optimal solution.
 In optimization binary search, the trigger will be that the pointers
 will equal each other every time, returning the optimal solution.
 
-### Limitation with duplicates
+## Limitation with duplicates
 In most standard binary search problems, duplicates do not interfere with
 correctness or efficiency as long as:
 1. The array is fully sorted
@@ -279,7 +279,7 @@ def find_min_with_duplicates(nums):
 ```
 
 
-### Binary Search Application: Target Binary Search
+## Binary Search Application: Target Binary Search
 Using Binary Search to locate the position of a target element 
 in a sorted list by repeatedly dividing the search interval in half.
 
@@ -301,7 +301,7 @@ Ex: Searching for a target number in a sorted array.
     return -1  # Target not found
 ```
 
-### Binary Search Application: Multiple Layers Binary Search
+## Binary Search Application: Multiple Layers Binary Search
 Applying binary search in multiple stages or layers, typically to 
 first narrow down a substructure (i.e., row, segment, or time range), 
 and then again within that substructure
@@ -344,7 +344,7 @@ Ex: Searching for a target in a sorted 2D matrix
         return False
 ```
 
-### Binary Search Application: Optimization Search Min Max Binary Search 
+## Binary Search Application: Optimization Search Min Max Binary Search 
 Using binary search to find the smallest or largest valid value 
 that satisfies a given constraint (e.g., minimum speed, minimum time, maximum capacity)
 
@@ -382,7 +382,7 @@ Ex: Find the minimum eating speed to finish all bananas within h hours
         return left  
 ```
 
-### Binary Search Application: Condition Adapted Binary Search
+## Binary Search Application: Condition Adapted Binary Search
 Adapting search conditions of binary search to account for special
 problem parameters or constraints (e.g., rotated array, duplicates, bounded search).
 
@@ -412,7 +412,7 @@ Ex: Finding the minimum element in a rotated sorted array
         return nums[left]
 ```
 
-### Binary Search Application: Upper Ceiling or Lower Floor Trick Based on Target Binary Search
+## Binary Search Application: Upper Ceiling or Lower Floor Trick Based on Target Binary Search
 Binary search cannot directly find the largest element less than or equal to a target
 (or similarly find the smallest elements greater than or equal to a target)
 in one step.
@@ -437,11 +437,11 @@ Ex: Find the first element less than or equal to target
         return nums[left - 1] if left > 0 else ""
 ```
 
-## 704. Binary Search ::2:: - Easy
+# 704. Binary Search ::2:: - Easy
 
 Topics:  Array, Binary Search
 
-### Intro
+## Intro
 > Given an array of integers nums which is sorted in ascending order, 
 > and an integer target, write a function to search target in nums.
 > If target exists, then return its index. Otherwise, return -1.
@@ -463,10 +463,10 @@ All the integers in nums are unique
 nums is sorted in ascending order
 
 
-### Abstraction
+## Abstraction
 Given a sorted list of elements, find the target
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -477,7 +477,7 @@ Given a sorted list of elements, find the target
 |  |  | 
 
 
-### Brute Force: (iterative)
+## Brute Force: (iterative)
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -487,7 +487,7 @@ Given a sorted list of elements, find the target
 |  |  |  |  |  |
 
 
-### Find the Bug: Missing return value
+## Find the Bug: Missing return value
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
@@ -524,7 +524,7 @@ Given a sorted list of elements, find the target
         return res
 ```
 
-### Solution 1: Recursive Binary Search - Binary Search/Searching
+## Solution 1: Recursive Binary Search - Binary Search/Searching
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
@@ -565,7 +565,7 @@ Given a sorted list of elements, find the target
 | Recursive Binary Search | O(log n) | O(log n) | Search space is halved on each recursive call O(log n) | Call stack grows to depth O(log n) |
 | Overall | O(log n) | O(log n) | Binary search over sorted list dominates, leading to O(log n) | Stack memory used for recursive calls dominates, leading to O(log n) |
 
-### Solution 2: Iterative Binary Search - Binary Search/Searching
+## Solution 2: Iterative Binary Search - Binary Search/Searching
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
@@ -616,11 +616,11 @@ Given a sorted list of elements, find the target
 | Overall | O(log n) | O(1) | Binary search over sorted array O(log n) | No additional memory allocation O(1) |
 
 
-## 74. Search a 2D Matrix ::2:: - Medium
+# 74. Search a 2D Matrix ::2:: - Medium
 
 Topics:  Array, Binary Search, Matrix
 
-### Intro
+## Intro
 > You are given an m x n integer matrix matrix with the following two properties:
 > Each row is sorted in non-decreasing order.
 > The first integer of each row is greater than the last integer of the previous row.
@@ -641,10 +641,10 @@ n == matrix[i].length
 
 -10<sup>4</sup> &le; matrix[i][j], target &le; 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Given a sorted matrix, check if target is in matrix
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -653,7 +653,7 @@ Given a sorted matrix, check if target is in matrix
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -662,11 +662,11 @@ Given a sorted matrix, check if target is in matrix
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Find the Bug: Did not follow Binary Search 
+## Find the Bug: Did not follow Binary Search 
 ```python
 ```
 
-### Find the Bug: Forgot to break
+## Find the Bug: Forgot to break
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
@@ -716,7 +716,7 @@ Given a sorted matrix, check if target is in matrix
             return False
 ```
 
-### Solution 1: Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
+## Solution 1: Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
@@ -794,7 +794,7 @@ Given a sorted matrix, check if target is in matrix
 | Binary search 1D index | O(log (m*n)) = O(log(m) + log(n)) | O(1) | Binary search over full flattened matrix treated as 1D O(log (m*n)) | No additional memory allocation |
 
 
-### Solution 2: Two Phase Binary Search over Row Ranges and Binary Search in Row Candidate - Binary Search/Searching
+## Solution 2: Two Phase Binary Search over Row Ranges and Binary Search in Row Candidate - Binary Search/Searching
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
@@ -897,11 +897,11 @@ Given a sorted matrix, check if target is in matrix
 | Overall | O(log m + log n) = O(log (m*n)) | O(1) | Sum of two binary searches dominates, leading to O(log m + log n) | No additional memory allocation, leading to O(1)  |
 
 
-## 875. Koko Eating Bananas ::2:: - Medium
+# 875. Koko Eating Bananas ::2:: - Medium
 
 Topics:  Array, Binary Search, Network Packet Routing, Design, System Level Design
 
-### Intro
+## Intro
 > Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas.
 > The guards have gone and will come back in h hours.
 > Koko can decide her bananas-per-hour eating speed of k.
@@ -924,10 +924,10 @@ piles.length &leq; h &leq; 10<sup>9</sup>
 
 1 &leq; piles[i] &leq; 10<sup>9</sup>
 
-### Abstraction
+## Abstraction
 Find minimum bananas per hour so that all are eaten in time.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -936,7 +936,7 @@ Find minimum bananas per hour so that all are eaten in time.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -946,7 +946,7 @@ Find minimum bananas per hour so that all are eaten in time.
 |  |  |  |  |  |
 
 
-### Find the Bug: Hours For Speed k Is Always Rounding Down 
+## Find the Bug: Hours For Speed k Is Always Rounding Down 
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -971,7 +971,7 @@ Find minimum bananas per hour so that all are eaten in time.
         return left  
 ```
 
-### Find the Bug: Floor Caused K Starting Speed at 0, Leading to Division By 0 Error
+## Find the Bug: Floor Caused K Starting Speed at 0, Leading to Division By 0 Error
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -1025,7 +1025,7 @@ Find minimum bananas per hour so that all are eaten in time.
                 speed += 1
 ```
 
-### Find the Bug: Wait a minute, This House Has No Roof
+## Find the Bug: Wait a minute, This House Has No Roof
 ```python
 def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -1068,7 +1068,7 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         
 ```
 
-### Find the Bug: Cannot Bananas Divided By Hour, with Remainder
+## Find the Bug: Cannot Bananas Divided By Hour, with Remainder
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -1103,7 +1103,7 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         
 ```
 
-### Solution 1: Binary Search - Binary Search/Optimization Search Min Max
+## Solution 1: Binary Search - Binary Search/Optimization Search Min Max
 ```python
     import math
 
@@ -1178,7 +1178,7 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 | Hours calculation | O(n) | O(1) | Iterate over all piles to calculate if piles are eaten O(n) | No additional memory allocation for calculation O(1) |
 | Overall | O(n * log(max(piles))) | O(1) | Binary search over range alongside hours calculation per candidate dominates, leading to O(n * log(max(piles))) | No additional memory allocation O(1) |
 
-### Solution 2: Networking Router Analogy, Greedy Heuristic Hybrid Target Optimization Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
+## Solution 2: Networking Router Analogy, Greedy Heuristic Hybrid Target Optimization Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -1343,11 +1343,11 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 |  |  |  |  |  |
 
 
-## 153. Find Minimum in Rotated Sorted Array ::1:: - Medium
+# 153. Find Minimum in Rotated Sorted Array ::1:: - Medium
 
 Topics:  Array, Binary Search
 
-### Intro
+## Intro
 > Suppose an array of length n sorted in ascending order
 > s rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
 > [4,5,6,7,0,1,2] if it was rotated 4 times.
@@ -1375,10 +1375,10 @@ All of the integers of nums are unique
 
 nums is sorted and rotated between 1 and n times
 
-### Abstraction
+## Abstraction
 Find smallest number in an array that has been rotated some amount of times.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1387,7 +1387,7 @@ Find smallest number in an array that has been rotated some amount of times.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1397,11 +1397,11 @@ Find smallest number in an array that has been rotated some amount of times.
 |  |  |  |  |  |
 
 
-### Find the Bug: 
+## Find the Bug: 
 ```python
 ```
 
-### Solution 1: Find Min by Determining if Smaller Numbers on Left or Right of Middle Binary Search - Binary Search/Condition Adapted Binary Search
+## Solution 1: Find Min by Determining if Smaller Numbers on Left or Right of Middle Binary Search - Binary Search/Condition Adapted Binary Search
 ```python
     def findMin(self, nums: List[int]) -> int:
 
@@ -1471,11 +1471,11 @@ Find smallest number in an array that has been rotated some amount of times.
 | No explicit target | O(1) | O(1) | We are optimizing loop to converge to min O(1) | No additional memory allocation O(1) |
 | Overall | O(log n) | O(1) | Binary search over array of n length dominates, leading to O(log n) | No additional memory allocation for binary search |
 
-## 33. Search in Rotated Sorted Array ::1:: - Medium
+# 33. Search in Rotated Sorted Array ::1:: - Medium
 
 Topics:  Array, Binary Search
 
-### Intro
+## Intro
 > There is an integer array nums sorted in ascending order (with distinct values).
 > Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 &leq; k &le; nums.length)
 > such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed).
@@ -1502,10 +1502,10 @@ nums is an ascending array that is possibly rotated.
 
 -10<sup>4</sup> &leq; target &leq; 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Find target in an array that has been rotated some amount of times.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1514,7 +1514,7 @@ Find target in an array that has been rotated some amount of times.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1524,7 +1524,7 @@ Find target in an array that has been rotated some amount of times.
 |  |  |  |  |  |
 
 
-### Find the Bug: Returned Index Instead of Value
+## Find the Bug: Returned Index Instead of Value
 ```python
     def findMin(self, nums: List[int]) -> int:
 
@@ -1546,7 +1546,7 @@ Find target in an array that has been rotated some amount of times.
         return left
 ```
 
-### Solution 1: Inequality Boundaries Discard Mid Binary Search - Binary Search/Condition Adapted Binary Search
+## Solution 1: Inequality Boundaries Discard Mid Binary Search - Binary Search/Condition Adapted Binary Search
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
@@ -1626,11 +1626,11 @@ Find target in an array that has been rotated some amount of times.
 | One target comparison | O(1) | O(1) | Mid comparison in constant O(1) | No additional memory allocation for comparison O(1) |
 | Overall | O(log n) | O(1) | Binary search over n elements dominates, leading to O(log n) | No additional memory allocation O(1) |
 
-## 981. Time Based Key Value Store ::2:: - Medium
+# 981. Time Based Key Value Store ::2:: - Medium
 
 Topics:  Hash Table, String, Binary Search, Design
 
-### Intro
+## Intro
 > Design a time based key value data structure that can store multiple values for
 > the same key at different time stamps and retrieve the key's value at a certain timestamp.
 > Implement the TimeMap class:
@@ -1657,10 +1657,10 @@ All the timestamps timestamp of set are strictly increasing.
 
 At most 2 * 10<sup>5</sup> calls will be made to set and get.
 
-### Abstraction
+## Abstraction
 Find target in an array that has been rotated some amount of times.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1669,7 +1669,7 @@ Find target in an array that has been rotated some amount of times.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1679,11 +1679,11 @@ Find target in an array that has been rotated some amount of times.
 |  |  |  |  |  |
 
 
-### Find the Bug: 
+## Find the Bug: 
 ```python
 ```
 
-### Solution 1: Reverse Linear Scan - Binary Search/Condition Adapted Binary Search
+## Solution 1: Reverse Linear Scan - Binary Search/Condition Adapted Binary Search
 ```python
     class TimeMap:
 
@@ -1744,7 +1744,7 @@ Find target in an array that has been rotated some amount of times.
 | Overall | O(m) | O(n) | get scaling linearly with timestamps count dominates, leading to O(m) | Storage is proportional to total number of sets O(n) |
 
 
-### Solution 2: Upper Ceiling to Find First Invalid TimeStamp - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
+## Solution 2: Upper Ceiling to Find First Invalid TimeStamp - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
 ```python
     class TimeMap:
 
@@ -1840,7 +1840,7 @@ Find target in an array that has been rotated some amount of times.
 | get | O(log m) | Binary search over m timestamps O(log m) | No additional memory allocation for binary search O(1) |  |
 | Overall | O(log m) | O(n) | Binary search retrieval dominates, leading to O(log m) | Storage proportional to total number of sets O(n) |
 
-### Solution 3: Floor Search Tracking Largest Valid Index With Right Pointer - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
+## Solution 3: Floor Search Tracking Largest Valid Index With Right Pointer - Binary Search/Upper Ceiling or Lower Floor Trick Based on Target Binary Search
 ```python
     class TimeMap:
 
@@ -1913,11 +1913,11 @@ Find target in an array that has been rotated some amount of times.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## 162. Find Peak Element ::1:: - Medium
+# 162. Find Peak Element ::1:: - Medium
 
 Topics:  Array, Binary Search
 
-### Intro
+## Intro
 > A peak element is an element that is strictly greater than its neighbors.
 > Given a 0-indexed integer array nums, find a peak element, and return
 > its index. If the array contains multiple peaks, return the index to any of 
@@ -1940,12 +1940,12 @@ Constraints:
 
 nums[i] != nums[i + 1] for all valid i.target in an array that has been rotated some amount of time
 
-### Abstraction
+## Abstraction
 Find the peak elements in an array, where peak elements are defined as 
 a height that is greater than both of their neighbors.
 Multiple peaks can exist per array.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1954,7 +1954,7 @@ Multiple peaks can exist per array.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1964,11 +1964,11 @@ Multiple peaks can exist per array.
 |  |  |  |  |  |
 
 
-### Find the Bug: 
+## Find the Bug: 
 ```python
 ```
 
-### Solution 1: Modified Binary Search over Towards Higher Slope - Binary Search/Condition Adapted Binary Search
+## Solution 1: Modified Binary Search over Towards Higher Slope - Binary Search/Condition Adapted Binary Search
 ```python
     def findPeakElement(self, nums: List[int]) -> int:
         
@@ -2021,11 +2021,11 @@ Multiple peaks can exist per array.
 |  |  |  |  |  |
 
 
-## 4. Median of Two Sorted Arrays ::2:: - Hard
+# 4. Median of Two Sorted Arrays ::2:: - Hard
 
 Topics:  Array, Binary Search, Divide and Conquer
 
-### Intro
+## Intro
 > Given two sorted arrays nums1 and nums2 of size m and n 
 > respectively, return the median of the two sorted arrays.
 > The overall run time complexity should be O(log (m+n)).
@@ -2051,10 +2051,10 @@ nums2.length == n
 
 -10<sup>6</sup> nums1[i], nums2[i] &leq; 10<sup>6</sup>
 
-### Abstraction
+## Abstraction
 Find median between two sorted arrays.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2063,7 +2063,7 @@ Find median between two sorted arrays.
 | --- | ----- |
 |  |  | 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2073,11 +2073,11 @@ Find median between two sorted arrays.
 |  |  |  |  |  |
 
 
-### Find the Bug: 
+## Find the Bug: 
 ```python
 ```
 
-### Solution 1: Two Pointer Merge Until Median - Binary Search/Condition Adapted Binary Search
+## Solution 1: Two Pointer Merge Until Median - Binary Search/Condition Adapted Binary Search
 ```python
     def findMedianSortedArrays(self, nums1, nums2):
         
@@ -2180,7 +2180,7 @@ Find median between two sorted arrays.
 |  |  |  |  |  |
 
 
-### Solution 2: Binary Search Partition - Binary Search/Condition Adapted Binary Search
+## Solution 2: Binary Search Partition - Binary Search/Condition Adapted Binary Search
 ```python
    def findMedianSortedArrays(self, nums1, nums2):
 

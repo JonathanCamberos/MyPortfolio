@@ -10,16 +10,16 @@ tags:
 - data structures and algorithms
 ---
 
-## Trie Intro
+# Trie Intro
 
 LeetCode questions regarding tries.
 
-### What is a Trie
+## What is a Trie
 
 A Trie, also known as a prefix tree, is a tree data structure
 used for storing and querying strings (words) efficiently
 
-### Trie Characteristics
+## Trie Characteristics
 
 Tries are a special type of tree, characterized by:
 
@@ -32,11 +32,11 @@ Tries are a special type of tree, characterized by:
 7. Time and Space Tradeoff: Space complexity can be large O(sum of all chars), but allows for efficient prefix queries O(1) ** check this **
 8. Alphabet Size: Can be optimized based on the expected character set (26 for lowercase English)
 
-### Trie Representation
+## Trie Representation
 
 Tries are usually represented in TrieNodes which hold a dictionary of char -> subtrees.
 
-### Trie IRL
+## Trie IRL
 
 Autocomplete Systems: Find all words starting with a given prefix
 
@@ -49,7 +49,7 @@ IP Routing: Longest prefix matching in networking
 Word Games: Efficiently verify and search word lists
 
 
-### Trie Visualization
+## Trie Visualization
 
 Example words inserted: ["cat", "car", "dog"]
 ```python
@@ -64,7 +64,7 @@ Example words inserted: ["cat", "car", "dog"]
 ```
 
 
-### Trie Application: Trie Insert and Search Recursive
+## Trie Application: Trie Insert and Search Recursive
 Traversal Order: Insert/Search characters one by one from root to leaf nodes
 Mindset: At each char, check subtrees and create new nodes if needed (insert) or check existence (search)
 Trick: Ill follow the string one char at a time, building or verifying the path as I go
@@ -135,11 +135,11 @@ class Trie:
     #      (end) (end)   (end)
 ```
 
-## 208. Implement Trie (Prefix Tree) ::1:: - Medium
+# 208. Implement Trie (Prefix Tree) ::1:: - Medium
 
 Topics:  Hash Table, String, Design, Trie
 
-### Intro
+## Intro
 > A trie (pronounced as "try") or prefix tree is a tree data structure used 
 > to efficiently store and retrieve keys in a dataset of strings. There are 
 > various applications of this data structure, such as autocomplete
@@ -166,10 +166,10 @@ word and prefix consist only of lowercase English letters.
 At most 3 * 10<sup>4</sup> calls in total will be made to insert, search
 and starts with 
 
-### Abstraction
+## Abstraction
 Implement a trie data structure.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -180,7 +180,7 @@ Implement a trie data structure.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -190,11 +190,11 @@ Implement a trie data structure.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
+## Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
     def __init__(self):
@@ -289,11 +289,11 @@ class Trie:
     # overall: space complexity
 ```
 
-## 211. Design Add and Search Words Data Structure ::1:: - Medium
+# 211. Design Add and Search Words Data Structure ::1:: - Medium
 
 Topics:  String, Depth First Search, Design, Trie
 
-### Intro
+## Intro
 > Design a data structure that supports adding new words 
 > and finding if a string matches any previously added string.
 > Implement the WordDictionary class:
@@ -322,10 +322,10 @@ There will be at most 2 dots in word for search queries.
 
 At most 10<sup>4</sup> calls will be made to addWord and search.
 
-### Abstraction
+## Abstraction
 Implement a trie data structure with add work functionality.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -336,7 +336,7 @@ Implement a trie data structure with add work functionality.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -346,11 +346,11 @@ Implement a trie data structure with add work functionality.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
+## Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
     def __init__(self):
@@ -440,11 +440,11 @@ class WordDictionary:
     # overall: space complexity
 ```
 
-## 212. Word Search II ::2:: - Hard
+# 212. Word Search II ::2:: - Hard
 
 Topics:  Hash Table, String, Design, Trie
 
-### Intro
+## Intro
 > Given an m x n board of characters and a list of 
 > strings words, return all words on the board.
 > Each word must be constructed from letters of 
@@ -474,11 +474,11 @@ words[i] consists of lowercase English letters.
 
 All the strings of words are unique.
 
-### Abstraction
+## Abstraction
 Given a board and a list of words, return all words
 from the list that are present on the board.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -489,7 +489,7 @@ from the list that are present on the board.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -499,11 +499,11 @@ from the list that are present on the board.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
+## Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
 
@@ -607,7 +607,7 @@ class Solution:
         return list(res)
 ```
 
-### Solution 2: Trie Implementation Optimal - Trie/Trie Insert and Search Recursive
+## Solution 2: Trie Implementation Optimal - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
     def __init__(self):

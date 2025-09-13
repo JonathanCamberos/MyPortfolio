@@ -10,8 +10,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#1-two-sum-i-input-array-is-not-sorted-1---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "2": {
     "questionNum": 2,
@@ -70,8 +70,8 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#5-longest-palindromic-substring-3---medium",
     "blog": "1D Dynamic Programming",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "7": {
     "questionNum": 7,
@@ -113,8 +113,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#11-container-with-most-water-1---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "15": {
     "questionNum": 15,
@@ -129,8 +129,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#15-3sum-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "17": {
     "questionNum": 17,
@@ -172,8 +172,8 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#20-valid-parentheses-2---easy",
     "blog": "LeetCode: Stacks",
-    "lastSubmittedDate": "2025-07-13T04:46:00",
-    "coldnessCount": 62
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "21": {
     "questionNum": 21,
@@ -246,8 +246,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#33-search-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 51
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "36": {
     "questionNum": 36,
@@ -261,8 +261,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#36-valid-sudoku-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "39": {
     "questionNum": 39,
@@ -306,8 +306,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#42-trapping-rain-water-3---hard",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "43": {
     "questionNum": 43,
@@ -380,8 +380,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#49-group-anagrams-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "50": {
     "questionNum": 50,
@@ -568,8 +568,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#74-search-a-2d-matrix-2---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 51
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "76": {
     "questionNum": 76,
@@ -827,8 +827,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#125-valid-palindrome-3---easy",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "127": {
     "questionNum": 127,
@@ -857,8 +857,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#128-longest-consecutive-sequence-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "130": {
     "questionNum": 130,
@@ -1028,8 +1028,8 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#150-evaluate-reverse-polish-notation-1---medium",
     "blog": "LeetCode: Stacks",
-    "lastSubmittedDate": "2025-07-12T01:00:00",
-    "coldnessCount": 63
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "152": {
     "questionNum": 152,
@@ -1056,8 +1056,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#153-find-minimum-in-rotated-sorted-array-1---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 51
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "155": {
     "questionNum": 155,
@@ -1070,8 +1070,8 @@
     ],
     "questionLink": "/Notes/leetcode-stacks#155-min-stack-2---medium",
     "blog": "LeetCode: Stacks",
-    "lastSubmittedDate": "2025-07-13T04:53:00",
-    "coldnessCount": 62
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "162": {
     "questionNum": 162,
@@ -1099,8 +1099,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#167-two-sum-ii-sorted-array-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "190": {
     "questionNum": 190,
@@ -1330,8 +1330,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#217-contains-duplicate-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "226": {
     "questionNum": 226,
@@ -1392,8 +1392,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#238-product-of-array-except-self-2---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "239": {
     "questionNum": 239,
@@ -1424,8 +1424,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#242-valid-anagram-2---easy",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "252": {
     "questionNum": 252,
@@ -1519,8 +1519,8 @@
     ],
     "questionLink": "/Notes/leetcode-two-pointers#271-string-encode-and-decode-2---medium",
     "blog": "LeetCode: Two Pointers",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "286": {
     "questionNum": 286,
@@ -1729,8 +1729,8 @@
     ],
     "questionLink": "/Notes/leetcode-arrays-and-hashing#347-top-k-elements-in-list-3---medium",
     "blog": "LeetCode: Arrays and Hashing",
-    "lastSubmittedDate": "2025-07-10T08:20:00",
-    "coldnessCount": 65
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "355": {
     "questionNum": 355,
@@ -2025,8 +2025,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#704-binary-search-2---easy",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 51
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "739": {
     "questionNum": 739,
@@ -2175,8 +2175,8 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#875-koko-eating-bananas-2---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": "2025-07-24T09:01:00",
-    "coldnessCount": 51
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "973": {
     "questionNum": 973,

@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-## Heaps intro
+# Heaps intro
 
 LeetCode problems with heap solutions. 
 
-### What is a Heap
+## What is a Heap
 Heaps are specialized complete binary tree structures used to prioritize data.
 
 A heap maintains a partial order property:
@@ -28,7 +28,7 @@ which is filled left to right
 Peek(): efficient access to min/max element in O(1) time
 Insert()/Pop(): Heap edit in O(log n) time
 
-### Heap Characteristics
+## Heap Characteristics
 
 Heaps are characterized by: 
 
@@ -38,7 +38,7 @@ Heaps are characterized by:
 4. Nothing beyond heap property: No ordering between siblings or subtrees maintained, other than parent child from heap property
 5. Array: Implemented as array for space and cache efficiency
 
-### Heap Representation
+## Heap Representation
 Tree heap represented as an array:
 
 ```python
@@ -55,12 +55,12 @@ Tree heap represented as an array:
     (3)9  (4)10 (5)12 (6)15
 ```
 
-### Heap IRL
+## Heap IRL
 Priority Queues: scheduling, bandwidth management
 Graph algorithms: Dijkstra's shortest path, Prim's MST
 Event simulation: process events by priority/time
 
-### Heap Application: Top K Element Extraction
+## Heap Application: Top K Element Extraction
 We can maintain a heap to quickly retrieve the top K largest
 or smallest elements without fully sorting the input.
 
@@ -77,7 +77,7 @@ Ex: Find the kth largest element in array
     # Example: kthLargest([3, 2, 1, 5, 6, 4], 2) -> 5
 ```
 
-### Heap Application: Dual Heap Balancing Representing Secondary Property
+## Heap Application: Dual Heap Balancing Representing Secondary Property
 We can use two heaps, maxHeap for lower half of values and a 
 minHeap for the upper half, to maintain a property while adding
 and removing elements. 
@@ -103,7 +103,7 @@ class MedianFinder:
         return (-self.low[0] + self.high[0]) / 2        
 ```
 
-### Heap Application: K Way Merge for Sorted Streams
+## Heap Application: K Way Merge for Sorted Streams
 A minHeap can efficiently merge multiple sorted lists or streams by
 always extracting the next smallest element across all inputs.
 
@@ -126,7 +126,7 @@ Ex: Merge k sorted lists into one sorted lists
     # mergeKSorted([[1,4,5],[1,3,4],[2,6]]) -> [1,1,2,3,4,4,5,6]   
 ```
 
-### Heap Application: Best First Search or Breadth First Search with Priority
+## Heap Application: Best First Search or Breadth First Search with Priority
 A heap can drive a search algorithm where you can expand the 'best' 
 candidate first: A*, Dijkstra's, Prims, etc.
 In a non negative weighted graph context: a minHeap can be 
@@ -181,7 +181,7 @@ def dijkstra(graph, start):
     return dist
 ```
 
-### Heap Application: Kth element Within Iterating Sliding Window
+## Heap Application: Kth element Within Iterating Sliding Window
 A heap can track max/min within a sliding window efficiently when
 combined with lazy deletion or index tracking.
 
@@ -214,7 +214,7 @@ Ex: Find maximum in each sliding windows
         return res
 ```
 
-### Heap Application: Interval Scheduling Optimization
+## Heap Application: Interval Scheduling Optimization
 A minHeap can track the earliest finishing times among active
 intervals, enabling optimal scheduling of jobs or meetings without conflicts.
 
@@ -252,11 +252,11 @@ Ex: Find the minimum number of meeting rooms required
     # minMeetingRooms([[0,30],[5,10],[15,20]]) -> 2
 ```
 
-## 703. Kth Largest Element in a Stream ::1:: - Easy
+# 703. Kth Largest Element in a Stream ::1:: - Easy
 
 Topics:  Tree, Design, Binary Search Tree, Heap (Priority Queue), Binary Tree, Data Stream
 
-### Intro
+## Intro
 > You are part of a university admissions office and need to keep  
 > track of the kth highest test score from applicants in real-time. 
 > This helps to determine cut-off marks for interviews and admissions
@@ -290,10 +290,10 @@ Constraints:
 
 At most 10<sup>4</sup> calls will be make to add.
 
-### Abstraction
+## Abstraction
 Implement a heap that will keep track of the kth highest score for a data stream.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -304,7 +304,7 @@ Implement a heap that will keep track of the kth highest score for a data stream
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -314,11 +314,11 @@ Implement a heap that will keep track of the kth highest score for a data stream
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Min Heap of Size k - Heap/Heap
+## Solution 1: Min Heap of Size k - Heap/Heap
 ```python
 class KthLargest:
 
@@ -365,11 +365,11 @@ class KthLargest:
 ```
 
 
-## 1046. Last Stone Weight ::1:: - Easy
+# 1046. Last Stone Weight ::1:: - Easy
 
 Topics:  Array, Heap (Priority Queue)
 
-### Intro
+## Intro
 > You are given an array of integers stones where stones[i] is 
 > the weight of the ith stone.
 > We are playing a game with the stones. On each turn, we 
@@ -394,13 +394,13 @@ Constraints:
 
 1 &leq; stones[i] &leq; 1000
 
-### Abstraction
+## Abstraction
 Stone smashing game. Given some amount of stones, a round consists
 of smashing the two heaviest stones together. If they are the same weight
 both stones are destroyed. If one is heavier than the other, the heavier 
 stone loses weight equal to the weight of the less heavy stone.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -411,7 +411,7 @@ stone loses weight equal to the weight of the less heavy stone.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -421,11 +421,11 @@ stone loses weight equal to the weight of the less heavy stone.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Max Heap - Heap/Heap
+## Solution 1: Max Heap - Heap/Heap
 ```python
     def lastStoneWeight(self, stones: list[int]) -> int:
         # Note:
@@ -459,11 +459,11 @@ stone loses weight equal to the weight of the less heavy stone.
         return res
 ```
 
-## 973. K Closest Points to Origin ::2:: - Medium
+# 973. K Closest Points to Origin ::2:: - Medium
 
 Topics:  Array, Math, Divide and Conquer, Geometry, Sorting, Heap (Priority Queue), Quickselect
 
-### Intro
+## Intro
 > Given an array of points where points[i] = [x_i, y_i] represents 
 > a point on the X-Y plane and an integer k, return the k closest 
 > points to the origin (0, 0).
@@ -483,10 +483,10 @@ Constraints:
 
 -10<sup>4</sup> &leq; x_1, y_i &leq; 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Given a list of point on a X-Y grid, find the k closest points to the origin.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -497,7 +497,7 @@ Given a list of point on a X-Y grid, find the k closest points to the origin.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -507,11 +507,11 @@ Given a list of point on a X-Y grid, find the k closest points to the origin.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Max Heap of size k - Heap/Heap
+## Solution 1: Max Heap of size k - Heap/Heap
 ```python
     def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
         # Note:
@@ -553,7 +553,7 @@ Given a list of point on a X-Y grid, find the k closest points to the origin.
         return res
 ```
 
-### Solution 2: QuickSelect - Heap/Heap
+## Solution 2: QuickSelect - Heap/Heap
 ```python
     def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
         
@@ -622,11 +622,11 @@ Given a list of point on a X-Y grid, find the k closest points to the origin.
 ```
 
 
-## 215. Kth Largest Element in an Array ::2:: - Medium
+# 215. Kth Largest Element in an Array ::2:: - Medium
 
 Topics:  Array, Math, Divide and Conquer, Geometry, Sorting, Heap (Priority Queue), Quickselect
 
-### Intro
+## Intro
 > Given an integer array nums and an integer k, return the
 > kth largest element in the array.
 > Note that it is the kth largest element in the sorted order, 
@@ -644,10 +644,10 @@ Constraints:
 
 -10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Given an unsorted array, find the kth largest element in sorted order.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -658,7 +658,7 @@ Given an unsorted array, find the kth largest element in sorted order.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -668,11 +668,11 @@ Given an unsorted array, find the kth largest element in sorted order.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Min Heap of Size k - Heap/Heap
+## Solution 1: Min Heap of Size k - Heap/Heap
 ```python
     def findKthLargest(self, nums: list[int], k: int) -> int:
         # Note:
@@ -704,7 +704,7 @@ Given an unsorted array, find the kth largest element in sorted order.
         return kth
 ```
 
-### Solution 2: Modified Ignore Duplicates Quick Select - Heap/Heap
+## Solution 2: Modified Ignore Duplicates Quick Select - Heap/Heap
 ```python
     def findKthLargest(self, nums: List[int], k: int) -> int:
         
@@ -745,11 +745,11 @@ Given an unsorted array, find the kth largest element in sorted order.
         return self.findKthLargest(smaller, k-len(bigger)-len(equal))
 ```
 
-## 621. Task Scheduler ::3:: - Medium
+# 621. Task Scheduler ::3:: - Medium
 
 Topics:  Array, Hash Table, Greedy, Sorting, Heap (Priority Queue), Counting, Computer Architecture Scheduling
 
-### Intro
+## Intro
 > You are given an array of CPU tasks, each labeled with a 
 > letter from A to Z, and a number n. Each CPU interval can 
 > be idle or allow the completion of one task. Tasks can be 
@@ -773,12 +773,12 @@ tasks[i] is an uppercase English letter
 
 0 &leq; n &leq; 100
 
-### Abstraction
+## Abstraction
 Given a list of tasks marked by uppercase English letters and a minimum
 distance n between identical tasks, find how many cycles it would take to 
 finish all tasks.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -789,7 +789,7 @@ finish all tasks.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -799,11 +799,11 @@ finish all tasks.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Highest Occurring Tasks into Greedy Math Formula - Heap/Heap
+## Solution 1: Highest Occurring Tasks into Greedy Math Formula - Heap/Heap
 ```python
     def leastInterval(self, tasks: list[str], n: int) -> int:
 
@@ -850,7 +850,7 @@ finish all tasks.
         return res
 ```
 
-### Solution 2: Max Heap Tick by Tick Simulation For Count Occurrences - Heap/Heap
+## Solution 2: Max Heap Tick by Tick Simulation For Count Occurrences - Heap/Heap
 ```python
     def leastInterval(self, tasks: list[str], n: int) -> int:
 
@@ -906,7 +906,7 @@ finish all tasks.
         return time
 ```
 
-### Solution 3: Max Heap Time Jump Optimization Simulation for Count Occurrences - Heap/Heap
+## Solution 3: Max Heap Time Jump Optimization Simulation for Count Occurrences - Heap/Heap
 ```python
     def leastInterval(self, tasks: List[str], n: int) -> int:
 
@@ -969,11 +969,11 @@ finish all tasks.
         return time
 ```
 
-## 355. Design Twitter ::2:: - Medium
+# 355. Design Twitter ::2:: - Medium
 
 Topics:  Hash Table, Linked List, Design, Heap (Priority Queue)
 
-### Intro
+## Intro
 > Design a simplified version of Twitter where users can post 
 > tweets, follow/unfollow another user, and is able to see the 10 
 > most recent tweets in the user's news feed.
@@ -1011,13 +1011,13 @@ follow, and unfollow
 
 A user cannot follow themselves.
 
-### Abstraction
+## Abstraction
 Design a miniTwitter that allows for efficient news feed and postTweet.
 Boils down to desicions on efficiently storing tweets and retrieving 
 the top 10 recent ones.
 Also boils down to a merge k sorted lists question.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1028,7 +1028,7 @@ Also boils down to a merge k sorted lists question.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1038,11 +1038,11 @@ Also boils down to a merge k sorted lists question.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Store Tweets as Lists + Min Heap Merge - Heap/Heap
+## Solution 1: Store Tweets as Lists + Min Heap Merge - Heap/Heap
 ```python
 class Twitter:
 
@@ -1138,7 +1138,7 @@ class Twitter:
     # overall: space complexity
 ```
 
-### Solution 2: Store Tweets as Linked Lists + Merge K Sorted Lists - Heap/Heap
+## Solution 2: Store Tweets as Linked Lists + Merge K Sorted Lists - Heap/Heap
 ```python
 class TweetNode:
    
@@ -1231,7 +1231,7 @@ class Twitter:
     # overall: space complexity
 ```
 
-### Solution 3: Store Tweets as Arrays/Deques + Dynamic Heap Merge - Heap/Heap
+## Solution 3: Store Tweets as Arrays/Deques + Dynamic Heap Merge - Heap/Heap
 ```python
 class Twitter:
 
@@ -1298,11 +1298,11 @@ class Twitter:
         return result
 ```
 
-## 295. Find Median from Data Stream ::1:: - Hard
+# 295. Find Median from Data Stream ::1:: - Hard
 
 Topics:  Two Pointers, Design, Sorting, Heap (Priority Queue), Data Stream
 
-### Intro
+## Intro
 > The median is the middle value in an ordered integer list.
 > If the size of the list is even, there is no middle value, and
 > the median is the mean of the two middle values.
@@ -1330,10 +1330,10 @@ structure before calling findMedian.
 
 At most 5 * 10<sup>4</sup> calls will be made to addNum and findMedian 
 
-### Abstraction
+## Abstraction
 Find median value from a stream of data. 
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1344,7 +1344,7 @@ Find median value from a stream of data.
 |  |  | 
 
 
-### Brute Force:
+## Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1354,11 +1354,11 @@ Find median value from a stream of data.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: MaxHeap + MinHeap Median Finder - Heap/Heap
+## Solution 1: MaxHeap + MinHeap Median Finder - Heap/Heap
 ```python
 class MedianFinder:
 
@@ -1432,7 +1432,7 @@ class MedianFinder:
 ```
 
 
-### Solution 2: Balanced BST - Heap/Heap
+## Solution 2: Balanced BST - Heap/Heap
 ```python
 class MedianFinder:
     def __init__(self):

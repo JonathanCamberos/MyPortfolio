@@ -10,15 +10,15 @@ tags:
 - data structures and algorithms
 ---
 
-## Linked List Intro:
+# Linked List Intro:
 
 Leetcode problems with elegant solutions using a linked list.
 
-### What is a Linked List
+## What is a Linked List
 A linked list is a linear data structure where each element (node) points to the next.
 It does not offer direct index access like arrays, as all traversal is pointer based.
 
-### Structure of a Linked List
+## Structure of a Linked List
 Every linked list falls into one of two structural forms:
 
 1. Linear (acyclic)
@@ -44,13 +44,13 @@ Every linked list falls into one of two structural forms:
 Overall:
 Linked lists are either just a path or a path that leads to a cycle
 
-### Why Use a Linked List
+## Why Use a Linked List
 Linked lists are ideal for:
 - Memory efficient manipulation (no resizing like arrays)
 - Representing dynamic data structures (stacks, queues, etc)
 - Insertions and deletions in constant O(1) time (if the node is known)
 
-### Linked List Application: Linear Traversal
+## Linked List Application: Linear Traversal
 We can traverse a linked list node by node using a single pointer.
 Commonly used for printing, searching, summing values, etc.
 
@@ -67,7 +67,7 @@ Ex: Count number of nodes in the list
         return count
 ```
 
-### Linked List Application: Dummy Head Trick
+## Linked List Application: Dummy Head Trick
 Using a dummy (sentinel) node simplifies edge cases in linked list operations,
 especially when manipulating the head node.
 Dummy node precedes the head, providing the uniform way to handle
@@ -97,7 +97,7 @@ def removeNthFromEnd(head: Optional[ListNode], n: int) -> Optional[ListNode]:
     return dummy.next 
 ```
 
-### Linked List Application: Tortoise and Hare
+## Linked List Application: Tortoise and Hare
 We can represent fast and slow pointers to traverse the list.
 Useful for splitting lists in half for sorting or palindrome checks 
 and for checking for cycles.
@@ -146,7 +146,7 @@ Ex: Return middle node in list
     #             S^          F^        F: 6
 ```
 
-### Linked List Application: In Place Modification
+## Linked List Application: In Place Modification
 Iteratively manipulate linked list during traversal for
 O(1) time and space.
 
@@ -167,11 +167,11 @@ Ex: Reverse the entire list and return a new head
 
 
 
-## 206. Reverse Linked List ::4:: - Easy
+# 206. Reverse Linked List ::4:: - Easy
 
 Topics:  Linked List, Recursion
 
-### Intro
+## Intro
 > Given the head of a singly linked list, reverse the list, and return the reversed list.
 > A linked list can be reversed either iteratively or recursively. Could you implement both?
 
@@ -188,10 +188,10 @@ The number of nodes in the list is the range [0, 5000].
 
 -5000 &leq; Node.val &leq; 5000
 
-### Abstraction
+## Abstraction
 Given a linked list, reverse it iteratively and recursively.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -202,7 +202,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -212,11 +212,11 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Recursive - Linked List/Simple Traversal
+## Solution 1: Recursive - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -257,7 +257,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: Recursive Clean (Learning Not) - Linked List/Simple Traversal
+## Solution 2: Recursive Clean (Learning Not) - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -281,7 +281,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-### Solution 3: Iterative - Linked List/Simple Traversal
+## Solution 3: Iterative - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -323,7 +323,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 4: Iterative Clean (Learning Not) - Linked List/Simple Traversal
+## Solution 4: Iterative Clean (Learning Not) - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -353,11 +353,11 @@ Given a linked list, reverse it iteratively and recursively.
 
 
 
-## 21. Merge Two Sorted Lists ::2:: - Easy
+# 21. Merge Two Sorted Lists ::2:: - Easy
 
 Topics:  Linked List, Recursion
 
-### Intro
+## Intro
 > You are given the heads of two sorted linked lists list1 and list2.
 > Merge the two lists into one sorted list. The list should be made by splicing 
 > together the nodes of the first two lists. Return the head of the merged linked list.
@@ -377,10 +377,10 @@ The number of nodes in the list is the range [0, 50].
 
 Both list1 and list2 are sorted in non-decreasing order.
 
-### Abstraction
+## Abstraction
 Given two sorted linked lists, merge and return head of merged list.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -391,7 +391,7 @@ Given two sorted linked lists, merge and return head of merged list.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -401,11 +401,11 @@ Given two sorted linked lists, merge and return head of merged list.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Recursive - Linked List/Simple Traversal
+## Solution 1: Recursive - Linked List/Simple Traversal
 ```python
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -441,7 +441,7 @@ Given two sorted linked lists, merge and return head of merged list.
 |  |  |  |  |  |
 
 
-### Solution 2: Iterative Sentinel Anchor - Linked List/Simple Traversal
+## Solution 2: Iterative Sentinel Anchor - Linked List/Simple Traversal
 ```python
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -494,11 +494,11 @@ Given two sorted linked lists, merge and return head of merged list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## 141. Linked List Cycle ::2:: - Easy
+# 141. Linked List Cycle ::2:: - Easy
 
 Topics:  Hash Table, Linked List, Two Pointers
 
-### Intro
+## Intro
 > Given head, the head of a linked list, determine if the linked list has a cycle in it.
 > There is a cycle in a linked list if there is some node in the list that can be
 > reached again by continuously following the next pointer. 
@@ -520,10 +520,10 @@ The number of nodes in the list is the range [0, 5000].
 
 -5000 &leq; Node.val &leq; 5000
 
-### Abstraction
+## Abstraction
 Given a linked list, reverse it iteratively and recursively.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -534,7 +534,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -544,11 +544,11 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Track Visited Notes - Linked List/Simple Traversal
+## Solution 1: Track Visited Notes - Linked List/Simple Traversal
 ```python
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         
@@ -587,7 +587,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-### Solution 2: Floyd Cycle Detection Tortoise and Hare - Linked List/Simple Traversal
+## Solution 2: Floyd Cycle Detection Tortoise and Hare - Linked List/Simple Traversal
 ```python
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         
@@ -624,11 +624,11 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-## 143. Reorder List ::4:: - Medium
+# 143. Reorder List ::4:: - Medium
 
 Topics:  Linked List, Two Pointers, Stack, Recursion
 
-### Intro
+## Intro
 > You are given the head of a singly linked-list. The list can be represented as:
 > There is a cycle in a linked list if there is some node in the list that can be
 > L0 → L1 → … → Ln - 1 → Ln
@@ -647,10 +647,10 @@ The number of nodes in the list is the range [1, 5 * 10<sup>4</sup>].
 
 1 &leq; Node.val &leq; 1000
 
-### Abstraction
+## Abstraction
 Given a linked list, order it in values tending towards middle.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -661,7 +661,7 @@ Given a linked list, order it in values tending towards middle.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -671,11 +671,11 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Slow.next Explicit Set Tail of Final List Two Way Disconnect Iteration Reversal - Linked List/Simple Traversal
+## Solution 1: Slow.next Explicit Set Tail of Final List Two Way Disconnect Iteration Reversal - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -754,7 +754,7 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: Shared Slow Between Left and Right List Implicit Disconnect - Linked List/Simple Traversal
+## Solution 2: Shared Slow Between Left and Right List Implicit Disconnect - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -840,7 +840,7 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 3: Stack - Linked List/Simple Traversal
+## Solution 3: Stack - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -922,7 +922,7 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 4: Brain Teaser slow longer or equal Right list Stack - Linked List/Simple Traversal
+## Solution 4: Brain Teaser slow longer or equal Right list Stack - Linked List/Simple Traversal
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
@@ -1012,11 +1012,11 @@ Given a linked list, order it in values tending towards middle.
 |  |  |  |  |  |
 
 
-## 19. Remove Nth Node From End of List ::2:: - Medium
+# 19. Remove Nth Node From End of List ::2:: - Medium
 
 Topics:  Linked List, Two Pointers
 
-### Intro
+## Intro
 > Given the head of a linked list, remove the nth node from
 > the end of the list and return its head.
 > Follow up: Could you do this in one pass?
@@ -1037,10 +1037,10 @@ The number of nodes in the list is sz.
 
 1 &leq; n &leq; sz
 
-### Abstraction
+## Abstraction
 Given a linked list, remove nth node and return head of list.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1051,7 +1051,7 @@ Given a linked list, remove nth node and return head of list.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1061,11 +1061,11 @@ Given a linked list, remove nth node and return head of list.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Two Pass Get Length and Stop Prev to Removal Index - Linked List/Simple Traversal
+## Solution 1: Two Pass Get Length and Stop Prev to Removal Index - Linked List/Simple Traversal
 ```python
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         
@@ -1114,7 +1114,7 @@ Given a linked list, remove nth node and return head of list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: One Pass Fast Slow with HeadStart of N+1 - Linked List/Simple Traversal
+## Solution 2: One Pass Fast Slow with HeadStart of N+1 - Linked List/Simple Traversal
 ```python
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         
@@ -1159,11 +1159,11 @@ Given a linked list, remove nth node and return head of list.
 |  |  |  |  |  |
 
 
-## 138. Copy List with Random Pointer ::3:: - Medium
+# 138. Copy List with Random Pointer ::3:: - Medium
 
 Topics:  Hash Table, Linked List
 
-### Intro
+## Intro
 > A linked list of length n is given such that each node contains an 
 > additional random pointer, which could point to any node in the list, or null.
 > Construct a deep copy of the list. The deep copy should consist of 
@@ -1198,10 +1198,10 @@ Constraints:
 
 Node.random is null or is pointing to some node in the linked list.
 
-### Abstraction
+## Abstraction
 Given a linked list where each node has an additional random node pointers, create a deep copy.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1212,7 +1212,7 @@ Given a linked list where each node has an additional random node pointers, crea
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1222,11 +1222,11 @@ Given a linked list where each node has an additional random node pointers, crea
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Two Pass Hashmap Create Nodes and Set Next and Random Deep References - Linked List/Simple Traversal
+## Solution 1: Two Pass Hashmap Create Nodes and Set Next and Random Deep References - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
@@ -1277,7 +1277,7 @@ Given a linked list where each node has an additional random node pointers, crea
         return orig_to_deepCopy[head]
 ```
 
-### Solution 2: Memoization Lazy Construction One Pass Hashmap - Linked List/Simple Traversal
+## Solution 2: Memoization Lazy Construction One Pass Hashmap - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
@@ -1337,7 +1337,7 @@ Given a linked list where each node has an additional random node pointers, crea
         # return dummy.next
 ``` 
 
-### Solution 3: Three Pass In Place Interleaving Technique - Linked List/Simple Traversal
+## Solution 3: Three Pass In Place Interleaving Technique - Linked List/Simple Traversal
 ```python
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         
@@ -1420,11 +1420,11 @@ Given a linked list where each node has an additional random node pointers, crea
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## 2. Add Two Numbers ::2:: - Medium
+# 2. Add Two Numbers ::2:: - Medium
 
 Topics:  Linked List, Math, Recursion
 
-### Intro
+## Intro
 > You are given two non-empty linked lists representing two 
 > non-negative integers. The digits are stored in reverse 
 > order, and each of their nodes contains a single digit. Add 
@@ -1446,10 +1446,10 @@ The number of nodes in each linked list is in the range [1, 100].
 
 It is guaranteed that the list represents a number that does not have leading zeros.
 
-### Abstraction
+## Abstraction
 Given a two linked lists representing numbers, return the sum.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1460,7 +1460,7 @@ Given a two linked lists representing numbers, return the sum.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1470,11 +1470,11 @@ Given a two linked lists representing numbers, return the sum.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Recursive - Linked List/Simple Traversal
+## Solution 1: Recursive - Linked List/Simple Traversal
 ```python
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         
@@ -1526,7 +1526,7 @@ Given a two linked lists representing numbers, return the sum.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Solution 2: Iterative - Linked List/Simple Traversal
+## Solution 2: Iterative - Linked List/Simple Traversal
 ```python
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         
@@ -1576,11 +1576,11 @@ Given a two linked lists representing numbers, return the sum.
 |  |  |  |  |  |
 
 
-## 287. Find the Duplicate Number ::3:: - Medium
+# 287. Find the Duplicate Number ::3:: - Medium
 
 Topics:  Array, Two Pointers, Binary Search, Bit Manipulation
 
-### Intro
+## Intro
 > Given an array of integers nums containing n + 1 integers 
 > where each integer is in the range [1, n] inclusive.
 > There is only one repeated number in nums, return  
@@ -1604,10 +1604,10 @@ nums.length == n + 1
 
 All the integers in nums appear only once except for precisely one integer which appears two or more times.
 
-### Abstraction
+## Abstraction
 Given list, return which number is a duplicate.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1618,7 +1618,7 @@ Given list, return which number is a duplicate.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1628,7 +1628,7 @@ Given list, return which number is a duplicate.
 |  |  |  |  |  |
 
 
-### Find the Bug: While True instead of While slow != fast
+## Find the Bug: While True instead of While slow != fast
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
 
@@ -1661,7 +1661,7 @@ Given list, return which number is a duplicate.
         return slow
 ```
 
-### Solution 1: Max Bit Length Duplicate Flips  - Linked List/Simple Traversal
+## Solution 1: Max Bit Length Duplicate Flips  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
         
@@ -1722,7 +1722,7 @@ Given list, return which number is a duplicate.
 | Max Bit Calc | O(n) | O(1) | Iterate to determine max bits | No additional memory allocation for iteration O(1) |
 | Overall | O(n log n) | O(1) | Iteration for log n each with n dominates, leading to O(n log n)  | No additional memory allocation, leading to constant O(1) |
 
-### Solution 2: Pigeonhole Over Range 1 to N Then Count Array Binary Search  - Linked List/Simple Traversal
+## Solution 2: Pigeonhole Over Range 1 to N Then Count Array Binary Search  - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
 
@@ -1779,7 +1779,7 @@ Given list, return which number is a duplicate.
 | Overall | O(n log n) | O(1) | Binary search O(log n) each with iteration of O(n) dominates, leading to O(n log n) | No additional memory allocation O(1) |
 
 
-### Solution 3: Head to Start of Cycle Proof Floyd Tortoise and Hare - Linked List/Simple Traversal
+## Solution 3: Head to Start of Cycle Proof Floyd Tortoise and Hare - Linked List/Simple Traversal
 ```python
     def findDuplicate(self, nums: List[int]) -> int:
 
@@ -1874,11 +1874,11 @@ Given list, return which number is a duplicate.
 | Overall | O(n) | O(1) | Two iterations over list of n length dominate, leading to O(n) | No additional memory allocation, leading to O(1) |
 
 
-## 146. LRU Cache ::2:: - Medium
+# 146. LRU Cache ::2:: - Medium
 
 Topics:  Hash Table, Linked List, Design, Doubly Linked List
 
-### Intro
+## Intro
 > Design a data structure that follows the constraints of a 
 > Least Recently Used (LRU) cache.
 > Implement the LRUCache class:
@@ -1908,10 +1908,10 @@ Constraints:
 
 At most 2 * 10<sup>5</sup> calls will be made to get and put.
 
-### Abstraction
+## Abstraction
 Design an efficient LRU cache using linked lists.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1922,7 +1922,7 @@ Design an efficient LRU cache using linked lists.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1932,7 +1932,7 @@ Design an efficient LRU cache using linked lists.
 |  |  |  |  |  |
 
 
-### Find the Bug: Did not add to cache when adding to linked list put()
+## Find the Bug: Did not add to cache when adding to linked list put()
 ```python
 class Node:
     def __init__(self, key : int, val : int):
@@ -1992,7 +1992,7 @@ class LRUCache:
             self.cache.pop(lruNode.key)
 ```
 
-### Solution 1: Doubly Linked List with Hashmap  - Linked List/Simple Traversal
+## Solution 1: Doubly Linked List with Hashmap  - Linked List/Simple Traversal
 ```python
 class Node:
     def __init__(self, key: int, val: int):
@@ -2099,7 +2099,7 @@ class LRUCache:
 | put | O(1) | O(1) | Hashmap lookup O(1 ) with DLL remove O(1) and DLL insert_at_front O(1) all in constant O(1) | No additional memory allocation for either sub step O(1) |
 | overall | O(1) | O(capacity) | All operations in constant O(1) | Hashmap and DLL will store up to capacity O(capacity) |
 
-### Solution 2: Python Implementation OrderedDict a Doubly Linked List with Hashmap  - Linked List/Simple Traversal
+## Solution 2: Python Implementation OrderedDict a Doubly Linked List with Hashmap  - Linked List/Simple Traversal
 ```python
 class LRUCache:
     def __init__(self, capacity: int):
@@ -2151,11 +2151,11 @@ class LRUCache:
 | put | O(1) | O(1) | DLL move to end and lookup in constant O(1) | No additional memory allocation O(1) |
 | overall | O(1) | O(capacity) | All operations in constant O(1) | Hashmap and DLL store up to capacity O(capacity) |
 
-## 23. Merge k Sorted Lists ::2:: - Hard
+# 23. Merge k Sorted Lists ::2:: - Hard
 
 Topics:  Linked List, Divide and Conquer, Heap (Priority Queue), Merge Sort
 
-### Intro
+## Intro
 > You are given an array of k linked-lists lists, each linked-list is 
 > sorted in ascending order.
 > Merge all the linked-lists into one sorted linked-list and return it.
@@ -2180,10 +2180,10 @@ lists[i] is sorted in ascending order.
 
 The sum of lists[i].length will not exceed 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Given a list of sorted linked lists, combine into one sorted linked list.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2194,7 +2194,7 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2204,11 +2204,11 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Min Heap Priority Queue  - Linked List/Simple Traversal
+## Solution 1: Min Heap Priority Queue  - Linked List/Simple Traversal
 ```python
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         
@@ -2261,7 +2261,7 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 |  |  |  |  |  |
 
 
-### Solution 2: Merge Pair of List at a Time with Standard Merge Two Sorted Linked List  - Linked List/Simple Traversal
+## Solution 2: Merge Pair of List at a Time with Standard Merge Two Sorted Linked List  - Linked List/Simple Traversal
 ```python
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         
@@ -2326,11 +2326,11 @@ Given a list of sorted linked lists, combine into one sorted linked list.
 |  |  |  |  |  |
 
 
-## 25. Reverse Nodes in k-Group ::2:: - Hard
+# 25. Reverse Nodes in k-Group ::2:: - Hard
 
 Topics:  Linked List, Recursion
 
-### Intro
+## Intro
 > Given the head of a linked list, reverse the nodes of the list k at a 
 > time, and return the modified list.
 > k is a positive integer and is less than or equal to the length of the
@@ -2358,10 +2358,10 @@ lists[i] is sorted in ascending order.
 
 The sum of lists[i].length will not exceed 10<sup>4</sup>
 
-### Abstraction
+## Abstraction
 Given a linked lists, and group size k, reverse as many groups of k length as possible.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2372,7 +2372,7 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
 |  |  | 
 
 
-### Brute Force: 
+## Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2382,11 +2382,11 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
 |  |  |  |  |  |
 
 
-### Find the Bug:
+## Find the Bug:
 ```python
 ```
 
-### Solution 1: Recursive  - Linked List/Simple Traversal
+## Solution 1: Recursive  - Linked List/Simple Traversal
 ```python
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         
@@ -2443,7 +2443,7 @@ Given a linked lists, and group size k, reverse as many groups of k length as po
 |  |  |  |  |  |
 
 
-### Solution 2: Iterative  - Linked List/Simple Traversal
+## Solution 2: Iterative  - Linked List/Simple Traversal
 ```python
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
         

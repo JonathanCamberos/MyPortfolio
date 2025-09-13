@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-## Stack Intro
+# Stack Intro
 
 LeetCode problems with elegant solutions using stacks.
 
-### Stack Application: Tracking Nested or Hierarchical Structures
+## Stack Application: Tracking Nested or Hierarchical Structures
 
 We can track structure while iterating over an object ensuring it maintains 
 some criteria
@@ -33,7 +33,7 @@ Ex: Validate if a string containing brackets ()[]{} is properly balanced:
         return not stack
 ```
 
-### Stack Application: Backtracking by Tracking History or State
+## Stack Application: Backtracking by Tracking History or State
 We can use stacks in backtracking to store the state of exploration. 
 When a branch reaches a dead end or a solution, we pop the state to return
 to the previous state and continue exploring other branches.
@@ -64,7 +64,7 @@ Ex: Subset Sum with Backtracking
 ```
 
 
-### Stack Application: Monotonic Property Maintenance
+## Stack Application: Monotonic Property Maintenance
 A stack can maintain a monotonic property (increasing or decreasing)
 over a sequence while processing elements, ensuring efficient lookups
 or modifications.
@@ -86,7 +86,7 @@ Ex: Find the Next Greater Element
     # Example: nextGreaterElement([2, 1, 2, 4, 3]) -> [4, 2, 4, -1, -1]
 ```
 
-### Stack Application: Simulating Recursion or Call Stacks
+## Stack Application: Simulating Recursion or Call Stacks
 We can use a stack to emulate recursion by explicitly managing the call stack.
 
 Ex: Traverse a binary tree in preorder (root -> left -> right):
@@ -113,7 +113,7 @@ Ex: Traverse a binary tree in preorder (root -> left -> right):
     # Example: For a tree with root → 1, left → 2, right → 3, preorderTraversal(root) -> [1, 2, 3]
 ```
 
-### Stack Application: Expression Evaluation and Parsing
+## Stack Application: Expression Evaluation and Parsing
 We can use a stack to evaluate or parse expressions by storing operands
 and incrementally applying operators. 
 This approach is well-suited for postfix and prefix notations.
@@ -146,7 +146,7 @@ Ex: Post and Prefix
 ```
 
 
-### Stack Application: Dynamic Programming State Compression
+## Stack Application: Dynamic Programming State Compression
 We can use a stack to compress the necessary state while scanning through data,
 especially when enforcing a specific constraint or invariant like monotonicity.
 Instead of storing the entire history, we prune irrelevant elements from the stack
@@ -176,7 +176,7 @@ increasing subsequences
     print(min_partitions(nums))  # Output: 2
 ```
 
-### Stack Application: Interval and Range Processing
+## Stack Application: Interval and Range Processing
 We can use stacks to efficiently process intervals or ranges,
 such as merging overlapping intervals, calculating spans,
 or finding next/previous smaller or larger elements within a range.
@@ -202,11 +202,11 @@ Ex: Largest Rectangle in Histogram
     # Output: 10  (largest rectangle is formed by heights 5 and 6)
 ```
 
-## 20. Valid Parentheses ::2:: - Easy
+# 20. Valid Parentheses ::2:: - Easy
 
 Topics:  String, Stack  
 
-### Intro
+## Intro
 > Given a string s containing: ( ) [ ] \{ \},
 > determine if the input string is valid. 
 > An input string is valid if: 1. Open brackets must be closed by the same type
@@ -227,18 +227,18 @@ Constraints:
 
 s consists of parentheses only '()[]{}'
 
-### Abstract
+## Abstract
 We need to validate that every open parenthesis has a matching close
 in the correct order.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (replace with empty) |  |  |  |  |
 | Stack (redundant operations) |  |  |  |  |
 | Stack |  |  |  |  |
 
-### Brute Force: Replace Pairs with empty
+## Brute Force: Replace Pairs with empty
 ```python
     def isValid(self, s: str) -> bool:
         
@@ -265,7 +265,7 @@ in the correct order.
 | Total Iterations | O(n/2) | O(1) | At most n/2 pairs and thus n/2 removals O(n/2) | No additional memory allocation for iteration O(1) |
 | Overall | O(n<sup>2</sup>) | O(1) | Single iteration in O(n) for total iterations n/2 O(n/2), leading to O(n<sup>2</sup>) time complexity | No additional memory allocation for iteration, leading to constant O(1) | 
 
-### Find the Bug: Hashmap Count (does not track order)
+## Find the Bug: Hashmap Count (does not track order)
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -311,7 +311,7 @@ in the correct order.
 | Verify |  |  |  |  |
 | Overall |  |  |  |  | 
 
-### Find the Bug: Forgot to append to stack
+## Find the Bug: Forgot to append to stack
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -344,7 +344,7 @@ in the correct order.
 ```
 
 
-### Find the Bug: Did not check for empty Stack
+## Find the Bug: Did not check for empty Stack
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -375,7 +375,7 @@ in the correct order.
         return True
 ```
 
-### Solution 1: Manual Condition Stack Check - Stack/Tracking Nested or Hierarchical Structures 
+## Solution 1: Manual Condition Stack Check - Stack/Tracking Nested or Hierarchical Structures 
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -421,7 +421,7 @@ in the correct order.
 | Overall | O(n) | O(n) | Iteration over string of n length dominates, leading to O(n) | Memory allocation for stack with n opening brackets dominates, leading to O(n) | 
 
 
-### Solution 2: Stack with Hashmap lookup - Stack/Tracking Nested or Hierarchical Structures
+## Solution 2: Stack with Hashmap lookup - Stack/Tracking Nested or Hierarchical Structures
 ```python
     def isValid(self, s: str) -> bool:
 
@@ -469,11 +469,11 @@ in the correct order.
 | Overall | O(n) | O(n) | Iteration over string of n length dominates, leading to O(n) | Memory allocation for stack for n opening brackets dominates, leading to O(n) | 
 
 
-## 155. Min Stack ::2:: - Medium
+# 155. Min Stack ::2:: - Medium
 
 Topics:  Stack, Design
 
-### Intro
+## Intro
 > Design a stack that supports push, pop, top, and retrieving 
 > the minimum element in constant time.
 > Implement the MinStack class:
@@ -496,18 +496,18 @@ Methods pop, top and getMin operations will always be called on non-empty stacks
 
 At most 3 * 10<sup>4</sup> calls will be made to push, pop, top, and getMin.
 
-### Abstract
+## Abstract
 We need to design a stack that runs in O(1) time complexity for each main function.
 
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Brute Force:
+## Brute Force:
 ```python
     def __init__(self):
         
@@ -573,7 +573,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug:
+## Find the Bug:
 ```python
     def __init__(self):
         # space complexity: 
@@ -626,7 +626,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-### Solution 1: 2 Stacks for main and min - Stack/Dynamic Programming State Compression
+## Solution 1: 2 Stacks for main and min - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
 
@@ -701,7 +701,7 @@ class MinStack:
 | Overall | O(1) | O(n) | Each individual operation takes constant O(1) | MainStack and minTracker memory allocation dominate for n values, leading to O(n) | 
 
 
-### Solution 2: Tuple Stack - Stack/Dynamic Programming State Compression
+## Solution 2: Tuple Stack - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
     
@@ -764,11 +764,11 @@ class MinStack:
 | getMin | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
 | Overall | O(1) | O(n) | Each individual operation takes constant O(1) | Stack memory allocation dominates for n values, leading to O(n) | 
  
-## 150. Evaluate Reverse Polish Notation ::1:: - Medium
+# 150. Evaluate Reverse Polish Notation ::1:: - Medium
 
 Topics:  Array, Stack, Math, Design
 
-### Intro
+## Intro
 > You are given an array of strings tokens that represents an arithmetic 
 > expression in a Reverse Polish Notation.
 > Evaluate the expression. Return an integer that represents the value of
@@ -794,18 +794,18 @@ Constraints:
 tokens[i] is either an operator: "+", "-", "*", or "/", 
 or an integer in the range [-200, 200].
 
-### Abstract
+## Abstract
 We're designing abstract syntax tree that when execute, will execute the given
 operations in reverse polish notation.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Brute Force:
+## Brute Force:
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
         stack = []
@@ -837,7 +837,7 @@ operations in reverse polish notation.
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Operand Order
+## Find the Bug: Operand Order
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
         stack = []
@@ -863,7 +863,7 @@ operations in reverse polish notation.
         return stack.pop()
 ```
 
-### Find the Bug: Pushing Characters onto stack instead of Int
+## Find the Bug: Pushing Characters onto stack instead of Int
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
         
@@ -909,7 +909,7 @@ operations in reverse polish notation.
         return stack[-1]
 ```
 
-### Solution 1: Postfix Expression Evaluation Algorithm - Stack/Expression Evaluation and Parsing 
+## Solution 1: Postfix Expression Evaluation Algorithm - Stack/Expression Evaluation and Parsing 
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
         # space complexity: stack holds up to n/2 intermediate results O(n)
@@ -970,11 +970,11 @@ operations in reverse polish notation.
 | Stack operations | O(1) | O(1) | Add, sub, multi, and div all in constant O(1) | No additional memory allocation for operations |
 | Overall | O(n) | O(n) | Iterating over tokens array dominates, leading to O(n) | Operands stack for token array of n length dominates, leading to O(n) | 
 
-## 22. Generate Parentheses ::4:: - Medium
+# 22. Generate Parentheses ::4:: - Medium
 
 Topics:  String, Stack, Dynamic Programming, Backtracking
 
-### Intro
+## Intro
 > Given n pairs of parentheses, write a function to generate all 
 > combinations of well-formed parentheses.
 
@@ -987,17 +987,17 @@ Constraints:
 
 1 &le; n &le; 8
 
-### Abstract
+## Abstract
 Given a number, generate all possible combinations of parentheses.
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Brute Force:
+## Brute Force:
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1055,7 +1055,7 @@ Given a number, generate all possible combinations of parentheses.
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Adding Closing Parentheses Before Opening
+## Find the Bug: Adding Closing Parentheses Before Opening
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1087,7 +1087,7 @@ Given a number, generate all possible combinations of parentheses.
         return result
 ```
 
-### Find the Bug: Else clause instead of Adding Closed Parentheses based on Open Count
+## Find the Bug: Else clause instead of Adding Closed Parentheses based on Open Count
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
        
@@ -1121,7 +1121,7 @@ Given a number, generate all possible combinations of parentheses.
         return res
 ```
 
-### Find the Bug: Mutually exclusive if and if instead of if and elif
+## Find the Bug: Mutually exclusive if and if instead of if and elif
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
        
@@ -1154,7 +1154,7 @@ Given a number, generate all possible combinations of parentheses.
 ```
 
 
-### Find the Bug: list.append() modifies in place and returns None
+## Find the Bug: list.append() modifies in place and returns None
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
        
@@ -1194,7 +1194,7 @@ Given a number, generate all possible combinations of parentheses.
         return res
 ```
 
-### Find the Bug: Iterative Affects Other Branches Instead of Recursive
+## Find the Bug: Iterative Affects Other Branches Instead of Recursive
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1255,7 +1255,7 @@ Given a number, generate all possible combinations of parentheses.
 
 ```
 
-### Find the Bug: Forgot to initialize 0th level of DP
+## Find the Bug: Forgot to initialize 0th level of DP
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1282,7 +1282,7 @@ Given a number, generate all possible combinations of parentheses.
         return dp[n]
 ```
 
-### Find the Bug: Forgot to update Parentheses count
+## Find the Bug: Forgot to update Parentheses count
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1315,7 +1315,7 @@ Given a number, generate all possible combinations of parentheses.
         return res
 ```
 
-### Find the Bug: Cannot initialize empty list with multiplication, use bucket sort method
+## Find the Bug: Cannot initialize empty list with multiplication, use bucket sort method
 ```python
 def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1337,7 +1337,7 @@ def generateParenthesis(self, n: int) -> List[str]:
         return dp[n]
 ```
 
-### Solution 1: BackTracking Recursive with String Concatenation - Stack/Backtracking by Tracking History or State
+## Solution 1: BackTracking Recursive with String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1385,7 +1385,7 @@ def generateParenthesis(self, n: int) -> List[str]:
 | String concatenation | O(n) per path | O(n) per result | Explanation of total O(n<sup>2</sup>) is the same as the double for loop [derivation](/Notes/sorting-searching-algorithms#double-for-loop) |  |
 | Overall | O(Catalan(n) * n<sup>2</sup>) | O(Catalan(n) * n) | Catalan(n) unique strings with copy cost dominates as string grows O(n<sup>2</sup>) per solution dominates, leading to O(Catalan(n) * n<sup>2</sup>) | Catalan(n) valid strings each of length 2n dominates, leading to O(Catalan(n) * n) | 
 
-### Solution 2: BackTracking Recursive with Mutable List - Stack/Backtracking by Tracking History or State
+## Solution 2: BackTracking Recursive with Mutable List - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1445,7 +1445,7 @@ def generateParenthesis(self, n: int) -> List[str]:
 | String creation | O(n) per complete path | O(n) per result | Only joined once per result | Each string result is size 2n |
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | Avoids repeated copies | Stores all valid combinations | 
 
-### Solution 3: Iterative State Tracking Stack - Stack/Backtracking by Tracking History or State
+## Solution 3: Iterative State Tracking Stack - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1500,7 +1500,7 @@ def generateParenthesis(self, n: int) -> List[str]:
 | Final string join | O(n) per result | O(n) per result | Each completed list is joined into a string once | Output list contains O(Catalan(n)) strings, each of length O(n) | 
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | One entry and exit per valid state exploring ? | Final output dominates space; stack and temp lists also contribute O(n) each | 
 
-### Solution 4: Dynamic Programming Building Parentheses Combinations - Stack/Dynamic Programming State Compression
+## Solution 4: Dynamic Programming Building Parentheses Combinations - Stack/Dynamic Programming State Compression
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1556,11 +1556,11 @@ def generateParenthesis(self, n: int) -> List[str]:
 | String construction | O(n) per combination | O(n) per result | Each result takes O(n) to form | Final dp[n] holds all combinations |
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | No recursion but same asymptotic bound | Store all intermediate and final results | 
 
-## 739. Daily Temperatures ::3:: - Medium
+# 739. Daily Temperatures ::3:: - Medium
 
 Topics:  Array, Stack, Monotonic Stack, Two Pointers, Dynamic Programming
 
-### Intro
+## Intro
 > Given an array of integers temperatures represents the daily 
 > temperatures, return an array answer such that answer[i] is the 
 > number of days you have to wait after the ith day to get a warmer 
@@ -1580,16 +1580,16 @@ Constraints:
 30 &le; temperatures[i] &le; 100
 
 
-### Abstract
+## Abstract
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Brute Force: Stack
+## Brute Force: Stack
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1618,7 +1618,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Forgot to Push onto Stack 
+## Find the Bug: Forgot to Push onto Stack 
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1639,7 +1639,7 @@ Constraints:
         return res
 ```
 
-### Find the Bug: Comparing Indexes to Temperatures, instead of Temp to Temp
+## Find the Bug: Comparing Indexes to Temperatures, instead of Temp to Temp
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]: 
 
@@ -1679,7 +1679,7 @@ Constraints:
 
 ```
 
-### Find the Bug: Pop with If Statement instead of a While Loop
+## Find the Bug: Pop with If Statement instead of a While Loop
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:  
 
@@ -1719,7 +1719,7 @@ Constraints:
         return res
 ```
 
-### Find the Bug: Added extra if else statement during day calculation
+## Find the Bug: Added extra if else statement during day calculation
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
 
@@ -1754,7 +1754,7 @@ Constraints:
         return dp
 ```
 
-### Find the Bug: Reverse Iteration, forgot to pop matching old hot Temperatures
+## Find the Bug: Reverse Iteration, forgot to pop matching old hot Temperatures
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
 
@@ -1785,7 +1785,7 @@ Constraints:
         return res
 ```
 
-### Find the Bug: Dynamic, forgot to replace hottest_day with equal temperatures
+## Find the Bug: Dynamic, forgot to replace hottest_day with equal temperatures
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
 
@@ -1814,7 +1814,7 @@ Constraints:
         return dp
 ```
 
-### Solution 1: Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
+## Solution 1: Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1879,7 +1879,7 @@ Constraints:
 | Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
 | Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-### Solution 2: Reverse Iteration Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
+## Solution 2: Reverse Iteration Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1937,7 +1937,7 @@ Constraints:
 | Overall | O(n) | O(n) | Iteration over list of n temperatures dominates, leading to O(n) | Efficient pruning of colder temperatures often leads to smaller stack than forward pass but still for n elements O(n) |  
 
 
-### Solution 3: Dynamic Programming Jump Traversal using Future Warm Temperatures - Stack/Algorithm
+## Solution 3: Dynamic Programming Jump Traversal using Future Warm Temperatures - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1999,11 +1999,11 @@ Constraints:
 | Overall | O(n) | O(n) | Iteration over list of temperatures n length dominates, leading to O(n) |  | 
 
 
-## 853. Car Fleet ::2:: - Medium
+# 853. Car Fleet ::2:: - Medium
 
 Topics:  Array, Stack, Sorting, Monotonic Stack
 
-### Intro
+## Intro
 > There are n cars at given miles away from the starting mile 0, traveling to reach the mile target.
 > You are given two integer array position and speed, both of length n, where position[i] is the starting mile of the ith car and speed[i] is the speed of the ith car in miles per hour.
 > A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car.
@@ -2029,18 +2029,18 @@ All of values of position are unique
 
 0 &lt; speed[i] &le; 10<sup>6</sup>
 
-### Abstract
+## Abstract
 
 
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Brute Force: Stack
+## Brute Force: Stack
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2049,7 +2049,7 @@ All of values of position are unique
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Base Case Add if Stack Empty or New Fleet 
+## Find the Bug: Base Case Add if Stack Empty or New Fleet 
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         stack = []
@@ -2074,7 +2074,7 @@ All of values of position are unique
 
 
 
-### Solution 1: Monotonic Increasing Stack of Slower/Higher Fleet Times - Stack/Monotonic Property Maintenance
+## Solution 1: Monotonic Increasing Stack of Slower/Higher Fleet Times - Stack/Monotonic Property Maintenance
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         # Note: 
@@ -2131,7 +2131,7 @@ All of values of position are unique
 | Fleet generation | O(n) | O(n) | Iterate over list of cars n length O(n) | Stack tracks time to target for up to n fleets O(n) |
 | Overall | O(n log n) | O(n) | TimSort cars by descending position dominates, leading to O(n log n) | Cars and stack dominate, leading to O(n) | 
 
-### Solution 2: Greedy Tracking One Slowest/Higher Fleet - Stack/Algorithm
+## Solution 2: Greedy Tracking One Slowest/Higher Fleet - Stack/Algorithm
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         
@@ -2165,11 +2165,11 @@ All of values of position are unique
 | Overall | O(n log n) | O(n) | TimSort cars by descending position dominates, leading to O(n log n) | Storing cars for list of n length dominates, leading to O(n) | 
 
 
-## 84. Largest Rectangle in Histogram ::2:: - Hard
+# 84. Largest Rectangle in Histogram ::2:: - Hard
 
 Topics:  Array, Stack, Monotonic Stack
 
-### Intro
+## Intro
 > Given an array of integers heights representing the 
 > histogram's bar height where the width of each bar is 1, 
 > return the area of the largest rectangle in the histogram.
@@ -2185,17 +2185,17 @@ Constraints:
 
 0 &le; heights[i] &le; 10<sup>4</sup>
 
-### Abstract
+## Abstract
 
 
-### Space & Time Complexity
+## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-### Brute Force: Stack
+## Brute Force: Stack
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         n = len(heights)
@@ -2216,7 +2216,7 @@ Constraints:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-### Find the Bug: Did not append to stack correctly  
+## Find the Bug: Did not append to stack correctly  
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         
@@ -2260,7 +2260,7 @@ Constraints:
 
 
 
-### Solution 1: Double Dragging Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
+## Solution 1: Double Dragging Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
 
@@ -2341,7 +2341,7 @@ Constraints:
 | Overall | O(n) | O(n) | Iterate over list of n length dominates, leading to O(n) | Stack index storage dominates, leading to O(n) |
 
 
-### Solution 2: Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
+## Solution 2: Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         
@@ -2399,11 +2399,11 @@ Constraints:
 | Overall | O(n) | O(n) | Iteration over list dominates, leading to O(n) | Stack storage dominates, leading to O(n) |
 
 
-## 402. Remove K Digits ::1:: - Medium
+# 402. Remove K Digits ::1:: - Medium
 
 Topics:  String, Stack, Greedy, Monotonic Stack
 
-### Intro
+## Intro
 > Given string num representing a non-negative integer num, and an integer k, 
 > return the smallest possible integer after removing k digits from num.
 
@@ -2421,10 +2421,10 @@ num consists of only digits
 
 num does not have any leading zeros except for 0 itself
 
-### Abstract
+## Abstract
 Remove k digits in a way so that resulting integer is as large as possible.
 
-### Solution 1: Forward Iteration Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
+## Solution 1: Forward Iteration Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
 ```python
     def removeKdigits(self, num: str, k: int) -> str:
 
