@@ -448,6 +448,8 @@ will require the system to process much larger volumes of data than before.
 
 #### Describing Load (Twitter example)
 
+##### Intro
+
 > Load can be described with a few numbers which we call load parameters.
 > The best choice of parameters depends on the architecture of your system.
 
@@ -477,9 +479,13 @@ This may seem daunting at first, but there are two main ways
 of implementing these two operations
 
 
-1. SQL merge (Fan-out on Read)
+##### 1. SQL Merge (Fan-out on Read)
+
 Idea: Do almost no extra work when someone posts a tweet. Just insert it into
 the global tweets table.
+
+When someone posts via PostTweet():
+Insert into global tweets table
 
 When uses requests HomeTimeline():
 Look up list of people they follow, fetch tweets for each of those users,
@@ -487,34 +493,105 @@ merge them and sorted by timestamp
 
 Work: Happens at read time (query + merge)
 
-Use: Good when writes are frequent but reads are infrequent
+Optimized for: When writes are frequent but reads are infrequent
 
-##### Fan-Out on Read() Pseudocode
 ```sql
 -- Fan-Out on Read: Build users home timeline on demand
 
-    -- grab tweets and author info for everyone user follows from global tweet table
+    -- 1. FROM: start with base table of all tweets
     SELECT 
-        tweets.*, -- all tweets fields (id, text, timestamp, etc.)
-        users.*   -- all user fields for tweet's author (name, username, etc.)
+        tweets.*, -- 4. SELECT: grab tweet info (id, text, timestamp, etc.)
+        users.*   --    grab user info (name, username, etc.)
     FROM tweets
 
-    -- join information about user, matching tweeter to tweet
+    -- 2. JOIN users: merge tweets with users table based on author id
+    --    Users Table: user info
+    --    Tweets Table: tweet info
+    --    Result Table: columns (user + tweet)
     JOIN users 
         ON tweets.sender_id = users.id
+
+    -- 3. JOIN Table: merge previous result with follows table based on author
+    --    Follows Table: follower -> followed
+    --    Result Table: columns (user + tweet + follows (reader) + followed (author)) 
     JOIN follows 
         ON follows.followee_id = users.id
+
+    -- 4. WHERE: filter to keep only rows where current user is the follower
+    --    Current_User: user info
+    --    Result Action: return (tweets.* + users.*) where 
+    --                   (user.id == (user + tweet + follows + followed).follows (reader))
     WHERE follows.follower_id = current_user
+
+    -- 5. ORDER BY: sort by tweets.created_at DESC to show newest tweets first
+    -- 6. LIMIT 50: only return first 50 tweets
+```
+```python
+
+     For current logged-in user: 170
+                                  |
+| - - - - - - - - - - - - - - - - |
+|
+|     follows table                       tweets table
+|     +---------------------------+       +----------------------------------------------+
+|     | follower_id | followee_id |       | id (tweet_id) | sender_id | text | timestamp |
+|     +---------------------------+       +----------------------------------------------+
+| - > | 170         | 12          |       | 20           | 12        | "hi"  | 114297    |
+      +---------------------------+       +----------------------------------------------+
+                    / |                                     ^           
+                   /  | - - - - - - - - - - - - - - - - - - | 
+                  /                                                         
+                 /                                         
+                /  users table                                      
+               /   +----------------------------------+  
+              /    | id | screen_name | profile_image |
+             /     +----------------------------------+   
+            - - - >| 12 | alice       | alice.jpg     |
+                   | 170| bob         | bob.jpg       |
+                   +----------------------------------+
 ```
 
-2. User Cache Timeline
-Maintain a home timeline cache for each user, a mailbox of tweets for each user.
-When a user posts a tweet, look up all people who follow that user (their mail
-recipients or followees), and insert the new tweet into each of their home 
-timeline caches. The request to read home timeline is cheap because its been
-computed ahead of time.
+##### 2. Cache User Timeline (Fan-out on Write)
 
-> Twitter IRL
+Idea: Keep a precomputed 'mailbox' (cache) of tweets for each user.
+
+When someone posts via PostTweet():
+Find all their followers, insert that tweet into each follower's cached home timeline.
+
+When uses requests HomeTimeline():
+Just return their cached timeline, no merging required
+
+Work: Happens at write time (copy tweet into many many caches)
+
+Optimized for: When reads are more common than writes
+
+```python
+User posts a tweet → update all timelines (cache):
+
+                                   +--------+
+                                   |  User  |
+                                   +--------+
+    POST Tweet: 4.6 k writes/sec       |
+    4.6 k writes/sec                   |
+                                       v
+                                +---------------+
+                                |  All Tweets   | 
+                                | (Primary DB)  |     
+                                +---------------+
+                                       | 
+    Average: 75 followers        |-----------------|-----------------|
+    Write to 75 Timeline Caches  |                 |                 |
+    4.6 * 75 = 345               v                 v                 v
+    345k writes/sec     +--------------+   +--------------+   +--------------+
+                        | Timeline     |   | Timeline     |   | Timeline     |  
+                        | Cache: User1 |   | Cache: User2 |   | Cache: User3 |
+                        +--------------+   +--------------+   +--------------+
+
+    300k reads/sec 
+                
+```
+
+##### Twitter's Solution
 
 The first version of Twitter used approach 1.
 However, systems struggled to keep up so they switched to approach 2.
@@ -528,22 +605,27 @@ On average, a tweet is delivered to about 75 followers.
 So 4.6k tweets per second becomes 345k writes per second to user's home timeline
 caches. 
 
-> Twitter Celebrities
-
-Twitter also moved to a hybrid of both approaches. Most user's tweets are fanned
-out to timelines at the time when they are posted, but small number of users with
-very larger number of followers, 'celebrities', are excepted from this. 
+##### Common Problem: Celebrities
 
 Some users have over 30 millions followers, which means a single tweet may result
 in over 30 million writes to timelines, and as twitter tries to deliver tweets
 to followers within five seconds, this creates a significant challenge.
 
-Thus, and tweets from celebrities are fetched separately and merged
-with that users' home timeline when it is read, like in approach 1.
+##### Common Solution: Celebrity Merge + Cache Timeline Hybrid
 
-We will revisit this example in Chapter 12 after having covered more technical ground!
+Twitter eventually moved to hybrid of both approaches. 
+With most user's tweets being fanned out to timelines at the time when they 
+are posted (Solution 2: Cache).
+
+But tweets from celebrities with a large number of follows are fetched separately 
+and merged with that users' home timeline when it is read (Solution 1: Merge)
+to avoid overloading by passing to 30 million timeline caches.
+
+We will revisit this example in Chapter 12 after having covered more technical ground.
 
 #### Describing Performance
+
+##### Intro
 
 Once you have described load and load parameters on your architecture and system,
 you can investigate what happens when load increases.
