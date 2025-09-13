@@ -13,7 +13,6 @@ const RenderMdx = ({blog}) => {
 
 return (
   <div className='col-span-12   lg:col-span-8 font-in prose sm:prose-base md:prose-lg max-w-max
-  prose-h4:a:no-underline
   prose-blockquote:bg-accent/20 
   prose-blockquote:p-2
   prose-blockquote:px-6

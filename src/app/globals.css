@@ -13,16 +13,7 @@ content: "#";
 font-size: 0.8rem;
 }
 
-h4 {
-    font-size: 1.2rem !important; /* 18px */
-    font-weight: 600;     /* optional: match h3 or make bold */
-    margin-top: 1.5rem;   /* adjust spacing above */
-    margin-bottom: 0.75rem; /* adjust spacing below */
-}
-
-h2 > a,
-h3 > a,
-h4 > a {
+h2 > a, h3>a {
     text-decoration: none !important;
 }
 
