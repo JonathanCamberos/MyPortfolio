@@ -10,17 +10,17 @@ tags:
 - data structures and algorithms
 ---
 
-# Math and Geometry Intro
+## Math and Geometry Intro
 
-## What is Math and Geometry
-
-math!
-
-## Math and Geometry IRL
+### What is Math and Geometry
 
 math!
 
-## Math and Geometry Application: Math and Geometry
+### Math and Geometry IRL
+
+math!
+
+### Math and Geometry Application: Math and Geometry
 Pattern: math! 
 
 Ex: bits numbers!!
@@ -31,11 +31,11 @@ Ex: bits numbers!!
 ```
 
 
-# 48. Rotate Image ::1:: - Medium
+## 48. Rotate Image ::1:: - Medium
 
 Topics:  Array, Math, Matrix
 
-## Intro
+### Intro
 > You are given an n x n 2D matrix representing an 
 > image, rotate the image by 90 degrees (clockwise).
 > You have to rotate the image in-place, which means you 
@@ -55,10 +55,10 @@ n == matrix.length == matrix[i].length
 
 -1000 &leq; matrix[i][j] &leq; 1000
 
-## Abstraction
+### Abstraction
 Given an 2D array, rotate the 2D array 90 degrees.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -69,7 +69,7 @@ Given an 2D array, rotate the 2D array 90 degrees.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -79,11 +79,11 @@ Given an 2D array, rotate the 2D array 90 degrees.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Layer by Layer Rotation - Math and Geometry/Math and Geometry
+### Solution 1: Layer by Layer Rotation - Math and Geometry/Math and Geometry
 ```python
     def rotate(self, matrix: List[List[int]]) -> None:
         
@@ -161,11 +161,11 @@ Given an 2D array, rotate the 2D array 90 degrees.
         # overall: space complexity O(1)
 ```
 
-# 54. Spiral Matrix ::1:: - Medium
+## 54. Spiral Matrix ::1:: - Medium
 
 Topics:  Array, Matrix, Simulation
 
-## Intro
+### Intro
 > Given an m x n matrix, return all elements of the
 > matrix in spiral order.
 
@@ -184,11 +184,11 @@ n == matrix[i].length
 
 -100 &leq; matrix[i][j] &leq; 100
 
-## Abstraction
+### Abstraction
 Given a 2D array, return a list of all the elements in the matrix
 by iterating in a clockwise rotation.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -199,7 +199,7 @@ by iterating in a clockwise rotation.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -209,11 +209,11 @@ by iterating in a clockwise rotation.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Layer by Layer Spiral Traversal - Math and Geometry/Math and Geometry
+### Solution 1: Layer by Layer Spiral Traversal - Math and Geometry/Math and Geometry
 ```python
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
         
@@ -281,11 +281,11 @@ by iterating in a clockwise rotation.
         return res
 ```
 
-# 73. Set Matrix Zeroes ::1:: - Medium
+## 73. Set Matrix Zeroes ::1:: - Medium
 
 Topics:  Array, Hash Table, Matrix
 
-## Intro
+### Intro
 > Given an m x n integer matrix matrix, if an element is 
 > 0, set its entire row and column to 0's.
 > You must do it in place.
@@ -310,10 +310,10 @@ n == matrix[i].length
 
 -2<sup>31</sup> &leq; matrix[i][j] &leq; 2<sup>31</sup> - 1
 
-## Abstraction
+### Abstraction
 Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -324,7 +324,7 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -334,11 +334,11 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Brute Force O(m*n) Space - Math and Geometry/Math and Geometry
+### Solution 1: Brute Force O(m*n) Space - Math and Geometry/Math and Geometry
 ```python
     def setZeroes(self, matrix: List[List[int]]) -> None:
         
@@ -370,7 +370,7 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 ```
 
 
-## Solution 2: Using O(m+n) Space - Math and Geometry/Math and Geometry
+### Solution 2: Using O(m+n) Space - Math and Geometry/Math and Geometry
 ```python
     def setZeroes(self, matrix: List[List[int]]) -> None:
         
@@ -406,7 +406,7 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
 ```
 
 
-## Solution 3: Constant Space O(1) - Math and Geometry/Math and Geometry
+### Solution 3: Constant Space O(1) - Math and Geometry/Math and Geometry
 ```python
     def setZeroes(self, matrix: List[List[int]]) -> None:
         
@@ -464,11 +464,11 @@ Given a 2D array, if a cell has 0, zero out its adjacent row and column.
         # overall: space complexity O(1)
 ```
 
-# 202. Happy Number ::1:: - Easy
+## 202. Happy Number ::1:: - Easy
 
 Topics:  Hash Table, Math, Two Pointers
 
-## Intro
+### Intro
 > Write an algorithm to determine if a number n is happy.
 > A happy number is a number defined by the following process:
 > Starting with any positive integer, replace the number by 
@@ -488,10 +488,10 @@ Constraints:
 
 1 &leq; n &leq; 2<sup>31</sup> - 1
 
-## Abstraction
+### Abstraction
 Given a number and constraints, determine if number fits constraints.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -502,7 +502,7 @@ Given a number and constraints, determine if number fits constraints.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -512,11 +512,11 @@ Given a number and constraints, determine if number fits constraints.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
+### Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
 ```python
     def isHappy(self, n: int) -> bool:
         
@@ -552,7 +552,7 @@ Given a number and constraints, determine if number fits constraints.
         return res
 ```
 
-## Solution 2: Slow Fast Pointer - Math and Geometry/Math and Geometry
+### Solution 2: Slow Fast Pointer - Math and Geometry/Math and Geometry
 ```python
     def isHappy(self, n: int) -> bool:
         
@@ -584,11 +584,11 @@ Given a number and constraints, determine if number fits constraints.
         return res
 ```
 
-# 66. Plus One ::1:: - Easy
+## 66. Plus One ::1:: - Easy
 
 Topics:  Array, Math
 
-## Intro
+### Intro
 > You are given a large integer represented as an integer 
 > array digits, where each digits[i] is the ith digit of the 
 > integer. The digits are ordered from most significant to 
@@ -611,12 +611,12 @@ Constraints:
 
 digits does not contain any leading 0's.
 
-## Abstraction
+### Abstraction
 Given a number represented as an array of digits 
 (most significant digit first), increment the number by 1 and 
 return the resulting array of digits.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -627,7 +627,7 @@ return the resulting array of digits.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -637,11 +637,11 @@ return the resulting array of digits.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
+### Solution 1: Hash Set Detection - Math and Geometry/Math and Geometry
 ```python
     def plusOne(self, digits: List[int]) -> List[int]:
         
@@ -678,11 +678,11 @@ return the resulting array of digits.
 ```
 
 
-# 50. Pow(x, n) ::1:: - Medium
+## 50. Pow(x, n) ::1:: - Medium
 
 Topics:  Math, Recursion
 
-## Intro
+### Intro
 > Implement pow(x, n), which calculates x raised to the 
 > power n (i.e., xn).
 
@@ -704,10 +704,10 @@ Either x is not zero or n > 0.
 
 -10<sup>4</sup> &leq; x<sup>n</sup> &leq; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Implement pow(x, n).
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -718,7 +718,7 @@ Implement pow(x, n).
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -728,11 +728,11 @@ Implement pow(x, n).
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive Fast Exponentiation - Math and Geometry/Math and Geometry
+### Solution 1: Recursive Fast Exponentiation - Math and Geometry/Math and Geometry
 ```python
     def myPow(self, x: float, n: int) -> float:
         
@@ -771,7 +771,7 @@ Implement pow(x, n).
 ```
 
 
-## Solution 2: Iterative Fast Binary Exponentiation - Math and Geometry/Math and Geometry
+### Solution 2: Iterative Fast Binary Exponentiation - Math and Geometry/Math and Geometry
 ```python
     def myPow(self, x: float, n: int) -> float:
         
@@ -812,11 +812,11 @@ Implement pow(x, n).
 ```
 
 
-# 43. Multiply Strings ::2:: - Medium
+## 43. Multiply Strings ::2:: - Medium
 
 Topics:  Math, Recursion
 
-## Intro
+### Intro
 > Given two non-negative integers num1 and num2 
 > represented as strings, return the product of num1 and
 > num2, also represented as a string.
@@ -837,11 +837,11 @@ num1 and num2 consist of digits only.
 Both num1 and num2 do not contain any leading zero, 
 except the number 0 itself.
 
-## Abstraction
+### Abstraction
 Given two numbers represented as strings,
 return the product of the two numbers.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -852,7 +852,7 @@ return the product of the two numbers.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -862,11 +862,11 @@ return the product of the two numbers.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Simulate Grade School Multiplication - Math and Geometry/Math and Geometry
+### Solution 1: Simulate Grade School Multiplication - Math and Geometry/Math and Geometry
 ```python
     def multiply(self, num1: str, num2: str) -> str:
         
@@ -933,11 +933,11 @@ return the product of the two numbers.
 ```
 
 
-# 2013. Detect Squares ::1:: - Medium
+## 2013. Detect Squares ::1:: - Medium
 
 Topics:  Array, Hash Table, Design, Counting
 
-## Intro
+### Intro
 > You are given a stream of points on the X-Y plane.  
 > Design an algorithm that:
 > Adds new points from the stream into a data 
@@ -970,14 +970,14 @@ point.length == 2
 
 At most 3000 calls in total will be made to add and count.
 
-## Abstraction
+### Abstraction
 Design a data structure to store points on a 2D grid and count the 
 number of axis-aligned squares that can be formed with a given query point.
 Points can be added multiple times.
 Squares must have edges parallel to axes and positive area.
 Efficiently handle up to 3000 add and count calls.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -988,7 +988,7 @@ Efficiently handle up to 3000 add and count calls.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -998,11 +998,11 @@ Efficiently handle up to 3000 add and count calls.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Hash Map Counting - Math and Geometry/Math and Geometry
+### Solution 1: Hash Map Counting - Math and Geometry/Math and Geometry
 ```python
     class DetectSquares:
 

@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-# Sliding Window Intro:
+## Sliding Window Intro:
 
 Leetcode problems with elegant solutions using the sliding window technique. 
 
-## What is Sliding Window
+### What is Sliding Window
 Sliding Window is a technique used for iterating over a subset of data
 within a larger structure (like arrays or strings) by maintaining 
 a moving window that can expand, contract, or shift across the input.
@@ -26,7 +26,7 @@ There are two main types of sliding windows:
 Sliding window often replaces nested loops by reusing computation 
 from the previous window to achieve better efficiency.
 
-## Why Use Sliding Window
+### Why Use Sliding Window
 Sliding Window is ideal for problems that involve:
 - Finding optimal subarray/substring
 - Summation or counting within a range
@@ -35,7 +35,7 @@ Sliding Window is ideal for problems that involve:
 It typically reduces time complexity from O(n<sup>2</sup>) (naive nested loops) 
 to O(n) since each element is processed at most twice (entering/exiting the window).
 
-## Sliding Window Application: Fixed Size Window
+### Sliding Window Application: Fixed Size Window
 Fixed size windows help maintain a constant window of k elements 
 while scanning through a sequence.
 
@@ -54,7 +54,7 @@ Ex: Maximum sum of any subarray of size k
     # maxSumSubarray([1, 4, 2, 10, 2, 3, 1, 0, 20], 4) = 24
 ```
 
-## Sliding Window Application: Variable Size Window
+### Sliding Window Application: Variable Size Window
 Variable size windows expand and shrink dynamically depending on 
 whether some condition or constraint is met (e.g., substring uniqueness, 
 sum ≤ target).
@@ -77,11 +77,11 @@ Ex: Longest substring without repeating characters
     # "abcabcbb" → lengthOfLongestSubstring = 3
 ```
 
-# 121. Best Time to Buy and Sell Stock ::4:: - Easy
+## 121. Best Time to Buy and Sell Stock ::4:: - Easy
 
 Topics:  Array, Dynamic Programming, Sliding Window
 
-## Intro
+### Intro
 > You are given an array prices where prices[i] is the price of a given 
 > stock on the ith day.
 > You want to maximize your profit by choosing a single day to buy one stock and 
@@ -100,10 +100,10 @@ Constraints:
 
 0 &le; prices[i] &le; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Given an array of stock values, find the highest profit possible.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -114,7 +114,7 @@ Given an array of stock values, find the highest profit possible.
 |  |  | 
 
 
-## Brute Force: (iterative)
+### Brute Force: (iterative)
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -124,11 +124,11 @@ Given an array of stock values, find the highest profit possible.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Explicit Sliding Window Tracking Min Price and Max Profit - Sliding Window/Variable Size Window
+### Solution 1: Explicit Sliding Window Tracking Min Price and Max Profit - Sliding Window/Variable Size Window
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -175,7 +175,7 @@ Given an array of stock values, find the highest profit possible.
 | Overall | O(n) | O(1) | Iteration over array dominates O(n) | No additional memory allocation O(1) |
 
 
-## Solution 2: Implicit Sliding Window Tracking Min Price and Max Profit - Sliding Window/Variable Size Window
+### Solution 2: Implicit Sliding Window Tracking Min Price and Max Profit - Sliding Window/Variable Size Window
 ```python
     def maxProfit(self, prices: List[int]) -> int:
         
@@ -217,7 +217,7 @@ Given an array of stock values, find the highest profit possible.
 | Overall | O(n) | O(1) | Iteration over list dominates, leading to O(n) | No additional memory allocation, leading to O(1) |
 
 
-## Solution 3: Table Dynamic Programming - Sliding Window/Variable Size Window
+### Solution 3: Table Dynamic Programming - Sliding Window/Variable Size Window
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -267,7 +267,7 @@ Given an array of stock values, find the highest profit possible.
 |  |  |  |  |  |
 
 
-## Solution 4: State Compression Dynamic Programming - Sliding Window/Variable Size Window
+### Solution 4: State Compression Dynamic Programming - Sliding Window/Variable Size Window
 ```python
     def maxProfit(self, prices: List[int]) -> int:
 
@@ -312,11 +312,11 @@ Given an array of stock values, find the highest profit possible.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-# 3. Longest Substring Without Repeating Characters ::2:: - Medium
+## 3. Longest Substring Without Repeating Characters ::2:: - Medium
 
 Topics:  Hash Table, String, Sliding Window
 
-## Intro
+### Intro
 > Given a string s, find the length of the longest without duplicate characters.
 
 |  Example Input           | Output |  
@@ -331,10 +331,10 @@ Constraints:
 
 s consists of English letters, digits, symbols and spaces.
 
-## Abstraction
+### Abstraction
 Given a string, find longest substring without duplicates
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -345,7 +345,7 @@ Given a string, find longest substring without duplicates
 |  |  | 
 
 
-## Brute Force: (iterative)
+### Brute Force: (iterative)
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -355,11 +355,11 @@ Given a string, find longest substring without duplicates
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Enumerate Char Most Recent Index Within Window Validation Two Pointer Sliding Window - Sliding Window/Variable Size Window
+### Solution 1: Enumerate Char Most Recent Index Within Window Validation Two Pointer Sliding Window - Sliding Window/Variable Size Window
 ```python
     def lengthOfLongestSubstring(self, s: str) -> int:
 
@@ -409,7 +409,7 @@ Given a string, find longest substring without duplicates
 | Window shifting | O(n) | O(1) | Iteration over string visited at most once by start pointer O(n) | No additional memory allocation for start pointer iteration O(1) |
 | Overall | O(n) | O(1) | Iteration over string for start and end pointer dominates, leading to O(n) | Constant space for hashmap char indexes dominates, leading to O(n) |
 
-## Solution 2: Explicit Loop Char Most Recent Index Within Window Validation Two Pointer Sliding Window - Sliding Window/Variable Size Window
+### Solution 2: Explicit Loop Char Most Recent Index Within Window Validation Two Pointer Sliding Window - Sliding Window/Variable Size Window
 ```python
     def lengthOfLongestSubstring(self, s: str) -> int:
 
@@ -469,11 +469,11 @@ Given a string, find longest substring without duplicates
 
 
 
-# 424. Longest Repeating Character Replacement ::1:: - Medium
+## 424. Longest Repeating Character Replacement ::1:: - Medium
 
 Topics:  Hash Table, String, Sliding Window
 
-## Intro
+### Intro
 > You are given a string s and an integer k. 
 > You can choose any character of the string and change it to
 > any other uppercase English character. 
@@ -494,11 +494,11 @@ s consists of only uppercase English letters.
 
 0 &leq; k &leq; s.length
 
-## Abstraction
+### Abstraction
 Given a string, and count k, return the longest substring of 
 matching characters you can get after replacing k or less characters.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -509,7 +509,7 @@ matching characters you can get after replacing k or less characters.
 |  |  | 
 
 
-## Brute Force: (iterative)
+### Brute Force: (iterative)
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -519,11 +519,11 @@ matching characters you can get after replacing k or less characters.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Variable Size Window
 ```python
     def characterReplacement(self, s: str, k: int) -> int:
         
@@ -587,11 +587,11 @@ matching characters you can get after replacing k or less characters.
 
 
 
-# 567. Permutation in String ::2:: - Medium
+## 567. Permutation in String ::2:: - Medium
 
 Topics:  Hash Table, String, Sliding Window
 
-## Intro
+### Intro
 > Given two strings s1 and s2, return true if s2 contains 
 > a permutation of s1, or false otherwise.
 > In other words, return true if one of s1's permutations is the substring of s2.
@@ -607,11 +607,11 @@ Constraints:
 
 s1 and s2 consist of lowercase English letters.
 
-## Abstraction
+### Abstraction
 Given a string 1 and string 2, return true of string 1 is 
 a permutation within string 2.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -622,7 +622,7 @@ a permutation within string 2.
 |  |  | 
 
 
-## Brute Force: 
+### Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -632,11 +632,11 @@ a permutation within string 2.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Fixed Size Window
+### Solution 1: Explicit Two Pointer Sliding Window - Sliding Window/Fixed Size Window
 ```python
     def checkInclusion(s1: str, s2: str) -> bool:
 
@@ -703,7 +703,7 @@ a permutation within string 2.
 | Overall | O(n + m) | O(1) | Iteration over s1 and s2 dominate, leading to O(n + m) | Constant frequency count for s1 and sliding window O(1) |
 
 
-## Solution 2: Explicit Two Pointer Sliding Window - Sliding Window/Fixed Size Window
+### Solution 2: Explicit Two Pointer Sliding Window - Sliding Window/Fixed Size Window
 ```python
     def checkInclusion(s1: str, s2: str) -> bool:
         
@@ -781,11 +781,11 @@ a permutation within string 2.
 |  |  |  |  |  |
 
 
-# 76. Minimum Window Substring ::2:: - Hard
+## 76. Minimum Window Substring ::2:: - Hard
 
 Topics:  Hash Table, String, Sliding Window
 
-## Intro
+### Intro
 > Given two strings s and t of lengths m and n respectively, 
 > return the minimum window of s such that 
 > every character in t (including duplicates) is included in
@@ -808,12 +808,12 @@ n == t.length
 
 s and t consist of uppercase and lowercase English letters.
 
-## Abstraction
+### Abstraction
 Given two strings s1 and s2, of lengths m and n,
 return the minimum substring of s, such that every character 
 including duplicates is in the window.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -824,7 +824,7 @@ including duplicates is in the window.
 |  |  | 
 
 
-## Brute Force: 
+### Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -834,11 +834,11 @@ including duplicates is in the window.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Classic Sliding Window with Two Hashmaps - Sliding Window/Variable Size Window
+### Solution 1: Classic Sliding Window with Two Hashmaps - Sliding Window/Variable Size Window
 ```python
     def checkInclusion(self, s1: str, s2: str) -> bool:
 
@@ -928,7 +928,7 @@ including duplicates is in the window.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 2: Single Hashmap + Remaining Required Tracker - Sliding Window/Variable Size Window
+### Solution 2: Single Hashmap + Remaining Required Tracker - Sliding Window/Variable Size Window
 ```python
     def minWindow(self, s1: str, s2: str) -> bool:
 
@@ -1007,11 +1007,11 @@ including duplicates is in the window.
 
 
 
-# 239. Sliding Window Maximum ::3:: - Hard
+## 239. Sliding Window Maximum ::3:: - Hard
 
 Topics:  Array, Queue, Sliding Window, Heap (Priority Queue), Monotonic Queue
 
-## Intro
+### Intro
 > You are given an array of integers nums, there is a sliding window 
 > of size k which is moving from the very left of the array to the very
 > right. You can only see the k numbers in the window. Each time 
@@ -1031,11 +1031,11 @@ Constraints:
 
 1 &leq; k &leq; nums.length
 
-## Abstraction
+### Abstraction
 Given list of nums and sliding window size k, return array of 
 largest sum for every window within the list.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1046,7 +1046,7 @@ largest sum for every window within the list.
 |  |  | 
 
 
-## Brute Force: 
+### Brute Force: 
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1056,11 +1056,11 @@ largest sum for every window within the list.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Heap (Priority Queue) Approach - Sliding Window/Variable Size Window
+### Solution 1: Heap (Priority Queue) Approach - Sliding Window/Variable Size Window
 ```python
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
 
@@ -1121,7 +1121,7 @@ largest sum for every window within the list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 2: Sliding Window + Monotonic Queue - Sliding Window/Variable Size Window
+### Solution 2: Sliding Window + Monotonic Queue - Sliding Window/Variable Size Window
 ```python
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
 
@@ -1179,7 +1179,7 @@ largest sum for every window within the list.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 3: Block Partition Precomputed Maxes - Sliding Window/Variable Size Window
+### Solution 3: Block Partition Precomputed Maxes - Sliding Window/Variable Size Window
 ```python
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
 

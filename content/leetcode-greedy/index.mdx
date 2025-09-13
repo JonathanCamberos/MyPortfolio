@@ -11,7 +11,7 @@ tags:
 ---
 
 
-# Greedy Intro
+## Greedy Intro
 
 LeetCode problems solved with Greedy solutions.
 
@@ -33,14 +33,14 @@ and the counter point:
 > hard to come by (like dp and figuring out the recurrence relation) so it 
 > can be a good and fun topic to practice.
 
-## What is Greedy
+### What is Greedy
 
 Money!
 
-## Greedy IRL
+### Greedy IRL
 Money!
 
-## Greedy Application: Greedy
+### Greedy Application: Greedy
 Pattern: money! 
 
 Ex: money!!
@@ -51,11 +51,11 @@ Ex: money!!
 ```
 
 
-# 53. Maximum Subarray ::3:: - Medium
+## 53. Maximum Subarray ::3:: - Medium
 
 Topics:  Array, Divide and Conquer, Dynamic Programming
 
-## Intro
+### Intro
 > Given an integer array nums, find the with the largest sum,
 > and return its sum.  
 > Follow up: If you have figured out the O(n) solution, try coding 
@@ -74,10 +74,10 @@ Constraints:
 
 -10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Given an array, return the sum of the largest subarray.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -88,7 +88,7 @@ Given an array, return the sum of the largest subarray.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -98,11 +98,11 @@ Given an array, return the sum of the largest subarray.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy Kadane Algorithm Textbook Version - Greedy/Greedy
+### Solution 1: Greedy Kadane Algorithm Textbook Version - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
 
@@ -132,7 +132,7 @@ Given an array, return the sum of the largest subarray.
         return global_max
 ```
 
-## Solution 2: Greedy Kadane Algorithm Practical Version - Greedy/Greedy
+### Solution 2: Greedy Kadane Algorithm Practical Version - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
 
@@ -165,7 +165,7 @@ Given an array, return the sum of the largest subarray.
         return max_sum
 ```
 
-## Solution 3: Divide and Conquer - Greedy/Greedy
+### Solution 3: Divide and Conquer - Greedy/Greedy
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
         # Note:
@@ -218,11 +218,11 @@ Given an array, return the sum of the largest subarray.
         return res
 ```
 
-# 55. Jump Game ::1:: - Medium
+## 55. Jump Game ::1:: - Medium
 
 Topics:  Array, Dynamic Programming, Greedy
 
-## Intro
+### Intro
 > You are given an integer array nums. You are initially positioned at 
 > the array's first index, and each element in the array represents 
 > your maximum jump length at that position.
@@ -239,12 +239,12 @@ Constraints:
 
 0 &leq; nums[i] &leq; 10<sup>5</sup>
 
-## Abstraction
+### Abstraction
 Given an array, starting at the first index, determine if its possible to
 reach the end of the array, if a number at an index represents that max jump
 index possible from that index.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -255,7 +255,7 @@ index possible from that index.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -265,11 +265,11 @@ index possible from that index.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy Dynamic Programming Rolling Variable Early Exit - Greedy/Greedy
+### Solution 1: Greedy Dynamic Programming Rolling Variable Early Exit - Greedy/Greedy
 ```python
     def canJump(self, nums: List[int]) -> bool:
         
@@ -308,11 +308,11 @@ index possible from that index.
 ```
 
 
-# 45. Jump Game II ::1:: - Medium
+## 45. Jump Game II ::1:: - Medium
 
 Topics:  Array, Dynamic Programming, Greedy
 
-## Intro
+### Intro
 > You are given a 0-indexed array of integers nums of length n.  
 > You are initially positioned at index 0.
 > Each element nums[i] represents the maximum length of a 
@@ -336,12 +336,12 @@ Constraints:
 
 It's guaranteed that you can reach nums[n - 1].
 
-## Abstraction
+### Abstraction
 Given an array, starting at the first index, determine if its possible to
 reach the end of the array, if a number at an index represents that max jump
 index possible from that index.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -352,7 +352,7 @@ index possible from that index.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -362,11 +362,11 @@ index possible from that index.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy Layer By Layer - Greedy/Greedy
+### Solution 1: Greedy Layer By Layer - Greedy/Greedy
 ```python
     def jump(self, nums: List[int]) -> int:
         
@@ -416,11 +416,11 @@ index possible from that index.
 ```
 
 
-# 134. Gas Station ::1:: - Medium
+## 134. Gas Station ::1:: - Medium
 
 Topics:  Array, Greedy
 
-## Intro
+### Intro
 > There are n gas stations along a circular route, where the amount
 > of gas at the ith station is gas[i].
 > You have a car with an unlimited gas tank and it costs cost[i] of 
@@ -446,13 +446,13 @@ n == gas.length == cost.length
 
 The input is generated such that the answer is unique.
 
-## Abstraction
+### Abstraction
 Given two arrays gas[i] and cost[i], find the starting index where if you 
 begin with 0 fuel, you can travel the entire circle without running out of gas. 
 Return -1 if not possible.
 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -463,7 +463,7 @@ Return -1 if not possible.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -473,11 +473,11 @@ Return -1 if not possible.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy - Greedy/Greedy
+### Solution 1: Greedy - Greedy/Greedy
 ```python
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         
@@ -526,11 +526,11 @@ Return -1 if not possible.
 ```
 
 
-# 846. Hand of Straights ::1:: - Medium
+## 846. Hand of Straights ::1:: - Medium
 
 Topics:  Array, Hash Table, Greedy, Sorting
 
-## Intro
+### Intro
 > Alice has some number of cards and she wants to rearrange the 
 > cards into groups so that each group is of size groupSize, and 
 > consists of groupSize consecutive cards.
@@ -551,12 +551,12 @@ Constraints:
 
 1 &leq; groupSize &leq; hand.length
 
-## Abstraction
+### Abstraction
 Given an array and a run length, determine if its possible to rearrange 
 the cards of run length that are increasing.
 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -567,7 +567,7 @@ the cards of run length that are increasing.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -577,11 +577,11 @@ the cards of run length that are increasing.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy - Greedy/Greedy
+### Solution 1: Greedy - Greedy/Greedy
 ```python
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
         
@@ -623,7 +623,7 @@ the cards of run length that are increasing.
         return True
 ```
 
-## Solution 2: Greedy Heap - Greedy/Greedy
+### Solution 2: Greedy Heap - Greedy/Greedy
 ```python
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
         # Note:
@@ -680,11 +680,11 @@ the cards of run length that are increasing.
 ```
 
 
-# 1899. Merge Triplets to Form Target Triplet ::1:: - Medium
+## 1899. Merge Triplets to Form Target Triplet ::1:: - Medium
 
 Topics:  Array, Greedy
 
-## Intro
+### Intro
 > A triplet is an array of three integers. You are given a 2D
 > integer array triplets, where triplets[i] = [ai, bi, ci]
 > describes the ith triplet. You are also given an
@@ -715,12 +715,12 @@ triplets[i].length == target.length == 3
 
 1 &leq; ai, bi, ci, x, y, z &leq; 1000
 
-## Abstraction
+### Abstraction
 Given a list of triplets and a target triplet, determine if you can 
 select and merge triplets such that each element of the target is 
 matched exactly by taking the maximum across chosen triplets.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -731,7 +731,7 @@ matched exactly by taking the maximum across chosen triplets.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -741,11 +741,11 @@ matched exactly by taking the maximum across chosen triplets.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy - Greedy/Greedy
+### Solution 1: Greedy - Greedy/Greedy
 ```python
     def mergeTriplets(self, triplets: List[List[int]], target: List[int]) -> bool:
 
@@ -787,11 +787,11 @@ matched exactly by taking the maximum across chosen triplets.
 ```
 
 
-# 763. Partition Labels ::1:: - Medium
+## 763. Partition Labels ::1:: - Medium
 
 Topics:  Hash Table, Two Pointers, String, Greedy
 
-## Intro
+### Intro
 > You are given a string s. We want to partition the string 
 > string into as many parts as possible so that each letter
 > appears in at most one part. For example, the string 
@@ -813,11 +813,11 @@ Constraints:
 
 s consists of lowercase English letters.
 
-## Abstraction
+### Abstraction
 Given a string, determine what length the subarray should be 
 in order to have every character appear in each subarray
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -828,7 +828,7 @@ in order to have every character appear in each subarray
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -838,11 +838,11 @@ in order to have every character appear in each subarray
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy - Greedy/Greedy
+### Solution 1: Greedy - Greedy/Greedy
 ```python
     def partitionLabels(self, s: str) -> List[int]:
 
@@ -893,11 +893,11 @@ in order to have every character appear in each subarray
 ```
 
 
-# 678. Valid Parenthesis String ::2:: - Medium
+## 678. Valid Parenthesis String ::2:: - Medium
 
 Topics:  String, Dynamic Programming, Stack, Greedy
 
-## Intro
+### Intro
 > Given a string s containing only three types of 
 > characters: '(', ')' and '*', return true if s is valid. 
 > The following rules define a valid string:
@@ -922,10 +922,10 @@ Constraints:
 
 s[i] is '(', ')' or '*'
 
-## Abstraction
+### Abstraction
 Given a string, determine if the parenthesis are valid.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -936,7 +936,7 @@ Given a string, determine if the parenthesis are valid.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -946,11 +946,11 @@ Given a string, determine if the parenthesis are valid.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Greedy - Greedy/Greedy
+### Solution 1: Greedy - Greedy/Greedy
 ```python
     def checkValidString(self, s: str) -> bool:
         # Note:

@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-# Backtracking intro
+## Backtracking intro
 
 LeetCode problems with heap solutions. 
 
-## What is Backtracking
+### What is Backtracking
 
 Backtracking is a systematic technique for exploring all possible solutions
 to a problem by building them incrementally and abandoning ('backtracking')
@@ -27,14 +27,14 @@ While backtracking often has exponential time complexity in the worst case,
 it is the most practical way to solve problems that require exploring many
 possibilities with pruning.
 
-## Backtracking Characteristics
+### Backtracking Characteristics
 
 1. Build -> partial solution
 2. Prune -> remove branches that violate constraints
 3. Explore -> recurse or continue to extend the current partial solution
 4. Backtrack -> undo the last step and try another option
 
-## Backtracking Representation
+### Backtracking Representation
 
 - Tree representation: Each node represents a decision state
 
@@ -58,13 +58,13 @@ we decide to include or exclude a number
 ```
 
 
-## Backtracking IRL
+### Backtracking IRL
 In the context of solving a maze, at each intersection, you choose a path
 (a decision). If the path leads to a dead end, you backtrack to the intersection
 and try another route. Eventually, you either find the exit (solution) 
 or exhaust all paths (no solutions).
 
-## Backtracking Application: DFS Generate All Combinations Or Subsets
+### Backtracking Application: DFS Generate All Combinations Or Subsets
 Traversal Order: Root -> Choices 
 Mindset: Process the current subset as soon as you build it, then explore further elements
 Trick: Ill record the current subset first, then decide which elements to include next.
@@ -99,7 +99,7 @@ Ex: Generate all subsets of a set
     # Example: subsets([1,2,3]) -> [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]
 ```
 
-## Backtracking Application: DFS Generate While Constraint Satisfaction
+### Backtracking Application: DFS Generate While Constraint Satisfaction
 Traversal Order: Root -> Choices
 Mindset: Build sequences step by step, only adding valid elements and
 backtracking when constraints are violated
@@ -143,7 +143,7 @@ Ex: Generate all valid parentheses
     # Example: generateParenthesis(3) -> ["((()))","(()())","(())()","()(())","()()()"]
 ```
 
-## Backtracking Application: Path Finding In Search Space
+### Backtracking Application: Path Finding In Search Space
 Traversal Order: Root -> Choices (neighboring paths)
 Mindset: Explore each path step by step, backtracking when reaching dead ends.
 Trick: Ill walk one direction fully before trying another, undoing my steps if blocked.
@@ -197,7 +197,7 @@ Ex: Word Search in grid
     # Example: exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED") -> True
 ```
 
-## Backtracking Application: Combinatorial Optimization
+### Backtracking Application: Combinatorial Optimization
 Traversal Order: Root -> Choices (column positions)
 Mindset: Place one queen at a time, pruning invalid columns, and backtrack when stuck 
 Trick: Ill place a queen, explore further rows, then remove it if it leads to a conflict.
@@ -245,7 +245,7 @@ Ex: N Queens Problem
     
 ```
 
-## Backtracking Application: Decision Trees And Partitioning
+### Backtracking Application: Decision Trees And Partitioning
 Traversal Order: Root -> Choices (substring partitions)
 Mindset: Partition strings step by step, backtracking when a substring
 is not a palindrome
@@ -289,11 +289,11 @@ Ex: Partition a string into palindromic substrings
 ```
 
 
-# 78. Subsets ::2:: - Medium
+## 78. Subsets ::2:: - Medium
 
 Topics:  Array, Backtracking, Bit Manipulation
 
-## Intro
+### Intro
 > Given an integer array nums of unique elements, return 
 > all possible subsets (the power set).
 > A subset of an array is a selection of elements (possibly none) of the array.
@@ -314,10 +314,10 @@ Constraints:
 
 All the numbers of nums are unique.
 
-## Abstraction
+### Abstraction
 Given a list of numbers, return all unique subsets.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -328,7 +328,7 @@ Given a list of numbers, return all unique subsets.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -338,11 +338,11 @@ Given a list of numbers, return all unique subsets.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Backtracking on Global Path to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
+### Solution 1: Recursive DFS Backtracking on Global Path to Generate All Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
@@ -370,7 +370,7 @@ Given a list of numbers, return all unique subsets.
 ```
 
 
-## Solution 2: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
+### Solution 2: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
@@ -410,11 +410,11 @@ Given a list of numbers, return all unique subsets.
 ```
 
 
-# 39. Combination Sum ::4:: - Medium
+## 39. Combination Sum ::4:: - Medium
 
 Topics:  Array, Backtracking
 
-## Intro
+### Intro
 > Given an array of distinct integers candidates and a target 
 > integer target, return a list of all unique combinations of 
 > candidates where the chosen numbers sum to target. You 
@@ -443,10 +443,10 @@ All the numbers of nums are unique.
 
 1 &leq; target &leq; 40
 
-## Abstraction
+### Abstraction
 Find all combinations that add up to target.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -457,7 +457,7 @@ Find all combinations that add up to target.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -467,11 +467,11 @@ Find all combinations that add up to target.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive Unsorted Late Branch Pruning Backtracking on Global Path  - Backtracking/Generate All Combinations Or Subsets
+### Solution 1: Recursive Unsorted Late Branch Pruning Backtracking on Global Path  - Backtracking/Generate All Combinations Or Subsets
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -520,7 +520,7 @@ Find all combinations that add up to target.
         return res
 ```
 
-## Solution 2: Recursive Sorted Early Candidate Pruning Forward Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
+### Solution 2: Recursive Sorted Early Candidate Pruning Forward Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -571,7 +571,7 @@ Find all combinations that add up to target.
         return res
 ```
 
-## Solution 3: Recursive Sorted Early Pruning Backwards Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
+### Solution 3: Recursive Sorted Early Pruning Backwards Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
                 
@@ -633,7 +633,7 @@ Find all combinations that add up to target.
         return res
 ```
 
-## Solution 4: Iterative DFS Early Pruning with Explicit Stack - Backtracking/Generate While Constraint Satisfaction
+### Solution 4: Iterative DFS Early Pruning with Explicit Stack - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
                 
@@ -691,11 +691,11 @@ Find all combinations that add up to target.
 
 
 
-# 40. Combination Sum II ::2:: - Medium
+## 40. Combination Sum II ::2:: - Medium
 
 Topics:  Array, Backtracking
 
-## Intro
+### Intro
 > Given a collection of candidate numbers (candidates) and a 
 > target number (target), find all unique combinations in 
 > candidates where the candidate numbers sum to target.
@@ -716,10 +716,10 @@ Constraints:
 
 1 &leq; target &leq; 30
 
-## Abstraction
+### Abstraction
 Find all combinations that add up to target with no guaranteed unique values.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -730,7 +730,7 @@ Find all combinations that add up to target with no guaranteed unique values.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -740,11 +740,11 @@ Find all combinations that add up to target with no guaranteed unique values.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive Sorted Early Pruning Forward Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
+### Solution 1: Recursive Sorted Early Pruning Forward Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -808,7 +808,7 @@ Find all combinations that add up to target with no guaranteed unique values.
         return res
 ```
 
-## Solution 2: Recursive Sorted Early Pruning Backwards Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
+### Solution 2: Recursive Sorted Early Pruning Backwards Backtracking on Current Combination - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -877,11 +877,11 @@ Find all combinations that add up to target with no guaranteed unique values.
 
 
 
-# 46. Permutations ::1:: - Medium
+## 46. Permutations ::1:: - Medium
 
 Topics:  Array, Backtracking
 
-## Intro
+### Intro
 > Given an array nums of distinct integers, return all the 
 > possible . You can return the answer in any order.
 > A permutation is a rearrangement of all 
@@ -901,10 +901,10 @@ Constraints:
 
 All the integers of nums are unique.
 
-## Abstraction
+### Abstraction
 Find all permutations of an array.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -915,7 +915,7 @@ Find all permutations of an array.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -925,11 +925,11 @@ Find all permutations of an array.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Backtracking on Current Permutation Path with Element Usage Tracking - Backtracking/Generate While Constraint Satisfaction
+### Solution 1: Recursive DFS Backtracking on Current Permutation Path with Element Usage Tracking - Backtracking/Generate While Constraint Satisfaction
 ```python
     def permute(self, nums: List[int]) -> List[List[int]]:
 
@@ -980,11 +980,11 @@ Find all permutations of an array.
 ```
 
 
-# 90. Subsets II ::1:: - Medium
+## 90. Subsets II ::1:: - Medium
 
 Topics:  Array, Backtracking, Bit Manipulation
 
-## Intro
+### Intro
 > Given an integer array nums that may contain duplicates, return 
 > all possible subsets (the power set).
 > The solution set must not contain duplicate subsets. Return the
@@ -1001,10 +1001,10 @@ Constraints:
 
 -10 &leq; nums[i] &leq; 10
 
-## Abstraction
+### Abstraction
 Find all unique subsets of an array.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1015,7 +1015,7 @@ Find all unique subsets of an array.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1025,11 +1025,11 @@ Find all unique subsets of an array.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Backtracking on Current Subset Path with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
+### Solution 1: Recursive DFS Backtracking on Current Subset Path with Duplicate Skipping - Backtracking/Generate While Constraint Satisfaction
 ```python
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
 
@@ -1076,11 +1076,11 @@ Find all unique subsets of an array.
 ```
 
 
-# 79. Word Search ::2:: - Medium
+## 79. Word Search ::2:: - Medium
 
 Topics:  Array, String, Backtracking, Depth First Search, Matrix
 
-## Intro
+### Intro
 > Given an m x n grid of characters board and a string word, 
 > return true if word exists in the grid.
 > The word can be constructed from letters of sequentially 
@@ -1107,10 +1107,10 @@ board and word consists of only lowercase and uppercase English letters.
 
 Follow up: Could you use search pruning to make your solution faster with a larger board?
 
-## Abstraction
+### Abstraction
 Find if word exists in grid.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1121,7 +1121,7 @@ Find if word exists in grid.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1131,11 +1131,11 @@ Find if word exists in grid.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Backtracking on Current Path - Backtracking/Path Finding in Search Space
+### Solution 1: DFS Backtracking on Current Path - Backtracking/Path Finding in Search Space
 ```python
     def exist(self, board: List[List[str]], word: str) -> bool:
         
@@ -1184,7 +1184,7 @@ Find if word exists in grid.
         return False
 ```
 
-## Solution 2: Word Reversal Optimization DFS Backtracking on Current Path - Backtracking/Path Finding in Search Space
+### Solution 2: Word Reversal Optimization DFS Backtracking on Current Path - Backtracking/Path Finding in Search Space
 ```python
     def exist(self, board: List[List[str]], word: str) -> bool:
         
@@ -1252,11 +1252,11 @@ Find if word exists in grid.
 ```
 
 
-# 131. Palindrome Partitioning ::2:: - Medium
+## 131. Palindrome Partitioning ::2:: - Medium
 
 Topics:  String, Dynamic Programming, Backtracking
 
-## Intro
+### Intro
 > Given a string s, partition s such that every substring
 > of the partition is a palindrome. Return all possible 
 > palindrome partitioning of s.
@@ -1273,11 +1273,11 @@ Constraints:
 
 s contains only lowercase English letters.
 
-## Abstraction
+### Abstraction
 Split string s in a way such that every substring of the partition 
 is a palindrome. 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1288,7 +1288,7 @@ is a palindrome.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1298,11 +1298,11 @@ is a palindrome.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
+### Solution 1: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
 ```python
     def partition(self, s: str) -> List[List[str]]:
 
@@ -1356,7 +1356,7 @@ is a palindrome.
 ```
 
 
-## Solution 2: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
+### Solution 2: DFS Backtracking on Current Path to Match Word - Backtracking/Path Finding in Search Space
 ```python
     def partition(self, s: str) -> List[List[str]]:
 
@@ -1427,11 +1427,11 @@ is a palindrome.
 ```
 
 
-# 17. Letter Combinations of a Phone Number ::1:: - Medium
+## 17. Letter Combinations of a Phone Number ::1:: - Medium
 
 Topics:  Hash Table, String, Backtracking
 
-## Intro
+### Intro
 > Given a string containing digits from 2-9 inclusive, 
 > return all possible letter combinations that the number
 > could represent. Return the answer in any order.
@@ -1452,10 +1452,10 @@ Constraints:
 
 digits[i] is a digit in the range ['2', '9'].
 
-## Abstraction
+### Abstraction
 Given a mini phone number, find all the possible letter combinations.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1466,7 +1466,7 @@ Given a mini phone number, find all the possible letter combinations.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1476,11 +1476,11 @@ Given a mini phone number, find all the possible letter combinations.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Backtracking on Current Letter Path - Backtracking/Generate All Combinations
+### Solution 1: Recursive DFS Backtracking on Current Letter Path - Backtracking/Generate All Combinations
 ```python
     def letterCombinations(self, digits: str) -> List[str]:
         
@@ -1533,11 +1533,11 @@ Given a mini phone number, find all the possible letter combinations.
 ```
 
 
-# 51. N Queens ::1:: - Hard
+## 51. N Queens ::1:: - Hard
 
 Topics:  Array, Backtracking
 
-## Intro
+### Intro
 > The n-queens puzzle is the problem of placing n queens on an
 > n x n chessboard such that no two queens attack each other.
 > Given an integer n, return all distinct solutions to the n queens 
@@ -1556,10 +1556,10 @@ Constraints:
 
 1 &leq; n &leq; 9
 
-## Abstraction
+### Abstraction
 Find all the possible ways to possible n queens on a board of n x n size.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1570,7 +1570,7 @@ Find all the possible ways to possible n queens on a board of n x n size.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1580,11 +1580,11 @@ Find all the possible ways to possible n queens on a board of n x n size.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Backtracking on Current Row with Column/Diagonal Tracking - Backtracking/Combinatorial Optimization
+### Solution 1: Recursive DFS Backtracking on Current Row with Column/Diagonal Tracking - Backtracking/Combinatorial Optimization
 ```python
     def solveNQueens(self, n: int) -> List[List[str]]:
 
@@ -1652,7 +1652,7 @@ Find all the possible ways to possible n queens on a board of n x n size.
         return res
 ```
 
-## Solution 2: Recursive DFS Backtracking Using Bitmasking for Columns/Diagonals - Backtracking/Combinatorial Optimization
+### Solution 2: Recursive DFS Backtracking Using Bitmasking for Columns/Diagonals - Backtracking/Combinatorial Optimization
 ```python
     def solveNQueens(self, n: int) -> List[List[str]]:
 
