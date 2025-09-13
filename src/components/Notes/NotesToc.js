@@ -8,22 +8,21 @@ const ChildItem = ({ item }) => {
   return (
     <li className="mb-1">
       {hasChildren ? (
-        <details className="group">
-          <summary className="cursor-pointer hover:underline">
+        <details className="group ml-4">
+          <summary className="cursor-pointer hover:underline pl-2">
             <a href={`#${item.slug}`}>{item.text}</a>
           </summary>
 
-          <ul className="ml-4 mt-2">
+          <ul className="mt-2">
             {item.subheadings.map((sub) => (
               <ChildItem key={sub.slug} item={sub} />
             ))}
           </ul>
         </details>
       ) : (
-        // Leaf node: add dot before link
         <a
           href={`#${item.slug}`}
-          className="hover:underline block pl-6 flex items-center"
+          className="hover:underline block ml-6 flex items-center"
         >
           <span className="flex w-1 h-1 rounded-full bg-dark dark:bg-light mr-2">&nbsp;</span>
           {item.text}
@@ -65,12 +64,12 @@ const NotesToc = ({ blog }) => {
             <li key={item.slug} className="mb-2">
               {/* Level 2: always toggleable */}
               <details className="group">
-                <summary className="cursor-pointer hover:underline">
+                <summary className="cursor-pointer hover:underline pl-2">
                   <a href={`#${item.slug}`}>{item.text}</a>
                 </summary>
 
                 {item.subheadings.length > 0 && (
-                  <ul className="ml-4 mt-2">
+                  <ul className="mt-2">
                     {item.subheadings.map((child) => (
                       <ChildItem key={child.slug} item={child} />
                     ))}
