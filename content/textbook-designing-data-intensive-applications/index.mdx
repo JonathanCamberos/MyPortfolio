@@ -278,42 +278,75 @@ Lets put that in our back pocket for now and continue.
 
 #### Intro
 
-> The system should continue to work correctly (performing the correct function at the
-> desired level of performance) even in the face of *gasp adversity*, either 
-> hardware or software faults, human error, etc..
-
-Typical expectations for software to be reliable include:
-
-- Application performs function user expected
-- Tolerates user making mistakes or using software in unexpected ways
-- Good enough performance for required use case under expected load and volume
-- System prevents unauthorized access and abuse
+> The system should continue to work correctly: performing the correct function at the
+> desired level of performance, even in the face of adversity, that being 
+> either hardware faults, software faults, human error, etc..
 
 > A simple rule of thumb for reliability is 'continuing to work correctly, even
 > when things go wrong.'
 
-A fault, is the things that can go wrong
-A system that anticipate faults is thus fault-tolerant or resilient,
-tolerating certain types of faults.
+> The reflection of reliability, or what causes it to break, are faults and failures.
 
-A failure is when the system as a whole stops providing the required service
-to the user.
+> It is in our best interest to trigger faults deliberately to ensure faults are handled
+> gracefully when they occur naturally.
 
-It is nearly impossible to prevent all type of faults, which is why we prefer 
-fault-tolerant systems.
+Basic expectations for when one says software is reliable can include:
+
+- Application performs function user expected
+- Tolerates user making mistakes or using software in unexpected ways
+- Acceptable performance for the required use case under the expected load and volume
+- System prevents unauthorized access and abuse
+
+So in summary:
+
+What causes reliability to break is then the things that can go wrong.
+A fault is our system design wrapper word for all the things that can go wrong.
+Thus, a system that anticipates faults is fault tolerant or resilient.
+Whereas a failure is different.
+
+In the context of a system, a failure is when the system stops providing the required service
+to the user. A fault is usually defined as one component of the system deviating from its expectation.
+
+It is nearly impossible to reduce the probability of faults to zero, 
+which is why we prefer fault-tolerant systems.
+
+In fault-tolerant systems, we encourage and increase the rate of faults by triggering them 
+deliberately to test our tolerance.
+Many critical bugs are actually due to poor error handling and thus by continuously testing
+we ensure faults will be handled correctly when they occur naturally
 
 #### Hardware Faults
 
-> Common when discussing system failures
+> Hardware faults are fairly common when discussing system failures
 
-- Hard disk crash
+Among the first that come to mind as the reason behind full system failures:
+
+- Hard disk crashes
 - Faulty RAM
 - Power grid blackout
-- Unplugging the wrong network cable.
+- Unplugging the wrong network cable
 
-A good rule of thumb to explain how common it is:
-the MTTF (mean to time failure) of a hard disk is about 10 to 15 years.
-Thus, in a storage cluster with 10,000 disks around one disk dies per day.
+In data centers especially hardware faults are common. 
+For a given storage cluster that contains 10,000 disks,
+one disk dies per day on average as the MTTF (mean to time failure) of a 
+hard disk is about 10 to 15 years.
+
+##### Solution: Single Hardware Redundancy
+
+The first solution is to add redundancy to individual hardware components 
+with RAID configuration, add dual power supplies to servers, 
+hot swappable CPUS, or datacenters with batteries and diesel generators for
+back up power.
+
+The pattern being, when one physical component dies, the redundant component
+can take its place while its original is replaced.
+
+While this does not help the physical hardware from breaking, its helpful 
+in keeping machines running uninterrupted for years. 
+
+##### Solution: Multi Machine Redundancy for High Availability
+
+
 
 #### Software Errors
 
@@ -475,4 +508,4 @@ Again, to determine this requires performance numbers, so how to describe it?
 > (obviously ignoring the unavoidable knife fights over code comment style)
 
 
-# Chapter 2: Data Models and Query 
+# Part II: Data Models and Query 
