@@ -13,6 +13,14 @@ content: "#";
 font-size: 0.8rem;
 }
 
+/* Make h1 smaller and remove underline on its link */
+h1 {
+  font-size: 2rem!important;       /* ~32px — adjust as you like */
+  font-weight: 700;      /* keep it bold */
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
 h4 {
     font-size: 1.2rem !important; /* 18px */
     font-weight: 600;     /* optional: match h3 or make bold */
@@ -20,8 +28,17 @@ h4 {
     margin-bottom: 0.75rem; /* adjust spacing below */
 }
 
-h2 > a,
-h3 > a,
+h1 > a {
+    text-decoration: none !important;
+}
+
+h2 > a {
+    text-decoration: none !important;
+}
+
+h3 > a {
+    text-decoration: none !important; 
+}
 h4 > a {
     text-decoration: none !important;
 }

@@ -146,100 +146,104 @@ Free references and links as we go along.
 
 ### Intro
 
-> The first four chapters go through the fundamental ideas that apply to all data systems,
-> whether running on a single machine or distributed across a cluster of machines.
+> First four chapters: fundamental ideas that apply to all data systems,
+> regardless of single machine or distributed across a cluster of machines.
 
 1. **Chapter 1:**
 
-- Define terminology and approach we will use.
-- Define words like reliability, scalability, and maintainability
-- Explain how we try to achieve these goals.
+- Terminology and Approach.
+- Reliability, Scalability, and Maintainability
+- Explain approaches to achieve these goals.
 
 2. **Chapter 2:**
 
-- Compare data models and query languages.
-- See how different models are fit different situations.
+- Compare data models and query languages in different situations.
 
 3. **Chapter 3:**
 
-- Look at internals of storage engines.
-- Look at how database put data on disk.
-- Different storage engines are optimized for different workloads.
-- Choosing the right one can have a huge effect on performance.
+- Internals of storage engines.
+- How database store data on disk.
+- How different storage engines are optimized for different workloads.
+- Choosing the right has large effect on performance.
 
 4. Chapter 4: 
 
-- Compare formats of data encoding/serialization
-- Examine in an environment where application requirements change and schemas need to adapt over time.
+- Compare data encoding and serialization formats 
+- Examine in environment where app requirements change and schemas need to adapt over time.
 
-### Reliable, Scalable, and Maintainable Applications
+### Chapter 1: Reliable, Scalable, and Maintainable Applications
 
-> Many applications today are data intensive, as opposed to compute intensive.
-> Raw CPU power is rarely a limiting factor vs the amount of data, complexity of data, 
-> and speed at which it is changing.
+#### Intro
 
-Data intensive applications are typically built from standard building blocks for 
-functionality, not limited to but including:
+> The Internet was done so well that most people think of it like a natural resource
+> like the ocean or mountains, rather than being something man-made.
 
-- **Databases**: Storing data, for other apps or later use 
+The problems facing apps today is that they are data intensive instead of compute intensive.
+The amount, complexity, and speed at which data needs to be process ends up creating
+the most issues, as opposed to compute intensive.
+Rarely is CPU power a limiting factor for these applications.
 
-- **Caches**: Remember result of expensive operations, to speed up reads
+To start, most data intensive apps today are built from the same 
+standard building blocks and principles:
 
-- **Search Indexes**: Allowing users to search data by keywords or filter in various ways
+- Database: To store data
+- Caches: Store result of expensive operations, to avoid double work
+- Search Indexes: Allow to query by keywords or filter databases
+- Batch Processes: Periodically process larges amount of accumulated data in sections
+- etc.
 
-- **Batch Process**: Periodically crunching a large amount of accumulated data
+These building blocks have established and well built that most 'sane' engineers 
+wouldn't  think of writing a new data storage engine from scratch 
+because perfectly good ones already exists.
 
-Again, obvious yes, but thats the point!
-
-These data systems are such a **successful abstraction** that most **sane** engineers wouldn't 
-think of writing a new data storage engine from scratch because perfectly good ones already exists.
-
-But again, right tool for the right job.
-While there are many database systems, each have different characteristics
-as different applications have different requirements.
+But while there are many existing database systems, each have different characteristics
+as maybe benefit different applications as requirements change.
 
 ### Thinking About Data Systems
 
-> Why do we lump databases, queues, caches, etc, each with different patterns, performance, 
-> and implementations under the umbrella term data systems?
-> Why am I starting each section with a quote?
-> Do I have voices in my head?!? Maybe...
-> But still, the umbrella makes it confusing!
+> We can lump databases, queues, caches, etc, each with different patterns,
+> performance and implementations under the umbrella term data systems
+> as each of those act as building blocks for the larger 'data systems'
+> The API layer hides those implementation details from clients
+> allowing use to create a new special purpose data system 
+> from smaller, general purpose.
 
-New tools for data storage and processing emerged leading to trouble
-as traditional categories fad and boundaries blur.
+New tools for data storage and processing continue emerging leading to trouble
+as traditional categories fade and boundaries blur.
 
-1. **Redis**: both a datastore and message queue
-2. **Apache Kafka**: a message queue with database durability
+- Redis: Both a datastore and message queue
+- Apache Kafka: Both a message queue with database durability
 
-No single tool can meet all data processing and storage needs as applications
-have such demanding and wide ranging requirements.
+No single tool can meet all data processing and storage needs, as so 
+work is broken down into tasks, that is abstracted to a single 'data system'.  
 
-As no single tool can meet all data processing and storage needs, work is broken down
-into tasks, that can be performed on a single tool, which itself is using multiple tools.
+> Abstracting single data system with a API wrapper
 
-> Take an simple API
-
-An API usually hides implementation details from clients, and thus, becomes a 
+APIs hide implementation details from clients, becoming a 
 special purpose data system from smaller, general purpose components.
 
-We could even add guarantees such as cache will be invalidated and updated on writes so
-clients see consistent results, which leads wrappers to become responsible for
+This special purpose data system could perform single tasks across components to
+create contracts or guarantees such as cache invalidation upon writes so
+clients see consistent results 
+
+This leads API wrappers to have the responsibility for both
 both data storage and system design.
 
-But now even more questions arise! How do you provide good performance?
-How do we handle increase in load? etc. Lets put that in our back pocket (ignore) 
-for now and continue.
+And this is where the interesting questions arise! 
 
-Lets jump into our main sections, reliability, scalability, and maintainability.
+- How do you provide good performance?
+- How do we handle increase in load? 
+- etc. 
+
+Lets put that in our back pocket for now and continue.
 
 ### Reliability
+
+#### Intro
 
 > The system should continue to work correctly (performing the correct function at the
 > desired level of performance) even in the face of *gasp adversity*, either 
 > hardware or software faults, human error, etc..
-
-#### Intro
 
 Typical expectations for software to be reliable include:
 
@@ -315,6 +319,8 @@ There are situations in which we can sacrifice reliability in order to reduce
 development cost, but we should always be conscious of cutting corners.
 
 ### Scalability
+
+#### Intro
 
 > As the system grows (in data volume, traffic volume, or complexity), there should 
 > be a reasonable solution to deal with that growth
@@ -424,11 +430,11 @@ Again, to determine this requires performance numbers, so how to describe it?
 
 ### Maintainability
 
+#### Intro
+
 > Specifically over time, different people will build, work, and add to the system 
 > (engineering and operations, both maintaining behavior and adapting the system),
 > and they should all be able to work on it *productively* 
 > (obviously ignoring the unavoidable knife fights over code comment style)
-
-#### Intro
 
 
