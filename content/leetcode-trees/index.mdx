@@ -10,14 +10,14 @@ tags:
 - data structures and algorithms
 ---
 
-# Tree Intro
+## Tree Intro
 
-## What is a Tree
+### What is a Tree
 
 Trees are hierarchical data structures representing relationships
 between entities, often in a parent-child format.
 
-## Tree Characteristics
+### Tree Characteristics
 
 Trees are a special type of graph, characterized by:
 
@@ -45,7 +45,7 @@ Trees are a special type of graph, characterized by:
       4   5
 ```
 
-## Tree Representations
+### Tree Representations
 
 Trees can be represented in multiple formats:
 
@@ -58,7 +58,7 @@ Trees can be represented in multiple formats:
 For full notes on representations:
 please see [graph representations](/Notesleetcode-graphs#graph-representations)
 
-## Tree Math
+### Tree Math
 Height of a perfect binary tree with n nodes: log(n+1)-1
 
 Nodes in perfect binary tree of height h: 2^(h+1) -1
@@ -67,7 +67,7 @@ Max nodes at level l: 2^l
 
 Edges = Nodes - 1
 
-## Common Tree Types
+### Common Tree Types
 
 1. Binary Tree:
 Each node has at most two children left and right.
@@ -102,7 +102,7 @@ All internal nodes have 2 children and all leaves are at the same level.
 Type of tree where:
 Each node can have up to N children
 
-## Balanced Trees 
+### Balanced Trees 
 Balanced trees are binary search trees that maintain their height
 close to O(log n) by rebalancing themselves during insertion() and deletion().
 
@@ -132,11 +132,11 @@ for efficient range queries
 | Insert/Delete | O(n)             | O(log n)     |
 
 
-## Tree Traversal Overview
+### Tree Traversal Overview
 Given a Tree, and the task to traverse it,
 there a two fundamental search strategies that all others stem from. 
 
-## Depth First Search Traversal (DFS)
+### Depth First Search Traversal (DFS)
 Traversal Order: 
 Goes as deep as possible before backtracking
 (either recursively via function calls or iteratively via stack)
@@ -149,7 +149,7 @@ In: Left -> Root -> Right
 
 Post: Left -> Right -> Root
 
-## Breadth First Search Traversal (BFS)
+### Breadth First Search Traversal (BFS)
 Traversal Order: 
 Explores nodes level by level
 
@@ -158,19 +158,19 @@ and process all nodes for that level by iterating
 exactly level_size times popping each from the queue, thus popping all 
 nodes for a specific level.
 
-## Specialized Traversals
+### Specialized Traversals
 - Morris Traversal:
 In order traversal with O(1) extra space by temporarily modifying tree pointers.
 
 - Threaded Binary Tree:
 Uses null child pointers to store predecessor/successor pointers to enable O(1) traversal.
 
-## Tree Search Rule of Thumb
+### Tree Search Rule of Thumb
 Pre, In, Post, order traversal -> DFS (recursive usually, iterative stack based)
 
 Level Order Traversal -> BFS (iterative) queue based
 
-## Tree Application: DFS Pre Order Recursive One Sided Top Down
+### Tree Application: DFS Pre Order Recursive One Sided Top Down
 Traversal Order: Root -> Left -> Right (or Root -> Right -> Left)
 Mindset: Process the root as soon as you see it, 
 then traverse into one subtree fully before the other
@@ -222,7 +222,7 @@ Ex: Serialize a Binary Tree Recursive
     # Output: "1,2,N,N,3,4,N,N,5,N,N"
 ```
 
-## Tree Application: DFS Pre Order Iterative One Sided Top Down
+### Tree Application: DFS Pre Order Iterative One Sided Top Down
 Traversal Order: Root -> Left -> Right (or Root -> Right -> Left)
 Mindset: Process the root as soon as you see it, 
 then traverse into one subtree fully before the other
@@ -288,7 +288,7 @@ Ex: Pre Order Serialize a Binary Tree Iterative
     # Output: "1,2,N,N,3,4,N,N,5,N,N"
 ```
 
-## Tree Application: DFS In Order Recursive One Sided Bottom Up
+### Tree Application: DFS In Order Recursive One Sided Bottom Up
 Traversal Order: Left -> Root -> Right  (or Right -> Root -> Left) 
 Mindset: Fully explore one side before paying attention 
 to the root, then move to the other side
@@ -332,7 +332,7 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
         # isValidBST -> True
 ```
 
-## Tree Application: DFS In Order Iterative One Sided Bottom Up
+### Tree Application: DFS In Order Iterative One Sided Bottom Up
 Traversal Order: Left -> Root -> Right  (or Right -> Root -> Left) 
 Mindset: Fully explore one side before paying attention 
 to the root, then move to the other side
@@ -393,7 +393,7 @@ Ex: Convert BST to Sorted List Recursive and Validate BST Iterative
     # isValidBST -> True
 ```
 
-## Tree Application: DFS Post Order Recursive Two Sided Bottom Up
+### Tree Application: DFS Post Order Recursive Two Sided Bottom Up
 Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) 
 Mindset: Fully explore both sides before processing the root.
 Trick: I'll finish everything to your left then right or right then left
@@ -439,7 +439,7 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
     # diameterOfBinaryTree -> 3
 ```
 
-## Tree Application: DFS Post Order Iterative Two Sided Bottom Up 
+### Tree Application: DFS Post Order Iterative Two Sided Bottom Up 
 Traversal Order: Left -> Right -> Root (or Right -> Left -> Root) 
 Mindset: Fully explore both sides before processing the root.
 Trick: I'll finish everything to your left then right or right then left
@@ -509,7 +509,7 @@ Ex: Evaluate Expression Tree Recursive and Delete Tree Iterative
 ```
 
 
-## Tree Application: BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
+### Tree Application: BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 Traversal Order: Level by Level
 BFS visits nodes level by level, processing all nodes at a given depth 
 before moving on to the next.
@@ -564,7 +564,7 @@ Ex: Level order traversal of Binary Tree
     # Output: [[1], [2, 3], [4, 5]]
 ```
 
-## Tree Application: BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Tree Application: BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 Traversal Order: Level by Level
 BFS visit nodes in breath first order.
 However, in some problems we don't process or store the full level at once.
@@ -607,7 +607,7 @@ Ex: Invert a Binary Tree
         #     7   2
 ```
 
-## Tree Application: BFS Pre Order Across Level Distance from Root Full Across Top Down
+### Tree Application: BFS Pre Order Across Level Distance from Root Full Across Top Down
 Traversal Order: Level by Level
 Distance Tracking: Each level corresponds to one distance step from the root.
 Used when the problem depends on minimum, maximum or some count depth.
@@ -641,7 +641,7 @@ Ex: Minimum Depth of a Binary Tree
 ```
 
 
-## Tree Application: BFS Pre Order Across Level Non-Standard Level Traversal Non Standard Full Across
+### Tree Application: BFS Pre Order Across Level Non-Standard Level Traversal Non Standard Full Across
 Traversal Order: Level by Level (but with non default ordering such as reversed, zigzag, or other patterns)
 Used when the traversal order of nodes at each level must follow a specific 
 non standard pattern
@@ -703,7 +703,7 @@ Ex: Binary Tree Zigzag Level Order Traversal
     # Output: [[1], [3, 2], [4, 5, 6]]
 ```
 
-## Tree Application: BST Guided Recursive Traversal
+### Tree Application: BST Guided Recursive Traversal
 Traversal Order: Top down traversal pruning half the tree at each step
 based on BST property
 Mindset: Use BST ordering to decide which subtree to recurse into
@@ -727,7 +727,7 @@ Ex: Lowest Common Ancestor in BST Recursive
             return root
 ```
 
-## Tree Application: BST Guided Iterative Traversal
+### Tree Application: BST Guided Iterative Traversal
 Traversal Order: Top down traversal pruning half the tree at each step
 based on BST property
 Mindset: Use BST ordering to decide which subtree to iterate into
@@ -753,11 +753,11 @@ Ex: Lowest Common Ancestor in BST Iterative
                 return curr
 ```
 
-# 226. Invert Binary Tree ::3:: - Easy
+## 226. Invert Binary Tree ::3:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given the root of a binary tree, invert the tree, and return its root.
 
 |  Example Input           | Output |  
@@ -772,10 +772,10 @@ The number of nodes in the tree is in the range [0, 100]
 
 -100 &le; Node.val &le; 100
 
-## Abstraction
+### Abstraction
 Invert the binary tree.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -786,7 +786,7 @@ Invert the binary tree.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -796,11 +796,11 @@ Invert the binary tree.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Post Order Recursive Pass Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Pass Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -832,7 +832,7 @@ Invert the binary tree.
         return root
 ```
 
-## Solution 2: DFS Post Order Iterative Carry Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Iterative Carry Up Inverted Subtrees - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -882,7 +882,7 @@ Invert the binary tree.
         return root
 ```
 
-## Solution 3: BFS Pre Order Iterative Full Level Node Inversion - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
+### Solution 3: BFS Pre Order Iterative Full Level Node Inversion - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 ```python
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Note:
@@ -930,11 +930,11 @@ Invert the binary tree.
 |  |  |  |  |  |
 
 
-# 104. Maximum Depth of Binary Tree ::4:: - Easy
+## 104. Maximum Depth of Binary Tree ::4:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
-## Intro
+### Intro
 > A binary tree's maximum depth is the number of nodes along 
 > the longest path from the root node down to the farthest leaf node.
 
@@ -949,10 +949,10 @@ The number of nodes in the tree is in the range [0, 10<sup>4</sup>]
 
 -100 &le; Node.val &le; 100
 
-## Abstraction
+### Abstraction
 Find the max depth of a binary tree.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -963,7 +963,7 @@ Find the max depth of a binary tree.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -973,11 +973,11 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Post Order Recursive Pass Up Subtree Depth - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Pass Up Subtree Depth - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1010,7 +1010,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 2: DFS Post Order Iterative Dictionary (Lookup Subtree Depth) - Tree/DFS Post Order Iterative Two Sided Bottom Up
+### Solution 2: DFS Post Order Iterative Dictionary (Lookup Subtree Depth) - Tree/DFS Post Order Iterative Two Sided Bottom Up
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1065,7 +1065,7 @@ Find the max depth of a binary tree.
         return depth_map[root]
 ```
 
-## Solution 3: DFS Pre Order Iterative Global Depth + Tuple (Subtree, Subtree Depth) Pass Down - Tree/DFS Pre Order Iterative One Sided Top Down
+### Solution 3: DFS Pre Order Iterative Global Depth + Tuple (Subtree, Subtree Depth) Pass Down - Tree/DFS Pre Order Iterative One Sided Top Down
 ```python
     # Note:
     # DFS pre order iterative: root -> left -> right
@@ -1106,7 +1106,7 @@ Find the max depth of a binary tree.
     return max_depth
 ```
 
-## Solution 4: BFS Pre Order Iterative Full Level Global Depth + Completed Level Adds to Depth - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
+### Solution 4: BFS Pre Order Iterative Full Level Global Depth + Completed Level Adds to Depth - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1157,11 +1157,11 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
-# 543. Diameter of Binary Tree ::2:: - Easy
+## 543. Diameter of Binary Tree ::2:: - Easy
 
 Topics:  Tree, Depth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given the root of a binary tree, return the length of the diameter of the tree.
 > The diameter of a binary tree is the length of the longest path between any 
 > two nodes in a tree. This path may or may not pass through the root.
@@ -1179,10 +1179,10 @@ The number of nodes in the tree is in the range [0, 10<sup>4</sup>]
 
 -100 &le; Node.val &le; 100
 
-## Abstraction
+### Abstraction
 Find the diameter of a binary tree.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1193,7 +1193,7 @@ Find the diameter of a binary tree.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1203,11 +1203,11 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Post Order Recursive Global Max Diameter + (Tree Length) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Global Max Diameter + (Tree Length) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1253,7 +1253,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 2: DFS Post Order Recursive (Tree Max Diameter, Tree Length) Tuple Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive (Tree Max Diameter, Tree Length) Tuple Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # Note:
@@ -1294,7 +1294,7 @@ Find the diameter of a binary tree.
 |  |  |  |  |  |
 
 
-## Solution 3: DFS Post Order Iterative Global Max Diameter + Dictionary (Tree Length) Lookup - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 3: DFS Post Order Iterative Global Max Diameter + Dictionary (Tree Length) Lookup - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         
@@ -1351,7 +1351,7 @@ Find the diameter of a binary tree.
         return max_diameter
 ```
 
-## Solution 4: DFS Post Order Iterative Dictionary (Tree Max Diameter, Tree Length) Lookup - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 4: DFS Post Order Iterative Dictionary (Tree Max Diameter, Tree Length) Lookup - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
 
@@ -1411,11 +1411,11 @@ Find the diameter of a binary tree.
 ```
 
 
-# 110. Balanced Binary Tree ::2:: - Easy
+## 110. Balanced Binary Tree ::2:: - Easy
 
 Topics:  Tree, Depth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given a binary tree, determine if it is height-balanced. 
 > A height-balanced binary tree is a binary tree in which the depth 
 > of the two subtrees of every node never differs by more than one.
@@ -1432,12 +1432,12 @@ The number of nodes in the tree is in the range [0, 5000]
 
 -10<sup>4</sup> &le; Node.val &le; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Determine if a binary tree is height balanced.
 A height-balanced binary tree is a binary tree in which the 
 depth of the two subtrees of every node never differs by more than one.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1448,7 +1448,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1458,11 +1458,11 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Post Order Recursive Height or Error Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 1: DFS Post Order Recursive Height or Error Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1505,7 +1505,7 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 
-## Solution 2: DFS Post Order Recursive Tuple (Height, Bool) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
+### Solution 2: DFS Post Order Recursive Tuple (Height, Bool) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # Note:
@@ -1547,11 +1547,11 @@ depth of the two subtrees of every node never differs by more than one.
 |  |  |  |  |  |
 
 3
-# 100. Same Tree ::2:: - Easy
+## 100. Same Tree ::2:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given the roots of two binary trees p and q, write a function to
 > check if they are the same or not.
 > Two binary trees are considered the same if they are
@@ -1569,10 +1569,10 @@ The number of nodes in the tree is in the range [0, 100]
 
 -10<sup>4</sup> &le; Node.val &le; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Determine if two different binary trees match.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1583,7 +1583,7 @@ Determine if two different binary trees match.
 |  |  | 
 
 
-## Brute Force: (iterative)
+### Brute Force: (iterative)
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1593,11 +1593,11 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Pre Order Recursive Early Root Stop or Subtree Match Pass Up - Tree/DFS Pre Order Recursive One Sided Top Down
+### Solution 1: DFS Pre Order Recursive Early Root Stop or Subtree Match Pass Up - Tree/DFS Pre Order Recursive One Sided Top Down
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
@@ -1643,7 +1643,7 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-## Solution 2: BFS Iterative Early Root Stop or Subtree Match Pass Up - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 2: BFS Iterative Early Root Stop or Subtree Match Pass Up - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # Note:
@@ -1692,11 +1692,11 @@ Determine if two different binary trees match.
 |  |  |  |  |  |
 
 
-# 572. Subtree of Another Tree ::5:: - Easy
+## 572. Subtree of Another Tree ::5:: - Easy
 
 Topics:  Tree, Depth First Search, String Matching, Binary Tree, Hash Function
 
-## Intro
+### Intro
 > Given the roots of two binary trees root and subRoot, return true if 
 > there is a subtree of root with the same structure and node values of 
 > subRoot and false otherwise.
@@ -1720,10 +1720,10 @@ The number of nodes in the subRoot tree is in the range [1, 1000].
 -10<sup>4</sup> &le; subRoot.val &le; 10<sup>4</sup>
 
 
-## Abstraction
+### Abstraction
 Determine binary tree tree2 is a subtree of binary tree tree1.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1734,7 +1734,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1744,11 +1744,11 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Pre Order Recursive Abstraction Call Over Root Tree - Tree/DFS Pre Order Recursive One Sided Top Down
+### Solution 1: DFS Pre Order Recursive Abstraction Call Over Root Tree - Tree/DFS Pre Order Recursive One Sided Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1813,7 +1813,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-## Solution 2: BFS Pre Order Iterative Root Match Then Call isSameTree - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 2: BFS Pre Order Iterative Root Match Then Call isSameTree - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1884,7 +1884,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 
 
-## Solution 3: DFS Pre Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 3: DFS Pre Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # Note:
@@ -1931,7 +1931,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 4: DFS In Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 4: DFS In Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         
@@ -1959,7 +1959,7 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
         return match
 ```
 
-## Solution 5: DFS Post Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
+### Solution 5: DFS Post Order Tree Serialization Comparison - Tree/BFS Pre Order Across Level No Explicit Level Sized Grouping Full Across Top Down
 ```python
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         def serialize(node):
@@ -1987,11 +1987,11 @@ Determine binary tree tree2 is a subtree of binary tree tree1.
         return match   
 ```
 
-# 235. Lowest Common Ancestor of a Binary Search Tree ::2:: - Medium
+## 235. Lowest Common Ancestor of a Binary Search Tree ::2:: - Medium
 
 Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
 
-## Intro
+### Intro
 > Given a binary search tree (BST), find the lowest common 
 > ancestor (LCA) node of two given nodes in the BST.
 > According to the definition of LCA on Wikipedia: 
@@ -2017,10 +2017,10 @@ p != q
 
 p and q will exist in the BST.
 
-## Abstraction
+### Abstraction
 Find lowest node that has both p and q in their subtree.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2031,7 +2031,7 @@ Find lowest node that has both p and q in their subtree.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2041,11 +2041,11 @@ Find lowest node that has both p and q in their subtree.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: BST Recursive Traversal  - Tree/BST Guided Recursive Traversal
+### Solution 1: BST Recursive Traversal  - Tree/BST Guided Recursive Traversal
 ```python
     def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
         
@@ -2084,7 +2084,7 @@ Find lowest node that has both p and q in their subtree.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 2: BST Iterative Traversal  - Tree/BST Guided Iterative Traversal
+### Solution 2: BST Iterative Traversal  - Tree/BST Guided Iterative Traversal
 ```python
     def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
         
@@ -2127,11 +2127,11 @@ Find lowest node that has both p and q in their subtree.
 |  |  |  |  |  |
 
 
-# 102. Binary Tree Level Order Traversal ::2:: - Medium
+## 102. Binary Tree Level Order Traversal ::2:: - Medium
 
 Topics:  Tree, Breadth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given the root of a binary tree, return the level order traversal 
 > of its nodes' values. (i.e., from left to right, level by level).
 
@@ -2148,10 +2148,10 @@ The number of nodes in the root tree is in the range [1, 2000].
 
 -1000 &leq; Node.val &leq; 1000
 
-## Abstraction
+### Abstraction
 Traverse a tree and return list of nodes grouped by level.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2162,7 +2162,7 @@ Traverse a tree and return list of nodes grouped by level.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2172,11 +2172,11 @@ Traverse a tree and return list of nodes grouped by level.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: BFS Iterative - Tree/DFS Pre order Traversal
+### Solution 1: BFS Iterative - Tree/DFS Pre order Traversal
 ```python
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         
@@ -2214,7 +2214,7 @@ Traverse a tree and return list of nodes grouped by level.
 |  |  |  |  |  |
 
 
-## Solution 2: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
+### Solution 2: DFS Pre Order Recursive - Tree/DFS Pre order Traversal
 ```python
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         
@@ -2260,11 +2260,11 @@ Traverse a tree and return list of nodes grouped by level.
 |  |  |  |  |  |
 
 
-# 199. Binary Tree Right Side View ::2:: - Medium
+## 199. Binary Tree Right Side View ::2:: - Medium
 
 Topics:  Tree, Breadth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given the root of a binary tree, imagine yourself standing on 
 > the right side of it, return the values of the nodes you can 
 > see ordered from top to bottom.
@@ -2283,11 +2283,11 @@ The number of nodes in the root tree is in the range [1, 100].
 
 -100 &leq; Node.val &leq; 100
 
-## Abstraction
+### Abstraction
 Given a tree, if you were to stand on the right side, return all nodes
 that you would have a direct line of sight to (not hidden by right-er nodes)
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2298,7 +2298,7 @@ that you would have a direct line of sight to (not hidden by right-er nodes)
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2308,11 +2308,11 @@ that you would have a direct line of sight to (not hidden by right-er nodes)
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: BFS Pre Order Iterative Grab Last Element Per Level - Tree/DFS Pre order Traversal
+### Solution 1: BFS Pre Order Iterative Grab Last Element Per Level - Tree/DFS Pre order Traversal
 ```python
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         
@@ -2365,7 +2365,7 @@ that you would have a direct line of sight to (not hidden by right-er nodes)
 |  |  |  |  |  |
 
 
-## Solution 2: DFS Pre Order Recursive Right Subtree Search With New Depth Trigger  - Tree/DFS Pre order Traversal
+### Solution 2: DFS Pre Order Recursive Right Subtree Search With New Depth Trigger  - Tree/DFS Pre order Traversal
 ```python
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         
@@ -2411,11 +2411,11 @@ that you would have a direct line of sight to (not hidden by right-er nodes)
 
 
 
-# 1448. Count Good Nodes in Binary Tree ::2:: - Medium
+## 1448. Count Good Nodes in Binary Tree ::2:: - Medium
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
-## Intro
+### Intro
 > Given a binary tree root, a node X in the tree is  
 > named good if in the path from root to X there are no nodes 
 > with a value greater than X.
@@ -2434,11 +2434,11 @@ The number of nodes in the root tree is in the range [1, 10<sup>5</sup>].
 
 Each node's value is between [-10<sup>4</sup>, 10<sup>4</sup>]
 
-## Abstraction
+### Abstraction
 Given a tree, a node is good if in the path between itself and the root
 there is no node that is larger than it.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2449,7 +2449,7 @@ there is no node that is larger than it.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2459,11 +2459,11 @@ there is no node that is larger than it.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Pre Order Recursive Pass Down Max Value Seen So Far - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive Pass Down Max Value Seen So Far - Tree/DFS Pre order Traversal
 ```python
     def goodNodes(self, root: TreeNode) -> int:
 
@@ -2507,7 +2507,7 @@ there is no node that is larger than it.
 |  |  |  |  |  |
 
 
-## Solution 2: DFS Pre Order Iterative Pass (Root, Max_So_Far) Tuple Down  - Tree/DFS Pre order Traversal
+### Solution 2: DFS Pre Order Iterative Pass (Root, Max_So_Far) Tuple Down  - Tree/DFS Pre order Traversal
 ```python
     def goodNodes(self, root: TreeNode) -> int:
         
@@ -2553,11 +2553,11 @@ there is no node that is larger than it.
 |  |  |  |  |  |
 
 
-# 98. Validate Binary Search Tree ::2:: - Medium
+## 98. Validate Binary Search Tree ::2:: - Medium
 
 Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
 
-## Intro
+### Intro
 > Given the root of a binary tree, determine if it is a 
 > valid binary search tree (BST).
 > The left subtree of a node contains only nodes with 
@@ -2578,11 +2578,11 @@ The number of nodes in the root tree is in the range [1, 10<sup>4</sup>].
 
 -2<sup>31</sup> &leq; Node.val &leq; 2<sup>31</sup>-1
 
-## Abstraction
+### Abstraction
 Given a tree, determine if tree is a valid BST. Where value of nodes
 is always: left.val &leq; root.val &leq; right.val 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2593,7 +2593,7 @@ is always: left.val &leq; root.val &leq; right.val
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2603,11 +2603,11 @@ is always: left.val &leq; root.val &leq; right.val
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Pre Order Recursive Passing Range Limits - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive Passing Range Limits - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         
@@ -2651,7 +2651,7 @@ is always: left.val &leq; root.val &leq; right.val
 |  |  |  |  |  |
 
 
-## Solution 2: BFS Pre Order Iterative Passing Queuing Range Limits  - Tree/DFS Pre order Traversal
+### Solution 2: BFS Pre Order Iterative Passing Queuing Range Limits  - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
 
@@ -2689,11 +2689,11 @@ is always: left.val &leq; root.val &leq; right.val
 ```
 
 
-# 230. Kth Smallest Element in a BST ::2:: - Medium
+## 230. Kth Smallest Element in a BST ::2:: - Medium
 
 Topics:  Tree, Depth First Search, Binary Search Tree, Binary Tree
 
-## Intro
+### Intro
 > Given the root of a binary search tree, and an integer k,
 > return the kth smallest value (1-indexed) of 
 > all the values of the nodes in the tree.
@@ -2715,10 +2715,10 @@ The number of nodes in the root tree is n
 
 0 &leq; Node.val &leq; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Given a BST, find the kth smallest node. 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2729,7 +2729,7 @@ Given a BST, find the kth smallest node.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2739,11 +2739,11 @@ Given a BST, find the kth smallest node.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS In Order Recursive Early Stop with Global Element Counter  - Tree/DFS Pre order Traversal
+### Solution 1: DFS In Order Recursive Early Stop with Global Element Counter  - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
 
@@ -2794,7 +2794,7 @@ Given a BST, find the kth smallest node.
 |  |  |  |  |  |
 
 
-## Solution 2: DFS In Order Iterative with Element Counter - Tree/DFS Pre order Traversal
+### Solution 2: DFS In Order Iterative with Element Counter - Tree/DFS Pre order Traversal
 ```python
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
 
@@ -2838,11 +2838,11 @@ Given a BST, find the kth smallest node.
 |  |  |  |  |  |
 
 
-# 105. Construct Binary Tree from Pre Order and In Order Traversal ::2:: - Medium
+## 105. Construct Binary Tree from Pre Order and In Order Traversal ::2:: - Medium
 
 Topics:  Array, Hash Table, Divide and Conquer, Tree, Binary Tree
 
-## Intro
+### Intro
 > Given two integer arrays pre order and in order where 
 > pre order is the pre order traversal of a binary tree and 
 > inorder is the inorder traversal of the same tree, 
@@ -2868,10 +2868,10 @@ preorder is guaranteed to be the preorder traversal of the tree.
 
 inorder is guaranteed to be the inorder traversal of the tree.
 
-## Abstraction
+### Abstraction
 Create original free given pre and post order traversals.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2882,7 +2882,7 @@ Create original free given pre and post order traversals.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2892,11 +2892,11 @@ Create original free given pre and post order traversals.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Pre Order Recursive In Order Hash Map  - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive In Order Hash Map  - Tree/DFS Pre order Traversal
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
 
@@ -2990,7 +2990,7 @@ Create original free given pre and post order traversals.
 |  |  |  |  |  |
 
 
-## Solution 2: DFS Pre Order Iterative Build Using Stack - Tree/DFS Pre order Traversal
+### Solution 2: DFS Pre Order Iterative Build Using Stack - Tree/DFS Pre order Traversal
 ```python
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
 
@@ -3079,11 +3079,11 @@ Create original free given pre and post order traversals.
 |  |  |  |  |  |
 
 
-# 124. Binary Tree Maximum Path Sum ::1:: - Hard
+## 124. Binary Tree Maximum Path Sum ::1:: - Hard
 
 Topics:  Dynamic Programming, Tree, Depth First Search, Binary Tree
 
-## Intro
+### Intro
 > A path in a binary tree is a sequence of nodes where each pair of 
 > adjacent nodes in the sequence has an edge connecting them. A 
 > node can only appear in the sequence at most once. Note that 
@@ -3104,10 +3104,10 @@ The number of nodes in the tree is in the range [1, 3 * 10<sup>4</sup>]
 
 -1000 &leq; Node.val &leq; 1000
 
-## Abstraction
+### Abstraction
 Given a tree, find the path that produces the max sum.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -3118,7 +3118,7 @@ Given a tree, find the path that produces the max sum.
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -3128,11 +3128,11 @@ Given a tree, find the path that produces the max sum.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Post Order Recursive Global Max Tracker  - Tree/DFS Pre order Traversal
+### Solution 1: DFS Post Order Recursive Global Max Tracker  - Tree/DFS Pre order Traversal
 ```python
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         
@@ -3180,11 +3180,11 @@ Given a tree, find the path that produces the max sum.
 |  |  |  |  |  |
 
 
-# 297. Serialize and Deserialize Binary Tree ::2:: - Hard
+## 297. Serialize and Deserialize Binary Tree ::2:: - Hard
 
 Topics:  String, Tree, Depth First Search, Breadth First Search, Design, Binary Tree
 
-## Intro
+### Intro
 > Serialization is the process of converting a data structure or 
 > object into a sequence of bits so that it can be stored in a file 
 > or memory buffer, or transmitted across a network connection 
@@ -3210,10 +3210,10 @@ The number of nodes in the tree is in the range [1, 10<sup>4</sup>]
 
 -1000 &leq; Node.val &leq; 1000
 
-## Abstraction
+### Abstraction
 Create a serialize and deserialize functions for trees
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -3224,7 +3224,7 @@ Create a serialize and deserialize functions for trees
 |  |  | 
 
 
-## Brute Force: iterative
+### Brute Force: iterative
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -3234,11 +3234,11 @@ Create a serialize and deserialize functions for trees
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Pre Order Recursive  - Tree/DFS Pre order Traversal
+### Solution 1: DFS Pre Order Recursive  - Tree/DFS Pre order Traversal
 ```python
 class Codec:
 

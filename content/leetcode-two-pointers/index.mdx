@@ -10,14 +10,14 @@ tags:
 - data structures and algorithms
 ---
 
-# Two Pointers Intro
+## Two Pointers Intro
 Leetcode problems with elegant solutions using two pointers. 
 
-## What are Two Pointers
+### What are Two Pointers
 Two Pointers is the strategy of using a Left and Right pointer to iterate over 
 a data structure, usually an array, to solve a problem.
 
-## Two Pointers Application: One Pointer with Auxiliary State
+### Two Pointers Application: One Pointer with Auxiliary State
 Use a single pointer to scan linearly and keep track of additional state 
 variables to simulate a second pointer.
 
@@ -37,7 +37,7 @@ Ex: Move all zeros while maintaining order
     # move_zeros(arr)  Output: [1, 3, 12, 0, 0]
 ```
 
-## Two Pointers Application: Opposite Ends
+### Two Pointers Application: Opposite Ends
 We can have two pointers starting at opposite ends of a list and move them inward 
 while validating some sort of logic.
 
@@ -57,7 +57,7 @@ Ex: Determine if a string is a palindrome
     print(is_palindrome("hello"))  # Output: False
 ```
 
-## Two Pointers Application: Sliding Window
+### Two Pointers Application: Sliding Window
 We can have two pointers represent a window over a sequence that expands or shrinks
 to satisfy a condition.
 
@@ -82,7 +82,7 @@ Ex: Find the length of the longest substring without repeating characters.
 ```
 
 
-## Two Pointers Application: Fast & Slow Pointers 
+### Two Pointers Application: Fast & Slow Pointers 
 We can have have two pointers moving at different speeds to detect cycles or find midpoints
 in linked lists or arrays.
 
@@ -115,7 +115,7 @@ Ex: Detect a cycle in a linked list.
     print(has_cycle(node1))  # Output: True
 ```
 
-## Two Pointers Application: Partitioning
+### Two Pointers Application: Partitioning
 We can have two pointers in the same array moving inward/outward to rearrange elements
 based on a condition.
 
@@ -134,7 +134,7 @@ Ex: Move all zeros in an array to the end while maintaining the order of other e
     print(move_zeros([0, 1, 0, 3, 12]))  # Output: [1, 3, 12, 0, 0]
 ```
 
-## Two Pointers Application: Parallel Pointer Traversal 
+### Two Pointers Application: Parallel Pointer Traversal 
 We can have two pointers traversing two separate arrays in parallel to merge, compare,
 or find intersections.
 
@@ -160,7 +160,7 @@ Ex: Merge two sorted arrays into one sorted array
     print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]
 ```
 
-## Two Pointers Application: Catchup
+### Two Pointers Application: Catchup
 We have two pointers traversing one array. One remains frozen, but catches up
 to the other after logic is complete on a subsection.
 
@@ -169,7 +169,7 @@ Ex: Decode Two Pointer Splicing
 
 ```
 
-## Two Pointers Application: K Pointer Variants 
+### Two Pointers Application: K Pointer Variants 
 We can extend the two pointer case to track k pointers simultaneously.
 These pointers can traverse the same list, different lists, or freeze while moving
 other pointers.
@@ -212,7 +212,7 @@ Ex: Given an integer array nums, return all the unique triplets [nums[i], nums[j
     print(threeSum(nums))  # Output: [[-1, -1, 2], [-1, 0, 1]]
 ```
 
-## Two Pointers Application: Algorithm
+### Two Pointers Application: Algorithm
 Case where a problem that seems to require Two Pointers is easily solved by 
 an algorithm specifically made for that problem
 
@@ -250,11 +250,11 @@ Ex: Manacher's Algorithm, find the longest palindromic substring
 
 
 
-# 125. Valid Palindrome ::3:: - Easy
+## 125. Valid Palindrome ::3:: - Easy
 
 Topics:  Two Pointers, String 
 
-## Intro
+### Intro
 > A phrase is a palindrome if, after converting all uppercase letters into lowercase letters 
 > and removing all non-alphanumeric characters, it reads the same forward and backward. 
 > Alphanumeric characters include letters and numbers.
@@ -269,20 +269,20 @@ Topics:  Two Pointers, String
 Constraints:
 string s consists only of printable ASCII characters.
 
-## Abstraction 
+### Abstraction 
 Using two pointers, L and R, we can traverse the string validating palindrome status.
 
 We can convert the string s into lowercase, 
 traverse using pointers comparing characters on the start and end of the string.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force One Pointer | O(n) | O(n) | Iterate over string of n length O(n) | Memory allocation for cleaned list of n length O(n) |
 | Two Pointer | O(n) | O(n) | Iterate over string of n length O(n) | Memory allocation for cleaned list of n length O(n) |
 | Two Pointer In Place | O(n) | O(1) | Iterate over string of n length O(n) | No additional memory allocation for in place comparison O(1) |
 
-## Brute Force One Pointer
+### Brute Force One Pointer
 ```python
     def isPalindrome(self, s: str) -> bool:
 
@@ -315,7 +315,7 @@ traverse using pointers comparing characters on the start and end of the string.
         return True
 ```
 
-## Find the Bug: Less than instead of Less than or equal to
+### Find the Bug: Less than instead of Less than or equal to
 ```python
 def isPalindrome(self, s: str) -> bool:
 
@@ -357,7 +357,7 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Find the Bug: Not Moving Pointers (thinking we are)
+### Find the Bug: Not Moving Pointers (thinking we are)
 ```python
     def isPalindrome(self, s: str) -> bool:
 
@@ -405,7 +405,7 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Find the Bug: Missing Char Palindrome Comparison (again, im half asleep, my bad :) ]
+### Find the Bug: Missing Char Palindrome Comparison (again, im half asleep, my bad :) ]
 ```python
     def isPalindrome(self, s: str) -> bool:
 
@@ -444,7 +444,7 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Solution 1: Slicing Traversing in Reverse Order - Two Pointers/Algorithm
+### Solution 1: Slicing Traversing in Reverse Order - Two Pointers/Algorithm
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -474,7 +474,7 @@ def isPalindrome(self, s: str) -> bool:
 | Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
 | Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
-## Solution 2: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
+### Solution 2: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -527,7 +527,7 @@ def isPalindrome(self, s: str) -> bool:
 | Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
 
 
-## Solution 3: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
+### Solution 3: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
 
@@ -583,11 +583,11 @@ def isPalindrome(self, s: str) -> bool:
 | Overall | O(n) | O(1) | Iterating over string n length dominates leading to O(n) | No additional memory allocation O(1) |
 
 
-# 271. String Encode and Decode ::2:: - Medium
+## 271. String Encode and Decode ::2:: - Medium
 
 Topics:  Two Pointers, Design
 
-## Intro
+### Intro
 
 > Design an algorithm to encode a list of strings to a single string.
 > The encoded string is then decoded back to the original list of strings
@@ -601,16 +601,16 @@ Topics:  Two Pointers, Design
 
 Constraints:
 
-## Abstraction
+### Abstraction
 We need to create an encode and decode function and mark the start of a new string
 as well as its length.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Two Pointers Length Delimiter |  |  |  |  |
 
-## Find the Bug: Decoded Length + Delimiter (Grabbed str(len) instead int(len))
+### Find the Bug: Decoded Length + Delimiter (Grabbed str(len) instead int(len))
 ```python
     def decode(self, encoded: str) -> List[str]:
 
@@ -647,7 +647,7 @@ as well as its length.
         return decoded
 ```
 
-## Find the Bug: Decoded Base 10 doing += instead of = (half asleep)
+### Find the Bug: Decoded Base 10 doing += instead of = (half asleep)
 ```python
     def decode(self, encoded: str) -> List[str]:
         
@@ -681,7 +681,7 @@ as well as its length.
         return decoded
 ```
 
-## Solution 1: Splicing Delimiter with Catchup 2 pointers - Two Pointers/Catchup
+### Solution 1: Splicing Delimiter with Catchup 2 pointers - Two Pointers/Catchup
 ```python
     def encode(self, strs: List[str]) -> str:
 
@@ -774,7 +774,7 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-## Solution 2: Base 10 Auxiliary Length Delimiter with 1 pointer - Two Pointers/One Pointer with Auxiliary State
+### Solution 2: Base 10 Auxiliary Length Delimiter with 1 pointer - Two Pointers/One Pointer with Auxiliary State
 ```python
     def encode(self, strs: List[str]) -> str:
 
@@ -856,11 +856,11 @@ as well as its length.
 | Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
 
 
-# 167. Two Sum II Sorted Array ::2:: - Medium
+## 167. Two Sum II Sorted Array ::2:: - Medium
 
 Topics:  Array, Two Pointers, Binary Search
 
-## Intro
+### Intro
 > Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, 
 > find two numbers such that they add up to a specific target number. 
 > Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length.
@@ -879,20 +879,20 @@ Constraints:
 
 Your solution must use only constant extra space O(1)
 
-## Abstraction
+### Abstraction
 Given a sorted array, find two numbers which add up to target.
 
 Unlike Two Sum I, we do not neccesarrily have to traverse the entire array, as since
 the given array is sorted, we can make assumptions about our traversal using l and r pointers.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (all pair comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>) | No additional memory allocation O(1) |
 | Binary Search for Complement | O(n log n) | O(1) | Iterates over list of n elements O(n), performing binary search on each O(log n) leading to O(n log n) | No additional memory allocation O(1) |
 | Two Pointers | Iterates through array of n length using two pointers O(n) | No additional memory allocation O(1) |  |  |
 
-## Brute Force (all pairs comparison)
+### Brute Force (all pairs comparison)
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
@@ -917,7 +917,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Comparison | O(1) | O(1) | Sum and comparison operations in constant O(1) | No additional memory allocation for sum or comparison O(1) | 
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity | No additional memory was allocated leading to constant O(1) space complexity. |
 
-## Find the Bug: Binary Search updates left and right pointer by midValue instead of midIndex
+### Find the Bug: Binary Search updates left and right pointer by midValue instead of midIndex
 ```python
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
        
@@ -947,7 +947,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
         return []
 ```
 
-## Solution 1: BinarySearch Per Element for Complement - Two Pointers/One Pointer with Auxiliary State
+### Solution 1: BinarySearch Per Element for Complement - Two Pointers/One Pointer with Auxiliary State
 ```python 
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
         
@@ -999,7 +999,7 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Overall | O(n log n) | O(1) | Binary search for each element dominates leading to O(n log n) | No additional memory allocation leading to constant O(1). | 
 
 
-## Solution 2: Opposite Ends Pointer Shift by BinarySearch Modification for Target - Two Pointers/Opposite Ends
+### Solution 2: Opposite Ends Pointer Shift by BinarySearch Modification for Target - Two Pointers/Opposite Ends
 ```python
     def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
@@ -1041,11 +1041,11 @@ the given array is sorted, we can make assumptions about our traversal using l a
 | Comparison | O(1) | O(1) | Sum and comparison operations take constant O(1) | No additional memory allocation for sum and comparison operations O(1) |
 | Overall | O(n) | O(1) | Iterating with left and right pointers over list of n length dominates leading to O(n) | No additional memory allocation leading to constant O(1) | 
 
-# 15. 3Sum ::2:: - Medium
+## 15. 3Sum ::2:: - Medium
 
 Topics:  Array, Two Pointers, Sorting, Binary Search
 
-## Intro
+### Intro
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] 
 > such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
 > Notice that the solution set must not contain duplicate triplets.
@@ -1058,7 +1058,7 @@ Topics:  Array, Two Pointers, Sorting, Binary Search
 
 Constraints:
 
-## Abstraction
+### Abstraction
 Given an array find all the groups of 3 integers that add up to 0, without duplicates.
 
 Sorting vs non-sorting is the first distinction which will lead to different solutions.
@@ -1070,7 +1070,7 @@ We can:
 Both of these give us different assumptions we can use to our advantage as we traverse the array.
 Let see:
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (all triplets comparison) |  |  |  |  |
@@ -1078,7 +1078,7 @@ Let see:
 | Two Pointers Set |  |  |  |  |
 | Two Pointers Early Breaks Set |  |  |  |  |
 
-## Brute Force (all triplets comparison)
+### Brute Force (all triplets comparison)
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -1110,7 +1110,7 @@ Let see:
 |  |  |  |  |  |
 |  |  |  |  |  | 
 
-## Brute Force Hashmap Two Sum I Approach (No Sorting)
+### Brute Force Hashmap Two Sum I Approach (No Sorting)
 ```python    
     def threeSum(self, nums: List[int]) -> List[List[int]]:
        
@@ -1153,7 +1153,7 @@ Let see:
 |  |  |  |  |  | 
 
 
-## Find the Bug: List is unHashable
+### Find the Bug: List is unHashable
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1234,7 +1234,7 @@ Let see:
         return list(res)  
 ```
 
-## Find the Bug: Index Into Wrong Array (2x) [im half asleep rn ok? :) cut me some slack]
+### Find the Bug: Index Into Wrong Array (2x) [im half asleep rn ok? :) cut me some slack]
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1316,7 +1316,7 @@ Let see:
 ```
 
 
-## Find the Bug: Giving Sorted() 3 arguments instead of 1 [i dont know python syntax, YET :)]
+### Find the Bug: Giving Sorted() 3 arguments instead of 1 [i dont know python syntax, YET :)]
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1367,7 +1367,7 @@ Let see:
         return res
 ```
 
-## Find the Bug: Adding Set to Set, cannot because set is un-hashable type [again, syntax]
+### Find the Bug: Adding Set to Set, cannot because set is un-hashable type [again, syntax]
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1424,7 +1424,7 @@ Let see:
         return list(res)
 ```
 
-## Find the Bug: Did not increment pointers if res == 0 case
+### Find the Bug: Did not increment pointers if res == 0 case
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1469,7 +1469,7 @@ Let see:
 ```
 
 
-## Solution 1: Mimicking Two Sum by doing Per Element Opposite Ends Pointer Shift by BinarySearch Modification for 0 (Sorting) - Two Pointers/K Pointer Variants
+### Solution 1: Mimicking Two Sum by doing Per Element Opposite Ends Pointer Shift by BinarySearch Modification for 0 (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -1559,7 +1559,7 @@ Let see:
 | Result Storage | O(1) | O(n) | Insert takes constant O(1) | Stores k unique triplets O(k) which in worst case is just O(n) | 
 | Overall | O(n<sup>2</sup>) | O(n) | Two pointer traversal for n elements dominates, leading to O(n<sup>2</sup>) | Worst case of n/3 valid triplets O(n/3), which leads to O(n) | 
 
-## Solution 2: Grouping By Parity 4 Triplet Combinations (time limit exceeded) - Two Pointers/Algorithm
+### Solution 2: Grouping By Parity 4 Triplet Combinations (time limit exceeded) - Two Pointers/Algorithm
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1643,11 +1643,11 @@ Let see:
 | Overall | O(n<sup>2</sup>) | O(n) | Negative and positive iterations dominate leading to O(n<sup>2</sup>) | Memory allocation for n/3 valid triplets, leading to O(n) | 
 
 
-# 11. Container With Most Water ::1:: - Medium
+## 11. Container With Most Water ::1:: - Medium
 
 Topics:  Array, Two Pointers, Greedy
 
-## Intro
+### Intro
 > You are given an integer array height of length n. There are n vertical lines drawn 
 > such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
 > Find two lines that together with the x-axis form a container, 
@@ -1664,7 +1664,7 @@ Constraints:
 trapped water involves the space between and including two walls (bars).
 width = (right - left)
 
-## Abstract
+### Abstract
 We need to calculate the container with the most water.
 
 The integer value represents the height of a side of a container, and the distance between
@@ -1673,13 +1673,13 @@ two sides is calculated using the index of the array
 We can iterate over the array calculating the sides of the container that will 
 give us the most water.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force |  |  |  |  |
 | Two Pointer Early Break |  |  |  |  |
 
-## Brute Force
+### Brute Force
 ```python
     def maxArea(self, height: List[int]) -> int:
 
@@ -1708,7 +1708,7 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) | 
 | Overall | O(n<sup>2</sup>) | O(1) | Inner loop dominates leading to O(n<sup>2</sup>) | No additional memory allocation leading to O(1) | 
 
-## Solution 1: Greedy Opposite Ends Pointer Shift by BinarySearch Modification - Two Pointers/Opposite Ends 
+### Solution 1: Greedy Opposite Ends Pointer Shift by BinarySearch Modification - Two Pointers/Opposite Ends 
 ```python
     def maxArea(self, height: List[int]) -> int:
         
@@ -1759,11 +1759,11 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) |
 | Overall | O(n) | O(1) | Iteration over list of n length dominates leading to O(n) | No additional memory allocation O(1) | 
 
-# 42. Trapping Rain Water ::3:: - Hard
+## 42. Trapping Rain Water ::3:: - Hard
 
 Topics:  Array, Two Pointers, Dynamic Programming, Stack, Monotonic Stack
 
-## Intro
+### Intro
 > Given n non-negative integers representing an elevation map where the width of 
 > each bar is 1, compute how much water it can trap after raining.
 
@@ -1777,7 +1777,7 @@ Constraints:
 trapped water involves the space between two walls (bars).
 width = (right - left - 1)
 
-## Abstraction 
+### Abstraction 
 To calculate trapped water:
 
 [1, 0, 1] -> 1 unit of water
@@ -1790,7 +1790,7 @@ Definition of trapped water is: [ min(left, right) - currHeight ]
 
 Now we need a way to traverse the array that allows us to take advantage of this pattern.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force |  |  |  |  |
@@ -1799,7 +1799,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 
 
 
-## Brute Force
+### Brute Force
 ```python
     def trap(self, height: List[int]) -> int:
         n = len(height)
@@ -1836,7 +1836,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Curr Water |  |  |  |  | 
 | Overall | | | | |
 
-## Find the Bug: Complete misunderstanding of water heights (haha)
+### Find the Bug: Complete misunderstanding of water heights (haha)
 ```python
     def trap(self, height: List[int]) -> int:
         
@@ -1870,7 +1870,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
         return water
 ```
 
-## Find the Bug: Two Pointers Early Break
+### Find the Bug: Two Pointers Early Break
 ```python 
     def trap(self, height: List[int]) -> int:
         
@@ -1910,7 +1910,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
         return water
 ```
 
-## Find the Bug: Not checking if left wall exists after pop
+### Find the Bug: Not checking if left wall exists after pop
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -1947,7 +1947,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
         return water
 ```
 
-## Find the Bug: Overwriting variables accidentally
+### Find the Bug: Overwriting variables accidentally
 ```python
     def trap(self, height: List[int]) -> int:
         stack = []  
@@ -1983,7 +1983,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
         return water
 ```
 
-## Find the Bug: Bad For Loop syntax
+### Find the Bug: Bad For Loop syntax
 ```python
     def trap(self, height: List[int]) -> int:
         
@@ -2012,7 +2012,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 
 
-## Solution 1: Monotonic Traversal 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
+### Solution 1: Monotonic Traversal 2 Outer/2 Inner Pointers Creating Bounds Opposite Ends Pointer Shift by BinarySearch Modification (Sorting) - Two Pointers/K Pointer Variants
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -2086,7 +2086,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Overall | O(n) | O(1) | Two pointer iteration over list of n length dominates, leading to O(n) | No additional memory allocation required, leading to O(1) | 
 
 
-## Solution 2: Monotonic Stack - Two Pointers/Algorithm
+### Solution 2: Monotonic Stack - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -2179,7 +2179,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Water Calculation | O(1) | O(1) | Calculating distance and bounded height in constant O(1) | No additional memory for distant or bounded height operations O(1) | 
 | Overall | O(n) | O(n) | Iterating over list of n length dominates, leading to O(n) | Stack growing for n elements dominates, leading to O(n) | 
 
-## Solution 3: Dynamic Programming - Two Pointers/Algorithm
+### Solution 3: Dynamic Programming - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
         

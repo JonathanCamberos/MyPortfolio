@@ -10,15 +10,15 @@ tags:
 - data structures and algorithms
 ---
 
-# Graphs Intro
+## Graphs Intro
 
 LeetCode problems with graph based solutions.
 
-## What is a Graph?
+### What is a Graph?
 
 A graph is a data structure used to represent relationships between entities.
 
-## Graph Characteristics
+### Graph Characteristics
 
 1. Vertices (n): entities (e.g. nodes)
 2. Edges (m): connections between entities
@@ -27,7 +27,7 @@ A graph is a data structure used to represent relationships between entities.
 5. Unordered: unlike tree, heaps, etc, graphs allow cycles, multiple paths, and varying connectivity
 6. Representation: Graphs are stored as adjacency matrix, adjacency list, or edge lists depending on the use case
 
-## Graph Representations: Adjacency Matrix
+### Graph Representations: Adjacency Matrix
 
 Graph and Matrix:
 ```
@@ -48,7 +48,7 @@ A[i][j] = 0 -> no edge between i and j
 
 Space complexity O(n<sup>2</sup>) -> better for dense graphs
 
-## Graph Representations: Adjacency List
+### Graph Representations: Adjacency List
 
 Graph and List
 ```
@@ -65,7 +65,7 @@ Each vertex points to its neighbors
 
 Space complexity: O(n + m) -> efficient for sparse graphs
 
-## Graph Representations: Edge List
+### Graph Representations: Edge List
 
 Graph and Edge List
 ```
@@ -85,7 +85,7 @@ Space complexity O(m) -> useful for algorithms that only need edges
 
 Simplest representation for algorithms that only care about edges.
 
-## Graph Application: DFS Pre Order
+### Graph Application: DFS Pre Order
 Use pre order DFS when you need to process a node immediately before
 exploring its neighbors
 
@@ -103,7 +103,7 @@ def dfs_pre(r, c, grid):
 # Example: numIslands uses pre-order DFS to flood fill
 ```
 
-## Graph Application: DFS In Order (Binary Tree Only)
+### Graph Application: DFS In Order (Binary Tree Only)
 Use in order DFS mainly for binary trees where left -> right order matters
 
 Ex: Extract sorted values from a BST
@@ -119,7 +119,7 @@ def inorder(node, res):
 ```
 
 
-## Graph Application: DFS Post Order
+### Graph Application: DFS Post Order
 Use post order DFS when you want to process a node after exploring
 all its neighbors.
 
@@ -141,7 +141,7 @@ def dfs_post(r, c, grid):
 # Example: maxAreaOfIsland uses post-order DFS to sum area
 ```
 
-## Graph Application: BFS Level Order / Flood Fill
+### Graph Application: BFS Level Order / Flood Fill
 Use BFS when you need shortest path in unweighted graphs, or to
 expand layers level by level.
 
@@ -163,7 +163,7 @@ def bfs_shortest(grid, start):
                 queue.append((nr,nc, dist + 1))
 ```
 
-## Graph Application: Union Find Disjoint Set
+### Graph Application: Union Find Disjoint Set
 Use Union Find to efficiently track connected components in dynamic graphs.
 
 Ex: Count islands or merge friend groups
@@ -199,11 +199,11 @@ Ex: Count islands or merge friend groups
 
 
 
-# 200. Number of Islands ::4:: - Medium
+## 200. Number of Islands ::4:: - Medium
 
 Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
 
-## Intro
+### Intro
 > Given an m x n 2D binary grid grid which represents a  
 > map of '1's (land) and '0's (water), return the number of 
 > islands.
@@ -228,11 +228,11 @@ n == grid[i].length
 
 grid[i][j] is '0' or '1'
 
-## Abstraction
+### Abstraction
 Given a graph, return the number of islands, where an islands is a cell
 that is surrounded by water, and islands can connect horizontally or vertically.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -243,7 +243,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -253,11 +253,11 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS with Visited Set - Graph/something
+### Solution 1: Recursive DFS with Visited Set - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -316,7 +316,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         return islands
 ```
 
-## Solution 2: Recursive DFS with In Place Flood Fill - Graph/something
+### Solution 2: Recursive DFS with In Place Flood Fill - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
         # Note:
@@ -367,7 +367,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         return islands
 ```
 
-## Solution 3: Iterative BFS with In Place Flood Fill - Graph/something
+### Solution 3: Iterative BFS with In Place Flood Fill - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -426,7 +426,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         return islands
 ```
 
-## Solution 4: Union Find - Graph/something
+### Solution 4: Union Find - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -512,11 +512,11 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 
 
 
-# 695. Max Area of Island ::3:: - Medium
+## 695. Max Area of Island ::3:: - Medium
 
 Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
 
-## Intro
+### Intro
 > You are given an m x n binary matrix grid. An island is a 
 > group of 1's (representing land) connected 4-directionally  
 > (horizontal or vertical.) You may assume all four edges of the 
@@ -542,10 +542,10 @@ n == grid[i].length
 
 grid[i][j] is either 0 or 1
 
-## Abstraction
+### Abstraction
 Given a graph, return the largest island.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -556,7 +556,7 @@ Given a graph, return the largest island.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -566,11 +566,11 @@ Given a graph, return the largest island.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS with Flood Fill - Graph/something
+### Solution 1: Recursive DFS with Flood Fill - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         # Note:
@@ -630,7 +630,7 @@ Given a graph, return the largest island.
 ```
 
 
-## Solution 2: Iterative BFS with Flood Fill - Graph/something
+### Solution 2: Iterative BFS with Flood Fill - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         # Note:
@@ -681,7 +681,7 @@ Given a graph, return the largest island.
         return max_area
 ```
 
-## Solution 3: Union Find - Graph/something
+### Solution 3: Union Find - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         
@@ -756,11 +756,11 @@ Given a graph, return the largest island.
 
 
 
-# 133. Clone Graph ::2:: - Medium
+## 133. Clone Graph ::2:: - Medium
 
 Topics:  Hash Table, Depth First Search, Breadth First Search, Graph
 
-## Intro
+### Intro
 > Given a reference of a node in a connected undirected graph.
 > Return a deep copy (clone) of the graph. 
 > Each node in the graph contains a value (int) and a list  
@@ -797,10 +797,10 @@ There are no repeated edges and no self-loops in the graph.
 
 The Graph is connected and all nodes can be visited starting from the given node.
 
-## Abstraction
+### Abstraction
 Given a graph represented by an adjacency matrix, return a deep copy.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -811,7 +811,7 @@ Given a graph represented by an adjacency matrix, return a deep copy.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -821,11 +821,11 @@ Given a graph represented by an adjacency matrix, return a deep copy.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS - Graph/something
+### Solution 1: Recursive DFS - Graph/something
 ```python
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         # Note:
@@ -866,7 +866,7 @@ Given a graph represented by an adjacency matrix, return a deep copy.
         return cloneRoot
 ```
 
-## Solution 2: Iterative BFS - Graph/something
+### Solution 2: Iterative BFS - Graph/something
 ```python
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         
@@ -910,11 +910,11 @@ Given a graph represented by an adjacency matrix, return a deep copy.
         return cloned[node]
 ```
 
-# 286. Walls and Gates ::2:: - Medium
+## 286. Walls and Gates ::2:: - Medium
 
 Topics:  Hash Table, Depth First Search, Breadth First Search, Graph
 
-## Intro
+### Intro
 > You are given a (m) x (n 2D) grid initialized with 
 > these three possible values:
 > -1 - A water cell that can not be traversed.
@@ -942,10 +942,10 @@ n == grid[i].length
 
 grid[i][j] is one of [-1, 0, 2147483647]
 
-## Abstraction
+### Abstraction
 Given grid, fill each land grid with the distance to the nearest treasure.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -956,7 +956,7 @@ Given grid, fill each land grid with the distance to the nearest treasure.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -966,11 +966,11 @@ Given grid, fill each land grid with the distance to the nearest treasure.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Multi Source BFS - Graph/something
+### Solution 1: Multi Source BFS - Graph/something
 ```python
     def islandsAndTreasure(self, grid: List[List[int]]) -> None:
         if not grid:
@@ -1008,11 +1008,11 @@ Given grid, fill each land grid with the distance to the nearest treasure.
         # overall: time O(m * n), space O(m * n) (queue worst-case)
 ```
 
-# 994. Rotting Oranges ::2:: - Medium
+## 994. Rotting Oranges ::2:: - Medium
 
 Topics:  Array, Breadth First Search, Matrix
 
-## Intro
+### Intro
 > You are given an m x n grid where each cell can have one of 
 > three values:
 > 0 representing an empty cell,
@@ -1040,10 +1040,10 @@ n == grid[i].length
 
 grid[i][j] is 0, 1, or 2.
 
-## Abstraction
+### Abstraction
 Given a grid with oranges, return how much time until no fresh oranges remain.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1054,7 +1054,7 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1064,11 +1064,11 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Iterative BFS Rotten Multi Source with Global Minutes Overwrite - Graph/something
+### Solution 1: Iterative BFS Rotten Multi Source with Global Minutes Overwrite - Graph/something
 ```python
     def orangesRotting(self, grid: List[List[int]]) -> int:
         # Note:
@@ -1134,7 +1134,7 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
         return res
 ```
 
-## Solution 2: Iterative BFS Rotten Multi Source with Level Processing Minutes Trigger - Graph/something
+### Solution 2: Iterative BFS Rotten Multi Source with Level Processing Minutes Trigger - Graph/something
 ```python
     def orangesRotting(self, grid: List[List[int]]) -> int:
         
@@ -1204,11 +1204,11 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
 ```
 
 
-# 417. Pacific Atlantic Water Flow ::2:: - Medium
+## 417. Pacific Atlantic Water Flow ::2:: - Medium
 
 Topics:  Array, Breadth First Search, Matrix
 
-## Intro
+### Intro
 > There is an m x n rectangular island that borders both
 > the Pacific Ocean and Atlantic Ocean. The Pacific 
 > Ocean touches the island's left and top edges, and the 
@@ -1243,10 +1243,10 @@ n == heights[r].length
 
 0 &leq; heights[r][c] &leq; 10<sup>5</sup>
 
-## Abstraction
+### Abstraction
 Given a grid of heights, return which cells can flow to the ocean.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1257,7 +1257,7 @@ Given a grid of heights, return which cells can flow to the ocean.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1267,11 +1267,11 @@ Given a grid of heights, return which cells can flow to the ocean.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Reverse Flow - Graph/something
+### Solution 1: Recursive DFS Reverse Flow - Graph/something
 ```python
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         
@@ -1333,7 +1333,7 @@ Given a grid of heights, return which cells can flow to the ocean.
 ```
 
 
-## Solution 2: Iterative BFS Reverse Flow - Graph/something
+### Solution 2: Iterative BFS Reverse Flow - Graph/something
 ```python
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         
@@ -1393,11 +1393,11 @@ Given a grid of heights, return which cells can flow to the ocean.
 ```
 
 
-# 130. Surrounded Regions ::3:: - Medium
+## 130. Surrounded Regions ::3:: - Medium
 
 Topics:  Array, Depth First Search, Breadth First Search, Union Find, Matrix
 
-## Intro
+### Intro
 > You are given an m x n matrix board containing letters
 > 'X' and 'O', capture regions that are surrounded:
 > Connect: A cell is connected to adjacent cells 
@@ -1426,10 +1426,10 @@ n == heights[r].length
 
 board[i][j] is 'X' or 'O'.
 
-## Abstraction
+### Abstraction
 Given a board, find all surrounded regions, capture and return them.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1440,7 +1440,7 @@ Given a board, find all surrounded regions, capture and return them.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1450,11 +1450,11 @@ Given a board, find all surrounded regions, capture and return them.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS with Flood Fill from Borders - Graph/something
+### Solution 1: Recursive DFS with Flood Fill from Borders - Graph/something
 ```python
     def solve(self, board: List[List[str]]) -> None:
         
@@ -1514,7 +1514,7 @@ Given a board, find all surrounded regions, capture and return them.
 ```
 
 
-## Solution 2: Iterative BFS with Flood Fill from Borders - Graph/something
+### Solution 2: Iterative BFS with Flood Fill from Borders - Graph/something
 ```python
     def solve(self, board: List[List[str]]) -> None:
         
@@ -1569,7 +1569,7 @@ Given a board, find all surrounded regions, capture and return them.
 ```
 
 
-## Solution 3: Union Find Disjoint Set Union - Graph/something 
+### Solution 3: Union Find Disjoint Set Union - Graph/something 
 ```python
     def solve(self, board: List[List[str]]) -> None:
         # Note:
@@ -1631,11 +1631,11 @@ Given a board, find all surrounded regions, capture and return them.
 ```
 
 
-# 207. Course Schedule ::2:: - Medium
+## 207. Course Schedule ::2:: - Medium
 
 Topics:  Depth First Search, Breadth First Search, Graph, Topological Sort
 
-## Intro
+### Intro
 > There are a total of numCourses courses you have to take, 
 > labeled from 0 to numCourses - 1. You are given an array 
 > prerequisites where prerequisites[i] = [ai, bi] 
@@ -1664,11 +1664,11 @@ prerequisites[i].length == 2
 
 All the pairs prerequisites[i] are unique.
 
-## Abstraction
+### Abstraction
 Given a number of courses and prerequisites, 
 determine if you can finish all courses.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1679,7 +1679,7 @@ determine if you can finish all courses.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1689,11 +1689,11 @@ determine if you can finish all courses.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Recursive DFS Cycle Detection - Graph/something
+### Solution 1: Recursive DFS Cycle Detection - Graph/something
 ```python
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         
@@ -1748,7 +1748,7 @@ determine if you can finish all courses.
 ```
 
 
-## Solution 2: Iterative BFS Topological Sort - Graph/something
+### Solution 2: Iterative BFS Topological Sort - Graph/something
 ```python
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         
@@ -1784,11 +1784,11 @@ determine if you can finish all courses.
 ```
 
 
-# 210. Course Schedule II ::3:: - Medium
+## 210. Course Schedule II ::3:: - Medium
 
 Topics:  Depth First Search, Breadth First Search, Graph, Topological Sort
 
-## Intro
+### Intro
 > There are a total of numCourses courses you have to take,
 > labeled from 0 to numCourses - 1. You are given an array 
 > prerequisites where prerequisites[i] = [ai, bi] 
@@ -1822,12 +1822,12 @@ ai != bi
 
 All the pairs prerequisites[i] are distinct.
 
-## Abstraction
+### Abstraction
 Given a number of courses and prerequisites, 
 determine if you can finish all courses, 
 and return the order to finish all courses.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1838,7 +1838,7 @@ and return the order to finish all courses.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1848,11 +1848,11 @@ and return the order to finish all courses.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Topological Sort with Cycle Detection - Graph/something
+### Solution 1: DFS Topological Sort with Cycle Detection - Graph/something
 ```python
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         
@@ -1912,7 +1912,7 @@ and return the order to finish all courses.
         return res[::-1]
 ```
 
-## Solution 2: BFS Topological Sort - Graph/something
+### Solution 2: BFS Topological Sort - Graph/something
 ```python
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         
@@ -1951,11 +1951,11 @@ and return the order to finish all courses.
         return res if len(res) == numCourses else []
 ```
 
-# 261. Graph Valid Tree ::3:: - Medium
+## 261. Graph Valid Tree ::3:: - Medium
 
 Topics:  Depth First Search, Breadth First Search, Graph, Union Find
 
-## Intro
+### Intro
 > Given n nodes labeled from 0 to n - 1 and a list of 
 > undirected edges (each edge is a pair of nodes), write a 
 > function to check whether these edges make up a valid tree.
@@ -1976,10 +1976,10 @@ Constraints:
 0 &leq; edges.length &leq; n * n(-1) / 2
 
 
-## Abstraction
+### Abstraction
 Given a list of undirected edges, check if valid tree is made.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1990,7 +1990,7 @@ Given a list of undirected edges, check if valid tree is made.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2000,11 +2000,11 @@ Given a list of undirected edges, check if valid tree is made.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS Cycle Detection + Connectivity Check - Graph/something
+### Solution 1: DFS Cycle Detection + Connectivity Check - Graph/something
 ```python
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
         
@@ -2047,7 +2047,7 @@ Given a list of undirected edges, check if valid tree is made.
         return dfs(0, -1) and len(visited) == n
 ```
 
-## Solution 2: BFS Cycle Detection + Connectivity Check - Graph/something
+### Solution 2: BFS Cycle Detection + Connectivity Check - Graph/something
 ```python
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
 
@@ -2090,7 +2090,7 @@ Given a list of undirected edges, check if valid tree is made.
         return len(visited) == n
 ```
 
-## Solution 3: Union Find Disjoint Set Union - Graph/something
+### Solution 3: Union Find Disjoint Set Union - Graph/something
 ```python
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
 
@@ -2142,11 +2142,11 @@ Given a list of undirected edges, check if valid tree is made.
 ```
 
 
-# 323. Number of Connected Components in an Undirected Graph ::3:: - Medium
+## 323. Number of Connected Components in an Undirected Graph ::3:: - Medium
 
 Topics:  Depth First Search, Breadth First Search, Graph, Union Find
 
-## Intro
+### Intro
 > There is an undirected graph with n nodes. There is also 
 > an edges array, where edges[i] = [a, b] means that 
 > there is an edge between node a and node b in the graph.
@@ -2166,10 +2166,10 @@ Constraints:
 0 &leq; edges.length &leq; n * (n-1) / 2
 
 
-## Abstraction
+### Abstraction
 Given a list of undirected edges, return number of connected components.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2180,7 +2180,7 @@ Given a list of undirected edges, return number of connected components.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2190,11 +2190,11 @@ Given a list of undirected edges, return number of connected components.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS - Graph/something
+### Solution 1: DFS - Graph/something
 ```python
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
         
@@ -2227,7 +2227,7 @@ Given a list of undirected edges, return number of connected components.
         return components
 ```
 
-## Solution 2: BFS - Graph/something
+### Solution 2: BFS - Graph/something
 ```python
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
         graph = defaultdict(list)
@@ -2255,7 +2255,7 @@ Given a list of undirected edges, return number of connected components.
         return components
 ```
 
-## Solution 3: BFS - Graph/something
+### Solution 3: BFS - Graph/something
 ```python
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
         parent = [i for i in range(n)]
@@ -2287,11 +2287,11 @@ Given a list of undirected edges, return number of connected components.
 ```
 
 
-# 684. Redundant Connection ::3:: - Medium
+## 684. Redundant Connection ::3:: - Medium
 
 Topics:  Depth First Search, Breadth First Search, Union Find, Graph
 
-## Intro
+### Intro
 > In this problem, a tree is an undirected graph that is 
 > connected and has no cycles.
 > You are given a graph that started as a tree with n nodes 
@@ -2325,10 +2325,10 @@ There are no repeated edges.
 
 The given graph is connected.
 
-## Abstraction
+### Abstraction
 Given a list of undirected edges, determine if there are redundant connections.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2339,7 +2339,7 @@ Given a list of undirected edges, determine if there are redundant connections.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2349,11 +2349,11 @@ Given a list of undirected edges, determine if there are redundant connections.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: DFS - Graph/something
+### Solution 1: DFS - Graph/something
 ```python
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         graph = defaultdict(list)
@@ -2375,7 +2375,7 @@ Given a list of undirected edges, determine if there are redundant connections.
             graph[v].append(u)
 ```
 
-## Solution 2: BFS - Graph/something
+### Solution 2: BFS - Graph/something
 ```python
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         graph = defaultdict(list)
@@ -2400,7 +2400,7 @@ Given a list of undirected edges, determine if there are redundant connections.
             graph[v].append(u)
 ```
 
-## Solution 3: Union Find Disjoint Set Union - Graph/something
+### Solution 3: Union Find Disjoint Set Union - Graph/something
 ```python
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         n = len(edges)
@@ -2431,11 +2431,11 @@ Given a list of undirected edges, determine if there are redundant connections.
 ```
 
 
-# 127. Word Ladder ::3:: - Hard
+## 127. Word Ladder ::3:: - Hard
 
 Topics:  Hash Table, String, Breadth First Search
 
-## Intro
+### Intro
 > A transformation sequence from word beginWord to 
 > word endWord using a dictionary wordList is a 
 > sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -2469,12 +2469,12 @@ beginWord != endWord
 
 All the words in wordList are unique.
 
-## Abstraction
+### Abstraction
 Given a begin word, end word, and transformation dictionary, 
 determine shortest transformation sequence from begin to end.
 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2485,7 +2485,7 @@ determine shortest transformation sequence from begin to end.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2495,11 +2495,11 @@ determine shortest transformation sequence from begin to end.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: BFS - Graph/something
+### Solution 1: BFS - Graph/something
 ```python
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
         wordSet = set(wordList)
@@ -2531,7 +2531,7 @@ determine shortest transformation sequence from begin to end.
 ```
 
 
-## Solution 2: Bidirectional BFS - Graph/something
+### Solution 2: Bidirectional BFS - Graph/something
 ```python
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
         wordSet = set(wordList)

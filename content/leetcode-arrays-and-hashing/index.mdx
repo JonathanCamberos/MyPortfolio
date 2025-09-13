@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-# Arrays & Hashing Intro:
+## Arrays & Hashing Intro:
 
 Leetcode problems with elegant solutions using hashing. 
 
-## What is a Hashmap
+### What is a Hashmap
 A dictionary is just a direct mapping of keys->values:
 
 Dictionary: ['a': 2, 'b': 2, 'c' : 3, ...] 
@@ -23,7 +23,7 @@ A Hashmap is just a dictionary that maps keys->values using a hash function.
 Hashmaps are a common use case for hashing.
 We choose hashing to maximize randomness and minimize collisions between elements to keys.
 
-## Hashing
+### Hashing
 Hashing is simply a function. It takes in an input, and spits out an output.
 As an example, here is the function mod, which takes in an integer and spits out an integer:
 
@@ -76,7 +76,7 @@ are great for storing key pairs of lists of elements to perform more complex tas
 where performance in time and space complexity are important.
 
 
-## Balancing
+### Balancing
 Balancing occurs when a hash table has passed its set load factor.
 
 Load Factor = n/m
@@ -105,7 +105,7 @@ n/2 = additional space after rebalancing
 Rehashing is notably expensive as we must rehash every element with the new hash function, 
 leading to O(n) for resizing and reinserting n elements.
 
-## Array Application: In place Transformations
+### Array Application: In place Transformations
 Perform transformations or reorderings on the array without using extra space.
 
 Ex: Rotate an array to the right by k steps.
@@ -125,7 +125,7 @@ Ex: Rotate an array to the right by k steps.
         reverse(k, n - 1)    # Reverse remaining elements
 ```
 
-## HashMap Application: Representations
+### HashMap Application: Representations
 
 Using a HashMap to represent objects or data based on specific criteria.
 
@@ -139,7 +139,7 @@ Ex: Representing a string by character frequency.
         # freq = {'a': 2, 'b': 2, 'c': 2}
 ```
 
-## HashMap Application: Grouping by Criteria
+### HashMap Application: Grouping by Criteria
 
 Group elements based on a defined criterion, such as sorting or categorization.
 
@@ -155,7 +155,7 @@ Ex: Grouping strings that are anagrams of each other:
         # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}
 ```
 
-## HashMap Application: Memoization in Dynamic Programming
+### HashMap Application: Memoization in Dynamic Programming
 
 Store solutions to subproblems in a HashMap to avoid redundant calculations.
 
@@ -169,7 +169,7 @@ Ex: Fibonacci number computation with memoization:
         return memo[n]
 ```
 
-## HashMap Application: Backtracking with Caching for Pruning
+### HashMap Application: Backtracking with Caching for Pruning
 
 Use a HashMap to cache explored paths or states to prune the search
 space effectively. 
@@ -210,7 +210,7 @@ Ex: Subset Sum with caching:
         return result
 ```
 
-## HashMap Application: Representing Relationships 
+### HashMap Application: Representing Relationships 
 
 Model relationships between entities.
 
@@ -233,7 +233,7 @@ Ex: Adjacency list representation of a graph:
         # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}
 ```
 
-## HashMap Application: Logic Mapping
+### HashMap Application: Logic Mapping
 Use a HashMap to represent problem specific logic or conditions.
 
 Ex: Map complements to indices for quick lookup:
@@ -255,7 +255,7 @@ Ex: Map complements to indices for quick lookup:
         return []
 ```
 
-## HashMap Application: Algorithm
+### HashMap Application: Algorithm
 Case where a problem that seems to require a HashMap is easily solved by 
 an algorithm specifically made for that problem
 
@@ -276,11 +276,11 @@ def majorityElement(nums: List[int]) -> int:
 ```
 
 
-# 217. Contains Duplicate ::2:: - Easy
+## 217. Contains Duplicate ::2:: - Easy
 
 Topics:  Array, Hash Table, Sorting 
 
-## Intro
+### Intro
 > Given an integer array nums, 
 > return true if any value appears at least twice in the array, 
 > return false if every element is distinct.
@@ -298,10 +298,10 @@ Array Length: 1 &le; nums.length &le; 10<sup>5</sup>
 Integer Size: -10<sup>9</sup>  &le; nums[i] &le; 10<sup>9</sup> 
 
 
-## Abstraction
+### Abstraction
 Given a list of elements, we need to check if any of those elements are duplicated.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
@@ -314,7 +314,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 | Find the Bug: (iterating element-wise) | Iterating element-wise will cause elements to compare with themselves. | 
 
 
-## Brute Force: (all pairs comparison)
+### Brute Force: (all pairs comparison)
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
@@ -342,7 +342,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 | Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional memory is needed for comparisons O(1) |
 | Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity.| No additional memory was allocated leading to constant O(1) space complexity. | 
 
-## Inefficient: Sorting (Tim Sort)
+### Inefficient: Sorting (Tim Sort)
 ```python
    def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -440,7 +440,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 | Overall | O(n log n) | O(n) | Merge sort dominates time complexity, leading to O(n log n) | Temporary arrays during merge dominates, leading to O(n) |
 
 
-## Find the Bug: (iterating element-wise)
+### Find the Bug: (iterating element-wise)
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
@@ -459,7 +459,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 ```
 
 
-## Solution 1: Hashmap - Hashmap/Representation
+### Solution 1: Hashmap - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
@@ -486,7 +486,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 | Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates leading to O(n) space complexity.  | 
 
 
-## Solution 2: Hashset - Hashmap/Representation
+### Solution 2: Hashset - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -513,11 +513,11 @@ Given a list of elements, we need to check if any of those elements are duplicat
 | Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashset dominates leading to O(n) space complexity.  | 
 
 
-# 242. Valid Anagram ::2:: - Easy
+## 242. Valid Anagram ::2:: - Easy
 
 Topics:  Hash Table, String, Sorting 
 
-## Intro
+### Intro
 
 > Given two strings s and t, return true if t is an anagram of s, and false otherwise.
 
@@ -535,12 +535,12 @@ String Length: 1 &le; s.length, t.length &le; 5 * 104
 
 Characters: s and t consist of lowercase English letters
 
-## Abstraction
+### Abstraction
 
 Given a string, we represent its character count as a Hashmap.
 We then validate it to the second string character count.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Merge Sort) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
@@ -552,7 +552,7 @@ We then validate it to the second string character count.
 | Find the Bug: (Set Frequency Count) |  Does not take into account frequency count of characters since sets can only have unique elements. | 
 
 
-## Brute Force (Merge Sort)
+### Brute Force (Merge Sort)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -623,7 +623,7 @@ We then validate it to the second string character count.
 | Overall | O(n log n) | O(n) | Sorting dominates the time complexity as comparison adds negligible overhead leading to O(n log n) time complexity. | Temporary arrays required for merge sort is proportional to input size leading to O(n) space complexity. |
 
 
-## Find the Bug: (Set Frequency Count)
+### Find the Bug: (Set Frequency Count)
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -641,7 +641,7 @@ We then validate it to the second string character count.
         return True
 ```
 
-## Solution 1: Hashmap - Hashmap/Representation
+### Solution 1: Hashmap - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -676,7 +676,7 @@ We then validate it to the second string character count.
 | Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | No additional memory is allocated O(1) |
 | Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Memory allocation for Hashmap dominates leading to O(n) space complexity |
 
-## Solution 2: Array of 26 - Hashmap/Representation
+### Solution 2: Array of 26 - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
@@ -717,11 +717,11 @@ We then validate it to the second string character count.
 | Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array O(1) |
 
 
-# 1. Two Sum I (Input Array Is Not Sorted) ::1:: - Easy
+## 1. Two Sum I (Input Array Is Not Sorted) ::1:: - Easy
 
 Topics:  Array, Hash Table 
 
-## Intro
+### Intro
 > Given an array of integers nums and an integer target, return indices of the two numbers
 > such that they add up to target. You may assume that each input would have exactly one solution, 
 > and you may not use the same element twice. You can return the answer in any order.
@@ -740,18 +740,18 @@ Target = n + m, n/m value: 2 &le; nums.length &le; 10^4
 
 Target value: -10^9 &le; target &le; 10^9
 
-## Abstraction
+### Abstraction
 We need to find two elements that add up to the target
 and return their indexes.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Comparing all pairs) |  |  |  |  |
 | Hashmap 1-pass |  |  |  |  |
 
 
-## Brute Force (Comparing all pairs)
+### Brute Force (Comparing all pairs)
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -780,7 +780,7 @@ and return their indexes.
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notes/sorting-searching-algorithms#double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
 
 
-## Find the Bug: (overwriting duplicates)
+### Find the Bug: (overwriting duplicates)
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -804,7 +804,7 @@ and return their indexes.
         return []
 ```
 
-## Solution 1: Hashmap - Hashmap/Logic Mapping
+### Solution 1: Hashmap - Hashmap/Logic Mapping
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -842,11 +842,11 @@ and return their indexes.
 | Overall | O(n) | O(n) | Iterating dominates time complexity leading to linear O(n) time complexity. | Memory allocation for Hashmap dominates leading to O(n) space complexity. |
 
 
-# 49. Group Anagrams ::2:: - Medium
+## 49. Group Anagrams ::2:: - Medium
 
 Topics:  Array, Hash Table, String, Sorting
 
-## Intro
+### Intro
 > Given an array of strings strs, group the anagrams together. You can return the answer in any order.
 > An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, 
 > typically using all the original letters exactly once.
@@ -861,7 +861,7 @@ Constraints:
 
 strs[i] consists of lowercase English letters
 
-## Abstraction
+### Abstraction
 There are different ways to solve this problem. 
 
 We could then use the Hashmaps of character counts as keys to group anagrams in a list of strings:
@@ -872,7 +872,7 @@ Hashmap ( sorted_string -> [[unsorted anagram string group]])
 
 Lets see:
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Merge sort) | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
@@ -884,7 +884,7 @@ Lets see:
 | Find the Bug: Set -> String Key (Set Frequency Count) |  Does not take into account frequency count of characters since sets can only have unique elements. | 
 
 
-## Brute Force: (Merge Sort)
+### Brute Force: (Merge Sort)
 ```python 
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -955,7 +955,7 @@ Lets see:
 
 
 
-## Find the Bug: Hashmap Key for Hashmap (Unhashable type)
+### Find the Bug: Hashmap Key for Hashmap (Unhashable type)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -981,7 +981,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-## Find the Bug: Hashmap Key Order (Hashmaps are not sorted)
+### Find the Bug: Hashmap Key Order (Hashmaps are not sorted)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1007,7 +1007,7 @@ Lets see:
         return list(groupAna.values())
 ```
 
-## Find the Bug: Set to String Key (Set Frequency Count)
+### Find the Bug: Set to String Key (Set Frequency Count)
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1032,7 +1032,7 @@ Lets see:
         return list(anaGroup.values())
 ```
 
-## Solution 1: Array of 26 to Tuple Key - Hashmap/Grouping by Criteria
+### Solution 1: Array of 26 to Tuple Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -1081,7 +1081,7 @@ Lets see:
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-## Solution 2: Array of 26 to String Key - Hashmap/Grouping by Criteria
+### Solution 2: Array of 26 to String Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
@@ -1132,11 +1132,11 @@ Lets see:
 | Overall | O(n * k) | O(n * k) | Iterating over n strings and counting characters for strings k length dominates O(n * k) | Hashmap of n string keys with lists of strings k length dominates O(n * k) |
 
 
-# 347. Top K Elements in List ::3:: - Medium
+## 347. Top K Elements in List ::3:: - Medium
 
 Topics:  Array, Hash Table, Divide and Conquer, Sorting, Heap (Priority Queue), Bucket Sort, Counting, Quickselect
 
-## Intro
+### Intro
 > Given an integer array nums and an integer k, return the k most frequent element within the array. 
 > Test cases are generated such that the answer is always unique. You may return the output in any order
 
@@ -1151,11 +1151,11 @@ Most Occurrences: 1 &le; k &le; number of distinct elements in nums
 
 Integer value: -1000 &le; nums[i] &le; 1000
 
-## Abstraction
+### Abstraction
 To find the k most frequent elements, we must first create an occurrence counter for each element in the list.
 Now that we have the count, we just grab the top k highest occurring elements. 
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (Insertion sort) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
@@ -1164,7 +1164,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Divide and Conquer |  |  |  |  |
 | Quickselect |  |  |  |  |
 
-## Brute Force (Insertion sort)
+### Brute Force (Insertion sort)
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
@@ -1214,7 +1214,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Grabbing top-k elements | O(k) | O(k) | Iterating over sorted list for k elements O(k) | Storing top k elements into result array O(k) | 
 | Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
 
-## Find the Bug: Inverted Binary Search if statement:
+### Find the Bug: Inverted Binary Search if statement:
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
@@ -1279,7 +1279,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ```
 
 
-## Solution 1: MaxHeap Track N Elements - HashMap/Algorithm
+### Solution 1: MaxHeap Track N Elements - HashMap/Algorithm
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1332,7 +1332,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | overall | O(n log n) | O(n) | Heap construction dominates leading to O(n log n) | Memory allocation for hashmap and heap dominate leading to O(n) |
 
 
-## Solution 2: MinHeap Track K Elements - HashMap/Algorithm
+### Solution 2: MinHeap Track K Elements - HashMap/Algorithm
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
@@ -1387,7 +1387,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Overall | best: O(n log k) worst: O(n log n) | O(n) | Worst case iterating over count for n unique elements O(n) and pushing values to heap to track n values O(log n), leading to O(n log n) | Memory allocation to track in worst case n unique element counts O(n) |
 
 
-## Solution 3: Descending QuickSelect BinarySearch - Hashmap/Algorithm
+### Solution 3: Descending QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
@@ -1484,7 +1484,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         return unique[:k]
 ```
 
-## Solution 4: Ascending QuickSelect BinarySearch - Hashmap/Algorithm
+### Solution 4: Ascending QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
@@ -1588,7 +1588,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
 | Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
 | Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
 
-## Solution 5: BucketSort by Count - Hashmap/Algorithm
+### Solution 5: BucketSort by Count - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
@@ -1647,11 +1647,11 @@ Now that we have the count, we just grab the top k highest occurring elements.
 
 
 
-# 238. Product of Array Except Self ::2:: - Medium
+## 238. Product of Array Except Self ::2:: - Medium
 
 Topics:  Array, Prefix Sum
 
-## Intro
+### Intro
 > Given an integer array nums, return an array answer such that answer[i] is 
 > equal to the product of all the elements of nums except nums[i].
 > The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
@@ -1667,7 +1667,7 @@ Constraints:
 
 The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer
 
-## Abstraction
+### Abstraction
 Given a list of nums, return a list of nums that is the product of the array except itself.
 
 So, for some num n, the result should be the product of all the numbers to the left of it,
@@ -1690,14 +1690,14 @@ To calculate the result array, we can just iterate over both prefix and postfix 
 This would lead to O(n) = O(3n) for time and O(n) = O(3n) space. 
 Now lets see how we can do it in O(1) for space.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(n) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>) | Memory allocation for result array O(n) |
 | Prefix & Postfix | O(n) | O(n) | Three iterations over the array for prefix, postfix, and result calculation O(n) = O(3n)  | Memory allocation for prefix, postfix, and result arrays O(n) = O(3n) |
 | Prefix & Postfix | O(n) | O(1) | Two iterations over the array for prefix and postfix calculations O(n) |  |
 
-## Brute Force (all pairs comparison)
+### Brute Force (all pairs comparison)
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
 
@@ -1735,7 +1735,7 @@ Now lets see how we can do it in O(1) for space.
 | Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notescommon-formulas#brute-case-double-for-loop). | Memory allocation for array to store n result elements O(n) |
 
 
-## Solution 1:  Prefix and Postfix O(n) - Array/In Place Transformations
+### Solution 1:  Prefix and Postfix O(n) - Array/In Place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
@@ -1782,7 +1782,7 @@ Now lets see how we can do it in O(1) for space.
 | Overall | O(n) | O(n) | Iteration over list of n length takes linear time leading to O(n) | Memory allocation for list of n length leading to O(n) | 
 
 
-## Solution 2: Prefix and Postfix Optimal O(1) - Array/In Place Transformations
+### Solution 2: Prefix and Postfix Optimal O(1) - Array/In Place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
@@ -1824,11 +1824,11 @@ Now lets see how we can do it in O(1) for space.
 | Overall | O(n) | O(1) | Iteration over list of n length O(n) | Prefix, postfix, and product except self all stored in result array or an integer leading to constant O(1) |
 
 
-# 36. Valid Sudoku ::2:: - Medium
+## 36. Valid Sudoku ::2:: - Medium
 
 Topics:  Array, Hash Table, Matrix
 
-## Intro
+### Intro
 > Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
 > Each row must contain the digits 1-9 without repetition.
 > Each column must contain the digits 1-9 without repetition.
@@ -1843,20 +1843,20 @@ Only the currently filled cells need to be validated.
 | -------------- | --------------- | 
 | a sudoku table is too big to put here lol | just look at -> [sudoku board example](https://leetcode.com/problems/valid-sudoku/description/) | 
 
-## Abstraction
+### Abstraction
 With sudoku, valid boards , we have rows  are looking for duplicates much like the original 217. Contains Duplicates.
 
 The only difference here, is that we are looking for duplicates in 3 sets along the rows, columns, and 3x3 squares.
 
 So we simply create sets for all of these groups and as we traverse the board, we check for duplicates
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force | O(n<sup>2</sup>) = O(3 * n<sup>2</sup>)  |  |  | |
 | Hashmap | O(n<sup>2</sup>) | O(n) |  |  |
 
-## Brute Force (check row, column, box)
+### Brute Force (check row, column, box)
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1899,7 +1899,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-## Find the bug: Creating defaultdict of sets incorrectly
+### Find the bug: Creating defaultdict of sets incorrectly
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
 
@@ -1933,7 +1933,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-## Find the bug: Did not index into 9 boxes correctly
+### Find the bug: Did not index into 9 boxes correctly
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         rows = defaultdict(set)
@@ -1970,7 +1970,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-## Solution 1: Defaultdict Matrix - Hashmap/Representation
+### Solution 1: Defaultdict Matrix - Hashmap/Representation
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -2005,7 +2005,7 @@ So we simply create sets for all of these groups and as we traverse the board, w
         return True
 ```
 
-## Solution 2: [[]] Matrix - Hashmap/Representation
+### Solution 2: [[]] Matrix - Hashmap/Representation
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -2061,11 +2061,11 @@ While sets are efficient for large data due to constant time insert, lookup, del
 for a fixed-sized 9x9 board like this, the overhead of defaultdict and 
 set operations is slower than the [[]] solution. 
 
-# 128. Longest Consecutive Sequence ::3:: - Medium
+## 128. Longest Consecutive Sequence ::3:: - Medium
 
 Topics:  Array, Hash Table, Union Find
 
-## Intro
+### Intro
 > Given an array of integers nums, return the length of the longest consecutive sequence of elements.
 > A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than 
 > the previous element
@@ -2080,7 +2080,7 @@ Topics:  Array, Hash Table, Union Find
 Constraints:
 
 
-## Abstraction
+### Abstraction
 Give a list of integers, find the longest sequence of increasing integers 
 A longest consecutive sequence on a number line would look like this:
 
@@ -2089,13 +2089,13 @@ Sequence of length 4:     [ 1,  2,  3,  4,  2  ]
 Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 ```
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Brute Force |  |  |  | |
 | Hashmap |  |  |  |  |
 
-## Brute Force
+### Brute Force
 ```python
     def longestConsecutive(nums: List[int]) -> int:
         
@@ -2126,7 +2126,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | List lookup | O(n) | O(1) | Lookup in list takes O(n) | No additional memory allocation for list lookup O(1) |
 | Overall | O(n<sup>3</sup>) | O(1) | Iterating * Iterating * Lookup dominate leading to O(n<sup>3</sup>) | No additional memory allocation O(1) |
 
-## Find the Bug: Empty list for Union tree leads to fail
+### Find the Bug: Empty list for Union tree leads to fail
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
 
@@ -2177,7 +2177,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
         
 ```
 
-## Solution 1: HashMap Continent Boundaries - HashMap/Representation
+### Solution 1: HashMap Continent Boundaries - HashMap/Representation
 ```python
     def longestConsecutive(nums: List[int]) -> int:
         
@@ -2214,7 +2214,7 @@ Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
 | Updating sequence count | O(1) | O(1) | Boundary updates for left most, curr, and right most in constant O(1) | Insert operation takes constant O(1) | 
 | Overall | O(n) | O(n) | Iterating over list of n length dominates O(n) | Memory allocation for n sequences O(n) | 
 
-## Solution 2: Set Rummy Run - Hashmap/Representation
+### Solution 2: Set Rummy Run - Hashmap/Representation
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
     
@@ -2253,7 +2253,7 @@ def longestConsecutive(self, nums: List[int]) -> int:
 
 
 
-## Solution 3: Union Find Tree - HashMap/Algorithm
+### Solution 3: Union Find Tree - HashMap/Algorithm
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
         

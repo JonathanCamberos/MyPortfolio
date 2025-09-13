@@ -10,11 +10,11 @@ tags:
 - data structures and algorithms
 ---
 
-# 1D Dynamic Programming Intro
+## 1D Dynamic Programming Intro
 
 LeetCode problems solved with dynamic programming
 
-## What is 1D Dynamic Programming 
+### What is 1D Dynamic Programming 
 
 Dynamic Programming (DP) is a technique for solving problems that 
 can be broken into overlapping sub problems and have optimal 
@@ -25,7 +25,7 @@ Instead of solving the same subproblem repeatedly, DP stores
 solutions in a table via memorization or a bottom up array,
 to avoid redundant work.
 
-## Recursive Memoization: Improving Recursion
+### Recursive Memoization: Improving Recursion
 
 Many 1D Dynamic Programming problems naturally arise from recursion.
 In climbing stairs problem, a naive recursive solutions explores all paths:
@@ -43,7 +43,7 @@ While this recursion works logically, it recomputes overlapping sub problems.
 Memoization solves this by caching results of sub problems to avoid recomputation.
 
 
-## Iterative: Tabulation and Variables
+### Iterative: Tabulation and Variables
 
 Dynamic Programming can also be implemented iteratively via bottom up
 by computing solutions from small sub problems to larger ones.
@@ -62,7 +62,7 @@ usually the last 1 or 2.
 Here, we replace the tabulation array with variables, reducing
 the space form O(n) to O(1).
 
-## (0 to i or i to N) Recursive Top Down vs (0 to i) Iterative Bottom Up 
+### (0 to i or i to N) Recursive Top Down vs (0 to i) Iterative Bottom Up 
 We have two ways to solve dynamic programming problems.
 Recursive and iterative, and each have their own strategy for building up problems.
 
@@ -103,7 +103,7 @@ Visual Comparison:
     computed iteratively
 ```
 
-## DP Array Size / Padding / Indexing / Shifting
+### DP Array Size / Padding / Indexing / Shifting
 
 The choice of a DP array size of (N) or (N+1) depends on 
 whether we are padding the DP array and thus what the
@@ -233,7 +233,7 @@ So the DP array is only of length n (last index n-1 = ways to reach step n).
         return dp[n-1]
 ```
 
-## 1D Dynamic Programming IRL
+### 1D Dynamic Programming IRL
 Networking: Optimize packet processing sequences with limited buffers.
 
 Resource Allocation: Task scheduling with constraints (eg, cannot pick consecutive tasks)
@@ -241,7 +241,7 @@ Resource Allocation: Task scheduling with constraints (eg, cannot pick consecuti
 Finance: Maximize profit in trading tracking best profit up to day if
 
 
-## 1D Dynamic Programming Application: DFS with Caching (Padded N+1) Top Down with Memoization
+### 1D Dynamic Programming Application: DFS with Caching (Padded N+1) Top Down with Memoization
 Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation. 
 Extra base 'padding' simplifies boundary checks.
 Use When: Problem naturally needs a “ground” or empty state.
@@ -270,7 +270,7 @@ Ex: Climbing Stairs (Top Down, Padded)
         return dfs(n)
 ```
 
-## 1D Dynamic Programming Application: DFS with Caching (Direct N) Top Down with Memoization
+### 1D Dynamic Programming Application: DFS with Caching (Direct N) Top Down with Memoization
 Pattern: Recursive DFS explores choices, memo stores results to avoid recomputation. 
 Direct mapping aligns base cases with the first elements.
 Use When: Problem naturally aligns 1:1 with input array elements.
@@ -299,7 +299,7 @@ Ex: Climbing Stairs (Top Down, Direct)
         return dfs(n)
 ```
 
-## 1D Dynamic Programming Application: Iterative Tabulation (Padded N+1) Bottom Up
+### 1D Dynamic Programming Application: Iterative Tabulation (Padded N+1) Bottom Up
 Pattern: Iteratively fill a DP array with extra padding for base/empty case.
 Use When: Problem naturally needs a “ground” or empty state 
 and empty state was not given in original array.
@@ -324,7 +324,7 @@ Ex: Climbing Stairs (Bottom Up, Padded)
         return dp[n]
 ```
 
-## 1D Dynamic Programming Application: Iterative Tabulation (Direct N) Bottom Up
+### 1D Dynamic Programming Application: Iterative Tabulation (Direct N) Bottom Up
 Pattern: Iteratively fill a DP array with direct mapping to the original array elements.
 Use When: Problem naturally aligns 1:1 with input array.
 Recurrence: dp[i] = max(dp[i-1], dp[i-2] + nums[i])
@@ -349,7 +349,7 @@ Ex: House Robber (Bottom Up, Direct)
         return dp[n-1]
 ```
 
-## 1D Dynamic Programming Application: Optimal Iterative (Padded N+1) Rolling State Variables Bottom Up
+### 1D Dynamic Programming Application: Optimal Iterative (Padded N+1) Rolling State Variables Bottom Up
 Pattern: Reduce DP array to a few variables while padding for base/ground case.
 Use When: Problem naturally needs a “ground” or empty state and you want O(1) space.
 Recurrence: curr = prev1 + prev2 -> shift forward each step.
@@ -373,7 +373,7 @@ Ex: Climbing Stairs (Optimal Bottom Up, Padded)
         return prev1
 ```
 
-## 1D Dynamic Programming Application: Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### 1D Dynamic Programming Application: Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 Pattern: Reduce DP array to a few variables with direct mapping to the original array.
 Use When: Problem naturally aligns 1:1 with input array and O(1) space is desired.
 Recurrence: curr = prev1 + prev2 → shift forward each step.
@@ -398,7 +398,7 @@ Ex: House Robber (Optimal Bottom Up, Direct)
         return prev1
 ```
 
-## 1D Dynamic Programming Application: Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up
+### 1D Dynamic Programming Application: Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up
 Pattern: Maintain rolling cumulative products from both ends of the array to capture subarrays affected by negative numbers.
 Use When: Problem involves products/subarrays where negative numbers can flip the max/min, and O(1) space is desired.
 Recurrence: left_prod *= nums[i], right_prod *= nums[n-1-i], reset to 1 if zero.
@@ -430,7 +430,7 @@ Ex: Maximum Product Subarray (Opposite Ends Rolling Variables)
 ```
 
 
-## 1D Dynamic Programming Application: Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up
+### 1D Dynamic Programming Application: Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up
 Pattern: Maintain a rolling DP window of fixed size instead of the full DP array to reduce space.
 Use When: Problem involves checking previous k states (e.g., word lengths in Word Break) and you want O(k) space instead of O(n).
 Recurrence: dp[i % (k+1)] = any(dp[(i-l) % (k+1)] and segment_valid for l in 1..k)                                   od *= nums[n-1-i], reset to 1 if zero.
@@ -467,7 +467,7 @@ Ex: Word Break (Sliding Window Rolling Variables)
 ```
 
 
-## 1D Dynamic Programming Application: BFS Visited Memo Level Order
+### 1D Dynamic Programming Application: BFS Visited Memo Level Order
 Pattern: Treat problem as shortest-path search; each state represents “remaining target” or “current subproblem.” Use a queue for BFS and a visited set as memoization to avoid recomputation.
 Use When: Problem can be framed as reaching a target with choices at each step (e.g., coin change, min steps). BFS guarantees the first solution found is minimal (shortest path).
 Recurrence: For each state curr, explore all valid next states curr - choice. Steps to reach next = steps[curr] + 1.
@@ -506,11 +506,11 @@ Ex: Coin Change (BFS with Memo)
 
 
 
-# 70. Climbing Stairs ::4:: - Easy
+## 70. Climbing Stairs ::4:: - Easy
 
 Topics:  Math, Dynamic Programming, Memoization
 
-## Intro
+### Intro
 > You are climbing a staircase. It takes n steps to reach   
 > the top.
 > Each time you can either climb 1 or 2 steps. In how 
@@ -526,11 +526,11 @@ Constraints:
 
 1 &leq; n &leq; 45
 
-## Abstraction
+### Abstraction
 Given a number of steps, return the number of unique ways to reach the top,
 by either climbing 1 or 2 steps at a time.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -541,7 +541,7 @@ by either climbing 1 or 2 steps at a time.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -551,11 +551,11 @@ by either climbing 1 or 2 steps at a time.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Padded N+1) Top Down with Memoization
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Padded N+1) Top Down with Memoization
 ```python
     def climbStairs(self, n: int) -> int:
 
@@ -599,7 +599,7 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-## Solution 2: 0 to i Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Padded N+1) Top Down with Memoization
+### Solution 2: 0 to i Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Padded N+1) Top Down with Memoization
 ```python
     def climbStairs(self, n: int) -> int:
 
@@ -644,7 +644,7 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-## Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Padded N+1) Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Padded N+1) Bottom Up
 ```python
     def climbStairs(self, n: int) -> int:
         
@@ -674,7 +674,7 @@ by either climbing 1 or 2 steps at a time.
         return res
 ```
 
-## Solution 4: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Padded N+1) Rolling State Variables Bottom Up
+### Solution 4: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Padded N+1) Rolling State Variables Bottom Up
 ```python
     def climbStairs(self, n: int) -> int:
         
@@ -709,11 +709,11 @@ by either climbing 1 or 2 steps at a time.
 ```
 
 
-# 746. Min Cost Climbing Stairs ::4:: - Easy
+## 746. Min Cost Climbing Stairs ::4:: - Easy
 
 Topics:  Array, Dynamic Programming
 
-## Intro
+### Intro
 > You are given an integer array cost where cost[i] is 
 > the cost of ith step on a staircase. Once you pay the 
 > cost, you can either climb one or two steps.
@@ -733,11 +733,11 @@ Constraints:
 
 0 &leq; cost[i] &leq; 999
 
-## Abstraction
+### Abstraction
 Given a number of steps, and the cost to process a step,
 find the cheapest cost to climb to the top.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -748,7 +748,7 @@ find the cheapest cost to climb to the top.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -758,11 +758,11 @@ find the cheapest cost to climb to the top.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Padded N+1) Top Down with Memoization
+### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Padded N+1) Top Down with Memoization
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
@@ -807,7 +807,7 @@ find the cheapest cost to climb to the top.
 ```
 
 
-## Solution 2: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 2: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
@@ -851,7 +851,7 @@ find the cheapest cost to climb to the top.
         return res
 ```
 
-## Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
@@ -885,7 +885,7 @@ find the cheapest cost to climb to the top.
         return res
 ```
 
-## Solution 4: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 4: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
@@ -923,11 +923,11 @@ find the cheapest cost to climb to the top.
 ```
 
 
-# 1137. Nth Tribonacci Number ::3:: - Easy
+## 1137. Nth Tribonacci Number ::3:: - Easy
 
 Topics:  Math, Dynamic Programming, Memoization
 
-## Intro
+### Intro
 > The Tribonacci sequence Tn is defined as follows: 
 > T0 = 0, T1 = 1, T2 = 1,
 > Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
@@ -945,10 +945,10 @@ Constraints:
 The answer is guaranteed to fit within a 32-bit integer, ie.
 answer &leq; 2<sup>31</sup> - 1
 
-## Abstraction
+### Abstraction
 Find the Tribonacci for n.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -959,7 +959,7 @@ Find the Tribonacci for n.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -969,11 +969,11 @@ Find the Tribonacci for n.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def tribonacci(self, n: int) -> int:
 
@@ -1017,7 +1017,7 @@ Find the Tribonacci for n.
         return res
 ```
 
-## Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def tribonacci(n: int) -> int:
 
@@ -1058,7 +1058,7 @@ Find the Tribonacci for n.
         return res
 ```
 
-## Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def tribonacci(self, n: int) -> int:
 
@@ -1103,11 +1103,11 @@ Find the Tribonacci for n.
 
 
 
-# 198. House Robber ::3:: - Medium
+## 198. House Robber ::3:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-## Intro
+### Intro
 > You are a professional robber planning to rob houses 
 > along a street. Each house has a certain amount of 
 > money stashed, the only constraint stopping you from 
@@ -1131,11 +1131,11 @@ Constraints:
 
 0 &leq; nums[i] &leq; 400
 
-## Abstraction
+### Abstraction
 Given an array of cash, determine the max you can steal when you
 cannot steal from two adjacent entries.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1146,7 +1146,7 @@ cannot steal from two adjacent entries.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1156,11 +1156,11 @@ cannot steal from two adjacent entries.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Explicit Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def rob(self, nums: List[int]) -> int:
         
@@ -1204,7 +1204,7 @@ cannot steal from two adjacent entries.
         return res
 ```
 
-## Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
         
@@ -1241,7 +1241,7 @@ cannot steal from two adjacent entries.
         return res
 ```
 
-## Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
 
@@ -1281,11 +1281,11 @@ cannot steal from two adjacent entries.
 ```
 
 
-# 213. House Robber II ::3:: - Medium
+## 213. House Robber II ::3:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-## Intro
+### Intro
 > You are a professional robber planning to rob houses 
 > along a street. Each house has a certain amount of 
 > money stashed. All houses at this place are arranged 
@@ -1311,11 +1311,11 @@ Constraints:
 
 0 &leq; nums[i] &leq; 1000
 
-## Abstraction
+### Abstraction
 Given an array of cash, determine the max you can steal when you
 cannot steal from two adjacent entries, when array is circular.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1326,7 +1326,7 @@ cannot steal from two adjacent entries, when array is circular.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1336,11 +1336,11 @@ cannot steal from two adjacent entries, when array is circular.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def rob(self, nums: List[int]) -> int:
 
@@ -1396,7 +1396,7 @@ cannot steal from two adjacent entries, when array is circular.
         return res
 ```
 
-## Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
         
@@ -1451,7 +1451,7 @@ cannot steal from two adjacent entries, when array is circular.
         return res
 ```
 
-## Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def rob(self, nums: List[int]) -> int:
 
@@ -1508,11 +1508,11 @@ cannot steal from two adjacent entries, when array is circular.
         return res
 ```
 
-# 5. Longest Palindromic Substring ::3:: - Medium
+## 5. Longest Palindromic Substring ::3:: - Medium
 
 Topics: Two Pointers, String, Dynamic Programming
 
-## Intro
+### Intro
 > Given a string s, return the longest palindromic substring in s. 
 
 |  Input | Output  |  
@@ -1527,11 +1527,11 @@ Constraints:
 
 s consists of only digits and English letters.
 
-## Abstraction 
+### Abstraction 
 
 Find the longest palindrome in a string.
 
-## Find the Bug: Did not create Expanded String
+### Find the Bug: Did not create Expanded String
 ```python
     def longestPalindrome(self, s: str) -> str:
         
@@ -1570,7 +1570,7 @@ Find the longest palindrome in a string.
         return s[start:start+maxRadius]
 ```
 
-## Find the Bug: Defined List instead of Slicing
+### Find the Bug: Defined List instead of Slicing
 ```python
     def longestPalindrome(self, s: str) -> str:
         
@@ -1599,7 +1599,7 @@ Find the longest palindrome in a string.
         return maxPalin
 ```
 
-## Find the Bug: Bad iteration leading to out of bounds on string expansion
+### Find the Bug: Bad iteration leading to out of bounds on string expansion
 ```python
     def longestPalindrome(self, s: str) -> str:
         
@@ -1642,7 +1642,7 @@ Find the longest palindrome in a string.
         return s[startIndex:startIndex+maxRadi]
 ```
 
-## Find the Bug: Bad enumerate method:
+### Find the Bug: Bad enumerate method:
 ```python
     def longestPalindrome(self, s: str) -> str:
         
@@ -1683,7 +1683,7 @@ Find the longest palindrome in a string.
         return s[startIndex:startIndex+maxRadi]
 ```
 
-## Solution 1: Manacher's Algorithm (iterate, mirror radius optimization, and expand) - Two Pointers/Algorithm
+### Solution 1: Manacher's Algorithm (iterate, mirror radius optimization, and expand) - Two Pointers/Algorithm
 ```python
     def longestPalindrome(self, s: str) -> str:
 
@@ -1822,7 +1822,7 @@ Find the longest palindrome in a string.
 | Overall | O(n) | O(n) | Iterating over expanded string dominates, leading to O(n) time complexity. | Expanding string dominates, leading to O(n) space complexity. |
 
 
-## Solution 2: Expand Around Center checking for Odd and Even palindromes (constant space) - Two Pointers/Algorithm
+### Solution 2: Expand Around Center checking for Odd and Even palindromes (constant space) - Two Pointers/Algorithm
 ```python
     def longestPalindrome(self, s: str) -> str:
 
@@ -1867,7 +1867,7 @@ Find the longest palindrome in a string.
 | Overall | O(n^2) | O(1) | Even and odd expansion per outer iteration dominate, leading to O(n<sup>2</sup>) | No additional memory allocation required for in place expansion or iteration, leading to constant O(1) |
 
 
-## Solution 3: Dynamic Programming - 1D Dynamic Programming/Linear Property Tracking
+### Solution 3: Dynamic Programming - 1D Dynamic Programming/Linear Property Tracking
 ```python
         def longestPalindrome(self, s: str) -> str:
         
@@ -1897,11 +1897,11 @@ Find the longest palindrome in a string.
 
 
 
-# 647. Palindromic Substrings ::2:: - Medium
+## 647. Palindromic Substrings ::2:: - Medium
 
 Topics:  Two Pointers, String, Dynamic Programming
 
-## Intro
+### Intro
 > Given a string s, return the number of palindromic 
 > substrings in it.
 > A string is a palindrome when it reads the same 
@@ -1921,10 +1921,10 @@ Constraints:
 
 s consists of lowercase English letters.
 
-## Abstraction
+### Abstraction
 Given a string, determine how many palindromic substrings exist.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -1935,7 +1935,7 @@ Given a string, determine how many palindromic substrings exist.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1945,11 +1945,11 @@ Given a string, determine how many palindromic substrings exist.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Two Pointers Expand Around Center - 1D Dynamic Programming/Linear Property Tracking
+### Solution 1: Two Pointers Expand Around Center - 1D Dynamic Programming/Linear Property Tracking
 ```python
     def countSubstrings(self, s: str) -> int:
         n = len(s)
@@ -1972,7 +1972,7 @@ Given a string, determine how many palindromic substrings exist.
         return count
 ```
 
-## Solution 2: Dynamic Programming - 1D Dynamic Programming/Linear Property Tracking
+### Solution 2: Dynamic Programming - 1D Dynamic Programming/Linear Property Tracking
 ```python
     def countSubstrings(self, s: str) -> int:
         n = len(s)
@@ -1997,11 +1997,11 @@ Given a string, determine how many palindromic substrings exist.
 ```
 
 
-# 91. Decode Ways ::3:: - Medium
+## 91. Decode Ways ::3:: - Medium
 
 Topics:  String, Dynamic Programming
 
-## Intro
+### Intro
 > You have intercepted a secret message encoded as a 
 > string of numbers. The message is decoded via the 
 > following mapping:
@@ -2039,10 +2039,10 @@ Constraints:
 
 s contains only digits and may contain leading zero(s).
 
-## Abstraction
+### Abstraction
 Given a string, determine how many ways there to decode the string.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2053,7 +2053,7 @@ Given a string, determine how many ways there to decode the string.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2063,11 +2063,11 @@ Given a string, determine how many ways there to decode the string.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def numDecodings(self, s: str) -> int:
 
@@ -2127,7 +2127,7 @@ Given a string, determine how many ways there to decode the string.
 ```
 
 
-## Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def numDecodings(self, s: str) -> int:
 
@@ -2182,7 +2182,7 @@ Given a string, determine how many ways there to decode the string.
 ```
 
 
-## Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def numDecodings(self, s: str) -> int:
 
@@ -2243,11 +2243,11 @@ Given a string, determine how many ways there to decode the string.
 ```
 
 
-# 322. Coin Change ::3:: - Medium
+## 322. Coin Change ::3:: - Medium
 
 Topics:  Array, Dynamic Programming, Breadth First Search
 
-## Intro
+### Intro
 > You are given an integer array coins representing
 > coins of different denominations and an integer 
 > amount representing a total amount of money.
@@ -2272,11 +2272,11 @@ Constraints:
 0 &leq; amount &leq; 10<sup>4</sup>
 
 
-## Abstraction
+### Abstraction
 Given a array of coin cost and a price, determine the minimum number
 of coins needed to make the price.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2287,7 +2287,7 @@ of coins needed to make the price.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2297,11 +2297,11 @@ of coins needed to make the price.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
 
@@ -2353,7 +2353,7 @@ of coins needed to make the price.
         return -1 if res == float('inf') else res
 ```
 
-## Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
         
@@ -2398,7 +2398,7 @@ of coins needed to make the price.
         return res
 ```
 
-## Solution 3: BFS Memo Coin Number Level Order Search - 1D Dynamic Programming/BFS Visited Memo Level Order
+### Solution 3: BFS Memo Coin Number Level Order Search - 1D Dynamic Programming/BFS Visited Memo Level Order
 ```python
     def coinChange(self, coins: List[int], amount: int) -> int:
         
@@ -2447,11 +2447,11 @@ of coins needed to make the price.
 ```
 
 
-# 152. Maximum Product Subarray ::2:: - Medium
+## 152. Maximum Product Subarray ::2:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-## Intro
+### Intro
 > Given an integer array nums, find a subarray that has 
 > the largest product, and return the product.
 > The test cases are generated so that the answer will fit 
@@ -2472,11 +2472,11 @@ The product of any subarray of nums is guaranteed
 to fit in a 32-bit integer.
 
 
-## Abstraction
+### Abstraction
 Given a array, find the subarray with the largest product 
 and return the product.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2487,7 +2487,7 @@ and return the product.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2497,11 +2497,11 @@ and return the product.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: (Modified Kadane) i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: (Modified Kadane) i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def maxProduct(self, nums: List[int]) -> int:
         
@@ -2564,7 +2564,7 @@ and return the product.
         return result
 ```
 
-## Solution 2: (Modified Kadane) 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
+### Solution 2: (Modified Kadane) 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Iterative Tabulation (Direct N) Bottom Up
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
@@ -2607,7 +2607,7 @@ and return the product.
         return result
 ```
 
-## Solution 3: (Modified Kadane) 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 3: (Modified Kadane) 0 to i Iterative Bottom Up Variables - 1D Dynamic Programming/Optimal Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
@@ -2648,7 +2648,7 @@ and return the product.
         return result
 ```
 
-## Solution 4: (Modified Kadane) Forward Backward Scan - 1D Dynamic Programming/Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 4: (Modified Kadane) Forward Backward Scan - 1D Dynamic Programming/Opposite Ends Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def maxProduct(self, nums: List[int]) -> int:
 
@@ -2694,11 +2694,11 @@ and return the product.
         return result
 ```
 
-# 139. Word Break ::4:: - Medium
+## 139. Word Break ::4:: - Medium
 
 Topics:  Array, Hash Table, String, Dynamic Programming, Trie, Memoization
 
-## Intro
+### Intro
 > Given a string s and a dictionary of strings wordDict,
 > return true if s can be segmented into a space 
 > separated sequence of one or more dictionary words. 
@@ -2723,11 +2723,11 @@ s and wordDict[i] consist of only lowercase English letters.
 
 All the strings of wordDict are unique.
 
-## Abstraction
+### Abstraction
 Given a string and an array of strings, determine if the string
 can be separated into some combination of strings from the array.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2738,7 +2738,7 @@ can be separated into some combination of strings from the array.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2748,11 +2748,11 @@ can be separated into some combination of strings from the array.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 1: i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
 
@@ -2806,7 +2806,7 @@ can be separated into some combination of strings from the array.
         return res
 ```
 
-## Solution 2: Optimized i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
+### Solution 2: Optimized i to N Recursive with Memoization Top Down - 1D Dynamic Programming/DFS with Caching (Direct N) Top Down with Memoization
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
 
@@ -2862,7 +2862,7 @@ can be separated into some combination of strings from the array.
         return res
 ```
 
-## Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up
+### Solution 3: 0 to i Iterative Bottom Up Array - 1D Dynamic Programming/Sliding Window Iterative (Direct N) Rolling State Variables Bottom Up
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         
@@ -2908,7 +2908,7 @@ can be separated into some combination of strings from the array.
         return res
 ```
 
-## Solution 4: 0 to i Iterative Bottom Up Rolling Variables Sliding Window - 1D Dynamic Programming/Sequential Segment Choice Validation
+### Solution 4: 0 to i Iterative Bottom Up Rolling Variables Sliding Window - 1D Dynamic Programming/Sequential Segment Choice Validation
 ```python
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         
@@ -2952,11 +2952,11 @@ can be separated into some combination of strings from the array.
         return res
 ```
 
-# 300. Longest Increasing Subsequence ::3:: - Medium
+## 300. Longest Increasing Subsequence ::3:: - Medium
 
 Topics:  Array, Binary Search, Dynamic Programming
 
-## Intro
+### Intro
 > Given an integer array nums, return the length of the 
 > longest strictly increasing subsequence.
 > Follow up: Can you come up with an algorithm that runs
@@ -2975,10 +2975,10 @@ Constraints:
 
 -10<sup>4</sup> &leq; nums[i] &leq; 10<sup>4</sup>
 
-## Abstraction
+### Abstraction
 Given an integer array, find the longest increasing subsequence.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -2989,7 +2989,7 @@ Given an integer array, find the longest increasing subsequence.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2999,11 +2999,11 @@ Given an integer array, find the longest increasing subsequence.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Dynamic Programming - 1D Dynamic Programming/Subsequence Optimization Constrained
+### Solution 1: Dynamic Programming - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
 
@@ -3046,7 +3046,7 @@ Given an integer array, find the longest increasing subsequence.
 ```
 
 
-## Solution 2: Dynamic Programming - 1D Dynamic Programming/Subsequence Optimization Constrained
+### Solution 2: Dynamic Programming - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
 
@@ -3086,7 +3086,7 @@ Given an integer array, find the longest increasing subsequence.
         return res
 ```
 
-## Solution 3: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
+### Solution 3: Binary Search - 1D Dynamic Programming/Subsequence Optimization Constrained
 ```python
     def lengthOfLIS(self, nums: List[int]) -> int:
 
@@ -3125,11 +3125,11 @@ Given an integer array, find the longest increasing subsequence.
 ```
 
 
-# 416. Partition Equal Subset Sum ::2:: - Medium
+## 416. Partition Equal Subset Sum ::2:: - Medium
 
 Topics:  Array, Dynamic Programming
 
-## Intro
+### Intro
 > Given an integer array nums, return true if you can 
 > partition the array into two subsets such that the sum
 > of the elements in both subsets is equal or false 
@@ -3147,11 +3147,11 @@ Constraints:
 
 1 &leq; nums[i] &leq; 100
 
-## Abstraction
+### Abstraction
 Given an integer array, determine if you can split it into two arrays
 such that the sum of each arrays is equal.
 
-## Space & Time Complexity
+### Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 |  |  |  |  |  |
@@ -3162,7 +3162,7 @@ such that the sum of each arrays is equal.
 |  |  | 
 
 
-## Brute Force:
+### Brute Force:
 ```python
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -3172,11 +3172,11 @@ such that the sum of each arrays is equal.
 |  |  |  |  |  |
 
 
-## Find the Bug:
+### Find the Bug:
 ```python
 ```
 
-## Solution 1: Dynamic Programming Subset Sum - 1D Dynamic Programming/Subset Sum Linear Choice Selection
+### Solution 1: Dynamic Programming Subset Sum - 1D Dynamic Programming/Subset Sum Linear Choice Selection
 ```python
     def canPartition(self, nums: List[int]) -> bool:
         
@@ -3211,7 +3211,7 @@ such that the sum of each arrays is equal.
 ```
 
 
-## Solution 2: Bitmask Bitset DP - 1D Dynamic Programming/Subset Sum Linear Choice Selection
+### Solution 2: Bitmask Bitset DP - 1D Dynamic Programming/Subset Sum Linear Choice Selection
 ```python
     def canPartition(self, nums: List[int]) -> bool:
         
