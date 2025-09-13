@@ -13,6 +13,8 @@ tags:
 
 # Preface
 
+## Intro
+
 > Hello! all of these notes will be in short hand form, to avoid rewriting the textbook from scratch.
 > Additionally, I am reading/writing this in my vscode, i know i know, editing text in vscode,
 > an editor for code, WITH CODE IN THE NAME, disgraceful, buttt the rest of my LeetCode notes
@@ -22,9 +24,7 @@ tags:
 
 > Additionally, if this looks bad in full screen, that is because I
 > only read the notes in 2/3rds split screen and I dont have the need 
-> to fix it ¯\\_(ツ)_/¯.
-
-## Intro
+> to fix it, again:  ¯\\_(ツ)_/¯.
 
 Backend swe's have new common buzz words relating
 to the storage and processing of data.
@@ -49,31 +49,31 @@ The goal of these notes is to organize shorthand to learn these concepts.
 
 But again, if you are backend these notes are for you.
 
-1. **Role wise, this is for** 
+1. Role wise this is for: 
 
-- **software engineers**: the builders
+- software engineers the builders
 
-- **software architects**: the designers
+- software architects the designers
 
-- basically **anybody** making decisions on the 
+- basically anybody making decisions on the 
 architecture of the systems you are building.
 
 - for people with natural curiosity for what is going on under the hood,
 rule number 1: its never magic (thanks bobby ;) )
 rule number 2: i will not bail you out of jail (also thank you bobby, rip cmsc417 gang)
 
-2. **App wise, this is for** 
+2. App wise, this is for 
 
-- **scalable data systems**: (e.g., supporting web or mobile apps with millions of users)
+- scalable data systems (e.g., supporting web or mobile apps with millions of users)
 
-- **minimizing downtime**: (e.g., making apps available)
+- minimizing downtime (e.g., making apps available)
 
-- **maintainable systems**: (e.g., making systems easier scale and update as technologies change)
+- maintainable systems (e.g., making systems easier scale and update as technologies change)
 
-3. **Counter Argument wise, this is for**
+3. Counter Argument wise, this is for
 
 - when someone complains "you're not google or amazon, stop worrying about scale
-and just use a relational database". You can **slap them with a fish and say**
+and just use a relational database". You can slap them with a fish and say
 "fair, while building for scale you don't need is wasted effort, it may lock you
 into an inflexible design. You should know its important to choose the right tool 
 for the job and while relational databases are important, they are not the final word
@@ -81,12 +81,13 @@ on dealing with data". They will then view you as a worthy advisory and challeng
 you to a fight to the death (dont forget what you learned in your 4 years of computer science
 undergrad and give them the classic fork() and os.kill_child() leading to instant victory, for
 legal reasons this is a joke please dont stop reading its like 4 in the morning im sorry,
+the rest of the notes dont have jokes,
 also if you laughed at that youre a nerd :) )
 
 
 ## Scope Of This Book
 
-> Again, the *architecture* of data systems.
+> Again, the architecture of data systems.
 
 We cover the principles and tradeoffs to data systems 
 and explore design decisions taken by different products.
@@ -146,100 +147,104 @@ Free references and links as we go along.
 
 ## Intro
 
-> The first four chapters go through the fundamental ideas that apply to all data systems,
-> whether running on a single machine or distributed across a cluster of machines.
+> First four chapters: fundamental ideas that apply to all data systems,
+> regardless of single machine or distributed across a cluster of machines.
 
 1. **Chapter 1:**
 
-- Define terminology and approach we will use.
-- Define words like reliability, scalability, and maintainability
-- Explain how we try to achieve these goals.
+- Terminology and Approach.
+- Reliability, Scalability, and Maintainability
+- Explain approaches to achieve these goals.
 
 2. **Chapter 2:**
 
-- Compare data models and query languages.
-- See how different models are fit different situations.
+- Compare data models and query languages in different situations.
 
 3. **Chapter 3:**
 
-- Look at internals of storage engines.
-- Look at how database put data on disk.
-- Different storage engines are optimized for different workloads.
-- Choosing the right one can have a huge effect on performance.
+- Internals of storage engines.
+- How database store data on disk.
+- How different storage engines are optimized for different workloads.
+- Choosing the right has large effect on performance.
 
-4. Chapter 4: 
+4. **Chapter 4**: 
 
-- Compare formats of data encoding/serialization
-- Examine in an environment where application requirements change and schemas need to adapt over time.
+- Compare data encoding and serialization formats 
+- Examine in environment where app requirements change and schemas need to adapt over time.
 
-## Reliable, Scalable, and Maintainable Applications
+## Chapter 1: Reliable, Scalable, and Maintainable Applications
 
-> Many applications today are data intensive, as opposed to compute intensive.
-> Raw CPU power is rarely a limiting factor vs the amount of data, complexity of data, 
-> and speed at which it is changing.
+### Intro
 
-Data intensive applications are typically built from standard building blocks for 
-functionality, not limited to but including:
+> The Internet was done so well that most people think of it like a natural resource
+> like the ocean or mountains, rather than being something man-made.
 
-- **Databases**: Storing data, for other apps or later use 
+The problems facing apps today is that they are data intensive instead of compute intensive.
+The amount, complexity, and speed at which data needs to be process ends up creating
+the most issues, as opposed to compute intensive.
+Rarely is CPU power a limiting factor for these applications.
 
-- **Caches**: Remember result of expensive operations, to speed up reads
+To start, most data intensive apps today are built from the same 
+standard building blocks and principles:
 
-- **Search Indexes**: Allowing users to search data by keywords or filter in various ways
+- Database: To store data
+- Caches: Store result of expensive operations, to avoid double work
+- Search Indexes: Allow to query by keywords or filter databases
+- Batch Processes: Periodically process larges amount of accumulated data in sections
+- etc.
 
-- **Batch Process**: Periodically crunching a large amount of accumulated data
+These building blocks have established and well built that most 'sane' engineers 
+wouldn't  think of writing a new data storage engine from scratch 
+because perfectly good ones already exists.
 
-Again, obvious yes, but thats the point!
+But while there are many existing database systems, each have different characteristics
+as maybe benefit different applications as requirements change.
 
-These data systems are such a **successful abstraction** that most **sane** engineers wouldn't 
-think of writing a new data storage engine from scratch because perfectly good ones already exists.
+### Thinking About Data Systems
 
-But again, right tool for the right job.
-While there are many database systems, each have different characteristics
-as different applications have different requirements.
+> We can lump databases, queues, caches, etc, each with different patterns,
+> performance and implementations under the umbrella term data systems
+> as each of those act as building blocks for the larger 'data systems'
+> The API layer hides those implementation details from clients
+> allowing use to create a new special purpose data system 
+> from smaller, general purpose.
 
-## Thinking About Data Systems
+New tools for data storage and processing continue emerging leading to trouble
+as traditional categories fade and boundaries blur.
 
-> Why do we lump databases, queues, caches, etc, each with different patterns, performance, 
-> and implementations under the umbrella term data systems?
-> Why am I starting each section with a quote?
-> Do I have voices in my head?!? Maybe...
-> But still, the umbrella makes it confusing!
+- Redis: Both a datastore and message queue
+- Apache Kafka: Both a message queue with database durability
 
-New tools for data storage and processing emerged leading to trouble
-as traditional categories fad and boundaries blur.
+No single tool can meet all data processing and storage needs, as so 
+work is broken down into tasks, that is abstracted to a single 'data system'.  
 
-1. **Redis**: both a datastore and message queue
-2. **Apache Kafka**: a message queue with database durability
+> Abstracting single data system with a API wrapper
 
-No single tool can meet all data processing and storage needs as applications
-have such demanding and wide ranging requirements.
-
-As no single tool can meet all data processing and storage needs, work is broken down
-into tasks, that can be performed on a single tool, which itself is using multiple tools.
-
-> Take an simple API
-
-An API usually hides implementation details from clients, and thus, becomes a 
+APIs hide implementation details from clients, becoming a 
 special purpose data system from smaller, general purpose components.
 
-We could even add guarantees such as cache will be invalidated and updated on writes so
-clients see consistent results, which leads wrappers to become responsible for
+This special purpose data system could perform single tasks across components to
+create contracts or guarantees such as cache invalidation upon writes so
+clients see consistent results 
+
+This leads API wrappers to have the responsibility for both
 both data storage and system design.
 
-But now even more questions arise! How do you provide good performance?
-How do we handle increase in load? etc. Lets put that in our back pocket (ignore) 
-for now and continue.
+And this is where the interesting questions arise! 
 
-Lets jump into our main sections, reliability, scalability, and maintainability.
+- How do you provide good performance?
+- How do we handle increase in load? 
+- etc. 
 
-## Reliability
+Lets put that in our back pocket for now and continue.
+
+### Reliability
+
+#### Intro
 
 > The system should continue to work correctly (performing the correct function at the
 > desired level of performance) even in the face of *gasp adversity*, either 
 > hardware or software faults, human error, etc..
-
-## Intro
 
 Typical expectations for software to be reliable include:
 
@@ -261,7 +266,7 @@ to the user.
 It is nearly impossible to prevent all type of faults, which is why we prefer 
 fault-tolerant systems.
 
-## Hardware Faults
+#### Hardware Faults
 
 > Common when discussing system failures
 
@@ -274,7 +279,7 @@ A good rule of thumb to explain how common it is:
 the MTTF (mean to time failure) of a hard disk is about 10 to 15 years.
 Thus, in a storage cluster with 10,000 disks around one disk dies per day.
 
-## Software Errors
+#### Software Errors
 
 Systematic errors can occur within the system, and such faults are harder to
 anticipate because they are correlated 'non-random' across nodes, and tend to 
@@ -289,7 +294,7 @@ These faults lie dormant for a long time until they are triggered by an unusual
 set of circumstances.
 
 
-## Human Errors
+#### Human Errors
 
 Humans are known to be unreliable, even with the best intentions.
 
@@ -306,7 +311,7 @@ well designed abstraction, APIs, and admin interfaces.
 - Allow quick and easy recovery from human errors to minimize impact
 - Telemetry for performance metrics and error rates 
 
-## How Important is Reliability?
+#### How Important is Reliability?
 
 Reliability is not just for power stations and air traffic control.
 More mundane applications such as photo applications for parents as an example.
@@ -314,7 +319,9 @@ More mundane applications such as photo applications for parents as an example.
 There are situations in which we can sacrifice reliability in order to reduce 
 development cost, but we should always be conscious of cutting corners.
 
-## Scalability
+### Scalability
+
+#### Intro
 
 > As the system grows (in data volume, traffic volume, or complexity), there should 
 > be a reasonable solution to deal with that growth
@@ -330,7 +337,7 @@ of data than before
 what are our options for coping with the growth' or 'how can we add computing 
 resources to handle the additional load'
 
-## Describing Load Via Twitter (yes twitter not 'X')
+#### Describing Load Via Twitter (yes twitter not 'X')
 
 > Load can be described with a few numbers which we call load parameters.
 > The best choice of parameters depends on the architecture of your system.
@@ -409,7 +416,7 @@ with that users' home timeline when it is read, like in approach 1.
 
 We will revisit this example in Chapter 12 after having covered more technical ground!
 
-## Describing Performance
+#### Describing Performance
 
 Once you have described load and load parameters on your architecture and system,
 you can investigate what happens when load increases.
@@ -422,13 +429,13 @@ if you want to keep performance unchanged
 
 Again, to determine this requires performance numbers, so how to describe it?
 
-## Maintainability
+### Maintainability
+
+#### Intro
 
 > Specifically over time, different people will build, work, and add to the system 
 > (engineering and operations, both maintaining behavior and adapting the system),
 > and they should all be able to work on it *productively* 
 > (obviously ignoring the unavoidable knife fights over code comment style)
-
-## Intro
 
 
