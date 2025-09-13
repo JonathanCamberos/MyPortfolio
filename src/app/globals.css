@@ -37,6 +37,22 @@ h3 >a {
   text-decoration: none !important;
 }
 
+h4 >a {
+  font-size: 1.0rem; /* match old h5 */
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-decoration: none !important;
+}
+
+h5 >a {
+  font-size: 0.9rem; /* match old h5 */
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-decoration: none !important;
+}
+
 code {
     counter-reset: line;
   }

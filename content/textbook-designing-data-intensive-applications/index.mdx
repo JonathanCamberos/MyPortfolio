@@ -230,6 +230,42 @@ clients see consistent results
 This leads API wrappers to have the responsibility for both
 both data storage and system design.
 
+#### Diagram: example of architecture for data system
+```python
+                            +--------+
+                            | Client |          
+                            +--------+          
+                                ^               
+                                |                            
+                                |    Client Requests                
+                                |               
+                                v  
+                        +---------------------+                 Asynchronous tasks
+                        |   Application Code  | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+                     /  +---------------------+ \                                       |
+ Reads requests     /           |                \                                      |
+ and first checks  /            |                 \  Search                             |
+ if the data      /             |                  \ Requests                           |
+ is cached       /              |                   \                                   |
+   +-----------+        +----------------------+     +-----------+                +-----------+  
+   | In-memory |        |   Primary Database   |     | Full-text |                |  Message  |
+   |   Cache   |        +----------------------+     |   index   |                |  Queue    | 
+   +-----------+                |                    +-----------+                +-----------+
+                ^               |                   /                                   |
+                 \              | Capture          /                                    |
+                  \             | changes to      /                                     |
+                   \            | data           /                                      |
+        Invalidate  \           v               /   Apply updates                       |
+        or update    \  +---------------------+     to search index          +---------------------+
+        the cache       |   Application Code  |                              |   Application Code  |
+                        +---------------------+                              +---------------------+
+                                                                                        |
+                                                                                        |   e.g. send email
+                                                                                        V
+
+                                                                                    'outside world'
+```     
+
 And this is where the interesting questions arise! 
 
 - How do you provide good performance?
@@ -439,3 +475,4 @@ Again, to determine this requires performance numbers, so how to describe it?
 > (obviously ignoring the unavoidable knife fights over code comment style)
 
 
+# Chapter 2: Data Models and Query 
