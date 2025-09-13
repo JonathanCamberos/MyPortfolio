@@ -6,7 +6,6 @@ import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import GithubSlugger from 'github-slugger'
 
-
 /* All Blogs come w/ these parameters
    used for ease of manipulation for React display
 */
