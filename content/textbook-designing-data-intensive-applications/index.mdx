@@ -305,7 +305,8 @@ Thus, a system that anticipates faults is fault tolerant or resilient.
 Whereas a failure is different.
 
 In the context of a system, a failure is when the system stops providing the required service
-to the user. A fault is usually defined as one component of the system deviating from its expectation.
+to the user. 
+A fault is usually defined as one component of the system deviating from its expectation.
 
 It is nearly impossible to reduce the probability of faults to zero, 
 which is why we prefer fault-tolerant systems.
@@ -344,49 +345,87 @@ can take its place while its original is replaced.
 While this does not help the physical hardware from breaking, its helpful 
 in keeping machines running uninterrupted for years. 
 
-##### Solution: Multi Machine Redundancy for High Availability
+##### Solution: Shift to Software Fault Tolerance for Loss of Entire Machines
 
+As data volumes and application computing demands increase, applications have begun
+using a large number of machine which proportionally increases the rate of hardware
+faults. 
+
+Thus, there has been a shift towards systems that can tolerate the loss of entire
+machine by using software fault-tolerance techniques in addition to hardware redundancy.
+
+In some cloud platforms (AWS), it is fairly common for virtual machine instances to
+become unavailable without warning as the platforms are designed to prioritize 
+flexibility and elasticity over single-machine reliability.
+
+This full tolerance has operational advantages: Single server systems require planned
+downtime if you need to reboot the machine, but a system that can tolerate machine 
+failure can be patched one node at a time, without downtime of the entire system.
+
+Hence why this shift benefits applications that require high availability.
 
 
 #### Software Errors
 
-Systematic errors can occur within the system, and such faults are harder to
-anticipate because they are correlated 'non-random' across nodes, and tend to 
-cause more system failures than uncorrelated 'random, ex: MTTF' hardware faults.
+> Software faults are harder to anticipate because they are 'non-random' across nodes.
+> They also tend to cause more system failures than 'random' hardware faults (e.g., MTTF).
+> The are 'non-random' as they might fault upon a bad input.
 
-- Software bug that causes app instance to crash on particular bad input
-- Runaway process that uses up shared resources, CPU, memory, disk, bandwidth
-- Services slows down which other system depends on
-- Cascading failures, small fault triggers fault in another component
+Among the first that come to mind as the reason behind full system failures:
 
-These faults lie dormant for a long time until they are triggered by an unusual
-set of circumstances.
+- Software bug that crashes app instance on bad input
+- Runaway process using up shared resources, CPU, memory, disk, bandwidth
+- Dependent services slowing other services down
+- Cascading faults from service to service leading to fault
 
+These 'non-random' faults lie dormant for a long time until they are triggered 
+by an unusual set of circumstances.
+
+##### Solution: Separate Small Fault Tolerant Approaches Working Together
+
+There is one one quick solution to faults in software.
+But lots of small things can help:
+
+- Think about assumptions and interactions between systems
+- Thorough testing
+- Process Isolation
+- Allowing Processes to crash and restart
+- Measuring, monitoring, and analyzing system behavior in production
+- Using some full system guarantee (incoming messages in queue = outgoing messages)
+
+Layers of fault-tolerance within a software system enable the overall system to
+become more fault-tolerant.
 
 #### Human Errors
 
-Humans are known to be unreliable, even with the best intentions.
+> Humans are known to be unreliable, even with the best intentions.
 
-A good rule of thumb to explain how common it is:
 Study of large internet services showed configuration errors by operators 
 were the leading causes of outages, where hardware faults were only 10-25%
 
-How do we make system reliable in spite of humans?
+##### Solution: Separate Small Fault Tolerant Approaches Working Together
 
-- Design systems with minimal opportunity for error, for example by 
-well designed abstraction, APIs, and admin interfaces.
-- Decouple where people make the most mistakes from places where they can cause errors
+Human configuration and touch is around the entire system making it hard
+to anticipate.
+But lots of small things can help:
+
+- Design systems with minimal opportunity for error: APIs, admin interfaces, good abstraction
+- Decouple places where people make the most mistakes from places where they can cause errors
 - Test thoroughly on all levels, from unit tests to whole system integration tests
 - Allow quick and easy recovery from human errors to minimize impact
 - Telemetry for performance metrics and error rates 
 
+We make the system as fault-tolerant and anticipate errors in order
+to account for future human errors.
+
 #### How Important is Reliability?
 
-Reliability is not just for power stations and air traffic control.
-More mundane applications such as photo applications for parents as an example.
+Reliability is just as much for dangerous power stations and air traffic control
+as mundane applications such as photo applications for parents as an example.
 
-There are situations in which we can sacrifice reliability in order to reduce 
-development cost, but we should always be conscious of cutting corners.
+In development, there will be situations where we can sacrifice reliability in order 
+to reduce development cost, but we should always be aware of the potential effects 
+of cutting corners.
 
 ### Scalability
 
@@ -395,18 +434,19 @@ development cost, but we should always be conscious of cutting corners.
 > As the system grows (in data volume, traffic volume, or complexity), there should 
 > be a reasonable solution to deal with that growth
 
+> Scalability is a system's ability to cope with increased load across different target
+> parameters. 'if the system grows in a particular way, what are our options for 
+> coping with that growth' or 'how can we add computing resources to handle the 
+> additional load'
+
 If a system is reliable today, that is not a guarantee that it will work reliably 
 in the future.
-A common reason for degradation is increased load. A jump from 10,000 concurrent
-to 100,000 or 1 million to 10 million will require processing much larger volumes
-of data than before
+Increased load is a common reason for future degradation. 
+Jumping from 10,000 concurrent to 100,000 or 1 million to 10 million 
+will require the system to process much larger volumes of data than before.
 
-> Scalability is then, a system's ability to cope with increased load. 
-> Not one dimensionally, but more so, 'if the system grows in a particular way,
-what are our options for coping with the growth' or 'how can we add computing 
-resources to handle the additional load'
 
-#### Describing Load Via Twitter (yes twitter not 'X')
+#### Describing Load (Twitter example)
 
 > Load can be described with a few numbers which we call load parameters.
 > The best choice of parameters depends on the architecture of your system.
@@ -414,38 +454,56 @@ resources to handle the additional load'
 Examples of load parameters could be:
 
 - Requests per second to a web server.
-- A ratio of reads to writes in a database.
-- The number of simultaneously active users in a chat room
+- Ratio of reads to writes in a database.
+- Number of simultaneously active users in a chat room
 - Hit rate on a cache
 - The average case or a bottleneck of some specific case
 
-> Twitter Scalability (ehm sorry 'X') Post/Home
-
-Published in Nov 2012, Twitters two main operations are
+Twitters two main operations are PostTweet() and HomeTimeline()
 
 1. Post Tweet
-A user can publish a new message to their followers. 4.6k requests/sec on average,
-over 12k request/sec at peak
+A user can publish a new message to their followers. 
+4.6k requests/sec on average, over 12k request/sec at peak
 
 2. Home timeline
-A user can view tweets posted by the people they follow. 300k requests/sec
+A user can view tweets posted by the people they follow. 
+300k requests/sec
 
-Handling 12,000 writes per second is simple. The issue lies not with tweet volume 
-but with fan out.
-
+Handling 12,000 writes per second is simple. 
+So the issue lies not with tweet volume, but with fan out from tweeter to follower.
 Each user follows many people, and each user is followed by many people.
-Thus broadly, there are two ways of implementing these two operations
+
+This may seem daunting at first, but there are two main ways
+of implementing these two operations
 
 
-1. SQL merge
-Posting a tweet simply inserts the new tweet into a global collection of tweets.
-When a user requests their home timeline, simply look up all the people they follow, 
-find all tweets for each of those users, merge them sorted by time.
+1. SQL merge (Fan-out on Read)
+Idea: Do almost no extra work when someone posts a tweet. Just insert it into
+the global tweets table.
 
+When uses requests HomeTimeline():
+Look up list of people they follow, fetch tweets for each of those users,
+merge them and sorted by timestamp
+
+Work: Happens at read time (query + merge)
+
+Use: Good when writes are frequent but reads are infrequent
+
+##### Fan-Out on Read() Pseudocode
 ```sql
-    SELECT tweets.*, users.* FROM tweets
-    JOIN users ON tweets.sender_id = users.id
-    JOIN follows ON follows.followee_id = users.id
+-- Fan-Out on Read: Build users home timeline on demand
+
+    -- grab tweets and author info for everyone user follows from global tweet table
+    SELECT 
+        tweets.*, -- all tweets fields (id, text, timestamp, etc.)
+        users.*   -- all user fields for tweet's author (name, username, etc.)
+    FROM tweets
+
+    -- join information about user, matching tweeter to tweet
+    JOIN users 
+        ON tweets.sender_id = users.id
+    JOIN follows 
+        ON follows.followee_id = users.id
     WHERE follows.follower_id = current_user
 ```
 
@@ -508,4 +566,34 @@ Again, to determine this requires performance numbers, so how to describe it?
 > (obviously ignoring the unavoidable knife fights over code comment style)
 
 
-# Part II: Data Models and Query 
+## Chapter 2: Data Models and Query Languages
+
+### Intro
+
+## Chapter 3: Storage and Retrieval
+
+### Intro
+
+## Chapter 4: Encoding and Evolution
+
+### Intro
+
+# Part II: Distributed Data
+
+## Chapter 5: Replication
+
+## Chapter 6: Partitioning
+
+## Chapter 7: Transactions
+
+## Chapter 8: The Trouble with Distributed Systems
+
+## Chapter 9: Consistency and Consensus
+
+# Part III: Derived Data
+
+## Chapter 10: Batch Processing
+
+## Chapter 11: Stream Processing
+
+## Chapter 12: The Future of Data Systems
