@@ -121,10 +121,10 @@ function parseSolutions(content, blogTitle) {
   const solutionsMap = {};
 
   // Regex to match the question number and title
-  const questionHeaderRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
+  const questionHeaderRegex = /^#\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
 
   // Updated regex to capture solution number, name, and all pairs after first ' - '
-  const solutionHeaderRegex = /^### Solution (\d+): (.+?) - (.+)$/gm;
+  const solutionHeaderRegex = /^## Solution (\d+): (.+?) - (.+)$/gm;
 
   // Normalize keys (for use as object keys and URLs)
   const normalizeKey = (key) =>
@@ -223,7 +223,7 @@ function parseQuestions(content, blogTitle) {
   const topicMap = {};
   const questionsMap = {};
 
-  const questionRegex = /^##\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
+  const questionRegex = /^#\s(\d+)\.\s(.+)\s-\s(Easy|Medium|Hard)$/gm;
   const topicRegex = /^Topics:\s+(.+)$/gm;
   const introLineRegex = /^>\s(.+)$/; // Match single lines starting with '>'
   const formattedBlogTitle = blogTitle
@@ -315,7 +315,7 @@ function parseQuestions(content, blogTitle) {
 // Function to parse use cases from content
 function parseUseCases(content, blogTitle) {
   const useCasesMap = {};
-  const useCaseRegex = /^###\s([\w\s]+)\sApplication:\s(.+)$/gm;
+  const useCaseRegex = /^##\s([\w\s]+)\sApplication:\s(.+)$/gm;
 
   // Normalize keys helper
   const normalizeKey = (key) =>
