@@ -14,6 +14,9 @@ tags:
 
 Topics: Scaling Reads
 
+Bit.ly is a URL shortening service that converts long URLs into shorter, 
+manageable links. It also provides analytics for the shortened URLs.
+
 # Functional Requirements ::2::
 
 > Features needed to satisfy the needs of the user.
@@ -80,23 +83,11 @@ will revolve around this.
 In our case simple, but still good to list out.
 The core entities are the long URL, short URL, and user.
 
-### Something
-
-#### Else
-
-## API: the delivery framework ::2::
+# API: the delivery framework ::2::
 
 > The contract between the client and the server
 > and first point of reference in high level design.
-
-We simply use a REST API and map the requirement to the correct HTTP method:
-- POST: Create a new resource
-- GET: Read an existing resource
-- PUT: Update an existing resource
-- DELETE: Delete an existing resource
-
-In our case, functional requirements and end points map 1:1 for 
-create short url -> POST and get long url -> GET.
+> Usually map 1:1 with functional requirements.
 
 1. POST: Generate a new short URL
 
@@ -135,7 +126,7 @@ Response: HTTP 302 Redirect to the original long URL
 
 # High Level Design Functional Requirement 1: User submits a long URL and receives a short URL
 
-High level design for short url creation.
+## Core components
 
 Core components high level:
 1. Client: Users interact with system through web or mobile app
@@ -177,8 +168,7 @@ Urls Table                  | Database  |    SQL Insert:
 }
 ```
 
-## POST Processing Logic
-
+## POST Processing Steps
 
 1. Client Request()
 
@@ -213,45 +203,14 @@ Send back response to client with short URL.
 
 # High Level Design Functional Requirement 2: User can access original long URL by using short URL
 
-High level design for redirection to the original long url.
+## Core components
 
-## GET Diagram
+Core components high level:
+1. Client: Users interact with system through web or mobile app
+2. Primary Server: Receives requests from client and handles logic
+3. Database: Stores mapping of short URLs to long URLs, user generated aliases, and expiration dates
 
-```python
-User requests a short URL and is redirected to the original URL:
-
-                                +--------+
-Request:                        | Client |          Response:
-GET/{short_url}                 +--------+          HTTP 302: Found
-                                    ^               {
-                                    |                   "Location": "https://www.example.com/"
-                                    |               }
-                                    |               or
-                                    |               HTTP 404/410/500 (failure)
-                                    |               {
-                                    |                   "error": "..."
-                                    |               }
-                                    v
-                            +------------------+
-Read():                     | Primary Server   |    On Success:
-1) QUERY short URL          +------------------+        Return 302 redirect
-2) Redirect on match                ^               On Failure:
-                                    |                   Return error msg
-                                    |
-                                    |
-                                    v
-                                +-----------+
-Urls Table                      | Database  |    SQL Query:
-{                               +-----------+    SELECT * FROM Urls WHERE short_url_code = ...
-    string short_url                                
-    string original_url                             
-    datetime creation_time                          
-    datetime expiration_time                        
-    created_by                                      
-}
-```
-
-## GET Processing Logic
+## GET Processing Steps
 
 1. User Request()
 
@@ -288,6 +247,44 @@ process, in case we need to update or expire links as needed
 
 - Allows us to track click statistics for each short URL, since it is
 forced to go through our primary server
+
+
+
+## GET Diagram
+
+```python
+User requests a short URL and is redirected to the original URL:
+
+                                +--------+
+Request:                        | Client |          Response:
+GET/{short_url}                 +--------+          HTTP 302: Found
+                                    ^               {
+                                    |                   "Location": "https://www.example.com/"
+                                    |               }
+                                    |               or
+                                    |               HTTP 404 (resource not found)
+                                    |               {
+                                    |                   "error": "..."
+                                    |               }
+                                    v
+                            +------------------+
+Read():                     | Primary Server   |    On Success:
+1) QUERY short URL          +------------------+        Return 302 redirect
+2) Redirect on match                ^               On Failure:
+                                    |                   Return 404 (resource not found)
+                                    |
+                                    |
+                                    v
+                                +-----------+
+Urls Table                      | Database  |
+{                               +-----------+ 
+    string short_url                                
+    string original_url                             
+    datetime creation_time                          
+    datetime expiration_time                        
+    created_by                                      
+}
+```
 
 
 # Deep Dive 1: Short and Unique Urls
@@ -497,10 +494,10 @@ GET/{short_url}                 +--------+          HTTP 302: Found
                             +------------------+                        +-------------+
 Read():                     | Primary Server   |   < ---------------- > | Redis Cache |
 1) QUERY short URL          +------------------+                        +-------------+
-2) Redirect on match                ^               
-                                    |                  
-                                    |
-                                    |
+2) Redirect on match                ^                    Purpose:       
+                                    |                    - Server checks cache before querying DB
+                                    |                    - Fast key-value store
+                                    |                    - Maps short_url_code → original_url
                                     v
                                 +-----------+
 Urls Table                      | Database  |    SQL Query:
@@ -533,6 +530,164 @@ tradeoffs and invalidation strategies that need to be worked out
 
 ## Great Solution: Leveraging Content Deliver Networks (CDNs) and Edge Computing
 
+# Deep Dive 3: Scaling to 1B shortened URLs and 100M DAU
+
+## Constraints
+
+Lets start with the size of the database.
+
+```python
+Long URL Table:             
+                 | ------------------------- |
+Indexing -->     | Short URL (~8 bytes)      |
+                 | Long URL (~100 bytes)     |
+                 | creation Time (~8 bytes)  |
+                 | custom alias (~100 bytes) |
+                 | expiration date (~8 bytes)|
+                 | ------------------------- |
+
+Leading to ~200 bytes per row
+Rounding up to ~500 bytes to account for additional metadata
+such as creator id, analytics id, etc.
+```
+
+If we store 1B shortened URLS we are looking at around:
+
+```python
+~500 bytes * 1B rows = 500 GB of data
+```
+
+500 GB is within the capabilities of SSDs.
+And given that the number of urls is limited by the number of urls 
+on the internet, we can expect it to grow but only modestly.
+
+If we were to hit the hardware limit, we could shard our data across 
+multiple servers, but for now a single Postgres instance as mentioned
+previously should be ok.
+
+To estimate, we could say 100k new urls are created per day.
+
+```python
+100k urls per day 
+
+86,400 seconds in day
+
+100k / 86,400 ~= Insert 1 row per second
+```
+
+Most database technology should can handle this as we already fixed the 
+heavy read throughput via cache and have bounded our write throughput 
+as low.
+
+Challenges:
+
+What if the DB goes down?
+
+1. Database Replication
+
+By using a database like Postgres that supports replication, we can 
+create multiple identical copies of our database on different servers.
+If one goes down we can redirect to another.
+
+This adds complexity to our system as we need to ensure our 
+Primary Server can interact with any replica without issues,
+adding operational overhead.
+
+2. Database Backup 
+
+We could implement a backup system that periodically takes snapshot of 
+our database and stores it in a separate location.
+
+This adds complexity to our system as we need to ensure our 
+Primary Server can interact with the backup without any issues,
+adding operational overhead.
 
 
-# Deep Dives: Scaling to 1B shortened URLs and 100M DAU
+Approach:
+
+What about our Primary Server?
+
+We can split our Primary Server by separating read() and write() operations.
+A microservice architecture where Read() Services handle redirects while
+Write() Services handle the creation of new short URLS.
+It allows use to scale each service independently based on specific demand.
+
+We can add multiple instances of the Read() and Write() services to horizontally
+scale and distribute our load across multiple servers.
+
+This can allow us to handle a large number of requests per second 
+without increasing the load on a single server, and thus when a new request
+comes in, it is randomly routed to one of the instances of the server.
+
+
+Approach:
+
+What about our counter?
+
+Horizontally scaling our write services means that we need a single source
+of truth for the counter as it needs to be accessible to all instances
+of the Write Service so they can agree on the next value.
+
+We could solve this with a centralized Redis instance to store the counter
+and other metadata that needs to be shared across all instances of the 
+Write Service.
+And since Redis is single-threaded, very fast for this use case, and 
+allows for atomic increment operations: 'all or nothing' units of work that
+atomically add value to a memory location, in our case creating a short URL,
+we can increment the global counter without any issues.
+
+```python
+Global Counter():
+
+                            +--------+
+                            | Client |          
+                            +--------+          
+                                ^               
+                                |                              
+                                |              
+                                v                   
+                        +------------------+
+- Route to microservice |   API Gateway    |       
+                        +------------------+        
+                          /               \       
+                         /                 \          
+                        /                   \
+                       /                     \
+                      /                       \             
+    +------------------+                       +------------------+
+    |   Read Service   |                       |   Write Service  | 
+    +------------------+                       +------------------+ 
+        /             \                      /             \
+       /               \                    /               \
+      /                 \                  /                 \
+     /                   \                /                   \
++--------------+            +------------+           +----------------------+
+|  Redis Cache |            |  Database  |           | Redis Global Counter |
++--------------+            +------------+           +----------------------+     
+keyValue pair:                 URL Table:               - atomic increment operation
+- key: short_url               - short_url
+- value: long_url              - long_url
+                               - creation_time
+                               - expiration_time
+                               - created_by
+```
+
+Challenge:
+
+Should we be concerned about network overhead?
+Not really, network request is negligible compared to other operations in
+the system. However, we could also do 'counter batching' to reduce network requests.
+
+The Redis Global Counter, instead of incrementing per operation, will 
+instead issue batch groups of 1000 to each instance of the Write() service.
+So a Write service cna use 1000 values locally without needing to contact
+Redis for a new URL.
+
+Now with the batch counters, if a write service goes down before using the
+1000 values locally, the global counter in Redis has already been incremented
+so these local values will never be used.
+
+This is not an issue however, because we will need up to a trillion short URLs
+before we need a 7 character short codes (refer to short code section), so
+we can tolerate a fair amount of loss for batch counters.
+

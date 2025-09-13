@@ -13,8 +13,28 @@ content: "#";
 font-size: 0.8rem;
 }
 
-h2 > a, h3>a {
-    text-decoration: none !important;
+h1 >a {
+  font-size: 1.7rem; /* match old h2 */
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  text-decoration: none !important;
+} 
+
+h2 >a {
+  font-size: 1.3rem; /* match old h3 */
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  text-decoration: none !important;
+} 
+
+h3 >a {
+  font-size: 1.1rem; /* match old h4 */
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-decoration: none !important;
 }
 
 code {
