@@ -1,6 +1,6 @@
 ---
 title: "Textbook: Designing Data Intensive Applications"
-description: "designing data intensive applications: pg 16/544"
+description: "designing data intensive applications: pg 28/544"
 image: "../../public/Notes/ddia-2.png"
 publishedAt: "2025-09-18"
 updatedAt: "2025-09-18"
@@ -144,7 +144,7 @@ Free references and links as we go along.
 
 # Part I: Foundations of Data Systems
 
-## Intro
+## Intr
 
 > First four chapters: fundamental ideas that apply to all data systems,
 > regardless of single machine or distributed across a cluster of machines.
@@ -915,6 +915,125 @@ but patterns and technique exist that help us work towards these goals.
 ## Chapter 2: Data Models and Query Languages
 
 ### Intro
+
+> The limits of my language mean the limits of my world
+
+> Data models are perhaps the most important part of developing software,
+> because they have such a profound effect not only on how the software
+> is written, but also on how we think about the problem we are solving
+
+Most applications are built by layering one data model on top of another.
+For each new layer, the key question is how is it represented in terms of 
+the next-lower layer.
+
+Layer 1. Most apps look at the real world (people, organizations, goods, actions, etc.)
+and model it in terms of objects or data structures, and APIs manipulate those 
+data structures
+
+Layer 2. When we store these data structures, we express them in a 
+general purpose data model, such as JSON or XML, tables in a relational database,
+or a graph model.
+
+Layer 3. The database software decided on representing the JSON, XML, relational, 
+and graph data in terms of bytes in memory, on disk or on network. 
+That representation or layer allows the data to be queries, searched, manipulated,
+and processed.
+
+Layer 4. Hardware engineers figured out how to represent bytes in terms of electrical
+currents, pulses of lights, magnetic fields, and more.
+
+Each layer hides the complexity of the layers below it by providing a clean data model.
+In complex applications there may be more intermediary levels, such as APIs build 
+upon APIs but the idea of layers still applies.
+
+In this chapter we will:
+
+- Look at a range of general purpose data models for storage and querying
+- Compare the relational model, the document model, and a few graph based data models
+- Look at various query languages and compare their use cases
+
+### Relational Model vs Document Model
+
+#### Intro
+
+> The best known model today is probably that of SQL, based on the relational model
+> proposed by Edgar Codd in 1970.
+
+- Def: Relational Model: Data is organized into relations (called tables in SQL), 
+where each relation is an unordered collection of tuples (rows in SQL).
+
+The goal of relational model is to hide implementations of the internal representation
+of data in the database behind a cleaner interface.
+
+In the 1970s and early 1980s, the network model and hierarchical model were the main
+alternatives to relational model, but the relational model dominance continued to last 
+around 25-30 years, which is an eternity in computing history.
+
+Much of what we used today on the web is still powered by relational databases, 
+whether it be online publishing, discussion, social networking, saas, etc. 
+
+#### The Birth of NoSQL
+
+Now in the 2010s, NoSQL is the latest attempt to overthrow the relational models
+dominance.
+
+NoSQL stands for Not Only SQL, and there are several forces behind the adoption of 
+NoSQL database:
+
+- Need for greater scalability than relational database can easily achieve, including
+very large datasets or high write throughput
+
+- Widespread preference for free and open source software over commercial database products
+
+- Specialized query operations not supported well by the relational model 
+
+- Frustration with the restrictiveness of relational schemas, and a desire for more 
+dynamic and expressive data models
+
+- Def: Polyglot Persistence: Relational databases will continue to be used 
+alongside a broad variety of nonrelational datastores
+
+#### The Object-Relational Mismatch
+
+> If data is stored in relational tables, an awkward transition layer 
+> is required between objects in the application code and the database 
+> models of tables, rows, and columns. This disconnect between relational 
+> and object-oriented is called an impedance mismatch
+
+Most development done today is done in object-oriented programming languages.
+This leads to a common criticism of the SQL data model: an extra translation layer
+is needed between relational tables and objects in application code.
+
+- Def: Object-relational mapping (ORM): frameworks to reduce boilerplate required
+for relational to object-oriented translation
+
+
+
+#### Many to One and Many to Many Relationships
+
+#### Are Document Databases Repeating History?
+
+##### The Network Model
+
+##### The Relational Model
+
+##### Comparison to Document Databases
+
+#### Relational vs Document Databases Today
+
+##### Which Data Model leads to Simpler Application Code
+
+##### Schema Flexibility in the Document Model 
+
+##### Data Locality for Queries
+
+##### Convergence of Document and Relational Databases
+
+### Query Languages for Data
+
+### Graph Like Data Models
+
+### Summary
 
 ## Chapter 3: Storage and Retrieval
 
