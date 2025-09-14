@@ -144,43 +144,28 @@ Free references and links as we go along.
 
 # Part I: Foundations of Data Systems
 
-## Intr
+## Intro
 
-> First four chapters: fundamental ideas that apply to all data systems,
+> First 4 chapters: fundamental ideas that apply to all data systems,
 > regardless of single machine or distributed across a cluster of machines.
 
-1. **Chapter 1:**
-
-- Terminology and Approach.
-- Reliability, Scalability, and Maintainability
-- Explain approaches to achieve these goals.
-
-2. **Chapter 2:**
-
-- Compare data models and query languages in different situations.
-
-3. **Chapter 3:**
-
-- Internals of storage engines.
-- How database store data on disk.
-- How different storage engines are optimized for different workloads.
-- Choosing the right has large effect on performance.
-
-4. **Chapter 4**: 
-
-- Compare data encoding and serialization formats 
-- Examine in environment where app requirements change and schemas need to adapt over time.
+|  Chapter  | Topic |
+| --------  | --------------- |
+| 1 | Reliability, Scalability, and Maintainability. Terminology and how to achieve these.  |
+| 2 | Compare data models and query languages in different situations. |
+| 3 | Internals of storage engines. Data on disk. Storage engine optimization for different workload. Performance effects from database choices. |
+| 4 | Comparing data encoding and serialization formats, and put in environment where requirements and schemas change over time.  |
 
 ## Chapter 1: Reliable, Scalable, and Maintainable Applications
 
 ### Intro
 
-> The Internet was done so well that most people think of it like a natural resource
+> The Internet was build so well that most people think of it like a natural resource
 > like the ocean or mountains, rather than being something man-made.
 
 The problems facing apps today is that they are data intensive instead of compute intensive.
 The amount, complexity, and speed at which data needs to be process ends up creating
-the most issues, as opposed to compute intensive.
+the most issues, as opposed to issues regarding applications being compute intensive.
 Rarely is CPU power a limiting factor for these applications.
 
 To start, most data intensive apps today are built from the same 
@@ -192,34 +177,38 @@ standard building blocks and principles:
 - Batch Processes: Periodically process larges amount of accumulated data in sections
 - etc.
 
-These building blocks have established and well built that most 'sane' engineers 
+These building blocks have been established and well built that most 'sane' engineers 
 wouldn't  think of writing a new data storage engine from scratch 
 because perfectly good ones already exists.
 
 But while there are many existing database systems, each have different characteristics
 as maybe benefit different applications as requirements change.
 
-### Thinking About Data Systems
+### Thinking About Data Systems: Data Systems and API Layers
+
+#### Data Systems
 
 > We can lump databases, queues, caches, etc, each with different patterns,
-> performance and implementations under the umbrella term data systems
-> as each of those act as building blocks for the larger 'data systems'
-> The API layer hides those implementation details from clients
-> allowing use to create a new special purpose data system 
-> from smaller, general purpose.
-
-New tools for data storage and processing continue emerging leading to trouble
-as traditional categories fade and boundaries blur.
-
-- Redis: Both a datastore and message queue
-- Apache Kafka: Both a message queue with database durability
+> performance, and implementations, under the same umbrella term data systems
+> as each of those act as building blocks for the larger 'data system'.
 
 No single tool can meet all data processing and storage needs, as so 
 work is broken down into tasks, that is abstracted to a single 'data system'.  
 
-> Abstracting single data system with a API wrapper
+And as new data storage and processing tools continue to emerge, this leads 
+to trouble as traditional boundaries blur and categories fade.
 
-APIs hide implementation details from clients, becoming a 
+- Redis: Both a datastore and message queue
+- Apache Kafka: Both a message queue with database durability
+
+#### API Layers
+
+> API layers hide implementation details for individual systems as 
+> well as how different systems interact with one another
+> allowing developers to create a new special purpose data system 
+> from smaller, general purpose data systems.
+
+APIs serve to hide implementation details from clients and developers, becoming a 
 special purpose data system from smaller, general purpose components.
 
 This special purpose data system could perform single tasks across components to
@@ -273,53 +262,56 @@ And this is where the interesting questions arise!
 
 Lets put that in our back pocket for now and continue.
 
-### Reliability
+### Reliability: Fault-Tolerant Systems vs Hardware, Software, Humans Errors
 
 #### Intro
 
-> The system should continue to work correctly: performing the correct function at the
-> desired level of performance, even in the face of adversity, that being 
-> either hardware faults, software faults, human error, etc..
-
-> A simple rule of thumb for reliability is 'continuing to work correctly, even
-> when things go wrong.'
+> Reliability: a system should 'continuing to work correctly, 
+> even when things go wrong.'
 
 > The reflection of reliability, or what causes it to break, are faults and failures.
+> Fault is a bad result of a single data system within the larger data system. 
+> Failure is a bad result of the data system as a whole
 
-> It is in our best interest to trigger faults deliberately to ensure faults are handled
-> gracefully when they occur naturally.
+> We make our systems fault-tolerant by trigger faults deliberately to ensure 
+> faults are handled gracefully when they occur naturally.
 
-Basic expectations for when one says software is reliable can include:
+Reliability is defined as a system continuing to work correctly, 
+performing the correct function at the desired level of performance, 
+even in the face of adversity: hardware faults, software faults, human error, etc..
+
+Basic expectations for reliable software can include:
 
 - Application performs function user expected
 - Tolerates user making mistakes or using software in unexpected ways
 - Acceptable performance for the required use case under the expected load and volume
 - System prevents unauthorized access and abuse
 
-So in summary:
+In summary:
 
-What causes reliability to break is then the things that can go wrong.
+A system that anticipates faults is fault-tolerant or resilient.
+
 A fault is our system design wrapper word for all the things that can go wrong.
-Thus, a system that anticipates faults is fault tolerant or resilient.
-Whereas a failure is different.
-
-In the context of a system, a failure is when the system stops providing the required service
-to the user. 
 A fault is usually defined as one component of the system deviating from its expectation.
+
+A failure is when the system as a whole stops providing the required service
+to the user.
 
 It is nearly impossible to reduce the probability of faults to zero, 
 which is why we prefer fault-tolerant systems.
 
-In fault-tolerant systems, we encourage and increase the rate of faults by triggering them 
-deliberately to test our tolerance.
-Many critical bugs are actually due to poor error handling and thus by continuously testing
-we ensure faults will be handled correctly when they occur naturally
+System become fault-tolerant by triggering faults deliberately to test our tolerance.
+Many critical bugs are due to poor error handling. 
+Thus, by continuously testing we ensure faults will be handled gracefully
+when they occur naturally.
 
 #### Hardware Faults
 
+##### Intro
+
 > Hardware faults are fairly common when discussing system failures
 
-Among the first that come to mind as the reason behind full system failures:
+Hardware faults that can cause full system failures:
 
 - Hard disk crashes
 - Faulty RAM
@@ -333,25 +325,26 @@ hard disk is about 10 to 15 years.
 
 ##### Solution: Single Hardware Redundancy
 
-The first solution is to add redundancy to individual hardware components 
-with RAID configuration, add dual power supplies to servers, 
+> The pattern being, when one physical component dies, the redundant component
+> can take its place while its original is replaced.
+
+The first solution to hardware faults is to add redundancy to individual 
+hardware components with RAID configuration, add dual power supplies to servers, 
 hot swappable CPUS, or datacenters with batteries and diesel generators for
 back up power.
-
-The pattern being, when one physical component dies, the redundant component
-can take its place while its original is replaced.
 
 While this does not help the physical hardware from breaking, its helpful 
 in keeping machines running uninterrupted for years. 
 
 ##### Solution: Shift to Software Fault Tolerance for Loss of Entire Machines
 
+> A shift towards systems that can tolerate the loss of entire machine by 
+> using software fault-tolerance techniques in addition to hardware redundancy
+> increase availability
+
 As data volumes and application computing demands increase, applications have begun
 using a large number of machine which proportionally increases the rate of hardware
 faults. 
-
-Thus, there has been a shift towards systems that can tolerate the loss of entire
-machine by using software fault-tolerance techniques in addition to hardware redundancy.
 
 In some cloud platforms (AWS), it is fairly common for virtual machine instances to
 become unavailable without warning as the platforms are designed to prioritize 
@@ -361,14 +354,16 @@ This full tolerance has operational advantages: Single server systems require pl
 downtime if you need to reboot the machine, but a system that can tolerate machine 
 failure can be patched one node at a time, without downtime of the entire system.
 
-Hence why this shift benefits applications that require high availability.
-
+Applications that require high availability have shift software fault tolerance
+as a solution for hardware faults.
 
 #### Software Errors
 
+##### Intro
+
 > Software faults are harder to anticipate because they are 'non-random' across nodes.
-> They also tend to cause more system failures than 'random' hardware faults (e.g., MTTF).
-> The are 'non-random' as they might fault upon a bad input.
+> They tend to cause more system failures than 'random' hardware faults (e.g., MTTF).
+> The are 'non-random' as they occur because of actions such as bad input.
 
 Among the first that come to mind as the reason behind full system failures:
 
@@ -380,10 +375,10 @@ Among the first that come to mind as the reason behind full system failures:
 These 'non-random' faults lie dormant for a long time until they are triggered 
 by an unusual set of circumstances.
 
-##### Solution: Separate Small Fault Tolerant Approaches Working Together
+##### Solution: Multiple Small Fault Tolerant Solutions Working Together
 
-There is one one quick solution to faults in software.
-But lots of small things can help:
+There is no one quick solution to faults in software,
+but lots of small solutions put together can help odds:
 
 - Think about assumptions and interactions between systems
 - Thorough testing
@@ -397,6 +392,8 @@ become more fault-tolerant.
 
 #### Human Errors
 
+##### Intro
+
 > Humans are known to be unreliable, even with the best intentions.
 
 Study of large internet services showed configuration errors by operators 
@@ -404,9 +401,8 @@ were the leading causes of outages, where hardware faults were only 10-25%
 
 ##### Solution: Separate Small Fault Tolerant Approaches Working Together
 
-Human configuration and touch is around the entire system making it hard
-to anticipate.
-But lots of small things can help:
+Human configuration occurs around the entire systems making it hard to anticipate.
+But lots of small solutions can help:
 
 - Design systems with minimal opportunity for error: APIs, admin interfaces, good abstraction
 - Decouple places where people make the most mistakes from places where they can cause errors
@@ -414,8 +410,8 @@ But lots of small things can help:
 - Allow quick and easy recovery from human errors to minimize impact
 - Telemetry for performance metrics and error rates 
 
-We make the system as fault-tolerant and anticipate errors in order
-to account for future human errors.
+We make the system as fault-tolerant and anticipate a wide array of human errors 
+in order to account for the future.
 
 #### How Important is Reliability?
 
@@ -426,33 +422,32 @@ In development, there will be situations where we can sacrifice reliability in o
 to reduce development cost, but we should always be aware of the potential effects 
 of cutting corners.
 
-### Scalability
+### Scalability: Plans to Cope Load, System Load Parameters, Performance Distribution
 
 #### Intro
 
-> As the system grows (in data volume, traffic volume, or complexity), there should 
-> be a reasonable solution to deal with that growth
+> Scalability: As a system grows, in data volume, traffic volume, complexity, etc,
+> there should be a ready reasonable solution to deal with that growth
 
 > Scalability is a system's ability to cope with increased load across different target
 > parameters. 'if the system grows in a particular way, what are our options for 
 > coping with that growth' or 'how can we add computing resources to handle the 
 > additional load'
 
-If a system is reliable today, that is not a guarantee that it will work reliably 
-in the future.
-Increased load is a common reason for future degradation. 
-Jumping from 10,000 concurrent to 100,000 or 1 million to 10 million 
-will require the system to process much larger volumes of data than before.
+If a system is reliable today, there is no guarantee that it will work reliably 
+in the future as load changes.
 
+Increased load is a common reason for degradation as jumping from  10,000 
+concurrent to 100,000 or 1 million to 10 million will require the system 
+to process much larger volumes of data than before.
 
 #### Describing Load: Scaling Twitter With Fan Out
 
 ##### Intro
 
-> Load can be described with a few numbers which we call load parameters.
-> The best choice of parameters depends on the architecture of your system.
+> Load: described by load parameters dependent on the architecture of your system.
 
-Examples of load parameters could be:
+Load parameters for a system could be:
 
 - Requests per second to a web server.
 - Ratio of reads to writes in a database.
@@ -460,42 +455,57 @@ Examples of load parameters could be:
 - Hit rate on a cache
 - The average case or a bottleneck of some specific case
 
+##### Twitter Load Parameters
+
 Twitters two main operations are PostTweet() and HomeTimeline()
+which essentially end up being writes() and reads().
 
-1. Post Tweet
-A user can publish a new message to their followers. 
-4.6k requests/sec on average, over 12k request/sec at peak
+Thus, our load parameters are the number of reads and writes to a database
+as well as the ratio of reads to write
 
-2. Home timeline
-A user can view tweets posted by the people they follow. 
-300k requests/sec
+##### Twitter Write() and Read()
+
+1. PostTweet()
+
+User: can publish a new message to their followers:
+~4.6k requests/sec on average, over ~12k request/sec at peak
+
+2. HomeTimeline()
+
+User: can view tweets posted by the people they follow ~300k requests/sec.
+
+##### Twitter Problem To Solve: Where to Fan Out
 
 Handling 12,000 writes per second is simple. 
-So the issue lies not with tweet volume, but with fan out from tweeter to follower.
+
+The issue lies not with tweet volume, but with fan out from tweeter to follower.
 Each user follows many people, and each user is followed by many people.
+A user has ~75 followers on average.
 
-This may seem daunting at first, but there are two main ways
-of implementing these two operations
-
+There are two main ways of implementing these two operations,
+one focusing on the Read() action and one focused on the Write() action.
 
 ##### 1. SQL Merge: Fan Out on Read
 
-Idea: Do almost no extra work when someone posts a tweet. Just insert it into
-the global tweets table.
+Optimized for Write: Write() frequent, Read() infrequent
 
-When someone posts via PostTweet():
-Insert into global tweets table
+Idea: Do no extra work when on Write/PostTweet() and insert it into global tweets table.
 
-When uses requests HomeTimeline():
-Look up list of people they follow, fetch tweets for each of those users,
-merge them and sorted by timestamp
+Main Work: on Read() -> query + merge
 
-Work: Happens at read time (query + merge)
+User PostTweet(): 
 
-Optimized for: When writes are frequent but reads are infrequent
+1. Insert into global tweets table
+
+User HomeTimeline():
+
+1. Look up list of people they follow 
+2. Fetch tweets for each of those users,
+3. merge them and sorted by timestamp
 
 ```sql
--- Fan-Out on Read: Build users home timeline on demand
+Read()
+User requests timeline → query who they are following and merge:
 
     -- 1. FROM: start with base table of all tweets
     SELECT 
@@ -552,20 +562,26 @@ Optimized for: When writes are frequent but reads are infrequent
 
 ##### 2. Cache User Timeline: Fan Out on Write
 
-Idea: Keep a precomputed 'mailbox' (cache) of tweets for each user.
+Optimized for Read: Read() frequent, Write() infrequent
 
-When someone posts via PostTweet():
-Find all their followers, insert that tweet into each follower's cached home timeline.
+Idea: Do little extra work on read, grab precomputed 'mailbox' (cache) 
+of tweets for each user.
 
-When uses requests HomeTimeline():
-Just return their cached timeline, no merging required
+Main Work: on Write() -> copy tweet into many followers cache
 
-Work: Happens at write time (copy tweet into many many caches)
+User PostTweet():
 
-Optimized for: When reads are more common than writes
+1. Find all their followers
+2. Insert that tweet into each follower's cached home timeline.
+
+User HomeTimeline():
+
+1. Return their cached timeline, no merging required
+
 
 ```python
-User posts a tweet → update all timelines (cache):
+Write()
+User posts a tweet → update all timelines cache:
 
                                    +--------+
                                    |  User  |
@@ -586,11 +602,10 @@ User posts a tweet → update all timelines (cache):
                         | Cache: User1 |   | Cache: User2 |   | Cache: User3 |
                         +--------------+   +--------------+   +--------------+
     READ Timeline:
-    300k reads/sec 
-                
+    300k reads/sec  
 ```
 
-##### Twitter Scaling Fan Out: Solution 1, then Solution 2 Due To Reads() > Writes()
+##### Twitter Iterations: Tried Solution 1, then Solution 2 as more Reads() > Writes()
 
 The first version of Twitter used approach 1.
 However, systems struggled to keep up so they switched to approach 2.
@@ -604,13 +619,13 @@ On average, a tweet is delivered to about 75 followers.
 So 4.6k tweets per second becomes 345k writes per second to user's home timeline
 caches. 
 
-##### Celebrity Fan Out Problem
+##### Twitter Iterations: Celebrity Fan Out Problem
 
 Some users have over 30 millions followers, which means a single tweet may result
 in over 30 million writes to timelines, and as twitter tries to deliver tweets
 to followers within five seconds, this creates a significant challenge.
 
-##### Celebrity Fan Out Solution: Celebrity Tweet Merge + Cache Timeline Hybrid
+##### Twitter Iterations: Celebrity Fan Out Solution: Celebrity Merge + User Cache Timeline Hybrid
 
 Twitter eventually moved to hybrid of both approaches. 
 With most user's tweets being fanned out to timelines at the time when they 
@@ -640,7 +655,7 @@ if you want to keep performance unchanged
 Both of these require performance numbers, so lets define how to numerate
 the performance of a system
 
-##### Performance As a Distribution: p50, p95, p99, p999 and client load generation
+##### Performance Distribution: p50, p95, p99, p999 and Client Load Generators
 
 Throughput could be the first thing that comes to mind when thinking about numerical 
 performance, such as in batch processing systems.
@@ -721,7 +736,7 @@ If a client waits for a previous request to complete before sending the next one
 that behavior keeps the queues shorted in test than they would be in reality 
 due to head-of-line blocking, which would skew the measurements.
 
-##### Percentiles In Practice
+##### Percentiles In Practice: Tail Latency and Percentile Algorithms
 
 High percentiles become especially in backend services that are called multiple 
 times as part of serving a single end-user request.
@@ -813,7 +828,7 @@ The issue lies in incorrect assumptions, which will lead to the engineering effo
 for scaling to be at best wasted and at worst be counterproductive.
 
 
-### Maintainability
+### Maintainability: Happy Operators, Simple Abstractions, Happy Future Developers
 
 #### Intro
 
@@ -1007,9 +1022,65 @@ is needed between relational tables and objects in application code.
 - Def: Object-relational mapping (ORM): frameworks to reduce boilerplate required
 for relational to object-oriented translation
 
+#### One to Many, Many to One, and Many to Many Relationships
 
+##### One to Many: LinkedIn Profile
 
-#### Many to One and Many to Many Relationships
+A profile as a whole can be identified by a unique identifier, user_id.
+Fields like first_name, last_name appear exactly once per user, so they can
+be modeled as columns on the user table.
+
+However, most people have had more than one job in their career, and people
+by have varying number of periods of education.
+This leads to a one-to-many relationships from the user to these items
+which can be represented in many ways:
+
+- Traditional SQL (prior to SQL:1999), the most common normalized representation
+is the put positions, education, and contact info in separate tables, with a foreign
+key reference to the users table.
+
+- Later versions of SQL standard added support for structured datatypes and 
+XML data, allowing multi-valued data to be stored in a single row,
+with support for querying and indexing inside those documents.
+These features are more or less supported by MS SQL Server, PostgresSQL,
+Oracle, etc.
+
+- We can encode jobs, education, and contact info as JSON or XML document,
+store it on a text column in the database, but in this setup you cannot 
+use the database to query for values inside the encoded column.
+
+- JSON model reduced the impedance mismatch between application code and storage
+layer, but comes with problems as well, to be discussed, although the lack 
+of scheme is often cited as an advantage
+
+##### Many to One: LinkedIn Job Location
+
+For common items across profiles such as job location, region_id and industry_id 
+are given as IDs, not as plain-text strings 'greater seattle area' or 'philanthropy'.
+
+The advantage of using an ID is that because it has no meaning to humans, it never
+has to change. The ID can remain the same, even if the information it identifies 
+changes. Usually, anything meaningful to humans may need to change in the future,
+and if that information is duplicated, location in multiple user profiles, all redundant
+copies need to be updated which incurs write overheads and risks inconsistencies.
+
+- Def: Normalization: aims to remove duplication among values in databases 
+
+Normalizing data requires many-to-one relationships.
+Many people live in one particular region, many people work in one particular industry,
+and this does not fit nicely into the document model.
+
+For joins, you have to emulate a join in application code by making multiple queries 
+to the database, in our case the lists of regions and industries is small and slow 
+changing enough that the application can keep it in memory, but still the work of 
+making the join is shifted from the database to the application code.
+
+##### Many to Many: 
+
+Now if we add multiple features for a single user profile, such as 
+converting school and organization to an id which points to a school and organization
+profile, adding comments on other uses profile, now there is many-to-many relationships
+between the profiles themselves
 
 #### Are Document Databases Repeating History?
 
