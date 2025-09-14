@@ -1,10 +1,7 @@
-# Jonathan's portfolio template
+# Jonathan's swe portfolio
 
-Hello, welcome. This is a blog template. 
+Hello! This is a notes template to store leetcode, projects, and things im reading.
+Hope you enjoy.
 
-# See the portfolio
+# Live Portfolio
 https://portfolio-jonathan-camberos.vercel.app/
-
-# To use the template
-...
-Portfolio is made with React.js. tailwind, contentlayer, and other libraries:
