@@ -1,6 +1,6 @@
 ---
 title: "Textbook: Designing Data Intensive Applications"
-description: "designing data intensive applications: pg 28/544"
+description: "designing data intensive applications: rewrite chapter 2"
 image: "../../public/Notes/ddia-2.png"
 publishedAt: "2025-09-18"
 updatedAt: "2025-09-18"
@@ -736,51 +736,60 @@ If a client waits for a previous request to complete before sending the next one
 that behavior keeps the queues shorted in test than they would be in reality 
 due to head-of-line blocking, which would skew the measurements.
 
-##### Percentiles In Practice: Tail Latency and Percentile Algorithms
+##### Percentiles In Practice: High Percentiles, 
 
-High percentiles become especially in backend services that are called multiple 
-times as part of serving a single end-user request.
+> High percentiles become especially important in backend services that are 
+> called multiple times as part of serving a single end-user request
+> as a single slow response time slows down the entire user response time.
 
 Even if you make the calls in parallel, the client response will still wait on the 
 slowest of the parallel calls.
 
-Thus, even if a small percentage of backend calls are slow, the chance of getting
-a slow call increases if a end-user request requires multiple backend calls,
-leading to a higher proportion of end-user requests being slow, an effect 
-known as tail latency amplification
+- Def: Tail Latency Application: effect of multiple parallel calls from a single
+client call, where overall response must wait on the slowest parallel response, 
+increasing the chance of a high percentile slow call
 
-- Def: Tail Latency Application: when a single client call leads to multiple parallel calls,
-and must wait on the slowest parallel response, increasing the chance of a high percentile
-slow call
+Even if a small percentage of backend calls are slow, the chance of getting
+a slow call increases from multiple backend calls,
+leads to a higher proportion of end-user requests being slow.
 
-In order to add response time percentiles to monitoring dashboards for your backend
-services, you need to efficiently calculate them on an ongoing basis.
+##### Measuring High Percentiles: Naive and Algorithms
 
-Naive Implementation: Keep a rolling window of response times of requests in the last
-10 minutes, and every minute calculate the median and various percentiles.
+It is ideal to add response time percentiles to monitoring dashboards 
+for your backend services, in efficient ways to calculate them on an ongoing basis
+with minimal CPU and memory cost.
 
-There are actually algorithms specific for good approximation of percentiles 
-at minimal CPU and memory cost
+A naive implementation is to keep a rolling window of response times of requests
+in the last 10 minutes, and every minute calculate the median and 
+various percentiles as this costs CPU and memory.
 
-A common mistake is to average the percentile of two different machines, which would
-be mathematically meaningless. A percentile depends on the distribution of all combined
-requests, not the 95th or 50th percentile of each machine individually.
-Machine A might have fast requests while machine B has slow ones and averaging
-those separately losses the true combined distribution.
+A naive mistake is to average the percentile of two different machines.
+This is mathematically meaningless as a percentile depends on the distribution
+of all combined requests, not an average of the 95th or 50th percentile between
+machines. Machine A might have fast requests while machine B has slow ones 
+and averaging those separately losses the true combined distribution.
 
-Forward Decay: streaming algorithm for approximating metrics like percentils
+Algorithms specific for good approximation of percentiles 
+at minimal CPU and memory cost exist:
+
+1. Forward Decay
+
+Streaming algorithm for approximating metrics like percentiles
 over a rolling time window. Older data is 'decayed' (weighted less) automatically
 so recent values have more impact. Useful for monitoring metrics over 
 time without storing every data point
 
-t-digest: Compact data structure for approximating percentiles and very accurate for
+2. t-digest  
+
+Compact data structure for approximating percentiles and very accurate for
 extreme tails (p99, p999). Works by clustering data points into centroids, then computing
 percentiles from those clusters. Efficient in memory and CPU, even fro large datasets
 
-HdrHistogram: High Dynamic Range Histogram. Stores response time counts in a histogram.
+3. HdrHistogram
+
+High Dynamic Range Histogram. Stores response time counts in a histogram.
 Tracks latencies from microseconds to hours in a single histogram structure. Supports 
 fast percentile calculations and is suitable for high-throughput monitoring
-
 
 
 ##### Approaches for Coping with Load: Ensuring Performance While Increasing Load
