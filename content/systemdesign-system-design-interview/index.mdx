@@ -2,8 +2,8 @@
 title: "System Design: System Design Interview Vol I"
 description: "system design interview"
 image: "../../public/Notes/sysdesinterview.png"
-publishedAt: "2025-11-03"
-updatedAt: "2025-11-03"
+publishedAt: "2025-09-14"
+updatedAt: "2025-09-15"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -12,7 +12,7 @@ tags:
 
 # Forward
 
-## Companies Goals
+## Hiring Company Perspective
 
 System design interviews have been widely adopted because the communication 
 nad problem solving skills tested in these interviews are similar to those
@@ -24,10 +24,154 @@ and solve the idea step by step.
 Additionally, the abilities tested also involve how they explain the idea,
 discuss with others, and evaluate and optimize the system.
 
+## System Design Questions
+
+The questions are usually open ended, just like in the real world, 
+and the desired outcome is to come up with an architecture to achieve
+the intended design goals.
+
+Interviewers may choose high level architecture to cover all aspects or 
+pick one or more areas to focus on.
+
+The intended design goals are the requirements, constraints, and bottlenecks
+that shape the direction of both the interviewer and interviewee.
+
+## Scope Of This Book
+
+The objective is to provide a reliable strategy to approach the system design
+questions and to solidify the strategy and knowledge needed for a successful
+interview.
 
 # Chapter 1: Scale From Zero to Millions of Users
 
+## Intro
+
+> Learning basic techniques to crack system design interview
+
+## Single Server Setup: Starting Simple
+
+### Intro
+
+Lets start simple and run everything on a single server.
+Here, the application code, database, cache, etc. are all running
+on a single server.
+
+### Single Server: Processing Steps
+
+1. Client -> DNS
+
+{/* def */}
+DNS: Users access websites through domain names, (e.g., www.google.com)
+The Domain Name System (DNS) resolve those domain names into IP addresses.
+DNS is usually provided by third parties (registrars, hosting providers, 
+dedicated DNS services) rather than hosted on the application's own servers.
+
+2. IP Address
+
+{/* def */}
+IP Address: An Internet Protocol (IP) address is the numerical label assigned
+to a device on a network.
+
+It is returned to the browser or mobile app after a DNS lookup so the client 
+knows where to send requests.
+
+3. HTTP/JSON Request
+
+Once the client receives the IP address, Hypertext Transfer Protocol (HTTP)
+or JSON requests are sent to the server.
+
+4. HTML/JSON Response
+
+The server returns HTML pages or JSON responses for rendering.
+
+### Diagram: Single Server Setup
+```python
+                                              1) ------>
+               +-------------------------+   api.mysite.com     +--------+
+               | Web Browser, Mobile App |                      |  DNS   |     
+               +-------------------------+    15.125.23.214     +--------+    
+                        |        ^            2) <------    
+                        |        |                 
+                        |        |       
+    3)                  |        |  4)    
+    15.125.23.214       |        |  HTML Page 
+                        |        |    
+                        |        |       
+                        |        |      
+                        V        |
+                    +------------------+
+                    |   Web Server     |
+                    +------------------+
+```
+
+### Client Traffic Sources: Users
+
+Client via a web application or mobile application
+
+- Def: Web Application: A client web application instance uses a combination 
+of server-side languages (Java, Python, etc) to handle logic, storage, etc.,
+and client-side languages (HTML, JavaScript, etc) for presentation
+
+- Def: Mobile Application: HTTP protocol is the communication protocol between
+the mobile app and the web server. JavaScript Object Notation (JSON) is the 
+most commonly used API response format to transfer data due to its simplicity.
+
+
+## Database
+
+## Which Database To Use? 
+
+## Vertical Scaling vs Horizontal Scaling
+
+## Load Balancer
+
+## Database Replication
+
+## Cache 
+
+## Cache Tier
+
+## Considerations For Using Cache
+
+## Content Delivery Network (CDN)
+
+## Considerations Of Using A CDN
+
+## Stateless Web Tier
+
+## Stateful Architecture
+
+## Stateless Architecture
+
+## Data Centers
+
+## Message Queue
+
+## Logging, Metrics, Automation
+
+## Adding Message Queues and Different Tools
+
+## Database Scaling
+
+## Vertical Scaling
+
+## Horizontal Scaling
+
+## Re Sharding Data
+
+## Celebrity Problem
+
+## Join and De Normalization
+
+## Millions of Users and Beyond
+
 # Chapter 2: Back Of The Envelope Estimation
+
+## Intro
+
+> Calculations and estimates created by using combination of thought
+> experiments and common performance in order to get a feel for
+> which design strategies will meet the requirements for the system.
 
 # Chapter 3: A Framework For System Design Interviews
 

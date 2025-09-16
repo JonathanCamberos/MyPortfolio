@@ -37,7 +37,7 @@ const NotesDisplayOne = ({ blog }) => {
             </span>
           </h2>
           <span className="inline-block w-full capitalize text-dark/60 dark:text-light font-semibold  text-xs sm:text-base">
-            {format(new Date(blog.publishedAt), "MMMM dd, yyyy")}
+            {format(new Date(blog.updatedAt), "MMMM dd, yyyy")}
           </span>
         </Link>
 
