@@ -7,6 +7,7 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 const Solution = ({ solution }) => {
   return (
     <div className="group border p-4 rounded-md shadow-md hover:scale-100 transition-all ease duration-200">
+      
       {/* Display question number and name */}
       <h2 className="font-bold text-lg sm:text-xl">
         <Link

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-const HorizontalQuestion = ({ question }) => {
+const IntroBox = ({ question }) => {
   // Check coldnessCount first
   const formattedDate = question.coldnessCount === -1
     ? "Not submitted yet"
@@ -45,4 +45,4 @@ const HorizontalQuestion = ({ question }) => {
   );
 };
 
-export default HorizontalQuestion;
+export default IntroBox;

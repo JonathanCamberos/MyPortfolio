@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Solution from "./Solution";
-import HorizontalQuestion from "./HorizontalQuestion";
+import Solution from "./SolutionDisplay";
+import HorizontalQuestion from "./SolutionIntroBox";
 
 
 const SolutionSection = () => {

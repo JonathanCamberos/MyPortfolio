@@ -1,9 +1,9 @@
 import { allBlogs } from "../../../.contentlayer/generated";
 import GithubSlugger from "github-slugger";
-import QuestionSection from "../../components/LeetCode/QuestionSection";
+import TopicSection from "../../components/LeetCode/Topics/TopicSearch";
 import DifficultySection from "../../components/LeetCode/Difficulty/DifficultySection";
 import ApplicationSection from "../../components/LeetCode/Application/ApplicationSection";
-import SolutionSection from "../../components/LeetCode/Solutions/SolutionSection";
+import SolutionSection from "../../components/LeetCode/SolutionSearch/TextSearch";
 
 const slugger = new GithubSlugger();
 
@@ -31,7 +31,7 @@ const LeetCodePage = ({ params }) => {
     <article className="mt-20 flex flex-col text-dark dark:text-light">
       <SolutionSection />
       <ApplicationSection />
-      <QuestionSection />
+      <TopicSection />
       <DifficultySection />
     </article>
   );

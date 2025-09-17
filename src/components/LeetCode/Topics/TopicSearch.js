@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Topics from "./TopicButton";
-import Question from "../LeetCode/Question";
+import Question from "./TopicIntroBox";
 import Link from "next/link";
 
-const QuestionSection = () => {
+const TopicSection = () => {
   const [topics, setTopics] = useState(["all"]);
   const [questions, setQuestions] = useState({});
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -85,4 +85,4 @@ const QuestionSection = () => {
   );
 };
 
-export default QuestionSection;
+export default TopicSection;

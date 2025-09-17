@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Difficulties from "./DifficultyButton";
-import Question from "../Question";
+import Difficulties from "./DifficultyCell";
+import Question from "../Topics/TopicIntroBox";
 import Link from "next/link";
 
 const DifficultySection = () => {
