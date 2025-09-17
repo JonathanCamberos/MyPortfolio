@@ -37,7 +37,7 @@ export default function ClientBlog({ blog }) {
       </div>
 
       {/* MDX Content Column */}
-      <div className={`${contentColClass} transition-all duration-300 ease-in-out`}>
+      <div className={`${contentColClass} transition-all duration-700 ease-in-out`}>
         <RenderMdx blog={blog} />
       </div>
 

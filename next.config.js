@@ -624,18 +624,12 @@ function parseDefinitions(content, filePath) {
   return defs;
 }
 
-// Normalize title/key for URLs
-const normalizeKey = (key) =>
-  key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-
-// Parse diagrams from MDX content
 function parseDiagrams(content, definitions, filePath) {
   const diagrams = {};
+  const normalizeKey = (key) =>
+    key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  // Base link for diagram anchors
-  const baseLink = filePath
-    .replace(/^content\//, "/Notes/")
-    .replace(/\/index\.mdx$/, "");
+  const baseLink = filePath.replace(/^content\//, "/Notes/").replace(/\/index\.mdx$/, "");
 
   const lines = content.split("\n");
   let currentDiagram = null;
@@ -643,17 +637,18 @@ function parseDiagrams(content, definitions, filePath) {
   let relatedDefs = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const lineRaw = lines[i];           // keep raw line for whitespace
+    const line = lineRaw.trim();        // trimmed version for matching
 
-    // Diagram metadata: related definitions
-    const diagramDefsMatch = /^\{\/\*\s*Diagram:\s*(.+?)\s*\*\/\}/i.exec(line);
+    // Match related definitions line
+    const diagramDefsMatch = /^\{\/\*\s*Diagram:\s*(.+)\s*\*\/\}/i.exec(line);
     if (diagramDefsMatch) {
       relatedDefs = diagramDefsMatch[1].split(",").map((d) => d.trim());
       continue;
     }
 
-    // Diagram title
-    const diagramMatch = /^###\s*Diagram:\s*(.+)$/i.exec(line);
+    // Match diagram title
+    const diagramMatch = /^#{1,6}\s*Diagram:\s*(.+)$/i.exec(line);
     if (diagramMatch) {
       currentDiagram = {
         name: diagramMatch[1].trim(),
@@ -665,21 +660,20 @@ function parseDiagrams(content, definitions, filePath) {
       continue;
     }
 
-    // Inside a diagram code block
     if (currentDiagram) {
+      // Start or end of code block
       if (line.startsWith("```") && buffer.length === 0) {
-        // skip opening ```
-        continue;
+        continue; // skip opening ```
       } else if (line.startsWith("```")) {
-        // end of code block
-        currentDiagram.diagram = buffer.join("\n");
-        diagrams[currentDiagram.name] = { ...currentDiagram };
+        // End of code block
+        currentDiagram.diagram = buffer.join("\n"); // preserve exact whitespace
+        diagrams[currentDiagram.name] = currentDiagram;
         currentDiagram = null;
         buffer = [];
         relatedDefs = [];
         continue;
       } else {
-        buffer.push(lines[i]); // use original line to preserve spaces
+        buffer.push(lineRaw); // use raw line to keep formatting
       }
     }
   }

@@ -18,11 +18,15 @@ const DefinitionSearch = () => {
       );
   }, []);
 
+  // Filter keys based on search query or show all if query is "all"
   const filteredKeys = searchQuery
-    ? Object.keys(definitionMapping).filter((key) =>
-        key.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
+    ? searchQuery.toLowerCase() === "all"
+      ? Object.keys(definitionMapping) // show all
+      : Object.keys(definitionMapping).filter((key) =>
+          key.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    : []; // show nothing if empty
+
 
   const handleButtonClick = (key) => {
     setSelectedDefinition(definitionMapping[key]);
@@ -42,7 +46,7 @@ const DefinitionSearch = () => {
       <div className="mt-5 px-5 sm:px-10 md:px-24 sxl:px-32">
         <input
           type="text"
-          placeholder="Search definitions..."
+          placeholder="'All' or search definitions..."
           className="w-full p-2 border rounded-md shadow-sm bg-light dark:bg-dark text-dark dark:text-light dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-yellow-500 focus:border-transparent"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -52,7 +56,7 @@ const DefinitionSearch = () => {
       <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10 min-h-[60px]">
         {filteredKeys.length > 0 ? (
           filteredKeys.map((key, index) => {
-            const isSelected = selectedDefinition?.title === key;
+            const isSelected = selectedDefinition?.name === key;
 
             const baseClass = isSelected
               ? "bg-dark text-light dark:bg-light dark:text-dark"
@@ -68,12 +72,12 @@ const DefinitionSearch = () => {
               </button>
             );
           })
+        ) : searchQuery ? (
+          <p className="text-center text-gray-500 dark:text-gray-400 w-full m-2">
+            No results found.
+          </p>
         ) : (
-          searchQuery && (
-            <p className="text-center text-gray-500 dark:text-gray-400 w-full m-2">
-              No results found.
-            </p>
-          )
+          <div className="w-full h-10"></div>
         )}
       </div>
 
