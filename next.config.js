@@ -4,6 +4,12 @@ const {withContentlayer} = require("next-contentlayer")
 const fs = require('fs');
 const path = require('path');
 
+const systemDesignFilePaths = [
+  "content/systemdesign-system-design-interview/index.mdx",
+  // add more .mdx files here
+];
+
+
 const filePaths = [
   'content/leetcode-arrays-and-hashing/index.mdx',
   'content/leetcode-stacks/index.mdx',
@@ -26,6 +32,9 @@ const filePaths = [
 
 ];
 
+
+// ***************************
+// LeetCode parsers
 function syncWarmness() {
   const allQuestionsPath = path.join(process.cwd(), "public/generatedDB", "allQuestionNum.json");
   const warmnessPath = path.join(process.cwd(), "public/generatedDB", "allQuestionWarmness.json");
@@ -549,9 +558,80 @@ function createQuestionMapping(filePath) {
   return mapping;
 }
 
+// ********************
+// System Design Parsers
+
+function parseDefinitions(content, blogTitle) {
+  const defs = {};
+  const lines = content.split("\n");
+
+  const normalizeKey = (key) =>
+    key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  let currentHeading = null;   // last ### heading
+  let currentDef = null;
+  let buffer = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // --- track the nearest preceding ### heading ---
+    const headingMatch = /^#{3}\s*(.+?)\s*$/.exec(line);
+    if (headingMatch) {
+      currentHeading = headingMatch[1].trim();
+      continue;
+    }
+
+    // --- start of a definition ---
+    if (/\{\/\*\s*def\s*\*\/\}/i.test(line)) {
+      // save previous def
+      if (currentDef) {
+        currentDef.body = [currentDef.body, ...buffer].filter(Boolean).join(" ").trim();
+        defs[currentDef.name] = currentDef;
+        buffer = [];
+      }
+
+      const nextLine = lines[++i] || "";
+      const [rawName, ...rest] = nextLine.split(":");
+      const name = rawName.trim();
+      const firstPart = rest.join(":").trim();
+
+      const sectionSlug = currentHeading
+        ? normalizeKey(currentHeading)
+        : normalizeKey(blogTitle);
+
+      currentDef = {
+        name,
+        body: firstPart,
+        blog: blogTitle,
+        definitionLink: `/Notes/${normalizeKey(blogTitle)}#${sectionSlug}`,
+      };
+      continue;
+    }
+
+    // --- collect body lines inside current definition ---
+    if (currentDef) {
+      const trimmed = line.trim();
+      if (trimmed) buffer.push(trimmed);
+    }
+  }
+
+  // flush last def
+  if (currentDef) {
+    currentDef.body = [currentDef.body, ...buffer].filter(Boolean).join(" ").trim();
+    defs[currentDef.name] = currentDef;
+  }
+
+  return defs;
+}
+
+
 const nextConfig = {
   webpack(config, { isServer }) {
     if (isServer) {
+
+      // ********************
+      // LeetCode Parsing
       const {
         questionStats,
         topicMap,
@@ -600,7 +680,30 @@ const nextConfig = {
       );
 
       syncWarmness();
-    }
+
+      // ********************
+      // System Design Parsing
+      const systemDefinitions = {};
+
+      systemDesignFilePaths.forEach((relPath) => {
+      try {
+        const filePath = path.join(process.cwd(), relPath);
+        const content = fs.readFileSync(filePath, "utf-8");
+        const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
+        const blogTitle = titleMatch ? titleMatch[1] : "system-design";
+
+        Object.assign(systemDefinitions, parseDefinitions(content, blogTitle));
+      } catch (err) {
+        console.error(`Error parsing ${relPath}`, err);
+      }
+      });
+
+      fs.writeFileSync(
+        path.join(process.cwd(), "public/generatedDB", "systemDesignDefinitions.json"),
+        JSON.stringify(systemDefinitions, null, 2)
+      );
+      }
+
     return config;
   },
 };

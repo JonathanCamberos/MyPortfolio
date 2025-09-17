@@ -26,7 +26,7 @@ export default function ClientBlog({ blog }) {
           {/* Button below TOC, outside scroll */}
           <div className="mt-2 flex-shrink-0">
             <button
-            className="w-full px-4 py-2 rounded border border-dark dark:border-light text-dark dark:text-light dark:hover:text-accentDark hover:text-accent transition-colors duration-200 hidden lg:block"
+            className="w-full px-4 py-2 rounded text-dark dark:text-light dark:hover:text-accentDark hover:text-accent transition-colors duration-200 hidden lg:block"
             onClick={() => setTocOpen(!tocOpen)}
             >
             {tocOpen ? "<<<" : ">"}
