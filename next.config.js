@@ -560,70 +560,163 @@ function createQuestionMapping(filePath) {
 
 // ********************
 // System Design Parsers
-
-function parseDefinitions(content, blogTitle) {
+function parseDefinitions(content, filePath) {
   const defs = {};
   const lines = content.split("\n");
 
   const normalizeKey = (key) =>
     key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  let currentHeading = null;   // last ### heading
+  // Build the base URL from the MDX file path
+  // THIS is the key: replace 'content/' with '/Notes/' and remove 'index.mdx'
+  const baseLink = filePath.replace(/^content\//, "/Notes/").replace(/\/index\.mdx$/, "");
+
   let currentDef = null;
   let buffer = [];
+  let insideDef = false;
+  let currentHeadingSlug = null;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+    const line = lines[i].trim();
 
-    // --- track the nearest preceding ### heading ---
-    const headingMatch = /^#{3}\s*(.+?)\s*$/.exec(line);
+    // Track closest preceding heading (#, ##, ###, etc.)
+    const headingMatch = /^(#+)\s*(.+)$/.exec(line);
     if (headingMatch) {
-      currentHeading = headingMatch[1].trim();
+      currentHeadingSlug = normalizeKey(headingMatch[2]);
       continue;
     }
 
-    // --- start of a definition ---
-    if (/\{\/\*\s*def\s*\*\/\}/i.test(line)) {
-      // save previous def
+    if (line === "{/* def: start */}") {
+      insideDef = true;
+      buffer = [];
+      continue;
+    }
+
+    if (line === "{/* def: end */}") {
       if (currentDef) {
-        currentDef.body = [currentDef.body, ...buffer].filter(Boolean).join(" ").trim();
+        currentDef.body = buffer.join(" ").trim();
+        // Use the closest heading slug for the link
+        currentDef.definitionLink = `${baseLink}#${currentHeadingSlug || normalizeKey(currentDef.name)}`;
         defs[currentDef.name] = currentDef;
-        buffer = [];
       }
-
-      const nextLine = lines[++i] || "";
-      const [rawName, ...rest] = nextLine.split(":");
-      const name = rawName.trim();
-      const firstPart = rest.join(":").trim();
-
-      const sectionSlug = currentHeading
-        ? normalizeKey(currentHeading)
-        : normalizeKey(blogTitle);
-
-      currentDef = {
-        name,
-        body: firstPart,
-        blog: blogTitle,
-        definitionLink: `/Notes/${normalizeKey(blogTitle)}#${sectionSlug}`,
-      };
+      currentDef = null;
+      insideDef = false;
+      buffer = [];
       continue;
     }
 
-    // --- collect body lines inside current definition ---
-    if (currentDef) {
-      const trimmed = line.trim();
-      if (trimmed) buffer.push(trimmed);
+    if (insideDef) {
+      if (!currentDef) {
+        const [rawName, ...rest] = line.split(":");
+        const name = rawName.trim();
+        const firstPart = rest.join(":").trim();
+        currentDef = {
+          name,
+          body: firstPart,
+          definitionLink: "", // will set on end
+        };
+      } else {
+        buffer.push(line);
+      }
     }
-  }
-
-  // flush last def
-  if (currentDef) {
-    currentDef.body = [currentDef.body, ...buffer].filter(Boolean).join(" ").trim();
-    defs[currentDef.name] = currentDef;
   }
 
   return defs;
 }
+
+// Normalize title/key for URLs
+const normalizeKey = (key) =>
+  key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+// Parse diagrams from MDX content
+function parseDiagrams(content, definitions, filePath) {
+  const diagrams = {};
+
+  // Base link for diagram anchors
+  const baseLink = filePath
+    .replace(/^content\//, "/Notes/")
+    .replace(/\/index\.mdx$/, "");
+
+  const lines = content.split("\n");
+  let currentDiagram = null;
+  let buffer = [];
+  let relatedDefs = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    // Diagram metadata: related definitions
+    const diagramDefsMatch = /^\{\/\*\s*Diagram:\s*(.+?)\s*\*\/\}/i.exec(line);
+    if (diagramDefsMatch) {
+      relatedDefs = diagramDefsMatch[1].split(",").map((d) => d.trim());
+      continue;
+    }
+
+    // Diagram title
+    const diagramMatch = /^###\s*Diagram:\s*(.+)$/i.exec(line);
+    if (diagramMatch) {
+      currentDiagram = {
+        name: diagramMatch[1].trim(),
+        diagramLink: `${baseLink}#diagram-${normalizeKey(diagramMatch[1].trim())}`,
+        diagram: "",
+        relatedDefinitions: relatedDefs || [],
+      };
+      buffer = [];
+      continue;
+    }
+
+    // Inside a diagram code block
+    if (currentDiagram) {
+      if (line.startsWith("```") && buffer.length === 0) {
+        // skip opening ```
+        continue;
+      } else if (line.startsWith("```")) {
+        // end of code block
+        currentDiagram.diagram = buffer.join("\n");
+        diagrams[currentDiagram.name] = { ...currentDiagram };
+        currentDiagram = null;
+        buffer = [];
+        relatedDefs = [];
+        continue;
+      } else {
+        buffer.push(lines[i]); // use original line to preserve spaces
+      }
+    }
+  }
+
+  return diagrams;
+}
+
+function attachDiagramsToDefinitions(definitionsPath, diagramsPath) {
+  const defsFile = path.join(process.cwd(), definitionsPath);
+  const diagramsFile = path.join(process.cwd(), diagramsPath);
+
+  const definitions = JSON.parse(fs.readFileSync(defsFile, "utf-8"));
+  const diagrams = JSON.parse(fs.readFileSync(diagramsFile, "utf-8"));
+
+  // Clear any existing diagramList
+  Object.values(definitions).forEach((def) => (def.diagramList = []));
+
+  Object.values(diagrams).forEach((diagram) => {
+    diagram.relatedDefinitions.forEach((defName) => {
+      if (definitions[defName]) {
+        definitions[defName].diagramList.push({
+          name: diagram.name,
+          diagramLink: diagram.diagramLink,
+          diagram: diagram.diagram,
+        });
+      }
+    });
+  });
+
+  fs.writeFileSync(defsFile, JSON.stringify(definitions, null, 2));
+  console.log("Diagrams attached to definitions successfully!");
+}
+
+
+
+
+
 
 
 const nextConfig = {
@@ -684,24 +777,58 @@ const nextConfig = {
       // ********************
       // System Design Parsing
       const systemDefinitions = {};
+      const systemDiagrams = {};
 
       systemDesignFilePaths.forEach((relPath) => {
-      try {
-        const filePath = path.join(process.cwd(), relPath);
-        const content = fs.readFileSync(filePath, "utf-8");
-        const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
-        const blogTitle = titleMatch ? titleMatch[1] : "system-design";
+        try {
+          const filePath = path.join(process.cwd(), relPath);
+          const content = fs.readFileSync(filePath, "utf-8");
 
-        Object.assign(systemDefinitions, parseDefinitions(content, blogTitle));
-      } catch (err) {
-        console.error(`Error parsing ${relPath}`, err);
-      }
+          const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
+          const blogTitle = titleMatch ? titleMatch[1] : "system-design";
+
+          // Parse definitions
+          let defs = parseDefinitions(content, relPath);
+
+          // Parse diagrams
+          const diagrams = parseDiagrams(content, defs, relPath); // Returns object { diagramSlug: diagramData }
+          
+          // Attach diagrams to definitions if needed
+          Object.entries(diagrams).forEach(([slug, diagram]) => {
+            if (diagram.definitionsReferenced) {
+              diagram.definitionsReferenced.forEach((defName) => {
+                if (defs[defName]) {
+                  if (!defs[defName].diagrams) defs[defName].diagrams = [];
+                  defs[defName].diagrams.push(slug);
+                }
+              });
+            }
+          });
+
+          // Merge into main collections
+          Object.assign(systemDefinitions, defs);
+          Object.assign(systemDiagrams, diagrams);
+        } catch (err) {
+          console.error(`Error parsing ${relPath}`, err);
+        }
       });
 
+      // Write definitions and diagrams to DB
       fs.writeFileSync(
         path.join(process.cwd(), "public/generatedDB", "systemDesignDefinitions.json"),
         JSON.stringify(systemDefinitions, null, 2)
       );
+      fs.writeFileSync(
+        path.join(process.cwd(), "public/generatedDB", "systemDesignDiagrams.json"),
+        JSON.stringify(systemDiagrams, null, 2)
+      );
+
+      // After writing systemDesignDefinitions.json and systemDesignDiagrams.json
+      attachDiagramsToDefinitions(
+        "public/generatedDB/systemDesignDefinitions.json",
+        "public/generatedDB/systemDesignDiagrams.json"
+      );
+
       }
 
     return config;

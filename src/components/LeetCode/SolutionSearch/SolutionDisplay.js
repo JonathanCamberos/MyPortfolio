@@ -4,7 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 
-const Solution = ({ solution }) => {
+const SolutionDisplay = ({ solution }) => {
   return (
     <div className="group border p-4 rounded-md shadow-md hover:scale-100 transition-all ease duration-200">
       
@@ -47,4 +47,4 @@ const Solution = ({ solution }) => {
 
 
 
-export default Solution;
+export default SolutionDisplay;

@@ -3,7 +3,7 @@ import GithubSlugger from "github-slugger";
 import TopicSection from "../../components/LeetCode/Topics/TopicSearch";
 import DifficultySection from "../../components/LeetCode/Difficulty/DifficultySection";
 import ApplicationSection from "../../components/LeetCode/Application/ApplicationSection";
-import SolutionSection from "../../components/LeetCode/SolutionSearch/TextSearch";
+import SolutionSection from "../../components/LeetCode/SolutionSearch/SolutionTextSearch";
 
 const slugger = new GithubSlugger();
 

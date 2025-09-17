@@ -5,7 +5,7 @@ import Solution from "./SolutionDisplay";
 import HorizontalQuestion from "./SolutionIntroBox";
 
 
-const SolutionSection = () => {
+const SolutionTextSearch = () => {
   const [questionMapping, setQuestionMapping] = useState({});
   const [allSolutions, setAllSolutions] = useState({});
   const [warmnessData, setWarmnessData] = useState({});
@@ -197,4 +197,4 @@ const getColdnessClass = (coldnessCount, isSelected) => {
   );
 };
 
-export default SolutionSection;
+export default SolutionTextSearch;

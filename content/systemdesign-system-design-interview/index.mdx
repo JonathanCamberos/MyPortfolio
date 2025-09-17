@@ -60,20 +60,23 @@ on a single server.
 
 1. Client -> DNS
 
-{/* def */}
+{/* def: start */}
 DNS: Users access websites through domain names, (e.g., www.google.com)
 The Domain Name System (DNS) resolve those domain names into IP addresses.
 DNS is usually provided by third parties (registrars, hosting providers, 
 dedicated DNS services) rather than hosted on the application's own servers.
+{/* def: end */}
 
 2. IP Address
 
-{/* def */}
+{/* def: start */}
 IP Address: An Internet Protocol (IP) address is the numerical label assigned
 to a device on a network.
 
 It is returned to the browser or mobile app after a DNS lookup so the client 
 knows where to send requests.
+{/* def: end */}
+
 
 3. HTTP/JSON Request
 
@@ -84,6 +87,7 @@ or JSON requests are sent to the server.
 
 The server returns HTML pages or JSON responses for rendering.
 
+{/* Diagram: DNS, IP Address */}
 ### Diagram: Single Server Setup
 ```python
                                               1) ------>

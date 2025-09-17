@@ -1,14 +1,26 @@
 {
   "DNS": {
     "name": "DNS",
-    "body": "Users access websites through domain names, (e.g., www.google.com) The Domain Name System (DNS) resolve those domain names into IP addresses. DNS is usually provided by third parties (registrars, hosting providers, dedicated DNS services) rather than hosted on the application's own servers. 2. IP Address",
-    "blog": "System Design: System Design Interview Vol I",
-    "definitionLink": "/Notes/system-design-system-design-interview-vol-i#single-server-processing-steps"
+    "body": "The Domain Name System (DNS) resolve those domain names into IP addresses. DNS is usually provided by third parties (registrars, hosting providers, dedicated DNS services) rather than hosted on the application's own servers.",
+    "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+    "diagramList": [
+      {
+        "name": "Single Server Setup",
+        "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+        "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+    15.125.23.214     +--------+    \n                        |        ^            2) <------    \n                        |        |                 \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+"
+      }
+    ]
   },
   "IP Address": {
     "name": "IP Address",
-    "body": "An Internet Protocol (IP) address is the numerical label assigned to a device on a network. It is returned to the browser or mobile app after a DNS lookup so the client knows where to send requests. 3. HTTP/JSON Request Once the client receives the IP address, Hypertext Transfer Protocol (HTTP) or JSON requests are sent to the server. 4. HTML/JSON Response The server returns HTML pages or JSON responses for rendering. ```python 1) ------> +-------------------------+   api.mysite.com     +--------+ | Web Browser, Mobile App |                      |  DNS   | +-------------------------+    15.125.23.214     +--------+ |        ^            2) <------ |        | |        | 3)                  |        |  4) 15.125.23.214       |        |  HTML Page |        | |        | |        | V        | +------------------+ |   Web Server     | +------------------+ ``` Client via a web application or mobile application - Def: Web Application: A client web application instance uses a combination of server-side languages (Java, Python, etc) to handle logic, storage, etc., and client-side languages (HTML, JavaScript, etc) for presentation - Def: Mobile Application: HTTP protocol is the communication protocol between the mobile app and the web server. JavaScript Object Notation (JSON) is the most commonly used API response format to transfer data due to its simplicity. ## Database ## Which Database To Use? ## Vertical Scaling vs Horizontal Scaling ## Load Balancer ## Database Replication ## Cache ## Cache Tier ## Considerations For Using Cache ## Content Delivery Network (CDN) ## Considerations Of Using A CDN ## Stateless Web Tier ## Stateful Architecture ## Stateless Architecture ## Data Centers ## Message Queue ## Logging, Metrics, Automation ## Adding Message Queues and Different Tools ## Database Scaling ## Vertical Scaling ## Horizontal Scaling ## Re Sharding Data ## Celebrity Problem ## Join and De Normalization ## Millions of Users and Beyond # Chapter 2: Back Of The Envelope Estimation ## Intro > Calculations and estimates created by using combination of thought > experiments and common performance in order to get a feel for > which design strategies will meet the requirements for the system. # Chapter 3: A Framework For System Design Interviews # Chapter 4: Design a Rate Limiter # Chapter 5: Design Consistent Hashing # Chapter 6: Design a Key Value Store # Chapter 7: Design a Unique ID Generator in Distributed Systems # Chapter 8: Design a URL Shortener # Chapter 9: Design a Web Crawler # Chapter 10: Design a Notification System # Chapter 11: Design a News Feed System # Chapter 12: Design a Chat System # Chapter 13: Design a Search Auto Complete System # Chapter 14: Design Youtube # Chapter 15: Design Google Drive # Chapter 16: The Learning Continues # Afterword",
-    "blog": "System Design: System Design Interview Vol I",
-    "definitionLink": "/Notes/system-design-system-design-interview-vol-i#single-server-processing-steps"
+    "body": "to a device on a network.  It is returned to the browser or mobile app after a DNS lookup so the client knows where to send requests.",
+    "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+    "diagramList": [
+      {
+        "name": "Single Server Setup",
+        "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+        "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+    15.125.23.214     +--------+    \n                        |        ^            2) <------    \n                        |        |                 \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+"
+      }
+    ]
   }
 }
