@@ -560,6 +560,7 @@ function createQuestionMapping(filePath) {
 
 // ********************
 // System Design Parsers
+// parseDefinitions: preserve first-line content and combine with following buffer lines
 function parseDefinitions(content, filePath) {
   const defs = {};
   const lines = content.split("\n");
@@ -567,8 +568,6 @@ function parseDefinitions(content, filePath) {
   const normalizeKey = (key) =>
     key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  // Build the base URL from the MDX file path
-  // THIS is the key: replace 'content/' with '/Notes/' and remove 'index.mdx'
   const baseLink = filePath.replace(/^content\//, "/Notes/").replace(/\/index\.mdx$/, "");
 
   let currentDef = null;
@@ -586,18 +585,29 @@ function parseDefinitions(content, filePath) {
       continue;
     }
 
-    if (line === "{/* def: start */}") {
+    // Start of a perspective
+    if (/^{\/\*\s*def:/.test(line)) {
       insideDef = true;
       buffer = [];
+
+      // Extract perspectiveId and diagramId
+      const perspectiveIdMatch = /perspectiveId\s*=\s*(\d+)/.exec(line);
+      const diagramIdMatch = /diagramId\s*=\s*([^\s*}]+)/.exec(line);
+
+      currentDef = {
+        perspectiveId: perspectiveIdMatch ? parseInt(perspectiveIdMatch[1], 10) : 0,
+        diagramId: diagramIdMatch ? diagramIdMatch[1].trim() : null,
+      };
       continue;
     }
 
-    if (line === "{/* def: end */}") {
-      if (currentDef) {
+    if (line === "{/* end */}") {
+      if (currentDef && currentDef.name) {
         currentDef.body = buffer.join(" ").trim();
-        // Use the closest heading slug for the link
         currentDef.definitionLink = `${baseLink}#${currentHeadingSlug || normalizeKey(currentDef.name)}`;
-        defs[currentDef.name] = currentDef;
+
+        if (!defs[currentDef.name]) defs[currentDef.name] = [];
+        defs[currentDef.name].push(currentDef);
       }
       currentDef = null;
       insideDef = false;
@@ -606,25 +616,26 @@ function parseDefinitions(content, filePath) {
     }
 
     if (insideDef) {
-      if (!currentDef) {
+      if (!currentDef.name) {
         const [rawName, ...rest] = line.split(":");
-        const name = rawName.trim();
-        const firstPart = rest.join(":").trim();
-        currentDef = {
-          name,
-          body: firstPart,
-          definitionLink: "", // will set on end
-        };
+        currentDef.name = rawName.trim();
+        buffer.push(rest.join(":").trim());
       } else {
         buffer.push(line);
       }
     }
   }
 
+  // Sort perspectives by perspectiveId ascending
+  Object.keys(defs).forEach((concept) => {
+    defs[concept].sort((a, b) => a.perspectiveId - b.perspectiveId);
+  });
+
   return defs;
 }
 
-function parseDiagrams(content, definitions, filePath) {
+// parseDiagrams: preserves raw line spacing inside code blocks
+function parseDiagrams(content, filePath) {
   const diagrams = {};
   const normalizeKey = (key) =>
     key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -634,46 +645,48 @@ function parseDiagrams(content, definitions, filePath) {
   const lines = content.split("\n");
   let currentDiagram = null;
   let buffer = [];
-  let relatedDefs = [];
+  let relatedIds = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const lineRaw = lines[i];           // keep raw line for whitespace
-    const line = lineRaw.trim();        // trimmed version for matching
+    const lineRaw = lines[i];
+    const line = lineRaw.trim();
 
-    // Match related definitions line
-    const diagramDefsMatch = /^\{\/\*\s*Diagram:\s*(.+)\s*\*\/\}/i.exec(line);
-    if (diagramDefsMatch) {
-      relatedDefs = diagramDefsMatch[1].split(",").map((d) => d.trim());
+    // Match diagram reference to diagramId(s)
+    const diagramRefMatch = /^\{\/\*\s*Diagram:\s*(.+)\s*\*\/\}/i.exec(line);
+    if (diagramRefMatch) {
+      relatedIds = diagramRefMatch[1].split(",").map((d) => d.trim());
       continue;
     }
 
-    // Match diagram title
+    // Match diagram heading
     const diagramMatch = /^#{1,6}\s*Diagram:\s*(.+)$/i.exec(line);
     if (diagramMatch) {
       currentDiagram = {
         name: diagramMatch[1].trim(),
         diagramLink: `${baseLink}#diagram-${normalizeKey(diagramMatch[1].trim())}`,
         diagram: "",
-        relatedDefinitions: relatedDefs || [],
+        relatedIds: relatedIds || [],
+        related: [],
       };
       buffer = [];
       continue;
     }
 
     if (currentDiagram) {
-      // Start or end of code block
-      if (line.startsWith("```") && buffer.length === 0) {
-        continue; // skip opening ```
-      } else if (line.startsWith("```")) {
-        // End of code block
-        currentDiagram.diagram = buffer.join("\n"); // preserve exact whitespace
-        diagrams[currentDiagram.name] = currentDiagram;
+      if (line.startsWith("```") && buffer.length === 0) continue; // skip opening ```
+      if (line.startsWith("```")) {
+        currentDiagram.diagram = buffer.join("\n");
+
+        // Use the first relatedId as the key if available, else fallback to name
+        const key = currentDiagram.relatedIds[0] || currentDiagram.name;
+        diagrams[key] = currentDiagram;
+
         currentDiagram = null;
         buffer = [];
-        relatedDefs = [];
+        relatedIds = [];
         continue;
       } else {
-        buffer.push(lineRaw); // use raw line to keep formatting
+        buffer.push(lineRaw); // preserve whitespace
       }
     }
   }
@@ -681,36 +694,45 @@ function parseDiagrams(content, definitions, filePath) {
   return diagrams;
 }
 
-function attachDiagramsToDefinitions(definitionsPath, diagramsPath) {
-  const defsFile = path.join(process.cwd(), definitionsPath);
-  const diagramsFile = path.join(process.cwd(), diagramsPath);
-
-  const definitions = JSON.parse(fs.readFileSync(defsFile, "utf-8"));
-  const diagrams = JSON.parse(fs.readFileSync(diagramsFile, "utf-8"));
-
-  // Clear any existing diagramList
-  Object.values(definitions).forEach((def) => (def.diagramList = []));
-
-  Object.values(diagrams).forEach((diagram) => {
-    diagram.relatedDefinitions.forEach((defName) => {
-      if (definitions[defName]) {
-        definitions[defName].diagramList.push({
-          name: diagram.name,
-          diagramLink: diagram.diagramLink,
-          diagram: diagram.diagram,
-        });
+function attachDiagramsToPerspectives(defs, diagrams) {
+  Object.entries(defs).forEach(([concept, perspectiveArray]) => {
+    perspectiveArray.forEach((perspective) => {
+      if (perspective.diagramId) {
+        const diagram = diagrams[perspective.diagramId];
+        if (diagram) {
+          // Attach the diagram to the perspective
+          if (!perspective.diagramList) perspective.diagramList = [];
+          perspective.diagramList.push({
+            name: diagram.name,
+            diagramLink: diagram.diagramLink,
+            diagram: diagram.diagram,
+            // Use the pre-populated related array
+            related: diagram.related.join(", "),
+          });
+        }
       }
     });
   });
-
-  fs.writeFileSync(defsFile, JSON.stringify(definitions, null, 2));
-  console.log("Diagrams attached to definitions successfully!");
 }
 
+function addConceptsToDiagramRelated(defs, diagrams) {
+  Object.entries(defs).forEach(([conceptName, perspectives]) => {
+    perspectives.forEach((perspective) => {
+      if (perspective.diagramId) {
+        const diagram = diagrams[perspective.diagramId];
+        if (diagram) {
+          // Ensure the 'related' array exists
+          if (!diagram.related) diagram.related = [];
 
-
-
-
+          // Add the concept name if it's not already there
+          if (!diagram.related.includes(conceptName)) {
+            diagram.related.push(conceptName);
+          }
+        }
+      }
+    });
+  });
+}
 
 
 const nextConfig = {
@@ -773,55 +795,59 @@ const nextConfig = {
       const systemDefinitions = {};
       const systemDiagrams = {};
 
+      const outputDir = path.join(process.cwd(), "public/generatedDB");
+      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+
       systemDesignFilePaths.forEach((relPath) => {
         try {
           const filePath = path.join(process.cwd(), relPath);
           const content = fs.readFileSync(filePath, "utf-8");
 
-          const titleMatch = /^title:\s*"(.+)"$/m.exec(content);
-          const blogTitle = titleMatch ? titleMatch[1] : "system-design";
+          const defs = parseDefinitions(content, relPath);
+          const diagrams = parseDiagrams(content, relPath);
 
-          // Parse definitions
-          let defs = parseDefinitions(content, relPath);
+          addConceptsToDiagramRelated(defs, diagrams);
+          // Attach diagrams to perspectives (existing function)
+          attachDiagramsToPerspectives(defs, diagrams);
 
-          // Parse diagrams
-          const diagrams = parseDiagrams(content, defs, relPath); // Returns object { diagramSlug: diagramData }
-          
-          // Attach diagrams to definitions if needed
-          Object.entries(diagrams).forEach(([slug, diagram]) => {
-            if (diagram.definitionsReferenced) {
-              diagram.definitionsReferenced.forEach((defName) => {
-                if (defs[defName]) {
-                  if (!defs[defName].diagrams) defs[defName].diagrams = [];
-                  defs[defName].diagrams.push(slug);
+          // NEW: automatically populate diagram.related arrays
+          Object.entries(defs).forEach(([conceptName, perspectives]) => {
+            perspectives.forEach((perspective) => {
+              if (perspective.diagramId) {
+                const diagram = diagrams[perspective.diagramId];
+                if (diagram) {
+                  if (!diagram.related) diagram.related = [];
+                  if (!diagram.related.includes(conceptName)) {
+                    diagram.related.push(conceptName);
+                  }
                 }
-              });
-            }
+              }
+            });
           });
 
-          // Merge into main collections
-          Object.assign(systemDefinitions, defs);
+          // Merge into the master DBs
+          Object.entries(defs).forEach(([concept, perspectiveArray]) => {
+            if (!systemDefinitions[concept]) systemDefinitions[concept] = [];
+            systemDefinitions[concept].push(...perspectiveArray);
+          });
+
           Object.assign(systemDiagrams, diagrams);
+
         } catch (err) {
           console.error(`Error parsing ${relPath}`, err);
         }
       });
 
-      // Write definitions and diagrams to DB
       fs.writeFileSync(
-        path.join(process.cwd(), "public/generatedDB", "systemDesignDefinitions.json"),
+        path.join(outputDir, "systemDesignDefinitions.json"),
         JSON.stringify(systemDefinitions, null, 2)
       );
+
       fs.writeFileSync(
-        path.join(process.cwd(), "public/generatedDB", "systemDesignDiagrams.json"),
+        path.join(outputDir, "systemDesignDiagrams.json"),
         JSON.stringify(systemDiagrams, null, 2)
       );
 
-      // After writing systemDesignDefinitions.json and systemDesignDiagrams.json
-      attachDiagramsToDefinitions(
-        "public/generatedDB/systemDesignDefinitions.json",
-        "public/generatedDB/systemDesignDiagrams.json"
-      );
 
       }
 

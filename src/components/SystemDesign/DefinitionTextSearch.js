@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import DefinitionCard from "./DefinitionDisplay";
+import DefinitionCard from "./DefinitionCard";
 
 const DefinitionSearch = () => {
   const [definitionMapping, setDefinitionMapping] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDefinition, setSelectedDefinition] = useState(null);
+  const [selectedConcept, setSelectedConcept] = useState(null);
 
   // Fetch definitions JSON
   useEffect(() => {
@@ -18,18 +18,16 @@ const DefinitionSearch = () => {
       );
   }, []);
 
-  // Filter keys based on search query or show all if query is "all"
   const filteredKeys = searchQuery
     ? searchQuery.toLowerCase() === "all"
-      ? Object.keys(definitionMapping) // show all
+      ? Object.keys(definitionMapping)
       : Object.keys(definitionMapping).filter((key) =>
           key.toLowerCase().includes(searchQuery.toLowerCase())
         )
-    : []; // show nothing if empty
-
+    : [];
 
   const handleButtonClick = (key) => {
-    setSelectedDefinition(definitionMapping[key]);
+    setSelectedConcept({ concept: key, perspectives: definitionMapping[key] });
   };
 
   return (
@@ -39,7 +37,7 @@ const DefinitionSearch = () => {
           Search System Design Definitions
         </h1>
         <span className="mt-2 inline-block">
-          Find system design topics and view definitions.
+          Find system design topics and view all perspectives.
         </span>
       </div>
 
@@ -56,7 +54,7 @@ const DefinitionSearch = () => {
       <div className="px-0 md:px-10 sxl:px-20 mt-10 border-t-2 text-dark dark:text-light border-b-2 border-solid border-dark dark:border-light py-4 flex items-start flex-wrap font-medium mx-5 md:mx-10 min-h-[60px]">
         {filteredKeys.length > 0 ? (
           filteredKeys.map((key, index) => {
-            const isSelected = selectedDefinition?.name === key;
+            const isSelected = selectedConcept?.concept === key;
 
             const baseClass = isSelected
               ? "bg-dark text-light dark:bg-light dark:text-dark"
@@ -81,8 +79,12 @@ const DefinitionSearch = () => {
         )}
       </div>
 
-      {/* Display only selected definition */}
-      {selectedDefinition && <DefinitionCard definition={selectedDefinition} />}
+      {selectedConcept && (
+        <DefinitionCard
+          concept={selectedConcept.concept}
+          perspectives={selectedConcept.perspectives}
+        />
+      )}
     </article>
   );
 };

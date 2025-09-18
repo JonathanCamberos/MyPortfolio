@@ -1,26 +1,36 @@
 {
-  "DNS": {
-    "name": "DNS",
-    "body": "The Domain Name System (DNS) resolve those domain names into IP addresses. DNS is usually provided by third parties (registrars, hosting providers, dedicated DNS services) rather than hosted on the application's own servers.",
-    "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
-    "diagramList": [
-      {
-        "name": "Single Server Setup",
-        "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
-        "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+    15.125.23.214     +--------+    \n                        |        ^            2) <------    \n                        |        |                 \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+"
-      }
-    ]
-  },
-  "IP Address": {
-    "name": "IP Address",
-    "body": "to a device on a network.  It is returned to the browser or mobile app after a DNS lookup so the client knows where to send requests.",
-    "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
-    "diagramList": [
-      {
-        "name": "Single Server Setup",
-        "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
-        "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+    15.125.23.214     +--------+    \n                        |        ^            2) <------    \n                        |        |                 \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+"
-      }
-    ]
-  }
+  "DNS": [
+    {
+      "perspectiveId": 1,
+      "diagramId": "dns-basic",
+      "name": "DNS",
+      "body": "Users access websites through domain names, (e.g., www.google.com) The Domain Name System (DNS) resolve those domain names into IP addresses. DNS is usually provided by third parties (registrars, hosting providers, dedicated DNS services) rather than hosted on the application's own servers.",
+      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "diagramList": [
+        {
+          "name": "Single Server Setup",
+          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+    15.125.23.214     +--------+    \n                        |        ^            2) <------    \n                        |        |                 \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
+          "related": "DNS, IP Address"
+        }
+      ]
+    }
+  ],
+  "IP Address": [
+    {
+      "perspectiveId": 1,
+      "diagramId": "dns-basic",
+      "name": "IP Address",
+      "body": "An Internet Protocol (IP) address is the numerical label assigned to a device on a network.  It is returned to the browser or mobile app after a DNS lookup so the client knows where to send requests.",
+      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "diagramList": [
+        {
+          "name": "Single Server Setup",
+          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+    15.125.23.214     +--------+    \n                        |        ^            2) <------    \n                        |        |                 \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
+          "related": "DNS, IP Address"
+        }
+      ]
+    }
+  ]
 }
