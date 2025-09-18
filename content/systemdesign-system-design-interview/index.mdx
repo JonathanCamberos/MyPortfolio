@@ -72,7 +72,6 @@ dedicated DNS services) rather than hosted on the application's own servers.
 {/* def: perspectiveId=1 diagramId=dns-basic */}
 IP Address: An Internet Protocol (IP) address is the numerical label assigned
 to a device on a network.
-
 It is returned to the browser or mobile app after a DNS lookup so the client 
 knows where to send requests.
 {/* end */}
@@ -93,9 +92,9 @@ The server returns HTML pages or JSON responses for rendering.
                                               1) ------>
                +-------------------------+   api.mysite.com     +--------+
                | Web Browser, Mobile App |                      |  DNS   |     
-               +-------------------------+    15.125.23.214     +--------+    
+               +-------------------------+                      +--------+    
                         |        ^            2) <------    
-                        |        |                 
+                        |        |           15.125.23.214     
                         |        |       
     3)                  |        |  4)    
     15.125.23.214       |        |  HTML Page 

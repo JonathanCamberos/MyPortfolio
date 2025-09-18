@@ -6,7 +6,9 @@ const path = require('path');
 
 const systemDesignFilePaths = [
   "content/systemdesign-system-design-interview/index.mdx",
-  // add more .mdx files here
+  "content/systemdesign-ticket-master/index.mdx",
+  "content/systemdesign-url-shortner/index.mdx",
+  "content/textbook-designing-data-intensive-applications/index.mdx",
 ];
 
 
@@ -576,17 +578,17 @@ function parseDefinitions(content, filePath) {
   let currentHeadingSlug = null;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    let line = lines[i];
 
     // Track closest preceding heading (#, ##, ###, etc.)
-    const headingMatch = /^(#+)\s*(.+)$/.exec(line);
+    const headingMatch = /^(#+)\s*(.+)$/.exec(line.trim());
     if (headingMatch) {
       currentHeadingSlug = normalizeKey(headingMatch[2]);
       continue;
     }
 
     // Start of a perspective
-    if (/^{\/\*\s*def:/.test(line)) {
+    if (/^{\/\*\s*def:/.test(line.trim())) {
       insideDef = true;
       buffer = [];
 
@@ -601,9 +603,10 @@ function parseDefinitions(content, filePath) {
       continue;
     }
 
-    if (line === "{/* end */}") {
+    // End of perspective
+    if (line.trim() === "{/* end */}") {
       if (currentDef && currentDef.name) {
-        currentDef.body = buffer.join(" ").trim();
+        currentDef.body = buffer.join("\n").trim();
         currentDef.definitionLink = `${baseLink}#${currentHeadingSlug || normalizeKey(currentDef.name)}`;
 
         if (!defs[currentDef.name]) defs[currentDef.name] = [];
@@ -616,12 +619,16 @@ function parseDefinitions(content, filePath) {
     }
 
     if (insideDef) {
+      // Remove leading "-" or "*" for markdown lists
+      const cleanLine = line.replace(/^[-*]\s*/, "");
+
       if (!currentDef.name) {
-        const [rawName, ...rest] = line.split(":");
+        // Split on first colon for name/body
+        const [rawName, ...rest] = cleanLine.split(":");
         currentDef.name = rawName.trim();
         buffer.push(rest.join(":").trim());
       } else {
-        buffer.push(line);
+        buffer.push(cleanLine);
       }
     }
   }
@@ -634,24 +641,29 @@ function parseDefinitions(content, filePath) {
   return defs;
 }
 
+
 // parseDiagrams: preserves raw line spacing inside code blocks
 function parseDiagrams(content, filePath) {
   const diagrams = {};
   const normalizeKey = (key) =>
     key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  const baseLink = filePath.replace(/^content\//, "/Notes/").replace(/\/index\.mdx$/, "");
+  const baseLink = filePath
+    .replace(/^content\//, "/Notes/")
+    .replace(/\/index\.mdx$/, "");
 
   const lines = content.split("\n");
   let currentDiagram = null;
   let buffer = [];
   let relatedIds = [];
+  let currentLanguage = null;
+  let insideCodeBlock = false;
 
   for (let i = 0; i < lines.length; i++) {
     const lineRaw = lines[i];
     const line = lineRaw.trim();
 
-    // Match diagram reference to diagramId(s)
+    // Match diagram reference to diagramId
     const diagramRefMatch = /^\{\/\*\s*Diagram:\s*(.+)\s*\*\/\}/i.exec(line);
     if (diagramRefMatch) {
       relatedIds = diagramRefMatch[1].split(",").map((d) => d.trim());
@@ -663,29 +675,46 @@ function parseDiagrams(content, filePath) {
     if (diagramMatch) {
       currentDiagram = {
         name: diagramMatch[1].trim(),
-        diagramLink: `${baseLink}#diagram-${normalizeKey(diagramMatch[1].trim())}`,
+        diagramLink: `${baseLink}#diagram-${normalizeKey(
+          diagramMatch[1].trim()
+        )}`,
         diagram: "",
         relatedIds: relatedIds || [],
         related: [],
+        language: null, // store language later
       };
       buffer = [];
       continue;
     }
 
     if (currentDiagram) {
-      if (line.startsWith("```") && buffer.length === 0) continue; // skip opening ```
-      if (line.startsWith("```")) {
-        currentDiagram.diagram = buffer.join("\n");
+      // Opening or closing code block
+      const codeBlockMatch = /^```(\w*)/.exec(line);
+      if (codeBlockMatch) {
+        if (!insideCodeBlock) {
+          // Opening code block
+          insideCodeBlock = true;
+          currentLanguage = codeBlockMatch[1] || "text"; // default to text
+        } else {
+          // Closing code block
+          insideCodeBlock = false;
+          currentDiagram.diagram = buffer.join("\n");
+          currentDiagram.language = currentLanguage;
 
-        // Use the first relatedId as the key if available, else fallback to name
-        const key = currentDiagram.relatedIds[0] || currentDiagram.name;
-        diagrams[key] = currentDiagram;
+          // Use first relatedId as the key, fallback to normalized name
+          const key = currentDiagram.relatedIds[0] || normalizeKey(currentDiagram.name);
+          diagrams[key] = currentDiagram;
 
-        currentDiagram = null;
-        buffer = [];
-        relatedIds = [];
+          // Reset for next diagram
+          currentDiagram = null;
+          buffer = [];
+          relatedIds = [];
+          currentLanguage = null;
+        }
         continue;
-      } else {
+      }
+
+      if (insideCodeBlock) {
         buffer.push(lineRaw); // preserve whitespace
       }
     }
@@ -693,6 +722,7 @@ function parseDiagrams(content, filePath) {
 
   return diagrams;
 }
+
 
 function attachDiagramsToPerspectives(defs, diagrams) {
   Object.entries(defs).forEach(([concept, perspectiveArray]) => {
@@ -708,6 +738,7 @@ function attachDiagramsToPerspectives(defs, diagrams) {
             diagram: diagram.diagram,
             // Use the pre-populated related array
             related: diagram.related.join(", "),
+            language: diagram.language
           });
         }
       }

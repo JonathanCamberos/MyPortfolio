@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { dracula, okaidia, coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const DefinitionCard = ({ concept, perspectives }) => {
   if (!perspectives || perspectives.length === 0) return null;
@@ -9,6 +9,7 @@ const DefinitionCard = ({ concept, perspectives }) => {
   return (
     <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8 px-5 sm:px-10 md:px-24 sxl:px-32">
       {perspectives.map((definition, idx) => {
+        // Split body on code blocks
         const splitBody = definition.body.split(/```(.*?)\n([\s\S]*?)```/g);
 
         return (
@@ -31,7 +32,7 @@ const DefinitionCard = ({ concept, perspectives }) => {
               {splitBody.map((chunk, i) => {
                 if (i % 3 === 1) return null; // language line
                 if (i % 3 === 2) {
-                  const language = splitBody[i - 1] || "text";
+                  const language = splitBody[i - 1]?.trim() || "text"; // use code block language
                   return (
                     <div
                       key={i}
@@ -67,7 +68,7 @@ const DefinitionCard = ({ concept, perspectives }) => {
                 {definition.diagramList.map((diagram, i) => (
                   <div
                     key={i}
-                    className=" p-3 bg-gray-50 dark:bg-gray-800"
+                    className="p-3 bg-gray-50 dark:bg-gray-800 "
                   >
                     <h3 className="font-semibold mb-1">
                       <Link
@@ -83,8 +84,8 @@ const DefinitionCard = ({ concept, perspectives }) => {
                       style={{ backgroundColor: "#2D2D2D" }}
                     >
                       <SyntaxHighlighter
-                        language="python"
-                        style={dracula}
+                        language={diagram.language || "text"} // use diagram language
+                        style={coldarkDark}
                         customStyle={{
                           background: "transparent",
                           fontSize: "0.9rem",

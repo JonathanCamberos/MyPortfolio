@@ -1,67 +1,186 @@
-"use client"
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { GithubIcon, LinkedInIcon, SunIcon } from '../Icons'
-import Link from 'next/link'
-import siteMetadata from '../../utils/siteMetaDataFile'
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 
-const Footer = () => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
-    const onSubmit = (data) => console.log(data);
-    console.log(errors);
+export default function Footer({ radioLabel, setRadioLabel }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+  const [trackTitle, setTrackTitle] = useState("Playlist");
+  const [trackArtist, setTrackArtist] = useState("");
 
-    const openInNewTab = (url) => {
-      window.open(url, "_blank", "noreferrer");
+  const playerRef = useRef(null);
+  const savedScrollRef = useRef(null);
+  const radioToggleRef = useRef(false);
+
+  const YOUTUBE_PLAYLIST_ID = "PLeAiYqMdk8HGBpeJmZLw0StqyMqggATX8";
+
+  useEffect(() => {
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      playerRef.current = new window.YT.Player("youtube-player", {
+        height: "0",
+        width: "0",
+        playerVars: { listType: "playlist", list: YOUTUBE_PLAYLIST_ID, autoplay: 0, controls: 0 },
+        events: {
+          onReady: () => playerRef.current.setVolume(volume * 100),
+          onStateChange: (e) =>
+            e.data === window.YT.PlayerState.PLAYING
+              ? (setIsPlaying(true), updateTitle())
+              : e.data === window.YT.PlayerState.PAUSED && setIsPlaying(false),
+        },
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (playerRef.current) playerRef.current.setVolume(volume * 100);
+
+    const handlePlayRadio = () => {
+      if (!radioToggleRef.current) {
+        savedScrollRef.current = window.scrollY;
+        document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" });
+        playerRef.current?.playVideo();
+        setIsPlaying(true);
+        setRadioLabel("Back ");
+      } else {
+        if (savedScrollRef.current !== null) {
+          window.scrollTo({ top: savedScrollRef.current, behavior: "smooth" });
+        }
+        setRadioLabel("Radio");
+      }
+      radioToggleRef.current = !radioToggleRef.current;
     };
 
+    document.addEventListener("playRadio", handlePlayRadio);
+    return () => document.removeEventListener("playRadio", handlePlayRadio);
+  }, [volume, setRadioLabel]);
+
+  const updateTitle = () => {
+    if (!playerRef.current) return;
+    const data = playerRef.current.getVideoData();
+    setTrackTitle(data.title);
+    setTrackArtist(data.author || "");
+  };
+
+  const togglePlay = () => {
+    if (!playerRef.current) return;
+    const state = playerRef.current.getPlayerState();
+    state === 1 ? playerRef.current.pauseVideo() : playerRef.current.playVideo();
+    setIsPlaying((p) => !p);
+  };
+  const skipForward = () => {
+    playerRef.current?.nextVideo();
+    setTimeout(updateTitle, 500);
+  };
+
+  const skipBackward = () => {
+    playerRef.current?.previousVideo();
+    setTimeout(updateTitle, 500);
+  };
+
   return (
-    /* ##### footer component ##### */
-    <footer className="mt-16 rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-10 flex flex-col items-center text-light dark:text-dark">
-
-        {/* ##### The Foots Foot ##### */}
-        <div className="w-full  relative font-medium py-6 px-8 flex  flex-col md:flex-row items-center justify-between">
-          
-          <span className="text-center">
-            <div className="flex items-center">
-                
-            </div>
-          </span>
-
-          {/* <Link href="/sitemap.xml" className="text-center underline ml:-4  my-4 md:my-0">
-            sitemap.xml
-          </Link> */}
-
-          <div>
-            Thanks for visiting!
+    <footer
+      id="footer"
+      className="rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-5 flex items-center text-light dark:text-dark py-2 px-6"
+    >
+      <div className="w-full flex justify-between items-center">
+        {/* === Left: title + bars === */}
+        <div className="flex items-center w-1/3 space-x-2 flex-shrink-0">
+                    {/* bars */}
+          <div className="flex items-end space-x-0.5 h-4 w-12 justify-end">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="w-1 bg-light dark:bg-light/80 transition-all duration-300"
+                style={{ height: isPlaying ? `${Math.random() * 8 + 4}px` : "2px" }}
+              />
+            ))}
           </div>
-           
-
-          {/* <div>
-            <button
-                role="link"
-                onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}
-                className="inline-block w-6 h-6 mr-4"
+          
+          <div className="flex-1 overflow-hidden max-w-[120px] md:max-w-[180px]">
+            <div className="whitespace-nowrap overflow-hidden relative">
+              <div
+                className="inline-block animate-marquee"
+                style={{ animationPlayState: isPlaying ? "running" : "paused" }}
               >
-                <LinkedInIcon className="hover:scale-125 transition-all ease duration-200"/>
-              </button>
+                <span className="font-semibold">{trackTitle}</span>
+                {trackArtist && <span className="text-gray-300 text-xs ml-1">{trackArtist}</span>}
+              </div>
+            </div>
+          </div>
+        </div>
 
-              <button
-                role="link"
-                onClick={() => openInNewTab(`${siteMetadata.github}`)}
-                className="inline-block w-6 h-6 mr-4"
-              >
-                <GithubIcon className="hover:scale-125 transition-all ease duration-200 fill-light dark:fill-dark"/>
-              </button>
-          </div> */}
+        {/* === Middle: controls + Radio btn === */}
+        <div className="flex items-center justify-center space-x-3 w-1/3 flex-shrink-0">
+          <button onClick={skipBackward} className="p-1.5 rounded-full hover:bg-light/20 dark:hover:bg-dark/20">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7M18 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <button
+            onClick={togglePlay}
+            className={`p-2.5 rounded-full transition ${
+              isPlaying ? "bg-light dark:bg-light/80 hover:bg-light/90 dark:hover:bg-light/90" : "bg-transparent hover:bg-light/10 dark:hover:bg-light/20"
+            }`}
+          >
+            {isPlaying ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <rect x="6" y="4" width="4" height="16" />
+                <rect x="14" y="4" width="4" height="16" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <polygon points="5,3 19,12 5,21" />
+              </svg>
+            )}
+          </button>
+
+          <button onClick={skipForward} className="p-1.5 rounded-full hover:bg-light/20 dark:hover:bg-dark/20">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M6 5l7 7-7 7" />
+            </svg>
+          </button>
 
         </div>
-        
-    </footer>
-  )
-}
 
-export default Footer
+        {/* === Right: volume === */}
+        <div className="flex items-center justify-end space-x-1 w-1/3 flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M5 9v6h4l5 5V4l-5 5H5z" />
+          </svg>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            className="w-20"
+          />
+        </div>
+
+        <div id="youtube-player" style={{ display: "none" }} />
+      </div>
+
+      <style jsx>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+        .animate-marquee {
+          display: inline-block;
+          padding-left: 100%;
+          animation: marquee 15s linear infinite;
+        }
+      `}</style>
+    </footer>
+  );
+};
+

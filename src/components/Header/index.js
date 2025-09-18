@@ -8,7 +8,7 @@ import { useThemeSwitch } from '../Hooks/useThemeSwitch'
 import { cx } from '../../utils'
 
 
-const Header = () => {
+const Header = ({radioLabel}) => {
   const [mode, setMode] = useThemeSwitch();
   const [click, setClick] = useState(false);
 
@@ -30,6 +30,24 @@ const Header = () => {
 
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
+  };
+
+  // Radio button handler
+  const handleRadioClick = () => {
+    const footerEl = document.getElementById("footer");
+    if (!footerEl) return;
+
+    if (!radioActive) {
+      // First click: save current scroll, scroll to footer, and play
+      savedScrollRef.current = window.scrollY;
+      document.dispatchEvent(new Event("playRadio"));
+      footerEl.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Second click: return to saved scroll
+      window.scrollTo({ top: savedScrollRef.current, behavior: "smooth" });
+    }
+
+    setRadioActive(!radioActive);
   };
 
   return (
@@ -116,6 +134,13 @@ const Header = () => {
           <Link href="/About" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             About
           </Link>
+          {/* Radio Button */}
+          <button
+            className="mx-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={() => document.dispatchEvent(new Event("playRadio"))}
+          >
+            {radioLabel}
+          </button>
           <button
             onClick={() => {
               setMode(mode === "light" ? "dark" : "light");
@@ -208,6 +233,12 @@ const Header = () => {
           >
             About
           </Link>
+          <button
+            className="mb-2 hover:text-accent dark:hover:text-accentDark"
+            onClick={() => document.dispatchEvent(new Event("playRadio"))}
+          >
+            {radioLabel}
+          </button>
           <button
             onClick={() => {
               setMode(mode === "light" ? "dark" : "light");

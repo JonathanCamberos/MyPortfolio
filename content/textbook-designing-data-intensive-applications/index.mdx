@@ -660,12 +660,16 @@ the performance of a system
 Throughput could be the first thing that comes to mind when thinking about numerical 
 performance, such as in batch processing systems.
 
-- Def: Throughput: the number of records we can process per second, or the total time
+{/* def: perspectiveId=1 */}
+- Throughput: The number of records we can process per second, or the total time
 to complete a job on a dataset of a certain size
+{/* end */}
 
 However, in online systems, the response time is usually more important
 
-- Def: Response Time: time between a client sending a request and receiving a response
+{/* def: perspectiveId=1 diagramId=high-percentile*/}
+- Response Time: Time between a client sending a request and receiving a response
+{/* end */}
 
 A single request sent multiple times will get slightly different response times
 each time its sent. In practice, a single system is handling a variety of different 
@@ -677,6 +681,8 @@ Outliers may seem like they are slower because they could be processing more dat
 but in the case where all requests do the same, random additional latency could be 
 introduced by the loss of a packet, TCP retransmission, garbage collection pause, etc. 
 
+{/* Diagram: high-percentile */}
+###### Diagram: High Percentile Response Time
 ```python
                         Response Time
                         (ms)
