@@ -88,12 +88,12 @@ export default function Footer({ radioLabel, setRadioLabel }) {
       <div className="w-full flex justify-between items-center">
         {/* === Left: title + bars === */}
         <div className="flex items-center w-1/3 space-x-2 flex-shrink-0">
-                    {/* bars */}
+          {/* bars */}
           <div className="flex items-end space-x-0.5 h-4 w-12 justify-end">
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="w-1 bg-light dark:bg-light/80 transition-all duration-300"
+                className="w-1 transition-all duration-300 bg-accent dark:bg-dark"
                 style={{ height: isPlaying ? `${Math.random() * 8 + 4}px` : "2px" }}
               />
             ))}
@@ -127,7 +127,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
             }`}
           >
             {isPlaying ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-dark" fill="currentColor" viewBox="0 0 24 24">
                 <rect x="6" y="4" width="4" height="16" />
                 <rect x="14" y="4" width="4" height="16" />
               </svg>
@@ -158,8 +158,9 @@ export default function Footer({ radioLabel, setRadioLabel }) {
             step="0.01"
             value={volume}
             onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="w-20"
+            className="w-20 h-1 rounded-lg accent-accent dark:accent-dark"
           />
+
         </div>
 
         <div id="youtube-player" style={{ display: "none" }} />

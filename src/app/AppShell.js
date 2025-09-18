@@ -10,7 +10,7 @@ export default function AppShell({ children }) {
   return (
     <>
       <Header radioLabel={radioLabel} />
-      {children}
+      <main className="pb-24">{children}</main> {/* mdx was hitting footer  */}
       <Footer radioLabel={radioLabel} setRadioLabel={setRadioLabel} />
     </>
   );
