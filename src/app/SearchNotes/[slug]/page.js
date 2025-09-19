@@ -68,7 +68,7 @@ const NotesPage = ({params}) => {
       <Categories categories={allCategories} currentSlug={params.slug} /> 
 
       {blogs.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-16 mt-8 sm:mt-12 md:mt-28 sxl:mt-36 px-5 sm:px-10 md:px-24 sxl:px-32">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 grid-rows-2 gap-16 mt-8 sm:mt-12 md:mt-28 sxl:mt-36 px-5 sm:px-10 md:px-24 sxl:px-32">
           {blogs.map((blog, index) => (
             <article key={index} className="col-span-1 row-span-1 relative">
               <NotesDisplayTwo blog={blog} />
