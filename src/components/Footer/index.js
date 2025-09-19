@@ -119,16 +119,23 @@ export default function Footer({ radioLabel, setRadioLabel }) {
   const skipForward = () => {
     if (playerRef.current) {
       playerRef.current.nextVideo();
-      setTimeout(updateTitle, 500);
+      setTimeout(() => {
+        updateTitle();
+        playerRef.current.playVideo(); 
+      }, 50);
     }
   };
 
   const skipBackward = () => {
     if (playerRef.current) {
       playerRef.current.previousVideo();
-      setTimeout(updateTitle, 500);
+      setTimeout(() => {
+        updateTitle();
+        playerRef.current.playVideo(); 
+      }, 50);
     }
   };
+
 
   // === Radio toggle scroll ===
   useEffect(() => {
