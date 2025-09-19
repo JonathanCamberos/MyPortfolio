@@ -570,7 +570,9 @@ function parseDefinitions(content, filePath) {
   const normalizeKey = (key) =>
     key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  const baseLink = filePath.replace(/^content\//, "/Notes/").replace(/\/index\.mdx$/, "");
+  const baseLink = filePath
+    .replace(/^content\//, "/Notes/")
+    .replace(/\/index\.mdx$/, "");
 
   let currentDef = null;
   let buffer = [];
@@ -578,39 +580,50 @@ function parseDefinitions(content, filePath) {
   let currentHeadingSlug = null;
 
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i];
+    const line = lines[i];
 
-    // Track closest preceding heading (#, ##, ###, etc.)
+    // --- Track closest heading ---
     const headingMatch = /^(#+)\s*(.+)$/.exec(line.trim());
     if (headingMatch) {
       currentHeadingSlug = normalizeKey(headingMatch[2]);
       continue;
     }
 
-    // Start of a perspective
-    if (/^{\/\*\s*def:/.test(line.trim())) {
+    // --- Start of a definition ---
+    const defMatch = /^{\/\*\s*def:(.*?)\*\/}/.exec(line.trim());
+    if (defMatch) {
       insideDef = true;
       buffer = [];
 
-      // Extract perspectiveId and diagramId
-      const perspectiveIdMatch = /perspectiveId\s*=\s*(\d+)/.exec(line);
-      const diagramIdMatch = /diagramId\s*=\s*([^\s*}]+)/.exec(line);
+      const metaString = defMatch[1].trim();
+      const meta = {};
+
+      // Regex to match key=value, allowing spaces in value
+      const regex = /(\w+)=((?:(?!\s\w+=).)+)/g;
+      let match;
+      while ((match = regex.exec(metaString)) !== null) {
+        meta[match[1]] = match[2].trim();
+      }
 
       currentDef = {
-        perspectiveId: perspectiveIdMatch ? parseInt(perspectiveIdMatch[1], 10) : 0,
-        diagramId: diagramIdMatch ? diagramIdMatch[1].trim() : null,
+        topic: meta.topic || "Unknown",
+        id: meta.id ? parseInt(meta.id, 10) : 0,
+        perspective: meta.perspective || null,
+        diagramId: meta.diagramId || null,
       };
       continue;
     }
 
-    // End of perspective
+    // --- End of a definition ---
     if (line.trim() === "{/* end */}") {
-      if (currentDef && currentDef.name) {
+      if (currentDef) {
         currentDef.body = buffer.join("\n").trim();
-        currentDef.definitionLink = `${baseLink}#${currentHeadingSlug || normalizeKey(currentDef.name)}`;
+        currentDef.definitionLink = `${baseLink}#${
+          currentHeadingSlug || normalizeKey(currentDef.topic)
+        }`;
 
-        if (!defs[currentDef.name]) defs[currentDef.name] = [];
-        defs[currentDef.name].push(currentDef);
+        if (!defs[currentDef.topic]) defs[currentDef.topic] = [];
+        defs[currentDef.topic].push(currentDef);
       }
       currentDef = null;
       insideDef = false;
@@ -618,29 +631,19 @@ function parseDefinitions(content, filePath) {
       continue;
     }
 
+    // --- Inside a definition body ---
     if (insideDef) {
-      // Remove leading "-" or "*" for markdown lists
-      const cleanLine = line.replace(/^[-*]\s*/, "");
-
-      if (!currentDef.name) {
-        // Split on first colon for name/body
-        const [rawName, ...rest] = cleanLine.split(":");
-        currentDef.name = rawName.trim();
-        buffer.push(rest.join(":").trim());
-      } else {
-        buffer.push(cleanLine);
-      }
+      buffer.push(line);
     }
   }
 
-  // Sort perspectives by perspectiveId ascending
-  Object.keys(defs).forEach((concept) => {
-    defs[concept].sort((a, b) => a.perspectiveId - b.perspectiveId);
+  // Sort by id
+  Object.keys(defs).forEach((topic) => {
+    defs[topic].sort((a, b) => a.id - b.id);
   });
 
   return defs;
 }
-
 
 // parseDiagrams: preserves raw line spacing inside code blocks
 function parseDiagrams(content, filePath) {

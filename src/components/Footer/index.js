@@ -1,47 +1,123 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import startMix from "./Radio/startMix"; // array of playlist IDs
 
 export default function Footer({ radioLabel, setRadioLabel }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [trackTitle, setTrackTitle] = useState("Playlist");
   const [trackArtist, setTrackArtist] = useState("");
+  const [stationIndex, setStationIndex] = useState(0); // current station index
 
   const playerRef = useRef(null);
   const savedScrollRef = useRef(null);
   const radioToggleRef = useRef(false);
+  const apiReadyRef = useRef(false);
 
-  const YOUTUBE_PLAYLIST_ID = "PLeAiYqMdk8HGBpeJmZLw0StqyMqggATX8";
-
+  // Load YouTube API once
   useEffect(() => {
     const tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
     window.onYouTubeIframeAPIReady = () => {
+      apiReadyRef.current = true;
+      // mount dummy player
       playerRef.current = new window.YT.Player("youtube-player", {
         height: "0",
         width: "0",
-        playerVars: { listType: "playlist", list: YOUTUBE_PLAYLIST_ID, autoplay: 0, controls: 0 },
+        playerVars: { autoplay: 0, controls: 0 },
         events: {
           onReady: () => playerRef.current.setVolume(volume * 100),
-          onStateChange: (e) =>
-            e.data === window.YT.PlayerState.PLAYING
-              ? (setIsPlaying(true), updateTitle())
-              : e.data === window.YT.PlayerState.PAUSED && setIsPlaying(false),
+          onStateChange: handleStateChange,
         },
       });
     };
   }, []);
 
-  useEffect(() => {
-    if (playerRef.current) playerRef.current.setVolume(volume * 100);
+  // Handle player state changes
+  const handleStateChange = (e) => {
+    if (e.data === window.YT.PlayerState.PLAYING) {
+      setIsPlaying(true);
+      updateTitle();
+    } else if (e.data === window.YT.PlayerState.PAUSED) {
+      setIsPlaying(false);
+    }
+  };
 
+  // Start current playlist
+  const playCurrentPlaylist = () => {
+    if (!playerRef.current || !apiReadyRef.current) return;
+
+    const playlist = startMix[stationIndex];
+    playerRef.current.loadPlaylist({
+      list: playlist,
+      listType: "playlist",
+      index: 0,
+      suggestedQuality: "default",
+    });
+    playerRef.current.playVideo();
+  };
+
+  // Change playlist to a new random station
+  const changePlaylist = () => {
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * startMix.length);
+    } while (newIndex === stationIndex); // avoid repeating same playlist
+    setStationIndex(newIndex);
+    const playlist = startMix[newIndex];
+    if (playerRef.current) {
+      playerRef.current.loadPlaylist({
+        list: playlist,
+        listType: "playlist",
+        index: 0,
+        suggestedQuality: "default",
+      });
+      playerRef.current.playVideo();
+    }
+  };
+
+  // Play/pause toggle
+  const togglePlay = () => {
+    if (!playerRef.current) {
+      playCurrentPlaylist();
+      return;
+    }
+    const state = playerRef.current.getPlayerState();
+    if (state === 1) playerRef.current.pauseVideo();
+    else playerRef.current.playVideo();
+    setIsPlaying((p) => !p);
+  };
+
+  const updateTitle = () => {
+    if (!playerRef.current) return;
+    const data = playerRef.current.getVideoData();
+    setTrackTitle(data.title);
+    setTrackArtist(data.author || "");
+  };
+
+  const skipForward = () => {
+    if (playerRef.current) {
+      playerRef.current.nextVideo();
+      setTimeout(updateTitle, 500);
+    }
+  };
+
+  const skipBackward = () => {
+    if (playerRef.current) {
+      playerRef.current.previousVideo();
+      setTimeout(updateTitle, 500);
+    }
+  };
+
+  // Radio: scroll + play current playlist
+  useEffect(() => {
     const handlePlayRadio = () => {
       if (!radioToggleRef.current) {
         savedScrollRef.current = window.scrollY;
         document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" });
-        playerRef.current?.playVideo();
+        playCurrentPlaylist();
         setIsPlaying(true);
         setRadioLabel("Back ");
       } else {
@@ -55,40 +131,18 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
     document.addEventListener("playRadio", handlePlayRadio);
     return () => document.removeEventListener("playRadio", handlePlayRadio);
-  }, [volume, setRadioLabel]);
+  }, [setRadioLabel, stationIndex]);
 
-  const updateTitle = () => {
-    if (!playerRef.current) return;
-    const data = playerRef.current.getVideoData();
-    setTrackTitle(data.title);
-    setTrackArtist(data.author || "");
-  };
-
-  const togglePlay = () => {
-    if (!playerRef.current) return;
-    const state = playerRef.current.getPlayerState();
-    state === 1 ? playerRef.current.pauseVideo() : playerRef.current.playVideo();
-    setIsPlaying((p) => !p);
-  };
-  const skipForward = () => {
-    playerRef.current?.nextVideo();
-    setTimeout(updateTitle, 500);
-  };
-
-  const skipBackward = () => {
-    playerRef.current?.previousVideo();
-    setTimeout(updateTitle, 500);
-  };
+  useEffect(() => {
+    if (playerRef.current) playerRef.current.setVolume(volume * 100);
+  }, [volume]);
 
   return (
-    <footer
-      id="footer"
-      className="rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-5 flex items-center text-light dark:text-dark py-2 px-6"
-    >
+    <footer className="rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-5 flex items-center text-light dark:text-dark py-2 px-6">
       <div className="w-full flex justify-between items-center">
-        {/* === Left: title + bars === */}
-        <div className="flex items-center w-1/3 space-x-2 flex-shrink-0">
-          {/* bars */}
+        {/* === Left: station number + bars === */}
+        <div className="flex items-center space-x-2 w-1/3 flex-shrink-0">
+          <div className="font-bold text-lg">{stationIndex + 1}</div>
           <div className="flex items-end space-x-0.5 h-4 w-12 justify-end">
             {[...Array(5)].map((_, i) => (
               <div
@@ -98,7 +152,6 @@ export default function Footer({ radioLabel, setRadioLabel }) {
               />
             ))}
           </div>
-          
           <div className="flex-1 overflow-hidden max-w-[120px] md:max-w-[180px]">
             <div className="whitespace-nowrap overflow-hidden relative">
               <div
@@ -112,7 +165,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
           </div>
         </div>
 
-        {/* === Middle: controls + Radio btn === */}
+        {/* === Middle: controls === */}
         <div className="flex items-center justify-center space-x-3 w-1/3 flex-shrink-0">
           <button onClick={skipBackward} className="p-1.5 rounded-full hover:bg-light/20 dark:hover:bg-dark/20">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,9 +175,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
           <button
             onClick={togglePlay}
-            className={`p-2.5 rounded-full transition ${
-              isPlaying ? "bg-light dark:bg-light/80 hover:bg-light/90 dark:hover:bg-light/90" : "bg-transparent hover:bg-light/10 dark:hover:bg-light/20"
-            }`}
+            className={`p-2.5 rounded-full transition ${isPlaying ? "bg-light dark:bg-light/80 hover:bg-light/90 dark:hover:bg-light/90" : "bg-transparent hover:bg-light/10 dark:hover:bg-light/20"}`}
           >
             {isPlaying ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-dark" fill="currentColor" viewBox="0 0 24 24">
@@ -143,11 +194,10 @@ export default function Footer({ radioLabel, setRadioLabel }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M6 5l7 7-7 7" />
             </svg>
           </button>
-
         </div>
 
-        {/* === Right: volume === */}
-        <div className="flex items-center justify-end space-x-1 w-1/3 flex-shrink-0">
+        {/* === Right: volume + change playlist === */}
+        <div className="flex items-center justify-end space-x-2 w-1/3 flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M5 9v6h4l5 5V4l-5 5H5z" />
           </svg>
@@ -160,7 +210,12 @@ export default function Footer({ radioLabel, setRadioLabel }) {
             onChange={(e) => setVolume(parseFloat(e.target.value))}
             className="w-20 h-1 rounded-lg accent-accent dark:accent-dark"
           />
-
+          <button
+            onClick={changePlaylist}
+            className="p-1.5 rounded-md bg-accent dark:bg-dark/80 hover:bg-accent/90 dark:hover:bg-dark/90 text-xs"
+          >
+            Change
+          </button>
         </div>
 
         <div id="youtube-player" style={{ display: "none" }} />
@@ -168,12 +223,8 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
       <style jsx>{`
         @keyframes marquee {
-          0% {
-            transform: translateX(100%);
-          }
-          100% {
-            transform: translateX(-100%);
-          }
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
         }
         .animate-marquee {
           display: inline-block;
@@ -183,5 +234,4 @@ export default function Footer({ radioLabel, setRadioLabel }) {
       `}</style>
     </footer>
   );
-};
-
+}

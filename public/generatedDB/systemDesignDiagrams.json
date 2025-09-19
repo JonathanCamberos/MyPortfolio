@@ -12,12 +12,16 @@
     ],
     "language": "python"
   },
-  "example-of-architecture-for-data-system": {
+  "simple-architecture": {
     "name": "example of architecture for data system",
     "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-example-of-architecture-for-data-system",
     "diagram": "                            +--------+\n                            | Client |          \n                            +--------+          \n                                ^               \n                                |                            \n                                |    Client Requests                \n                                |               \n                                v  \n                        +---------------------+                 Asynchronous tasks\n                        |   Application Code  | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n                     /  +---------------------+ \\                                       |\n Reads requests     /           |                \\                                      |\n and first checks  /            |                 \\  Search                             |\n if the data      /             |                  \\ Requests                           |\n is cached       /              |                   \\                                   |\n   +-----------+        +----------------------+     +-----------+                +-----------+  \n   | In-memory |        |   Primary Database   |     | Full-text |                |  Message  |\n   |   Cache   |        +----------------------+     |   index   |                |  Queue    | \n   +-----------+                |                    +-----------+                +-----------+\n                ^               |                   /                                   |\n                 \\              | Capture          /                                    |\n                  \\             | changes to      /                                     |\n                   \\            | data           /                                      |\n        Invalidate  \\           v               /   Apply updates                       |\n        or update    \\  +---------------------+     to search index          +---------------------+\n        the cache       |   Application Code  |                              |   Application Code  |\n                        +---------------------+                              +---------------------+\n                                                                                        |\n                                                                                        |   e.g. send email\n                                                                                        V\n\n                                                                                    'outside world'",
-    "relatedIds": [],
-    "related": [],
+    "relatedIds": [
+      "simple-architecture"
+    ],
+    "related": [
+      "API"
+    ],
     "language": "python"
   },
   "high-percentile": {
@@ -28,6 +32,7 @@
       "high-percentile"
     ],
     "related": [
+      "Throughput",
       "Response Time"
     ],
     "language": "python"

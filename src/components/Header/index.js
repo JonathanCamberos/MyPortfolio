@@ -60,7 +60,7 @@ const Header = ({radioLabel}) => {
 
         {/* Hamburger Menu */}
         <button
-          className="w-10 h-10 flex items-center justify-center sm:hidden mr-5 cursor-pointer rounded transition-all ease duration-300"
+          className="w-10 h-10 flex items-center justify-center md:hidden mr-5 cursor-pointer rounded transition-all ease duration-300"
           onClick={toggle}
           aria-label="Hamburger Menu"
         >
@@ -118,7 +118,7 @@ const Header = ({radioLabel}) => {
         </button>
 
         {/* Navigation */}
-        <nav className="hidden sm:flex items-center dark:text-light transform translate-x-8">
+        <nav className="hidden md:flex items-center dark:text-light transform translate-x-8">
           {/* <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
             Home
           </Link> */}
@@ -134,9 +134,8 @@ const Header = ({radioLabel}) => {
           <Link href="/About" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             About
           </Link>
-          {/* Radio Button */}
           <button
-            className="mx-2 hover:text-accent dark:hover:text-accentDark"
+            className="mx-2 hover:text-accent dark:hover:text-accentDark w-10 text-center"
             onClick={() => document.dispatchEvent(new Event("playRadio"))}
           >
             {radioLabel}
@@ -161,7 +160,7 @@ const Header = ({radioLabel}) => {
         </nav>
 
         {/* Social Media Icons */}
-        <div className="hidden sm:flex items-center">
+        <div className="hidden md:flex items-center">
           <button
             role="link"
             onClick={() => openInNewTab(`${siteMetadata.linkedin}`)}

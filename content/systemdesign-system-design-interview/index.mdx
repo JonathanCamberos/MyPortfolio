@@ -59,8 +59,7 @@ on a single server.
 ### Single Server: Processing Steps
 
 1. Client -> DNS
-
-{/* def: perspectiveId=1 diagramId=dns-basic */}
+{/* def: topic=DNS id=1 perspective=API diagramId=dns-basic */}
 DNS: Users access websites through domain names, (e.g., www.google.com)
 The Domain Name System (DNS) resolve those domain names into IP addresses.
 DNS is usually provided by third parties (registrars, hosting providers, 
@@ -69,7 +68,7 @@ dedicated DNS services) rather than hosted on the application's own servers.
 
 2. IP Address
 
-{/* def: perspectiveId=1 diagramId=dns-basic */}
+{/* def: topic=IP Address id=1 perspective=API diagramId=dns-basic */}
 IP Address: An Internet Protocol (IP) address is the numerical label assigned
 to a device on a network.
 It is returned to the browser or mobile app after a DNS lookup so the client 
@@ -119,6 +118,26 @@ and client-side languages (HTML, JavaScript, etc) for presentation
 the mobile app and the web server. JavaScript Object Notation (JSON) is the 
 most commonly used API response format to transfer data due to its simplicity.
 
+## API
+
+{/* def: topic=API id=1 perspective=definition */}
+API: An API, Application Programming Interface, is a set of rules or defined contract 
+that allow different software applications to communicate with each other.
+
+Rules:
+- What endpoints exits
+- Defined valid inputs
+- Expected outputs and errors
+
+This contract allows different systems, such as a client and server, to work together
+them to work together.
+
+1. Request: A client/user sends a request through the API
+2. Processing: The API forwards the request to the server
+3. Response: The server processes the request and sends the response back to the api
+4. Delivery: The API returns the server's response to the client
+
+{/* end */}
 
 ## Database
 

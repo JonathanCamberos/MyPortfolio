@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Solution from "./SolutionDisplay";
-import HorizontalQuestion from "./SolutionIntroBox";
+import SolutionDisplay from "./SolutionDisplay";
+import SolutionIntroBox from "./SolutionIntroBox";
 
 
 const SolutionTextSearch = () => {
@@ -183,13 +183,13 @@ const getColdnessClass = (coldnessCount, isSelected) => {
 
       {selectedQuestion && (
         <div className="mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
-          <HorizontalQuestion question={selectedQuestion} />
+          <SolutionIntroBox question={selectedQuestion} />
         </div>
       )}
       {selectedSolutions.length > 0 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
           {selectedSolutions.map((solution, idx) => (
-            <Solution key={idx} solution={solution} />
+            <SolutionDisplay key={idx} solution={solution} />
           ))}
         </div>
       )}

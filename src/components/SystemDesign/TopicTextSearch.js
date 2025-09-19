@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import DefinitionCard from "./DefinitionCard";
+import TopicIntroBox from "./TopicIntroBox";
+import TopicPerspectiveDisplay from "./TopicPerspectiveDisplay";
 
-const DefinitionSearch = () => {
+const TopicTextSearch = () => {
   const [definitionMapping, setDefinitionMapping] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedConcept, setSelectedConcept] = useState(null);
@@ -30,11 +31,19 @@ const DefinitionSearch = () => {
     setSelectedConcept({ concept: key, perspectives: definitionMapping[key] });
   };
 
+  // Separate intro vs other perspectives
+  const intro = selectedConcept?.perspectives?.find(
+    (p) => p.perspective.toLowerCase() === "definition"
+  );
+  const otherPerspectives = selectedConcept?.perspectives?.filter(
+    (p) => p !== intro
+  );
+
   return (
     <article className="mt-10 flex flex-col text-dark dark:text-light">
       <div className="px-5 sm:px-10 md:px-24 sxl:px-32 flex flex-col">
         <h1 className="mt-6 font-semibold text-2xl md:text-3xl lg:text-3xl">
-          Search System Design Definitions
+          Search System Design Topics
         </h1>
         <span className="mt-2 inline-block">
           Find system design topics and view all perspectives.
@@ -79,14 +88,24 @@ const DefinitionSearch = () => {
         )}
       </div>
 
-      {selectedConcept && (
-        <DefinitionCard
-          concept={selectedConcept.concept}
-          perspectives={selectedConcept.perspectives}
-        />
+      {/* Intro Card */}
+      {intro && (
+        <div className="mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
+          <TopicIntroBox concept={selectedConcept.concept} intro={intro} />
+        </div>
       )}
+
+      {/* Other Perspectives */}
+    {otherPerspectives && otherPerspectives.length > 0 && (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 px-5 sm:px-10 md:px-24 sxl:px-32">
+        <TopicPerspectiveDisplay
+        concept={selectedConcept.concept}
+        perspectives={otherPerspectives}
+        />
+    </div>
+    )}
     </article>
   );
 };
 
-export default DefinitionSearch;
+export default TopicTextSearch;

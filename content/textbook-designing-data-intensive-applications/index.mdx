@@ -51,12 +51,10 @@ But again, if you are backend these notes are for you.
 1. Role wise this is for: 
 
 - software engineers the builders
-
 - software architects the designers
 
 - basically anybody making decisions on the 
 architecture of the systems you are building.
-
 - for people with natural curiosity for what is going on under the hood,
 rule number 1: its never magic (thanks bobby ;) )
 rule number 2: i will not bail you out of jail (also thank you bobby, rip cmsc417 gang)
@@ -64,9 +62,7 @@ rule number 2: i will not bail you out of jail (also thank you bobby, rip cmsc41
 2. App wise, this is for 
 
 - scalable data systems (e.g., supporting web or mobile apps with millions of users)
-
 - minimizing downtime (e.g., making apps available)
-
 - maintainable systems (e.g., making systems easier scale and update as technologies change)
 
 3. Counter Argument wise, this is for
@@ -208,6 +204,7 @@ to trouble as traditional boundaries blur and categories fade.
 > allowing developers to create a new special purpose data system 
 > from smaller, general purpose data systems.
 
+{/* def: topic=API id=2 perspective=definition diagramId=simple-architecture */}
 APIs serve to hide implementation details from clients and developers, becoming a 
 special purpose data system from smaller, general purpose components.
 
@@ -218,6 +215,9 @@ clients see consistent results
 This leads API wrappers to have the responsibility for both
 both data storage and system design.
 
+{/* end */}
+
+{/* Diagram: simple-architecture */}
 #### Diagram: example of architecture for data system
 ```python
                             +--------+
@@ -660,15 +660,15 @@ the performance of a system
 Throughput could be the first thing that comes to mind when thinking about numerical 
 performance, such as in batch processing systems.
 
-{/* def: perspectiveId=1 */}
-- Throughput: The number of records we can process per second, or the total time
+{/* def: topic=Throughput id=2 perspective=Performance distribution diagramId=high-percentile */}
+Throughput would be the number of records we can process per second, or the total time
 to complete a job on a dataset of a certain size
 {/* end */}
 
 However, in online systems, the response time is usually more important
 
-{/* def: perspectiveId=1 diagramId=high-percentile*/}
-- Response Time: Time between a client sending a request and receiving a response
+{/* def: topic=Response Time id=2 perspective=performance distribution diagramId=high-percentile */}
+Response time would be the total time between a client sending a request and receiving a response
 {/* end */}
 
 A single request sent multiple times will get slightly different response times

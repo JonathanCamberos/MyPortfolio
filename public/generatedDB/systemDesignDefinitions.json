@@ -1,10 +1,11 @@
 {
   "DNS": [
     {
-      "perspectiveId": 1,
+      "topic": "DNS",
+      "id": 1,
+      "perspective": "API",
       "diagramId": "dns-basic",
-      "name": "DNS",
-      "body": "Users access websites through domain names, (e.g., www.google.com)\nThe Domain Name System (DNS) resolve those domain names into IP addresses.\nDNS is usually provided by third parties (registrars, hosting providers, \ndedicated DNS services) rather than hosted on the application's own servers.",
+      "body": "DNS: Users access websites through domain names, (e.g., www.google.com)\nThe Domain Name System (DNS) resolve those domain names into IP addresses.\nDNS is usually provided by third parties (registrars, hosting providers, \ndedicated DNS services) rather than hosted on the application's own servers.",
       "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
@@ -19,10 +20,11 @@
   ],
   "IP Address": [
     {
-      "perspectiveId": 1,
+      "topic": "IP Address",
+      "id": 1,
+      "perspective": "API",
       "diagramId": "dns-basic",
-      "name": "IP Address",
-      "body": "An Internet Protocol (IP) address is the numerical label assigned\nto a device on a network.\nIt is returned to the browser or mobile app after a DNS lookup so the client \nknows where to send requests.",
+      "body": "IP Address: An Internet Protocol (IP) address is the numerical label assigned\nto a device on a network.\nIt is returned to the browser or mobile app after a DNS lookup so the client \nknows where to send requests.",
       "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
@@ -35,28 +37,66 @@
       ]
     }
   ],
-  "Throughput": [
+  "API": [
     {
-      "perspectiveId": 1,
+      "topic": "API",
+      "id": 1,
+      "perspective": "definition",
       "diagramId": null,
-      "name": "Throughput",
-      "body": "The number of records we can process per second, or the total time\nto complete a job on a dataset of a certain size",
-      "definitionLink": "/Notes/textbook-designing-data-intensive-applications#performance-distribution-p50-p95-p99-p999-and-client-load-generators"
+      "body": "API: An API, Application Programming Interface, is a set of rules or defined contract \nthat allow different software applications to communicate with each other.\n\nRules:\n- What endpoints exits\n- Defined valid inputs\n- Expected outputs and errors\n\nThis contract allows different systems, such as a client and server, to work together\nthem to work together.\n\n1. Request: A client/user sends a request through the API\n2. Processing: The API forwards the request to the server\n3. Response: The server processes the request and sends the response back to the api\n4. Delivery: The API returns the server's response to the client",
+      "definitionLink": "/Notes/systemdesign-system-design-interview#api"
+    },
+    {
+      "topic": "API",
+      "id": 2,
+      "perspective": "definition",
+      "diagramId": "simple-architecture",
+      "body": "APIs serve to hide implementation details from clients and developers, becoming a \nspecial purpose data system from smaller, general purpose components.\n\nThis special purpose data system could perform single tasks across components to\ncreate contracts or guarantees such as cache invalidation upon writes so\nclients see consistent results \n\nThis leads API wrappers to have the responsibility for both\nboth data storage and system design.",
+      "definitionLink": "/Notes/textbook-designing-data-intensive-applications#api-layers",
+      "diagramList": [
+        {
+          "name": "example of architecture for data system",
+          "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-example-of-architecture-for-data-system",
+          "diagram": "                            +--------+\n                            | Client |          \n                            +--------+          \n                                ^               \n                                |                            \n                                |    Client Requests                \n                                |               \n                                v  \n                        +---------------------+                 Asynchronous tasks\n                        |   Application Code  | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n                     /  +---------------------+ \\                                       |\n Reads requests     /           |                \\                                      |\n and first checks  /            |                 \\  Search                             |\n if the data      /             |                  \\ Requests                           |\n is cached       /              |                   \\                                   |\n   +-----------+        +----------------------+     +-----------+                +-----------+  \n   | In-memory |        |   Primary Database   |     | Full-text |                |  Message  |\n   |   Cache   |        +----------------------+     |   index   |                |  Queue    | \n   +-----------+                |                    +-----------+                +-----------+\n                ^               |                   /                                   |\n                 \\              | Capture          /                                    |\n                  \\             | changes to      /                                     |\n                   \\            | data           /                                      |\n        Invalidate  \\           v               /   Apply updates                       |\n        or update    \\  +---------------------+     to search index          +---------------------+\n        the cache       |   Application Code  |                              |   Application Code  |\n                        +---------------------+                              +---------------------+\n                                                                                        |\n                                                                                        |   e.g. send email\n                                                                                        V\n\n                                                                                    'outside world'",
+          "related": "API",
+          "language": "python"
+        }
+      ]
     }
   ],
-  "Response Time": [
+  "Throughput": [
     {
-      "perspectiveId": 1,
+      "topic": "Throughput",
+      "id": 2,
+      "perspective": "Performance distribution",
       "diagramId": "high-percentile",
-      "name": "Response Time",
-      "body": "Time between a client sending a request and receiving a response",
+      "body": "Throughput would be the number of records we can process per second, or the total time\nto complete a job on a dataset of a certain size",
       "definitionLink": "/Notes/textbook-designing-data-intensive-applications#performance-distribution-p50-p95-p99-p999-and-client-load-generators",
       "diagramList": [
         {
           "name": "High Percentile Response Time",
           "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-high-percentile-response-time",
           "diagram": "                        Response Time\n                        (ms)\n  99th percentile ----  |          *                                          \n                        |          *                                          \n                        |          *                                         \n                        |          *                 *                       \n  95th percentile ----  |  *       *       *         *        *              \n                        |  *       *       *         *        *              \n  Mean  --------------  |  *       *   *   *       *   *    *   *   *        \n  Median -------------  |  *   *   *   *   *   *   *   *    *   *   *        \n                        |  *   *   *   *   *   *   *   *    *   *   *        \n                        |  *   *   *   *   *   *   *   *    *   *   *        \n                        ----------------------------------------------------\n                          R1  R2  R3  R4  R5  R6  R7  R8  R9  R10  R11     Request Number",
-          "related": "Response Time",
+          "related": "Throughput, Response Time",
+          "language": "python"
+        }
+      ]
+    }
+  ],
+  "Response Time": [
+    {
+      "topic": "Response Time",
+      "id": 2,
+      "perspective": "performance distribution",
+      "diagramId": "high-percentile",
+      "body": "Response time would be the total time between a client sending a request and receiving a response",
+      "definitionLink": "/Notes/textbook-designing-data-intensive-applications#performance-distribution-p50-p95-p99-p999-and-client-load-generators",
+      "diagramList": [
+        {
+          "name": "High Percentile Response Time",
+          "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-high-percentile-response-time",
+          "diagram": "                        Response Time\n                        (ms)\n  99th percentile ----  |          *                                          \n                        |          *                                          \n                        |          *                                         \n                        |          *                 *                       \n  95th percentile ----  |  *       *       *         *        *              \n                        |  *       *       *         *        *              \n  Mean  --------------  |  *       *   *   *       *   *    *   *   *        \n  Median -------------  |  *   *   *   *   *   *   *   *    *   *   *        \n                        |  *   *   *   *   *   *   *   *    *   *   *        \n                        |  *   *   *   *   *   *   *   *    *   *   *        \n                        ----------------------------------------------------\n                          R1  R2  R3  R4  R5  R6  R7  R8  R9  R10  R11     Request Number",
+          "related": "Throughput, Response Time",
           "language": "python"
         }
       ]

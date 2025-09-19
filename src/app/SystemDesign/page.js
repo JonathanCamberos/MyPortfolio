@@ -1,6 +1,6 @@
 import { allBlogs } from "../../../.contentlayer/generated";
 import GithubSlugger from "github-slugger";
-import DefinitionSearch from "../../components/SystemDesign/DefinitionTextSearch";
+import DefinitionSearch from "../../components/SystemDesign/TopicTextSearch";
 
 const slugger = new GithubSlugger();
 
