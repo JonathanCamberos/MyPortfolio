@@ -234,7 +234,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
 
         {/* --- Middle: controls --- */}
-        <div className="flex items-center justify-center space-x-3 w-1/3 flex-shrink-0">
+        <div className="flex items-center justify-center space-x-1 sm:space-x-3 w-1/3 flex-shrink-0">
           <button
             onClick={skipBackward}
             className="p-0 sm:p-1.5 rounded-full hover:bg-light/20 dark:hover:bg-dark/20"
