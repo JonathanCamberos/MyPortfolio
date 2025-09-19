@@ -22,7 +22,6 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
     window.onYouTubeIframeAPIReady = () => {
       apiReadyRef.current = true;
-      // mount dummy player
       playerRef.current = new window.YT.Player("youtube-player", {
         height: "0",
         width: "0",
@@ -48,7 +47,6 @@ export default function Footer({ radioLabel, setRadioLabel }) {
   // Start current playlist
   const playCurrentPlaylist = () => {
     if (!playerRef.current || !apiReadyRef.current) return;
-
     const playlist = startMix[stationIndex];
     playerRef.current.loadPlaylist({
       list: playlist,
@@ -64,7 +62,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
     let newIndex;
     do {
       newIndex = Math.floor(Math.random() * startMix.length);
-    } while (newIndex === stationIndex); // avoid repeating same playlist
+    } while (newIndex === stationIndex);
     setStationIndex(newIndex);
     const playlist = startMix[newIndex];
     if (playerRef.current) {
@@ -112,33 +110,53 @@ export default function Footer({ radioLabel, setRadioLabel }) {
   };
 
   // Radio: scroll + play current playlist
-  useEffect(() => {
-    const handlePlayRadio = () => {
-      if (!radioToggleRef.current) {
-        savedScrollRef.current = window.scrollY;
-        document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" });
+useEffect(() => {
+  const handlePlayRadio = () => {
+    if (!playerRef.current || !apiReadyRef.current) return;
+
+    if (!radioToggleRef.current) {
+      // --- First time we hit "Radio"
+      savedScrollRef.current = window.scrollY;
+      document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" });
+
+      const state = playerRef.current.getPlayerState();
+
+      if (state === window.YT.PlayerState.PAUSED) {
+        // resume if paused
+        playerRef.current.playVideo();
+        setIsPlaying(true);
+      } else if (state !== window.YT.PlayerState.PLAYING) {
+        // only start if not already playing
         playCurrentPlaylist();
         setIsPlaying(true);
-        setRadioLabel("Back ");
-      } else {
-        if (savedScrollRef.current !== null) {
-          window.scrollTo({ top: savedScrollRef.current, behavior: "smooth" });
-        }
-        setRadioLabel("Radio");
       }
-      radioToggleRef.current = !radioToggleRef.current;
-    };
 
-    document.addEventListener("playRadio", handlePlayRadio);
-    return () => document.removeEventListener("playRadio", handlePlayRadio);
-  }, [setRadioLabel, stationIndex]);
+      setRadioLabel("Back ");
+      radioToggleRef.current = true;
+    } else {
+      // --- Second click: return to previous scroll position
+      if (savedScrollRef.current !== null) {
+        window.scrollTo({ top: savedScrollRef.current, behavior: "smooth" });
+      }
+      setRadioLabel("Radio");
+      radioToggleRef.current = false;
+    }
+  };
 
+  document.addEventListener("playRadio", handlePlayRadio);
+  return () => document.removeEventListener("playRadio", handlePlayRadio);
+}, [setRadioLabel, stationIndex]);
+
+  // Update volume dynamically
   useEffect(() => {
     if (playerRef.current) playerRef.current.setVolume(volume * 100);
   }, [volume]);
 
   return (
-    <footer className="rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-5 flex items-center text-light dark:text-dark py-2 px-6">
+    <footer
+      id="footer"
+      className="rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-5 flex items-center text-light dark:text-dark py-2 px-6"
+    >
       <div className="w-full flex justify-between items-center">
         {/* === Left: station number + bars === */}
         <div className="flex items-center space-x-2 w-1/3 flex-shrink-0">
@@ -175,7 +193,11 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
           <button
             onClick={togglePlay}
-            className={`p-2.5 rounded-full transition ${isPlaying ? "bg-light dark:bg-light/80 hover:bg-light/90 dark:hover:bg-light/90" : "bg-transparent hover:bg-light/10 dark:hover:bg-light/20"}`}
+            className={`p-2.5 rounded-full transition ${
+              isPlaying
+                ? "bg-light dark:bg-light/80 hover:bg-light/90 dark:hover:bg-light/90"
+                : "bg-transparent hover:bg-light/10 dark:hover:bg-light/20"
+            }`}
           >
             {isPlaying ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-dark" fill="currentColor" viewBox="0 0 24 24">
