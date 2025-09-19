@@ -174,11 +174,10 @@ export default function Footer({ radioLabel, setRadioLabel }) {
       className="rounded-2xl bg-dark dark:bg-accentDark/90 m-2 sm:m-5 flex items-center text-light dark:text-dark py-2 px-6"
     >
       <div className="w-full flex justify-between items-center">
-        {/* --- Left: Station button + bars + track info --- */}
-        <div className="flex items-center space-x-2 w-1/3 flex-shrink-0 relative">
-          
-          {/* Station button wrapper */}
-          <div className="relative flex flex-col items-center">
+        {/* --- Left: Station + dropdown + bars + track info --- */}
+        <div className="flex items-center space-x-2 w-1/3 flex-shrink-0">
+          {/* Number + dropdown wrapper */}
+          <div className="relative inline-block">
             <button
               onClick={() => setShowDropdown((v) => !v)}
               className="font-bold text-lg focus:outline-none z-20"
@@ -186,9 +185,8 @@ export default function Footer({ radioLabel, setRadioLabel }) {
               {startMix[stationIndex]?.name}
             </button>
 
-            {/* Dropdown menu */}
             {showDropdown && (
-              <div className="absolute bottom-full mb-1 bg-dark dark:bg-accentDark/90 rounded shadow-md z-10 w-max">
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-dark dark:bg-accentDark/90 rounded shadow-md z-10 w-max">
                 {startMix.map((station, i) => (
                   <button
                     key={station.id}
@@ -207,9 +205,8 @@ export default function Footer({ radioLabel, setRadioLabel }) {
             )}
           </div>
 
-
           {/* Bars */}
-          <div className="flex items-end space-x-0.5 h-4 w-12 justify-end">
+          <div className="flex items-end space-x-0.5 h-4 w-6 justify-end">
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
@@ -234,6 +231,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
             </div>
           </div>
         </div>
+
 
         {/* --- Middle: controls --- */}
         <div className="flex items-center justify-center space-x-3 w-1/3 flex-shrink-0">
