@@ -22,20 +22,28 @@ export default function Footer({ radioLabel, setRadioLabel }) {
     document.body.appendChild(tag);
 
     window.onYouTubeIframeAPIReady = () => {
-      apiReadyRef.current = true;
-      playerRef.current = new window.YT.Player("youtube-player", {
-        height: "0",
-        width: "0",
-        playerVars: { autoplay: 0, controls: 0 },
-        events: {
-          onReady: () => {
-            playerRef.current.setVolume(volume * 100);
-            playCurrentPlaylist(); // load first playlist only after ready
-          },
-          onStateChange: handleStateChange,
-        },
-      });
-    };
+  apiReadyRef.current = true;
+  playerRef.current = new window.YT.Player("youtube-player", {
+    height: "0",
+    width: "0",
+    playerVars: { autoplay: 0, controls: 0 },
+    events: {
+      onReady: () => {
+        playerRef.current.setVolume(volume * 100);
+        // Preload first station without playing
+        const { id } = startMix[stationIndex];
+        playerRef.current.loadPlaylist({
+          list: id,
+          listType: "playlist",
+          index: 0,
+          suggestedQuality: "default",
+        });
+      },
+      onStateChange: handleStateChange,
+    },
+  });
+};
+
   }, []);
 
   // === Player state ===
