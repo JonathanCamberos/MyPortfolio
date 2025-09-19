@@ -237,7 +237,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
         <div className="flex items-center justify-center space-x-1 sm:space-x-3 w-1/3 flex-shrink-0">
           <button
             onClick={skipBackward}
-            className="p-0 sm:p-1.5 rounded-full hover:bg-light/20 dark:hover:bg-dark/20"
+            className="p-0.5 sm:p-1.5 rounded-full hover:bg-light/20 dark:hover:bg-dark/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7M18 19l-7-7 7-7" />
@@ -246,7 +246,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
           <button
             onClick={togglePlay}
-            className={`p-0 sm:p-2.5 rounded-full transition ${
+            className={`p-1.5 sm:p-2.5 rounded-full transition ${
               isPlaying
                 ? "bg-light dark:bg-light/80 hover:bg-light/90 dark:hover:bg-light/90"
                 : "bg-transparent hover:bg-light/10 dark:hover:bg-light/20"
@@ -266,7 +266,7 @@ export default function Footer({ radioLabel, setRadioLabel }) {
 
           <button
             onClick={skipForward}
-            className="p-0 sm:p-1.5 sm:p-0 rounded-full hover:bg-light/20 dark:hover:bg-dark/20"
+            className="p-0.5 sm:p-1.5 sm:p-0 rounded-full hover:bg-light/20 dark:hover:bg-dark/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M6 5l7 7-7 7" />
