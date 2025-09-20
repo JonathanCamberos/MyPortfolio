@@ -53,7 +53,7 @@ const Header = ({radioLabel}) => {
   return (
     <>
       <header
-        className="w-full sm:p-4 px-5 flex items-center justify-between fixed top-0 z-50 bg-light dark:bg-dark shadow-md transition-all duration-300"
+        className="w-full md:p-3 px-5 flex items-center justify-between fixed top-0 z-50 bg-light dark:bg-dark shadow-md transition-all duration-300"
       >
         {/* Logo Section */}
         <Logo />
@@ -119,9 +119,6 @@ const Header = ({radioLabel}) => {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center dark:text-light transform translate-x-8">
-          {/* <Link href="/" className="mr-2 hover:text-accent dark:hover:text-accentDark">
-            Home
-          </Link> */}
           <Link href="/SearchNotes/all-categories" className="mx-2 hover:text-accent dark:hover:text-accentDark">
             Notes
           </Link>
@@ -193,9 +190,9 @@ const Header = ({radioLabel}) => {
     }`}
       >
         {/* Dummy Item */}
-    <div className="mb-1 invisible">
-      ur not supposed to see this :)
-    </div>
+        <div className="mb-1 invisible">
+          ur not supposed to see this :)
+        </div>
         <nav className="flex flex-col items-start text-dark dark:text-light">
           {/* <Link
             href="/"
