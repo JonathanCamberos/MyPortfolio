@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { dracula, coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const TopicIntroBox = ({ concept, intro }) => {
   if (!intro) return null;
@@ -28,10 +28,13 @@ const TopicIntroBox = ({ concept, intro }) => {
 
         {/* Code part */}
         {intro.bodyCode && (
-          <div className="mt-2 p-2 rounded overflow-x-auto max-w-[700px] w-full">
+          <div
+            className="mt-2 p-2 rounded overflow-x-auto max-w-[700px] w-full"
+            style={{ backgroundColor: "#2D2D2D" }}
+          >
             <SyntaxHighlighter
               language={intro.bodyCodeLanguage || "text"}
-              style={dracula}
+              style={coldarkDark}
               customStyle={{
                 background: "transparent",
                 fontSize: "0.9rem",
@@ -49,7 +52,7 @@ const TopicIntroBox = ({ concept, intro }) => {
       {intro.diagramList && intro.diagramList.length > 0 && (
         <div className="mt-4 space-y-4">
           {intro.diagramList.map((diagram, i) => (
-            <div key={i} className="p-3 bg-gray-50 dark:bg-gray-800">
+            <div key={i} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
               <h3 className="font-semibold mb-1">
                 <Link
                   href={diagram.diagramLink}
@@ -58,14 +61,16 @@ const TopicIntroBox = ({ concept, intro }) => {
                   {diagram.name}
                 </Link>
               </h3>
-              Related: {diagram.related}
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Related: {diagram.related}
+              </p>
               <div
                 className="mt-2 p-2 rounded overflow-x-auto"
                 style={{ backgroundColor: "#2D2D2D" }}
               >
                 <SyntaxHighlighter
                   language={diagram.language || "text"}
-                  style={dracula}
+                  style={coldarkDark}
                   customStyle={{
                     background: "transparent",
                     fontSize: "0.9rem",

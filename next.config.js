@@ -621,8 +621,17 @@ function parseDefinitions(content, filePath) {
     // --- End of a definition ---
     if (line.trim() === "{/* end */}" && !insideCodeBlock) {
       if (currentDef) {
-        currentDef.bodyString = bufferString.join("\n").trim();
-        currentDef.bodyCode = bufferCode.join("\n").trim() || null;
+        // Combine body string
+        let bodyString = bufferString.join("\n");
+
+        // --- Strip leading "TopicName:" if present ---
+        const topicPrefix = currentDef.topic + ":";
+        if (bodyString.startsWith(topicPrefix)) {
+          bodyString = bodyString.slice(topicPrefix.length).trimStart();
+        }
+
+        currentDef.bodyString = bodyString;
+        currentDef.bodyCode = bufferCode.join("\n") || null; // preserve indentation
         currentDef.bodyCodeLanguage = codeLanguage || null;
         currentDef.definitionLink = `${baseLink}#${
           currentHeadingSlug || normalizeKey(currentDef.topic)
@@ -631,6 +640,7 @@ function parseDefinitions(content, filePath) {
         if (!defs[currentDef.topic]) defs[currentDef.topic] = [];
         defs[currentDef.topic].push(currentDef);
       }
+
       currentDef = null;
       insideDef = false;
       bufferString = [];
@@ -641,17 +651,18 @@ function parseDefinitions(content, filePath) {
 
     // --- Handle code block start/end ---
     if (insideDef) {
-      const codeBlockStart = line.trim().match(/^```(\w*)/);
+      const trimmedLine = line.trim();
+      const codeBlockStart = trimmedLine.match(/^```(\w*)/);
       if (codeBlockStart) {
         insideCodeBlock = !insideCodeBlock;
         if (insideCodeBlock) {
-          codeLanguage = codeBlockStart[1] || null; // capture language on start
+          codeLanguage = codeBlockStart[1] || null;
         }
-        continue; // skip the ``` line itself
+        continue; // skip the ``` line
       }
 
       if (insideCodeBlock) {
-        bufferCode.push(line);
+        bufferCode.push(line); // preserve indentation
       } else {
         bufferString.push(line);
       }

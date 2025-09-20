@@ -60,14 +60,16 @@ on a single server.
 
 1. Client -> DNS: Domain Name
 {/* def: topic=Client id=1 perspective=Definition diagramId=dns-basic */}
-Client: A client is any software or device that initiates requests to a 
+Client: 
+A client is any software or device that initiates requests to a 
 server or service over a network. Examples include web browsers, mobile apps, 
 desktop programs, or other services consuming an API. Clients present data to 
 users or other systems and rely on servers to process requests and return results.
 {/* end */}
 
 {/* def: topic=DNS id=1 perspective=Definition diagramId=dns-basic */}
-DNS: Users access websites through domain names, (e.g., www.google.com)
+DNS: 
+Users access websites through domain names, (e.g., `www.google.com`)
 The Domain Name System (DNS) resolve those domain names into IP addresses,
 (e.g., 140.250.190.78). DNS is usually provided by third parties 
 (registrars, hosting providers, dedicated DNS services) rather than hosted 
@@ -75,7 +77,8 @@ on the application's own servers.
 {/* end */}
 
 {/* def: topic=Domain Name id=1 perspective=Definition diagramId=dns-basic */}
-Domain Name: A domain name is the human-readable address of a resource on the 
+Domain Name: 
+A domain name is the human-readable address of a resource on the 
 internet (e.g., `www.example.com`). It acts as an alias for an IP address, making 
 it easier for users to find, remember, and access services without remembering 
 long IP addresses. Domain names are registered through registrars and resolved to 
@@ -85,28 +88,110 @@ IP addresses via DNS.
 2. DNS -> Client: IP Address
 
 {/* def: topic=IP Address id=1 perspective=Definition diagramId=dns-basic */}
-IP Address: An Internet Protocol (IP) address is the numerical label assigned
+IP Address: 
+An Internet Protocol (IP) address is the numerical label assigned
 to a device on a network. It is returned to the browser or mobile app after a DNS lookup 
 so the client knows where to send requests.
 {/* end */}
 
 
-3. Client -> Web Server: HTTP/JSON Request
+3. Client -> Web Server: HTTP Request + JSON Body
 
 Once the client receives the IP address, Hypertext Transfer Protocol (HTTP)
-or JSON requests are sent to the server.
+with JSON are sent to the server.
+
+{/* def: topic=HTTP Protocol id=1 perspective=Definition diagramId=dns-basic */}
+HTTP Protocol: 
+Hypertext Transfer Protocol (HTTP) is an application level
+protocol used for communication between clients (e.g., browsers, mobile apps)
+and servers on the web. It defines how requests and responses are formatted and
+transmitted over TCP/IP networks.
+
+HTTP itself does not define the format of the data being sent, it only provides
+a way to transport it (e.g. of data being sent: HTML, JSON, img, binary files).
+
+```js
+    // Request Link -> Method Path HTTP/Version 
+    GET /index.html HTTP/1.1
+    // Headers -> key value pairs describing the request
+    Host: www.example.com
+    Accept: text/html
+```
+{/* end */}
+
+{/* def: topic=HTTP Request/Response id=1 perspective=Definition diagramId=web-basic */}
+HTTP Request/Response: 
+An HTTP request is a message a client sends to a server, 
+asking for a resource or performing an action (e.g., `GET /index.html`).  
+
+An HTTP response is the server's reply, which includes a status code
+(e.g., 200 OK), headers, and an optional body.
+
+The body of an HTTP message can contain many kinds of data, HTML for web pages,
+JSON for APIs, or other formats depending on the endpoint.
+
+```js
+    // HTTP Request
+    GET /about HTTP/1.1
+    Host: www.example.com
+    Accept: text/html
+
+    // HTTP Request with JSON Body
+    POST /api/users HTTP/1.1
+    Host: api.example.com
+    Content-Type: application/json
+    Authorization: Bearer <token>
+
+    {
+        "username": "alice",
+        "email": "alice@example.com",
+        "password": "securePassword123"
+    }
+
+    // HTTP Response with HTML Body
+    HTTP/1.1 200 OK
+    Content-Type: text/html; charset=UTF-8
+
+    <!DOCTYPE html>
+    <html>
+    <body>
+        <h1>Hello World!</h1>
+    </body>
+    </html>
+
+    // HTTP Response with JSON Body
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "id" : 12,
+        "firstName": "John",
+        "lastName": "Smith",
+        "address": {
+            "streetAddress": "21 2nd Street",
+            "city" : "New York",
+            "state": "NY",
+            "postalCode": 10021
+        },
+        "phoneNumber" : "212 555-1234"
+    }
+```
+{/* end */}
 
 4. Web Server -> Client: HTML/JSON Response
 
 {/* def: topic=HTML Response id=1 perspective=Definition diagramId=web-basic */}
-HTML Response: An HTML response is an HTTP response whose body contains HTML 
-(HyperText Markup Language). Its commonly used by web servers to deliver full 
-web pages that browsers can render for users.
+HTML Response: 
+An HTML response is an HTTP response with a HTML body. 
+Its used by web servers to deliver full web pages that browsers can 
+render for users.
 
 ```js
+    // HTTP Response with HTML Body
     HTTP/1.1 200 OK
     Content-Type: text/html; charset=UTF-8
 
+    // HTML Body
     <!DOCTYPE html>
     <html>
     <head>
@@ -120,6 +205,7 @@ web pages that browsers can render for users.
 {/* end */}
 
 {/* Diagram: dns-basic */}
+
 ### Diagram: Single Server Setup
 ```python
                                               1) ------>
@@ -140,17 +226,26 @@ web pages that browsers can render for users.
                     +------------------+
 ```
 
-### Client Traffic Sources: Users
+### Traffic Sources: Clients/Users
 
-Client via a web application or mobile application
+Client create traffic via web or mobile applications.
 
-- Def: Web Application: A client web application instance uses a combination 
-of server-side languages (Java, Python, etc) to handle logic, storage, etc.,
-and client-side languages (HTML, JavaScript, etc) for presentation
+{/* def: topic=Web Application id=1 perspective=Definition diagramId=dns-basic */}
+Web Application: 
+A web application is client software that runs in a browser.
+It uses client side languages for the UI (e.g., HTML, CSS, JavaScript) and
+server side languages (e.g., Java, Python, Node.js) to handle logic, data storage, 
+and processing. Web applications are accessible through URLs and do not require 
+installation on a user's device.
+{/* end */}
 
-- Def: Mobile Application: HTTP protocol is the communication protocol between
-the mobile app and the web server. JavaScript Object Notation (JSON) is the 
-most commonly used API response format to transfer data due to its simplicity.
+{/* def: topic=Mobile Application id=1 perspective=Definition diagramId=dns-basic */}
+Mobile Application: 
+A mobile application is client software designed to run on smartphones or 
+tables. It communicates with servers using HTTP protocol, often using JSON for
+data body. Mobile apps combine a UI (e.g., HTML, CSS, JavaScript) alongside
+a backend service separate from the mobile app to provide functionality.
+{/* end */}
 
 ## API
 
@@ -173,15 +268,270 @@ them to work together.
 
 {/* end */}
 
-## Database
+## Separating Traffic and Database
+
+### Intro
+
+As more users use an application, one server is not enough for the new amount
+of traffic. We need multiple servers. Lets say, one for web/mobile traffic,
+and the other to host the database. Separating logic from storage
+allows them to be scaled independently.
+
+{/* Diagram: separating-traffic-database */}
+
+### Diagram: Separating Traffic and Database
+```python
+                                              1) ------>
+               +-------------------------+   api.mysite.com     +--------+
+               | Web Browser, Mobile App |                      |  DNS   |     
+               +-------------------------+                      +--------+    
+                        |        ^            2) <------    
+                        |        |           15.125.23.214     
+                        |        |       
+    3)                  |        |  4)    
+    15.125.23.214       |        |  HTML Page 
+                        |        |    
+                        |        |       
+                        |        |      
+                        V        |          5) ------>
+                    +----------------+    read/write/update  +------------+
+                    |   Web Server   |                       |  Database  |
+                    +----------------+     6) <------        +------------+
+                                            return data
+```             
 
 ## Which Database To Use? 
 
-## Vertical Scaling vs Horizontal Scaling
+### Intro
+The type of database in a system directly impacts the performance, 
+scalability, and how data can be queried and maintains. 
 
-## Load Balancer
+To give some examples, relational databases are ideal for data with 
+consistent shape, while  non relational databases are better for 
+dynamic schemas.
 
-## Database Replication
+In relational databases, queries can become slow due to frequent joins
+to alter scheme, while non relational database are usually faster in queries
+since no joins are necessary.
+
+There are more differences that we will dive into as we go.
+
+### Relational Database
+
+{/* def: topic=Relational Database id=1 perspective=definition */}
+Relational Database: 
+A relational database (RDB) is a type of database that stores data in 
+tables with rows and columns. Each table has a schema that defines its 
+structure, and tables can be related to one another through keys 
+(primary keys, foreign keys). Relational databases support SQL 
+(Structured Query Language) for querying and managing data. They are 
+ideal for structured data with well-defined relationships.
+
+```sql
+    -- Example: Relational Database Table
+    CREATE TABLE Users (
+        id INT PRIMARY KEY,
+        firstName VARCHAR(50),
+        lastName VARCHAR(50),
+        email VARCHAR(100)
+    );
+```
+{/* end */}
+
+### Non-Relational Database
+
+{/* def: topic=Non-Relational Database id=1 perspective=definition */}
+Non-Relational Database:
+A non-relational database (NoSQL) is a database that stores data in flexible 
+formats such as key-value pairs, documents, wide-column stores, or graphs. 
+They do not require a fixed schema and are optimized for horizontal scalability
+and high-performance data operations. Examples include 
+MongoDB (document store), Redis (key-value store), and 
+Cassandra (wide-column store).
+
+```js
+    // Example: Non-Relational Database Document
+    {
+        "id": 12,
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "email": "jane@example.com"
+    }
+```
+{/* end */}
+
+## Scaling
+
+### Intro
+
+{/* def: topic=Scaling id=1 perspective=definition */}
+Scaling: 
+Determines how a system can handle increased traffic, data volume,
+or computation load. Different aspects of a system require 
+different scaling approaches:
+
+- Traffic spikes: Additional servers or resources via horizontal scaling
+- Data growth: Database may need to be partitioned or shareded via horizontal
+- Geographic distribution: Serving users across multiple regions may require
+closer services via geographical or regional scaling
+- Compute heavy operations: Specific components may need more powerful servers
+or parallelized process vertical scaling
+- etc...
+
+The type of scaling chosen depends on the problem/bottleneck the system is facing.
+{/* end */}
+
+### Vertical Scaling
+{/* def: topic=Vertical Scaling id=1 perspective=definition */}
+Vertical Scaling:
+Vertical scaling or 'scaling up', involves adding resources to a single instance
+to handle increased load.
+
+This could mean upgrading the CPU, RAM, or storage.
+
+Pros:
+- Simple to implement with no changes to application logic, just need $
+- Useful for applications with limit
+
+Cons:
+- Will be limited by physical capabilities aof a single machine
+- Will be expensive as hardware upgrade cost increases
+
+Ex: Upgrading web server from 16GB to 64GB of RAM to handle more 
+simultaneous users.
+{/* end */}
+
+### Horizontal Scaling
+{/* def: topic=Horizontal Scaling id=1 perspective=definition */}
+Horizontal scaling: 
+Horizontal scaling or 'scaling out', involves adding more machines or node
+instances to a system to distribute load. This allows applications to handle
+increased traffic by spreading requests across multiple servers.
+
+Pros:
+- Can scale indefinitely by adding more nodes
+- Improves fault tolerance and redundancy
+
+Cons:
+- Requires more complex distributed architecture and load balancing 
+- Complexity to maintain data consistency across load
+
+Ex: Running a web application across 5 servers behind a load balancer
+to handle spikes in traffic.
+{/* end */}
+
+## Load Balancer: Server Tier Scaling
+
+### Intro
+To account for both reliability and scaling, a load balancer acts as 
+a wrapper to allow for both of these gracefully.
+
+### Load Balancer
+
+{/* def: topic=Load Balancer id=1 perspective=definition diagramId=load-balancer */}
+Load Balancer:
+A load balancer evenly distributes incoming traffic among web servers that 
+are defined in a load balanced set or 'server pool/target group'.
+
+When traffic arrives, the load balancer decides using a policy such as
+round-robin, least connection, or weighted rules, which server in the set
+should handle the request.
+
+For better security, private IPs are used for communication between servers,
+making the web servers unreachable directly by clients.
+{/* end */}
+
+{/* def: topic=Private IP Address id=1 perspective=definition diagramId=load-balancer */}
+Private IP Address:
+A private IP address is an IP address reserved for use inside a private network
+(e.g., home, office, data center). They are not routable on the public internet
+and can only be used by machines on the same network.
+
+Common private ranges include:
+- 10.0.0.0 - 10.255.255.255  
+- 172.16.0.0 - 172.31.255.255  
+- 192.168.0.0 - 192.168.255.255
+
+Private IPs help conserve public address space and add a layer of security as 
+external hosts cannot directly reach them without network address translation (NAT).
+{/* end */}
+
+{/* def: topic=NAT id=1 perspective=definition diagramId=load-balancer */}
+NAT:  
+Network Address Translation is a networking process that maps one set of 
+IP addresses to another, allowing devices in a private network to 
+communicate with external networks (e.g., public internet, external
+private network wrapper) using a single public IP address.  
+
+It is most commonly used by routers to let multiple devices with private 
+IP addresses share one public IP. NAT helps conserve public address space 
+and adds a layer of security, since internal addresses are hidden from the 
+outside.
+
+1. Reliability
+
+If server 1 goes offline, all traffic will be routed to server 2, which
+prevents the website from going offline. Additionally on fail, we can
+add a new healthy web server to the server pool to re balance the load.
+
+2. Scaling
+
+If website traffic grows rapidly and two servers are no longer enough,
+we can just add more servers to the web server pool and the load balancer
+can automatically start sending requests to them.
+
+```js
+    // Example: NAT translating private IPs to a public IP
+    Private IPs: 192.168.1.10, 192.168.1.25, 192.168.1.30
+    Public IP (router): 203.0.113.5
+
+    // Outbound request:
+    192.168.1.10:5050  ---> 203.0.113.5:5500 (mapped by NAT)
+```
+{/* end */}
+
+{/* Diagram: load-balancer */}
+
+### Diagram: Load Balancer
+```python
+                                              1) ------>
+               +-------------------------+   api.mysite.com     +--------+
+               | Web Browser, Mobile App |                      |  DNS   |     
+               +-------------------------+                      +--------+    
+                         |        ^            2) <------    
+                         |        |           15.125.23.214     
+                         |        |       
+    3)                   |        |  4)    
+Public IP: 15.125.23.214 |        |  HTML Page 
+                         |        |    
+                         |        |       
+                         |        |      
+                         V        |
+                    +------------------+
+                    |  Load Balancer   |
+                    +------------------+
+                       /             \
+Private IP: 10.0.0.1  /               \     Private IP: 10.0.0.2
+                     /                 \
+        +----------+                  +----------+
+        | Server 1 |                  | Server 2 |
+        +----------+                  +----------+
+```
+
+
+
+## Database Replication: Data Tier Scaling
+
+### Intro
+
+### Database Replication
+
+
+{/* Diagram: database-replication */}
+
+### Diagram: Database Replication
+```python
+```
 
 ## Cache 
 

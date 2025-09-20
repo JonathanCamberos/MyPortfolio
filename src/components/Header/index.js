@@ -32,23 +32,6 @@ const Header = ({radioLabel}) => {
     window.open(url, "_blank", "noreferrer");
   };
 
-  // Radio button handler
-  const handleRadioClick = () => {
-    const footerEl = document.getElementById("footer");
-    if (!footerEl) return;
-
-    if (!radioActive) {
-      // First click: save current scroll, scroll to footer, and play
-      savedScrollRef.current = window.scrollY;
-      document.dispatchEvent(new Event("playRadio"));
-      footerEl.scrollIntoView({ behavior: "smooth" });
-    } else {
-      // Second click: return to saved scroll
-      window.scrollTo({ top: savedScrollRef.current, behavior: "smooth" });
-    }
-
-    setRadioActive(!radioActive);
-  };
 
   return (
     <>
