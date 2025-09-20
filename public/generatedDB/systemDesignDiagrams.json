@@ -2,7 +2,7 @@
   "dns-basic": {
     "name": "Single Server Setup",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
-    "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                      dfsdf",
+    "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
     "relatedIds": [
       "dns-basic"
     ],
