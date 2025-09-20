@@ -19,11 +19,33 @@ const TopicIntroBox = ({ concept, intro }) => {
           </Link>
         </h2>
 
-        <div className="text-gray-700 dark:text-gray-300 space-y-2 whitespace-pre-wrap max-w-[700px] text-left">
-          {intro.body}
-        </div>
+        {/* Text part */}
+        {intro.bodyString && (
+          <div className="text-gray-700 dark:text-gray-300 space-y-2 whitespace-pre-wrap max-w-[700px] text-left">
+            {intro.bodyString}
+          </div>
+        )}
+
+        {/* Code part */}
+        {intro.bodyCode && (
+          <div className="mt-2 p-2 rounded overflow-x-auto max-w-[700px] w-full">
+            <SyntaxHighlighter
+              language={intro.bodyCodeLanguage || "text"}
+              style={dracula}
+              customStyle={{
+                background: "transparent",
+                fontSize: "0.9rem",
+                lineHeight: "1.5",
+                color: "#FFFFFF",
+              }}
+            >
+              {intro.bodyCode}
+            </SyntaxHighlighter>
+          </div>
+        )}
       </div>
 
+      {/* Diagram list */}
       {intro.diagramList && intro.diagramList.length > 0 && (
         <div className="mt-4 space-y-4">
           {intro.diagramList.map((diagram, i) => (
@@ -61,6 +83,5 @@ const TopicIntroBox = ({ concept, intro }) => {
     </div>
   );
 };
-
 
 export default TopicIntroBox;

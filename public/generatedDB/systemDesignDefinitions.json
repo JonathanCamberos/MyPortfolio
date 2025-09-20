@@ -1,18 +1,62 @@
 {
-  "DNS": [
+  "Client": [
     {
-      "topic": "DNS",
+      "topic": "Client",
       "id": 1,
-      "perspective": "API",
+      "perspective": "Definition",
       "diagramId": "dns-basic",
-      "body": "DNS: Users access websites through domain names, (e.g., www.google.com)\nThe Domain Name System (DNS) resolve those domain names into IP addresses.\nDNS is usually provided by third parties (registrars, hosting providers, \ndedicated DNS services) rather than hosted on the application's own servers.",
+      "bodyString": "Client: A client is any software or device that initiates requests to a \nserver or service over a network. Examples include web browsers, mobile apps, \ndesktop programs, or other services consuming an API. Clients present data to \nusers or other systems and rely on servers to process requests and return results.",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
       "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
           "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
-          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
-          "related": "DNS, IP Address",
+          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                      dfsdf",
+          "related": "Client, DNS, Domain Name, IP Address",
+          "language": "python"
+        }
+      ]
+    }
+  ],
+  "DNS": [
+    {
+      "topic": "DNS",
+      "id": 1,
+      "perspective": "Definition",
+      "diagramId": "dns-basic",
+      "bodyString": "DNS: Users access websites through domain names, (e.g., www.google.com)\nThe Domain Name System (DNS) resolve those domain names into IP addresses,\n(e.g., 140.250.190.78). DNS is usually provided by third parties \n(registrars, hosting providers, dedicated DNS services) rather than hosted \non the application's own servers.",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
+      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "diagramList": [
+        {
+          "name": "Single Server Setup",
+          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                      dfsdf",
+          "related": "Client, DNS, Domain Name, IP Address",
+          "language": "python"
+        }
+      ]
+    }
+  ],
+  "Domain Name": [
+    {
+      "topic": "Domain Name",
+      "id": 1,
+      "perspective": "Definition",
+      "diagramId": "dns-basic",
+      "bodyString": "Domain Name: A domain name is the human-readable address of a resource on the \ninternet (e.g., `www.example.com`). It acts as an alias for an IP address, making \nit easier for users to find, remember, and access services without remembering \nlong IP addresses. Domain names are registered through registrars and resolved to \nIP addresses via DNS.",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
+      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "diagramList": [
+        {
+          "name": "Single Server Setup",
+          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                      dfsdf",
+          "related": "Client, DNS, Domain Name, IP Address",
           "language": "python"
         }
       ]
@@ -22,19 +66,33 @@
     {
       "topic": "IP Address",
       "id": 1,
-      "perspective": "API",
+      "perspective": "Definition",
       "diagramId": "dns-basic",
-      "body": "IP Address: An Internet Protocol (IP) address is the numerical label assigned\nto a device on a network.\nIt is returned to the browser or mobile app after a DNS lookup so the client \nknows where to send requests.",
+      "bodyString": "IP Address: An Internet Protocol (IP) address is the numerical label assigned\nto a device on a network. It is returned to the browser or mobile app after a DNS lookup \nso the client knows where to send requests.",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
       "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
           "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
-          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
-          "related": "DNS, IP Address",
+          "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                      dfsdf",
+          "related": "Client, DNS, Domain Name, IP Address",
           "language": "python"
         }
       ]
+    }
+  ],
+  "HTML Response": [
+    {
+      "topic": "HTML Response",
+      "id": 1,
+      "perspective": "Definition",
+      "diagramId": "web-basic",
+      "bodyString": "HTML Response: An HTML response is an HTTP response whose body contains HTML \n(HyperText Markup Language). Its commonly used by web servers to deliver full \nweb pages that browsers can render for users.",
+      "bodyCode": "HTTP/1.1 200 OK\n    Content-Type: text/html; charset=UTF-8\n\n    <!DOCTYPE html>\n    <html>\n    <head>\n        <title>Welcome</title>\n    </head>\n    <body>\n        <h1>Hello, Jane!</h1>\n    </body>\n    </html>",
+      "bodyCodeLanguage": "js",
+      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps"
     }
   ],
   "API": [
@@ -43,20 +101,24 @@
       "id": 1,
       "perspective": "definition",
       "diagramId": null,
-      "body": "API: An API, Application Programming Interface, is a set of rules or defined contract \nthat allow different software applications to communicate with each other.\n\nRules:\n- What endpoints exits\n- Defined valid inputs\n- Expected outputs and errors\n\nThis contract allows different systems, such as a client and server, to work together\nthem to work together.\n\n1. Request: A client/user sends a request through the API\n2. Processing: The API forwards the request to the server\n3. Response: The server processes the request and sends the response back to the api\n4. Delivery: The API returns the server's response to the client",
+      "bodyString": "API: An API, Application Programming Interface, is a set of rules or defined contract \nthat allow different software applications to communicate with each other.\n\nRules:\n- What endpoints exits\n- Defined valid inputs\n- Expected outputs and errors\n\nThis contract allows different systems, such as a client and server, to work together\nthem to work together.\n\n1. Request: A client/user sends a request through the API\n2. Processing: The API forwards the request to the server\n3. Response: The server processes the request and sends the response back to the api\n4. Delivery: The API returns the server's response to the client",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
       "definitionLink": "/Notes/systemdesign-system-design-interview#api"
     },
     {
       "topic": "API",
       "id": 2,
-      "perspective": "definition",
+      "perspective": "Data Systems",
       "diagramId": "simple-architecture",
-      "body": "APIs serve to hide implementation details from clients and developers, becoming a \nspecial purpose data system from smaller, general purpose components.\n\nThis special purpose data system could perform single tasks across components to\ncreate contracts or guarantees such as cache invalidation upon writes so\nclients see consistent results \n\nThis leads API wrappers to have the responsibility for both\nboth data storage and system design.",
+      "bodyString": "APIs serve to hide implementation details from clients and developers, becoming a \nspecial purpose data system from smaller, general purpose components.\n\nThis special purpose data system could perform single tasks across components to\ncreate contracts or guarantees such as cache invalidation upon writes so\nclients see consistent results \n\nThis leads API wrappers to have the responsibility for both\nboth data storage and system design.",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
       "definitionLink": "/Notes/textbook-designing-data-intensive-applications#api-layers",
       "diagramList": [
         {
-          "name": "example of architecture for data system",
-          "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-example-of-architecture-for-data-system",
+          "name": "Simple Example of an Architecture for Data System",
+          "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-simple-example-of-an-architecture-for-data-system",
           "diagram": "                            +--------+\n                            | Client |          \n                            +--------+          \n                                ^               \n                                |                            \n                                |    Client Requests                \n                                |               \n                                v  \n                        +---------------------+                 Asynchronous tasks\n                        |   Application Code  | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n                     /  +---------------------+ \\                                       |\n Reads requests     /           |                \\                                      |\n and first checks  /            |                 \\  Search                             |\n if the data      /             |                  \\ Requests                           |\n is cached       /              |                   \\                                   |\n   +-----------+        +----------------------+     +-----------+                +-----------+  \n   | In-memory |        |   Primary Database   |     | Full-text |                |  Message  |\n   |   Cache   |        +----------------------+     |   index   |                |  Queue    | \n   +-----------+                |                    +-----------+                +-----------+\n                ^               |                   /                                   |\n                 \\              | Capture          /                                    |\n                  \\             | changes to      /                                     |\n                   \\            | data           /                                      |\n        Invalidate  \\           v               /   Apply updates                       |\n        or update    \\  +---------------------+     to search index          +---------------------+\n        the cache       |   Application Code  |                              |   Application Code  |\n                        +---------------------+                              +---------------------+\n                                                                                        |\n                                                                                        |   e.g. send email\n                                                                                        V\n\n                                                                                    'outside world'",
           "related": "API",
           "language": "python"
@@ -70,7 +132,9 @@
       "id": 2,
       "perspective": "Performance distribution",
       "diagramId": "high-percentile",
-      "body": "Throughput would be the number of records we can process per second, or the total time\nto complete a job on a dataset of a certain size",
+      "bodyString": "Throughput would be the number of records we can process per second, or the total time\nto complete a job on a dataset of a certain size",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
       "definitionLink": "/Notes/textbook-designing-data-intensive-applications#performance-distribution-p50-p95-p99-p999-and-client-load-generators",
       "diagramList": [
         {
@@ -89,7 +153,9 @@
       "id": 2,
       "perspective": "performance distribution",
       "diagramId": "high-percentile",
-      "body": "Response time would be the total time between a client sending a request and receiving a response",
+      "bodyString": "Response time would be the total time between a client sending a request and receiving a response",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
       "definitionLink": "/Notes/textbook-designing-data-intensive-applications#performance-distribution-p50-p95-p99-p999-and-client-load-generators",
       "diagramList": [
         {

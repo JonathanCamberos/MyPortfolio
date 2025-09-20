@@ -46,7 +46,7 @@ interview.
 
 ## Intro
 
-> The basic techniques to for system design
+> Basic techniques and knowledge for system design
 
 ## Single Server Setup: Starting Simple
 
@@ -58,32 +58,66 @@ on a single server.
 
 ### Single Server: Processing Steps
 
-1. Client -> DNS
-{/* def: topic=DNS id=1 perspective=API diagramId=dns-basic */}
+1. Client -> DNS: Domain Name
+{/* def: topic=Client id=1 perspective=Definition diagramId=dns-basic */}
+Client: A client is any software or device that initiates requests to a 
+server or service over a network. Examples include web browsers, mobile apps, 
+desktop programs, or other services consuming an API. Clients present data to 
+users or other systems and rely on servers to process requests and return results.
+{/* end */}
+
+{/* def: topic=DNS id=1 perspective=Definition diagramId=dns-basic */}
 DNS: Users access websites through domain names, (e.g., www.google.com)
-The Domain Name System (DNS) resolve those domain names into IP addresses.
-DNS is usually provided by third parties (registrars, hosting providers, 
-dedicated DNS services) rather than hosted on the application's own servers.
+The Domain Name System (DNS) resolve those domain names into IP addresses,
+(e.g., 140.250.190.78). DNS is usually provided by third parties 
+(registrars, hosting providers, dedicated DNS services) rather than hosted 
+on the application's own servers.
 {/* end */}
 
-2. IP Address
+{/* def: topic=Domain Name id=1 perspective=Definition diagramId=dns-basic */}
+Domain Name: A domain name is the human-readable address of a resource on the 
+internet (e.g., `www.example.com`). It acts as an alias for an IP address, making 
+it easier for users to find, remember, and access services without remembering 
+long IP addresses. Domain names are registered through registrars and resolved to 
+IP addresses via DNS.
+{/* end */}
 
-{/* def: topic=IP Address id=1 perspective=API diagramId=dns-basic */}
+2. DNS -> Client: IP Address
+
+{/* def: topic=IP Address id=1 perspective=Definition diagramId=dns-basic */}
 IP Address: An Internet Protocol (IP) address is the numerical label assigned
-to a device on a network.
-It is returned to the browser or mobile app after a DNS lookup so the client 
-knows where to send requests.
+to a device on a network. It is returned to the browser or mobile app after a DNS lookup 
+so the client knows where to send requests.
 {/* end */}
 
 
-3. HTTP/JSON Request
+3. Client -> Web Server: HTTP/JSON Request
 
 Once the client receives the IP address, Hypertext Transfer Protocol (HTTP)
 or JSON requests are sent to the server.
 
-4. HTML/JSON Response
+4. Web Server -> Client: HTML/JSON Response
 
-The server returns HTML pages or JSON responses for rendering.
+{/* def: topic=HTML Response id=1 perspective=Definition diagramId=web-basic */}
+HTML Response: An HTML response is an HTTP response whose body contains HTML 
+(HyperText Markup Language). Its commonly used by web servers to deliver full 
+web pages that browsers can render for users.
+
+```js
+    HTTP/1.1 200 OK
+    Content-Type: text/html; charset=UTF-8
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Welcome</title>
+    </head>
+    <body>
+        <h1>Hello, Jane!</h1>
+    </body>
+    </html>
+```
+{/* end */}
 
 {/* Diagram: dns-basic */}
 ### Diagram: Single Server Setup

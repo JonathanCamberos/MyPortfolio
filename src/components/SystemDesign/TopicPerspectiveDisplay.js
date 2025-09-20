@@ -22,10 +22,32 @@ const TopicPerspectiveDisplay = ({ concept, perspectives }) => {
             </Link>
           </h2>
 
-          <div className="text-gray-700 dark:text-gray-300 space-y-2">
-            <p className="whitespace-pre-wrap">{definition.body}</p>
-          </div>
+          {/* Text part */}
+          {definition.bodyString && (
+            <div className="text-gray-700 dark:text-gray-300 space-y-2">
+              <p className="whitespace-pre-wrap">{definition.bodyString}</p>
+            </div>
+          )}
 
+          {/* Code part */}
+          {definition.bodyCode && (
+            <div className="mt-2 p-2 rounded overflow-x-auto">
+              <SyntaxHighlighter
+                language={definition.bodyCodeLanguage || "text"}
+                style={coldarkDark}
+                customStyle={{
+                  background: "transparent",
+                  fontSize: "0.9rem",
+                  lineHeight: "1.5",
+                  color: "#FFFFFF",
+                }}
+              >
+                {definition.bodyCode}
+              </SyntaxHighlighter>
+            </div>
+          )}
+
+          {/* Diagram list */}
           {definition.diagramList && definition.diagramList.length > 0 && (
             <div className="mt-4 space-y-4">
               {definition.diagramList.map((diagram, i) => (

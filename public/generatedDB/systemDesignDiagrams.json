@@ -2,19 +2,21 @@
   "dns-basic": {
     "name": "Single Server Setup",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
-    "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
+    "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                      dfsdf",
     "relatedIds": [
       "dns-basic"
     ],
     "related": [
+      "Client",
       "DNS",
+      "Domain Name",
       "IP Address"
     ],
     "language": "python"
   },
   "simple-architecture": {
-    "name": "example of architecture for data system",
-    "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-example-of-architecture-for-data-system",
+    "name": "Simple Example of an Architecture for Data System",
+    "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-simple-example-of-an-architecture-for-data-system",
     "diagram": "                            +--------+\n                            | Client |          \n                            +--------+          \n                                ^               \n                                |                            \n                                |    Client Requests                \n                                |               \n                                v  \n                        +---------------------+                 Asynchronous tasks\n                        |   Application Code  | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n                     /  +---------------------+ \\                                       |\n Reads requests     /           |                \\                                      |\n and first checks  /            |                 \\  Search                             |\n if the data      /             |                  \\ Requests                           |\n is cached       /              |                   \\                                   |\n   +-----------+        +----------------------+     +-----------+                +-----------+  \n   | In-memory |        |   Primary Database   |     | Full-text |                |  Message  |\n   |   Cache   |        +----------------------+     |   index   |                |  Queue    | \n   +-----------+                |                    +-----------+                +-----------+\n                ^               |                   /                                   |\n                 \\              | Capture          /                                    |\n                  \\             | changes to      /                                     |\n                   \\            | data           /                                      |\n        Invalidate  \\           v               /   Apply updates                       |\n        or update    \\  +---------------------+     to search index          +---------------------+\n        the cache       |   Application Code  |                              |   Application Code  |\n                        +---------------------+                              +---------------------+\n                                                                                        |\n                                                                                        |   e.g. send email\n                                                                                        V\n\n                                                                                    'outside world'",
     "relatedIds": [
       "simple-architecture"

@@ -575,8 +575,11 @@ function parseDefinitions(content, filePath) {
     .replace(/\/index\.mdx$/, "");
 
   let currentDef = null;
-  let buffer = [];
+  let bufferString = [];
+  let bufferCode = [];
+  let codeLanguage = null;
   let insideDef = false;
+  let insideCodeBlock = false;
   let currentHeadingSlug = null;
 
   for (let i = 0; i < lines.length; i++) {
@@ -593,12 +596,13 @@ function parseDefinitions(content, filePath) {
     const defMatch = /^{\/\*\s*def:(.*?)\*\/}/.exec(line.trim());
     if (defMatch) {
       insideDef = true;
-      buffer = [];
+      bufferString = [];
+      bufferCode = [];
+      codeLanguage = null;
 
       const metaString = defMatch[1].trim();
       const meta = {};
 
-      // Regex to match key=value, allowing spaces in value
       const regex = /(\w+)=((?:(?!\s\w+=).)+)/g;
       let match;
       while ((match = regex.exec(metaString)) !== null) {
@@ -615,9 +619,11 @@ function parseDefinitions(content, filePath) {
     }
 
     // --- End of a definition ---
-    if (line.trim() === "{/* end */}") {
+    if (line.trim() === "{/* end */}" && !insideCodeBlock) {
       if (currentDef) {
-        currentDef.body = buffer.join("\n").trim();
+        currentDef.bodyString = bufferString.join("\n").trim();
+        currentDef.bodyCode = bufferCode.join("\n").trim() || null;
+        currentDef.bodyCodeLanguage = codeLanguage || null;
         currentDef.definitionLink = `${baseLink}#${
           currentHeadingSlug || normalizeKey(currentDef.topic)
         }`;
@@ -627,13 +633,28 @@ function parseDefinitions(content, filePath) {
       }
       currentDef = null;
       insideDef = false;
-      buffer = [];
+      bufferString = [];
+      bufferCode = [];
+      codeLanguage = null;
       continue;
     }
 
-    // --- Inside a definition body ---
+    // --- Handle code block start/end ---
     if (insideDef) {
-      buffer.push(line);
+      const codeBlockStart = line.trim().match(/^```(\w*)/);
+      if (codeBlockStart) {
+        insideCodeBlock = !insideCodeBlock;
+        if (insideCodeBlock) {
+          codeLanguage = codeBlockStart[1] || null; // capture language on start
+        }
+        continue; // skip the ``` line itself
+      }
+
+      if (insideCodeBlock) {
+        bufferCode.push(line);
+      } else {
+        bufferString.push(line);
+      }
     }
   }
 
