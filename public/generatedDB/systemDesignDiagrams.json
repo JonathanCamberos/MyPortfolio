@@ -34,8 +34,11 @@
   "database-replication": {
     "name": "Database Replication",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-database-replication",
-    "diagram": "",
-    "language": "python"
+    "diagram": "                         +----------------------+\n                         |      Web Server      |\n                         +----------------------+\n                           |                |\n                           |                |\n                           |                |    \n            (Writes)       |                |       (Reads)\n                           |                |\n        - - - - - - - - - -                 - - - - - - - - - - - - - - - - - -\n        |                                                         |     |     |\n        |                (DB Replication)   +--------------+      |     |     |\n        |                   - - - - - - - > |  Slave DB 1  | - - -      |     |\n        |                   |               +--------------+            |     |\n    +-------------------+   |                                           |     |\n    |   Master Database | - |               +--------------+            |     |\n    +-------------------+   - - - - - - - > |  Slave DB 2  | - - - - - -      |\n                            |               +--------------+                  |\n                            |                                                 |\n                            |               +--------------+                  |\n                            - - - - - - - > |  Slave DB 3  | - - - - - - - - - \n                                            +--------------+",
+    "language": "python",
+    "related": [
+      "Database Replication"
+    ]
   },
   "simple-architecture": {
     "name": "Simple Example of an Architecture for Data System",

@@ -324,6 +324,39 @@
       ]
     }
   ],
+  "Database Replication": [
+    {
+      "topic": "Database Replication",
+      "id": 1,
+      "perspective": "Definition",
+      "diagramId": "database-replication",
+      "bodyString": "Database replication is the process of copying and maintaining since \ndatabase objects, such as tables, in multiple databases (replicas) \nto improve availability and read performance.\n\nThe databases are split into a primary and replica format where\nthe primary handles all write operations and propagates \nchanges to replicas, and reads are handled by the replicas.\n\nPerformance: \nall writes happen in master nodes, while reads are distributed\nacross the replica nodes. This allows queries to be processed in parallel\nimproving performance.\n\nReliability:\nIf a database server is destroyed, data is still preserved as its \nreplicated across multiple locations.\n\nAvailability:\nIf a database goes offline, we can access data stored in another replica\ndatabase server allowing website to remain operational.\n\nScalability: Splitting reads to replicas and writes \nto primaries allows us to scale easier.\n\nReplica Failure:\nIf we have a single replica database which goes offline, read operations\nwill be directed to the primary temporarily until the issue is found\nand we create a new healthy replica. If there are multiple replicas\nand a single replica goes offline, we simply redirect to the other \nhealthy database and a new replica will replace the old one.\n\nPrimary Failure:\nIf a primary database goes offline, a replica database will be promoted\nas a new primary. A new replica is then created to replace the old \nreplica. However, we run into the issue of a replica not being up\nto date. Replication methods like multi masters and circular replication\ncould help, or we could run data recovery scripts.\n\nCustomization: replication can be synchronous where primary waits for\nreplicas to confirm changes, or be asynchronous where replicas \neventually catch up. The choice affects latency and consistency guarantees.\n",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
+      "definitionLink": "/Notes/systemdesign-system-design-interview#database-replication",
+      "diagramList": [
+        {
+          "name": "Database Replication",
+          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-database-replication",
+          "diagram": "                         +----------------------+\n                         |      Web Server      |\n                         +----------------------+\n                           |                |\n                           |                |\n                           |                |    \n            (Writes)       |                |       (Reads)\n                           |                |\n        - - - - - - - - - -                 - - - - - - - - - - - - - - - - - -\n        |                                                         |     |     |\n        |                (DB Replication)   +--------------+      |     |     |\n        |                   - - - - - - - > |  Slave DB 1  | - - -      |     |\n        |                   |               +--------------+            |     |\n    +-------------------+   |                                           |     |\n    |   Master Database | - |               +--------------+            |     |\n    +-------------------+   - - - - - - - > |  Slave DB 2  | - - - - - -      |\n                            |               +--------------+                  |\n                            |                                                 |\n                            |               +--------------+                  |\n                            - - - - - - - > |  Slave DB 3  | - - - - - - - - - \n                                            +--------------+",
+          "related": "Database Replication",
+          "language": "python"
+        }
+      ]
+    }
+  ],
+  "Cache": [
+    {
+      "topic": "Cache",
+      "id": 1,
+      "perspective": "definition",
+      "diagramId": null,
+      "bodyString": "A cache temporarily stores copies of data that would otherwise be \nretrieved from a slower backend, such as a database or remote API.\n\nCaches can exist at different levels:\n\n- Client side cache: Stored in the browser or app (e.g., local storage, \nservice workers).\n\n- CDN (Edge Cache): Cached at network edge servers to reduce latency for \ngeographically distributed users.\n\nServer cache: Stored in memory (e.g., Redis, Memcached) to accelerate \nAPI responses.\n\nPros:\n- Backend Load: Offloads repeated requests from the main servers\n- Response Time: Serves frequency accessed data faster\n- Scalability: Allows to scale cache tier independently from backend\n\nCons:\n- Inconsistency: Cache data may become outdated if source changes\n- Cache Invalidation: When and what to remove from cache is hard\nto determine, especially in distributed systems",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
+      "definitionLink": "/Notes/systemdesign-system-design-interview#cache-tier"
+    }
+  ],
   "Throughput": [
     {
       "topic": "Throughput",

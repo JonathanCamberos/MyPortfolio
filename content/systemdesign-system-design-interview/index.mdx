@@ -423,8 +423,12 @@ to handle spikes in traffic.
 ## Load Balancer: Server Tier Scaling
 
 ### Intro
-To account for both reliability and scaling, a load balancer acts as 
-a wrapper to allow for both of these gracefully.
+A load balancer assists the reliability and scalability in a system. Acting
+as a person in the middle between clients and web servers distributing 
+traffic efficiently ensuring that no single server is overwhelmed.
+
+A load balancer allows us to handle server failures, traffic spikes,
+and dynamic scaling without downtime.
 
 ### Load Balancer
 
@@ -524,24 +528,135 @@ Private IP: 10.0.0.1  /               \     Private IP: 10.0.0.2
 
 ### Intro
 
+Database replication is assists the availability, reliability, and
+read performance of a system by creating copies of a database across
+multiple servers. The allows read heavy workloads to be distributed
+across multiple replicas and allows writes to be coordinated by a 
+master database. The allows for fault tolerance.
+
 ### Database Replication
+{/* def: topic=Database Replication id=1 perspective=Definition diagramId=database-replication */}
+Database Replication:
+Database replication is the process of copying and maintaining since 
+database objects, such as tables, in multiple databases (replicas) 
+to improve availability and read performance.
 
+The databases are split into a primary and replica format where
+the primary handles all write operations and propagates 
+changes to replicas, and reads are handled by the replicas.
 
+Performance: 
+all writes happen in master nodes, while reads are distributed
+across the replica nodes. This allows queries to be processed in parallel
+improving performance.
+
+Reliability:
+If a database server is destroyed, data is still preserved as its 
+replicated across multiple locations.
+
+Availability:
+If a database goes offline, we can access data stored in another replica
+database server allowing website to remain operational.
+
+Scalability: Splitting reads to replicas and writes 
+to primaries allows us to scale easier.
+
+Replica Failure:
+If we have a single replica database which goes offline, read operations
+will be directed to the primary temporarily until the issue is found
+and we create a new healthy replica. If there are multiple replicas
+and a single replica goes offline, we simply redirect to the other 
+healthy database and a new replica will replace the old one.
+
+Primary Failure:
+If a primary database goes offline, a replica database will be promoted
+as a new primary. A new replica is then created to replace the old 
+replica. However, we run into the issue of a replica not being up
+to date. Replication methods like multi masters and circular replication
+could help, or we could run data recovery scripts.
+
+Customization: replication can be synchronous where primary waits for
+replicas to confirm changes, or be asynchronous where replicas 
+eventually catch up. The choice affects latency and consistency guarantees.
+
+{/* end */}
 
 ### Diagram: Database Replication
 {/* Diagram: database-replication */}
 ```python
+                         +----------------------+
+                         |      Web Server      |
+                         +----------------------+
+                           |                |
+                           |                |
+                           |                |    
+            (Writes)       |                |       (Reads)
+                           |                |
+        - - - - - - - - - -                 - - - - - - - - - - - - - - - - - -
+        |                                                         |     |     |
+        |                (DB Replication)   +--------------+      |     |     |
+        |                   - - - - - - - > |  Slave DB 1  | - - -      |     |
+        |                   |               +--------------+            |     |
+    +-------------------+   |                                           |     |
+    |   Master Database | - |               +--------------+            |     |
+    +-------------------+   - - - - - - - > |  Slave DB 2  | - - - - - -      |
+                            |               +--------------+                  |
+                            |                                                 |
+                            |               +--------------+                  |
+                            - - - - - - - > |  Slave DB 3  | - - - - - - - - - 
+                                            +--------------+
 ```
 
-## Cache 
+## Cache: Load and Response Time Tier
 
-## Cache Tier
+### Intro
 
-## Considerations For Using Cache
+Caching is a technique to store frequently accessed data closer to the 
+client or in a faster storage so that repeated requests can be
+served faster.
+
+By reducing the number of requests to the backend severs or databases,
+caching improves response time, reduces load, and increases scalability.
+
+Its particularly in read heave workloads and in scenarios where data
+does not change frequently.
+
+### Cache Tier
+
+{/* def: topic=Cache id=1 perspective=definition */}
+Cache:
+A cache temporarily stores copies of data that would otherwise be 
+retrieved from a slower backend, such as a database or remote API.
+
+Caches can exist at different levels:
+
+- Client side cache: Stored in the browser or app (e.g., local storage, 
+service workers).
+
+- CDN (Edge Cache): Cached at network edge servers to reduce latency for 
+geographically distributed users.
+
+Server cache: Stored in memory (e.g., Redis, Memcached) to accelerate 
+API responses.
+
+Pros:
+- Backend Load: Offloads repeated requests from the main servers
+- Response Time: Serves frequency accessed data faster
+- Scalability: Allows to scale cache tier independently from backend
+
+Cons:
+- Inconsistency: Cache data may become outdated if source changes
+- Cache Invalidation: When and what to remove from cache is hard
+to determine, especially in distributed systems
+{/* end */}
+
+### Considerations For Using Cache
 
 ## Content Delivery Network (CDN)
 
-## Considerations Of Using A CDN
+### Intro
+
+### Considerations Of Using A CDN
 
 ## Stateless Web Tier
 
@@ -581,30 +696,3 @@ Private IP: 10.0.0.1  /               \     Private IP: 10.0.0.2
 
 # Chapter 3: A Framework For System Design Interviews
 
-# Chapter 4: Design a Rate Limiter
-
-# Chapter 5: Design Consistent Hashing
-
-# Chapter 6: Design a Key Value Store
-
-# Chapter 7: Design a Unique ID Generator in Distributed Systems
-
-# Chapter 8: Design a URL Shortener
-
-# Chapter 9: Design a Web Crawler
-
-# Chapter 10: Design a Notification System
-
-# Chapter 11: Design a News Feed System
-
-# Chapter 12: Design a Chat System
-
-# Chapter 13: Design a Search Auto Complete System
-
-# Chapter 14: Design Youtube
-
-# Chapter 15: Design Google Drive
-
-# Chapter 16: The Learning Continues
-
-# Afterword
