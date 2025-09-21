@@ -28,7 +28,12 @@ const TopicTextSearch = () => {
     : [];
 
   const handleButtonClick = (key) => {
-    setSelectedConcept({ concept: key, perspectives: definitionMapping[key] });
+    // Toggle selection: unselect if already selected
+    if (selectedConcept?.concept === key) {
+      setSelectedConcept(null);
+    } else {
+      setSelectedConcept({ concept: key, perspectives: definitionMapping[key] });
+    }
   };
 
   // Separate intro vs other perspectives

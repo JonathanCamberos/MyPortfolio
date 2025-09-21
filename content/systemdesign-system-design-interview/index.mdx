@@ -630,14 +630,16 @@ retrieved from a slower backend, such as a database or remote API.
 
 Caches can exist at different levels:
 
-- Client side cache: Stored in the browser or app (e.g., local storage, 
+Client Side Cache: Stored in the browser or app (e.g., local storage, 
 service workers).
 
-- CDN (Edge Cache): Cached at network edge servers to reduce latency for 
+CDN Edge Cache: Cached at network edge servers to reduce latency for 
 geographically distributed users.
 
-Server cache: Stored in memory (e.g., Redis, Memcached) to accelerate 
-API responses.
+Server Cache: External in memory (e.g., Redis, Memcached) controlled by
+the server to accelerate API responses and usually put in front of a database. 
+
+Database Cache: Some relational databases or ORMs have built in query caching
 
 Pros:
 - Backend Load: Offloads repeated requests from the main servers
@@ -648,21 +650,133 @@ Cons:
 - Inconsistency: Cache data may become outdated if source changes
 - Cache Invalidation: When and what to remove from cache is hard
 to determine, especially in distributed systems
+
+```python
+Read_Through_Cache_Strategy():
+
+                +-----------------+                 1.
+                |   Web Server    | - - - - - - -   if data exists in cache,
+                +-----------------+             |   read data from cache
+                    |     |                     |
+                    |     |   2.1               |
+  2.                |     |   Save data         | 
+  If data does not  |     |   to cache          v
+  exist in cache,   |     |               +------------+
+  query database    |     | - - - - - - > |    Cache   |               
+                    v                     +------------+
+                  +------------+ 
+                  |  Database  |        
+                  +------------+ 
+```
 {/* end */}
 
-### Considerations For Using Cache
+### Cache Considerations
+
+When to use a cache:
+A cache is practical when data is read frequently but modified infrequently.
+Cache should be saved in persistent data stores, as opposed to volatile memory
+such as a cache server which may restart and lose data.
+
+Expiration Policy:
+Determine a viable expiration policy, that once cached data reached, it expires
+and is removed from the cache.
+
+Consistency:
+Keeping the database and cache in sync is challenging. Inconsistencies occur 
+as data modifying operations on the data store and cache
+are not done in a single transaction. Difficulty increases when scaling across
+multiple regions, a good reference is 'scaling memcache at facebook'.
+
+Mitigating Failures:
+A single cache server represents a single point of failure. Multiple 
+cache servers across different data centers is recommended in addition 
+to overprovisioning required memory by certain percentages to provide a 
+buffer as memory usage increases.
+
+Eviction Policy:
+Once a cache is full, new requests to add items will cause existing items to 
+be removed. Least recently used (LRU) is the most popular cache eviction
+policy. Least frequently used (LFU), First in First Out (FIFO) can also
+be used to satisfy different use cases.
 
 ## Content Delivery Network (CDN)
 
 ### Intro
 
-### Considerations Of Using A CDN
+A Content Deliver Network (CDN) is a distributed network of servers
+that cache and deliver content closer to end users. CDNs improve 
+performance, reduce latency, and help handle high traffic loads 
+efficiently.
 
-## Stateless Web Tier
+### CDN
+{/* def: topic=CDN id=1 perspective=definition diagramId=cdn */}
+CDN:
+A CDN is a globally distributed network of edge servers that caches 
+static and sometimes dynamic content. When a user requests content, 
+the CDN serves it from the nearest edge server instead of the origin 
+server, reducing load times and bandwidth usage.
 
-## Stateful Architecture
+CDNs are commonly used for data that changes less frequently:
+- Images, videos, and static files (CSS, JS)
+- API responses (with caching policies)
+- Web page information to accelerate delivery
 
-## Stateless Architecture
+Key benefits include improved response times, reduced origin server 
+load, and better handling of geographically distributed traffic.
+
+A CDN is essentially a public, distributed cache with nuances.
+
+- Public/Shared: Part of a global network that serves many users
+- Edge Caching: It stores content closer to end users geographically
+- Not just caching: Provides routing, DDoS protection, SSL termination, etc
+- Cache control: You can configure what gets cached, TTL, invalidation, etc
+
+```python
+    +---------+
+    | Client1 | - -                  +------------+
+    +---------+   |                  |   Origin   |
+        |         |                  | (web/orig) |
+        v         |                  +------------+
+    +---------+   |                         ^
+    | Client2 | - - - - - - - - - - - - - - |
+    +---------+         |               120 ms
+        |               |   40 ms
+        v               v
+                +-------------+
+                |     CDN     |
+                | (edge cache)|
+                +-------------+
+```
+{/* end */}
+
+### CDN Considerations
+
+Cost:
+CDNs are run by third party providers, so you are charged for data 
+transfers in and out of the CDN, so cache only frequently used data.
+
+Appropriate Cache Expiry:
+Cache expiration time should not be too long to avoid un fresh data
+or too short that reloading of content from origin to CDN is too often.
+
+CDN Fallback:
+Consider how application copes with CDN failure, temporary CDN outage,
+in a way that clients should be able to detect the problem and start
+requesting resources from the origin.
+
+Invalidation:
+Expiration occurs either by APIs provided by CDN vendors or by 
+updating object versioning to server a newer version of some object.
+
+
+
+## State Web Tier
+
+### Intro 
+
+### Stateful Architecture
+
+### Stateless Architecture
 
 ## Data Centers
 
