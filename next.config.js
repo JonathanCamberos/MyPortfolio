@@ -688,70 +688,65 @@ function parseDiagrams(content, filePath) {
     .replace(/\/index\.mdx$/, "");
 
   const lines = content.split("\n");
+
   let currentDiagram = null;
   let buffer = [];
-  let relatedIds = [];
-  let currentLanguage = null;
   let insideCodeBlock = false;
+  let currentLanguage = null;
+  let headingName = null;
+  let diagramKey = null;
 
   for (let i = 0; i < lines.length; i++) {
     const lineRaw = lines[i];
     const line = lineRaw.trim();
 
-    // Match diagram reference to diagramId
-    const diagramRefMatch = /^\{\/\*\s*Diagram:\s*(.+)\s*\*\/\}/i.exec(line);
-    if (diagramRefMatch) {
-      relatedIds = diagramRefMatch[1].split(",").map((d) => d.trim());
+    // --- Track heading for display name ---
+    const headingMatch = /^#{1,6}\s*Diagram:\s*(.+)$/i.exec(line);
+    if (headingMatch) {
+      headingName = headingMatch[1].trim();
       continue;
     }
 
-    // Match diagram heading
-    const diagramMatch = /^#{1,6}\s*Diagram:\s*(.+)$/i.exec(line);
-    if (diagramMatch) {
-      currentDiagram = {
-        name: diagramMatch[1].trim(),
-        diagramLink: `${baseLink}#diagram-${normalizeKey(
-          diagramMatch[1].trim()
-        )}`,
-        diagram: "",
-        relatedIds: relatedIds || [],
-        related: [],
-        language: null, // store language later
-      };
-      buffer = [];
+    // --- Track diagram comment for database key ---
+    const diagramCommentMatch = /^\{\/\*\s*Diagram:\s*(.+)\s*\*\/\}/i.exec(line);
+    if (diagramCommentMatch) {
+      diagramKey = diagramCommentMatch[1].trim();
       continue;
     }
 
-    if (currentDiagram) {
-      // Opening or closing code block
-      const codeBlockMatch = /^```(\w*)/.exec(line);
-      if (codeBlockMatch) {
-        if (!insideCodeBlock) {
-          // Opening code block
-          insideCodeBlock = true;
-          currentLanguage = codeBlockMatch[1] || "text"; // default to text
-        } else {
-          // Closing code block
-          insideCodeBlock = false;
-          currentDiagram.diagram = buffer.join("\n");
-          currentDiagram.language = currentLanguage;
+    // --- Handle code block start/end ---
+    const codeBlockMatch = /^```(\w*)/.exec(line);
+    if (codeBlockMatch) {
+      if (!insideCodeBlock) {
+        // opening code block
+        insideCodeBlock = true;
+        currentLanguage = codeBlockMatch[1] || "text";
+        buffer = [];
+      } else {
+        // closing code block
+        insideCodeBlock = false;
 
-          // Use first relatedId as the key, fallback to normalized name
-          const key = currentDiagram.relatedIds[0] || normalizeKey(currentDiagram.name);
-          diagrams[key] = currentDiagram;
-
-          // Reset for next diagram
-          currentDiagram = null;
-          buffer = [];
-          relatedIds = [];
-          currentLanguage = null;
+        if (diagramKey && headingName) {
+          diagrams[diagramKey] = {
+            name: headingName,
+            diagramLink: `${baseLink}#diagram-${normalizeKey(headingName)}`,
+            diagram: buffer.join("\n"),
+            language: currentLanguage,
+          };
         }
-        continue;
-      }
 
-      if (insideCodeBlock) {
-        buffer.push(lineRaw); // preserve whitespace
+        // reset
+        headingName = null;
+        diagramKey = null;
+        buffer = [];
+        currentLanguage = null;
       }
+      continue;
+    }
+
+    // --- Collect code block lines ---
+    if (insideCodeBlock) {
+      buffer.push(lineRaw); // preserve whitespace
     }
   }
 

@@ -3,9 +3,7 @@
     "name": "Single Server Setup",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
     "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
-    "relatedIds": [
-      "dns-basic"
-    ],
+    "language": "python",
     "related": [
       "Client",
       "DNS",
@@ -14,66 +12,48 @@
       "HTTP Protocol",
       "Web Application",
       "Mobile Application"
-    ],
-    "language": "python"
+    ]
   },
   "separating-traffic-database": {
     "name": "Separating Traffic and Database",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-separating-traffic-and-database",
     "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |          5) ------>\n                    +----------------+    read/write/update  +------------+\n                    |   Web Server   |                       |  Database  |\n                    +----------------+     6) <------        +------------+\n                                            return data",
-    "relatedIds": [
-      "separating-traffic-database"
-    ],
-    "related": [],
     "language": "python"
   },
   "load-balancer": {
     "name": "Load Balancer",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-load-balancer",
     "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                         |        ^            2) <------    \n                         |        |           15.125.23.214     \n                         |        |       \n    3)                   |        |  4)    \nPublic IP: 15.125.23.214 |        |  HTML Page \n                         |        |    \n                         |        |       \n                         |        |      \n                         V        |\n                    +------------------+\n                    |  Load Balancer   |\n                    +------------------+\n                       /             \\\nPrivate IP: 10.0.0.1  /               \\     Private IP: 10.0.0.2\n                     /                 \\\n        +----------+                  +----------+\n        | Server 1 |                  | Server 2 |\n        +----------+                  +----------+",
-    "relatedIds": [
-      "load-balancer"
-    ],
+    "language": "python",
     "related": [
       "Load Balancer",
       "Private IP Address",
       "NAT"
-    ],
-    "language": "python"
+    ]
   },
   "database-replication": {
     "name": "Database Replication",
     "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-database-replication",
     "diagram": "",
-    "relatedIds": [
-      "database-replication"
-    ],
-    "related": [],
     "language": "python"
   },
   "simple-architecture": {
     "name": "Simple Example of an Architecture for Data System",
     "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-simple-example-of-an-architecture-for-data-system",
     "diagram": "                            +--------+\n                            | Client |          \n                            +--------+          \n                                ^               \n                                |                            \n                                |    Client Requests                \n                                |               \n                                v  \n                        +---------------------+                 Asynchronous tasks\n                        |   Application Code  | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n                     /  +---------------------+ \\                                       |\n Reads requests     /           |                \\                                      |\n and first checks  /            |                 \\  Search                             |\n if the data      /             |                  \\ Requests                           |\n is cached       /              |                   \\                                   |\n   +-----------+        +----------------------+     +-----------+                +-----------+  \n   | In-memory |        |   Primary Database   |     | Full-text |                |  Message  |\n   |   Cache   |        +----------------------+     |   index   |                |  Queue    | \n   +-----------+                |                    +-----------+                +-----------+\n                ^               |                   /                                   |\n                 \\              | Capture          /                                    |\n                  \\             | changes to      /                                     |\n                   \\            | data           /                                      |\n        Invalidate  \\           v               /   Apply updates                       |\n        or update    \\  +---------------------+     to search index          +---------------------+\n        the cache       |   Application Code  |                              |   Application Code  |\n                        +---------------------+                              +---------------------+\n                                                                                        |\n                                                                                        |   e.g. send email\n                                                                                        V\n\n                                                                                    'outside world'",
-    "relatedIds": [
-      "simple-architecture"
-    ],
+    "language": "python",
     "related": [
       "API"
-    ],
-    "language": "python"
+    ]
   },
   "high-percentile": {
     "name": "High Percentile Response Time",
     "diagramLink": "/Notes/textbook-designing-data-intensive-applications#diagram-high-percentile-response-time",
     "diagram": "                        Response Time\n                        (ms)\n  99th percentile ----  |          *                                          \n                        |          *                                          \n                        |          *                                         \n                        |          *                 *                       \n  95th percentile ----  |  *       *       *         *        *              \n                        |  *       *       *         *        *              \n  Mean  --------------  |  *       *   *   *       *   *    *   *   *        \n  Median -------------  |  *   *   *   *   *   *   *   *    *   *   *        \n                        |  *   *   *   *   *   *   *   *    *   *   *        \n                        |  *   *   *   *   *   *   *   *    *   *   *        \n                        ----------------------------------------------------\n                          R1  R2  R3  R4  R5  R6  R7  R8  R9  R10  R11     Request Number",
-    "relatedIds": [
-      "high-percentile"
-    ],
+    "language": "python",
     "related": [
       "Throughput",
       "Response Time"
-    ],
-    "language": "python"
+    ]
   }
 }
