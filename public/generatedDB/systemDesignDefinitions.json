@@ -351,10 +351,22 @@
       "id": 1,
       "perspective": "definition",
       "diagramId": null,
-      "bodyString": "A cache temporarily stores copies of data that would otherwise be \nretrieved from a slower backend, such as a database or remote API.\n\nCaches can exist at different levels:\n\n- Client side cache: Stored in the browser or app (e.g., local storage, \nservice workers).\n\n- CDN (Edge Cache): Cached at network edge servers to reduce latency for \ngeographically distributed users.\n\nServer cache: Stored in memory (e.g., Redis, Memcached) to accelerate \nAPI responses.\n\nPros:\n- Backend Load: Offloads repeated requests from the main servers\n- Response Time: Serves frequency accessed data faster\n- Scalability: Allows to scale cache tier independently from backend\n\nCons:\n- Inconsistency: Cache data may become outdated if source changes\n- Cache Invalidation: When and what to remove from cache is hard\nto determine, especially in distributed systems",
-      "bodyCode": null,
-      "bodyCodeLanguage": null,
+      "bodyString": "A cache temporarily stores copies of data that would otherwise be \nretrieved from a slower backend, such as a database or remote API.\n\nCaches can exist at different levels:\n\nClient Side Cache: Stored in the browser or app (e.g., local storage, \nservice workers).\n\nCDN Edge Cache: Cached at network edge servers to reduce latency for \ngeographically distributed users.\n\nServer Cache: External in memory (e.g., Redis, Memcached) controlled by\nthe server to accelerate API responses and usually put in front of a database. \n\nDatabase Cache: Some relational databases or ORMs have built in query caching\n\nPros:\n- Backend Load: Offloads repeated requests from the main servers\n- Response Time: Serves frequency accessed data faster\n- Scalability: Allows to scale cache tier independently from backend\n\nCons:\n- Inconsistency: Cache data may become outdated if source changes\n- Cache Invalidation: When and what to remove from cache is hard\nto determine, especially in distributed systems\n",
+      "bodyCode": "Read_Through_Cache_Strategy():\n\n                +-----------------+                 1.\n                |   Web Server    | - - - - - - -   if data exists in cache,\n                +-----------------+             |   read data from cache\n                    |     |                     |\n                    |     |   2.1               |\n  2.                |     |   Save data         | \n  If data does not  |     |   to cache          v\n  exist in cache,   |     |               +------------+\n  query database    |     | - - - - - - > |    Cache   |               \n                    v                     +------------+\n                  +------------+ \n                  |  Database  |        \n                  +------------+ ",
+      "bodyCodeLanguage": "python",
       "definitionLink": "/Notes/systemdesign-system-design-interview#cache-tier"
+    }
+  ],
+  "CDN": [
+    {
+      "topic": "CDN",
+      "id": 1,
+      "perspective": "definition",
+      "diagramId": "cdn",
+      "bodyString": "A CDN is a globally distributed network of edge servers that caches \nstatic and sometimes dynamic content. When a user requests content, \nthe CDN serves it from the nearest edge server instead of the origin \nserver, reducing load times and bandwidth usage.\n\nCDNs are commonly used for data that changes less frequently:\n- Images, videos, and static files (CSS, JS)\n- API responses (with caching policies)\n- Web page information to accelerate delivery\n\nKey benefits include improved response times, reduced origin server \nload, and better handling of geographically distributed traffic.\n\nA CDN is essentially a public, distributed cache with nuances.\n\n- Public/Shared: Part of a global network that serves many users\n- Edge Caching: It stores content closer to end users geographically\n- Not just caching: Provides routing, DDoS protection, SSL termination, etc\n- Cache control: You can configure what gets cached, TTL, invalidation, etc\n",
+      "bodyCode": "    +---------+\n    | Client1 | - -                  +------------+\n    +---------+   |                  |   Origin   |\n        |         |                  | (web/orig) |\n        v         |                  +------------+\n    +---------+   |                         ^\n    | Client2 | - - - - - - - - - - - - - - |\n    +---------+         |               120 ms\n        |               |   40 ms\n        v               v\n                +-------------+\n                |     CDN     |\n                | (edge cache)|\n                +-------------+",
+      "bodyCodeLanguage": "python",
+      "definitionLink": "/Notes/systemdesign-system-design-interview#cdn"
     }
   ],
   "Throughput": [
