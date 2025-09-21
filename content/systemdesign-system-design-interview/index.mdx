@@ -735,13 +735,13 @@ A CDN is essentially a public, distributed cache with nuances.
     +---------+
     | Client1 | - -                  +------------+
     +---------+   |                  |   Origin   |
-        |         |                  | (web/orig) |
-        v         |                  +------------+
+                  |                  | (web/orig) |
+                  |                  +------------+
     +---------+   |                         ^
     | Client2 | - - - - - - - - - - - - - - |
     +---------+         |               120 ms
-        |               |   40 ms
-        v               v
+                        |   40 ms
+                        v
                 +-------------+
                 |     CDN     |
                 | (edge cache)|

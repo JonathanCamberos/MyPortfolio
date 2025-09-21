@@ -12,7 +12,7 @@ tags:
 
 # Arrays & Hashing Intro:
 
-Leetcode problems with elegant solutions using hashing. 
+LeetCode problems with solutions using hashmaps. 
 
 ## What is a Hashmap
 A dictionary is just a direct mapping of keys->values:
@@ -21,62 +21,60 @@ Dictionary: ['a': 2, 'b': 2, 'c' : 3, ...]
 
 A Hashmap is just a dictionary that maps keys->values using a hash function.
 Hashmaps are a common use case for hashing.
-We choose hashing to maximize randomness and minimize collisions between elements to keys.
+We choose hashing to maximize randomness and minimize collisions between elements 
+to keys.
 
-## Hashing
-Hashing is simply a function. It takes in an input, and spits out an output.
-As an example, here is the function mod, which takes in an integer and spits out an integer:
+## Hashing With A Function
+Hashing is simply a function. It takes in an input and spits out an output.
+Here is the function mod, which takes in an integer and spits out an integer:
 
-1 mod (3) = 1
+- 1 mod (3) = 1
+- 2 mod (3) = 2
+- 3 mod (3) = 0
+- 4 mod (3) = 1
 
-2 mod (3) = 2
+Now this is could be our function for our hashmap, but it would lead to high 
+collisions and low randomness as there are only 3 possible key 
+results: 0, 1, and 2. So hashmaps are only efficient as the chosen hash function.
 
-3 mod (3) = 0
+## Choosing a Hash Function
 
-4 mod (3) = 1
-
-Now this is could be our function for our hashmap, but it would lead to high collisions and low randomness
-as there are only 3 possible key results: 0, 1, and 2.
-So hashmaps are only efficient as the chosen function.
-
-With a good Hash function:
-
+With a good hash function:
 Insert, Lookup, and Delete take O(1).
 In this case, every element gets its own unique key and so
 a lookup using this function would be constant O(1).
 
-With a bad Hash function:
-
+With a bad hash function:
 Insert, Lookup, and Delete take O(n). 
 Lets say our function is hash():
 
-```
+## Handling Collisions
+Even with a good hash function, we may run into collisions sometimes.
+In those cases, we handle collision using chaining with a linked list of elements.
+
+Here, there are 5 keys or buckets we could hash to.
+
+```python
     hash()  ->  [key mod (5)]
+    ----------------------------
     hash(10) = 10 % 5 = 0
     hash(22) = 22 % 5 = 2
     hash(31) = 31 % 5 = 1
     hash(14) = 14 % 5 = 4
     hash(17) = 17 % 5 = 2 (collision!)
-
-    Handle collision using chaining with a linked list of elements.
-
-    Index 0  |  Index 1  |  Index 2         |  Index 3  |  Index 4
-    -------- | --------- | ---------------- | --------- | ---------
-    [10]     |  [31]     |  [22 -> 17]      |  [  ]     |  [14]
 ```
 
-In this case there are only 5 keys or buckets would be hashed to.
-After inserting n elements into one key or bucket, performing a lookup would for some element k 
-would result in traversing a list of size n in the worst case leading to O(n).
+| Key (index) | Value (element) |
+| ----------- | --------------- |
+| 0           | [10]            | 
+| 1           | [31]            |
+| 2           | [22, 17]        |
+| 3           | []              |
+| 4           | [14]            |
 
-This would degrade insert, lookup, and delete from the original O(1) to O(n).
+## Balancing Hash Table With Load Factor
+Load factors are calculated to ensure a hash table maintains its O(1) time complexity.
 
-Hashmaps having quick O(1) average time for insert(), lookup(), and delete(), 
-are great for storing key pairs of lists of elements to perform more complex tasks 
-where performance in time and space complexity are important.
-
-
-## Balancing
 Balancing occurs when a hash table has passed its set load factor.
 
 Load Factor = n/m
@@ -85,81 +83,108 @@ Where n = num of elements, m = num of keys
 Thus, when certain fraction of the table size, say 75% full with 3 elements and 4 potential keys. 
 The table must increase in size and rehash/reinsert every element. 
 
-The efficiency of a hash table decreases significantly without balancing, as this leads to increased collisions as the table fills up,
-which leads to time needed to resolve collisions, as we traverse through list to find the element in linear time O(n).
-Operations like search, insert, and delete, degrade from O(1) on average to O(n) in the worst case.
+The efficiency of a hash table decreases significantly without balancing, as this 
+leads to increased collisions as the table fills up, which leads to time needed to 
+resolve collisions, as we traverse through list to find the element in linear 
+time O(n). Operations like search, insert, and delete, degrade from O(1) on average 
+to O(n) in the worst case.
 
 Usually, when the load factor is reached, the table size doubles to 2n.
-And usually, a common load factor is 0.75 or 75% full.
-Finally, we must rehash every element leading to:
-[(double table size * load factor) - current n elements] = 
+0.75 or 75% full is a common load factor for a hash table.
 
-(2n * 0.75) - n  =
+Upon balancing, we need to rehash every element leading to n/2 additional space:
+```python
+    New table size - current number of elements 
+    (double table size * load factor) - current n elements
+    (2 n * 0.75) 
+    1.5 n  = New Load Factor Element Count
 
-1.5n - n =
-
-0.5n =
-
-n/2 = additional space after rebalancing
-
-Rehashing is notably expensive as we must rehash every element with the new hash function, 
-leading to O(n) for resizing and reinserting n elements.
+    New Load Factor Element Count - Current Element Count
+    1.5 n - n 
+    0.5
+    n/2 = Additional space until next rebalance
+```
+Rehashing is expensive as we need to rehash every element with the new hash function
+into their new bucket, leading to O(n) for resizing and reinserting n elements.
 
 ## Array Application: In place Transformations
-Perform transformations or reorderings on the array without using extra space.
+We can perform transformations or reorderings on the array 
+itself without using extra space.
 
 Ex: Rotate an array to the right by k steps.
 ```python
     def rotate(nums: List[int], k: int) -> None:
+        
         n = len(nums)
         k %= n  # handle cases where k > n
         
+        # Opposite ends reverse subarray [start, end]
         def reverse(start: int, end: int) -> None:
+            
+            # Reverse until hit middle of subarray
             while start < end:
                 nums[start], nums[end] = nums[end], nums[start]
                 start += 1
                 end -= 1
 
-        reverse(0, n - 1)    # Reverse entire array
-        reverse(0, k - 1)    # Reverse first k elements
-        reverse(k, n - 1)    # Reverse remaining elements
+        # Reverse entire array
+        reverse(0, n - 1)
+        # Reverse first k elements [0, k)
+        reverse(0, k - 1)
+        # Reverse remaining elements [k, n)
+        reverse(k, n - 1)
 ```
 
 ## HashMap Application: Representations
+We can represent objects or data based on specific criteria.
 
-Using a HashMap to represent objects or data based on specific criteria.
-
-Ex: Representing a string by character frequency.
+Ex: Representing a string by character frequency
 ```python
     def freqCount():
+
+        # object
         s = "aabbcc"
+
+        # representation
         freq = {}
+
+        # mapping
         for char in s:
             freq[char] = freq.get(char, 0) + 1
-        # freq = {'a': 2, 'b': 2, 'c': 2}
+
+    # freq = {'a': 2, 'b': 2, 'c': 2}
 ```
 
 ## HashMap Application: Grouping by Criteria
+We can group elements based on a defined criterion, 
+such as sorting or categorization, using hashing to push
+values into the corresponding bucket.
 
-Group elements based on a defined criterion, such as sorting or categorization.
-
-Ex: Grouping strings that are anagrams of each other:
+Ex: Grouping string anagrams
 ```python
     def groupAnagrams(strs):
+        
+        # groups
         anagrams = {}
+
+        # for list
         for word in strs:
+
+            # create key
             key = "".join(sorted(word))
             if key not in anagrams:
                 anagrams[key] = []
+            
+            # hash key and put value into bucket
             anagrams[key].append(word)
-        # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}
+
+    # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}
 ```
 
 ## HashMap Application: Memoization in Dynamic Programming
+We can store solutions to sub problems to avoid redundant calculations.
 
-Store solutions to subproblems in a HashMap to avoid redundant calculations.
-
-Ex: Fibonacci number computation with memoization:
+Ex: Fibonacci number computation with memoization
 ```python
     def fib(n, memo={}):
         if n <= 1:
@@ -170,108 +195,133 @@ Ex: Fibonacci number computation with memoization:
 ```
 
 ## HashMap Application: Backtracking with Caching for Pruning
-
-Use a HashMap to cache explored paths or states to prune the search
-space effectively. 
+We can cache previous paths or states to prune the search
+space effectively as we explore.
 
 Ex: Subset Sum with caching:
 ```python
     def subsetSum(nums, target):
-        # Cache to store paths that can no longer lead to valid solutions
-        cache = {}
+
         result = []
 
-        def backtrack(current, index, total):
-            # Check if we've encountered this path before
+        # Cache to avoid exploring previously visited paths
+        cache = {}
+
+        def dfs_backtrack(current, index, total):
+            
+            # Check if already explored state
             state = (tuple(current), total)
             if state in cache:
                 return
+
+            # Mark as explored
             cache[state] = True
 
-            # Prune: If the total exceeds the target
+            # Early Prune -> no potential valid path is current total exceeds target
             if total > target:
                 return
             
-            # Valid solution
+            # Valid solution -> no need to explore further, backtrack
             if total == target:
                 result.append(list(current))
                 return
 
-            # Explore further candidates
+            # Explore -> branches from current state
             for i in range(index, len(nums)):
-                # Choose
+                
+                # Build
                 current.append(nums[i])
-                # Recurse
-                backtrack(current, i + 1, total + nums[i])
-                # Undo the choice
+                # Explore
+                dfs_backtrack(current, i + 1, total + nums[i])
+                # Backtrack
                 current.pop()
 
-        backtrack([], 0, 0)
+        dfs_backtrack([], 0, 0)
         return result
 ```
 
 ## HashMap Application: Representing Relationships 
+We can model relationships between entities.
 
-Model relationships between entities.
-
-Ex: Adjacency list representation of a graph:
+Ex: Adjacency list for a graph
 ```python
     def graph():
-        edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph
-        graph = {}  # Initialize an empty hashmap to represent the graph
+
+        # List of edges in the graph
+        edges = [(1, 2), (2, 3), (1, 3)]
+
+        # Adjacency list
+        graph = {}
 
         # Build the adjacency list
         for u, v in edges:
-            if u not in graph:  # If the node `u` is not yet in the graph, initialize it
-                graph[u] = []
-            if v not in graph:  # If the node `v` is not yet in the graph, initialize it
-                graph[v] = []
-            graph[u].append(v)  # Add `v` to the list of neighbors for `u`
-            graph[v].append(u)  # Add `u` to the list of neighbors for `v`
 
-        # Resulting adjacency list representation
-        # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}
+            # If the node 'u' or 'v' is not yet in the graph, initialize it
+            if u not in graph:
+                graph[u] = []
+            if v not in graph:
+                graph[v] = []
+
+            # Add 'v' to the list of neighbors for 'u' and 'u' to 'v'
+            graph[u].append(v)
+            graph[v].append(u)
+
+    # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}
 ```
 
 ## HashMap Application: Logic Mapping
-Use a HashMap to represent problem specific logic or conditions.
+We can represent logic or conditions.
 
-Ex: Map complements to indices for quick lookup:
+Ex: Store integer complements for quick lookup:
 ```python
     def twoSum(nums, target):
-        # Map to store complement -> index
+
+        # Complement -> index
         complement_map = {}
 
         for i, num in enumerate(nums):
+            
+            # Calculate complement
             complement = target - num
             
-            # Check if current number is a complement of a previously seen number
+            # Lookup(complement)
             if num in complement_map:
                 return [complement_map[num], i]
             
-            # Store complement of current number with index for future lookup
+            # Put(complement)
             complement_map[complement] = i
 
         return []
 ```
 
 ## HashMap Application: Algorithm
-Case where a problem that seems to require a HashMap is easily solved by 
-an algorithm specifically made for that problem
+There are cases where problem that seems to require a hashmap 
+have an existing algorithm made for that problem.
 
-Ex: Boyer-Moore Voting Algorithm
+Ex: Boyer Moore Voting Algorithm
 ```python
 def majorityElement(nums: List[int]) -> int:
-    candidate = None
+    
+    # Find element that appears more then floor(n/2) times
+
+    # votes for candidate
     count = 0
 
-    # Phase 1: Find a candidate for the majority element
-    for num in nums:
-        if count == 0:  # Reset candidate
-            candidate = num
-        count += (1 if num == candidate else -1)
+    # current candidate
+    candidate = None
 
-    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)
+    for num in nums:
+        
+        # Reset candidate
+        if count == 0:
+            candidate = num
+
+        if num == candidate:
+            count += 1
+        else:
+            count -= 1
+
+    # Confirm the candidate ( optional if majority element is guaranteed)
     return candidate
 ```
 
@@ -293,9 +343,9 @@ Topics:  Array, Hash Table, Sorting
  
 Constraints:
 
-Array Length: 1 &le; nums.length &le; 10<sup>5</sup>
+1 &le; nums.length &le; 10<sup>5</sup>
 
-Integer Size: -10<sup>9</sup>  &le; nums[i] &le; 10<sup>9</sup> 
+-10<sup>9</sup> &le; nums[i] &le; 10<sup>9</sup> 
 
 
 ## Abstraction
@@ -334,7 +384,6 @@ Given a list of elements, we need to check if any of those elements are duplicat
         # overall: space complexity O(1)
         return False
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Outer Loop | O(n) | O(1) | Iteration over the list takes linear time O(n) | No additional memory is allocated O(1) |
@@ -440,7 +489,7 @@ Given a list of elements, we need to check if any of those elements are duplicat
 | Overall | O(n log n) | O(n) | Merge sort dominates time complexity, leading to O(n log n) | Temporary arrays during merge dominates, leading to O(n) |
 
 
-## Find the Bug: (iterating element-wise)
+## Find the Bug: (iterating element wise)
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
