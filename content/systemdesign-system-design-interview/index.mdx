@@ -3,7 +3,7 @@ title: "System Design: System Design Interview Vol I"
 description: "system design interview"
 image: "../../public/Notes/sysdesinterview.png"
 publishedAt: "2025-09-14"
-updatedAt: "2025-09-15"
+updatedAt: "2025-09-23"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -749,8 +749,7 @@ A CDN is essentially a public, distributed cache with nuances.
 ```
 {/* end */}
 
-### CDN Considerations
-
+### CDN Considerations: Cost, CDN Failure, Cache Expiry, Cache Invalidation 
 Cost:
 CDNs are run by third party providers, so you are charged for data 
 transfers in and out of the CDN, so cache only frequently used data.
@@ -773,8 +772,28 @@ updating object versioning to server a newer version of some object.
 ## State Web Tier
 
 ### Intro 
+The web tier, (the application servers that handle HTTP requests), can
+be designed as stateful or stateless. How state is managed
+directly affects scalability, fault tolerance, and complexity.
+
+In stateful architecture, the web tier stores client session data (state)
+on the server itself.
+
+In stateless architecture, the web tier does not keep client state, and
+each request is independent and needs to carry context (cookies,
+tokens, or be stored in external DB/cache)
 
 ### Stateful Architecture
+
+{/* def: topic=Stateful Architecture id=1 perspective=Definition */}
+Stateful Architecture: The server maintains session state for each client
+across multiple requests.
+
+Examples of Stateful:
+- Logged In Sessions stored in server memory
+- 
+
+{/* end */}
 
 ### Stateless Architecture
 

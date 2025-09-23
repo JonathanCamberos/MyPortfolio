@@ -369,6 +369,18 @@
       "definitionLink": "/Notes/systemdesign-system-design-interview#cdn"
     }
   ],
+  "Stateful Architecture": [
+    {
+      "topic": "Stateful Architecture",
+      "id": 1,
+      "perspective": "Definition",
+      "diagramId": null,
+      "bodyString": "The server maintains session state for each client\nacross multiple requests.\n\nExamples of Stateful:\n- Logged In Sessions stored in server memory\n- \n",
+      "bodyCode": null,
+      "bodyCodeLanguage": null,
+      "definitionLink": "/Notes/systemdesign-system-design-interview#stateful-architecture"
+    }
+  ],
   "Throughput": [
     {
       "topic": "Throughput",

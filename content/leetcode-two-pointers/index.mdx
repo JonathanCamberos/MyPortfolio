@@ -11,30 +11,36 @@ tags:
 ---
 
 # Two Pointers Intro
-Leetcode problems with elegant solutions using two pointers. 
+LeetCode problems with solutions using two pointers. 
 
 ## What are Two Pointers
-Two Pointers is the strategy of using a Left and Right pointer to iterate over 
-a data structure, usually an array, to solve a problem.
+Two Pointers is the strategy of using a left and right pointer 
+to iterate over a data structure, usually an array, to solve a problem.
 
 ## Two Pointers Application: One Pointer with Auxiliary State
-Use a single pointer to scan linearly and keep track of additional state 
-variables to simulate a second pointer.
+We can use a single pointer to iterate linearly and keep track of
+additional state variables to either simulate a second pointer
+or store relevant data.
 
-Ex: Move all zeros while maintaining order
+Ex: Move all zeros to end of array while maintaining order
 ```python
     def move_zeros(nums: list[int]) -> None:
-        # `last_non_zero_found_at` tracks the position where the next non-zero
-        # element should be placed, simulating a second pointer.
-        last_non_zero_found_at = 0
 
-        for current in range(len(nums)):
-            if nums[current] != 0:
-                nums[last_non_zero_found_at], nums[current] = nums[current], nums[last_non_zero_found_at]
+        # Slot where non-zero value should go
+        partition = 0
+
+        # Pointer iteration
+        for left in range(len(nums)):
+
+            # Move non-zero values to current slot
+            if nums[left] != 0:
+                nums[last_non_zero_found_at], nums[left] = nums[left], nums[last_non_zero_found_at]
+                
+                # next non-zero slot
                 last_non_zero_found_at += 1
 
-    # arr = [0, 1, 0, 3, 12] 
-    # move_zeros(arr)  Output: [1, 3, 12, 0, 0]
+    # input:  [0, 1, 0, 3, 12] 
+    # output: [1, 3, 12, 0, 0]
 ```
 
 ## Two Pointers Application: Opposite Ends
@@ -44,47 +50,72 @@ while validating some sort of logic.
 Ex: Determine if a string is a palindrome
 ```python
     def is_palindrome(s: str) -> bool:
+
+        # init to start and end of array
         left, right = 0, len(s) - 1
+
+        # until middle of array is hit
         while left < right:
+
+            # if palindrome is broken
             if s[left] != s[right]:
                 return False
+
+            # continue towards middle
             left += 1
             right -= 1
+
+        # valid palindrome
         return True
 
-    # Example:
-    print(is_palindrome("radar"))  # Output: True
-    print(is_palindrome("hello"))  # Output: False
+    # is_palindrome("radar") -> True
+    # is_palindrome("hello") -> False
 ```
 
 ## Two Pointers Application: Sliding Window
-We can have two pointers represent a window over a sequence that expands or shrinks
-to satisfy a condition.
+We can have two pointers represent a window from [Left, Right] over 
+a sequence that expands or shrinks to satisfy a condition.
 
 Ex: Find the length of the longest substring without repeating characters.
 ```python
     def longest_unique_substring(s: str) -> int:
-        char_set = set()
+
+        # start of window, left side
         left = 0
+
+        # window data, stores unique chars within window range
+        char_set = set()
+
+        # window data, stores length of all windows
         maxLength = 0
 
+        # expand window length, right side
         for right in range(len(s)):
+
+            # if unique char is broken, remove from left side until
+            # unique char is true again
             while s[right] in char_set:
+                # remove data
                 char_set.remove(s[left])
+                # shrink window
                 left += 1
+            
+            # add to window data
             char_set.add(s[right])
+  
+            # update length, compare against global max
             maxLength = max(maxLength, right - left + 1)
-        
+
+        # global max window length      
         return maxLength
 
-    # Example:
-    print(longest_unique_substring("abcabcbb"))  # Output: 3
+    # longest_unique_substring("abcabcbb") -> 3
 ```
 
 
 ## Two Pointers Application: Fast & Slow Pointers 
-We can have have two pointers moving at different speeds to detect cycles or find midpoints
-in linked lists or arrays.
+We can have have two pointers moving at different speeds to detect cycles 
+or find midpoints in linked lists or arrays.
 
 Ex: Detect a cycle in a linked list.
 ```python
@@ -94,57 +125,73 @@ Ex: Detect a cycle in a linked list.
             self.next = next
 
     def has_cycle(head: ListNode) -> bool:
+        
+        # tortoise and hare pointers
         slow, fast = head, head
         while fast and fast.next:
+
+            # iterate fast x2, slow x1
             slow = slow.next
             fast = fast.next.next
+
+            # if pointers match, cycle exists
+            # will be hit a n/2 iterations
             if slow == fast:
                 return True
+
+        # reached end of list
         return False
 
-    # Example:
-    # Construct a list with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)
-    node1 = ListNode(1)
-    node2 = ListNode(2)
-    node3 = ListNode(3)
-    node4 = ListNode(4)
-    node1.next = node2
-    node2.next = node3
-    node3.next = node4
-    node4.next = node2
-    print(has_cycle(node1))  # Output: True
+    # List with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)
+    # has_cycle(node1) -> True
 ```
 
 ## Two Pointers Application: Partitioning
-We can have two pointers in the same array moving inward/outward to rearrange elements
-based on a condition.
+We can have two pointers in the same array moving inward/outward 
+to rearrange elements based on a condition.
 
-Ex: Move all zeros in an array to the end while maintaining the order of other elements
+Ex: Lomuto partition scheme in quicksort
 ```python
-    def move_zeros(nums):
-        left, right = 0, 0
-        while right < len(nums):
-            if nums[right] != 0:
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1
-            right += 1
-        return nums
+    def partition(nums, pivot):
 
-    # Example:
-    print(move_zeros([0, 1, 0, 3, 12]))  # Output: [1, 3, 12, 0, 0]
+        # current flip slot
+        left = 0
+
+        # iterate right pointer over array
+        for right in range(len(nums)):
+
+            # condition: if curr val is less that pivot val, flip to left side
+            if nums[right] < pivot:
+
+                # swap curr val with flip slot
+                nums[left], nums[right] = nums[right], nums[left]
+
+                # iterate flip slot
+                left += 1
+
+        # left is first index where element >= pivot
+        return nums, left 
+
+    # partition([9, 3, 5, 2, 8, 1, 6], 5) -> [3, 2, 1, 5, 8, 9, 6], index = 5
 ```
 
-## Two Pointers Application: Parallel Pointer Traversal 
-We can have two pointers traversing two separate arrays in parallel to merge, compare,
-or find intersections.
+## Two Pointers Application: K Parallel Pointer Traversal 
+We can have k pointers traversing separate arrays in parallel to 
+merge, compare, or find intersections.
 
 Ex: Merge two sorted arrays into one sorted array
 ```python
     def merge_sorted_arrays(arr1, arr2):
+
         result = []
+
+        # k = 2 pointers
         i, j = 0, 0
 
+        # iterate both pointers, while elements remain in both lists 
         while i < len(arr1) and j < len(arr2):
+
+            # compare both pointers, append smaller
             if arr1[i] < arr2[j]:
                 result.append(arr1[i])
                 i += 1
@@ -152,31 +199,69 @@ Ex: Merge two sorted arrays into one sorted array
                 result.append(arr2[j])
                 j += 1
         
+        # One list has run out of elements, append rest of list
         result.extend(arr1[i:])
         result.extend(arr2[j:])
+
+        # return sorted array
         return result
 
-    # Example:
-    print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]
+    # merge_sorted_arrays([1, 3, 5], [2, 4, 6]) -> [1, 2, 3, 4, 5, 6]
 ```
 
 ## Two Pointers Application: Catchup
-We have two pointers traversing one array. One remains frozen, but catches up
-to the other after logic is complete on a subsection.
+We can have two pointers traversing an array. The left pointer can
+remain frozen while the right pointer iterates until it hits a delimiter,
+at which point the left jumps (catches up) to right+1 to mark the start
+of the next section.
 
-Ex: Decode Two Pointer Splicing
+Ex: Split string by spaces
 ```python
+    def split_words(s: str, delim: str = ' ') -> list[str]:
 
+        words = []
+
+        # start of current word
+        left = 0
+        # scanning pointer
+        right = 0
+
+        # iterate looking for delimiters
+        while right < len(s):
+
+            # found delimiter
+            if s[right] == delim:
+
+                # non-empty word, splice and add to array
+                if left != right:
+                    words.append(s[left:right])
+
+                # catch up: move start to after delim
+                left = right + 1
+
+            # move right pointer
+            right += 1
+
+        # hit end of string, check if last word exists
+        if left < len(s):
+            words.append(s[left:])
+
+        # return split words
+        return words
+
+
+    # split_words("catch up pointers example") -> ['catch', 'up', 'pointers', 'example']
 ```
 
 ## Two Pointers Application: K Pointer Variants 
-We can extend the two pointer case to track k pointers simultaneously.
-These pointers can traverse the same list, different lists, or freeze while moving
-other pointers.
+We can extend the two pointers to k pointers. These pointers could follow
+any of the pointer applications, traverse the same list, different lists, 
+freeze while moving others, etc.
 
 Ex: Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] that sum to 0.
 ```python
     def threeSum(nums):
+
         nums.sort()  # Step 1: Sort the array
         result = []
 
@@ -207,18 +292,17 @@ Ex: Given an integer array nums, return all the unique triplets [nums[i], nums[j
 
         return result
 
-    # Example usage:
-    nums = [-1, 0, 1, 2, -1, -4]
-    print(threeSum(nums))  # Output: [[-1, -1, 2], [-1, 0, 1]]
+    # threeSum([-1, 0, 1, 2, -1, -4]) -> [[-1, -1, 2], [-1, 0, 1]]
 ```
 
 ## Two Pointers Application: Algorithm
-Case where a problem that seems to require Two Pointers is easily solved by 
-an algorithm specifically made for that problem
+We can have cases where problems that seems to require 
+two pointers have an algorithm specifically made for that problem.
 
-Ex: Manacher's Algorithm, find the longest palindromic substring 
+Ex: Manacher's Algorithm, longest palindromic substring 
 ```python
     def longestPalindrome(s: str) -> str:
+
         # Preprocess the string to handle even-length palindromes
         t = "#".join(f"^{s}$")
         n = len(t)
@@ -248,8 +332,6 @@ Ex: Manacher's Algorithm, find the longest palindromic substring
         return s[start: start + maxLen]
 ```
 
-
-
 # 125. Valid Palindrome ::3:: - Easy
 
 Topics:  Two Pointers, String 
@@ -267,6 +349,7 @@ Topics:  Two Pointers, String
 | " "                                | true    |
 
 Constraints:
+
 string s consists only of printable ASCII characters.
 
 ## Abstraction 

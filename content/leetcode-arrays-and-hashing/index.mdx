@@ -269,8 +269,8 @@ Ex: Adjacency list for a graph
     # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}
 ```
 
-## HashMap Application: Logic Mapping
-We can represent logic or conditions.
+## HashMap Application: Index with Data Key
+We can index into arrays based on data or data structures.
 
 Ex: Store integer complements for quick lookup:
 ```python
@@ -349,217 +349,64 @@ Constraints:
 
 
 ## Abstraction
-Given a list of elements, we need to check if any of those elements are duplicated.
+Given a list of elements, check for duplicates.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
-| Tim Sort | O(n log n) | O(n) | Tim sort over the array dominates, leading to O(n log n)  | Temporary arrays used during the merge phase dominate, leading to O(n) |
-| Hashmap | O(n) | O(n) | Iterate over every element O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires additional memory proportional to the number of elements O(n) |
-| Hashset | O(n) | O(n) | Same logic as Hashmap | Same logic as Hashmap |
-
-| Bug | Error |
-| --- | ----- |
-| Find the Bug: (iterating element-wise) | Iterating element-wise will cause elements to compare with themselves. | 
-
-
-## Brute Force: (all pairs comparison)
-```python
-    def containsDuplicate(self, nums: List[int]) -> bool:
-
-        # time complexity: iteration of O(n)
-        for i in range(len(nums)):
-
-            # time complexity: iteration of O(n^2)
-            # 1 + 2 + 3 ... (n - 3) (n - 2) (n - 1) -> 
-            # sandwich with reverse sum and cross out like terms -> n(n-1)/2 = O(n^2)
-            for j in range(i + 1, len(nums)):
-
-                # time complexity: comparison O(1)
-                if nums[i] == nums[j]:
-                    return True
-        
-        # overall: time complexity O(n^2) 
-        # overall: space complexity O(1)
-        return False
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Outer Loop | O(n) | O(1) | Iteration over the list takes linear time O(n) | No additional memory is allocated O(1) |
-| Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, the inner loop iterates through all subsequent elements with Big(O) is O(n<sup>2</sup>). Derivation [here](/Notes/sorting-searching-algorithms#double-for-loop) | No additional memory is allocated O(1) |
-| Comparison | O(1) | O(1) | Each pair of elements is compared in constant time O(1) | No additional memory is needed for comparisons O(1) |
-| Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity.| No additional memory was allocated leading to constant O(1) space complexity. | 
-
-## Inefficient: Sorting (Tim Sort)
-```python
-   def containsDuplicate(self, nums: List[int]) -> bool:
-        
-        # sorts small segment of array using in-place Insertion Sort 
-        def insertionSort(arr: List[int], start: int, end: int) -> None:
-            
-            # insertion sort algo on small segment [start+1, end]
-            for i in range(start + 1, end + 1):
-                key = arr[i]
-                j = i - 1
-
-                while j >= start and arr[j] > key:
-                    arr[j + 1] = arr[j]
-                    j -= 1
-                arr[j + 1] = key
-
-        # merges two sorted subarrays into a single sorted segment using in-place Merge Sort
-        def merge(arr: List[int], start: int, mid: int, end: int) -> None:
-            
-            # temporary arrays for left and right halves
-            left = arr[start:mid + 1]
-            right = arr[mid + 1:end + 1]
-
-            # pointer for left and right arrays
-            i = j = 0
-
-            # pointer for main array where merged elements are placed
-            k = start
-
-            # merge sort algo elements into arr[start...end]
-            while i < len(left) and j < len(right):
-                if left[i] <= right[j]:
-                    arr[k] = left[i]
-                    i += 1
-                else:
-                    arr[k] = right[j]
-                    j += 1
-                k += 1
-
-            # place left over elements within the array, cannot use extend()
-            while i < len(left):
-                arr[k] = left[i]
-                i += 1
-                k += 1
-            while j < len(right):
-                arr[k] = right[j]
-                j += 1
-                k += 1
-
-        # sorts array into place using runs of 32
-        def timSort(arr: List[int], run: int = 32) -> None:
-            
-            n = len(arr)
-
-            # Sort small runs using Insertion Sort
-            # time complexity: initial sort runs O((n/run)) * run^2) ~ O(n)
-            for i in range(0, n, run):
-                insertionSort(arr, i, min(i + run - 1, n - 1))
-
-            # Iterate over array and merge sort runs
-            # time complexity: O(log(n/run) * n) ~ O(n log n)
-            size = run
-            while size < n:
-
-                # merge neighbor pairs of runs of length 'size'
-                for start in range(0, n, size * 2):
-                    mid = min(start + size - 1, n - 1)
-                    end = min(start + size * 2 - 1, n - 1)
-
-                    # merge if two valid runs exists (mid < end)
-                    if mid < end:
-                        merge(arr, start, mid, end)
-
-                # merged two runs of length size
-                # update new run length = old run len + old run len
-                size *= 2
-
-        timSort(nums)
-        
-        # check for duplicates in the sorted array
-        # time complexity: iterate over sorted array of n length O(n)
-        for i in range(1, len(nums)):
-            if nums[i] == nums[i - 1]:
-                return True
-        
-        # overall: time complexity O(n log n)
-        # overall: space complexity O(n)
-        return False
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Insertion Sort | O(n) | O(1) | Sorting small runs of size run with O(run^2) per segment, totaling O(n) | No additional memory allocation for in-place sorting O(1) |
-| Merging Segments | O(n log n) | O(n) | log(n/run) levels of merges, each requiring O(n) time, O(n log (n/run)), leading to O(n log n) | Temporary arrays during merge O(n) |
-| Duplicate Validation | O(n) | O(1) | Iterating over sorted array of n length O(n) | No additional memory for comparison operation O(1) |
-| Overall | O(n log n) | O(n) | Merge sort dominates time complexity, leading to O(n log n) | Temporary arrays during merge dominates, leading to O(n) |
-
-
-## Find the Bug: (iterating element wise)
-```python
-    def containsDuplicate(self, nums: List[int]) -> bool:
-
-        # time complexity: iteration of O(n)
-        for i in nums:
-
-            # time complexity: iteration of O(n)
-            for j in nums: 
-
-                # INCORRECT: iterating element-wise will comparing elements to themselves
-                # use index iteration in this case
-                if i == j 
-                    return True
-
-        return False 
-```
-
+| Hashmap | O(n) | O(n) | Iterate over array O(n) + get, put in O(1) | Dictionary size relative to input O(n) |
+| Set()   | O(n) | O(n) | Iterate over array O(n) + get, in in O(1) | Set size relative to input O(n) |
 
 ## Solution 1: Hashmap - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
-        # space complexity: dictionary of O(n)
+        # sc: hashmap relative to input O(n)
         count = defaultdict(int)
 
-        # time complexity: iteration over list of n length O(n)
+        # tc: iterate over list O(n)
         for num in nums:
 
-            # time complexity: lookup operation in constant O(1)
+            # tc: in operation constant O(1)
             if count[num] >= 1:
                 return True
+            # tc: put operation constant O(1)
             count[num] += 1
 
-        # overall: time complexity  O(n) 
-        # overall: space complexity O(n)
+        # overall: tc  O(n) 
+        # overall: tc O(n)
         return False
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashmap in O(1) time. Iteration dominates O(n). | Hashmap grows proportional to the number of unique elements. Worst case O(n) |
-| Lookup | O(1) | O(1) | Each lookup is O(1), performed once per element | Lookup operations do not require additional memory allocation. |
-| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashmap dominates leading to O(n) space complexity.  | 
+| Iteration | O(n) | O(n) | Iterate over array in linear O(n) + get, put in O(1) | Dictionary relative to input O(n) |
+| Overall   | O(n) | O(n) | Iteration over input dominates, O(n)| Allocation for dictionary dominates, O(n) | 
 
 
-## Solution 2: Hashset - Hashmap/Representation
+## Solution 2: Set - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
-        # space complexity: hashset of O(n)
+        # sc: set relative to input O(n)
         seen = set()
 
-        # time complexity: iteration of O(n)
+        # tc: iterate over list O(n)
         for n in nums:
 
-            # time complexity: lookup operation of O(1)
+            # tc: in operation O(1)
             if n in seen:
                 return True
+            # tc: add operation O(1)
             seen.add(n)
             
-        # overall: time complexity  O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return False
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(n) | Iteration over the list takes linear time O(n) with insertion into Hashset in O(1) time. Iteration dominates O(n). | Hashset grows proportional to the number of unique elements. Worst case O(n) |
-| Lookup | O(1) | O(1) | Lookup operation O(1), performed once per element, is still O(1) | Lookup operations do not require additional memory allocation. O(1) |
-| Overall | O(n) | O(n) | Iteration dominates over insertion for time complexity linearly for O(n) | Memory allocation for Hashset dominates leading to O(n) space complexity.  | 
+| Iteration | O(n) | O(n) | Iteration over list in linear O(n) + in, add operation O(1) | Set size relative to input O(n) |
+| Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
 
 
 # 242. Valid Anagram ::2:: - Easy
@@ -568,10 +415,11 @@ Topics:  Hash Table, String, Sorting
 
 ## Intro
 
-> Given two strings s and t, return true if t is an anagram of s, and false otherwise.
-
-An Anagram is a word or phrase formed by rearranging the letters of a different 
-word or phrase, typically using all the original letters exactly once.
+> Given two strings s and t, return true if t is an 
+> anagram of s, and false otherwise.
+> An Anagram is a word or phrase formed by rearranging 
+> the letters of a different word using all 
+> original letters exactly once.
 
 |  Example Input 'S'  | Example Input 'T' | Output |  
 | ------------------- | ----------------- | ------ | 
@@ -580,200 +428,96 @@ word or phrase, typically using all the original letters exactly once.
 
 Constraints:
 
-String Length: 1 &le; s.length, t.length &le; 5 * 104
+1 &le; s.length, t.length &le; 5 * 104
 
-Characters: s and t consist of lowercase English letters
+s and t consist of lowercase English letters
 
 ## Abstraction
-
-Given a string, we represent its character count as a Hashmap.
-We then validate it to the second string character count.
+Given two strings determine if they have the same 
+character count.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Merge Sort) | O(n log n) | O(n) | Sorting an individual string O(n log n) dominates as comparing strings by character sequentially is linear O(n) | No additional memory is allocated O(1) |
-| Hashmap | O(n) | O(1) | Iteration over the list takes linear time O(n), with O(1) lookup and insertion into the map, leading to linear time O(n) | We store each each element in a hashmap, which requires memory proportional to the number of elements O(n) |
-| Hashmap (array of 26) | O(n) | O(1) | Same as logic as Hashmap | Same as logic as Hashmap |
+| Hashmap | O(n) | O(1) | Two iterations over each word, linear O(n) + lookup, put in constant time O(1) | Dictionary will be proportional to input, space O(n) |
+| Array of 26 | O(n) | O(1) | Single iteration over both words at same time O(n) + lookup, put in constant time O(1) | Array will be constant 26 elements, space O(1) |
 
-| Bug | Error |
-| --- | ----- |
-| Find the Bug: (Set Frequency Count) |  Does not take into account frequency count of characters since sets can only have unique elements. | 
-
-
-## Brute Force (Merge Sort)
+## Solution 1: Hashmap Double Pass - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
-        # time complexity: comparison of O(1)
-        if len(s) != len(t):
-            return False
-        
-        # time complexity: sorting of O(n log n) for sorting each string
-        # space complexity: overall of O(n) = temporary arrays O(n) + recursion stack of O(log n)
-        def mergeSort(string):
-            
-            # base case of list with single element ['']
-            # time complexity: O(1)
-            # space complexity: O(1)
-            if len(string) <= 1:
-                return string
-            
-            # time complexity: dividing operation in constant O(1)
-            mid = len(string) // 2
-
-            # mergeSort both subarrays
-            left = mergeSort(string[:mid])
-            right = mergeSort(string[mid:])
-            
-            # base case of merge two lists with single element merge ([''], [''])
-            return merge(left, right)
-        
-        # Time Complexity: O(n) per merge
-        # Space Complexity: O(n) for temporary storage of the merged array
-        def merge(left, right):
-        
-            sorted = []
-            i = j = 0
-
-            # time complexity: iterate over two strings combined n length O(n) 
-            while i < len(left) and j < len(right):
-
-                # sort characters into sorted while iterating
-                if left[i] <= right[j]:
-                    sorted.append(left[i])
-                    i += 1
-                else:
-                    sorted.append(right[j])
-                    j += 1
-            
-
-            # time complexity: O(n) in worst case if either list is empty
-            sorted.extend(left[i:]) # If elements remain in `left`
-            sorted.extend(right[j:]) # If elements remain in `right`
-
-            return sorted
-
-        # Time Complexity: O(n log n) for sorting each string
-        # Space Complexity: O(n) for temporary arrays and recursion stack
-        sorted_s = mergeSort(list(s))
-        sorted_t = mergeSort(list(t))
-
-
-        # overall: time complexity: O(n log n)
-        # overall: space complexity: O(n)
-        return sorted_s == sorted_t
-```
-
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Sorting | O(n log n) | O(n) | Sorting the strings involves recursively dividing the input and merging them back leading to O(n log n) time complexity. Merge sort derivation [here](/Notescommon-formulas#merge-sort). | Temporary arrays are used during merging, leading to O(n) space |
-| Comparison | O(n) | O(1) | Comparing the sorted strings character by-element takes linear time | No additional memory is allocated O(1) |
-| Overall | O(n log n) | O(n) | Sorting dominates the time complexity as comparison adds negligible overhead leading to O(n log n) time complexity. | Temporary arrays required for merge sort is proportional to input size leading to O(n) space complexity. |
-
-
-## Find the Bug: (Set Frequency Count)
-```python
-    def isAnagram(self, s: str, t: str) -> bool:
-        
-        # checking if length match
-        if len(s) != len(t):
-            return False
-
-        # INCORRECT: checks only if all characters of s are in t
-        # and not vice versa
-        for char in s:
-            if char not in t:
-                return False
-        
-        # INCORRECT: does not validate that character frequency counts match
-        return True
-```
-
-## Solution 1: Hashmap - Hashmap/Representation
-```python
-    def isAnagram(self, s: str, t: str) -> bool:
-        
-        # space complexity: hashmap of 26 elements constant  O(1) 
+        # sc: hashmap of 26 elements O(1) 
         count = defaultdict(int)
 
-        # time complexity: iteration over string of n length O(n)
+        # tc: two iteration over string length O(n) * 2 ~= O(n)
         for x in s:
            count[x] += 1
-
-        # time complexity: iteration over string of n length O(n)
         for x in t:
            count[x] -= 1
 
-        # time complexity: iteration over string of n length O(n)
+        # tc: iteration over char count O(n)
         for value in count.values():
 
-            # time complexity: comparison operation in constant O(1)
+            # tc: get() in constant O(1)
             if value != 0:
                 return False
 
-        # overall: time complexity  O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return True
 ```
-
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(n) | Iterating over the first string takes linear time O(n) with O(1) insertion. | Hashmap size depends on the number of unique characters in the input. Worst case O(n) |
-| Editing Map | O(n) | O(1) | Iterating over the second string to edit the Hashset takes linear time O(n) | No additional memory is allocated O(1) |
-| Verification | O(n) | O(1) | Iterating over the Hashmap takes linear time O(n) | No additional memory is allocated O(1) |
-| Overall | O(n) | O(n) | Character counting and verification result in O(3n) which Big(O) abstracts to O(n). | Memory allocation for Hashmap dominates leading to O(n) space complexity |
+| Iteration | O(n) | O(n) | Iterate over two strings in linear O(n) + put, get in O(1) | Dictionary relative to input O(n) |
+| Verification | O(n) | O(1) | Iterating over char count in linear O(n) + get in O(1) | No additional memory O(1) |
+| Overall | O(n) | O(n) | Iteration over input dominates, O(n) | Allocation for dictionary relative to input dominates, O(n) |
 
-## Solution 2: Array of 26 - Hashmap/Representation
+## Solution 2: Array of 26 Single Pass - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
-        # note: ord() converts a single uni-code character to its integer representation
-        # int: 97-122 -> lowercase English alphabet (a-z)
-        # we can calculate any char (a-z)'s uni-code integer by subtracting uni-code of 'a'
-        # '(a-z)' - 'a': returns a value of 0-25 which we can index into our array
-        # this simulates a hashing into our array
+        # Note:
+        # ord() converts unicode char to int representation
+        # and use int to index into array
 
-        # space complexity: array of 26 elements constant O(1)
+        # sc: array of 26 constant O(1)
         count = [0] * 26
 
-        # time complexity: iteration of O(n)
-        for x in s:
-           count[ord(x) - ord('a')] += 1
+        # Check: mismatch length
+        if len(s) != len(t):
+            return False
 
-        # time complexity: iteration of O(n)
-        for x in t:
-           count[ord(x) - ord('a')] -= 1
+        # tc: single iterate over both strings at same time O(n)
+        for i in range(len(s)):
+            count[ord(s[i]) - ord('a')] += 1
+            count[ord(t[i]) - ord('a')] -= 1
 
-        # time complexity: iteration of O(n)
-        for value in count:
-
-            # time complexity: comparison of O(1)
+        # tc: iterate over count array length 26 O(1)
+        for val in count:
             if value != 0:
                 return False
 
-        # overall: time complexity: O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return True
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(1) | Iterating over the first string to populate the Array takes linear time O(n) | Fixed-sized array of 26 elements is used O(1) |
-| Editing Array | O(n) | O(1) | Iterating over the second string to edit the Array takes linear time O(n) | No additional memory is allocated O(1) |
-| Verification | O(n) | O(1) | Iterating over the Array takes linear time O(n) | No additional memory is allocated O(1) |
-| Overall | O(n) | O(1) |  counting and verification result in O(3n) which Big(O) abstracts to O(n) | Space usage optimal due to a constant size array O(1) |
+| Iteration | O(n) | O(1) | One iteration over both strings in linear O(n) + put, get in O(1) | Array of constant 26 size O(1) |
+| Verification | O(n) | O(1) | Iterating over count array length 26 in constant O(1) | No additional memory O(1) |
+| Overall | O(n) | O(1) | Iteration over input dominates, O(n) | Allocation for array is constant O(1) |
 
 
-# 1. Two Sum I (Input Array Is Not Sorted) ::1:: - Easy
+# 1. Two Sum I Not Sorted ::1:: - Easy
 
 Topics:  Array, Hash Table 
 
 ## Intro
-> Given an array of integers nums and an integer target, return indices of the two numbers
-> such that they add up to target. You may assume that each input would have exactly one solution, 
-> and you may not use the same element twice. You can return the answer in any order.
+> Given an array of integers nums and an integer target, return 
+> indices of two numbers such that they add up to target. You 
+> can assume each test case only has one solution and 
+> you may cant use the same element twice. Answer can
+> be returned in any order.
 
 |  nums[]         | Target    | Output |  
 | --------------- | ----------| ------ | 
@@ -785,9 +529,9 @@ Constraints:
 
 Only one valid answer exists
 
-Target = n + m, n/m value: 2 &le; nums.length &le; 10^4
+2 &le; nums.length &le; 10^4
 
-Target value: -10^9 &le; target &le; 10^9
+-10^9 &le; target &le; 10^9
 
 ## Abstraction
 We need to find two elements that add up to the target
@@ -796,99 +540,38 @@ and return their indexes.
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Comparing all pairs) |  |  |  |  |
-| Hashmap 1-pass |  |  |  |  |
+| Hashmap of Complements | O(n) | O(n) | Iterate over array O(n) | Allocation relative to input O(n) |
 
-
-## Brute Force (Comparing all pairs)
+## Solution 1: Hashmap - Hashmap/Index with Data Key
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
-        # time complexity: iteration of O(n)
-        for i in range(len(nums)):
+        # Note:
+        # dictionary is complement -> index 
 
-            # time complexity: iteration of O(n^2) 
-            # 1 + 2 + 3 ... (n - 3) (n - 2) (n - 1) -> 
-            # sandwich with reverse sum and cross out like terms -> n(n-1)/2 = O(n^2)
-            for j in range(i + 1, len(nums)):
-
-                # time complexity: summation + comparison of O(1)
-                if nums[i] + nums[j] == target:
-                    return [i, j]
-
-        # overall: time complexity  O(n^2) 
-        # overall: space complexity O(1)
-        return []
-```
-
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Outer Loop | O(n) | O(1) | Iterates over the array once for each element O(n) | No additional memory is allocated O(1) |
-| Inner Loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>)  | No additional memory is allocated O(1) |
-| Summation + Comparison | O(1) | O(1) | Summing two numbers takes constant time O(1) and comparison to target takes constant time O(1) | No additional space is needed for summation O(1), no additional space is needed for comparison O(1)  |
-| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notes/sorting-searching-algorithms#double-for-loop). | No additional space was allocated, so it is independent of input size O(1) | 
-
-
-## Find the Bug: (overwriting duplicates)
-```python
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        
-        # space complexity: hashmap of (int, index) for list n length O(n)
-        tracking = {} 
-
-        # time complexity: iterate over list n length o(n)
-        for i, num in enumerate(nums):
-
-            # INCORRECT: Overwrites already existing value in the tracking map
-            # nums = [3, 3] target = 6 would fail
-            tracking[num] = i
-
-            # find complement
-            complement = target - num
-
-            # grab complement 
-            if complement in tracking:
-                return [tracking[complement], i]
-
-        return []
-```
-
-## Solution 1: Hashmap - Hashmap/Logic Mapping
-```python
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        
-        # map of {complement: index, complement: index...}
-        # space complexity: hashmap of list of n length  O(n)
+        # sc: dictionary size relative to input O(n)
         tracking = {}
  
-        # time complexity: iterating over list of size n O(n)
+        # tc: iterate over list O(n)
         for i in range (len(nums)):
 
-            # grab curr complement -> (target = nums[i] + complement) 
-            # time complexity: subtraction O(1) 
             complement = target - nums[i]
 
-            # time complexity: lookup operation O(1)
+            # tc: in operation O(1)
             if complement in tracking:
-                
-                # [curr_index, complement_index]
                 return [i, tracking[complement]]
     
-            # if miss, track currElement as potential complement
-            # time complexity: insert operation O(1)
+            # tc: put operation O(1)
             tracking[nums[i]] = i
 
-        # overall: time complexity  O(n) 
-        # overall: space complexity O(n)
+        # overall: tc O(n) 
+        # overall: sc O(n)
         return []
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(n) | Iterating over the first string to populate a Hashmap takes linear time O(n) | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
-| Lookup | O(1) | O(1) | Each lookup operation takes constant O(1) time. | Lookups do not require additional memory. |
-| Insertion | O(1) | O(n) |Each insertion operation takes constant O(1) time. | Hashmap size is proportional to the number of unique integers. Worst case O(n). |
-| Overall | O(n) | O(n) | Iterating dominates time complexity leading to linear O(n) time complexity. | Memory allocation for Hashmap dominates leading to O(n) space complexity. |
+| Iteration | O(n) | O(n) | Iterate over list in linear O(n) + in, put O(n)  | Dictionary relative to input O(n) |
+| Overall | O(n) | O(n) | Iterate over list dominates, O(n) | Allocation relative to input dominates, O(n) |
 
 
 # 49. Group Anagrams ::2:: - Medium
@@ -896,9 +579,10 @@ and return their indexes.
 Topics:  Array, Hash Table, String, Sorting
 
 ## Intro
-> Given an array of strings strs, group the anagrams together. You can return the answer in any order.
-> An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, 
-> typically using all the original letters exactly once.
+> Given an array of strings strs, group the anagrams together. You 
+> can return the answer in any order. An Anagram is a word formed by 
+> rearranging the letters of a different word using all the original 
+> letters exactly once.
 
 |  Input                                   | Output                                      |  
 | ---------------------------------------- | ------------------------------------------- | 
@@ -911,133 +595,42 @@ Constraints:
 strs[i] consists of lowercase English letters
 
 ## Abstraction
-There are different ways to solve this problem. 
-
-We could then use the Hashmaps of character counts as keys to group anagrams in a list of strings:
-Hashmap(Hashmap(charCount) -> [anagram list string]) 
-
-We could sort the string and use that as the key: 
-Hashmap ( sorted_string -> [[unsorted anagram string group]])
-
-Lets see:
+Group the matching anagrams together.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Merge sort) | O(n * k log k) | O(n * k) | Iterating over the Array takes O(n). Sorting each string with merge sort takes O(k log k). Leading to O(n * k log k) | Requires storage for sorted strings O(k) for O(n) strings, groups are stored in memory |
-| Hashmap (array of 26) -> Tuple Key | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
-| Hashmap (array of 26) -> String Key | O(n * k) | O(n * k) | Iterating over the Array takes O(n). Computing character count per string takes O(k). Leading to O(n * k) | Creates a Hashmap per string O(n) for k character key map per string O(k). Leading to O(n * k)|
+| Array to Tuple Key  | O(n * k) | O(n * k) | Iterate over list O(n) * iterate over string O(m) | Dictionary relative to input O(n) |
+| Array to String Key | O(n * k) | O(n * k) | Iterate over list O(n) * iterate over string O(m) | Dictionary relative to input O(n) |
 
-| Bug | Error |
-| --- | ----- |
-| Find the Bug: Set -> String Key (Set Frequency Count) |  Does not take into account frequency count of characters since sets can only have unique elements. | 
-
-
-## Brute Force: (Merge Sort)
-```python 
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        
-        # time complexity: O(k log k) = merge two halves O(k) * num of levels of recursion O(log k) 
-        # space complexity: O(k) = temporary array during merging O(k) + recursion stack memory O(log k)
-        def mergeSort(word):
-        
-            # base case: list with 1 element
-            # time complexity: O(1)
-            # space complexity: O(1)
-            if len(word) <= 1:
-                return word
-            
-            mid = len(word) // 2
-            
-
-            # space complexity: temporary array O(k) + recursion stack memory O(log k)
-            left = mergeSort(word[:mid])
-            right = mergeSort(word[mid:])
-            
-            # space complexity: temporary array O(k)
-            sorted = []
-            i = j = 0
-            
-            # time complexity: iteration of both subarrays O(n)
-            # space complexity: temporary arrays of O(n)
-            while i < len(left) and j < len(right):
-                if left[i] < right[j]:
-                    sorted.append(left[i])
-                    i += 1
-                else:
-                    sorted.append(right[j])
-                    j += 1
-            
-            # Adding remaining elements from either half
-            sorted.extend(left[i:])  # time complexity: O(n)
-            sorted.extend(right[j:]) # time complexity: O(n)
-
-            return ''.join(sorted_word)
-    
-        # space complexity: O(n * k) = for n sorted string key O(n) and original string value of length k O(k)
-        anaGroup = {}
-        
-        # time complexity: O(n * k log k), where n is number of strings and k is maximum length
-        for word in strs:
-            
-            # time complexity: merge sort O(k log k)
-            sorted = mergeSort(word)
-
-            # time complexity: lookup + insertion O(1)
-            if sorted in hashmap:
-                hashmap[sorted].append(word)
-            else:
-                hashmap[sorted] = [word]
-        
-
-        # overall: time complexity 
-        # overall: space complexity
-        return list(anaGroup.values())
-``` 
-
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Merge Sort per string | O(k log k) | O(k) | Sorting a single string of length k.  | Temporary arrays O(k) and recursion stack O(log k) |
-| Sorting all strings | O(n * k log k) | O(k) (temporary per string sequentially)  | Sorting n strings, each of length k | O(k) per string dominates recursion stack O(log k)  |
-| Hashmap insertion | O(1) | O(n * k) | Lookup and insertion are O(1)  | Memory allocation for sorted n string keys O(n) * original string values O(k) |
-| Overall | O(n * k log k) | O(n * k) |  Merge sort O(k log k) for all strings O(n) dominates. Leading to O(n * k log k) |  Storing sorted string keys O(n) with original string value O(k) dominates. Leading to O(n * k) |
-
-
-
-## Find the Bug: Hashmap Key for Hashmap (Unhashable type)
+## Bug: Mutable object, list, cannot be hashed
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)
         anaGroup = {}
         
-        # Iterating over all strings O(n)
         for word in strs:
             
-            # Counting character frequencies O(k)
             charCount = [0] * 26
             for char in word:
                 charCount[ord(char) - ord('a')] += 1
             
-            # INCORRECT: Mutable list `charCount` used as key
+            # BUG: 
+            # Attempted to hash mutable list charCount
             if charCount not in anaGroup:
-                anaGroup[charCount] = []  # Initialize list for group if key doesn't exist
+                anaGroup[charCount] = []
             
             anaGroup[charCount].append(word)
         
-        # overall: time complexity
-        # overall: space complexity 
         return list(anaGroup.values())
 ```
 
-## Find the Bug: Hashmap Key Order (Hashmaps are not sorted)
+## Bug: Cannot use unsorted hashmap to tuple as key
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)
         groupAna = {}
 
-        # Iterating over all strings O(n)
         for s in strs:
             count = defaultdict(int)
 
@@ -1046,8 +639,9 @@ Lets see:
 
             tupKey = tuple(count)
 
-            # INCORRECT: hashmaps (count obj) is not sorted
-            # so tupKey will vary for "cat" vs "tac"
+            # BUG: 
+            # hashmaps are not sorted
+            # so tuple will vary (e.g., "cat" vs "tac")
             if tupKey not in groupAna:
                 groupAna[tupKey] = []
 
@@ -1056,43 +650,15 @@ Lets see:
         return list(groupAna.values())
 ```
 
-## Find the Bug: Set to String Key (Set Frequency Count)
+## Solution 1: Array to Tuple Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        # space complexity: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
-        anaGroup = {}
-        
-        # time complexity: iterating over list of n length O(n)
-        for word in strs:
-            
-            # INCORRECT: Set creates a key excluding duplicates
-            charSet = set()  
-            for c in word:
-                charSet.add(c) 
-            
-            # set sort string key
-            setSort = ''.join(sorted(charSet))
-            
-            if setSort not in anaGroup:
-                anaGroup[setSort] = [] 
-            anaGroup[setSort].append(word)
-        
-        return list(anaGroup.values())
-```
+        # Note: 
+        # Tuples immutable, allowing them to be hashed
+        # Array allows for constant ordered representation
 
-## Solution 1: Array of 26 to Tuple Key - Hashmap/Grouping by Criteria
-```python
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        
-        # Note: Tuples in python are immutable which makes them suitable as keys for a hashmaps
-        # Lists are mutable and as such not hashable for hashmaps
-        # You should use tuples where the position carries semantic meaning. 
-
-        # [26 char count tuple key -> [anagram group list], ...]
-        
-        # space complexity: stores unique m tuple keys O(m) and lists of k strings O(k), O(m * k)
-        anaGroup = {}
+        # sc: relative to input unique anagram count m, O(m)
 
         # time complexity: iterating over all strings O(n) 
         for word in strs:
@@ -1130,44 +696,48 @@ Lets see:
 | Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
 
 
-## Solution 2: Array of 26 to String Key - Hashmap/Grouping by Criteria
+## Solution 2: Array to String Key - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
-        # Note: using a list to build the string key is more efficient than repeatedly appending to a string, 
-        # as it avoids the overhead of creating new string objects on each append
-        # list takes O(m) time vs string append which takes O(m^2)
+        # Note: 
+        # Appending to list then joining is more efficient than repeatedly 
+        # appending to a string, it avoids the overhead of creating new string
+        # objects on each append, overall: list in O(m), string in O(m^2)
 
-        # space complexity: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
+        # sc: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
         anaGroup = {}
 
-        # time complexity: iterating over n strings O(n)
+        # tc: iterate over list O(n)
         for word in strs:
 
-            # space complexity: fixed-sized array of 26 lowercase characters O(1)
+            # sc: array of 26 constant O(1)
             charCount = [0] * 26
             
-            # time complexity: counting characters for string k length O(k)
+            # tc: iterate over string O(m)
             for char in word:
                 charCount[ord(char) - ord('a')] += 1
             
-            # time complexity: creating unique char count key from fixed-sized array of 26 O(1)
-            # Using a list to build the key
+            # tc: array of 26 to list O(1)
             key_parts = []
             for count in charCount:
                 key_parts.append(str(count))
-                key_parts.append("#")  # Separator
+                # delimiter
+                key_parts.append("#")  
 
-            # Concatenate once at the end
+            # tc: concat list of 26 to string O(1)
             key = ''.join(key_parts)
 
-            # time complexity: lookup operation for key O(1)
+            # tc: in operation O(1)
             if key not in anaGroup:
-                anaGroup[key] = []  # Initialize list for key if doesn't exist
-            anaGroup[key].append(word)  # Add word to corresponding key group
+                # init empty list if no key doesn't exist
+                anaGroup[key] = []
 
-        # overall: time complexity
-        # overall: space complexity 
+            # append word to anagram group
+            anaGroup[key].append(word)
+
+        # overall: tc
+        # overall: sc 
         return list(anaGroup.values())
 ```
 
@@ -1196,9 +766,9 @@ Topics:  Array, Hash Table, Divide and Conquer, Sorting, Heap (Priority Queue), 
 
 Constraints:
 
-Most Occurrences: 1 &le; k &le; number of distinct elements in nums
+1 &le; k &le; number of distinct elements in nums
 
-Integer value: -1000 &le; nums[i] &le; 1000
+-1000 &le; nums[i] &le; 1000
 
 ## Abstraction
 To find the k most frequent elements, we must first create an occurrence counter for each element in the list.
@@ -1714,30 +1284,13 @@ Topics:  Array, Prefix Sum
 
 Constraints:
 
-The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer
+Product of any prefix or suffix is guaranteed to fit into 32 bit integer
 
 ## Abstraction
-Given a list of nums, return a list of nums that is the product of the array except itself.
-
-So, for some num n, the result should be the product of all the numbers to the left of it,
-times the product of all the numbers to the right of it:
-
-```
-Array:           [   2,    3,    4,    5,    6  ]
-
-Prefix:          [   1,    2,    6,   24,  120  ]
-x
-Postfix:         [ 360,  120,   30,    6,    1  ]
-=
-Result:          [ 360,  240,  180,  120,  120  ]
-```
-
-To calculate the prefix, we can just iterate over the array multiplying each integer.
-To calculate the postfix, we can just iterate over the array backwards multiplying each integer. 
-To calculate the result array, we can just iterate over both prefix and postfix arrays multiplying corresponding index values.
-
-This would lead to O(n) = O(3n) for time and O(n) = O(3n) space. 
-Now lets see how we can do it in O(1) for space.
+Given a list of nums, return a list of nums that is the product of the array 
+excluding itself. For num n, the result should be the product of all the 
+numbers to the left of it, times the product of all the numbers to the 
+right of it.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -1885,19 +1438,16 @@ Topics:  Array, Hash Table, Matrix
 
 Constraints:
 
-A Sudoku board that is partially filled could be valid, but not necessarily solvable.
-Only the currently filled cells need to be validated.
+Only the currently filled cells need to be validated, regardless is sudoku board
+is actually solvable or not.
 
 |  Input         | Output          |  
 | -------------- | --------------- | 
 | a sudoku table is too big to put here lol | just look at -> [sudoku board example](https://leetcode.com/problems/valid-sudoku/description/) | 
 
 ## Abstraction
-With sudoku, valid boards , we have rows  are looking for duplicates much like the original 217. Contains Duplicates.
-
-The only difference here, is that we are looking for duplicates in 3 sets along the rows, columns, and 3x3 squares.
-
-So we simply create sets for all of these groups and as we traverse the board, we check for duplicates
+Abstract board into sets of rows, cols, and boxes, and validate whether 
+duplicate values exist in any set.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -2122,21 +1672,19 @@ Topics:  Array, Hash Table, Union Find
 
 |  Input                    | Output  |  
 | ------------------------- | ------- | 
-| [2, 20, 4, 10, 3, 4, 5]   | 4       | 
-| [0, 3, 2, 5, 4, 6, 1, 1]  | 7       |
-
+| [100,4,200,1,3,2]   | 4 from [1, 2, 3, 4]      | 
+| [0,3,7,2,5,8,4,6,0,1]  | 9 from [0, 1, 2, 3, 4, 5, 6, 7, 8]  |
+| [1, 0, 1, 2] | 3 from [0, 1, 2] |
 
 Constraints:
 
+0 &leq; nums.length &leq; 10<sup>5</sup>
+
+-10<sup>9</sup> &leq; nums[i] &leq; 10<sup>9</sup>
 
 ## Abstraction
-Give a list of integers, find the longest sequence of increasing integers 
-A longest consecutive sequence on a number line would look like this:
-
-```
-Sequence of length 4:     [ 1,  2,  3,  4,  2  ]
-Sequence of length 3:     [ 3,  5,  9,  10, 4  ]
-```
+Give a list of integers, find the longest sequence of increasing integers.
+This sequence does not have to follow the left to right order of the array.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  

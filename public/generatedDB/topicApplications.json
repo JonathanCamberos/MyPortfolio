@@ -3,9 +3,9 @@
     {
       "type": "Array",
       "title": "In place Transformations",
-      "summary": "Perform transformations or reorderings on the array without using extra space.",
+      "summary": "We can perform transformations or reorderings on the array itself without using extra space.",
       "exampleIntro": "Rotate an array to the right by k steps.",
-      "codeExample": "def rotate(nums: List[int], k: int) -> None:\n        n = len(nums)\n        k %= n  # handle cases where k > n\n        \n        def reverse(start: int, end: int) -> None:\n            while start < end:\n                nums[start], nums[end] = nums[end], nums[start]\n                start += 1\n                end -= 1\n\n        reverse(0, n - 1)    # Reverse entire array\n        reverse(0, k - 1)    # Reverse first k elements\n        reverse(k, n - 1)    # Reverse remaining elements",
+      "codeExample": "def rotate(nums: List[int], k: int) -> None:\n        \n        n = len(nums)\n        k %= n  # handle cases where k > n\n        \n        # Opposite ends reverse subarray [start, end]\n        def reverse(start: int, end: int) -> None:\n            \n            # Reverse until hit middle of subarray\n            while start < end:\n                nums[start], nums[end] = nums[end], nums[start]\n                start += 1\n                end -= 1\n\n        # Reverse entire array\n        reverse(0, n - 1)\n        # Reverse first k elements [0, k)\n        reverse(0, k - 1)\n        # Reverse remaining elements [k, n)\n        reverse(k, n - 1)",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#array-application-in-place-transformations",
       "blog": "LeetCode: Arrays and Hashing"
     }
@@ -14,26 +14,26 @@
     {
       "type": "HashMap",
       "title": "Representations",
-      "summary": "Using a HashMap to represent objects or data based on specific criteria.",
-      "exampleIntro": "Representing a string by character frequency.",
-      "codeExample": "def freqCount():\n        s = \"aabbcc\"\n        freq = {}\n        for char in s:\n            freq[char] = freq.get(char, 0) + 1\n        # freq = {'a': 2, 'b': 2, 'c': 2}",
+      "summary": "We can represent objects or data based on specific criteria.",
+      "exampleIntro": "Representing a string by character frequency",
+      "codeExample": "def freqCount():\n\n        # object\n        s = \"aabbcc\"\n\n        # representation\n        freq = {}\n\n        # mapping\n        for char in s:\n            freq[char] = freq.get(char, 0) + 1\n\n    # freq = {'a': 2, 'b': 2, 'c': 2}",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-representations",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
       "title": "Grouping by Criteria",
-      "summary": "Group elements based on a defined criterion, such as sorting or categorization.",
-      "exampleIntro": "Grouping strings that are anagrams of each other:",
-      "codeExample": "def groupAnagrams(strs):\n        anagrams = {}\n        for word in strs:\n            key = \"\".join(sorted(word))\n            if key not in anagrams:\n                anagrams[key] = []\n            anagrams[key].append(word)\n        # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}",
+      "summary": "We can group elements based on a defined criterion, such as sorting or categorization, using hashing to push values into the corresponding bucket.",
+      "exampleIntro": "Grouping string anagrams",
+      "codeExample": "def groupAnagrams(strs):\n        \n        # groups\n        anagrams = {}\n\n        # for list\n        for word in strs:\n\n            # create key\n            key = \"\".join(sorted(word))\n            if key not in anagrams:\n                anagrams[key] = []\n            \n            # hash key and put value into bucket\n            anagrams[key].append(word)\n\n    # anagrams = {'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-grouping-by-criteria",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
       "title": "Memoization in Dynamic Programming",
-      "summary": "Store solutions to subproblems in a HashMap to avoid redundant calculations.",
-      "exampleIntro": "Fibonacci number computation with memoization:",
+      "summary": "We can store solutions to sub problems to avoid redundant calculations.",
+      "exampleIntro": "Fibonacci number computation with memoization",
       "codeExample": "def fib(n, memo={}):\n        if n <= 1:\n            return n\n        if n not in memo:\n            memo[n] = fib(n - 1, memo) + fib(n - 2, memo)\n        return memo[n]",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-memoization-in-dynamic-programming",
       "blog": "LeetCode: Arrays and Hashing"
@@ -41,36 +41,36 @@
     {
       "type": "HashMap",
       "title": "Backtracking with Caching for Pruning",
-      "summary": "Use a HashMap to cache explored paths or states to prune the search space effectively.",
+      "summary": "We can cache previous paths or states to prune the search space effectively as we explore.",
       "exampleIntro": "Subset Sum with caching:",
-      "codeExample": "def subsetSum(nums, target):\n        # Cache to store paths that can no longer lead to valid solutions\n        cache = {}\n        result = []\n\n        def backtrack(current, index, total):\n            # Check if we've encountered this path before\n            state = (tuple(current), total)\n            if state in cache:\n                return\n            cache[state] = True\n\n            # Prune: If the total exceeds the target\n            if total > target:\n                return\n            \n            # Valid solution\n            if total == target:\n                result.append(list(current))\n                return\n\n            # Explore further candidates\n            for i in range(index, len(nums)):\n                # Choose\n                current.append(nums[i])\n                # Recurse\n                backtrack(current, i + 1, total + nums[i])\n                # Undo the choice\n                current.pop()\n\n        backtrack([], 0, 0)\n        return result",
+      "codeExample": "def subsetSum(nums, target):\n\n        result = []\n\n        # Cache to avoid exploring previously visited paths\n        cache = {}\n\n        def dfs_backtrack(current, index, total):\n            \n            # Check if already explored state\n            state = (tuple(current), total)\n            if state in cache:\n                return\n\n            # Mark as explored\n            cache[state] = True\n\n            # Early Prune -> no potential valid path is current total exceeds target\n            if total > target:\n                return\n            \n            # Valid solution -> no need to explore further, backtrack\n            if total == target:\n                result.append(list(current))\n                return\n\n            # Explore -> branches from current state\n            for i in range(index, len(nums)):\n                \n                # Build\n                current.append(nums[i])\n                # Explore\n                dfs_backtrack(current, i + 1, total + nums[i])\n                # Backtrack\n                current.pop()\n\n        dfs_backtrack([], 0, 0)\n        return result",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-backtracking-with-caching-for-pruning",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
       "title": "Representing Relationships",
-      "summary": "Model relationships between entities.",
-      "exampleIntro": "Adjacency list representation of a graph:",
-      "codeExample": "def graph():\n        edges = [(1, 2), (2, 3), (1, 3)]  # List of edges in the graph\n        graph = {}  # Initialize an empty hashmap to represent the graph\n\n        # Build the adjacency list\n        for u, v in edges:\n            if u not in graph:  # If the node `u` is not yet in the graph, initialize it\n                graph[u] = []\n            if v not in graph:  # If the node `v` is not yet in the graph, initialize it\n                graph[v] = []\n            graph[u].append(v)  # Add `v` to the list of neighbors for `u`\n            graph[v].append(u)  # Add `u` to the list of neighbors for `v`\n\n        # Resulting adjacency list representation\n        # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}",
+      "summary": "We can model relationships between entities.",
+      "exampleIntro": "Adjacency list for a graph",
+      "codeExample": "def graph():\n\n        # List of edges in the graph\n        edges = [(1, 2), (2, 3), (1, 3)]\n\n        # Adjacency list\n        graph = {}\n\n        # Build the adjacency list\n        for u, v in edges:\n\n            # If the node 'u' or 'v' is not yet in the graph, initialize it\n            if u not in graph:\n                graph[u] = []\n            if v not in graph:\n                graph[v] = []\n\n            # Add 'v' to the list of neighbors for 'u' and 'u' to 'v'\n            graph[u].append(v)\n            graph[v].append(u)\n\n    # graph = {1: [2, 3], 2: [1, 3], 3: [2, 1]}",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-representing-relationships-",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
-      "title": "Logic Mapping",
-      "summary": "Use a HashMap to represent problem specific logic or conditions.",
-      "exampleIntro": "Map complements to indices for quick lookup:",
-      "codeExample": "def twoSum(nums, target):\n        # Map to store complement -> index\n        complement_map = {}\n\n        for i, num in enumerate(nums):\n            complement = target - num\n            \n            # Check if current number is a complement of a previously seen number\n            if num in complement_map:\n                return [complement_map[num], i]\n            \n            # Store complement of current number with index for future lookup\n            complement_map[complement] = i\n\n        return []",
-      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-logic-mapping",
+      "title": "Index with Data Key",
+      "summary": "We can index into arrays based on data or data structures.",
+      "exampleIntro": "Store integer complements for quick lookup:",
+      "codeExample": "def twoSum(nums, target):\n\n        # Complement -> index\n        complement_map = {}\n\n        for i, num in enumerate(nums):\n            \n            # Calculate complement\n            complement = target - num\n            \n            # Lookup(complement)\n            if num in complement_map:\n                return [complement_map[num], i]\n            \n            # Put(complement)\n            complement_map[complement] = i\n\n        return []",
+      "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-index-with-data-key",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "type": "HashMap",
       "title": "Algorithm",
-      "summary": "Case where a problem that seems to require a HashMap is easily solved by an algorithm specifically made for that problem",
-      "exampleIntro": "Boyer-Moore Voting Algorithm",
-      "codeExample": "def majorityElement(nums: List[int]) -> int:\n    candidate = None\n    count = 0\n\n    # Phase 1: Find a candidate for the majority element\n    for num in nums:\n        if count == 0:  # Reset candidate\n            candidate = num\n        count += (1 if num == candidate else -1)\n\n    # Phase 2: Confirm the candidate (optional if majority element is guaranteed)\n    return candidate",
+      "summary": "There are cases where problem that seems to require a hashmap have an existing algorithm made for that problem.",
+      "exampleIntro": "Boyer Moore Voting Algorithm",
+      "codeExample": "def majorityElement(nums: List[int]) -> int:\n    \n    # Find element that appears more then floor(n/2) times\n\n    # votes for candidate\n    count = 0\n\n    # current candidate\n    candidate = None\n\n    for num in nums:\n        \n        # Reset candidate\n        if count == 0:\n            candidate = num\n\n        if num == candidate:\n            count += 1\n        else:\n            count -= 1\n\n    # Confirm the candidate ( optional if majority element is guaranteed)\n    return candidate",
       "useCaseLink": "/Notes/leetcode-arrays-and-hashing#hashmap-application-algorithm",
       "blog": "LeetCode: Arrays and Hashing"
     }
@@ -144,9 +144,9 @@
     {
       "type": "Two Pointers",
       "title": "One Pointer with Auxiliary State",
-      "summary": "Use a single pointer to scan linearly and keep track of additional state variables to simulate a second pointer.",
-      "exampleIntro": "Move all zeros while maintaining order",
-      "codeExample": "def move_zeros(nums: list[int]) -> None:\n        # `last_non_zero_found_at` tracks the position where the next non-zero\n        # element should be placed, simulating a second pointer.\n        last_non_zero_found_at = 0\n\n        for current in range(len(nums)):\n            if nums[current] != 0:\n                nums[last_non_zero_found_at], nums[current] = nums[current], nums[last_non_zero_found_at]\n                last_non_zero_found_at += 1\n\n    # arr = [0, 1, 0, 3, 12] \n    # move_zeros(arr)  Output: [1, 3, 12, 0, 0]",
+      "summary": "We can use a single pointer to iterate linearly and keep track of additional state variables to either simulate a second pointer or store relevant data.",
+      "exampleIntro": "Move all zeros to end of array while maintaining order",
+      "codeExample": "def move_zeros(nums: list[int]) -> None:\n\n        # Slot where non-zero value should go\n        partition = 0\n\n        # Pointer iteration\n        for left in range(len(nums)):\n\n            # Move non-zero values to current slot\n            if nums[left] != 0:\n                nums[last_non_zero_found_at], nums[left] = nums[left], nums[last_non_zero_found_at]\n                \n                # next non-zero slot\n                last_non_zero_found_at += 1\n\n    # input:  [0, 1, 0, 3, 12] \n    # output: [1, 3, 12, 0, 0]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-one-pointer-with-auxiliary-state",
       "blog": "LeetCode: Two Pointers"
     },
@@ -155,16 +155,16 @@
       "title": "Opposite Ends",
       "summary": "We can have two pointers starting at opposite ends of a list and move them inward while validating some sort of logic.",
       "exampleIntro": "Determine if a string is a palindrome",
-      "codeExample": "def is_palindrome(s: str) -> bool:\n        left, right = 0, len(s) - 1\n        while left < right:\n            if s[left] != s[right]:\n                return False\n            left += 1\n            right -= 1\n        return True\n\n    # Example:\n    print(is_palindrome(\"radar\"))  # Output: True\n    print(is_palindrome(\"hello\"))  # Output: False",
+      "codeExample": "def is_palindrome(s: str) -> bool:\n\n        # init to start and end of array\n        left, right = 0, len(s) - 1\n\n        # until middle of array is hit\n        while left < right:\n\n            # if palindrome is broken\n            if s[left] != s[right]:\n                return False\n\n            # continue towards middle\n            left += 1\n            right -= 1\n\n        # valid palindrome\n        return True\n\n    # is_palindrome(\"radar\") -> True\n    # is_palindrome(\"hello\") -> False",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-opposite-ends",
       "blog": "LeetCode: Two Pointers"
     },
     {
       "type": "Two Pointers",
       "title": "Sliding Window",
-      "summary": "We can have two pointers represent a window over a sequence that expands or shrinks to satisfy a condition.",
+      "summary": "We can have two pointers represent a window from [Left, Right] over a sequence that expands or shrinks to satisfy a condition.",
       "exampleIntro": "Find the length of the longest substring without repeating characters.",
-      "codeExample": "def longest_unique_substring(s: str) -> int:\n        char_set = set()\n        left = 0\n        maxLength = 0\n\n        for right in range(len(s)):\n            while s[right] in char_set:\n                char_set.remove(s[left])\n                left += 1\n            char_set.add(s[right])\n            maxLength = max(maxLength, right - left + 1)\n        \n        return maxLength\n\n    # Example:\n    print(longest_unique_substring(\"abcabcbb\"))  # Output: 3",
+      "codeExample": "def longest_unique_substring(s: str) -> int:\n\n        # start of window, left side\n        left = 0\n\n        # window data, stores unique chars within window range\n        char_set = set()\n\n        # window data, stores length of all windows\n        maxLength = 0\n\n        # expand window length, right side\n        for right in range(len(s)):\n\n            # if unique char is broken, remove from left side until\n            # unique char is true again\n            while s[right] in char_set:\n                # remove data\n                char_set.remove(s[left])\n                # shrink window\n                left += 1\n            \n            # add to window data\n            char_set.add(s[right])\n  \n            # update length, compare against global max\n            maxLength = max(maxLength, right - left + 1)\n\n        # global max window length      \n        return maxLength\n\n    # longest_unique_substring(\"abcabcbb\") -> 3",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-sliding-window",
       "blog": "LeetCode: Two Pointers"
     },
@@ -173,7 +173,7 @@
       "title": "Fast & Slow Pointers",
       "summary": "We can have have two pointers moving at different speeds to detect cycles or find midpoints in linked lists or arrays.",
       "exampleIntro": "Detect a cycle in a linked list.",
-      "codeExample": "class ListNode:\n        def __init__(self, value=0, next=None):\n            self.value = value\n            self.next = next\n\n    def has_cycle(head: ListNode) -> bool:\n        slow, fast = head, head\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n            if slow == fast:\n                return True\n        return False\n\n    # Example:\n    # Construct a list with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)\n    node1 = ListNode(1)\n    node2 = ListNode(2)\n    node3 = ListNode(3)\n    node4 = ListNode(4)\n    node1.next = node2\n    node2.next = node3\n    node3.next = node4\n    node4.next = node2\n    print(has_cycle(node1))  # Output: True",
+      "codeExample": "class ListNode:\n        def __init__(self, value=0, next=None):\n            self.value = value\n            self.next = next\n\n    def has_cycle(head: ListNode) -> bool:\n        \n        # tortoise and hare pointers\n        slow, fast = head, head\n        while fast and fast.next:\n\n            # iterate fast x2, slow x1\n            slow = slow.next\n            fast = fast.next.next\n\n            # if pointers match, cycle exists\n            # will be hit a n/2 iterations\n            if slow == fast:\n                return True\n\n        # reached end of list\n        return False\n\n    # List with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)\n    # has_cycle(node1) -> True",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-fast-slow-pointers-",
       "blog": "LeetCode: Two Pointers"
     },
@@ -181,44 +181,44 @@
       "type": "Two Pointers",
       "title": "Partitioning",
       "summary": "We can have two pointers in the same array moving inward/outward to rearrange elements based on a condition.",
-      "exampleIntro": "Move all zeros in an array to the end while maintaining the order of other elements",
-      "codeExample": "def move_zeros(nums):\n        left, right = 0, 0\n        while right < len(nums):\n            if nums[right] != 0:\n                nums[left], nums[right] = nums[right], nums[left]\n                left += 1\n            right += 1\n        return nums\n\n    # Example:\n    print(move_zeros([0, 1, 0, 3, 12]))  # Output: [1, 3, 12, 0, 0]",
+      "exampleIntro": "Lomuto partition scheme in quicksort",
+      "codeExample": "def partition(nums, pivot):\n\n        # current flip slot\n        left = 0\n\n        # iterate right pointer over array\n        for right in range(len(nums)):\n\n            # condition: if curr val is less that pivot val, flip to left side\n            if nums[right] < pivot:\n\n                # swap curr val with flip slot\n                nums[left], nums[right] = nums[right], nums[left]\n\n                # iterate flip slot\n                left += 1\n\n        # left is first index where element >= pivot\n        return nums, left \n\n    # partition([9, 3, 5, 2, 8, 1, 6], 5) -> [3, 2, 1, 5, 8, 9, 6], index = 5",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-partitioning",
       "blog": "LeetCode: Two Pointers"
     },
     {
       "type": "Two Pointers",
-      "title": "Parallel Pointer Traversal",
-      "summary": "We can have two pointers traversing two separate arrays in parallel to merge, compare, or find intersections.",
+      "title": "K Parallel Pointer Traversal",
+      "summary": "We can have k pointers traversing separate arrays in parallel to merge, compare, or find intersections.",
       "exampleIntro": "Merge two sorted arrays into one sorted array",
-      "codeExample": "def merge_sorted_arrays(arr1, arr2):\n        result = []\n        i, j = 0, 0\n\n        while i < len(arr1) and j < len(arr2):\n            if arr1[i] < arr2[j]:\n                result.append(arr1[i])\n                i += 1\n            else:\n                result.append(arr2[j])\n                j += 1\n        \n        result.extend(arr1[i:])\n        result.extend(arr2[j:])\n        return result\n\n    # Example:\n    print(merge_sorted_arrays([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]",
-      "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-parallel-pointer-traversal-",
+      "codeExample": "def merge_sorted_arrays(arr1, arr2):\n\n        result = []\n\n        # k = 2 pointers\n        i, j = 0, 0\n\n        # iterate both pointers, while elements remain in both lists \n        while i < len(arr1) and j < len(arr2):\n\n            # compare both pointers, append smaller\n            if arr1[i] < arr2[j]:\n                result.append(arr1[i])\n                i += 1\n            else:\n                result.append(arr2[j])\n                j += 1\n        \n        # One list has run out of elements, append rest of list\n        result.extend(arr1[i:])\n        result.extend(arr2[j:])\n\n        # return sorted array\n        return result\n\n    # merge_sorted_arrays([1, 3, 5], [2, 4, 6]) -> [1, 2, 3, 4, 5, 6]",
+      "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-k-parallel-pointer-traversal-",
       "blog": "LeetCode: Two Pointers"
     },
     {
       "type": "Two Pointers",
       "title": "Catchup",
-      "summary": "We have two pointers traversing one array. One remains frozen, but catches up to the other after logic is complete on a subsection.",
-      "exampleIntro": "Decode Two Pointer Splicing",
-      "codeExample": "",
+      "summary": "We can have two pointers traversing an array. The left pointer can remain frozen while the right pointer iterates until it hits a delimiter, at which point the left jumps (catches up) to right+1 to mark the start of the next section.",
+      "exampleIntro": "Split string by spaces",
+      "codeExample": "def split_words(s: str, delim: str = ' ') -> list[str]:\n\n        words = []\n\n        # start of current word\n        left = 0\n        # scanning pointer\n        right = 0\n\n        # iterate looking for delimiters\n        while right < len(s):\n\n            # found delimiter\n            if s[right] == delim:\n\n                # non-empty word, splice and add to array\n                if left != right:\n                    words.append(s[left:right])\n\n                # catch up: move start to after delim\n                left = right + 1\n\n            # move right pointer\n            right += 1\n\n        # hit end of string, check if last word exists\n        if left < len(s):\n            words.append(s[left:])\n\n        # return split words\n        return words\n\n\n    # split_words(\"catch up pointers example\") -> ['catch', 'up', 'pointers', 'example']",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-catchup",
       "blog": "LeetCode: Two Pointers"
     },
     {
       "type": "Two Pointers",
       "title": "K Pointer Variants",
-      "summary": "We can extend the two pointer case to track k pointers simultaneously. These pointers can traverse the same list, different lists, or freeze while moving other pointers.",
+      "summary": "We can extend the two pointers to k pointers. These pointers could follow any of the pointer applications, traverse the same list, different lists, freeze while moving others, etc.",
       "exampleIntro": "Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] that sum to 0.",
-      "codeExample": "def threeSum(nums):\n        nums.sort()  # Step 1: Sort the array\n        result = []\n\n        for i in range(len(nums)):\n            # Avoid duplicates for the first element\n            if i > 0 and nums[i] == nums[i - 1]:\n                continue\n\n            # Two-pointer approach\n            left, right = i + 1, len(nums) - 1\n            while left < right:\n                current_sum = nums[i] + nums[left] + nums[right]\n                if current_sum == 0:\n                    result.append([nums[i], nums[left], nums[right]])\n\n                    # Move pointers and avoid duplicates\n                    left += 1\n                    while left < right and nums[left] == nums[left - 1]:\n                        left += 1\n                    right -= 1\n                    while left < right and nums[right] == nums[right + 1]:\n                        right -= 1\n\n                elif current_sum < 0:\n                    left += 1  # Increase sum by moving left pointer rightward\n                else:\n                    right -= 1  # Decrease sum by moving right pointer leftward\n\n        return result\n\n    # Example usage:\n    nums = [-1, 0, 1, 2, -1, -4]\n    print(threeSum(nums))  # Output: [[-1, -1, 2], [-1, 0, 1]]",
+      "codeExample": "def threeSum(nums):\n\n        nums.sort()  # Step 1: Sort the array\n        result = []\n\n        for i in range(len(nums)):\n            # Avoid duplicates for the first element\n            if i > 0 and nums[i] == nums[i - 1]:\n                continue\n\n            # Two-pointer approach\n            left, right = i + 1, len(nums) - 1\n            while left < right:\n                current_sum = nums[i] + nums[left] + nums[right]\n                if current_sum == 0:\n                    result.append([nums[i], nums[left], nums[right]])\n\n                    # Move pointers and avoid duplicates\n                    left += 1\n                    while left < right and nums[left] == nums[left - 1]:\n                        left += 1\n                    right -= 1\n                    while left < right and nums[right] == nums[right + 1]:\n                        right -= 1\n\n                elif current_sum < 0:\n                    left += 1  # Increase sum by moving left pointer rightward\n                else:\n                    right -= 1  # Decrease sum by moving right pointer leftward\n\n        return result\n\n    # threeSum([-1, 0, 1, 2, -1, -4]) -> [[-1, -1, 2], [-1, 0, 1]]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-k-pointer-variants-",
       "blog": "LeetCode: Two Pointers"
     },
     {
       "type": "Two Pointers",
       "title": "Algorithm",
-      "summary": "Case where a problem that seems to require Two Pointers is easily solved by an algorithm specifically made for that problem",
-      "exampleIntro": "Manacher's Algorithm, find the longest palindromic substring",
-      "codeExample": "def longestPalindrome(s: str) -> str:\n        # Preprocess the string to handle even-length palindromes\n        t = \"#\".join(f\"^{s}$\")\n        n = len(t)\n        p = [0] * n\n        center = right = 0\n\n        \n        for i in range(1, n - 1):\n            mirror = 2 * center - i  # Mirror of `i` with respect to `center`\n\n            # If within bounds of the current right boundary\n            if i < right:\n                p[i] = min(right - i, p[mirror])\n\n            # Expand around `i`\n            while t[i + p[i] + 1] == t[i - p[i] - 1]:\n                p[i] += 1\n\n            # Update the center and right boundary if the palindrome is expanded\n            if i + p[i] > right:\n                center = i\n                right = i + p[i]\n\n        # Find the maximum length palindrome\n        maxLen, centerIndex = max((n, i) for i, n in enumerate(p))\n        start = (centerIndex - maxLen) // 2  # Convert index back to original string\n        return s[start: start + maxLen]",
+      "summary": "We can have cases where problems that seems to require two pointers have an algorithm specifically made for that problem.",
+      "exampleIntro": "Manacher's Algorithm, longest palindromic substring",
+      "codeExample": "def longestPalindrome(s: str) -> str:\n\n        # Preprocess the string to handle even-length palindromes\n        t = \"#\".join(f\"^{s}$\")\n        n = len(t)\n        p = [0] * n\n        center = right = 0\n\n        \n        for i in range(1, n - 1):\n            mirror = 2 * center - i  # Mirror of `i` with respect to `center`\n\n            # If within bounds of the current right boundary\n            if i < right:\n                p[i] = min(right - i, p[mirror])\n\n            # Expand around `i`\n            while t[i + p[i] + 1] == t[i - p[i] - 1]:\n                p[i] += 1\n\n            # Update the center and right boundary if the palindrome is expanded\n            if i + p[i] > right:\n                center = i\n                right = i + p[i]\n\n        # Find the maximum length palindrome\n        maxLen, centerIndex = max((n, i) for i, n in enumerate(p))\n        start = (centerIndex - maxLen) // 2  # Convert index back to original string\n        return s[start: start + maxLen]",
       "useCaseLink": "/Notes/leetcode-two-pointers#two-pointers-application-algorithm",
       "blog": "LeetCode: Two Pointers"
     }
