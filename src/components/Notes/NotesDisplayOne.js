@@ -18,7 +18,7 @@ const NotesDisplayOne = ({ blog }) => {
           alt={blog.title}
           width={blog.image.width}
           height={blog.image.height}
-          className="aspect-square w-full h-full object-cover object-center group-hover:scale-100 transition-all ease duration-300"
+          className="aspect-square w-full h-full object-cover object-center"
           sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw, 33vw"
         />
       </Link>
@@ -31,7 +31,7 @@ const NotesDisplayOne = ({ blog }) => {
           <h2 className="font-semibold capitalize text-base sm:text-lg">
             <span
               className="bg-gradient-to-r from-accent/50 dark:from-accentDark/50 to-accent/50 dark:to-accentDark/50 bg-[length:0px_6px]
-                group-hover:bg-[length:100%_6px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 "
+                bg-left-bottom bg-no-repeat transition-[background-size] duration-500 "
             >
               {blog.title}
             </span>

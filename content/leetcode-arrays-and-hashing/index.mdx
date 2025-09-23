@@ -681,8 +681,8 @@ Group the matching anagrams together.
             anaGroup[key].append(word)  
 
 
-        # overall: time complexity  O(n * k)  
-        # overall: space complexity O(m * k)
+        # overall: time complexity
+        # overall: space complexity
         return list(anaGroup.values())
 ```
 
@@ -732,7 +732,6 @@ Group the matching anagrams together.
             if key not in anaGroup:
                 # init empty list if no key doesn't exist
                 anaGroup[key] = []
-
             # append word to anagram group
             anaGroup[key].append(word)
 
@@ -743,7 +742,7 @@ Group the matching anagrams together.
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iterating over strings | O(n) | O(1) | Iterating over n strings O(n) | No additional memory per iteration O(1)  |
+| Iterate | O(n * m) | O(1) | Iterate over list O(n) * iterate over string over n strings O(n) | No additional memory per iteration O(1)  |
 | Counting Characters | O(k) per string | O(1) | Counting characters for string k length | Fixed-sized character count array of 26 lowercase letters O(1) |
 | Key Generator | O(1) | O(1) | Iterating over fixed-sized 26 character array to generate key O(1) | Unique string key generated O(1) |
 | Lookup in hashmap | O(1) | O(n * k) | Lookup operation in hashmaps takes constant O(1) | Hashmap of n string keys to list of strings k length O(n * k)   |
