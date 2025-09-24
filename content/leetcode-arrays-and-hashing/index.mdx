@@ -862,7 +862,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # tc: push operation O(log n)
             heapq.heappush(minHeap, (freq, num)) 
             
-            # tcif heap grows to size k + 1
+            # if heap grows to size k + 1
             if len(minHeap) > k:
 
                 # tc: pop smallest element O(log k)
@@ -881,12 +881,13 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Frequencies | O(n) | O(n) | Iterate over list O(n) | Allocation for n elements O(n) |
-| MinHeap | Best O(log k), Worst O(log n) | Best O(k), Worst O(n) | Insert BubbleUp on heap of size k or n O(log k) or O(log n) | Allocation for heap of k or n length O(k) or O(n) |
-| Overall | Best O(n log k), O(n log n) | Best O(k), Worst O(n) | Iterating over list for frequency count dominates * Insert BubbleUp per element in freq count list, dominates, O(n log k) or O(n log n) | Allocation for heap of k or n length dominates, O(k) or O(n) |
+| Iterate List | O(n) | O(n) | Iterate over list O(n) | Allocation for n elements O(n) |
+| Iterate Freq Counts + MinHeap | O(n log k) | O(k) | Iterate over counts * Push/BubbleUp, Pop O(log k) for heap of size k | Allocation for heap of max k elements O(k) |
+| MinHeap Grab k | O(k) | O(k) | Iterate over minHeap of k size O(k) | Result list of size k O(k) |
+| Overall | O(n log k) | O(n) | Iterating over freq counts * heap operations dominate, O(n log k) | Allocation for freq count of n elements dominates, O(n) |
 
 
-## Solution 2: Descending QuickSelect BinarySearch - Hashmap/Algorithm
+## Solution 2: QuickSelect BinarySearch High to Low Sort - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
@@ -913,14 +914,13 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # Index to partition larger elements to the left boundary of subarray
             partitionIndex = left
 
-            # Partition elements with (pivotElemFreq < freq) to left side
             # tc: iterate over subarray, n in worst case O(n)
             for i in range(left, right):
 
-                # Higher freq element than pivot element, move to left -> 'greater'
+                # Partition elements with (pivotElemFreq < freq), move to left -> 'greater'
                 if pivotElemFreq < frequency[unique[i]]:  
 
-                    # move larger freq element to left, sorting high to low 
+                    # larger freq element on left, sorting [high... low] count 
                     # -> allows use to grab top freq k elements [:k]
                     unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
                     partitionIndex += 1
@@ -934,117 +934,124 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # sc: recursion stack for in place partitioning on average O(log m)
         def quickSelectBinarySearchHelper(left, right, finalPartitionMarker):
             
-            # Base Case: see 'For descending' below
+            # Base Case: 
             if left == right:
                 return
 
-            # Randomly choose a pivot index
+            # Random pivot index,
             # differs from QuickSort "median-of-three" approach
-            # random pivot is focused on finding the k-th smallest or largest
-            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
+            # random pivot focuses on finding the kth smallest or largest,
+            # rather than fully sorting the array, 
+            # random pivot avoids degrading to worst case O(n^2)
             randPivotElemIndex = random.randint(left, right)
 
-            # Partition the array
+            # partition subarray
             resultPivotElemIndex = partitionSection(left, right, randPivotElemIndex)
             
-            # Base Case: see 'For descending' below
+            # Base Case: kth item in correct sorted [high... low] place
             if finalPartitionMarker == resultPivotElemIndex:
+                # -> allows us to grab k top freq count by [:k]
                 return 
             
             # Binary Search Modification:
-            # Selects next partition pivot
-            # Recursively QuickSelect on partitioned section (left or right)
-            # where finalPartitionMarker belongs to
+            # Selects next subarray and partition pivot
+            # resultPivotElemIndex must recurse towards side where finalPartitionMark is on
 
-            # finalPartitionMarker is in the left partition of resultPivotElemIndex
+            # final is in left partition of result: [left, resultPivot-1]
             elif finalPartitionMarker < resultPivotElemIndex:
                 quickSelectBinarySearchHelper(left, resultPivotElemIndex - 1, finalPartitionMarker)
             
-            # finalPartitionMarker is in the right partition of resultPivotElemIndex
+            # final is in right partition of result: [resultPivot+1, right]
             else:
                 quickSelectBinarySearchHelper(resultPivotElemIndex + 1, right, finalPartitionMarker)
 
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate over list O(n)
+        # sc: allocate for list, n unique elements worst case O(n)
         frequency = defaultdict(int)
         for num in nums:
             frequency[num] += 1
 
-        # QuickSelect BinarySearch to find the k most frequent elements
+        # QuickSelect BinarySearch to place kth most frequent element
+        # in its partitioned location, to then splice [:k]
         unique = list(frequency.keys())
         n = len(unique)
         finalPartition = k - 1
         l, r = 0, n - 1
 
-        # For descending:
-        # say we have a list of 6 elements, we are trying to grab the largest 2 elements
-        # if we do 2 - 1 we get 1.
-        # so if we find we have partitioned and set index 1
-        # we know that the elements 0 and 1 are the 2 largest elements
-        # so we splice [:2] = [0, 1]
+        # For High to Low (descending) indexing:
+        # with list of 6 elements, grab largest 2 elements
+        # 2 - 1 = 1 (our 2nd largest)
+        # splice [:2] = [0, 1]
         quickSelectBinarySearchHelper(l, r, finalPartition)
 
-        # overall: time complexity
-        # overall: space complexity 
+        # overall: tc O
+        # overall: sc 
         return unique[:k]
 ```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Iterate List | O(n) | O(n) | Iterate over list O(n) | Allocation for n elements O(n) |
+| QuickSort Partition | O(n<sup>2</sup>) | O(1) | Bad pivot choices cause quadratic behavior O(n<sup>2</sup>) | Partition of freq count array occurs in place O(1) |
+| QuickSort Recursion | O(k) | O(k) | Iterate over buckets for k steps O(k) | Result list of size k O(k) |
+| Result Splice | O(k) | O(k) | Splicing array for first k elements | Result list of k elements |
+| Overall | O(n<sup>2</sup>) | O(n) | Bad pivot partition dominates O(n<sup>2</sup>) |  |
+
 
 ## Solution 3: BucketSort by Count - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
-        # space complexity: frequency count for unique integers O(m) 
-        # time complexity: iterate over list of n integers O(n)
+        # tc: iterate over list of n integers O(n)
+        # sc: frequency count for unique integers O(m) 
         count = defaultdict(int)
         for key in nums:
-
-            # time complexity: insertion operation takes constant O(1)
             count[key] += 1
 
-        # numBuckets equal to length to account for max possible frequency count
-        # the case where list is full of only 1 element O(n)
-        # + 1 for case of element with 1 list, need bucket of frequency 0 and bucket of frequency 1
+        # numBuckets index = items with that frequency count
+        # numBuckets must account for max freq count case, where list is full of only 1 element
+        # numBuckets must account for empty list, (but still needs a bucket index 0), so we need
+        # len(num)+1,
+        # empty: 1 bucket: [0] representing empty group
+        # else: list of len 5, 6 buckets: [0, 1, 2, 3, 4, 5] each representing length group,
+        # with max freq count of 5
         numBuckets = len(nums) + 1
 
-        # below is saying: create a list of empty lists numBuckets amount of times 
-        # time complexity: iterating to set empty list for each bucket
-        # space complexity: creating O(n) bucket lists
+        # list of empty lists, numBucket amount of times 
+        # tc: iterate over list length O(n)
+        # sc: create len(list)+1 buckets O(n)
         freqBuckets = [[] for i in range(numBuckets)]
 
-        # time complexity: iterate over frequency list for m unique integer tuples (int, occurrences) O(m) 
+        # tc: iterate over frequency list for m unique integer tuples (int, occurrences) O(m) 
         for int, occurrences in count.items():
-
-            # time complexity: insert operation takes constant O(1)
             freqBuckets[occurrences].append(int)
 
-        # space complexity: grabbing top k integers O(k)
+        # sc: grabbing top k integers, n worst case O(k)
         res = []
 
-        # time complexity: iterate over n buckets O(n)
+        # tc: iterate over len(list)+1 buckets O(n)
         for i in range(len(freqBuckets) - 1, 0, -1):
             
-            # time complexity: iterate over all entries in current bucket O(n)
+            # tc: iterate over all elements in curr bucket O(m)
             for num in freqBuckets[i]:
                 
-                # time complexity: insert operation takes constant O(1)
+                # tc: insert operation O(1)
                 res.append(num)
                 
-                # time complexity: continue while less than k integers have been grabbed O(k)
+                # tc: continue while less than k elements grabbed O(k)
                 if len(res) == k:
                     return res
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return res
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(m) | Iteration over array of n integers O(n) | Hashmap for m unique integers O(m) |
-| Bucket Initialization | O(n) | O(n) | Iterating over list length to create n empty buckets O(n) | At least n buckets needed for worst case scenario of list filled with only 1 integer O(n) |
-| Bucket Population | O(m) | O(m) | Inserting m unique integers into their respective buckets |  Buckets will store m unique integers in their respective buckets O(m) |
-| Result Extraction | O(n) | O(k) | Iterating over n buckets to collect k integers, worst case all buckets must be traverse O(n) | Top k integers must be stored in result list O(k) | 
-| Overall | O(n) | O(n) | Iterating over n buckets dominates leading to O(n) | Initializing n buckets dominates leading to O(n) |
-
+| Iterate list | O(n) | O(n) | Iteration over list O(n) | Allocation for n elements O(n) |
+| Bucket Creation | O(n) | O(n) | Iterate len(list)+1 steps O(n) | Allocate len(list)+1 buckets O(n) |
+| Bucket Population | O(n) | O(n) | Inserting n integers into buckets O(n) | Buckets store n integers O(m) |
+| Bucket Grab k | O(k) | O(k) | Iterate over buckets for k steps O(k) | Result list of size k O(k) |
+| Overall | O(n) | O(n) | Iterating over list dominates, O(n) | Allocating n buckets dominates, O(n) |
 
 
 # 238. Product of Array Except Self ::2:: - Medium
