@@ -1428,14 +1428,15 @@ This sequence does not have to follow the left to right order of the array.
 | List lookup | O(n) | O(1) | Lookup in list takes O(n) | No additional memory allocation for list lookup O(1) |
 | Overall | O(n<sup>3</sup>) | O(1) | Iterating * Iterating * Lookup dominate leading to O(n<sup>3</sup>) | No additional memory allocation O(1) |
 
-## Find the Bug: Empty list for Union tree leads to fail
+## Bug: Empty list for Union tree leads to fail
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
 
-        # INCORRECT:
-        # need to account for empty list case
+        # BUG:
+        # need to check for empty list case
         # or else max(size.values()) will return error
-        # should be:
+
+        # Instead:
         # if len(nums) == 0
         #   return 0
 
@@ -1476,28 +1477,27 @@ This sequence does not have to follow the left to right order of the array.
                 union(n, n+1)
 
         return max(size.values())
-        
 ```
 
 ## Solution 1: HashMap Continent Boundaries - HashMap/Representation
 ```python
     def longestConsecutive(nums: List[int]) -> int:
         
-        # space complexity: hashmap of list of n length O(n)
-        seqLen = defaultdict(int)
         longest = 0
 
-        # Handle duplicates
-        nums = set(nums)  
+        # sc: hashmap of list of n length O(n)
+        seqLen = defaultdict(int)
 
-        # Iterate over unique numbers
+        # tc: iterate list O(n)
+        # sc: ignore duplicates O(n)
+        numSet = set(nums)
         for num in nums:
-            # Skip if num is already part of an existing sequence
-            # Fetch lengths of neighboring sequences
+            
+            # Get lengths of neighbor sequences
             leftContinentLenFromBoundary = seqLen[num - 1]
             rightContinentLenFromBoundary = seqLen[num + 1]
 
-            # Calculate new sequence length
+            # Calculate new bridged sequence length
             bridgedLen = 1 + leftContinentLenFromBoundary + rightContinentLenFromBoundary
 
             # Update new continent boundaries
@@ -1507,73 +1507,84 @@ This sequence does not have to follow the left to right order of the array.
             # Update the global max
             longest = max(longest, bridgedLen)
 
+        # overall: tc 
+        # overall: sc
         return longest
 ```
 |  Aspect  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Iteration + Insertion | O(n) | O(n) | Iterating over list of n length O(n) | Memory allocation for sequence length for n integers O(n) |
-| Lookups | O(1) | O(1) | Lookup operation takes constant O(1) | No additional memory allocation needed for lookup O(1) |
-| Updating sequence count | O(1) | O(1) | Boundary updates for left most, curr, and right most in constant O(1) | Insert operation takes constant O(1) | 
-| Overall | O(n) | O(n) | Iterating over list of n length dominates O(n) | Memory allocation for n sequences O(n) | 
+| Set | O(n) | O(n) | Converting list unique list O(n) | Allocation for unique set O(n) |
+| Iterate over set | O(n) | O(n) | Iterate set O(n) | Dictionary allocation for sequence length per element O(n) |
+| Operations | O(1) | O(1) | Get, Put operation O(1) | No allocation O(1) |
+| Overall | O(n) | O(n) | Iterate unique list dominates O(n) | Allocation for unique elements, sequence length dominates, O(n) | 
 
 ## Solution 2: Set Rummy Run - Hashmap/Representation
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
+
     
-    # space complexity: set for list of n length O(n)
-    numSet = set(nums)
+    # Note: 
+    # although rummy has an inner while loop,
+    # each number is part of at most one sequence
+    # and are not checked again in future sequences
+    # thus, the number of times the while loop runs across 
+    # all iterations is n.
+    # so the overall tc is O(n), instead of O(n^2)
+
+
     longest = 0
 
-    # time complexity: iterate over list of n length O(n)
+    # sc: ignore duplicates O(n)
+    numSet = set(nums)
+
+    # tc: iterate list O(n)
     for num in numSet:
 
-        # found start of a run
-        # time complexity: lookup operation takes constant O(1)
+        # tc: lookup operation takes constant O(1)
+        # found start of a new run
         if (num - 1) not in numSet: 
 
+            newRunLen = 1
+
+            # tc: iterate over sequence/list O(n)
             # rummy run until missing an element
-            currLen = 1
-            # time complexity: iterate over m sequence worst case n sequence O(n), lookup O(1), leading to O(n)
-            while (num + currLen) in numSet:
-                currLen += 1 
+            while (num + newRunLen) in numSet:
+                newRunLen += 1 
 
-            # validate with global max sequence
-            longest = max(longest, currLen)
+            # compare with global max sequence
+            longest = max(longest, newRunLen)
 
-    # overall: time complexity O(n)
-    # overall: space complexity O(n)
+    # overall: tc O(n)
+    # overall: sc O(n)
     return longest        
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Hashset | O(n) | O(n) | Converting list to set uses insert operation O(1) for n linear O(n) | Memory allocation for list of n length O(n) |
-| Outer Loop | O(n) | O(1) | Iterating over set of n length O(n) | No additional memory allocation for iteration |
-| Start of sequence check | O(1) | O(1) | Lookup operation takes constant O(1) | No additional space of lookup operation O(1) |
-| while loop sequence | O(n) | O(1) | Iterate white sequence is valid, note all numbers are checked only once due to start of sequence check O(n) | No additional memory allocation for while loop O(1) |
-| Overall | O(n) | O(n) | Iterating over hashset of n length dominates leading to O(n) | Memory allocation for hashset of list n length dominates o(n) | 
-
-
+| Set | O(n) | O(n) | Converting list unique list O(n) | Allocation for unique set O(n) |
+| Iterate over set | O(n) | O(1) | Iterate set O(n) * Sequence Start Check In Operation O(1) | No allocation O(1) |
+| Rummy Iterate | O(n) | O(1) | Iterate while valid sequence, n steps across all iterations  O(n) | No allocation O(1) |
+| Overall | O(n) | O(n) | Iterate set dominates, O(n) | Set allocation dominates, O(n) | 
 
 ## Solution 3: Union Find Tree - HashMap/Algorithm
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
         
+        # Check Empty: avoid max(size.values()) return error
         if len(nums) == 0:
             return 0
 
-        # Union-Find Initialization:
+        # Union Find Initialization:
         
+        # sc: dictionary for list O(n)
         # Stores parent of each number
-        # space complexity: hashmap of size n O(n)
         parent = {}  
 
+        # sc: dictionary for list O(n)
         # Stores the size of connected components
-        # space complexity: hashmap of size n O(n)
         size = {}    
 
-        # Find operation with path compression
-        # time complexity: Amortized O(α(n)) per operation
+        # tc: Amortized O(α(n)) per operation
+        # Find + path compression
         def find(x):
 
             # if the parent of x is not itself, we have not reached the representative  
@@ -1588,60 +1599,61 @@ def longestConsecutive(self, nums: List[int]) -> int:
             # or return parent of parent
             return parent[x]
 
+        # tc: Amortized O(α(n)) per operation
         # Union operation with size optimization
-        # time complexity: Amortized O(α(n)) per operation
         def union(x, y):
 
-            # grab representatives of both x and y
+            # Get parent for trees x and y
             rootX = find(x)
             rootY = find(y)
 
-            # trees are not already connected
+            # If trees do not share representative
             if rootX != rootY:
 
-                # grab tree sizes
+                # Attach smaller tree to larger tree,
+                # update larger tree size and 
+                # smaller tree parent
+
                 xSize = size[rootX]
                 ySize = size[rootY]
 
-                # x tree is larger
                 if ySize < xSize:
-                    # attach smaller tree to larger tree
                     parent[rootY] = rootX
-                    # add smaller tree size to larger tree
                     size[rootX] += size[rootY]
-
-                # y tree is larger
                 else:
-                    # attach smaller tree to larger tree
                     parent[rootX] = rootY
-                    # add smaller tree size to larger tree
                     size[rootY] += size[rootX]
 
-        # Initialize Union-Find structure: 
-        # Set all parents to self
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate list O(n)
+        # Initialize Union Find: 
+        #   1. Set all parents to self
+        #   2. Set all sizes to 1
         for num in nums:
+
+            # ignore duplicates
             if num not in parent:
                 parent[num] = num
                 size[num] = 1
 
-        # Join consecutive numbers: 
-        # Union operation on sequences
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate list O(n)
+        # Join() consecutive numbers,
+        # stores sequences represented as trees
         for num in nums:
             if num + 1 in parent:
                 union(num, num + 1)
         
-        # return largest group
+        # return tree (sequence of numbers) with
+        # the longest size/length
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return max(size.values())
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Initialization | O(n) | O(n) | Insert n elements into parent and size hashmaps O(n) | Memory allocation for parent and size for n elements O(n) |
-| Union-Find Operations | Amortized O(α(n)) | O(1) | α(n) is nearly constant for realistic input sizes | No additional memory allocation for Union-Find operations O(1) |
-| Join Operation | O(n) | O(1) |  |  |
-| Grab Largest | O(n) | O(1) | Grab max size in list of n elements O(n) | No additional memory allocation for grab |
-| Overall | O(n) | O(n) | Initialization dominates, leading to O(n) |  | 
+| Union Tree Init | O(n) | O(n) | Iterate list O(n) | Dictionary allocation for parent and size O(n) |
+| Union | Amortized O(α(n)) | O(1) | Each union operation is nearly constant with path compression and size optimization α(n) | No allocation O(1) |
+| Find | Amortized O(α(n)) | O(1) | Find with path compression is nearly constant O(α(n)) | No allocation O(1)|
+| Iterate Join | O(n) | O(1) | Iterate list O(n) * Union which is constant, so just O(n) | No allocation O(1) |
+| Get Largest | O(n) | O(1) | Grab max from dictionary O(n) | No allocation O(1) |
+| Overall | O(n) | O(n) | Iterate * Union dominates, O(n) | Dictionary allocation for parent and size dominates, O(n) | 
