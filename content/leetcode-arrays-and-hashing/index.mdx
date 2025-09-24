@@ -3,7 +3,7 @@ title: "LeetCode: Arrays and Hashing"
 description: "arrays & hashing"
 image: "../../public/Notes/hashmap.png"
 publishedAt: "2025-06-13"
-updatedAt: "2025-06-26"
+updatedAt: "2025-09-23"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -600,8 +600,8 @@ Group the matching anagrams together.
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Array to Tuple Key  | O(n * k) | O(n * k) | Iterate over list O(n) * iterate over string O(m) | Dictionary relative to input O(n) |
-| Array to String Key | O(n * k) | O(n * k) | Iterate over list O(n) * iterate over string O(m) | Dictionary relative to input O(n) |
+| Array to Tuple Key  | O(n * k) | O(n * k) | Iterate over list O(n) * iterate over string k length O(k) | Dictionary relative to input O(n * k) |
+| Array to String Key | O(n * k) | O(n * k) | Iterate over list O(n) * iterate over string k length O(k) | Dictionary relative to input O(n * k) |
 
 ## Bug: Mutable object, list, cannot be hashed
 ```python
@@ -658,42 +658,41 @@ Group the matching anagrams together.
         # Tuples immutable, allowing them to be hashed
         # Array allows for constant ordered representation
 
-        # sc: relative to input unique anagram count m, O(m)
+        # sc: store k chars for n words O(n * k)
+        anaGroup = {}
 
-        # time complexity: iterating over all strings O(n) 
+        # tc: iterate over list O(n) 
         for word in strs:
             
-            # space complexity: fixed-sized array for 26 lowercase letters O(1)
+            # sc: array for 26 O(1)
             charCount = [0] * 26  
             
-            # time complexity: counting chars in string of k length O(k)
+            # tc: iterate over string k length O(k)
             for char in word:
                 charCount[ord(char) - ord('a')] += 1
             
-            # space complexity: fixed-size tuple of length 26 O(1)
+            # sc: array of 26 to tuple O(1)
             key = tuple(charCount)  
             
-            # time complexity: lookup operation of O(1) 
+            # tc: in operation O(1) 
             if key not in anaGroup:
                 anaGroup[key] = []  
 
-            # time complexity: append operation to list O(1)
+            # tc: put operation O(1)
             anaGroup[key].append(word)  
 
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(n * k)
+        # overall: sc O(n * k)
         return list(anaGroup.values())
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iterating over strings  | O(n) | O(1) | Loop over n strings O(n) | No additional memory per iteration O(1) |
-| Counting Characters | O(k) per string | O(1) | counting characters for string k length O(k) | fixed-sized array for 26 chars O(1) |
-| Tuple | O(1) | O(1) | Converting fixed-size array to tuple in constant O(1) | fixed-size tuple of 26 elements O(1) |
-| Lookup in hashmap | O(1) | O(n * k) | Lookup operation takes constant O(1) | For n string keys of length k O(n * k)  |
-| Appending to list | O(1) | O(n * k) | Appending operation takes constant O(1) | Hashmap of n keys to list of strings k length O(n * k) |
-| Overall | O(n * k) | O(n * k) | Iteration and character counting dominates with O(n * k) | Memory allocation for n string keys with for list of strings k length dominates with O(n * k) |
+| Iterate list | O(n) | O(1) | Iterate over list O(n) | No allocation for iteration O(1) |
+| Iterate string | O(k) | O(1) | Iterate over string k length O(k) | Array of 26 per iteration O(1) |
+| Store string in anagram group | O(1) | O(n * k) | Put operation constant O(1) | Dictionary stores n words of k length O(n * k) |
+| Overall | O(n * k) | O(n * k) | Iteration over list and strings dominate, O(n * k) | Allocation for all strings dominates, O(n * k) |
 
 
 ## Solution 2: Array to String Key - Hashmap/Grouping by Criteria
@@ -730,24 +729,21 @@ Group the matching anagrams together.
 
             # tc: in operation O(1)
             if key not in anaGroup:
-                # init empty list if no key doesn't exist
                 anaGroup[key] = []
-            # append word to anagram group
+
+            # tc: put operation O(1)
             anaGroup[key].append(word)
 
-        # overall: tc
-        # overall: sc 
+        # overall: tc O(n * k)
+        # overall: sc O(n * k)
         return list(anaGroup.values())
 ```
 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iterate | O(n * m) | O(1) | Iterate over list O(n) * iterate over string over n strings O(n) | No additional memory per iteration O(1)  |
-| Counting Characters | O(k) per string | O(1) | Counting characters for string k length | Fixed-sized character count array of 26 lowercase letters O(1) |
-| Key Generator | O(1) | O(1) | Iterating over fixed-sized 26 character array to generate key O(1) | Unique string key generated O(1) |
-| Lookup in hashmap | O(1) | O(n * k) | Lookup operation in hashmaps takes constant O(1) | Hashmap of n string keys to list of strings k length O(n * k)   |
-| Appending to list | O(1) | O(1) | Appending operation to list takes constant O(1) | No additional memory required for append O(1) | 
-| Overall | O(n * k) | O(n * k) | Iterating over n strings and counting characters for strings k length dominates O(n * k) | Hashmap of n string keys with lists of strings k length dominates O(n * k) |
+| Iterate list | O(n * m) | O(1) | Iterate over list O(n) | No allocation for iteration O(1) |
+| Iterate string | O(k) | O(1) | Iterate string of k length O(k) | Array of 26 O(1) |
+| Overall | O(n * k) | O(n * k) | Iterating over list and strings dominate, O(n * k) | Allocation for all strings dominates, O(n * k) |
 
 
 # 347. Top K Elements in List ::3:: - Medium
@@ -776,63 +772,11 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (Insertion sort) | O(m<sup>2</sup>) | O(n + k) | Insertion sort on m unique elements dominates leadin | |
-| Hashmap -> Bucket Sort | O(n) | O(n) | | |
 | MinHeap |  |  |  |  |
 | Divide and Conquer |  |  |  |  |
 | Quickselect |  |  |  |  |
 
-## Brute Force (Insertion sort)
-```python
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        
-        # space complexity: frequency count for all unique integers O(m)
-        count = defaultdict(int)
-
-        # time complexity: iterate over list of n integers O(n)
-        for num in nums: 
-
-            # time complexity: insertion operation takes constant O(1)
-            count[num] += 1
-
-
-        # time complexity: iteration for conversion to list takes O(m)
-        # space complexity: list size is equal to number of unique integers O(m)
-        countTuple = list(count.items()) # [(num, freq), ...]
-
-        # time complexity: Insertion sort 
-        # Best case O(m), Average O(m) = O(m^2/2), Worst O(m^2)
-        for i in range(1, len(countTuple)):
-            key = countTup[i][1]
-            j = i - 1
-
-            # while left element is greater than key
-            while j >= 0 and countTuple[j][1] < key:
-                countTuple[j + 1] = countTuple[j]
-                j -= 1
-            
-            countTuple[j + 1] = key # place key
-
-        # time complexity: grab k top occurring ints from frequency list O(k)        
-        result = []
-        for i in range(k):
-            
-            # grabbing int key from tuple [(int, count), ...]
-            result.append(countTuple[i][0]) 
-
-        # overall: time complexity  O(m^2) = O(n + m^2 + k)
-        # overall: space complexity O(m)
-        return result
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Iteration + Insertion | O(n) | O(m) | Iterating over array of n integers O(n) | Hashmap with m unique elements results in O(m) memory allocation with O(n) in worst case |
-| Conversion to list | O(m) | O(m) | Iterating over hashmap to create list takes O(m) | List of tuples stores m (int, count) pairs O(m) |
-| Insertion sort | Best O(m), O(m<sup>2</sup>) average, O(m<sup>2</sup>) worst | Insertion sort on tuples of (int, count) sorting by count results in usual time complexity of insertion sort | No additional memory allocation required for in-place insertion sort O(1) |  |
-| Grabbing top-k elements | O(k) | O(k) | Iterating over sorted list for k elements O(k) | Storing top k elements into result array O(k) | 
-| Overall | O(m<sup>2</sup>) | O(m) | Insertion sort dominates leading to O(m<sup>2</sup>) | Hashmap and list for m unique elements dominates leading to O(m) |
-
-## Find the Bug: Inverted Binary Search if statement:
+## Bug: Inverted Binary Search if statement:
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         
@@ -862,12 +806,14 @@ Now that we have the count, we just grab the top k highest occurring elements.
             if resIndex == finalMarker:
                 return
 
-            # INCORRECT:
+            # BUG:
             # this format is confusing
-            # we are searching for the finalMarker, so always have that on the left
-            # it should be, if the finalMarker is less than the result, then we shift right
-            # current we are doing the reverse
-            # should be:
+            # we are searching for the finalMarker, so always have that on 
+            # the left.
+            # The correct order should be:
+            # if the finalMarker is less than the result, then we shift right
+            # but because of the confused order, we are doing the reverse
+            # INSTEAD:
             # elif finalMarker < resIndex 
             #   quickSelectBinarySearchHelper(left, resIndex-1, finalMarker)
             elif resIndex < finalMarker:
@@ -875,177 +821,117 @@ Now that we have the count, we just grab the top k highest occurring elements.
             else:
                 quickSelectBinarySearchHelper(resIndex+1, right, finalMarker)
 
-        # generate frequencies
         frequency = defaultdict(int)
         for n in nums:
             frequency[n] += 1
         
-        # unique for keys
         unique = list(frequency.keys())
         n = len(unique)
-
-        # start binarySearch
         l, r = 0, n-1
 
-        # final index
         finalIndex = k-1
-
-
         quickSelectBinarySearchHelper(l, r, finalIndex)
-
         return unique[:k]
 ```
 
-
-## Solution 1: MaxHeap Track N Elements - HashMap/Algorithm
+## Solution 1: MinHeap Track K Elements - HashMap/Algorithm
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
-        # Note: A heap only guarantees that the root is the max (max heap) or min (min heap).
-        # The heap data structure only allows removing the root efficiently (O(log n))
-        # The heap property says nothing about the relative order of leaves or internal nodes.
-        # The smallest element could be anywhere in the leaves or internal nodes, not necessarily a leaf.
-        # Thus for maxHeap, we need to add all of the elements to the tree
-        # since we can't removed the smallest leaf as we go
+        # Note: 
+        # Heap only guarantees that the root is the min or max, and
+        # provides no guarantee about the relative order of nodes. 
+        # The minHeap root will hold the smallest element,
+        # we iterate and add elements, 
+        # we only remove the root/smallest element when heap exceeds size k, 
+        # ensuring heap holds the k largest frequencies seen so far.
 
-        # space complexity: count for m unique elements worst case n elements O(n)
-        count = defaultdict(int)
+        # sc: freq count for list, m unique elements in worst case O(n)
+        freq = defaultdict(int)
 
-        # time complexity: iterate over list of n length O(n)
-        for num in nums:
-            count[num] += 1
-
-        # space complexity: maxHeap must store all n elements O(n)
-        maxHeap = []
-
-        # time complexity: iteate over m unique elements worst case over n elements O(n)
-        for num, freq in count.items():
-
-            # time complexity: push onto heap O(log m) worst case O(log n) leading to best case O(m log m) worst case O(n log n) 
-            heapq.heappush(maxHeap, (-freq, num))
-
-        # space complexity: list of k elements worst case n elements best O(k) worst O(n)
-        result = []
-
-        # cannot iterate over array, as order is not guaranteed left to right
-        # time complexity: iterate for k elements worst case n elements best O(k) worst O(n)
-        for _ in range(k):
-
-            # time complexity: pop top element O(log n) for k elements, worst case O(log n) for n elements, best case O(k log n) worst O(n log n)
-            freq, num = heapq.heappop(maxHeap)
-            result.append(num)
-
-        # same as above
-        # res = [num for _, num in (heapq.heappop(maxHeap) for _ in range(k))]
-
-        # overall: time complexity O(n log n)
-        # overall: space complexity O(n)
-        return result
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Counting Frequencies | O(n) | O(n) | iterate trough input array of n length O(n) | Memory allocation for frequency count for n unique elements O(n) |
-| Building MaxHeap | O(n log n) | O(n) | Push n elements O(n) using bubbleUp O(log n) leading to O(n log n) | Memory allocation for array representing heap O(n) |
-| Extracting K elements | best: O(k log n) worst: O(n log n) | best: O(k) worst O(n) | Pop k elements O(k) using bubbleDown O(log n) leading to O(k log n) | Memory allocation to store k elements O(k) |
-| overall | O(n log n) | O(n) | Heap construction dominates leading to O(n log n) | Memory allocation for hashmap and heap dominate leading to O(n) |
-
-
-## Solution 2: MinHeap Track K Elements - HashMap/Algorithm
-```python    
-    def topKFrequent(self, nums: List[int], k:int) -> List[int]:
-
-        # Note: A heap only guarantees that the root is the min (min heap) or max (max heap).
-        # The heap data structure only allows removing the root efficiently (O(log n))
-        # The heap property says nothing about the relative order of leaves or internal nodes.
-        # The largest element could be anywhere in the leaves or internal nodes, not necessarily a leaf.
-        # Thus for a minHeap, the root always holds the smallest element.
-        # If we only remove the smallest element when heap as exceeded size k, 
-        # the heap will always contains the k largest frequencies seen so far.
-
-        # space complexity: count for m unique elements worst case n elements O(n)
-        count = defaultdict(int)
-
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate over list O(n)
         for num in nums: 
-            count[num] += 1
+            freq[num] += 1
 
-        # space complexity: minHeap tracks k elements O(k)
+        # sc: minHeap holds smallest k elements O(k)
         minHeap = []
 
-        # time complexity: worst case iterate over n unique elements O(n)
-        for num, freq in count.items(): 
+        # tc: iterate over freq count, m unique elements in worst case O(n)
+        for num, freq in freq.items(): 
 
-            # time complexity: push onto heap O(log n) for n elements, leading to O(n log n) 
+            # tc: push operation O(log n)
             heapq.heappush(minHeap, (freq, num)) 
             
-            # if heap grows to size k + 1
+            # tcif heap grows to size k + 1
             if len(minHeap) > k:
 
-                # pop smallest element, heap will be back to size k
-                # time complexity: # pop smallest O(log k) for worst case n elements, leading to O(n log k)
+                # tc: pop smallest element O(log k)
                 heapq.heappop(minHeap) 
         
-        # can iterate over heap array as only holding top k elements
-        # time complexity: grab all k elements from minHeap worst case grab n elements O(n)
+        # tc: grab k elements from minHeap, worst case grab n elements O(n)
         result = [num for freq, num in minHeap]
 
+        # expanded for loop:
         # for _, num in minHeap:
         #    result.append(num) 
-        # same as above
 
-        # overall: time complexity O(n log n)
-        # overall: space complexity O(n)
+        # overall: tc O(n log n)
+        # overall: sc O(n)
         return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Counting Frequencies | O(n) | O(n) | iterate trough input array of n length O(n) | Memory allocation for frequency count for n unique elements O(n) |
-| Building MinHeap | best: O(n log k) worst: O(n log n) | best: O(k) worst: O(n) | Iterates over list of n length O(n) and performs bubbleUp on heap with height k O(log k), leading to O(n log k) | Memory allocation to represent heap of k length O(k) |
-| Extracting top k | best: O(k) worst: O(n) | best: O(k) worst: O(n) | Iterate over heap for k elements O(k) | Memory allocation to store top k elements O(k) |
-| Overall | best: O(n log k) worst: O(n log n) | O(n) | Worst case iterating over count for n unique elements O(n) and pushing values to heap to track n values O(log n), leading to O(n log n) | Memory allocation to track in worst case n unique element counts O(n) |
+| Frequencies | O(n) | O(n) | Iterate over list O(n) | Allocation for n elements O(n) |
+| MinHeap | Best O(log k), Worst O(log n) | Best O(k), Worst O(n) | Insert BubbleUp on heap of size k or n O(log k) or O(log n) | Allocation for heap of k or n length O(k) or O(n) |
+| Overall | Best O(n log k), O(n log n) | Best O(k), Worst O(n) | Iterating over list for frequency count dominates * Insert BubbleUp per element in freq count list, dominates, O(n log k) or O(n log n) | Allocation for heap of k or n length dominates, O(k) or O(n) |
 
 
-## Solution 3: Descending QuickSelect BinarySearch - Hashmap/Algorithm
+## Solution 2: Descending QuickSelect BinarySearch - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
-        # Note: QuickSelect is a modified quicksort
-        # Once the finalPartitionMarker is placed in its correct position, 
-        # elements to the left and right are guaranteed to be smaller/larger
-        # This avoids sorting the entire array and isolates the elements we need
+        # Note: 
+        # QuickSelect is a modified quicksort
+        # A finalPartitionMarker marks the correct position, 
+        # at which point, elements to the left and right of finalPartitionMarker
+        # are guaranteed to be smaller/larger.
+        # QuickSelect avoids sorting the entire array and
+        # only isolates the minimum elements we need to complete task
 
-        # In-place partition of array based on pivot value
+        # In place partition of subarray [left,right] relative to random pivot index value
         def partitionSection(left, right, randPivotElemIndex):
             
-            # time complexity: partition processes m elements, n in worst case O(n)
-            # Frequency of pivot element
+            # tc: subarray m elements, n in worst case O(n)
+            
+            # Frequency count of random pivot element
             pivotElemFreq = frequency[unique[randPivotElemIndex]]
 
             # Move pivot to end
-            # tuple unpacking in python, allows to swap two variables in a single line
+            # Tuple unpacking in python allows to swap two variables
             unique[randPivotElemIndex], unique[right] = unique[right], unique[randPivotElemIndex]
             
-            # Index to partition larger elements to the left side of the section
+            # Index to partition larger elements to the left boundary of subarray
             partitionIndex = left
 
-            # Partition elements with freq more than pivotElemFreq to left
-            # time complexity: iterates over unique elements between left and right segment O(m)
+            # Partition elements with (pivotElemFreq < freq) to left side
+            # tc: iterate over subarray, n in worst case O(n)
             for i in range(left, right):
 
-                # Higher frequency -> "greater"
+                # Higher freq element than pivot element, move to left -> 'greater'
                 if pivotElemFreq < frequency[unique[i]]:  
 
-                    # swap larger element to left, sorting high to low
+                    # move larger freq element to left, sorting high to low 
+                    # -> allows use to grab top freq k elements [:k]
                     unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
                     partitionIndex += 1
 
-            # swap pivot to its final correct partitioned index
-            # now elements to the right and left follow the conditions according to pivot element
+            # set pivot to correct partitioned index,
+            # elements left and right of pivot follow [greater... pivot ... lesser] freq count
             unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
             return partitionIndex
 
-        # time complexity: average recursion depth O(log m)
-        # space complexity: recursion stack for in place partitioning on average O(log m)
+        # tc: average recursion depth O(log m)
+        # sc: recursion stack for in place partitioning on average O(log m)
         def quickSelectBinarySearchHelper(left, right, finalPartitionMarker):
             
             # Base Case: see 'For descending' below
@@ -1102,111 +988,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         return unique[:k]
 ```
 
-## Solution 4: Ascending QuickSelect BinarySearch - Hashmap/Algorithm
-```python
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-
-        # Note: QuickSelect is a modified quicksort
-        # Once the finalPartitionMarker is placed in its correct position, 
-        # elements to the left and right are guaranteed to be smaller/larger
-        # This avoids sorting the entire array and isolates the elements we need
-
-        # In-place partition of array based on pivot frequency (low to high sorting)
-        def partitionSection(left, right, randPivotElemIndex):
-            
-            # Frequency of pivot element
-            pivotElemFreq = frequency[unique[randPivotElemIndex]]
-
-            # Move pivot to end
-            # tuple unpacking in python, allows to swap two variables in a single line
-            unique[randPivotElemIndex], unique[right] = unique[right], unique[randPivotElemIndex]
-            
-            # Index to place smaller elements
-            partitionIndex = left
-
-            # Partition elements with freq less than pivotElemFreq to left
-            # time complexity: iterates over unique elements between left and right segment O(m)
-            for i in range(left, right):
-
-                # Lower frequency -> "lower"
-                if frequency[unique[i]] < pivotElemFreq:
-
-                    # swap larger element
-                    unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
-                    partitionIndex += 1
-
-            # swap pivot to its final correct partitioned index
-            # now elements to the right and left follow the conditions according to pivot element
-            unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
-            return partitionIndex
-
-        # QuickSelect helper for low to high sorting
-        # Avg recursion depth: O(log m), space: O(log m)
-        def quickSelectBinarySearchHelper(left, right, finalPartitionMarker):
-            
-            # Base Case: see 'For ascending' below
-            if left == right:
-                return
-
-            # Randomly choose a pivot index
-            # differs from QuickSort "median-of-three" approach
-            # random pivot is focused on finding the k-th smallest or largest
-            # rather than fully sorting the array, random pivot avoids degrading to worst case O(n^2)
-            partitionElemIndex = random.randint(left, right)
-            
-            # Partition the array
-            finalPartitionElemIndex = partitionPivot(left, right, partitionElemIndex)
-
-            # Base Case: see 'For ascending' below
-            if finalPartitionMarker == finalPartitionElemIndex:
-                return
-
-            # Binary Search Modification:
-            # Selects next partition pivot
-            # Recursively QuickSelect on partitioned section (left or right)
-            # where finalPartitionMarker belongs to
-
-            # finalPartitionMarker is in the left partition of resultPivotElemIndex
-            elif finalPartitionMarker < finalPartitionElemIndex:
-                quickSelectBinarySearchHelper(left, finalPartitionElemIndex - 1, finalPartitionMarker)
-            
-            # finalPartitionMarker is in the right partition of resultPivotElemIndex
-            else:
-                quickSelectBinarySearchHelper(finalPartitionElemIndex + 1, right, finalPartitionMarker)
-
-        # time complexity: iterate over list of n length O(n)        
-        frequency = defaultdict(int)
-        for num in nums:
-            frequency[num] += 1
-
-        # Quickselect to find the k most frequent elements
-        unique = list(frequency.keys())
-        n = len(unique)
-        finalPartition = n - k
-        l, r = 0, n - 1
-
-        # For ascending:
-        # say we have a list of 6 elements, we are trying to grab the largest 2 elements
-        # if we do 6 - 2 we get 4.
-        # so if we find we have partitioned and set index 4
-        # we know that the elements 4 and 5 are the 2 largest elements
-        # so we splice [6-2:] = [4:] = [4, 5]
-        # quickSelectBinarySearchHelper(left, right, finalPartitionMarker)
-        quickSelectBinarySearchHelper(l, r, finalPartition)
-
-        # overall: time complexity
-        # overall: space complexity
-        return unique[n - k:]
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Frequency Count | O(n) | O(n) | Iterate over list of n length O(n) | Frequency count for at most n keys O(n) |
-| Unique list | O(m) | O(m) | Grab unique keys from frequency map O(m) | Unique list contains m unique elements O(m) |
-| Single Partition | O(m) | O(1) | Iterates over m unique elements in portion for a single partition O(m) | No additional memory allocation for in-place partition O(1) |
-| Quickselect | O(m log m) | O(log m) | Recursion depth of O(log m) for O(m) elements per level O(m log m) | Recursion stack depth of O(log m) |
-| Overall | O(n + m log m) | O(m) | Iterating over list of n length competes with Quickselect m number of unique elements O(m log m), depending if m &lt;&lt; n or m &#8776; n, leading to O(n + m log m) | Frequency count dominates leading to O(m) |
-
-## Solution 5: BucketSort by Count - Hashmap/Algorithm
+## Solution 3: BucketSort by Count - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
             
