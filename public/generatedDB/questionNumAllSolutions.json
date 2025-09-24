@@ -376,7 +376,7 @@
   "36": [
     {
       "number": 1,
-      "name": "Defaultdict Matrix",
+      "name": "DefaultDict Matrix",
       "type": "hashmap",
       "application": "representation",
       "code": "def isValidSudoku(self, board: List[List[str]]) -> bool:\n        \n        # space complexity: hashsets for rows, columns, and flattened boxes of n length O(n) = O(3n)\n        cols = defaultdict(set)\n        rows = defaultdict(set)\n        grids = defaultdict(set)\n\n        # time complexity: iterating over all cells (r * c) O(n^2)\n        for r in range(9):\n            for c in range(9):\n                \n                tmp = board[r][c]\n                if tmp != \".\":\n\n                    # indexing box sets by tuple key (r/3, c/3)\n                    gridTuple = (r // 3, c // 3)\n\n                    # time complexity: lookup operation for element to corresponding sets in constant O(1)\n                    if (tmp in rows[r] or \n                        tmp in cols[c] or \n                        tmp in grids[gridTuple] ):\n                        return False\n                    \n                    # time complexity: insert operation for new element to corresponding sets in constant O(1)\n                    cols[c].add(tmp)\n                    rows[r].add(tmp)\n                    grids[gridTuple].add(tmp)\n\n        # overall: time complexity O(n^2)\n        # overall: space complexity O(n)\n        return True",
@@ -2156,22 +2156,22 @@
   "238": [
     {
       "number": 1,
-      "name": "Prefix and Postfix O(n)",
+      "name": "Prefix, Postfix, Result Arrays",
       "type": "array",
       "application": "in-place-transformations",
-      "code": "def productExceptSelf(self, nums: List[int]) -> List[int]:\n        \n        # space complexity: prefix, postfix, and result arrays to calculate and store final value for n integers O(n) = O(3n)\n        prefix = [1] * len(nums)\n        postfix = [1] * len(nums)\n        res = [1] * len(nums)\n\n        # Compute prefix products\n        # time complexity: iteration over list of n length O(n)\n        for i in range(1, len(nums)):\n            \n            # time complexity: lookup + multiplication operations take constant O(1)\n            # (prefix of i) = (prefix of i - 1) * (nums[i - 1])\n            prefix[i] = prefix[i - 1] * nums[i - 1]\n\n        # Compute postfix products\n        # time complexity: iteration over list of n length O(n)\n        for i in range(n - 2, -1, -1):\n\n            # time complexity: lookup + multiplication operations take constant O(1)\n            # (postfix of i) = (postfix of i + 1) * (nums[i + 1])\n            postfix[i] = postfix[i + 1] * nums[i + 1]\n\n        # Combine prefix and postfix products\n        # time complexity: iteration over list of length n O(n)\n        for i in range(n):\n\n            # time complexity: lookup + multiplication operations take constant O(1)\n            # (product except self of i) = (prefix of i) * (postfix of i)\n            res[i] = prefix[i] * postfix[i]\n\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return res",
+      "code": "def productExceptSelf(self, nums: List[int]) -> List[int]:\n        \n        # sc: prefix, postfix, result, arrays O(n)\n        prefix = [1] * len(nums)\n        postfix = [1] * len(nums)\n        res = [1] * len(nums)\n\n        # Prefix\n        # tc: iterate list O(n)\n        for i in range(1, len(nums)):\n            \n            # calculate prefix of i = (prefix of i - 1) * (nums[i - 1])\n            prefix[i] = prefix[i - 1] * nums[i - 1]\n\n        # Postfix\n        # postfix starts at 1 = the postfix of len(n) - 1\n        # start reverse iteration at: len(n) - 2\n        # tc: iterate list O(n)\n        for i in range(n - 2, -1, -1):\n\n            # calculate postfix of i = (postfix of i + 1) * (nums[i + 1])\n            postfix[i] = postfix[i + 1] * nums[i + 1]\n\n        # Result\n        # tc: iterate list O(n)\n        for i in range(n):\n\n            # calculate product except self for i = (prefix of i) * (postfix of i)\n            res[i] = prefix[i] * postfix[i]\n\n\n        # overall: tc O(n)\n        # overall: sc O(n)\n        return res",
       "questionNumber": 238,
-      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-prefix-and-postfix-o-n---arrayin-place-transformations",
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-1-prefix-postfix-result-arrays---arrayin-place-transformations",
       "blog": "LeetCode: Arrays and Hashing"
     },
     {
       "number": 2,
-      "name": "Prefix and Postfix Optimal O(1)",
+      "name": "Result Array",
       "type": "array",
       "application": "in-place-transformations",
-      "code": "def productExceptSelf(self, nums: List[int]) -> List[int]:\n        \n        # instantiate to 1, start prefix calculation at res[1], prefix of res[0] is always 1\n        # space complexity: array to store results for n integers O(n) \n        res = [1] * len(nums)\n\n        # Compute prefix products in res\n        # time complexity: iterate over list of size n O(n)\n        for i in range(1, len(nums)):\n\n            # time complexity:\n            # (prefix of i) = (prefix of i - 1) * (num at i - 1)\n            res[i] = res[i - 1] * nums[i - 1]\n\n        # accumulate running postfix through reverse iteration\n        # postfix starts at 1, the postfix of len(n) - 1\n        postfix = 1\n\n        # start iteration at (len(n)-1), postfix of last integer will always be 1\n        # time complexity: iterate over list of size n in reverse O(n)\n        for i in range(len(nums) - 1, -1, -1):\n            \n            # (product except i) = (prefix of i) * (postfix of i)\n            res[i] *= postfix\n            \n            # (postfix of i - 1) = (postfix of i) * (num at i) \n            postfix *= nums[i]\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return res",
+      "code": "def productExceptSelf(self, nums: List[int]) -> List[int]:\n        \n        # sc: result array O(1) \n        res = [1] * len(nums)\n\n        # Prefix\n        # tc: iterate list O(n)\n        for i in range(1, len(nums)):\n\n            # (prefix of i) = (prefix of i - 1) * (num at i - 1)\n            res[i] = res[i - 1] * nums[i - 1]\n\n        # Running postfix through reverse iteration,\n        # postfix starts at 1 = the postfix of len(n) - 1\n        postfix = 1\n\n        # tc: iterate list in reverse O(n)\n        for i in range(len(nums) - 1, -1, -1):\n            \n            # calculate product except self for i = (prefix of i) * (postfix of i)\n            res[i] *= postfix\n            \n            # update postfix = (postfix of i) * (num at i) \n            postfix *= nums[i]\n\n        # overall: tc O(n)\n        # overall: sc O(1)\n        return res",
       "questionNumber": 238,
-      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-prefix-and-postfix-optimal-o-1---arrayin-place-transformations",
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-result-array---arrayin-place-transformations",
       "blog": "LeetCode: Arrays and Hashing"
     }
   ],
