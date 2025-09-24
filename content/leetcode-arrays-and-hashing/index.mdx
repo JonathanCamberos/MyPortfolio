@@ -772,9 +772,9 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| MinHeap |  |  |  |  |
-| Divide and Conquer |  |  |  |  |
-| Quickselect |  |  |  |  |
+| MinHeap | O(n log k) | O(n) | Iterating over freq counts * heap operations dominate, O(n log k) | Allocation for freq count of n elements dominates, O(n) |
+| QuickSelect | Average: O(n) Worst: O(n<sup>2</sup>) | O(n) | Good pivot splits array in half on average O(n), Bad pivot each iteration, smallest or largest, causes O(n<sup>2</sup>)  | Allocation for freq count of n elements dominates, O(n) |
+| BucketSort | O(n) | O(n) | Iterating over list dominates, O(n) | Allocating n buckets dominates, O(n) |
 
 ## Bug: Inverted Binary Search if statement:
 ```python
@@ -991,10 +991,10 @@ Now that we have the count, we just grab the top k highest occurring elements.
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Iterate List | O(n) | O(n) | Iterate over list O(n) | Allocation for n elements O(n) |
-| QuickSort Partition | O(n<sup>2</sup>) | O(1) | Bad pivot choices cause quadratic behavior O(n<sup>2</sup>) | Partition of freq count array occurs in place O(1) |
+| QuickSort Partition | Average: O(n) Worst: O(n<sup>2</sup>) | O(1) | Good pivot splits array in half on average O(n), Bad pivot each iteration, smallest or largest, causes O(n<sup>2</sup>) | Partition of freq count array occurs in place O(1) |
 | QuickSort Recursion | O(k) | O(k) | Iterate over buckets for k steps O(k) | Result list of size k O(k) |
 | Result Splice | O(k) | O(k) | Splicing array for first k elements | Result list of k elements |
-| Overall | O(n<sup>2</sup>) | O(n) | Bad pivot partition dominates O(n<sup>2</sup>) |  |
+| Overall | Average: O(n) Worst: O(n<sup>2</sup>) | O(n) | Bad pivot partition dominates O(n<sup>2</sup>) | Allocation for freq count of n elements dominates, O(n) |
 
 
 ## Solution 3: BucketSort by Count - Hashmap/Algorithm
@@ -1083,135 +1083,90 @@ right of it.
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (all pairs comparison) | O(n<sup>2</sup>) | O(n) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>) | Memory allocation for result array O(n) |
-| Prefix & Postfix | O(n) | O(n) | Three iterations over the array for prefix, postfix, and result calculation O(n) = O(3n)  | Memory allocation for prefix, postfix, and result arrays O(n) = O(3n) |
-| Prefix & Postfix | O(n) | O(1) | Two iterations over the array for prefix and postfix calculations O(n) |  |
+| Prefix & Postfix | O(n) | O(n) | Three iterations, prefix, postfix, result, O(3n) ~= O(n) | Allocation for 3 arrays O(3n) ~= O(n) |
+| Prefix & Postfix | O(n) | O(1) | Two iterations, prefix, postfix, O(n) | Allocation for 1 array O(n) |
 
-## Brute Force (all pairs comparison)
-```python
-    def productExceptSelf(self, nums: List[int]) -> List[int]:
-
-        # space complexity: result array of length n O(n)
-        res = [0] * len(nums)
-
-        # time complexity: iterate over list of n integers O(n) 
-        for i in range(len(nums)):
-
-            # starting value
-            product = 1
-
-            # time complexity: iterate over list of n integers O(n)
-            for j in range(n):
-
-                # skip current index i while multiplying
-                if i != j:
-
-                    # time complexity: multiplication operation takes constant O(1)
-                    product *= nums[j]
-                
-            # time complexity: insert operation takes constant O(1)
-            res[i] = product
-        
-        # overall: time complexity  O(n^2)
-        # overall: space complexity O(n)
-        return res
-```
-
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Result array | O(1) | O(n) | Constant time to instantiate array of length n O(1) | Array to store n elements  O(n) |
-| Outer loop | O(n) | O(1) | Iteration over the list takes linear time O(n) | No additional memory is allocated O(1) |
-| Inner loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, iterates through all remaining elements O(n<sup>2</sup>) | No additional memory is allocated O(1) |
-| Overall | O(n<sup>2</sup>) | O(1) | The nested loops result in O(n<sup>2</sup>) time complexity. Derivation of average case is found O(n<sup>2</sup>) is found [here](/Notescommon-formulas#brute-case-double-for-loop). | Memory allocation for array to store n result elements O(n) |
-
-
-## Solution 1:  Prefix and Postfix O(n) - Array/In Place Transformations
+## Solution 1: Prefix, Postfix, Result Arrays - Array/In Place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        # space complexity: prefix, postfix, and result arrays to calculate and store final value for n integers O(n) = O(3n)
+        # sc: prefix, postfix, result, arrays O(n)
         prefix = [1] * len(nums)
         postfix = [1] * len(nums)
         res = [1] * len(nums)
 
-        # Compute prefix products
-        # time complexity: iteration over list of n length O(n)
+        # Prefix
+        # tc: iterate list O(n)
         for i in range(1, len(nums)):
             
-            # time complexity: lookup + multiplication operations take constant O(1)
-            # (prefix of i) = (prefix of i - 1) * (nums[i - 1])
+            # calculate prefix of i = (prefix of i - 1) * (nums[i - 1])
             prefix[i] = prefix[i - 1] * nums[i - 1]
 
-        # Compute postfix products
-        # time complexity: iteration over list of n length O(n)
+        # Postfix
+        # postfix starts at 1 = the postfix of len(n) - 1
+        # start reverse iteration at: len(n) - 2
+        # tc: iterate list O(n)
         for i in range(n - 2, -1, -1):
 
-            # time complexity: lookup + multiplication operations take constant O(1)
-            # (postfix of i) = (postfix of i + 1) * (nums[i + 1])
+            # calculate postfix of i = (postfix of i + 1) * (nums[i + 1])
             postfix[i] = postfix[i + 1] * nums[i + 1]
 
-        # Combine prefix and postfix products
-        # time complexity: iteration over list of length n O(n)
+        # Result
+        # tc: iterate list O(n)
         for i in range(n):
 
-            # time complexity: lookup + multiplication operations take constant O(1)
-            # (product except self of i) = (prefix of i) * (postfix of i)
+            # calculate product except self for i = (prefix of i) * (postfix of i)
             res[i] = prefix[i] * postfix[i]
 
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return res
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Prefix Computation | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation for prefix array of n length O(n) |
-| Postfix Computation | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation for postfix array of n length O(n) |
-| Product except self computation | O(n) | O(n) | Iterate over prefix/postfix list of n length O(n) | Memory allocation for result array of n length O(n) |
-| Overall | O(n) | O(n) | Iteration over list of n length takes linear time leading to O(n) | Memory allocation for list of n length leading to O(n) | 
+| Prefix | O(n) | O(n) | Iterate over list O(n) | Allocation for prefix array O(n) |
+| Postfix | O(n) | O(n) | Iterate over list O(n) | Allocation for postfix array O(n) |
+| Result | O(n) | O(n) | Iterate over list O(n) | Allocation for result array O(n) |
+| Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation for list dominates, O(n) | 
 
 
-## Solution 2: Prefix and Postfix Optimal O(1) - Array/In Place Transformations
+## Solution 2: Result Array - Array/In Place Transformations
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        # instantiate to 1, start prefix calculation at res[1], prefix of res[0] is always 1
-        # space complexity: array to store results for n integers O(n) 
+        # sc: result array O(1) 
         res = [1] * len(nums)
 
-        # Compute prefix products in res
-        # time complexity: iterate over list of size n O(n)
+        # Prefix
+        # tc: iterate list O(n)
         for i in range(1, len(nums)):
 
-            # time complexity:
             # (prefix of i) = (prefix of i - 1) * (num at i - 1)
             res[i] = res[i - 1] * nums[i - 1]
 
-        # accumulate running postfix through reverse iteration
-        # postfix starts at 1, the postfix of len(n) - 1
+        # Running postfix through reverse iteration,
+        # postfix starts at 1 = the postfix of len(n) - 1
         postfix = 1
 
-        # start iteration at (len(n)-1), postfix of last integer will always be 1
-        # time complexity: iterate over list of size n in reverse O(n)
+        # tc: iterate list in reverse O(n)
         for i in range(len(nums) - 1, -1, -1):
             
-            # (product except i) = (prefix of i) * (postfix of i)
+            # calculate product except self for i = (prefix of i) * (postfix of i)
             res[i] *= postfix
             
-            # (postfix of i - 1) = (postfix of i) * (num at i) 
+            # update postfix = (postfix of i) * (num at i) 
             postfix *= nums[i]
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return res
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Prefix Computation | O(n) | O(1) | Iteration over list of n length O(n) | Prefix value stored directly in result array O(1) |
-| Postfix Computation + Product except self computation | Iteration over list of n length O(n) | Postfix value stored in integer, product except self stored in result array O(1) |  |  |
-| Overall | O(n) | O(1) | Iteration over list of n length O(n) | Prefix, postfix, and product except self all stored in result array or an integer leading to constant O(1) |
+| Prefix | O(n) | O(1) | Iteration over list O(n) | Allocation for result array O(1) |
+| Result  | O(n) | O(1) | Iteration over list O(n) | Allocation for result array O(1) |
+| Overall | O(n) | O(1) | Iteration over list dominates, O(n) | Allocation for result array dominates, O(1) |
 
 
 # 36. Valid Sudoku ::2:: - Medium
