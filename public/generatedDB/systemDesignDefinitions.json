@@ -375,10 +375,22 @@
       "id": 1,
       "perspective": "Definition",
       "diagramId": null,
-      "bodyString": "The server maintains session state for each client\nacross multiple requests.\n\nExamples of Stateful:\n- Logged In Sessions stored in server memory\n- \n",
-      "bodyCode": null,
-      "bodyCodeLanguage": null,
+      "bodyString": "The server maintains session state for each client\nacross multiple requests.\n\nExamples of Stateful:\n- Logged In Sessions stored in server memory\n\n",
+      "bodyCode": "+----------+           +----------+           +---------+\n|  User A  |           |  User B  |           | User C  |\n+----------+           +----------+           +---------+\n     | HTTP Req             | HTTP Req            | HTTP Req\n     v                      v                     v\n+--------------+      +--------------+      +-------------+\n|   Server 1   |      |   Server 2   |      |   Server 3  |\n+--------------+      +--------------+      +-------------+\n| - Session A  |      | - Session B  |      | - Session C |\n| - Profile A  |      | - Profile B  |      | - Profile C |\n+--------------+      +--------------+      +-------------+",
+      "bodyCodeLanguage": "python",
       "definitionLink": "/Notes/systemdesign-system-design-interview#stateful-architecture"
+    }
+  ],
+  "Stateless Architecture": [
+    {
+      "topic": "Stateless Architecture",
+      "id": 1,
+      "perspective": "Definition",
+      "diagramId": null,
+      "bodyString": "The server maintains no session state for each client\nacross multiple requests.\n\nExamples of Stateless:\n- Logged In Sessions stored in server memory\n",
+      "bodyCode": "+---------+       +---------+       +---------+\n| User A  |       | User B  |       | User C  |\n+---------+       +---------+       +---------+\n     |                |                |            HTTP Req\n     v                v                v\n                 +-------------+\n                 |   Server 1  |\n                 +-------------+\n                       |\n                       v\n            +-------------------------+\n            |     Shared Session DB   |\n            +-------------------------+\n            | - Session A / Profile A |\n            | - Session B / Profile B |\n            | - Session C / Profile C |\n            +-------------------------+\n\n===============================================================\n\n+---------+       +---------+       +---------+\n| User A  |       | User B  |       | User C  |\n+---------+       +---------+       +---------+\n        |              |              |\n        |              |              |    HTTP Req with JWT / token\n        |              |              |\n        v              v              v\n                 +-------------+\n                 |   Server 1  |\n                 +-------------+\n                 |  Stateless  |\n                 |  No session |\n                 |  stored     |\n                 +-------------+",
+      "bodyCodeLanguage": "python",
+      "definitionLink": "/Notes/systemdesign-system-design-interview#stateless-architecture"
     }
   ],
   "Throughput": [

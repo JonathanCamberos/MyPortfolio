@@ -18,50 +18,58 @@ Two Pointers is the strategy of using a left and right pointer
 to iterate over a data structure, usually an array, to solve a problem.
 
 ## Two Pointers Application: One Pointer with Auxiliary State
-We can use a single pointer to iterate linearly and keep track of
-additional state variables to either simulate a second pointer
-or store relevant data.
+We can use a single pointer to iterate linearly and have a second
+variable to keep track of some state or action.
 
-Ex: Move all zeros to end of array while maintaining order
+Ex: Find the maximum consecutive ones in an array
 ```python
-    def move_zeros(nums: list[int]) -> None:
+    def max_consecutive_ones(nums: list[int]) -> int:
 
-        # Slot where non-zero value should go
-        partition = 0
+        # Aux state: track current streak
+        count = 0
 
-        # Pointer iteration
-        for left in range(len(nums)):
+        # Aux state: track max streak
+        max_count = 0
 
-            # Move non-zero values to current slot
-            if nums[left] != 0:
-                nums[last_non_zero_found_at], nums[left] = nums[left], nums[last_non_zero_found_at]
-                
-                # next non-zero slot
-                last_non_zero_found_at += 1
+        # Left Pointer: iterate array
+        for right in range(len(nums)):
+            
+            # Condition: while consecutive 1's is true
+            if nums[right] == 1:
+                # Aux state: add to streak
+                count += 1
+                max_count = max(max_count, count)
+            else:
+                # Aux state: reset streak
+                count = 0
 
-    # input:  [0, 1, 0, 3, 12] 
-    # output: [1, 3, 12, 0, 0]
+        return max_count
+
+    # max_consecutive_ones([1,1,0,1,1,1]) -> 3
 ```
 
 ## Two Pointers Application: Opposite Ends
-We can have two pointers starting at opposite ends of a list and move them inward 
-while validating some sort of logic.
+We can have two pointers, left and right, starting at opposite 
+ends of a list and move them inward while validating some sort of logic,
+stopping when their indexes hit left == right at the middle of the array
 
 Ex: Determine if a string is a palindrome
 ```python
     def is_palindrome(s: str) -> bool:
 
-        # init to start and end of array
+        # Left: start of array
+        # Right: end of array
         left, right = 0, len(s) - 1
 
-        # until middle of array is hit
+        # Break when left and right pointers match 
+        # when the middle of the array is hit
         while left < right:
 
-            # if palindrome is broken
+            # if palindrome invariant is broken
             if s[left] != s[right]:
                 return False
 
-            # continue towards middle
+            # shrink left and right pointers towards middle
             left += 1
             right -= 1
 
@@ -73,40 +81,45 @@ Ex: Determine if a string is a palindrome
 ```
 
 ## Two Pointers Application: Sliding Window
-We can have two pointers represent a window from [Left, Right] over 
-a sequence that expands or shrinks to satisfy a condition.
+We can have two pointers represent a imaginary window, [Left, Right],
+over a sequence that expands or shrinks while iterating or 
+checking if a condition is satisfied.
 
 Ex: Find the length of the longest substring without repeating characters.
 ```python
     def longest_unique_substring(s: str) -> int:
 
-        # start of window, left side
+        # Left: start of window
         left = 0
 
-        # window data, stores unique chars within window range
+        # Window data: stores unique chars within window range
         char_set = set()
 
-        # window data, stores length of all windows
+        # Window data: stores max window found up to now
         maxLength = 0
 
-        # expand window length, right side
+        # Right: end of window, expand window range as we iterate
         for right in range(len(s)):
 
-            # if unique char is broken, remove from left side until
-            # unique char is true again
+            # Invariant: window holds list of unique chars
+            # Broken: if condition is broken, shrink window from the 
+            # left side until the unique char condition is true again
             while s[right] in char_set:
-                # remove data
+
+                # Window data: remove char on left boundary of window
                 char_set.remove(s[left])
-                # shrink window
+                
+                # Left: start of window, shrink window range
                 left += 1
             
-            # add to window data
+            # Invariant: window holds list of unique chars
+
+            # Window data: add char unique list, guaranteed to be unique
             char_set.add(s[right])
   
-            # update length, compare against global max
+            # Window data: check global max
             maxLength = max(maxLength, right - left + 1)
 
-        # global max window length      
         return maxLength
 
     # longest_unique_substring("abcabcbb") -> 3
@@ -114,11 +127,14 @@ Ex: Find the length of the longest substring without repeating characters.
 
 
 ## Two Pointers Application: Fast & Slow Pointers 
-We can have have two pointers moving at different speeds to detect cycles 
+We can traverse linked lists using pointers. In this case two 
+pointers moving at different speeds x1 and x2 can detect cycles 
 or find midpoints in linked lists or arrays.
 
 Ex: Detect a cycle in a linked list.
 ```python
+
+    # linked list node definition
     class ListNode:
         def __init__(self, value=0, next=None):
             self.value = value
@@ -126,11 +142,13 @@ Ex: Detect a cycle in a linked list.
 
     def has_cycle(head: ListNode) -> bool:
         
-        # tortoise and hare pointers
+        # Tortoise, hare pointers: same starting index
         slow, fast = head, head
+
         while fast and fast.next:
 
-            # iterate fast x2, slow x1
+            # Tortoise pointer: x1 steps
+            # Hare pointer: x2 steps
             slow = slow.next
             fast = fast.next.next
 
@@ -139,14 +157,14 @@ Ex: Detect a cycle in a linked list.
             if slow == fast:
                 return True
 
-        # reached end of list
+        # reached end of list, no cycles
         return False
 
-    # List with a cycle: 1 -> 2 -> 3 -> 4 -> 2 (cycle)
-    # has_cycle(node1) -> True
+    # LinkedList: 1 -> 2 -> 3 -> 4 -> 2
+    # has_cycle(head) -> True
 ```
 
-## Two Pointers Application: Partitioning
+## Two Pointers Application: Lomuto Partition
 We can have two pointers in the same array moving inward/outward 
 to rearrange elements based on a condition.
 
@@ -154,30 +172,33 @@ Ex: Lomuto partition scheme in quicksort
 ```python
     def partition(nums, pivot):
 
-        # current flip slot
+        # Left: partition flip slot
         left = 0
 
-        # iterate right pointer over array
+        # Right: iterate array checking condition
         for right in range(len(nums)):
 
-            # condition: if curr val is less that pivot val, flip to left side
+            # Condition: if curr element value is less than pivot val, 
+            # flip element to left side of array in place
             if nums[right] < pivot:
 
-                # swap curr val with flip slot
+                # Flip: swap element with flip slot
                 nums[left], nums[right] = nums[right], nums[left]
 
-                # iterate flip slot
+                # Left: iterate flip slot by 1 step
                 left += 1
 
-        # left is first index where element >= pivot
-        return nums, left 
+        # Left: ends up pointing to first index where all elements 
+        # are greater than the pivot value
+        return (nums, left)
 
-    # partition([9, 3, 5, 2, 8, 1, 6], 5) -> [3, 2, 1, 5, 8, 9, 6], index = 5
+    # partition([9, 3, 5, 2, 8, 1, 6], 5) -> ([3, 2, 1, 5, 8, 9, 6], 5)
 ```
 
-## Two Pointers Application: K Parallel Pointer Traversal 
-We can have k pointers traversing separate arrays in parallel to 
-merge, compare, or find intersections.
+## Two Pointers Application: Parallel Array Pointer Traversal 
+We can expand our previous application cards to use k pointers 
+traversing separate k arrays in parallel to merge, compare, 
+find intersections, or other patterns.
 
 Ex: Merge two sorted arrays into one sorted array
 ```python
@@ -185,13 +206,13 @@ Ex: Merge two sorted arrays into one sorted array
 
         result = []
 
-        # k = 2 pointers
+        # i / j: 2 pointers
         i, j = 0, 0
 
-        # iterate both pointers, while elements remain in both lists 
+        # i / j: parallel iterate array, while elements remain in both lists 
         while i < len(arr1) and j < len(arr2):
 
-            # compare both pointers, append smaller
+            # Merge: append smaller element between arrays 
             if arr1[i] < arr2[j]:
                 result.append(arr1[i])
                 i += 1
@@ -199,21 +220,22 @@ Ex: Merge two sorted arrays into one sorted array
                 result.append(arr2[j])
                 j += 1
         
-        # One list has run out of elements, append rest of list
+        # Merge: one list has run out of elements, 
+        # append list with remaining elements as its already sorted
         result.extend(arr1[i:])
         result.extend(arr2[j:])
 
-        # return sorted array
+        # merged sorted array
         return result
 
     # merge_sorted_arrays([1, 3, 5], [2, 4, 6]) -> [1, 2, 3, 4, 5, 6]
 ```
 
-## Two Pointers Application: Catchup
+## Two Pointers Application: Catchup Pointer
 We can have two pointers traversing an array. The left pointer can
-remain frozen while the right pointer iterates until it hits a delimiter,
-at which point the left jumps (catches up) to right+1 to mark the start
-of the next section.
+be responsible for being frozen until the right pointer hits a delimiter,
+at which point some logic executes, then left jumps 'catches up' but 
+jumping to right+1 to mark the start of the next section/iteration.
 
 Ex: Split string by spaces
 ```python
@@ -221,32 +243,35 @@ Ex: Split string by spaces
 
         words = []
 
-        # start of current word
+        # Left: frozen until right hits delim
         left = 0
-        # scanning pointer
+
+        # Right: iterate list checking for delim
         right = 0
 
-        # iterate looking for delimiters
+        # Right: iterate list
         while right < len(s):
 
-            # found delimiter
+            # Right condition: delimiter found
             if s[right] == delim:
 
-                # non-empty word, splice and add to array
+                # Logic: check if non-empty word, 
+                # then splice word and add to array
                 if left != right:
                     words.append(s[left:right])
 
-                # catch up: move start to after delim
+                # Left: Catch up, move to right+1, to 1 index
+                # after the delimiter, to restart scanning for delim
                 left = right + 1
 
-            # move right pointer
+            # Right: iterate pointer, either after delim
+            # or to next index
             right += 1
 
-        # hit end of string, check if last word exists
+        # Right: hit end of string, check if last word exists
         if left < len(s):
             words.append(s[left:])
 
-        # return split words
         return words
 
 
@@ -258,26 +283,37 @@ We can extend the two pointers to k pointers. These pointers could follow
 any of the pointer applications, traverse the same list, different lists, 
 freeze while moving others, etc.
 
-Ex: Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] that sum to 0.
+Ex: Given array, return unique triplets [nums[i], nums[j], nums[k]] that sum to 0.
 ```python
     def threeSum(nums):
 
-        nums.sort()  # Step 1: Sort the array
         result = []
+        nums.sort()
 
+        # k: 3 pointers, i, left, right
+
+        # i: iterate pointer as 'frozen' pointer
         for i in range(len(nums)):
-            # Avoid duplicates for the first element
+
+            # i: Avoid duplicates
             if i > 0 and nums[i] == nums[i - 1]:
                 continue
 
-            # Two-pointer approach
+            # Inner two pointer approach:
+
+            # Left: 1 index after frozen pointer
+            # Right: right end of array
             left, right = i + 1, len(nums) - 1
             while left < right:
-                current_sum = nums[i] + nums[left] + nums[right]
+
+                # Condition: check if triplet sum == 0
+                current_sum = nums[i] + nums[left] + nums[right]                
                 if current_sum == 0:
+
+                    # Match: add triplet
                     result.append([nums[i], nums[left], nums[right]])
 
-                    # Move pointers and avoid duplicates
+                    # Left / Right: Iterate to avoid duplicates
                     left += 1
                     while left < right and nums[left] == nums[left - 1]:
                         left += 1
@@ -285,10 +321,17 @@ Ex: Given an integer array nums, return all the unique triplets [nums[i], nums[j
                     while left < right and nums[right] == nums[right + 1]:
                         right -= 1
 
+                # Search: 
+                # left end has lowest numbers, right end has highest numbers,
+                # shift towards whichever gets triplet sum closer to 0
+
+                # Left: shift towards higher numbers
                 elif current_sum < 0:
-                    left += 1  # Increase sum by moving left pointer rightward
+                    left += 1 
+
+                # Right: shift towards lower numbers 
                 else:
-                    right -= 1  # Decrease sum by moving right pointer leftward
+                    right -= 1
 
         return result
 
@@ -303,7 +346,7 @@ Ex: Manacher's Algorithm, longest palindromic substring
 ```python
     def longestPalindrome(s: str) -> str:
 
-        # Preprocess the string to handle even-length palindromes
+        # Preprocess the string to handle even length palindromes
         t = "#".join(f"^{s}$")
         n = len(t)
         p = [0] * n
@@ -311,13 +354,15 @@ Ex: Manacher's Algorithm, longest palindromic substring
 
         
         for i in range(1, n - 1):
-            mirror = 2 * center - i  # Mirror of `i` with respect to `center`
 
-            # If within bounds of the current right boundary
+            # Mirror of `i` with respect to `center`
+            mirror = 2 * center - i
+
+            # If within bounds of the current right boundary, use mirror head start 
             if i < right:
                 p[i] = min(right - i, p[mirror])
 
-            # Expand around `i`
+            # Expand around 'i' while palindrome condition true
             while t[i + p[i] + 1] == t[i - p[i] - 1]:
                 p[i] += 1
 
@@ -328,7 +373,11 @@ Ex: Manacher's Algorithm, longest palindromic substring
 
         # Find the maximum length palindrome
         maxLen, centerIndex = max((n, i) for i, n in enumerate(p))
-        start = (centerIndex - maxLen) // 2  # Convert index back to original string
+
+        # Convert index back to original string
+        start = (centerIndex - maxLen) // 2
+        
+        # Grab palindrome substring
         return s[start: start + maxLen]
 ```
 
@@ -337,10 +386,11 @@ Ex: Manacher's Algorithm, longest palindromic substring
 Topics:  Two Pointers, String 
 
 ## Intro
-> A phrase is a palindrome if, after converting all uppercase letters into lowercase letters 
-> and removing all non-alphanumeric characters, it reads the same forward and backward. 
-> Alphanumeric characters include letters and numbers.
-> Given a string s, return true if it is a palindrome, or false otherwise.
+> A phrase is a palindrome if, after converting all uppercase letters into 
+> lowercase letters  and removing all non-alphanumeric characters, it reads 
+> the same forward and backward. Alphanumeric characters include letters 
+> and numbers. Given a string s, return true if it is a palindrome, or 
+> false otherwise.
 
 |  Input                             | Output  |  
 | ---------------------------------- | ------- | 
@@ -353,70 +403,33 @@ Constraints:
 string s consists only of printable ASCII characters.
 
 ## Abstraction 
-Using two pointers, L and R, we can traverse the string validating palindrome status.
-
-We can convert the string s into lowercase, 
-traverse using pointers comparing characters on the start and end of the string.
+Using two pointers, L and R, we can traverse the string validating 
+palindrome status as we iterate.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force One Pointer | O(n) | O(n) | Iterate over string of n length O(n) | Memory allocation for cleaned list of n length O(n) |
 | Two Pointer | O(n) | O(n) | Iterate over string of n length O(n) | Memory allocation for cleaned list of n length O(n) |
 | Two Pointer In Place | O(n) | O(1) | Iterate over string of n length O(n) | No additional memory allocation for in place comparison O(1) |
 
-## Brute Force One Pointer
-```python
-    def isPalindrome(self, s: str) -> bool:
-
-        # space complexity: list to store cleaned string of n length O(n)
-        cleaned = []
-
-        # simple way for alphaNum check
-        def alphaNum(c):
-            return (ord('A') <= ord(c) <= ord('Z') or 
-                    ord('a') <= ord(c) <= ord('z') or 
-                    ord('0') <= ord(c) <= ord('9'))
-
-        # time complexity: iterate over string of n length O(n)
-        for c in s:
-
-            if alphaNum(c):
-                if 'A' <= c <= 'Z':
-                    cleaned.append(chr(ord(c) + 32))
-                else:
-                    cleaned.append(c)
-
-        # time complexity: two pointer iteration of string of n length O(n)
-        n = len(cleaned)
-        for i in range(n // 2):
-            if cleaned[i] != cleaned[n - i - 1]:
-                return False
-
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
-        return True
-```
-
-## Find the Bug: Less than instead of Less than or equal to
+## Bug: Used Less than Instead of Less than or equal to
 ```python
 def isPalindrome(self, s: str) -> bool:
 
-        # INCORRECT:
+        # BUG:
         # not including outer characters
         def isAlphaNum(c):
             return (ord('a') < ord(c) < ord('z') or
                     ord('A') < ord(c) < ord('Z') or
                     ord('0') < ord(c) < ord('9'))
 
-        # INCORRECT:
+        # BUG:
         # not including outer characters
         def isUpper(c):
             return (ord('A') < ord(c) < ord('Z'))
 
         def toLower(c):
             return chr(ord(c) + 32)
-
 
         cleaned = []
 
@@ -427,7 +440,6 @@ def isPalindrome(self, s: str) -> bool:
                 else:
                     cleaned.append(c)
 
-        
         left, right = 0, len(cleaned)-1
 
         while left < right:
@@ -440,7 +452,7 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Find the Bug: Not Moving Pointers (thinking we are)
+## Bug: Not Moving Pointers In 1 of 2 Cases
 ```python
     def isPalindrome(self, s: str) -> bool:
 
@@ -488,7 +500,7 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Find the Bug: Missing Char Palindrome Comparison (again, im half asleep, my bad :) ]
+## Bug: Missing Char Palindrome Comparison, im half sleep ok give me a break :')
 ```python
     def isPalindrome(self, s: str) -> bool:
 
@@ -519,8 +531,8 @@ def isPalindrome(self, s: str) -> bool:
             if isUpper(rightChar):
                 rightChar = toLower(rightChar)
 
-            # INCORRECT:
-            # missing char comparison
+            # BUG:
+            # missing palindrome validation
 
             l += 1
             r -= 1
@@ -531,78 +543,80 @@ def isPalindrome(self, s: str) -> bool:
 ```python
     def isPalindrome(self, s: str) -> bool:
         
-        # space complexity: cleaned version of string of n length O(n)
+        # sc: cleaned version of string O(n)
         phrase = ""
 
-        # time complexity: iterate over string of n length O(n)
+        # tc: iterate string O(n)
         for c in s:
+
+            # only compare alphaNum
             if c.isalnum():
                 phrase += c.lower()
         
         # slicing
         # [start:stop:step]
         # [::-1]
-        # here start and stop are omitted, so the slice includes the entire sequence
-        # step is -1, which indicates that sequences should be traversed in reverse order
+        # if start and stop are omitted, slice includes the entire sequence
+        # step is -1, indicates to traverse in reverse
 
-        # phrase is traversed left to right
-        # phrase[::-1] is traversed right to left
+        # compare original string to reversed string
         return phrase == phrase[::-1]
 ```
-
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Cleaned list | O(n) | O(n) | Iterate over list of n length O(n) | Memory allocation to store clean string of n length O(n) |
-| Palindrome Check | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
+| Clean list | O(n) | O(n) | Iterate string O(n) | Allocation for clean string O(n) |
+| Palindrome Check | O(n) | O(1) |  operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
 | Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
 
 ## Solution 2: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
-        # space complexity: cleaned version string of n length O(n)
+        # sc complexity: cleaned version string of n length O(n)
         cleaned = []
 
-        # isAlphaNum check using ord()
+        # helper: check if isAlphaNum
         def isAlphaNum(c):
             return (ord('A') <= ord(c) <= ord('Z') or 
                     ord('a') <= ord(c) <= ord('z') or 
                     ord('0') <= ord(c) <= ord('9'))
 
+        # helper: check if uppercase
         def isUpper(c):
             return ord('A') <= ord(c) <= ord('Z')
 
+        # helper: shift upper to lowercase
         def toLower(c):
             return chr(ord(c) + 32)
 
-        # time complexity: iterate over string of n length O(n)
+        # tc: iterate string O(n)
         for c in s:
 
-            # skip until isAlphaNum char
+            # Condition: only compare isAlphaNum
             if isAlphaNum(c):
                 
-                # Convert to lowercase char
+                # Condition: only compare lowercase
                 if isUpper(c):
                     cleaned.append(toLower(c))
                 else:
                     cleaned.append(c)
 
-        # clean is now lowercase alphaNum
-        # compare using left and right pointers
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate clean list O(n)
         left, right = 0, len(cleaned) - 1
         while left < right:
+
+            # Condition: validate palindrome
             if cleaned[left] != cleaned[right]:
                 return False
+
+            # Left/Right: shrink pointers towards center
             left += 1
             right -= 1
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return True
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Cleaned list | O(n) | O(n) | Iterating over list of n length O(n) | Memory allocation to store clean string of n length O(n) |
@@ -614,52 +628,54 @@ def isPalindrome(self, s: str) -> bool:
 ```python 
     def isPalindrome(self, s: str) -> bool:
 
-        # isAlphaNum check using ord()
+        # helper: check if isAlphaNum
         def isAlphaNum(c):
             return (ord('A') <= ord(c) <= ord('Z') or 
                     ord('a') <= ord(c) <= ord('z') or 
                     ord('0') <= ord(c) <= ord('9'))
 
+        # helper: check if uppercase
         def isUpper(c):
             return ord('A') <= ord(c) <= ord('Z')
 
+        # helper: shift upper to lowercase
         def toLower(c):
             return chr(ord(c) + 32)
 
-        # space complexity: no additional space used for storage O(1)
-        left, right = 0, len(s) - 1
+        # s complexity: no additional space used for storage O(1)
 
-        # time complexity: iteration over string of n length O(n)
+        # tc: iterate string O(n)
+        left, right = 0, len(s) - 1
         while left < right:
             
-            # time complexity: move left and right to isAlphaNum char O(n)
+            # Condition: only compare alphaNum
             while left < right and not isAlphaNum(s[left]):
                 left += 1
             while left < right and not isAlphaNum(s[right]):
                 right -= 1
 
-            # Convert left and right to lowercase char
+            # grab pointer values
             leftChar = s[left]
             rightChar = s[right]
 
+            # Condition: only compare lowercase
             if isUpper(leftChar):
                 leftChar = toLower(leftChar)
             if isUpper(rightChar):
                 rightChar = toLower(rightChar)
 
-            # Compare left and right char
+            # Condition: validate palindrome
             if leftChar != rightChar:
                 return False
 
-            # move pointers
+            # Left/Right: shrink pointers towards center
             left += 1
             right -= 1
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return True
 ``` 
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Two Pointer | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
@@ -671,7 +687,6 @@ def isPalindrome(self, s: str) -> bool:
 Topics:  Two Pointers, Design
 
 ## Intro
-
 > Design an algorithm to encode a list of strings to a single string.
 > The encoded string is then decoded back to the original list of strings
 > Please implement encode and decode.
@@ -693,7 +708,7 @@ as well as its length.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Two Pointers Length Delimiter |  |  |  |  |
 
-## Find the Bug: Decoded Length + Delimiter (Grabbed str(len) instead int(len))
+## Bug: Decoded Length + Delimiter (Grabbed str(len) instead int(len))
 ```python
     def decode(self, encoded: str) -> List[str]:
 
@@ -710,7 +725,7 @@ as well as its length.
                 right += 1
 
             # splicing the length of the string
-            # INCORRECT: 
+            # BUG: 
             # length is a string, cannot use it to index or add
             # need to use int()
             length = encoded[left:right]
@@ -730,7 +745,7 @@ as well as its length.
         return decoded
 ```
 
-## Find the Bug: Decoded Base 10 doing += instead of = (half asleep)
+## Bug: Decoded Base 10 doing += instead of = (half asleep)
 ```python
     def decode(self, encoded: str) -> List[str]:
         
@@ -746,7 +761,7 @@ as well as its length.
             currLen = 0
             while encoded[left] != "#":
 
-                # INCORRECT:
+                # BUG:
                 # we need to update currLen, not add to it
                 currLen += (10*currLen) + int(encoded[left])
                 left += 1
@@ -768,7 +783,8 @@ as well as its length.
 ```python
     def encode(self, strs: List[str]) -> str:
 
-        # Note: python strings are immutable so concatenation with += "" 
+        # Note: 
+        # python strings are immutable so concatenation with += "" 
         # python creates new string time complexity o(n^2)
         # python list .append() modifies list in place by adding a single
         # element at end in O(1) operation
@@ -861,7 +877,8 @@ as well as its length.
 ```python
     def encode(self, strs: List[str]) -> str:
 
-        # Note: python strings are immutable so concatenation with += "" 
+        # Note: 
+        # python strings are immutable so concatenation with += "" 
         # python creates new string time complexity o(n^2)
         # python list .append() modifies list in place by adding a single
         # element at end in O(1) operation

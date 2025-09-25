@@ -769,7 +769,7 @@ updating object versioning to server a newer version of some object.
 
 
 
-## State Web Tier
+## State and Stateless Web Tier
 
 ### Intro 
 The web tier, (the application servers that handle HTTP requests), can
@@ -791,11 +791,68 @@ across multiple requests.
 
 Examples of Stateful:
 - Logged In Sessions stored in server memory
-- 
+
+```python
++----------+           +----------+           +---------+
+|  User A  |           |  User B  |           | User C  |
++----------+           +----------+           +---------+
+     | HTTP Req             | HTTP Req            | HTTP Req
+     v                      v                     v
++--------------+      +--------------+      +-------------+
+|   Server 1   |      |   Server 2   |      |   Server 3  |
++--------------+      +--------------+      +-------------+
+| - Session A  |      | - Session B  |      | - Session C |
+| - Profile A  |      | - Profile B  |      | - Profile C |
++--------------+      +--------------+      +-------------+
+```
 
 {/* end */}
 
 ### Stateless Architecture
+{/* def: topic=Stateless Architecture id=1 perspective=Definition */}
+Stateless Architecture: The server maintains no session state for each client
+across multiple requests.
+
+Examples of Stateless:
+- Logged In Sessions stored in server memory
+
+```python
++---------+       +---------+       +---------+
+| User A  |       | User B  |       | User C  |
++---------+       +---------+       +---------+
+     |                |                |            HTTP Req
+     v                v                v
+                 +-------------+
+                 |   Server 1  |
+                 +-------------+
+                       |
+                       v
+            +-------------------------+
+            |     Shared Session DB   |
+            +-------------------------+
+            | - Session A / Profile A |
+            | - Session B / Profile B |
+            | - Session C / Profile C |
+            +-------------------------+
+
+===============================================================
+
++---------+       +---------+       +---------+
+| User A  |       | User B  |       | User C  |
++---------+       +---------+       +---------+
+        |              |              |
+        |              |              |    HTTP Req with JWT / token
+        |              |              |
+        v              v              v
+                 +-------------+
+                 |   Server 1  |
+                 +-------------+
+                 |  Stateless  |
+                 |  No session |
+                 |  stored     |
+                 +-------------+
+```
+{/* end */}
 
 ## Data Centers
 
