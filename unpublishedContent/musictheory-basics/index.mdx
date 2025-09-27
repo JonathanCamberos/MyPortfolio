@@ -1,0 +1,262 @@
+---
+title: "Music Theory: The Basics"
+description: "the 144 chords"
+image: "../../public/Notes/notepad-blue-1.png"
+publishedAt: "2025-09-20"
+updatedAt: "2025-09-26" 
+author: "jonathancamberos"
+isPublished: true
+tags: 
+- music theory
+---
+
+# Circle of 5ths -> 4 Half Circles
+
+## Intro
+The circle of 5ths for me is a bit confusing 
+in its visual representation. I cant think or read 
+counter clockwise flats as I can clockwise with sharps,
+so I made this trick for me to be able to think faster.
+Additionally this also helps with getting chords that 
+are not displayed on the circle of fifths.
+
+### Problem 1: Missing 6 notes/keys
+
+If we put every note possible on a table, we get:
+- A  B  C  D  E  F  G 
+- Ab Bb Cb Db Eb Fb Gb
+- A# B# C# D# E# F# G#
+
+If we match this table with notes on the circle of fifths:
+```js
+                C       
+       F _____________ G  
+       /               \
+  Bb /                   |  D 
+    /                     \
+   |                       |
+Eb |                       | A 
+   |                       |
+    |                     | 
+ Ab  |                   | E
+      |                 /
+    Db |______________  B  
+   C#          F#       Cb
+               Gb
+```
+We get:
+- A  B  C  D  E  F  G 
+- Ab Bb Cb Db Eb    Gb
+-                F#   
+
+With the circle of 5ths we are missing
+these 6 notes:
+- A  B  C  D  E  F  G 
+-                Fb
+
+How do we derive the missing notes?
+We get this by the 4 half circles shown below
+
+
+### Problem 2: Thinking About Flats Fast
+
+The second problem is that I for the life of me cannot
+read a circle counter clockwise as fast as I can clockwise.
+Im guessing its because my brain has been wired to read 
+right to left or just read a clock 1->12, just a small quirk.
+
+How do we fix the slowness problem?
+We can represent the 4 half circles all as clock wise
+using the 4 right halves of a circle.
+
+### Solution: 4 Right Half Circles
+
+Start with the circle of fifths and split it in half.
+```js
+// Start with the right half of circle of 5ths
+// then extend it
+    C       
+    ______ G  
+          \
+           |  D 
+            \
+             |
+             | A 
+             |
+            | 
+           | E
+          /
+    ______  B  
+   F#           
+```
+
+Now, use the same shape for the original circle of fifths
+```js
+// 2 halves
+    C              C              Cb              C#
+    _____ G       ______ F        _____ Fb       _____  G#
+          \              \              \              \
+           |  D           | Bb           |              |  D#
+            \              \             \               \
+             |             |              |               |
+             | A           | Eb            |              | A#
+             |             |              |               |
+            |             |              |               |
+           | E           | Ab           |               | E#
+          /             /              /               /
+    ____  B       ______ Db         ____           ____ B#
+   F#              Gb                               
+```
+
+And then lets add in the notes we were missing from problem 1:
+- A  B  C  D  E  F  G 
+-                Fb
+```js
+// 4 halves
+    C              C              Cb              C#
+    _____ G       ______ F        _____ Fb       _____  G#
+          \              \              \              \
+           |  D           | Bb           |              |  D#
+            \              \             \               \
+             |             |              |               |
+             | A           | Eb            |              | A#
+             |             |              |               |
+            |             |              |               |
+           | E           | Ab           |               | E#
+          /             /              /               /
+    ____  B       ______ Db         ____           ____ B#
+   F#              Gb                               
+```
+Now we have a visual diagram of:
+- How to derive all 21 notes, by modifying original notes/chords
+on the circle (e.g., D -> D#, just sharp every note in the D chord
+- We can traverse flats quicker by going by 4ths clockwise
+
+# The ~144 Chords
+
+## Intro
+
+Since brute force memorization seems to ALWAYS be the answer
+im going to write out every possible combination of 'beginner'
+chords and sort the chords into a derivation shortcut 
+similar to the circle of fifths. Here we can use a graph structure
+and see the original parent chords and its children derived chords.
+
+To start, we will learn 13 basic chords.
+They are derived from the major, minor, and sus triads
+to form graph structures from the parent triad.
+
+## Major Triad -> Seventh + Sixth Graph ::5::
+```js 
+                Major: 1 3 5    
+                  |      |   \  
+                / |      |    Aug: 1 3 5#  
+               /  |      |          
+Major 7: 1 3 5 7  |      |
+                 / \     (major triad)  
+                /   \    Aug Maj 7: 1 3 5 7#    
+Dominant: 1 3 5 7b   \            = 1 3 5 1          
+                      \ 
+                     (diminished major 7)
+                     Major 6th: 1 3 5 6 
+                              = 1 3 5 7bb     
+```
+
+## Minor Triad -> Seventh + Sixth Graph ::6::
+```js
+                Minor: 1 3b 5
+                   |    | \   
+                 / |    |   Dim: 1 3b 5b
+Minor 7: 1 3b 5 7b |    | \   
+                   |    |  \    
+                  /     |   Half Dim 7: 1 3b 5b 7b  
+(diminished minor 7)     \
+Minor 6th: 1 3b 5 6       \
+         = 1 3b 5 7bb     Full Dim 7: 1 3b 5b 7bb  
+```
+
+## Sus 2, Sus 4 Triads -> Dominant Sus 7 Extensions ::1::
+```js
+// A sus chord removes the 3rd in order to leave it ambiguous 
+// as to whether its a major or minor chord (since the 3rd of a triad
+// determines its type). The sus replaces the third with another note
+// (usually the 2nd or 4th), leading to the eventual resolving to
+// the third to be satisfying.
+
+// Sus extensions (past 7th) are usually dominant with a 7b,
+// but major sus with 7 is possible but again less common
+
+// diminished sus 7bb is just a 6, so we count that as a 6th chord
+// aug sus 7# is just a 1, so we count that as a triad
+                
+           ambiguous triad
+            /     |    \
+  Sus 4: 1 4 5    |      Sus 2: C D G 
+                / |             1 2 5
+Sus 9: 1 4 5 7b 9 | \  
+(doubled 2/9)     |  \ 
+                /    Sus 11: 1 4 5 b7 9 11
+               /     (doubled 2/9, 4/11)
+              /
+Sus 13: 1 4 5 7b 9 11 13        
+(doubled 2/9, 4/11, 6/13)
+```
+
+## C Major, Minor, Sus
+
+### Major 
+```js
+C Major Scale: C  D  E  F  G  A  B
+               1  2  3  4  5  6  7 
+                
+                Major: C E G    
+                       1 3 5
+                  |      |   \  
+                / |      |      Aug: C E G#
+Major 7: C E G B  |      |           1 3 5#
+         1 3 5 7  |      |   
+                  |      (major triad) 
+                /   \    Aug Maj 7: C E G B#         
+Dominant: C E G Bb   \            = 1 3 5 7#       
+          1 3 5 7b    \
+                      (diminished major 7)
+                      Major 6th: C E G A
+                               = 1 3 5 7bb        
+```
+
+### Minor
+```js
+c Minor Scale: C  D  Eb F  G  Ab Bb
+               1  2  3  4  5  6  7
+               
+                Minor: C Eb G
+                       1 3b 5
+                     |     |    \   
+                   / |     |       Dim: C Eb Gb
+ Minor 7: 1 3b 5 7b  |     | \          1 3b 5b
+                     |     |  \    
+                    /      |  Half Dim 7: C Eb Gb Bb 
+  (diminished minor 7)     |              1 3b 5b 7b
+  Minor 6th: 1 3b 5 6        \    
+           = 1 3b 5 7bb       \
+                              Full Dim 7: C Eb Gb Bbb
+                                          1 3b 5b 7bb
+```
+
+### Sus
+```js
+                ambiguous triad
+              /           |      \
+   Sus 4: C F G           |       Sus 2: C D G 
+          1 4 5         / |              1 2 5
+                       /  |   
+       (doubled 2/9)      | \  
+       Sus 9: C F G Bb D  |  \
+              1 4 5 7b 9  |    (doubled 2/9, 4/11)
+                          |    Sus 11: C F G Bb D F
+                        /              1 4 5 b7 9 11
+                       / 
+        (doubled 2/9, 4/11, 6/13)
+        Sus 13: C F G Bb D F  A       
+                1 4 5 7b 9 11 13 
+```

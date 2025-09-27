@@ -539,40 +539,48 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Solution 1: Slicing Traversing in Reverse Order - Two Pointers/Algorithm
+## Solution 1: [::-1] Reverse Slice Comparison - Two Pointers/Algorithm
 ```python
     def isPalindrome(self, s: str) -> bool:
         
         # sc: cleaned version of string O(n)
-        phrase = ""
+        clean = []
 
         # tc: iterate string O(n)
         for c in s:
 
             # only compare alphaNum
             if c.isalnum():
-                phrase += c.lower()
+                clean.append(c.lower())
         
-        # slicing
+        # tc: join list O(n)
+        clean = "".join(clean)
+
+        # Slicing -> [::-1]
         # [start:stop:step]
-        # [::-1]
+        # -----------------
         # if start and stop are omitted, slice includes the entire sequence
         # step is -1, indicates to traverse in reverse
 
-        # compare original string to reversed string
-        return phrase == phrase[::-1]
+        # tc: iterate over two strings comparing
+        # sc: create separate reversed string
+        res = phrase == phrase[::-1]
+
+        # overall: tc O(n)
+        # overall: sc O(n)
+        return 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Clean list | O(n) | O(n) | Iterate string O(n) | Allocation for clean string O(n) |
-| Palindrome Check | O(n) | O(1) |  operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
-| Overall | O(n) | O(n) | Iterating over list of n length dominates leading to O(n) | Memory allocation to store clean string of n length dominates leading to O(n) | 
+| Clean string | O(n) | O(n) | Iterate string O(n), append O(1), join O(n) | Allocation for clean string O(n) |
+| Palindrome Check | O(n) | O(n) | Slice reverse O(n), comparison O(n) | Slice allocates reversed string O(n) |
+| Overall | O(n) | O(n) | Iterate string dominates, O(n) | Allocation for clean string dominates, O(n) | 
 
-## Solution 2: Pre Clean Opposite Ends Comparison - Two Pointers/Opposite Ends
+## Solution 2: Clean Opposite Ends - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
-        # sc complexity: cleaned version string of n length O(n)
+        # sc: cleaned string O(n)
         cleaned = []
 
         # helper: check if isAlphaNum
@@ -619,12 +627,12 @@ def isPalindrome(self, s: str) -> bool:
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Cleaned list | O(n) | O(n) | Iterating over list of n length O(n) | Memory allocation to store clean string of n length O(n) |
-| Two Pointer | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
-| Overall | O(n) | O(1) | Iterating over list of n length dominates leading to O(n) | No additional memory allocation for comparison O(1) | 
+| Cleaned string | O(n) | O(n) | Iterate string O(n) | Allocation for clean string O(n) |
+| Two Pointer | O(n) | O(1) | Compare char pairs O(1) for n/2 steps O(n) | No allocation O(1) |
+| Overall | O(n) | O(n) | Iterate string dominates, O(n) | Allocation for clean string dominates, O(n) | 
 
 
-## Solution 3: In Place Opposite Ends Comparison - Two Pointers/Opposite Ends
+## Solution 3: In Place Opposite Ends - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
 
@@ -642,7 +650,7 @@ def isPalindrome(self, s: str) -> bool:
         def toLower(c):
             return chr(ord(c) + 32)
 
-        # s complexity: no additional space used for storage O(1)
+        # sc: no additional space used for storage O(1)
 
         # tc: iterate string O(n)
         left, right = 0, len(s) - 1
@@ -678,8 +686,8 @@ def isPalindrome(self, s: str) -> bool:
 ``` 
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Two Pointer | O(n) | O(1) | Comparison operation of two chars takes constant O(1) for string of n length O(n) | No additional memory allocation for comparison or iteration O(1) |
-| Overall | O(n) | O(1) | Iterating over string n length dominates leading to O(n) | No additional memory allocation O(1) |
+| Two Pointer | O(n) | O(1) | Iterate string O(n), compare alphaNum pairs O(1) | No allocation O(1) |
+| Overall | O(n) | O(1) | Iterate string dominates, O(n) | No allocation O(1) |
 
 
 # 271. String Encode and Decode ::2:: - Medium
@@ -687,9 +695,9 @@ def isPalindrome(self, s: str) -> bool:
 Topics:  Two Pointers, Design
 
 ## Intro
-> Design an algorithm to encode a list of strings to a single string.
-> The encoded string is then decoded back to the original list of strings
-> Please implement encode and decode.
+> Design an algorithm to encode a list of strings to a 
+> single string and a decode algorithm to decode the 
+> single string back to the original list of strings,
 > strs[i] contains only UTF-8 characters.
 
 |  Input                           | Output                              |  
@@ -699,14 +707,17 @@ Topics:  Two Pointers, Design
 
 Constraints:
 
+string s contains only UTF-8 characters
+
 ## Abstraction
-We need to create an encode and decode function and mark the start of a new string
-as well as its length.
+Create an encode and decode function to encode a 
+list to a string, and a string back to the original list.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Two Pointers Length Delimiter |  |  |  |  |
+| Splicing Delimiter with Catchup 2 pointers | O(n * m) | O(n * m) | Linear iteration for encode and decode across all strings and chars dominates, O(n * m) | Allocation for encoded and decoded strings dominates, O(n * m) |
+| Base 10 Auxiliary Length Delimiter with 1 pointer | O(n * m) | O(n * m) | Linear iteration for encode and decode across all strings and chars dominates, O(n * m) | Allocation for encoded and decoded strings dominates, O(n * m) |
 
 ## Bug: Decoded Length + Delimiter (Grabbed str(len) instead int(len))
 ```python
@@ -785,92 +796,92 @@ as well as its length.
 
         # Note: 
         # python strings are immutable so concatenation with += "" 
-        # python creates new string time complexity o(n^2)
+        # python creates new string quadratically
+        # the efficient alternative:
         # python list .append() modifies list in place by adding a single
         # element at end in O(1) operation
-        # so doing .append() with a "".join() at the end is more efficient  
+        # after appending all chars a "".join() in O(n)
+        # creates the same string in better time complexity
 
-        # space complexity: for n strings O(n) store n characters O(n), leading to O(n^2)
+        # sc: n strings with m chars O(n * m)
         encoded = []
 
-        # time complexity: iterate over list of n strings O(n)
+        # tc: iterate list O(n)
         for s in strs:
             
-            # lenDelim = len + delim
+            # tc: lenDelim length proportional to log10(m) ~= O(1)
+            # append "{length}#" -> "5#""
             lenDelim = str(len(s)) + "#"
-
-            # append length and delimiter "5#"
             left = 0
             while left < len(lenDelim):
                 encoded.append(lenDelim[left])
                 left += 1
             
-            # append string itself
-            # time complexity: iterate over string of n length O(n), for n iterations, leading to O(n^2)
+            # tc: iterate string O(m)
+            # append each char
             left = 0
             while left < len(s):
                 encoded.append(s[left])
                 left += 1
         
-        # overall: time complexity O(n^2)
-        # overall: space complexity O(n^2)
+        # overall: tc O(n * m)
+        # overall: sc O(n * m)
         return ''.join(encoded)
 
 
     def decode(self, encoded: str) -> List[str]:
 
-        # space complexity: list of n strings O(n) each of n length O(n), leading to O(n^2)
+        # sc: n strings with m chars O(n * m)
         decoded = []
         left = 0
 
-        # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
+        # tc: iterate string encoding of list O(n * m)
         while left < len(encoded):
 
-            # update right pointer to start of next (delim + string) group
+            # Right: set to start of length prefix
             right = left
 
-            # grab length before delimiter
+            # tc: log 10 (m) ~= O(1)
+            # Right: shift until pointing to delimiter
             while encoded[right] != "#":
                 right += 1
-            # right is now pointing at delim
+
+            # after:
             # [ 2 # h i ... ]
             #   ^ ^
             #   l r 
 
-            # splicing the length of the string
+            # slice out string length
             length = int(encoded[left:right])
 
-            right += 1
             # skip delimiter, point to start of string
+            right += 1
+
+            # after:
             # [ 2 # h i ... ]
             #   ^   ^
             #   l   r 
 
-            # time complexity: splice over string n length O(n) for n iterations O(n), leading to O(n^2)
+            # tc: slice out substring of length m 
             decoded.append(encoded[right:right + length])
-            # splicing the string of 'length' characters
-            # [ 2 # h i 4 # ...]
-            # [ 0 1 2 3 4 5 6 ...]
-            #   ^   ^   ^
-            #   l   r   r'
-            # 2 + 2 = 4, start of length in next delimiter group
-
+           
             left = right + length
-            # left pointing to start of next len
+            
+            # Left: shift to start of next length prefix
             # [ 2 # h i 4 # ...]
             # [ 0 1 2 3 4 5 6 ...]
             #       ^   ^
             #       r   l
 
-        # overall: time complexity O(n^2)
-        # overall: space complexity O(n^2)
+        # overall: tc O(n * m)
+        # overall: sc O(n * m)
         return decoded
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of n strings of n n length O(n) | Memory allocation for encoded string of length O(n)  |
-| Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
+| Encode loop | O(n * m) | O(n * m) | Iterate n strings of m length dominates, O(n * m) | Allocation for encoded string dominates, O(n * m)  |
+| Decode loop | O(n * m) | O(n * m) | Iterate over encoded string of n strings of m length dominates, O(n * m) | Allocation for decoded list of n strings of m length O(n * m) |
+| Overall | O(n * m) | O(n * m) | Linear iteration for encode and decode across all strings and chars dominates, O(n * m) | Allocation for encoded and decoded strings dominates, O(n * m) |
 
 
 ## Solution 2: Base 10 Auxiliary Length Delimiter with 1 pointer - Two Pointers/One Pointer with Auxiliary State
@@ -952,20 +963,21 @@ as well as its length.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Encode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterating over list of n strings of n n length O(n) | Memory allocation for encoded string of length O(n)  |
-| Decode loop | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over encoded n strings with delimiter n length o(n) | Memory allocation for list of strings n length |
-
+| Encode loop | O(n * m) | O(n * m) | Iterate n strings of m length dominates, O(n * m) | Allocation for encoded string dominates, O(n * m)  |
+| Decode loop | O(n * m) | O(n * m) | Iterate over encoded string of n strings of m length dominates, O(n * m) | Allocation for decoded list of n strings of m length O(n * m) |
+| Overall | O(n * m) | O(n * m) | Linear iteration for encode and decode across all strings and chars dominates, O(n * m) | Allocation for encoded and decoded strings dominates, O(n * m) |
 
 # 167. Two Sum II Sorted Array ::2:: - Medium
 
 Topics:  Array, Two Pointers, Binary Search
 
 ## Intro
-> Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, 
-> find two numbers such that they add up to a specific target number. 
-> Let these two numbers be numbers[index1] and numbers[index2] where 1 &le; index1 &lt; index2 &le; numbers.length.
-> Return the indices of the two numbers, index1 and index2, added by one as an 
-> integer array [index1, index2] of length 2.
+> Given a 1 indexed array of sorted integer in non decreasing order, 
+> find two numbers that add up to a target. Let these two numbers be 
+> numbers[index1] and numbers[index2] where
+> 1 &le; index1 &lt; index2 &le; numbers.length.
+> Return the indices of the two numbers, index1 and index2, 
+> added by one as an integer array [index1, index2] of length 2.
 > The tests are generated such that there is exactly one solution. 
 > You may not use the same element twice.
 
@@ -977,47 +989,20 @@ Topics:  Array, Two Pointers, Binary Search
 
 Constraints:
 
-Your solution must use only constant extra space O(1)
+Solutions can only use constant space O(1)
 
 ## Abstraction
-Given a sorted array, find two numbers which add up to target.
-
-Unlike Two Sum I, we do not neccesarrily have to traverse the entire array, as since
-the given array is sorted, we can make assumptions about our traversal using l and r pointers.
+Given a sorted array, find two numbers that add up to target,
+and numbers cannot share indexes.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
-| Brute Force (all pair comparison) | O(n<sup>2</sup>) | O(1) | For each pair of elements, we compare them, leading to quadratic number of comparison O(n<sup>2</sup>) | No additional memory allocation O(1) |
 | Binary Search for Complement | O(n log n) | O(1) | Iterates over list of n elements O(n), performing binary search on each O(log n) leading to O(n log n) | No additional memory allocation O(1) |
 | Two Pointers | Iterates through array of n length using two pointers O(n) | No additional memory allocation O(1) |  |  |
 
-## Brute Force (all pairs comparison)
-```python
-    def twoSumII(self, numbers: List[int], target: int) -> List[int]:
 
-        # time complexity: iteration of O(n)
-        for i in range(len(numbers)): 
-
-            # time complexity: iteration of O(n^2)
-            for j in range(i + 1, len(numbers)): 
-
-                # time complexity: sum and comparison operations take constant O(1)
-                if numbers[i] + numbers[j] == target:
-                    return [i + 1, j + 1]  # Convert to 1-indexed
-
-        # overall: time complexity O(n^2)
-        # overall: space complexity O(1)
-        return []
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Outer loop | O(n) | O(1) | Iterates over list of n length O(n) | No additional memory allocation for iteration O(1) |
-| Inner loop | O(n<sup>2</sup>) | O(1) | For each element in the outer loop, the inner loop iterates through all subsequent elements with Big(O) is O(n<sup>2</sup>). Derivation [here](/Notescommon-formulas#brute-case-double-for-loop) | No additional memory allocation for iteration O(1) |
-| Comparison | O(1) | O(1) | Sum and comparison operations in constant O(1) | No additional memory allocation for sum or comparison O(1) | 
-| Overall | O(n<sup>2</sup>) | O(1) | The inner loop dominates leading to O(n<sup>2</sup>) time complexity | No additional memory was allocated leading to constant O(1) space complexity. |
-
-## Find the Bug: Binary Search updates left and right pointer by midValue instead of midIndex
+## Bug: Binary Search updates left and right pointer by midValue instead of midIndex
 ```python
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
        
@@ -1034,12 +1019,12 @@ the given array is sorted, we can make assumptions about our traversal using l a
                 if currComplementTarget == midInt:
                     return [i + 1, mid + 1]
                 
-                # INCORRECT:
+                # BUG:
                 # moving pointer based on int value, instead of index
                 elif currComplementTarget < midInt:
                     right = midInt - 1
 
-                # INCORRECT:
+                # BUG:
                 # moving pointer based on int value, instead of index
                 else:
                     left = midInt + 1
