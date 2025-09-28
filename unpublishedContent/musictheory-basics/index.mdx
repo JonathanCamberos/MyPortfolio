@@ -146,33 +146,47 @@ To start, we will learn 13 basic chords.
 They are derived from the major, minor, and sus triads
 to form graph structures from the parent triad.
 
-## Major Triad -> Seventh + Sixth Graph ::5::
+## Major Triad -> Seventh + Aug -> Seventh ::6+1::
 ```js 
-                Major: 1 3 5    
-                  |      |   \  
-                / |      |    Aug: 1 3 5#  
-               /  |      |          
-Major 7: 1 3 5 7  |      |
-                 / \     (major triad)  
-                /   \    Aug Maj 7: 1 3 5 7#    
-Dominant: 1 3 5 7b   \            = 1 3 5 1          
-                      \ 
-                     (diminished major 7)
-                     Major 6th: 1 3 5 6 
-                              = 1 3 5 7bb     
+                     Major: 1 3 5  ->  Aug: 1 3 5# 
+(major triad)       /        |           |     \ (aug triad)
+ Major Aug: 1 3 5 7#         |           |        Aug Aug: 1 3 5# 7# ...
+                             |           |               = 1 3 5# 1
+                          /  |           |  \           
+       (major major)     /   |           |   \         
+        Major 7: 1 3 5 7     |           |    Aug Major: 1 3 5# 7   
+                             |           | \   
+                          /  |           |  \
+        (major minor)    /   |           |    Aug Minor: 1 3 5# 7b
+         Dominant: 1 3 5 7b  |             \
+                            /               \      
+                           /                  Aug Dim: 1 3 5# 7bb  
+        (major diminished)                
+         Major 6th: 1 3 5 6 
+                  = 1 3 5 7bb
 ```
 
-## Minor Triad -> Seventh + Sixth Graph ::6::
+## Minor Triad -> Seventh + Dim -> Seventh Graph ::7+1::
 ```js
-                Minor: 1 3b 5
-                   |    | \   
-                 / |    |   Dim: 1 3b 5b
-Minor 7: 1 3b 5 7b |    | \   
-                   |    |  \    
-                  /     |   Half Dim 7: 1 3b 5b 7b  
-(diminished minor 7)     \
-Minor 6th: 1 3b 5 6       \
-         = 1 3b 5 7bb     Full Dim 7: 1 3b 5b 7bb  
+                    Minor: 1 3b 5  ->  Dim: 1 3b 5b 
+ (minor triad)      /        |           |     \ (dim triad)
+  Minor Aug: 1 3b 5 7#       |           |        Dim Aug 7: 1 3b 5b 7# ... 
+                           / |           |                 = 1 3b 5b 1     
+                          /  |           |   \   
+    Minor Major: 1 3b 5 7    |           |    \ 
+                             |           |    Dim Major 7: 1 3b 5b 7 
+                          /  |           |  \  
+       (minor minor)     /   |           |   \
+        Minor 7: 1 3b 5 7b  /            |    (dim minor)
+                           /             |     Half Dim 7: 1 3b 5b 7b
+                                         |  \
+       (diminished minor)                |   \
+        Minor 6th: 1 3b 5 6              |    (dim dim)
+                 = 1 3b 5 7bb            |    Fully Dim 7: 1 3b 5b 7bb
+                                         |    
+                                          \
+                                           \ (dim dim)
+                                              Full Dim Ext: 1 3b 5b 7bb 1 3b ...
 ```
 
 ## Sus 2, Sus 4 Triads -> Dominant Sus 7 Extensions ::1::
@@ -189,61 +203,133 @@ Minor 6th: 1 3b 5 6       \
 // diminished sus 7bb is just a 6, so we count that as a 6th chord
 // aug sus 7# is just a 1, so we count that as a triad
                 
-           ambiguous triad
-            /     |    \
-  Sus 4: 1 4 5    |      Sus 2: C D G 
-                / |             1 2 5
-Sus 9: 1 4 5 7b 9 | \  
-(doubled 2/9)     |  \ 
-                /    Sus 11: 1 4 5 b7 9 11
-               /     (doubled 2/9, 4/11)
-              /
-Sus 13: 1 4 5 7b 9 11 13        
-(doubled 2/9, 4/11, 6/13)
+                       ambiguous triad
+                     /        |        \
+         Sus 4: 1 4 5         |          Sus 2: 1 2 5 
+                            / |             
+                           /  | \  
+          (doubled 2/9)       |  \ 
+          Sus 9: 1 4 5 7b 9   |    (doubled 2/9, 4/11)
+                              |      Sus 11: 1 4 5 b7 9 11
+                            /
+                           /        
+           (doubled 2/9, 4/11, 6/13)       
+            Sus 13: 1 4 5 7b 9 11 13 
 ```
+
+## Major Minor Scales
+
+### Major
+Derived from circle of fifths
+
+- Major: Normal, no modifications
+
+### Minor
+Derived from circle of fifths + modified for compositional purposes 
+for harmonic/melodic.
+
+Minor just means that the scale has a minor three instead of a major
+three. This means all scales with a minor 3 are minor, like Dorian,
+Phrygian, Klezmer, etc. The 3 is the third most important note in a 
+scale, the first being the 1 and the second being the 5. If the 5 is 
+altered the scale basically can never resolve, since you can't resolve 
+to a diminished or augmented chord, unless we were aliens. So there 
+are technically countably infinite minor scales.
+ 
+- Natural: Normal, no modifications, represents 'normal' minor sound
+- Harmonic: 7# raised so we get Major V, for V - i cadences
+- Melodic:  6# raised to avoid awkwardness of second interval between 
+6b and 7 scale degree, this instead makes it a whole step between 
+6b and 7. This is one reason why b6 -> 7 sounds kind of awkward in
+melodies as the b6 wants to resolve down to 5, whereas the 7 
+wants to resolve up to the tonic. Thus b6 and 7 pull in opposite 
+directions, and the distance between them is quite big. These are 
+the most strongly directional notes in the minor key. This is also why 
+you don't really  want to raise the 6th if you aren't continuing to 
+the leading tone. The raised 6th lacks the pull towards the 5th that 
+the b6 degree has. And the b6 -> 5 resolution is pretty much the most
+characteristic resolution of the minor key. 
 
 ## C Major, Minor, Sus
 
-### Major 
+### Major Scale
 ```js
-C Major Scale: C  D  E  F  G  A  B
-               1  2  3  4  5  6  7 
-                
-                Major: C E G    
-                       1 3 5
-                  |      |   \  
-                / |      |      Aug: C E G#
-Major 7: C E G B  |      |           1 3 5#
-         1 3 5 7  |      |   
-                  |      (major triad) 
-                /   \    Aug Maj 7: C E G B#         
-Dominant: C E G Bb   \            = 1 3 5 7#       
-          1 3 5 7b    \
-                      (diminished major 7)
-                      Major 6th: C E G A
-                               = 1 3 5 7bb        
+    C Major Scale: C  D  E  F  G  A  B
+                   1  2  3  4  5  6  7                
 ```
 
-### Minor
-```js
-c Minor Scale: C  D  Eb F  G  Ab Bb
-               1  2  3  4  5  6  7
-               
-                Minor: C Eb G
-                       1 3b 5
-                     |     |    \   
-                   / |     |       Dim: C Eb Gb
- Minor 7: 1 3b 5 7b  |     | \          1 3b 5b
-                     |     |  \    
-                    /      |  Half Dim 7: C Eb Gb Bb 
-  (diminished minor 7)     |              1 3b 5b 7b
-  Minor 6th: 1 3b 5 6        \    
-           = 1 3b 5 7bb       \
-                              Full Dim 7: C Eb Gb Bbb
-                                          1 3b 5b 7bb
+### Major Graph ::5+1+1::
+```js 
+                     Major: C E G  ->  Aug: C E G# 
+                            1 3 5           1 3 5#
+(major triad)       /        |           |     \ (aug triad)
+ Major Aug: C E G B#         |           |        Aug Aug: C E G# B# ...
+            1 3 5 7#         |           |               = 1 3 5# 7#
+                          /  |           |  \            = 1 3 5# 1 
+       (major major)     /   |           |   \         
+        Major 7: C E G B     |           |   Aug Major: C E G# B
+                 1 3 5 7     |           |  \           1 3 5# 7
+                          /  |           |   \
+        (major minor)    /   |           |   Aug Minor: 1 3 5# 7b
+         Dominant: C E G Bb  |            \            1 3 5# 7b
+                   1 3 5 7b /              \     
+                           /                 Aug Dim: C E G# Bbb 
+        (major diminished)                            1 3 5# 7bb
+         Major 6th: C E G A
+                  = 1 3 5 6 
+                  = 1 3 5 7bb
 ```
 
-### Sus
+### Minor Scales
+```js
+                   i  iio III  iv. v  VI  VII 
+    C Minor Scale: C  D   Eb   F   G  Ab  Bb
+    (natural)      1  2   3    4   5  6   7
+    no modi
+                   i  iio III+ iv  V  VI  vii
+    C Minor Scale: C  D   Eb   F   G  Ab  B
+    (harmonic)     1  2   3    4   5  6   7
+    7# modi
+    III  -> III+
+    v    -> V
+    VII  -> vii
+    
+                   i  ii  III+ IV  V  vi  vii
+    C Minor Scale: C  D   Eb   F   G  A   B
+    (Melodic Up)   1  2   3    4   5  6   7
+    6# modi
+    iio  -> ii
+    iv   -> IV
+    VI  -> vi
+
+    7# modi
+    III  -> III+
+    v    -> V
+    VII  -> vii
+```
+
+### Minor Graph ::6::
+```js
+                       Minor: C Eb G
+                              1 3b 5
+(minor triad)       /      |    |    \ 
+Aug Minor 7: C Eb G B#     |    |     Dim: 1 Eb Gb     
+             1 3b 5 7#     |    |  \       1 3b 5b            
+                        /  |    |   \    
+Minor Major 7: C Eb G B    |    |    Half Dim 7: C Eb Gb Bb  
+               1 3b 5 7  / |    | \              1 3b 5b 7b
+                        /  |    |  \
+      Minor 7: C Eb G Bb   |    |    Full Dim 7: C Eb Gb Bbb  
+               1 3b 5 7b  /     |  \             1 3b 5b 7bb
+                         /      |   \  
+        (diminished minor 7)    |    Full Dim Ext: C Eb Gb Bbb C
+        Minor 6th: C Eb G A      \                 1 3b 5b 7bb 1
+                 = 1 3b 5 6       \
+                 = 1 3b 5 7bb      Full Dim Ext: C Eb Gb Bbb C Eb ...
+                                                 1 3b 5b 7bb 1 3b
+```
+
+### Sus ::1::
 ```js
                 ambiguous triad
               /           |      \
