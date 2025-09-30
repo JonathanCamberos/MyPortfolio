@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const systemDesignFilePaths = [
-  "content/systemdesign-system-design-interview/index.mdx",
+  "content/textbook-system-design-interview/index.mdx",
   "content/systemdesign-ticket-master/index.mdx",
   "content/systemdesign-url-shortner/index.mdx",
   "content/textbook-designing-data-intensive-applications/index.mdx",

@@ -8,11 +8,11 @@
       "bodyString": "A client is any software or device that initiates requests to a \nserver or service over a network. Examples include web browsers, mobile apps, \ndesktop programs, or other services consuming an API. Clients present data to \nusers or other systems and rely on servers to process requests and return results.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -29,11 +29,11 @@
       "bodyString": "Users access websites through domain names, (e.g., `www.google.com`)\nThe Domain Name System (DNS) resolve those domain names into IP addresses,\n(e.g., 140.250.190.78). DNS is usually provided by third parties \n(registrars, hosting providers, dedicated DNS services) rather than hosted \non the application's own servers.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -50,11 +50,11 @@
       "bodyString": "A domain name is the human-readable address of a resource on the \ninternet (e.g., `www.example.com`). It acts as an alias for an IP address, making \nit easier for users to find, remember, and access services without remembering \nlong IP addresses. Domain names are registered through registrars and resolved to \nIP addresses via DNS.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -71,11 +71,11 @@
       "bodyString": "An Internet Protocol (IP) address is the numerical label assigned\nto a device on a network. It is returned to the browser or mobile app after a DNS lookup \nso the client knows where to send requests.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -92,11 +92,11 @@
       "bodyString": "Hypertext Transfer Protocol (HTTP) is an application level\nprotocol used for communication between clients (e.g., browsers, mobile apps)\nand servers on the web. It defines how requests and responses are formatted and\ntransmitted over TCP/IP networks.\n\nHTTP itself does not define the format of the data being sent, it only provides\na way to transport it (e.g. of data being sent: HTML, JSON, img, binary files).\n",
       "bodyCode": "    // Request Link -> Method Path HTTP/Version \n    GET /index.html HTTP/1.1\n    // Headers -> key value pairs describing the request\n    Host: www.example.com\n    Accept: text/html",
       "bodyCodeLanguage": "js",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps",
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -113,7 +113,7 @@
       "bodyString": "An HTTP request is a message a client sends to a server, \nasking for a resource or performing an action (e.g., `GET /index.html`).  \n\nAn HTTP response is the server's reply, which includes a status code\n(e.g., 200 OK), headers, and an optional body.\n\nThe body of an HTTP message can contain many kinds of data, HTML for web pages,\nJSON for APIs, or other formats depending on the endpoint.\n",
       "bodyCode": "    // HTTP Request\n    GET /about HTTP/1.1\n    Host: www.example.com\n    Accept: text/html\n\n    // HTTP Request with JSON Body\n    POST /api/users HTTP/1.1\n    Host: api.example.com\n    Content-Type: application/json\n    Authorization: Bearer <token>\n\n    {\n        \"username\": \"alice\",\n        \"email\": \"alice@example.com\",\n        \"password\": \"securePassword123\"\n    }\n\n    // HTTP Response with HTML Body\n    HTTP/1.1 200 OK\n    Content-Type: text/html; charset=UTF-8\n\n    <!DOCTYPE html>\n    <html>\n    <body>\n        <h1>Hello World!</h1>\n    </body>\n    </html>\n\n    // HTTP Response with JSON Body\n    HTTP/1.1 200 OK\n    Content-Type: application/json\n\n    {\n        \"id\" : 12,\n        \"firstName\": \"John\",\n        \"lastName\": \"Smith\",\n        \"address\": {\n            \"streetAddress\": \"21 2nd Street\",\n            \"city\" : \"New York\",\n            \"state\": \"NY\",\n            \"postalCode\": 10021\n        },\n        \"phoneNumber\" : \"212 555-1234\"\n    }",
       "bodyCodeLanguage": "js",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps"
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps"
     }
   ],
   "HTML Response": [
@@ -125,7 +125,7 @@
       "bodyString": "An HTML response is an HTTP response with a HTML body. \nIts used by web servers to deliver full web pages that browsers can \nrender for users.\n",
       "bodyCode": "    // HTTP Response with HTML Body\n    HTTP/1.1 200 OK\n    Content-Type: text/html; charset=UTF-8\n\n    // HTML Body\n    <!DOCTYPE html>\n    <html>\n    <head>\n        <title>Welcome</title>\n    </head>\n    <body>\n        <h1>Hello, Jane!</h1>\n    </body>\n    </html>",
       "bodyCodeLanguage": "js",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#single-server-processing-steps"
+      "definitionLink": "/Notes/textbook-system-design-interview#single-server-processing-steps"
     }
   ],
   "Web Application": [
@@ -137,11 +137,11 @@
       "bodyString": "A web application is client software that runs in a browser.\nIt uses client side languages for the UI (e.g., HTML, CSS, JavaScript) and\nserver side languages (e.g., Java, Python, Node.js) to handle logic, data storage, \nand processing. Web applications are accessible through URLs and do not require \ninstallation on a user's device.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#traffic-sources-clients-users",
+      "definitionLink": "/Notes/textbook-system-design-interview#traffic-sources-clients-users",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -158,11 +158,11 @@
       "bodyString": "A mobile application is client software designed to run on smartphones or \ntables. It communicates with servers using HTTP protocol, often using JSON for\ndata body. Mobile apps combine a UI (e.g., HTML, CSS, JavaScript) alongside\na backend service separate from the mobile app to provide functionality.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#traffic-sources-clients-users",
+      "definitionLink": "/Notes/textbook-system-design-interview#traffic-sources-clients-users",
       "diagramList": [
         {
           "name": "Single Server Setup",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
           "related": "Client, DNS, Domain Name, IP Address, HTTP Protocol, Web Application, Mobile Application",
           "language": "python"
@@ -179,7 +179,7 @@
       "bodyString": "An API, Application Programming Interface, is a set of rules or defined contract \nthat allow different software applications to communicate with each other.\n\nRules:\n- What endpoints exits\n- Defined valid inputs\n- Expected outputs and errors\n\nThis contract allows different systems, such as a client and server, to work together\nthem to work together.\n\n1. Request: A client/user sends a request through the API\n2. Processing: The API forwards the request to the server\n3. Response: The server processes the request and sends the response back to the api\n4. Delivery: The API returns the server's response to the client\n",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#api"
+      "definitionLink": "/Notes/textbook-system-design-interview#api"
     },
     {
       "topic": "API",
@@ -210,7 +210,7 @@
       "bodyString": "A relational database (RDB) is a type of database that stores data in \ntables with rows and columns. Each table has a schema that defines its \nstructure, and tables can be related to one another through keys \n(primary keys, foreign keys). Relational databases support SQL \n(Structured Query Language) for querying and managing data. They are \nideal for structured data with well-defined relationships.\n",
       "bodyCode": "    -- Example: Relational Database Table\n    CREATE TABLE Users (\n        id INT PRIMARY KEY,\n        firstName VARCHAR(50),\n        lastName VARCHAR(50),\n        email VARCHAR(100)\n    );",
       "bodyCodeLanguage": "sql",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#relational-database"
+      "definitionLink": "/Notes/textbook-system-design-interview#relational-database"
     }
   ],
   "Non-Relational Database": [
@@ -222,7 +222,7 @@
       "bodyString": "A non-relational database (NoSQL) is a database that stores data in flexible \nformats such as key-value pairs, documents, wide-column stores, or graphs. \nThey do not require a fixed schema and are optimized for horizontal scalability\nand high-performance data operations. Examples include \nMongoDB (document store), Redis (key-value store), and \nCassandra (wide-column store).\n",
       "bodyCode": "    // Example: Non-Relational Database Document\n    {\n        \"id\": 12,\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Doe\",\n        \"email\": \"jane@example.com\"\n    }",
       "bodyCodeLanguage": "js",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#non-relational-database"
+      "definitionLink": "/Notes/textbook-system-design-interview#non-relational-database"
     }
   ],
   "Scaling": [
@@ -234,7 +234,7 @@
       "bodyString": "Determines how a system can handle increased traffic, data volume,\nor computation load. Different aspects of a system require \ndifferent scaling approaches:\n\n- Traffic spikes: Additional servers or resources via horizontal scaling\n- Data growth: Database may need to be partitioned or shareded via horizontal\n- Geographic distribution: Serving users across multiple regions may require\ncloser services via geographical or regional scaling\n- Compute heavy operations: Specific components may need more powerful servers\nor parallelized process vertical scaling\n- etc...\n\nThe type of scaling chosen depends on the problem/bottleneck the system is facing.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#intro"
+      "definitionLink": "/Notes/textbook-system-design-interview#intro"
     }
   ],
   "Vertical Scaling": [
@@ -246,7 +246,7 @@
       "bodyString": "Vertical scaling or 'scaling up', involves adding resources to a single instance\nto handle increased load.\n\nThis could mean upgrading the CPU, RAM, or storage.\n\nPros:\n- Simple to implement with no changes to application logic, just need $\n- Useful for applications with limit\n\nCons:\n- Will be limited by physical capabilities aof a single machine\n- Will be expensive as hardware upgrade cost increases\n\nEx: Upgrading web server from 16GB to 64GB of RAM to handle more \nsimultaneous users.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#vertical-scaling"
+      "definitionLink": "/Notes/textbook-system-design-interview#vertical-scaling"
     }
   ],
   "Horizontal Scaling": [
@@ -258,7 +258,7 @@
       "bodyString": "Horizontal scaling: \nHorizontal scaling or 'scaling out', involves adding more machines or node\ninstances to a system to distribute load. This allows applications to handle\nincreased traffic by spreading requests across multiple servers.\n\nPros:\n- Can scale indefinitely by adding more nodes\n- Improves fault tolerance and redundancy\n\nCons:\n- Requires more complex distributed architecture and load balancing \n- Complexity to maintain data consistency across load\n\nEx: Running a web application across 5 servers behind a load balancer\nto handle spikes in traffic.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#horizontal-scaling"
+      "definitionLink": "/Notes/textbook-system-design-interview#horizontal-scaling"
     }
   ],
   "Load Balancer": [
@@ -270,11 +270,11 @@
       "bodyString": "A load balancer evenly distributes incoming traffic among web servers that \nare defined in a load balanced set or 'server pool/target group'.\n\nWhen traffic arrives, the load balancer decides using a policy such as\nround-robin, least connection, or weighted rules, which server in the set\nshould handle the request.\n\nFor better security, private IPs are used for communication between servers,\nmaking the web servers unreachable directly by clients.",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#load-balancer",
+      "definitionLink": "/Notes/textbook-system-design-interview#load-balancer",
       "diagramList": [
         {
           "name": "Load Balancer",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-load-balancer",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-load-balancer",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                         |        ^            2) <------    \n                         |        |           15.125.23.214     \n                         |        |       \n    3)                   |        |  4)    \nPublic IP: 15.125.23.214 |        |  HTML Page \n                         |        |    \n                         |        |       \n                         |        |      \n                         V        |\n                    +------------------+\n                    |  Load Balancer   |\n                    +------------------+\n                       /             \\\nPrivate IP: 10.0.0.1  /               \\     Private IP: 10.0.0.2\n                     /                 \\\n        +----------+                  +----------+\n        | Server 1 |                  | Server 2 |\n        +----------+                  +----------+",
           "related": "Load Balancer, Private IP Address, NAT",
           "language": "python"
@@ -291,11 +291,11 @@
       "bodyString": "A private IP address is an IP address reserved for use inside a private network\n(e.g., home, office, data center). They are not routable on the public internet\nand can only be used by machines on the same network.\n\nCommon private ranges include:\n- 10.0.0.0 - 10.255.255.255  \n- 172.16.0.0 - 172.31.255.255  \n- 192.168.0.0 - 192.168.255.255\n\nPrivate IPs help conserve public address space and add a layer of security as \nexternal hosts cannot directly reach them without network address translation (NAT).",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#load-balancer",
+      "definitionLink": "/Notes/textbook-system-design-interview#load-balancer",
       "diagramList": [
         {
           "name": "Load Balancer",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-load-balancer",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-load-balancer",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                         |        ^            2) <------    \n                         |        |           15.125.23.214     \n                         |        |       \n    3)                   |        |  4)    \nPublic IP: 15.125.23.214 |        |  HTML Page \n                         |        |    \n                         |        |       \n                         |        |      \n                         V        |\n                    +------------------+\n                    |  Load Balancer   |\n                    +------------------+\n                       /             \\\nPrivate IP: 10.0.0.1  /               \\     Private IP: 10.0.0.2\n                     /                 \\\n        +----------+                  +----------+\n        | Server 1 |                  | Server 2 |\n        +----------+                  +----------+",
           "related": "Load Balancer, Private IP Address, NAT",
           "language": "python"
@@ -312,11 +312,11 @@
       "bodyString": "Network Address Translation is a networking process that maps one set of \nIP addresses to another, allowing devices in a private network to \ncommunicate with external networks (e.g., public internet, external\nprivate network wrapper) using a single public IP address.  \n\nIt is most commonly used by routers to let multiple devices with private \nIP addresses share one public IP. NAT helps conserve public address space \nand adds a layer of security, since internal addresses are hidden from the \noutside.\n\n1. Reliability\n\nIf server 1 goes offline, all traffic will be routed to server 2, which\nprevents the website from going offline. Additionally on fail, we can\nadd a new healthy web server to the server pool to re balance the load.\n\n2. Scaling\n\nIf website traffic grows rapidly and two servers are no longer enough,\nwe can just add more servers to the web server pool and the load balancer\ncan automatically start sending requests to them.\n",
       "bodyCode": "    // Example: NAT translating private IPs to a public IP\n    Private IPs: 192.168.1.10, 192.168.1.25, 192.168.1.30\n    Public IP (router): 203.0.113.5\n\n    // Outbound request:\n    192.168.1.10:5050  ---> 203.0.113.5:5500 (mapped by NAT)",
       "bodyCodeLanguage": "js",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#load-balancer",
+      "definitionLink": "/Notes/textbook-system-design-interview#load-balancer",
       "diagramList": [
         {
           "name": "Load Balancer",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-load-balancer",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-load-balancer",
           "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                         |        ^            2) <------    \n                         |        |           15.125.23.214     \n                         |        |       \n    3)                   |        |  4)    \nPublic IP: 15.125.23.214 |        |  HTML Page \n                         |        |    \n                         |        |       \n                         |        |      \n                         V        |\n                    +------------------+\n                    |  Load Balancer   |\n                    +------------------+\n                       /             \\\nPrivate IP: 10.0.0.1  /               \\     Private IP: 10.0.0.2\n                     /                 \\\n        +----------+                  +----------+\n        | Server 1 |                  | Server 2 |\n        +----------+                  +----------+",
           "related": "Load Balancer, Private IP Address, NAT",
           "language": "python"
@@ -333,11 +333,11 @@
       "bodyString": "Database replication is the process of copying and maintaining since \ndatabase objects, such as tables, in multiple databases (replicas) \nto improve availability and read performance.\n\nThe databases are split into a primary and replica format where\nthe primary handles all write operations and propagates \nchanges to replicas, and reads are handled by the replicas.\n\nPerformance: \nall writes happen in master nodes, while reads are distributed\nacross the replica nodes. This allows queries to be processed in parallel\nimproving performance.\n\nReliability:\nIf a database server is destroyed, data is still preserved as its \nreplicated across multiple locations.\n\nAvailability:\nIf a database goes offline, we can access data stored in another replica\ndatabase server allowing website to remain operational.\n\nScalability: Splitting reads to replicas and writes \nto primaries allows us to scale easier.\n\nReplica Failure:\nIf we have a single replica database which goes offline, read operations\nwill be directed to the primary temporarily until the issue is found\nand we create a new healthy replica. If there are multiple replicas\nand a single replica goes offline, we simply redirect to the other \nhealthy database and a new replica will replace the old one.\n\nPrimary Failure:\nIf a primary database goes offline, a replica database will be promoted\nas a new primary. A new replica is then created to replace the old \nreplica. However, we run into the issue of a replica not being up\nto date. Replication methods like multi masters and circular replication\ncould help, or we could run data recovery scripts.\n\nCustomization: replication can be synchronous where primary waits for\nreplicas to confirm changes, or be asynchronous where replicas \neventually catch up. The choice affects latency and consistency guarantees.\n",
       "bodyCode": null,
       "bodyCodeLanguage": null,
-      "definitionLink": "/Notes/systemdesign-system-design-interview#database-replication",
+      "definitionLink": "/Notes/textbook-system-design-interview#database-replication",
       "diagramList": [
         {
           "name": "Database Replication",
-          "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-database-replication",
+          "diagramLink": "/Notes/textbook-system-design-interview#diagram-database-replication",
           "diagram": "                         +----------------------+\n                         |      Web Server      |\n                         +----------------------+\n                           |                |\n                           |                |\n                           |                |    \n            (Writes)       |                |       (Reads)\n                           |                |\n        - - - - - - - - - -                 - - - - - - - - - - - - - - - - - -\n        |                                                         |     |     |\n        |                (DB Replication)   +--------------+      |     |     |\n        |                   - - - - - - - > |  Slave DB 1  | - - -      |     |\n        |                   |               +--------------+            |     |\n    +-------------------+   |                                           |     |\n    |   Master Database | - |               +--------------+            |     |\n    +-------------------+   - - - - - - - > |  Slave DB 2  | - - - - - -      |\n                            |               +--------------+                  |\n                            |                                                 |\n                            |               +--------------+                  |\n                            - - - - - - - > |  Slave DB 3  | - - - - - - - - - \n                                            +--------------+",
           "related": "Database Replication",
           "language": "python"
@@ -354,7 +354,7 @@
       "bodyString": "A cache temporarily stores copies of data that would otherwise be \nretrieved from a slower backend, such as a database or remote API.\n\nCaches can exist at different levels:\n\nClient Side Cache: Stored in the browser or app (e.g., local storage, \nservice workers).\n\nCDN Edge Cache: Cached at network edge servers to reduce latency for \ngeographically distributed users.\n\nServer Cache: External in memory (e.g., Redis, Memcached) controlled by\nthe server to accelerate API responses and usually put in front of a database. \n\nDatabase Cache: Some relational databases or ORMs have built in query caching\n\nPros:\n- Backend Load: Offloads repeated requests from the main servers\n- Response Time: Serves frequency accessed data faster\n- Scalability: Allows to scale cache tier independently from backend\n\nCons:\n- Inconsistency: Cache data may become outdated if source changes\n- Cache Invalidation: When and what to remove from cache is hard\nto determine, especially in distributed systems\n",
       "bodyCode": "Read_Through_Cache_Strategy():\n\n                +-----------------+                 1.\n                |   Web Server    | - - - - - - -   if data exists in cache,\n                +-----------------+             |   read data from cache\n                    |     |                     |\n                    |     |   2.1               |\n  2.                |     |   Save data         | \n  If data does not  |     |   to cache          v\n  exist in cache,   |     |               +------------+\n  query database    |     | - - - - - - > |    Cache   |               \n                    v                     +------------+\n                  +------------+ \n                  |  Database  |        \n                  +------------+ ",
       "bodyCodeLanguage": "python",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#cache-tier"
+      "definitionLink": "/Notes/textbook-system-design-interview#cache-tier"
     }
   ],
   "CDN": [
@@ -366,7 +366,7 @@
       "bodyString": "A CDN is a globally distributed network of edge servers that caches \nstatic and sometimes dynamic content. When a user requests content, \nthe CDN serves it from the nearest edge server instead of the origin \nserver, reducing load times and bandwidth usage.\n\nCDNs are commonly used for data that changes less frequently:\n- Images, videos, and static files (CSS, JS)\n- API responses (with caching policies)\n- Web page information to accelerate delivery\n\nKey benefits include improved response times, reduced origin server \nload, and better handling of geographically distributed traffic.\n\nA CDN is essentially a public, distributed cache with nuances.\n\n- Public/Shared: Part of a global network that serves many users\n- Edge Caching: It stores content closer to end users geographically\n- Not just caching: Provides routing, DDoS protection, SSL termination, etc\n- Cache control: You can configure what gets cached, TTL, invalidation, etc\n",
       "bodyCode": "    +---------+\n    | Client1 | - -                  +------------+\n    +---------+   |                  |   Origin   |\n                  |                  | (web/orig) |\n                  |                  +------------+\n    +---------+   |                         ^\n    | Client2 | - - - - - - - - - - - - - - |\n    +---------+         |               120 ms\n                        |   40 ms\n                        v\n                +-------------+\n                |     CDN     |\n                | (edge cache)|\n                +-------------+",
       "bodyCodeLanguage": "python",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#cdn"
+      "definitionLink": "/Notes/textbook-system-design-interview#cdn"
     }
   ],
   "Stateful Architecture": [
@@ -378,7 +378,7 @@
       "bodyString": "The server maintains session state for each client\nacross multiple requests.\n\nExamples of Stateful:\n- Logged In Sessions stored in server memory\n\n",
       "bodyCode": "+----------+           +----------+           +---------+\n|  User A  |           |  User B  |           | User C  |\n+----------+           +----------+           +---------+\n     | HTTP Req             | HTTP Req            | HTTP Req\n     v                      v                     v\n+--------------+      +--------------+      +-------------+\n|   Server 1   |      |   Server 2   |      |   Server 3  |\n+--------------+      +--------------+      +-------------+\n| - Session A  |      | - Session B  |      | - Session C |\n| - Profile A  |      | - Profile B  |      | - Profile C |\n+--------------+      +--------------+      +-------------+",
       "bodyCodeLanguage": "python",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#stateful-architecture"
+      "definitionLink": "/Notes/textbook-system-design-interview#stateful-architecture"
     }
   ],
   "Stateless Architecture": [
@@ -390,7 +390,7 @@
       "bodyString": "The server maintains no session state for each client\nacross multiple requests.\n\nExamples of Stateless:\n- Logged In Sessions stored in server memory\n",
       "bodyCode": "+---------+       +---------+       +---------+\n| User A  |       | User B  |       | User C  |\n+---------+       +---------+       +---------+\n     |                |                |            HTTP Req\n     v                v                v\n                 +-------------+\n                 |   Server 1  |\n                 +-------------+\n                       |\n                       v\n            +-------------------------+\n            |     Shared Session DB   |\n            +-------------------------+\n            | - Session A / Profile A |\n            | - Session B / Profile B |\n            | - Session C / Profile C |\n            +-------------------------+\n\n===============================================================\n\n+---------+       +---------+       +---------+\n| User A  |       | User B  |       | User C  |\n+---------+       +---------+       +---------+\n        |              |              |\n        |              |              |    HTTP Req with JWT / token\n        |              |              |\n        v              v              v\n                 +-------------+\n                 |   Server 1  |\n                 +-------------+\n                 |  Stateless  |\n                 |  No session |\n                 |  stored     |\n                 +-------------+",
       "bodyCodeLanguage": "python",
-      "definitionLink": "/Notes/systemdesign-system-design-interview#stateless-architecture"
+      "definitionLink": "/Notes/textbook-system-design-interview#stateless-architecture"
     }
   ],
   "Throughput": [

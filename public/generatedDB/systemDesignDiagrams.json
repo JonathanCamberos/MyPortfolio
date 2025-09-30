@@ -1,7 +1,7 @@
 {
   "dns-basic": {
     "name": "Single Server Setup",
-    "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-single-server-setup",
+    "diagramLink": "/Notes/textbook-system-design-interview#diagram-single-server-setup",
     "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |\n                    +------------------+\n                    |   Web Server     |\n                    +------------------+",
     "language": "python",
     "related": [
@@ -16,13 +16,13 @@
   },
   "separating-traffic-database": {
     "name": "Separating Traffic and Database",
-    "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-separating-traffic-and-database",
+    "diagramLink": "/Notes/textbook-system-design-interview#diagram-separating-traffic-and-database",
     "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                        |        ^            2) <------    \n                        |        |           15.125.23.214     \n                        |        |       \n    3)                  |        |  4)    \n    15.125.23.214       |        |  HTML Page \n                        |        |    \n                        |        |       \n                        |        |      \n                        V        |          5) ------>\n                    +----------------+    read/write/update  +------------+\n                    |   Web Server   |                       |  Database  |\n                    +----------------+     6) <------        +------------+\n                                            return data",
     "language": "python"
   },
   "load-balancer": {
     "name": "Load Balancer",
-    "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-load-balancer",
+    "diagramLink": "/Notes/textbook-system-design-interview#diagram-load-balancer",
     "diagram": "                                              1) ------>\n               +-------------------------+   api.mysite.com     +--------+\n               | Web Browser, Mobile App |                      |  DNS   |     \n               +-------------------------+                      +--------+    \n                         |        ^            2) <------    \n                         |        |           15.125.23.214     \n                         |        |       \n    3)                   |        |  4)    \nPublic IP: 15.125.23.214 |        |  HTML Page \n                         |        |    \n                         |        |       \n                         |        |      \n                         V        |\n                    +------------------+\n                    |  Load Balancer   |\n                    +------------------+\n                       /             \\\nPrivate IP: 10.0.0.1  /               \\     Private IP: 10.0.0.2\n                     /                 \\\n        +----------+                  +----------+\n        | Server 1 |                  | Server 2 |\n        +----------+                  +----------+",
     "language": "python",
     "related": [
@@ -33,7 +33,7 @@
   },
   "database-replication": {
     "name": "Database Replication",
-    "diagramLink": "/Notes/systemdesign-system-design-interview#diagram-database-replication",
+    "diagramLink": "/Notes/textbook-system-design-interview#diagram-database-replication",
     "diagram": "                         +----------------------+\n                         |      Web Server      |\n                         +----------------------+\n                           |                |\n                           |                |\n                           |                |    \n            (Writes)       |                |       (Reads)\n                           |                |\n        - - - - - - - - - -                 - - - - - - - - - - - - - - - - - -\n        |                                                         |     |     |\n        |                (DB Replication)   +--------------+      |     |     |\n        |                   - - - - - - - > |  Slave DB 1  | - - -      |     |\n        |                   |               +--------------+            |     |\n    +-------------------+   |                                           |     |\n    |   Master Database | - |               +--------------+            |     |\n    +-------------------+   - - - - - - - > |  Slave DB 2  | - - - - - -      |\n                            |               +--------------+                  |\n                            |                                                 |\n                            |               +--------------+                  |\n                            - - - - - - - > |  Slave DB 3  | - - - - - - - - - \n                                            +--------------+",
     "language": "python",
     "related": [

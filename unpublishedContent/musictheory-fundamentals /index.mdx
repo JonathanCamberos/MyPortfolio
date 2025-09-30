@@ -1,0 +1,430 @@
+---
+title: "Music Theory: The Fundamentals"
+description: "music theory fundamentals"
+image: "../../public/Notes/notepad-blue-1.png"
+publishedAt: "2025-09-20"
+updatedAt: "2025-09-28" 
+author: "jonathancamberos"
+isPublished: true
+tags: 
+- music theory
+---
+
+# Circle of 5ths -> 4 Half Circles
+
+## Intro
+The circle of 5ths for me is a bit confusing 
+in its visual representation. I cant think or read 
+counter clockwise flats as I can clockwise with sharps,
+so I made this trick for me to be able to think faster.
+Additionally this also helps with getting chords that 
+are not displayed on the circle of fifths.
+
+## Problem 1: Missing 6 notes/keys
+
+If we put every note possible on a table, we get:
+- A  B  C  D  E  F  G 
+- Ab Bb Cb Db Eb Fb Gb
+- A# B# C# D# E# F# G#
+
+If we match this table with notes on the circle of fifths:
+```js
+                C       
+       F _____________ G  
+       /               \
+  Bb /                   |  D 
+    /                     \
+   |                       |
+Eb |                       | A 
+   |                       |
+    |                     | 
+ Ab  |                   | E
+      |                 /
+    Db |______________  B  
+   C#          F#       Cb
+               Gb
+```
+We get:
+- A  B  C  D  E  F  G 
+- Ab Bb Cb Db Eb    Gb
+-                F#   
+
+With the circle of 5ths we are missing
+these 6 notes:
+- A  B  C  D  E  F  G 
+-                Fb
+
+How do we derive the missing notes?
+We get this by the 4 half circles shown below
+
+
+## Problem 2: Thinking About Flats Fast
+
+The second problem is that I for the life of me cannot
+read a circle counter clockwise as fast as I can clockwise.
+Im guessing its because my brain has been wired to read 
+right to left or just read a clock 1->12, just a small quirk.
+
+How do we fix the slowness problem?
+We can represent the 4 half circles all as clock wise
+using the 4 right halves of a circle.
+
+## Solution: 4 Right Half Circles
+
+Start with the circle of fifths and split it in half.
+```js
+// Start with the right half of circle of 5ths
+// then extend it
+    C       
+    ______ G  
+          \
+           |  D 
+            \
+             |
+             | A 
+             |
+            | 
+           | E
+          /
+    ______  B  
+   F#           
+```
+
+Now, use the same shape for the original circle of fifths
+```js
+// 2 halves
+    C              C              Cb              C#
+    _____ G       ______ F        _____ Fb       _____  G#
+          \              \              \              \
+           |  D           | Bb           |              |  D#
+            \              \             \               \
+             |             |              |               |
+             | A           | Eb            |              | A#
+             |             |              |               |
+            |             |              |               |
+           | E           | Ab           |               | E#
+          /             /              /               /
+    ____  B       ______ Db         ____           ____ B#
+   F#              Gb                               
+```
+
+And then lets add in the notes we were missing from problem 1:
+- A  B  C  D  E  F  G 
+-                Fb
+```js
+// 4 halves
+    C              C              Cb              C#
+    _____ G       ______ F        _____ Fb       _____  G#
+          \              \              \              \
+           |  D           | Bb           |              |  D#
+            \              \             \               \
+             |             |              |               |
+             | A           | Eb            |              | A#
+             |             |              |               |
+            |             |              |               |
+           | E           | Ab           |               | E#
+          /             /              /               /
+    ____  B       ______ Db         ____           ____ B#
+   F#              Gb                               
+```
+Now we have a visual diagram of:
+- How to derive all 21 notes, by modifying original notes/chords
+on the circle (e.g., D -> D#, just sharp every note in the D chord
+- We can traverse flats quicker by going by 4ths clockwise
+
+# Major and Minor Scales
+
+## Context: Major Scale
+Derived from circle of fifths
+
+- Major: Normal, no modifications
+
+## Context: Minor Scale
+Derived from circle of fifths + modified for compositional purposes 
+for harmonic/melodic.
+
+Minor just means that the scale has a minor three instead of a major
+three. This means all scales with a minor 3 are minor, like Dorian,
+Phrygian, Klezmer, etc. The 3 is the third most important note in a 
+scale, the first being the 1 and the second being the 5. If the 5 is 
+altered the scale basically can never resolve, since you can't resolve 
+to a diminished or augmented chord, unless we were aliens. So there 
+are technically countably infinite minor scales.
+ 
+- Natural: Normal, no modifications, represents 'normal' minor sound
+- Harmonic: 7# raised so we get Major V, for V - i cadences
+- Melodic:  6# raised to avoid awkwardness of second interval between 
+6b and 7 scale degree, this instead makes it a whole step between 
+6b and 7. This is one reason why b6 -> 7 sounds kind of awkward in
+melodies as the b6 wants to resolve down to 5, whereas the 7 
+wants to resolve up to the tonic. Thus b6 and 7 pull in opposite 
+directions, and the distance between them is quite big. These are 
+the most strongly directional notes in the minor key. This is also why 
+you don't really  want to raise the 6th if you aren't continuing to 
+the leading tone. The raised 6th lacks the pull towards the 5th that 
+the b6 degree has. And the b6 -> 5 resolution is pretty much the most
+characteristic resolution of the minor key. This is also why we revert 
+the 6th to original on the way down from melodic minor to natural minor
+to get back that pull from b6 -> 5 on the way down, since we don't need
+to the pull to the tonic anymore.
+
+## Major Scale
+```js
+                   I  ii iii IV V  vi viio
+      Major Scale: 1  2  3   4  5  6  7
+```
+
+## Minor Scales
+```js
+                   i  iio III  iv  v  VI  VII    no modi
+      Minor Scale: 1  2   3    4   5  6   7      --------------
+      (natural) 
+
+                   i  iio III+ iv  V  VI  vii    7# modi
+      Minor Scale: 1  2   3    4   5  6   7      --------------
+      (harmonic)                                 III  -> III+
+                                                 v    -> V
+                                                 VII  -> vii
+    
+                   i  ii  III+ IV  V  vi  vii    6# modi
+    C Minor Scale: 1  2   3    4   5  6   7      --------------
+    (Melodic Up)                                 iio  -> ii
+                                                 iv   -> IV
+                                                 VI  -> vi
+```
+
+## Mixing Major Minor Scale
+```js
+                   I    ii iii IV V   vi vii     no modi
+      Major Scale: 1    2  3   4  5   6  7       --------------
+      Minor Scale: 3    4  5   6  7   1  2      
+      (natural)    III  iv v   VI VII i  iio        
+      
+
+                   I    ii iii IV V   vi vii     5# modi   | 7# modi
+      Major Scale: 1    2  3   4  5   6  7       -----------------
+      Minor Scale: 3    4  5   6  7   1  2     I    -> I+  | III  -> III+
+      (natural)    III  iv v   VI VII i  iio   iii  -> III | v    -> V    
+                                               V    -> v   | VII  -> vii
+
+                   I    ii iii IV V   vi vii     4# modi   | 6# modi
+      Major Scale: 1    2  3   4  5   6  7       -----------------
+      Minor Scale: 3    4  5   6  7   1  2     viio -> vii | iio  -> ii
+      (natural)    III  iv v   VI VII i  iio   ii   -> II  | iv   -> IV
+                                               IV  -> iv   | VI   -> vi
+```     
+
+# Key Changes
+
+## Intro: Learning By Example
+Most sources that provide info regarding key changes
+have not been helpful, so im just going to do it by example 
+and sort songs by types of key change to see if we can find 
+recurring patterns and such
+
+## Major: 7b -> 4 Scale Degree
+
+### Hey Jude
+
+### The Long and Winding Road
+
+### Love of my Life
+
+# The ~144 Chords
+
+## Intro
+So we've been talking about chords in the previous sections,
+but how do we know what note goes where? 
+Brute force memorization seems to be the answer when starting 
+something new so we're going to write out every possible combination 
+of 'beginner' chords and sort the chords into a derivation shortcut 
+similar to the circle of fifths. 
+
+We will leave major, augment, minor, and diminished triads
+as the parents, and from there derive the children permutations
+forming a graph structure to remember quicker.
+
+## Major Triad -> Seventh + Aug -> Seventh ::6+1::
+```js 
+                     Major: 1 3 5  ->  Aug: 1 3 5# 
+    (major aug)       /      |           |     \ (aug triad)
+     Major Ext: 1 3 5 7#     |           |        Aug Ext: 1 3 5# 7# ...
+              = 1 3 5 1      |           |               = 1 3 5# 1
+                          /  |           |  \           
+                         /   |           |   \     
+       (major major)         |           |      (aug major)  
+        Major 7: 1 3 5 7     |           |      Aug Major: 1 3 5# 7 
+                          /  |           |  \ 
+                         /   |           |   \
+        (major minor)        |           |     (aug minor)
+         Dominant: 1 3 5 7b  |           |     Aug Minor: 1 3 5# 7b   
+                            /             \  
+                           /               \
+        (major diminished)                  (aug dim) 
+         Major 6th: 1 3 5 6                  Aug 6th: 1 3 5# 6
+                  = 1 3 5 7bb                       = 1 3 5# 7bb
+```
+
+## Minor Triad -> Seventh + Dim -> Seventh Graph ::7+1::
+```js
+                    Minor: 1 3b 5  ->  Dim: 1 3b 5b 
+   (minor aug)      /        |           |     \ (dim aug)
+    Minor Triad: 1 3b 5 7#   |           |        Dim Triad 7: 1 3b 5b 7# ... 
+               = 1 3b 5 1    |           |                   = 1 3b 5b 1     
+                           / |           |  \
+                          /  |           |   \   
+    (minor major)            |           |     (dim major)
+    Minor Major: 1 3b 5 7    |           |      Dim Major 7: 1 3b 5b 7 
+                          /  |           |  \  
+                         /   |           |   \
+       (minor minor)         |           |    (dim minor)
+        Minor 7: 1 3b 5 7b   |           |     Half Dim 7: 1 3b 5b 7b
+                            /             \
+                           /               \
+       (minor dim)                           (dim dim)
+        Minor 6th: 1 3b 5 6                   Fully Dim 7: 1 3b 5b 7bb
+                 = 1 3b 5 7bb  
+```
+
+## Sus 2, Sus 4 Triads -> Dominant Sus 7 Extensions ::1::
+```js
+// A sus chord removes the 3rd in order to leave it ambiguous 
+// as to whether its a major or minor chord (since the 3rd of a triad
+// determines its type). The sus replaces the third with another note
+// (usually the 2nd or 4th), leading to the eventual resolving to
+// the third to be satisfying.
+
+// Sus extensions (past 7th) are usually dominant (minor) with a 7b,
+// as dominant 7ths are the most harmonically unstable and want resolution,
+// so this adds color before resolving. Aug, major, dim sus is possible 
+// but again less common
+
+// diminished sus 7bb is just a 6, so we count that as a 6th chord
+// aug sus 7# is just a 1, so we count that as a triad
+                
+                      ambiguous triad: 1 !3 5
+                   /             |       
+      Sus 2: 1 2 5               |  Sus 4: 1 4 5 
+                       - - - - - | - - - - -   
+                     /                        \   
+ (aug, major, dim)  /                          \   (minor)
+                   |                            | \ 
+  (sus 4 aug)    / |                            |   (sus 4 minor)
+  Sus 4: 1 4 5 7#  |                          / |   Sus 7b: 1 4 5 7b
+       = 1 4 5 1   |        (doubled 2/9)    /  |   
+                   |        Sus 9: 1 4 5 7b 9   | \  
+                /  |                            |  \
+  (sus 4 major)    |                            |   (doubled 4/11)  
+  Sus 4: 1 4 5 7   |                          / |    Sus 11: 1 4 5 7b 9 11 
+                   |    (doubled 6/13)       /  |  
+                 /     Sus 13: 1 4 5 7b 9 11 13   \  
+                /                                  \
+  (sus 4 dim)                                       (doubled 1/15)
+  Sus 4 6: 1 4 5 6                                  Sus 15: 1 4 5 7b 9 11 13 15
+         = 1 4 5 7bb
+```
+
+## C Major, Minor, Sus
+
+### Major Scale
+```js
+                   I  ii iii IV V  vi viio
+    C Major Scale: C  D  E   F  G  A  B
+                   1  2  3   4  5  6  7                
+```
+
+### Minor Scales
+```js
+                   i  iio III  iv  v  VI  VII     no modi
+    C Minor Scale: C  D   Eb   F   G  Ab  Bb      --------------
+    (natural)      1  2   3    4   5  6   7
+
+
+                   i  iio III+ iv  V  VI  vii     7# modi
+    C Minor Scale: C  D   Eb   F   G  Ab  B       --------------
+    (harmonic)     1  2   3    4   5  6   7       III  -> III+
+                                                  v    -> V
+                                                  VII  -> vii
+    
+                   i  ii  III+ IV  V  vi  vii     6# modi
+    C Minor Scale: C  D   Eb   F   G  A   B       --------------
+    (Melodic Up)   1  2   3    4   5  6   7       iio  -> ii
+                                                  iv   -> IV
+                                                  VI  -> vi
+```
+
+### Major Graph ::5+1+1::
+```js 
+                     Major: 1 3 5  ->  Aug: 1 3 5# 
+    (major aug)       /      |           |     \ (aug triad)
+     Major Ext: C E G B#     |           |        Aug Ext: C E G# B# ...
+              = 1 3 5 7#     |           |               = 1 3 5# 7#
+              = 1 3 5 1   /  |           |  \            = 1 3 5# 1
+                         /   |           |   \     
+       (major major)         |           |      (aug major)  
+        Major 7: C E G B     |           |      Aug Major: C E G# B 
+                 1 3 5 7  /  |           |  \              1 3 5# 7
+                         /   |           |   \
+        (major minor)        |           |     (aug minor)
+         Dominant: C E G Bb  |           |     Aug Minor: C E G# Bb   
+                   1 3 5 7b /             \               1 3 5# 7b
+                           /               \
+         (major dim)                         (aug dim) 
+          Major 6th: C E G A                 Aug 6th: C E G# B
+                   = 1 3 5 6                        = 1 3 5# 6
+                   = 1 3 5 7bb                      = 1 3 5# 7bb
+```
+
+
+### Minor Graph ::6::
+```js
+                    Minor: 1 3b 5  ->  Dim: 1 3b 5b 
+   (minor aug)      /        |           |     \ (dim aug)
+    Minor Triad: C Eb G B#   |           |        Dim Triad 7: C Eb Gb B# ... 
+               = 1 3b 5 7#   |           |                   = 1 3b 5b 7#     
+               = 1 3b 5 1  / |           |  \                = 1 3b 5b 1
+                          /  |           |   \   
+    (minor major)            |           |     (dim major)
+    Minor Major: C Eb G B    |           |      Dim Major 7: C Eb Gb B 
+                 1 3b 5 7 /  |           |  \                1 3b 5b 7
+                         /   |           |   \
+       (minor minor)         |           |    (dim minor)
+        Minor 7: C Eb G Bb   |           |     Half Dim 7: C Eb Gb Bb
+                 1 3b 5 7b  /             \                1 3b 5b 7b
+                           /               \
+       (minor dim)                           (dim dim)
+        Minor 6th: C Eb G A                   Fully Dim 7: C Eb Gb Bbb
+                 = 1 3b 5 6                                1 3b 5b 7bb
+                 = 1 3b 5 7bb
+```
+
+### Sus Graph ::1::
+```js
+                      ambiguous triad: C D/F G 
+                                       1 !3 5 
+                   /             |       
+      Sus 2: C D G               |  Sus 4: C F G 
+             1 2 5               |         1 4 5
+                       - - - - - | - - - - -   
+                     /                        \   
+ (aug, major, dim)  /                          \   (minor)
+                   |                            | \ 
+  (sus 4 aug)    / |                            |   (sus 4 minor)
+  Sus 4: C F G B#  |                          / |   Sus 7b: C F G Bb
+       = 1 4 5 7#  |        (doubled 2/9)    /  |           1 4 5 7b
+       = 1 4 5 1   |        Sus 9: C F G Bb D   | \  
+                /  |               1 4 5 7b 9   |  \
+  (sus 4 major)    |                            |   (doubled 4/11)  
+  Sus 4: C F G B   |                          / |    Sus 11: C F G Bb D F 
+         1 4 5 7   |    (doubled 6/13)       /  |            1 4 5 7b 9 11
+                 /     Sus 13: C F G Bb D F A    \   
+                /              1 4 5 7b 9 11 13   \
+  (sus 4 dim)                                       (doubled 1/15)
+  Sus 4 6: C F G A                                  Sus 15: C F G Bb D F A C
+         = 1 4 5 6                                          1 4 5 7b 9 11 13 15
+         = 1 4 5 7bb
+```
+
+
+
+
