@@ -24,7 +24,7 @@ export default function Home() {
                     content="Portfolio Resume of Jonathan Camberos, software development, cybersecurity, leetcode, projects."
                 />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://portfolio-jonathan-camberos.vercel.app/" />
+                <meta property="og:url" content="https://jonathancamberos.dev/" />
                 {/* <meta property="og:image" content="/path-to-thumbnail.jpg" /> */}
                 {/* <meta name="twitter:card" content="summary_large_image" /> */}
                 {/* <meta name="twitter:title" content="Jonathan Camberos - Software Developer Portfolio" /> */}
@@ -39,7 +39,7 @@ export default function Home() {
                             "@context": "https://schema.org",
                             "@type": "Person",
                             "name": "Jonathan Camberos",
-                            "url": "https://portfolio-jonathan-camberos.vercel.app/",
+                            "url": "https://jonathancamberos.dev/",
                             "sameAs": [
                                 "https://www.linkedin.com/in/jonathancamberos/",
                                 "https://github.com/JonathanCamberos"
