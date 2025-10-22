@@ -7,13 +7,13 @@
    
 */
 const siteMetadata = {
-    title: 'jonathancamberos-portfolio',
+    title: 'jonathancamberos',
     author: 'jonathancamberos',
-    headerTitle: 'jonathancamberos-portfolio-header',
+    headerTitle: 'jonathancamberos',
     description: 'jonathan camberos software engineer portfolio',
     language: 'en-us',
     theme: 'dark', // system, dark or light
-    siteUrl: 'https://jcmyportfolio-jcprojects.vercel.app/', /* update w/ final url */
+    siteUrl: 'https://jonathancamberos.dev/',
     siteLogo: '/logo/cat30.png',
     socialBanner: '/social-banner.png', // add social banner in the public folder
     //socialBanner: '/social-banner.png', // add social banner in the public folder
