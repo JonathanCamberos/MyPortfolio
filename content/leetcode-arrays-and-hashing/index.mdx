@@ -413,8 +413,8 @@ Given a list of elements, check for duplicates.
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
-        # tc: Python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)
-        # sc: Sorts in place, no extra memory O(1)
+        # tc: python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)
+        # sc: sorts in place, no extra memory O(1)
         nums.sort()
 
         # tc: iterate over list O(n)
@@ -533,6 +533,47 @@ character count.
 | Iteration | O(n) | O(1) | One iteration over both strings in linear O(n) + put, get in O(1) | Array of constant 26 size O(1) |
 | Verification | O(n) | O(1) | Iterating over count array length 26 in constant O(1) | No additional memory O(1) |
 | Overall | O(n) | O(1) | Iteration over input dominates, O(n) | Allocation for array is constant O(1) |
+
+
+## Solution 3: Unicode Extension Hashmap Double Pass - Hashmap/Representation
+```python
+    def isAnagram(self, s: str, t: str) -> bool:
+        
+        # Note:
+        # Normalization is required in real life:
+        # - Text copied from different sources
+        # - User input from different keyboards
+        # - Databases with mixed normalization
+        # - International text processing
+        # - etc.
+        #
+        # Without normalization:
+        #   "é" != "e\u0301"
+        #
+        # With normalization:
+        #   "é" == "e\u0301"
+
+        # sc: hashmap of 26 elements O(1) 
+        count = defaultdict(int)
+
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Overall | ? | ? | ? | ? |
+
+## Solution 4: Array of 26 Single Pass - Hashmap/Representation
+```python
+    def isAnagram(self, s: str, t: str) -> bool:
+
+        # Note:
+        # Unicode cannot be extended for array solution 
+        # since number of characters is not bounded to 26
+
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| N/A | x | x | x | x |
 
 
 # 1. Two Sum I Not Sorted ::1:: - Easy

@@ -2075,6 +2075,16 @@
       "questionNumber": 217,
       "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-set---hashmaprepresentation",
       "blog": "LeetCode: Arrays and Hashing"
+    },
+    {
+      "number": 3,
+      "name": "Sort Then Iterate Comparison Space Optimization",
+      "type": "hashmap",
+      "application": "representation",
+      "code": "def containsDuplicate(self, nums: List[int]) -> bool:\n        \n        # tc: Python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)\n        # sc: Sorts in place, no extra memory O(1)\n        nums.sort()\n\n        # tc: iterate over list O(n)\n        for i in range(1, len(nums)):\n\n            # tc: comparison operation O(1)\n            if nums[i] == nums[i - 1]\n                return True\n\n        # overall: tc O(n log n)\n        # overall: sc O(1)\n        return False",
+      "questionNumber": 217,
+      "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-3-sort-then-iterate-comparison-space-optimization---hashmaprepresentation",
+      "blog": "LeetCode: Arrays and Hashing"
     }
   ],
   "226": [
