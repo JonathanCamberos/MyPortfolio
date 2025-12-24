@@ -409,6 +409,33 @@ Given a list of elements, check for duplicates.
 | Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
 
 
+## Solution 3: Sort Then Iterate Comparison Time Optimization - Hashmap/Representation
+```python
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        
+        # tc: Python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)
+        # sc: Sorts in place, no extra memory O(1)
+        nums.sort()
+
+        # tc: iterate over list O(n)
+        for i in range(1, len(nums)):
+
+            # tc: comparison operation O(1)
+            if nums[i] == nums[i - 1]
+                return True
+
+        # overall: tc O(n log n)
+        # overall: sc O(1)
+        return False
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Sorting | O(n log n) | O(1) | Sorting With Complexity O(n log n) | In place sorting, no extra memory O(1) |
+| Iteration | O(n) | O(n) | Iteration over list in linear O(n) + in, add operation O(1) | Set size relative to input O(n) |
+| Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
+
+
+
 # 242. Valid Anagram ::2:: - Easy
 
 Topics:  Hash Table, String, Sorting 
