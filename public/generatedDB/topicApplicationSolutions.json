@@ -26,7 +26,7 @@
         "name": "Sort Then Iterate Comparison Space Optimization",
         "type": "hashmap",
         "application": "representation",
-        "code": "def containsDuplicate(self, nums: List[int]) -> bool:\n        \n        # tc: Python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)\n        # sc: Sorts in place, no extra memory O(1)\n        nums.sort()\n\n        # tc: iterate over list O(n)\n        for i in range(1, len(nums)):\n\n            # tc: comparison operation O(1)\n            if nums[i] == nums[i - 1]\n                return True\n\n        # overall: tc O(n log n)\n        # overall: sc O(1)\n        return False",
+        "code": "def containsDuplicate(self, nums: List[int]) -> bool:\n        \n        # tc: python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)\n        # sc: sorts in place, no extra memory O(1)\n        nums.sort()\n\n        # tc: iterate over list O(n)\n        for i in range(1, len(nums)):\n\n            # tc: comparison operation O(1)\n            if nums[i] == nums[i - 1]\n                return True\n\n        # overall: tc O(n log n)\n        # overall: sc O(1)\n        return False",
         "questionNumber": 217,
         "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-3-sort-then-iterate-comparison-space-optimization---hashmaprepresentation",
         "blog": "LeetCode: Arrays and Hashing"
@@ -49,6 +49,26 @@
         "code": "def isAnagram(self, s: str, t: str) -> bool:\n\n        # Note:\n        # ord() converts unicode char to int representation\n        # and use int to index into array\n\n        # sc: array of 26 constant O(1)\n        count = [0] * 26\n\n        # Check: mismatch length\n        if len(s) != len(t):\n            return False\n\n        # tc: single iterate over both strings at same time O(n)\n        for i in range(len(s)):\n            count[ord(s[i]) - ord('a')] += 1\n            count[ord(t[i]) - ord('a')] -= 1\n\n        # tc: iterate over count array length 26 O(1)\n        for val in count:\n            if value != 0:\n                return False\n\n        # overall: tc O(n)\n        # overall: sc O(1)\n        return True",
         "questionNumber": 242,
         "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-2-array-of-26-single-pass---hashmaprepresentation",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 3,
+        "name": "Unicode Extension Hashmap Double Pass",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def isAnagram(self, s: str, t: str) -> bool:\n        \n        # Note:\n        # Normalization is required in real life:\n        # - Text copied from different sources\n        # - User input from different keyboards\n        # - Databases with mixed normalization\n        # - International text processing\n        # - etc.\n        #\n        # Without normalization:\n        #   \"é\" != \"e\\u0301\"\n        #\n        # With normalization:\n        #   \"é\" == \"e\\u0301\"\n\n        # sc: hashmap of 26 elements O(1) \n        count = defaultdict(int)",
+        "questionNumber": 242,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-3-unicode-extension-hashmap-double-pass---hashmaprepresentation",
+        "blog": "LeetCode: Arrays and Hashing"
+      },
+      {
+        "number": 4,
+        "name": "Array of 26 Single Pass",
+        "type": "hashmap",
+        "application": "representation",
+        "code": "def isAnagram(self, s: str, t: str) -> bool:\n\n        # Note:\n        # Unicode cannot be extended for array solution \n        # since number of characters is not bounded to 26",
+        "questionNumber": 242,
+        "solutionLink": "/Notes/leetcode-arrays-and-hashing#solution-4-array-of-26-single-pass---hashmaprepresentation",
         "blog": "LeetCode: Arrays and Hashing"
       },
       {

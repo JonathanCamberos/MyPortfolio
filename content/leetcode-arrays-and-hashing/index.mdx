@@ -347,7 +347,6 @@ Constraints:
 
 -10<sup>9</sup> &le; nums[i] &le; 10<sup>9</sup> 
 
-
 ## Abstraction
 Given a list of elements, check for duplicates.
 
@@ -355,7 +354,8 @@ Given a list of elements, check for duplicates.
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Hashmap | O(n) | O(n) | Iterate over array O(n) + get, put in O(1) | Dictionary size relative to input O(n) |
-| Set()   | O(n) | O(n) | Iterate over array O(n) + get, in in O(1) | Set size relative to input O(n) |
+| Set   | O(n) | O(n) | Iterate over array O(n) + get, in in O(1) | Set size relative to input O(n) |
+| Sort + Iterate | O(n log n) | O(1) | TimSort over array with Worst/Avg: O(n log n), Best: O(n) | No additional memory allocation O(1) |
 
 ## Solution 1: Hashmap - Hashmap/Representation
 ```python
@@ -430,10 +430,9 @@ Given a list of elements, check for duplicates.
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Sorting | O(n log n) | O(1) | Sorting With Complexity O(n log n) | In place sorting, no extra memory O(1) |
-| Iteration | O(n) | O(n) | Iteration over list in linear O(n) + in, add operation O(1) | Set size relative to input O(n) |
-| Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
-
+| Sorting | O(n log n) | O(1) | TimSort over array with Worst/Avg: O(n log n), Best O(n) | In place sorting, no extra memory O(1) |
+| Iteration | O(n) | O(1) | Iteration over list in linear O(n) + (in, add) operation O(1) | No additional memory allocation O(1) |
+| Overall | O(n) | O(n) | Iteration over list dominates, O(n) | In place sorting, no additional memory allocation O(1) | 
 
 
 # 242. Valid Anagram ::2:: - Easy
@@ -535,41 +534,95 @@ character count.
 | Overall | O(n) | O(1) | Iteration over input dominates, O(n) | Allocation for array is constant O(1) |
 
 
-## Solution 3: Unicode Extension Hashmap Double Pass - Hashmap/Representation
+## Solution 3: (Follow up) Unicode Extension For Hashmap Double Pass - Hashmap/Representation
 ```python
+    import unicodedata
     def isAnagram(self, s: str, t: str) -> bool:
         
         # Note:
-        # Normalization is required in real life:
-        # - Text copied from different sources
-        # - User input from different keyboards
-        # - Databases with mixed normalization
-        # - International text processing
+        # Why Normalization is required in real life?
+        # Because Unicode allows characters to be represented in multiple valid ways.
+        # Why? Doesn't that make it more complicated?
+        # Yes, but the alternative would be needing millions of characters:
+        # Some languages have hundred of diacritics (e.g, dots, tildes, strokes) 
+        # that can be superimposed to create the letters for their alphabet.
+        # When Unicode was created, it had to support existing encodings (Latin-1, MacRoman, Windows-1252)
+        # which have pre-composed/defined characters (é, ñ, ü) as well as other encodings as mentioned above 
+        # with use diacritics.
+        # The solution is to allow a composing system, that instead of pre-encoding every possible combination (infinite)
+        # instead we use base characters + combining marks. (letter + marks)
+        
+        # Thus, we need normalization to allow visually equal characters which are built/composed in different
+        # ways to be equal.
+
+        # Real world examples:
+        # - Text copied from different platforms or editors
+        # - User input from different keyboards and OSes
+        # - Databases storing mixed Unicode forms
+        # - International and multilingual applications
+        # - Prevent subtle equality bugs and security issues
         # - etc.
-        #
-        # Without normalization:
+        
+        # Without normalization (built/composed differently do not equal, even if visually equal):
         #   "é" != "e\u0301"
-        #
-        # With normalization:
+        
+        # With normalization (build/composed differently do equal, because they are visually equal):
         #   "é" == "e\u0301"
 
-        # sc: hashmap of 26 elements O(1) 
+
+        # Normalize both strings to a canonical form
+        s = unicodedata.normalize("NFC", s)
+        t = unicodedata.normalize("NFC", t)
+
+        # len check
+        if len(s) != len(t):
+            return False
+
+        # sc: dictionary possibly up to number of distinct characters O(k)
         count = defaultdict(int)
 
+        # tc: O(n) over s
+        for ch in s:
+            count[ch] += 1
 
+        # tc: O(n) over t
+        for ch in t:
+            count[ch] -= 1
+
+        # tc: O(k) over unique keys (≤ n)
+        for value in count.values():
+            if value != 0:
+                return False
+
+        # overall: tc O(n)
+        # overall: sc O(k) <= O(n)
+        return True
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Overall | ? | ? | ? | ? |
+| Normalization | O(n) | O(n) | Unicode normalization scans full string | Normalized string creates a copy |
+| Iteration | O(n) | O(k) | Two linear iterations over input | Dictionary grows with unique characters |
+| Verification | O(k) | O(1) | Iterate over dictionary values | No additional memory allocation |
+| Overall | O(n) | O(n) | Linear iterations dominate, O(n) | Worst case unique chars proportional to input O(n) |
 
-## Solution 4: Array of 26 Single Pass - Hashmap/Representation
+## Solution 4: (Follow up) Unicode Extension For Array of 26 Single Pass - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
-        # Note:
-        # Unicode cannot be extended for array solution 
-        # since number of characters is not bounded to 26
+        # Note: Unicode cannot be extended for fixed array solution 
 
+        # English lowercase letters are bounded: only 26
+        # Unicode is not bounded:
+        # > 140,000+ code points
+        # multiple languages
+        # emojis
+        # symbols
+        # combining characters
+
+        # Thus, no fixed small upper bound we can use for our fixed array single pass solution
+        # We need a hashmap / dictionary approach for variable size flexibility
+
+        N/A
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
