@@ -357,7 +357,7 @@ Given a list of elements, check for duplicates.
 | Set   | O(n) | O(n) | Iterate over array O(n) + get, in in O(1) | Set size relative to input O(n) |
 | Sort + Iterate | O(n log n) | O(1) | TimSort over array with Worst/Avg: O(n log n), Best: O(n) | No additional memory allocation O(1) |
 
-## Solution 1: Hashmap - Hashmap/Representation
+## Solution 1: Hashmap [TC Opt] - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
 
@@ -373,8 +373,8 @@ Given a list of elements, check for duplicates.
             # tc: put operation constant O(1)
             count[num] += 1
 
-        # overall: tc  O(n) 
-        # overall: tc O(n)
+        # overall: tc O(n) 
+        # overall: sc O(n)
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -383,7 +383,7 @@ Given a list of elements, check for duplicates.
 | Overall   | O(n) | O(n) | Iteration over input dominates, O(n)| Allocation for dictionary dominates, O(n) | 
 
 
-## Solution 2: Set - Hashmap/Representation
+## Solution 2: Set [TC Opt] - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -409,7 +409,7 @@ Given a list of elements, check for duplicates.
 | Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
 
 
-## Solution 3: Sort Then Iterate Comparison Space Optimization - Hashmap/Representation
+## Solution 3: Sort Iterate Comparison [SC Opt] - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -468,7 +468,7 @@ character count.
 | Hashmap | O(n) | O(1) | Two iterations over each word, linear O(n) + lookup, put in constant time O(1) | Dictionary will be proportional to input, space O(n) |
 | Array of 26 | O(n) | O(1) | Single iteration over both words at same time O(n) + lookup, put in constant time O(1) | Array will be constant 26 elements, space O(1) |
 
-## Solution 1: Hashmap Double Pass - Hashmap/Representation
+## Solution 1: Hashmap Foreach Double Pass [TC Opt] - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
         
@@ -498,7 +498,7 @@ character count.
 | Verification | O(n) | O(1) | Iterating over char count in linear O(n) + get in O(1) | No additional memory O(1) |
 | Overall | O(n) | O(n) | Iteration over input dominates, O(n) | Allocation for dictionary relative to input dominates, O(n) |
 
-## Solution 2: Array of 26 Single Pass - Hashmap/Representation
+## Solution 2: Array of 26 Indexing Single Pass [SC Opt] - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
@@ -534,7 +534,7 @@ character count.
 | Overall | O(n) | O(1) | Iteration over input dominates, O(n) | Allocation for array is constant O(1) |
 
 
-## Solution 3: (Follow up) Unicode Extension For Hashmap Double Pass - Hashmap/Representation
+## Solution 3: [Follow up] Unicode Extension For Hashmap Foreach Double Pass - Hashmap/Representation
 ```python
     import unicodedata
     def isAnagram(self, s: str, t: str) -> bool:
@@ -605,7 +605,7 @@ character count.
 | Verification | O(k) | O(1) | Iterate over dictionary values | No additional memory allocation |
 | Overall | O(n) | O(n) | Linear iterations dominate, O(n) | Worst case unique chars proportional to input O(n) |
 
-## Solution 4: (Follow up) Unicode Extension For Array of 26 Single Pass - Hashmap/Representation
+## Solution 4: [Follow up] Unicode Extension For Array of 26 Indexing Single Pass - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
@@ -663,7 +663,7 @@ and return their indexes.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Hashmap of Complements | O(n) | O(n) | Iterate over array O(n) | Allocation relative to input O(n) |
 
-## Solution 1: (Follow up) Hashmap Tracking Complement Target - Hashmap/Index with Data Key
+## Solution 1: [Follow up] Hashmap Tracking Complement Target - Hashmap/Index with Data Key
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
