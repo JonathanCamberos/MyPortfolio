@@ -547,7 +547,7 @@ def isPalindrome(self, s: str) -> bool:
         # Appending to a list and joining once is more efficient than repeatedly
         # appending to a string. Strings are immutable, so each concatenation
         # creates a new string and copies all existing characters.
-        # TC: list append + join: O(m), repeated string concat: O(m^2)
+        # tc: list append + join: O(m), repeated string concat: O(m^2)
 
         # sc: cleaned version of string O(n)
         cleaned = []
@@ -798,18 +798,15 @@ list to a string, and a string back to the original list.
         return decoded
 ```
 
-## Solution 1: Splicing Delimiter with Catchup 2 pointers - Two Pointers/Catchup
+## Solution 1: Splicing Delimiter With 2 Catchup pointers [TC Opt] - Two Pointers/Catchup
 ```python
     def encode(self, strs: List[str]) -> str:
 
-        # Note: 
-        # python strings are immutable so concatenation with += "" 
-        # python creates new string quadratically
-        # the efficient alternative:
-        # python list .append() modifies list in place by adding a single
-        # element at end in O(1) operation
-        # after appending all chars a "".join() in O(n)
-        # creates the same string in better time complexity
+        # Note:
+        # Appending to a list and joining once is more efficient than repeatedly
+        # appending to a string. Strings are immutable, so each concatenation
+        # creates a new string and copies all existing characters.
+        # tc: list append + join: O(m), repeated string concat: O(m^2)
 
         # sc: n strings with m chars O(n * m)
         encoded = []
@@ -817,8 +814,10 @@ list to a string, and a string back to the original list.
         # tc: iterate list O(n)
         for s in strs:
             
-            # tc: lenDelim length proportional to log10(m) ~= O(1)
-            # append "{length}#" -> "5#""
+            # Note:
+            # custom delimiter to mark start of string "{length}#" -> "5#""
+
+            # tc: delimiter length proportional to log10(m) ~= O(1)
             lenDelim = str(len(s)) + "#"
             left = 0
             while left < len(lenDelim):
@@ -826,9 +825,10 @@ list to a string, and a string back to the original list.
                 left += 1
             
             # tc: iterate string O(m)
-            # append each char
             left = 0
             while left < len(s):
+            
+                # append each char
                 encoded.append(s[left])
                 left += 1
         
@@ -846,11 +846,11 @@ list to a string, and a string back to the original list.
         # tc: iterate string encoding of list O(n * m)
         while left < len(encoded):
 
-            # Right: set to start of length prefix
+            # set right to start of length prefix
             right = left
 
             # tc: log 10 (m) ~= O(1)
-            # Right: shift until pointing to delimiter
+            # shift right until pointing to delimiter
             while encoded[right] != "#":
                 right += 1
 
@@ -873,11 +873,12 @@ list to a string, and a string back to the original list.
             # tc: slice out substring of length m 
             decoded.append(encoded[right:right + length])
            
+            # set left to start of next custom delimiter
             left = right + length
             
-            # Left: shift to start of next length prefix
-            # [ 2 # h i 4 # ...]
-            # [ 0 1 2 3 4 5 6 ...]
+            # after:
+            # [ 2 # h i 3 # b y e ...]
+            # [ 0 1 2 3 4 5 6 7 8 ...]
             #       ^   ^
             #       r   l
 
@@ -892,21 +893,20 @@ list to a string, and a string back to the original list.
 | Overall | O(n * m) | O(n * m) | Linear iteration for encode and decode across all strings and chars dominates, O(n * m) | Allocation for encoded and decoded strings dominates, O(n * m) |
 
 
-## Solution 2: Base 10 Auxiliary Length Delimiter with 1 pointer - Two Pointers/One Pointer with Auxiliary State
+## Solution 2: Base 10 Auxiliary Length Delimiter With 1 pointer [TC Opt] - Two Pointers/One Pointer with Auxiliary State
 ```python
     def encode(self, strs: List[str]) -> str:
 
-        # Note: 
-        # python strings are immutable so concatenation with += "" 
-        # python creates new string time complexity o(n^2)
-        # python list .append() modifies list in place by adding a single
-        # element at end in O(1) operation
-        # so doing .append() with a "".join() at the end is more efficient  
+        # Note:
+        # Appending to a list and joining once is more efficient than repeatedly
+        # appending to a string. Strings are immutable, so each concatenation
+        # creates a new string and copies all existing characters.
+        # tc: list append + join: O(m), repeated string concat: O(m^2)
 
-        # space complexity: for n strings O(n) store n characters O(n), leading to O(n^2)
+        # sc: for n strings O(n) store n characters O(n), leading to O(n^2)
         encoded = []
 
-        # time complexity: iterate over list of strings n length O(n)
+        # tc: iterate over list of strings n length O(n)
         for s in strs:
             
             # lenDelim = len + delim
@@ -919,24 +919,25 @@ list to a string, and a string back to the original list.
                 left += 1
             
             # append string itself
-            # time complexity: iterate over string of n length O(n), for n iterations, leading to O(n^2)
+
+            # tc: iterate over string of n length O(n), for n iterations, leading to O(n^2)
             left = 0
             while left < len(s):
                 encoded.append(s[left])
                 left += 1
         
-        # overall: time complexity O(n^2)
-        # overall: space complexity O(n^2)
+        # overall: tc O(n^2)
+        # overall: sc O(n^2)
         return ''.join(encoded)
 
 
     def decode(self, encoded: str) -> List[str]:
 
-        # space complexity: list of n strings O(n) each of n length O(n), leading to O(n^2)
+        # sc: list of n strings O(n) each of n length O(n), leading to O(n^2)
         decoded = []
         left = 0
 
-        # time complexity: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
+        # tc: iterate over representation of n strings O(n) each of n length O(n), leading to O(n^2)
         while left < len(encoded):
 
             # grab length prefix behind "#" delimiter
@@ -950,23 +951,33 @@ list to a string, and a string back to the original list.
             # skip delimiter, point to start of string
             left += 1  
 
-            # extract substring of 'currLen' characters
-            # time complexity: iterate over string n length O(n) for n iterations O(n), leading to O(n^2)
+            # after:
+            # [ 2 # h i ... ]
+            #       ^
+            #       l  
+
+            # tc: iterate string O(n) for n delimiters O(n), O(n^2)
             substring = []
             for _ in range(currLen):
 
-                # forming string
+                # grab string of currLen
                 substring.append(encoded[left])
                 left += 1
             
-            # left is pointing to start of next len
+            # left is set to start of next length
+
+            # after:
+            # [ 2 # h i 3 # b y e ...]
+            # [ 0 1 2 3 4 5 6 7 8 ...]
+            #           ^
+            #           l
 
             # add string to decoded list of strings
             decoded.append(''.join(substring))
 
 
-        # overall: time complexity O(n^2)
-        # overall: space complexity O(n^2)
+        # overall: tc O(n^2)
+        # overall: sc O(n^2)
         return decoded
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1112,15 +1123,22 @@ and numbers cannot share indexes.
             # grab current sum
             currSum = numbers[left] + numbers[right]  
 
-            # found target sum
+            # Note:
+            # Binary Search Pattern (1)
+            # Check Middle, If Left Path, Else Right Path
+
+            # Check Middle: found target sum
             if currSum == target:
                 # convert to 1-indexed array, per input/output example
                 return [left + 1, right + 1]
 
-            # "BinarySearch" on relevant subsection
-            # update left or right pointer
+            # Binary Search on relevant subsection:
+
+            # Left Path: currSum is too low
             elif currSum < target:
                 left += 1
+
+            # Right Path: currSum is too high
             else:
                 right -= 1
 

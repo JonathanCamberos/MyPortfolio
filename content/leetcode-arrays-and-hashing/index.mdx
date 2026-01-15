@@ -831,7 +831,7 @@ Group the matching anagrams together.
         # Appending to a list and joining once is more efficient than repeatedly
         # appending to a string. Strings are immutable, so each concatenation
         # creates a new string and copies all existing characters.
-        # TC: list append + join: O(m), repeated string concat: O(m^2)
+        # tc: list append + join: O(m), repeated string concat: O(m^2)
 
         # sc: stores n tuple keys O(n) and lists of original k strings O(k), O(n * k)
         anaGroup = {}
