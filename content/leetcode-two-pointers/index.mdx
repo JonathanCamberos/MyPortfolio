@@ -1069,25 +1069,25 @@ and numbers cannot share indexes.
             # BinarySearch Pattern (1)
             # 3 Paths: Middle Target, If Left Path, Else Right Path
 
-            # Base Case: no more array remaining to search, thus complement
-            # for numbers[i] was not found, check next iteration
+            # base case: no more array to search, numbers[i] complement
+            # was not found, check next iteration
             while left <= right:
                 
                 # grab middle element
                 midIndex = (left + right) // 2
                 midNum = numbers[midIndex]
 
-                # Check Middle Target: found sum
+                # check middle target: found sum
                 if midNum == currComplementSearch:
 
                     # convert to 1-indexed array, per test cases
                     return [i + 1, midIndex + 1]  
 
-                # Check Left Path: currSum is too low
+                # check left path: currSum is too low
                 elif midNum < currComplementSearch:
                     left = midIndex + 1
 
-                # Else Right Path: currSum is too high
+                # else right path: currSum is too high
                 else:
                     right = midIndex - 1
 
@@ -1124,19 +1124,19 @@ and numbers cannot share indexes.
 
             # Note:
             # BinarySearch Pattern (1)
-            # 3 Paths: Middle Target, If Left Path, Else Right Path
+            # 3 Paths: middle target, if left path, else right path
 
-            # Check Middle Target: found sum
+            # check middle target: found sum
             if currSum == target:
                 
                 # convert to 1-indexed array, per test cases
                 return [left + 1, right + 1]
 
-            # Check Left Path: currSum is too low
+            # eheck left path: currSum is too low
             elif currSum < target:
                 left += 1
 
-            # Else Right Path: currSum is too high
+            # else right path: currSum is too high
             else:
                 right -= 1
 
@@ -1582,23 +1582,23 @@ Let see:
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
-        # Note: Two Sum vs 3Sum
-        # Two sum, finding two numbers whose sum equals a target is simple
+        # Note:
+        # Two sum: finding two numbers whose sum equals a target is simple
         # with hashmaps or two pointer solutions being efficient
-        # 3Sum adds complexity with a third variable,
-        # but converting 3Sum into a two sum problem allows
-        # the use of hashmap or two pointer solutions again
+        # 3Sum: adds complexity with a third variable,
+        # but adding constraints turns 3Sum into a two sum
+        # and allows the use of hashmap or two pointer solutions again
 
         # set ensures no duplicate triplets
-        # space complexity: 
+        # sc: relative to input O(n)
         results = set()
         n = len(nums)
 
-        # time complexity: default python sorting TimSort, O(n log n)
+        # tc: python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)
+        # sc: sorts in place, no extra memory O(1)
         nums.sort()
 
-        # mimic 
-        # time complexity
+        # tc: iterate over list O(n)
         for i in range(n - 2):
 
             # skip iteration:
@@ -1611,55 +1611,59 @@ Let see:
             if nums[i] > 0:
                 break
 
-            # Set up "BinarySearch" modification:          
-            # set new left boundary for iteration BinarySearch
-            # reset right boundary for iteration BinarySearch  
+            # Note:
+            # BinarySearch Pattern (1)
+            # 3 Paths: Middle Target, If Left Path, Else Right Path
+
+            # new left boundary
+            # reset right boundary  
             left, right = i + 1, n - 1
 
-            # "BinarySearch" modification: 
-            # "<": working within subarray separate from i
+            # BinarySearch Modification (1)
             # cannot evaluate num at left == right given constraint i != j, i != k, j != k
-            # Base case: no more array remaining to search
-            # complement for numbers[i] was not found, 
-            # continue iteration for i
-            # time complexity: BinarySearch on subarray of n elements O(log n) for n iterations, leading to O(n log n)
+            # thus: left < right instead of left <= right
+
+            # Base case: no more array remaining, numbers[i] complement not found,
+            # next iteration
+            
+            # tc: BinarySearch on n elements O(log n), for n iterations O(n), (n log n)
             while left < right:
                 
                 # grab current sum (i, j, k)
                 currSum = nums[i] + nums[left] + nums[right]
-
-                # found target sum
+                
+                # check middle target: found sum
                 if currSum == 0:
                     
                     # add triplet to result set
                     results.add((nums[i], nums[left], nums[right]))
 
-                    # skip iteration:
-                    # j and k should only "BinarySearch" through any number once 
+                    # complete pair skip:
+                    # only j and k can add to 0, we can step to next pair 
                     left += 1
                     right -= 1
 
-                    # skip iteration:
-                    # j and k should only "BinarySearch" through any number once 
+                    # ignore duplicates complete pair:
+                    # we already found j and k, we can skip duplicates of j or k
                     while left < right and nums[left] == nums[left - 1]:
                         left += 1
                     while left < right and nums[right] == nums[right + 1]:
                         right -= 1
 
-                # "BinarySearch" on relevant subsection
-                # update left or right pointer
+                # check left path: currSum is too low 
                 elif currSum < 0:
                     left += 1
+                
+                # else right path: currSum is too low
                 else:
                     right -= 1
 
-        # convert valid set of tuple triplets into valid list of tuple triplets
+        # convert set of tuple triplets into list
 
         # Time Complexity: O(n^2)
         # Space Complexity: O(n)
         return list(results)
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Sorting | O(n log n) | O(1) | Sorting array using TimSort in O(n log n) | No additional memory allocation for in place sorting |
@@ -1668,26 +1672,27 @@ Let see:
 | Result Storage | O(1) | O(n) | Insert takes constant O(1) | Stores k unique triplets O(k) which in worst case is just O(n) | 
 | Overall | O(n<sup>2</sup>) | O(n) | Two pointer traversal for n elements dominates, leading to O(n<sup>2</sup>) | Worst case of n/3 valid triplets O(n/3), which leads to O(n) | 
 
+
 ## Solution 2: Grouping By Parity 4 Triplet Combinations (time limit exceeded) - Two Pointers/Algorithm
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
-        # Note: Two Sum vs 3Sum
-        # Two sum, finding two numbers whose sum equals a target is simple
-        # with hashmaps or two pointer approaches being efficient
-        # 3Sum adds complexity with a third variable.
+        # Note:
+        # Two sum: finding two numbers whose sum equals a target is simple
+        # with hashmaps or two pointer approaches
+        # 3Sum: adds complexity with a third variable.
         # Grouping techniques aim to narrow and organize the solution space
         # reducing redundant checks while finding valid triplets
 
-        # positive, negative, and zero sets
-        # space complexity: 
+        # group by: positive, negative, and zero sets
+        # sc: relative to input O(n)
         p, n, z = [], [], []
         
         # set ensures no duplicate triplets
-        # space complexity: 
+        # sc: relative to input O(n)
         res = set()
 
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate n length O(n)
         for i in nums:
             if i < 0:
                 n.append(i)
@@ -1696,42 +1701,45 @@ Let see:
             else:
                 z.append(i)
 
-        # sets for unique groups
-        # time complexity: convert list into set O(n)
+        # sets ensures no duplicates
+        # tc: convert list into set O(n)
         P, N = set(p), set(n)
 
-        # (0, num, -num)
-        # time complexity: iterate over positive numbers list n length O(n)
-        if len(z) > 0:
-            for i in P:                
-                # time complexity: negative target lookup in constant O(1)
-                nTarget = -i
-                if nTarget in N:
-                    res.add((nTarget, 0, i ))
-
-        # (0, 0, 0)
-        # time complexity: len operation constant O(1)
+        # (0, 0, 0): at least 3 0's for a valid triplet
+        # tc: len operation constant O(1)
         if len(z) >= 3:
             res.add((0, 0, 0))
 
-        # (-, -, +) negative pairs
-        # time complexity: iterate over list of negative numbers n length O(n)
+        # (0, num, -num): at least 1 additive inverse for a valid triplet with at least 1 0
+        if len(z) > 0:
+            # tc: iterate n positive numbers O(n)
+            for i in P:                
+                nTarget = -i
+                # tc: additive inverse target lookup constant O(1)
+                if nTarget in N:
+                    # tc: put constant O(1)
+                    res.add((nTarget, 0, i ))
+
+        # (-, -, +): negative pairs which are additive inverse of 1 positive number
+        # tc: iterate n negative numbers O(n)
         for i in range(len(n)):
-            # time complexity: iterate over list of negative numbers n length O(n) per outer iteration O(n), leading to O(n^2)
+            # tc: iterate n O(n)
             for j in range(i+1, len(n)):
-                # time complexity: lookup operation constant O(1)
                 pTarget = -(n[i] + n[j])
+                # tc: additive inverse lookup constant O(1)
                 if pTarget in P:
+                    # tc: put constant O(1)
                     res.add(tuple(sorted([n[i], n[j], pTarget])))
         
-        # (-, +, +) positive pairs
-        # time complexity: iterate over list of positive numbers n length O(n)
+        # (-, +, +): positive pairs which are additive inverse of 1 negative number
+        # tc: iterate n positive numbers O(n)
         for i in range(len(p)):
-            # time complexity: iterate over list of positive numbers n length O(n) per outer iteration O(n), leading to O(n^2)
+            # tc: iterate n positive numbers O(n)
             for j in range(i+1, len(p)):
-                # time complexity: lookup operation constant O(1)
                 nTarget = -(p[i] + p[j])
+                # tc: additive inverse lookup constant O(1)
                 if nTarget in n:
+                    # tc: put constant O(1)
                     res.add(tuple(sorted([p[i], p[j], nTarget])))
 
         # convert valid set of tuple triplets into valid list of tuple triplets
@@ -1740,7 +1748,6 @@ Let see:
         # overall: space complexity O(n)
         return list(res)  
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Grouping Iteration | O(n) | O(n) | Iterate over list of n length to group into positive, negative, and zero lists O(n) | Grouping list of n length into three groups O(n) |
