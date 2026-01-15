@@ -539,44 +539,49 @@ def isPalindrome(self, s: str) -> bool:
         return True
 ```
 
-## Solution 1: [::-1] Reverse Slice Comparison - Two Pointers/Algorithm
+## Solution 1: Reverse Slicing [::-1] Comparison [TC Opt] - Two Pointers/Algorithm
 ```python
     def isPalindrome(self, s: str) -> bool:
         
+        # Note:
+        # Appending to a list and joining once is more efficient than repeatedly
+        # appending to a string. Strings are immutable, so each concatenation
+        # creates a new string and copies all existing characters.
+        # TC: list append + join: O(m), repeated string concat: O(m^2)
+
         # sc: cleaned version of string O(n)
-        clean = []
+        cleaned = []
 
         # tc: iterate string O(n)
         for c in s:
 
-            # only compare alphaNum
+            # only grab alphaNum chars
             if c.isalnum():
-                clean.append(c.lower())
+                cleaned.append(c.lower())
         
-        # tc: join list O(n)
-        clean = "".join(clean)
+        # tc: join alphaNum list O(n)
+        phrase = "".join(cleaned)
 
-        # Slicing -> [::-1]
-        # [start:stop:step]
-        # -----------------
+        # Note:
+        # Slicing: [start:stop:step]
         # if start and stop are omitted, slice includes the entire sequence
-        # step is -1, indicates to traverse in reverse
+        # if step is -1, indicates to traverse in reverse
 
-        # tc: iterate over two strings comparing
-        # sc: create separate reversed string
+        # tc: single iteration over the two strings
+        # sc: creates new reversed string
         res = phrase == phrase[::-1]
 
         # overall: tc O(n)
         # overall: sc O(n)
-        return 
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
-| Clean string | O(n) | O(n) | Iterate string O(n), append O(1), join O(n) | Allocation for clean string O(n) |
+| cleaned string | O(n) | O(n) | Iterate string O(n), append O(1), join O(n) | Allocation for clean string O(n) |
 | Palindrome Check | O(n) | O(n) | Slice reverse O(n), comparison O(n) | Slice allocates reversed string O(n) |
 | Overall | O(n) | O(n) | Iterate string dominates, O(n) | Allocation for clean string dominates, O(n) | 
 
-## Solution 2: Clean Opposite Ends - Two Pointers/Opposite Ends
+## Solution 2: Cleaned String Opposite Ends [TC Opt] - Two Pointers/Opposite Ends
 ```python
     def isPalindrome(self, s: str) -> bool:
         
@@ -592,6 +597,9 @@ def isPalindrome(self, s: str) -> bool:
         # helper: check if uppercase
         def isUpper(c):
             return ord('A') <= ord(c) <= ord('Z')
+
+        # Note:
+        # Ascii Table Unicode Value: A = 65, a = 97, difference of 32
 
         # helper: shift upper to lowercase
         def toLower(c):
@@ -632,7 +640,7 @@ def isPalindrome(self, s: str) -> bool:
 | Overall | O(n) | O(n) | Iterate string dominates, O(n) | Allocation for clean string dominates, O(n) | 
 
 
-## Solution 3: In Place Opposite Ends - Two Pointers/Opposite Ends
+## Solution 3: In Place Opposite Ends [SC Opt] - Two Pointers/Opposite Ends
 ```python 
     def isPalindrome(self, s: str) -> bool:
 
@@ -656,7 +664,7 @@ def isPalindrome(self, s: str) -> bool:
         left, right = 0, len(s) - 1
         while left < right:
             
-            # Condition: only compare alphaNum
+            # Condition: skip non-alphaNum, compare alphaNum
             while left < right and not isAlphaNum(s[left]):
                 left += 1
             while left < right and not isAlphaNum(s[right]):
@@ -672,11 +680,11 @@ def isPalindrome(self, s: str) -> bool:
             if isUpper(rightChar):
                 rightChar = toLower(rightChar)
 
-            # Condition: validate palindrome
+            # Condition: compare alphaNum
             if leftChar != rightChar:
                 return False
 
-            # Left/Right: shrink pointers towards center
+            # Left/Right: shrink L/R towards center
             left += 1
             right -= 1
 
