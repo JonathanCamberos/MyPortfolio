@@ -519,7 +519,7 @@ character count.
             count[ord(t[i]) - ord('a')] -= 1
 
         # tc: iterate over count array length 26 O(1)
-        for val in count:
+        for value in count:
             if value != 0:
                 return False
 
@@ -534,9 +534,10 @@ character count.
 | Overall | O(n) | O(1) | Iteration over input dominates, O(n) | Allocation for array is constant O(1) |
 
 
-## Solution 3: [Follow up] Unicode Extension For Hashmap Foreach Double Pass - Hashmap/Representation
+## Solution 3: [Follow up] Unicode Extension Normalization For Hashmap Foreach Double Pass - Hashmap/Representation
 ```python
     import unicodedata
+
     def isAnagram(self, s: str, t: str) -> bool:
         
         # Note:
@@ -570,11 +571,17 @@ character count.
         #   "é" == "e\u0301"
 
 
-        # Normalize both strings to a canonical form
+        # NFC = Normalization Form C, where the C means Canonical Composition
+        # Combines characters into their precomposed forms when possible.
+        # So e +  ́ = é.
+        # allows for even comparison
+
+        # NFD = Normalization Form C, where the C means Canonical Decomposition
+        # so the inverse
         s = unicodedata.normalize("NFC", s)
         t = unicodedata.normalize("NFC", t)
 
-        # len check
+        # early len check
         if len(s) != len(t):
             return False
 
@@ -605,11 +612,11 @@ character count.
 | Verification | O(k) | O(1) | Iterate over dictionary values | No additional memory allocation |
 | Overall | O(n) | O(n) | Linear iterations dominate, O(n) | Worst case unique chars proportional to input O(n) |
 
-## Solution 4: [Follow up] Unicode Extension For Array of 26 Indexing Single Pass - Hashmap/Representation
+## Solution 4: [Follow up] Unicode Extension Normalization For Array of 26 Indexing Single Pass - Hashmap/Representation
 ```python
     def isAnagram(self, s: str, t: str) -> bool:
 
-        # Note: Unicode cannot be extended for fixed array solution 
+        # Note: Unicode cannot be extended for fixed array of 26 solution 
 
         # English lowercase letters are bounded: only 26
         # Unicode is not bounded:
@@ -663,7 +670,7 @@ and return their indexes.
 | ---------- | --------------- | ---------------- | ----------- | ------------ |
 | Hashmap of Complements | O(n) | O(n) | Iterate over array O(n) | Allocation relative to input O(n) |
 
-## Solution 1: [Follow up] Hashmap Tracking Complement Target - Hashmap/Index with Data Key
+## Solution 1: [Follow up] Hashmap Tracking Complement Target [TC Opt] - Hashmap/Index with Data Key
 ```python
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         
@@ -674,7 +681,7 @@ and return their indexes.
         tracking = {}
  
         # tc: iterate over list O(n)
-        for i in range (len(nums)):
+        for i in range(len(nums)):
 
             complement = target - nums[i]
 
@@ -771,7 +778,7 @@ Group the matching anagrams together.
         return list(groupAna.values())
 ```
 
-## Solution 1: Array to Tuple Key - Hashmap/Grouping by Criteria
+## Solution 1: Array to Tuple Count Key [TC Opt] - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
@@ -816,7 +823,7 @@ Group the matching anagrams together.
 | Overall | O(n * k) | O(n * k) | Iteration over list and strings dominate, O(n * k) | Allocation for all strings dominates, O(n * k) |
 
 
-## Solution 2: Array to String Key - Hashmap/Grouping by Criteria
+## Solution 2: Array to String Delimited Count Key [TC Opt] - Hashmap/Grouping by Criteria
 ```python
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
 
@@ -839,21 +846,21 @@ Group the matching anagrams together.
                 charCount[ord(char) - ord('a')] += 1
             
             # tc: array of 26 to list O(1)
-            key_parts = []
+            values = []
             for count in charCount:
-                key_parts.append(str(count))
+                values.append(str(count))
                 # delimiter
-                key_parts.append("#")  
+                values.append("#")  
 
             # tc: concat list of 26 to string O(1)
-            key = ''.join(key_parts)
+            groupCountKey = ''.join(values)
 
             # tc: in operation O(1)
-            if key not in anaGroup:
-                anaGroup[key] = []
+            if groupCountKey not in anaGroup:
+                anaGroup[groupCountKey] = []
 
             # tc: put operation O(1)
-            anaGroup[key].append(word)
+            anaGroup[groupCountKey].append(word)
 
         # overall: tc O(n * k)
         # overall: sc O(n * k)
