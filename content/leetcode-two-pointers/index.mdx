@@ -1578,7 +1578,7 @@ Let see:
 ```
 
 
-## Solution 1: Mimicking Two Sum by doing Per Element Opposite Ends Pointer Shift by BinarySearch Modification for 0 (Sorting) - Two Pointers/K Pointer Variants
+## Solution 1: [Sorting] Two Sum Mimic By Per Element Opposite Ends Pointer Shift By BinarySearch Modification For 0 [TC Opt] - Two Pointers/K Pointer Variants
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -1673,7 +1673,7 @@ Let see:
 | Overall | O(n<sup>2</sup>) | O(n) | Two pointer traversal for n elements dominates, leading to O(n<sup>2</sup>) | Worst case of n/3 valid triplets O(n/3), which leads to O(n) | 
 
 
-## Solution 2: Grouping By Parity 4 Triplet Combinations (time limit exceeded) - Two Pointers/Algorithm
+## Solution 2: Grouping By Parity 4 Triplet Combinations [Time Limit Exceeded] - Two Pointers/Algorithm
 ```python
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         
@@ -1824,23 +1824,23 @@ give us the most water.
 | Curr Water | O(1) | O(1) | Water height operation takes constant O(1) | No additional memory allocation O(1) | 
 | Overall | O(n<sup>2</sup>) | O(1) | Inner loop dominates leading to O(n<sup>2</sup>) | No additional memory allocation leading to O(1) | 
 
-## Solution 1: Greedy Opposite Ends Pointer Shift by BinarySearch Modification - Two Pointers/Opposite Ends 
+## Solution 1: Greedy Opposite Ends Pointer Shift by BinarySearch Modification [TC Opt] - Two Pointers/Opposite Ends 
 ```python
     def maxArea(self, height: List[int]) -> int:
         
-        # set up "BinarySearch" modification
+        # boundaries
         left, right = 0, len(height)-1
         maxWater = 0 
 
-        # time complexity: two pointer iteration over list of n length O(n)
+        # tc: iteration n O(n)
         while left < right:
 
             # grab smaller height between outside pointers
             smallerHeight = min(height[left], height[right])
 
-            # width includes walls: 
-            # [1, 1] is 1 water, so (rightIndex - leftIndex) = width
-            # calculate curr water between outside pointers, (smallerHeight * width)
+            # per test cases: width includes walls 
+            # [1, 1] is 1 water, (rightIndex - leftIndex) = width
+            # thus, calculate curr water between outside pointers = (smallerHeight * width)
             currWater = smallerHeight * (right-left)
             
             # compare to global max
@@ -1850,25 +1850,26 @@ give us the most water.
             # As we move pointers inwards, width is guaranteed to get shrink
             # Thus, we can continue to move our pointers,
             # until we hit a bigger height than our current smaller height
-            # time complexity: two pointer iteration over list of n length O(n)
+            # Or conversely, we only need to stop and check at a bigger height
+
+            # tc: iteration n list O(n)
             if height[left] < height[right]:
                 # step past current left/right wall combination
                 left += 1
-                # Greedy:
+                # Greedy Skip:
                 while left < right and height[left] < smallerHeight:
                     left += 1 
             else:
                 # step past current left/right wall combination
                 right -= 1
-                # Greedy:
+                # Greedy Skip:
                 while left < right and height[right] < smallerHeight:
                     right -= 1
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return maxWater
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Iteration | O(n) | O(1) | Iteration over list of n length with two pointers O(n) | No additional memory allocation for iteration O(1) |
