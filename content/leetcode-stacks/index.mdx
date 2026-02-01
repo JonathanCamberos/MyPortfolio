@@ -374,43 +374,51 @@ in the correct order.
         return True
 ```
 
-## Solution 1: Manual Condition Stack Check - Stack/Tracking Nested or Hierarchical Structures 
+## Solution 1: Manual Condition Stack Check [TC Opt] - Stack/Tracking Nested or Hierarchical Structures 
 ```python
     def isValid(self, s: str) -> bool:
 
         # note: in python, an empty list [] is falsy evaluating to false
         # not [] -> true
 
-        # space complexity: stack stores up to n opening brackets O(n)
+        # sc: relative to input O(n)
         stack = []
 
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate list O(n)
         for c in s:
 
-            # found closing bracket, match with opening bracket
+            # found close bracket, match with open
+
+            # tc: constant length list check effectively constant O(1)
             if c in ')]}':
 
-                # check stack is empty, no matching opening available
+                # check if stack is empty, no open to match
+                # tc: len check O(1)
                 if not stack:
                     return False
 
-                # time complexity: pop in constant O(1)
+                # tc: pop constant O(1)
                 topElem = stack.pop()
 
-                # check if opening matches closing
+                # check if open bracket matches
+                # tc: equal in constant O(1)
                 if  ((c == ')' and topElem != '(') or
                      (c == '}' and topElem != '{') or
                      (c == ']' and topElem != '[')):
                     return False
 
-            # found opening bracket, push to stack
+            # found open bracket, push to stack
+
+            # tc: constant length list check effectively constant O(1)
             if c in '([{':
+
+                # tc: list append amortized O(1)
                 stack.append(c)
                                
-        # if stack is empty, success
+        # stack is empty, success
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return not stack
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -420,45 +428,51 @@ in the correct order.
 | Overall | O(n) | O(n) | Iteration over string of n length dominates, leading to O(n) | Memory allocation for stack with n opening brackets dominates, leading to O(n) | 
 
 
-## Solution 2: Stack with Hashmap lookup - Stack/Tracking Nested or Hierarchical Structures
+## Solution 2: Stack with Hashmap lookup [TC Opt] - Stack/Tracking Nested or Hierarchical Structures
 ```python
     def isValid(self, s: str) -> bool:
 
-        # space complexity: stack stores opening brackets for string n length O(n)
+        # sc: relative to input O(n)
         stack = []
 
-        # space complexity: closed -> open mapping in constant O(1)
+        # bracket mapping: closed -> open
+
+        # sc: create hashmap fixed entries O(1)
         mapping = {
             ')' : '(',
             ']' : '[',
             '}' : '{'
         }
 
-        # time complexity: iterate over string of n length O(n)
+        # tc: iterate over string of n length O(n)
         for c in s:
             
-            # found closing bracket, match with opening bracket
+            # found close bracket, match open
             if c in mapping:
 
-                # check stack is empty, no matching opening available
+                # check if stack is empty, no open to match
+                # tc: len check O(1)
                 if not stack:
                     return False
 
-                # time complexity: pop in constant O(1)
+                # tc: pop constant O(1)
                 topElem = stack.pop()
 
-                # check if opening matches closing
+                # check if open bracket matches
+                # tc: equal in constant O(1)
                 if mapping[c] != topElem:
                     return False
             
             # found opening bracket, push to stack
-            else:   
+            else:
+
+                # tc: list append amortized O(1)
                 stack.append(c)
                 
-        # if stack is empty, success
+        # stack is empty, success
 
         # overall: time complexity O(n)
-        # overall: space complexity
+        # overall: space complexity O(n)
         return not stack
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -625,17 +639,17 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-## Solution 1: 2 Stacks for main and min - Stack/Dynamic Programming State Compression
+## Solution 1: 2 Stacks For Main and Min - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
 
-    # overall: space complexity O(n)
+    # overall: sc O(n)
     def __init__(self):
 
         # Note:
         # minTracker stack tracks the min value at each level of the main stack. 
 
-        # space complexity: two stacks for n elements O(n)
+        # sc: two stacks for n elements O(n)
 
         # stores all pushed values
         self.mainStack = []
@@ -651,7 +665,7 @@ class MinStack:
     def _compressStack(self, stack):
         return self.mainSize < len(stack)
             
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def push(self, val: int):
 
         # add new val at index or append
@@ -670,26 +684,26 @@ class MinStack:
         # increases logical size
         self.mainSize += 1
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def pop(self):
         # validate non empty, decrease logical length
         self._validateNotEmpty("Invalid pop, stack is empty")
         self.mainSize -= 1
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def top(self):
         # validate non empty, return elem
         self._validateNotEmpty("Invalid top, stack is empty")
         return self.mainStack[self.mainSize - 1]
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def getMin(self):
         # validate non empty, return min
         self._validateNotEmpty("Invalid getMin, stack is empty")
         return self.minTracker[self.mainSize - 1]
 
-    # overall: time complexity O(1)
-    # overall: space complexity O(n)
+    # overall: tc O(1)
+    # overall: sc O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -718,7 +732,7 @@ class MinStack:
     def _validateNotEmpty(self, errMsg: str):
         if self.size == 0:
             raise IndexError(errMsg)
-
+ 
     def _compressStack(self):
         return self.size < len(self.stack)
 

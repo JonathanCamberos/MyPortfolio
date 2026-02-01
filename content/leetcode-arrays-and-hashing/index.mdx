@@ -536,8 +536,6 @@ character count.
 
 ## Solution 3: [Follow up] Unicode Extension Normalization For Hashmap Foreach Double Pass - Hashmap/Representation
 ```python
-    import unicodedata
-
     def isAnagram(self, s: str, t: str) -> bool:
         
         # Note:
@@ -578,6 +576,10 @@ character count.
 
         # NFD = Normalization Form C, where the C means Canonical Decomposition
         # so the inverse
+
+        # tc: iteration relative to input O(n)
+        # sc: 2 string copies relative to input O(n)
+        import unicodedata
         s = unicodedata.normalize("NFC", s)
         t = unicodedata.normalize("NFC", t)
 
@@ -589,12 +591,12 @@ character count.
         count = defaultdict(int)
 
         # tc: O(n) over s
-        for ch in s:
-            count[ch] += 1
+        for c in s:
+            count[c] += 1
 
         # tc: O(n) over t
-        for ch in t:
-            count[ch] -= 1
+        for c in t:
+            count[c] -= 1
 
         # tc: O(k) over unique keys (≤ n)
         for value in count.values():
@@ -683,6 +685,7 @@ and return their indexes.
         # tc: iterate over list O(n)
         for i in range(len(nums)):
 
+            # find the complement we should be tracking
             complement = target - nums[i]
 
             # tc: in operation O(1)
