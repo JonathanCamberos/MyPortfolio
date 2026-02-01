@@ -2129,7 +2129,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 
 
-## Solution 1: Monotonic 2 Inner/Outer Pointers Traversal Creating Bound Buckets Opposite Ends Pointer Shift Modification - Two Pointers/K Pointer Variants
+## Solution 1: [Monotonic Pointers] 2 Inner/Outer Pointers Traversal Creating Bound Buckets By Monotonic Opposite Ends Pointer Shift Modification - Two Pointers/K Pointer Variants
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -2229,7 +2229,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Overall | O(n) | O(1) | Two pointer iteration over list of n length dominates, leading to O(n) | No additional memory allocation required, leading to O(1) | 
 
 
-## Solution 2: Monotonic Stack Dragging Right Wall Height Over The Array And Catching Water With Depth Candidates And Left Wall - Two Pointers/Algorithm
+## Solution 2: [Monotonic Stack] Dragging Right Wall Height Over The Array And Catching Water With Depth Candidates And Left Wall By Building Monotonic Stack - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -2343,7 +2343,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Water Calculation | O(1) | O(1) | Calculating distance and bounded height in constant O(1) | No additional memory for distant or bounded height operations O(1) | 
 | Overall | O(n) | O(n) | Iterating over list of n length dominates, leading to O(n) | Stack growing for n elements dominates, leading to O(n) | 
 
-## Solution 3: Dynamic Programming Creating Bucket By Tracking Max Height Bucket Bounds Encountered L To R and R to L - Two Pointers/Algorithm
+## Solution 3: [Dynamic Programming] Creating Bucket Left Right Boundaries By Dynamic Programming Tracking Max Height Bucket Bounds Encountered L To R and R to L - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
         

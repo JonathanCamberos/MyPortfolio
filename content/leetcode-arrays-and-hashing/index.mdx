@@ -970,17 +970,19 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ```python    
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
 
-        # Note: 
+        # MinHeap: 
         # Heap only guarantees that the root is the min or max, and
         # provides no guarantee about the relative order of nodes. 
         # The minHeap root will hold the smallest element,
-        # we iterate and add elements, 
-        # we only remove the root/smallest element when heap exceeds size k, 
-        # ensuring heap holds the k largest frequencies seen so far.
+        # as we iterate we will add elements, 
+        # and we only remove the root/smallest element when heap exceeds size k.
+        # This ensures the heap will hold the k most frequent
+        # elements we have seen so far
 
         # sc: freq count for list, m unique elements in worst case O(n)
         freq = defaultdict(int)
 
+        # Calculate freq count for each element
         # tc: iterate over list O(n)
         for num in nums: 
             freq[num] += 1
@@ -994,18 +996,21 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # tc: push operation O(log n)
             heapq.heappush(minHeap, (freq, num)) 
             
-            # if heap grows to size k + 1
+            # if heap grows to size k + 1, pop least freq root so we keep the k most freq elements
             if len(minHeap) > k:
 
                 # tc: pop smallest element O(log k)
                 heapq.heappop(minHeap) 
         
-        # tc: grab k elements from minHeap, worst case grab n elements O(n)
-        result = [num for freq, num in minHeap]
 
-        # expanded for loop:
-        # for _, num in minHeap:
-        #    result.append(num) 
+        # alternative expanded loop:
+        # tc: grab top k occurring elements from minHeap, worst case grab n elements O(n)
+        result = []
+        for _, num in minHeap:
+            result.append(num) 
+
+        # alternative shorter notation
+        # result = [num for freq, num in minHeap]
 
         # overall: tc O(n log n)
         # overall: sc O(n)
@@ -1023,14 +1028,14 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ```python
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     
-        # Note: 
-        # QuickSelect is a modified quicksort
-        # A finalPartitionMarker marks the correct position, 
-        # at which point, elements to the left and right of finalPartitionMarker
+        # QuickSelect Modified QuickSort:
+        # A finalPartitionMarker marks the final expected correct position, 
+        # where at which point, elements to the left and right of finalPartitionMarker
         # are guaranteed to be smaller/larger.
-        # QuickSelect avoids sorting the entire array and
-        # only isolates the minimum elements we need to complete task
+        # This avoids sorting the entire array by
+        # isolating the minimum elements needed to complete the task
 
+        # Helper: 
         # In place partition of subarray [left,right] relative to random pivot index value
         def partitionSection(left, right, randPivotElemIndex):
             
@@ -1039,48 +1044,53 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # Frequency count of random pivot element
             pivotElemFreq = frequency[unique[randPivotElemIndex]]
 
-            # Move pivot to end
-            # Tuple unpacking in python allows to swap two variables
+            # Move random pivot element to end
+            # Tuple unpacking in python allows swapping two variables
             unique[randPivotElemIndex], unique[right] = unique[right], unique[randPivotElemIndex]
             
-            # Index to partition larger elements to the left boundary of subarray
+            # Left index to partition/move larger elements to the left boundary of subarray
             partitionIndex = left
 
             # tc: iterate over subarray, n in worst case O(n)
             for i in range(left, right):
 
-                # Partition elements with (pivotElemFreq < freq), move to left -> 'greater'
+                # Partition elements with frequencies above the pivotElem Freq (pivotElemFreq < freq),
+                # move them to left (move larger elements greater than the pivot to the left of the pivot)
                 if pivotElemFreq < frequency[unique[i]]:  
-
-                    # larger freq element on left, sorting [high... low] count 
-                    # -> allows use to grab top freq k elements [:k]
+                    
+                    # Slicing:
+                    # Placing larger freq element on left [high... low] 
+                    # allows [:k] to grab the first top k freq elements
                     unique[i], unique[partitionIndex] = unique[partitionIndex], unique[i]
                     partitionIndex += 1
 
             # set pivot to correct partitioned index,
-            # elements left and right of pivot follow [greater... pivot ... lesser] freq count
+            # elements left and right of pivot follow [greater... pivot ... lesser]
             unique[partitionIndex], unique[right] = unique[right], unique[partitionIndex]
             return partitionIndex
 
+        # Helper: 
+        # Wrapper function that continues to pick random partition element until we have 
+        # placed the target in the "finalPartitionMarker"
         # tc: average recursion depth O(log m)
         # sc: recursion stack for in place partitioning on average O(log m)
         def quickSelectBinarySearchHelper(left, right, finalPartitionMarker):
             
-            # Base Case: 
+            # Base Case:
             if left == right:
                 return
 
-            # Random pivot index,
-            # differs from QuickSort "median-of-three" approach
-            # random pivot focuses on finding the kth smallest or largest,
-            # rather than fully sorting the array, 
-            # random pivot avoids degrading to worst case O(n^2)
+            # Random pivot index:
+            # Differs from QuickSort "median-of-three" approach.
+            # Random pivot focuses on finding the kth smallest or largest,
+            # rather than fully sorting the array, and using random pivot avoids 
+            # degrading to worst case O(n^2)
             randPivotElemIndex = random.randint(left, right)
 
-            # partition subarray
+            # Partition subarray
             resultPivotElemIndex = partitionSection(left, right, randPivotElemIndex)
             
-            # Base Case: kth item in correct sorted [high... low] place
+            # Base Case: Random partition marker ended up in correct place
             if finalPartitionMarker == resultPivotElemIndex:
                 # -> allows us to grab k top freq count by [:k]
                 return 
@@ -1089,25 +1099,31 @@ Now that we have the count, we just grab the top k highest occurring elements.
             # Selects next subarray and partition pivot
             # resultPivotElemIndex must recurse towards side where finalPartitionMark is on
 
-            # final is in left partition of result: [left, resultPivot-1]
+            # Result was to the right of final expected, 
+            # search to the left of the result: [left, resultPivot-1]
             elif finalPartitionMarker < resultPivotElemIndex:
                 quickSelectBinarySearchHelper(left, resultPivotElemIndex - 1, finalPartitionMarker)
             
-            # final is in right partition of result: [resultPivot+1, right]
+            # Result was to the left of final expected,
+            # search to the right of the result: [resultPivot+1, right]
             else:
                 quickSelectBinarySearchHelper(resultPivotElemIndex + 1, right, finalPartitionMarker)
 
+        # Calculate freq count for each element
         # tc: iterate over list O(n)
         # sc: allocate for list, n unique elements worst case O(n)
         frequency = defaultdict(int)
         for num in nums:
             frequency[num] += 1
 
-        # QuickSelect BinarySearch to place kth most frequent element
-        # in its partitioned location, to then splice [:k]
+        # Top Kth Elements Indexing: Top 2 elements, indexes (0, 1)
+        # [9 7 4 3 1]
+        #  0 1 2 3 4
+        finalPartition = k - 1
+
+        # Unique count to sort by during partitioning
         unique = list(frequency.keys())
         n = len(unique)
-        finalPartition = k - 1
         l, r = 0, n - 1
 
         # For High to Low (descending) indexing:
@@ -1115,6 +1131,10 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # 2 - 1 = 1 (our 2nd largest)
         # splice [:2] = [0, 1]
         quickSelectBinarySearchHelper(l, r, finalPartition)
+
+        # Pivot is now in the correct partitioned index.
+        # Elements left and right of pivot follow [greater... pivot ... lesser]
+        # Slice the first k to grab the top k elements
 
         # overall: tc O
         # overall: sc 
@@ -1132,7 +1152,12 @@ Now that we have the count, we just grab the top k highest occurring elements.
 ## Solution 3: BucketSort by Count - Hashmap/Algorithm
 ```python
     def topKFrequent(self, nums: List[int], k:int) -> List[int]:
-            
+        
+        # BucketSort:
+        # Grouping values by freq count into buckets.
+        # Allows us to iterate over most freq buckets and grab top k elements
+
+        # Calculate freq count for each element
         # tc: iterate over list of n integers O(n)
         # sc: frequency count for unique integers O(m) 
         count = defaultdict(int)
