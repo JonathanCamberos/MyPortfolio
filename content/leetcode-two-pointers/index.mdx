@@ -2229,7 +2229,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Overall | O(n) | O(1) | Two pointer iteration over list of n length dominates, leading to O(n) | No additional memory allocation required, leading to O(1) | 
 
 
-## Solution 2: Monotonic Stack - Two Pointers/Algorithm
+## Solution 2: Monotonic Stack Dragging Right Wall Height Over The Array And Catching Water With Depth Candidates And Left Wall - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -2259,11 +2259,12 @@ Now we need a way to traverse the array that allows us to take advantage of this
         # tc: iterate over n O(n)
         for i in range(len(height)):
 
-            # Check: if stack is non empty, depth candidate could exists (need 2 on stack)
+            # Check: if stack is non empty, depth candidate (still need to check if left wall candidate exists)
             # Check: if current height[i] breaks monotonic decreasing order, its viable as a right wall
             # implies: we keep appending while monotonic decreasing stays valid
             # implies: stack is kept in monotonic decreasing order
             # implies: when monotonic decreasing breaks, we have found right wall
+            # implies: we have a depth candidate
             while stack and height[i] > height[stack[-1]]:
                 
                 # curr while loop iteration:
@@ -2271,12 +2272,14 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # pop stack[-1]: depth candidate
                 # peak stack[-2]: left wall
 
-                # while stack is non-empty:
-                # stack.pop() will iterate depth candidate and left wall
-                # essentially dragging the right wall over the monotonic stack, 
-                # adding all possible water, with all combinations of left wall and depth candidate
-                # until a depth candidate is taller than the current right wall
-                # then we just add the right wall to the stack maintaining monotonic order
+                # Check if left wall candidate exists:
+                # remove depth candidate from stack, check if stack is non-empty
+                # If non-empty, we will essentially dragging the right wall over the monotonic stack, 
+                # comparing it to all depth candidates, and adding the corresponding water.
+                # Continue until a depth candidate is taller than the current right wall,
+                # then we just add the right wall to the stack maintaining monotonic order.
+                # Or continue until we run out of left wall/depth candidates,
+                # then the right wall becomes the new leftmost wall.
                 depthCandidateIndex = stack.pop() 
 
                 # Check: if stack empty after pop, no left wall exists (had 1 but not 2 elements)
@@ -2284,7 +2287,8 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 if not stack:
                     break
 
-                # trapped water involves the space between two walls, excluding walls
+                # Left wall exists:
+                # Check water between [Left Wall... Depth Candidate ...Dragged Right Wall] excluding walls
                 # width = (right - left - 1)
 
                 # After stack.pop():
@@ -2293,6 +2297,8 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # peak stack[-1]: left wall
                 # while loop check implies: depthCandidate < height[i]
                 # monotonic stack check implies: depthCandidate < stack[-1]
+                # Thus the bucket is: [peak stack[-1]... depthCandidate ... height[i]]
+
                 rightWallIndex = i
                 leftWallIndex = stack[-1]
                 distance = rightWallIndex - leftWallIndex - 1
@@ -2307,18 +2313,22 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # add the trapped water for the current segment 
                 # [5, 0, 0, 2]
                 # in this case, (0, 0, 2)
-                # would return with the left wall being 0
+                # left wall = 0, depth = 0, right wall = 2
                 # so no water captured
-                # but then, (5, 0, 2)
-                # would return with the right wall being 5
-                # in which case we would need the distance.
+                # but then due to pop, (5, 0, 2)
+                # left wall = 5, depth = 0, right wall = 2
+                # so water captured based on distance
                 
-                # so distance will always be 1
-                # unless we have a run of identical heights
+                # Originally: [5, 0, 0, 2]
+                #              0  1  2  3
+                # So distance is: 3 - 0 - 1 = 2
+                
+                # So distance will always be 1 in
+                # unless we have a run of identical heights such as above
                 water += distance * boundedHeight
 
             # implies: monotonic decreasing is still valid
-            # implies: append height to stack
+            # thus: continue appending height to stack
             stack.append(i)
 
         # overall: time complexity O(n)
@@ -2333,7 +2343,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 | Water Calculation | O(1) | O(1) | Calculating distance and bounded height in constant O(1) | No additional memory for distant or bounded height operations O(1) | 
 | Overall | O(n) | O(n) | Iterating over list of n length dominates, leading to O(n) | Stack growing for n elements dominates, leading to O(n) | 
 
-## Solution 3: Dynamic Programming - Two Pointers/Algorithm
+## Solution 3: Dynamic Programming Creating Bucket By Tracking Max Height Bucket Bounds Encountered L To R and R to L - Two Pointers/Algorithm
 ```python
     def trap(self, height: List[int]) -> int:
         
@@ -2347,39 +2357,39 @@ Now we need a way to traverse the array that allows us to take advantage of this
         if n == 0:
             return 0
 
-        # Arrays to store max heights from the left and right
-        # leftMax[i]: Maximum height from 0 to index i
-        # rightMax[i]: Maximum height from index i to (n-1)
+        # Arrays to store max heights from the left and right sides
+        # leftMax[i]: Maximum height from 0 to index i (via iterating left to right)
+        # rightMax[i]: Maximum height from index i to n-1 (via iterating right to left)
+        # sc: relative to input O(n)
         leftMax = [0] * n
         rightMax = [0] * n
         water = 0
 
-        # calculate left max for each bar
-        # compare previous max, with current bar height,
-        # as curr may be new max, for the curr index
-        # time complexity: iterate over list of n length O(n)
+        # Left Max Array:
+        # Max between left previous max and current height
+        # tc: iterate over n O(n)
         leftMax[0] = height[0]
         for i in range(1, n):
             leftMax[i] = max(leftMax[i - 1], height[i])
 
-        # calculate right max for each bar
-        # compare previous max, with current bar height,
-        # as curr may be new max, for the curr index
-        # time complexity: iterate over list of n length O(n)
+        # Right Max Array:
+        # Max between right previous max and current height
+        # tc: iterate over n O(n)
         rightMax[n - 1] = height[n - 1]
         for i in range(n - 2, -1, -1):
             rightMax[i] = max(rightMax[i + 1], height[i])
 
-        # calculate trapped water for each bar
-        # time complexity: iterate over list of n length O(n)
+        # Depth Calculation:
+        # Check if bounded by left or right max (lower of the two) and check if there is depth to catch water
+        # tc: iterate over n O(n)
         for i in range(n):
 
-            # The water trapped above bar i is determined by the minimum between
-            # leftMax[i] and rightMax[i] minus the curr bar height
+            # Water trapped at bar i is lower bound between left and right max
+            # minus the curr bar height
             water += min(leftMax[i], rightMax[i]) - height[i]
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return water
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
