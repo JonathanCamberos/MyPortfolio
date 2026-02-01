@@ -1116,7 +1116,7 @@ Now that we have the count, we just grab the top k highest occurring elements.
         for num in nums:
             frequency[num] += 1
 
-        # Top Kth Elements Indexing: Top 2 elements, indexes (0, 1)
+        # Top Kth Elements Indexing: Top 2 elements are indexes [0, 1]
         # [9 7 4 3 1]
         #  0 1 2 3 4
         finalPartition = k - 1
@@ -1136,8 +1136,8 @@ Now that we have the count, we just grab the top k highest occurring elements.
         # Elements left and right of pivot follow [greater... pivot ... lesser]
         # Slice the first k to grab the top k elements
 
-        # overall: tc O
-        # overall: sc 
+        # overall: tc O(n)
+        # overall: sc O(n)
         return unique[:k]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
