@@ -2237,6 +2237,7 @@ Constraints:
 0 &le; heights[i] &le; 10<sup>4</sup>
 
 ## Abstract
+Given array of heights, find the area of the largest rectangle in the histogram.
 
 
 ## Space & Time Complexity
@@ -2311,10 +2312,11 @@ Constraints:
 
 
 
-## Solution 1: Double Dragging Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
+## Solution 1: [Monotonic] Double Dragging Forward Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
 
+        # Popping Rule:
         # "we keep popping as long as the current small height candidate
         #  is still covered by the taller bars before it,
         #  which means that either:
@@ -2325,29 +2327,28 @@ Constraints:
         #     the small height candidate, since we know all popped walls were taller than
         #     this current left height, so we can do i - left index - 1
         
-        # Note:
-        # Monotonic stack: A stack that maintains monotonic increasing heights
+        # Monotonic Stack: 
+        # A stack that maintains monotonic increasing heights
         # When monotonic increasing rule breaks, curr height will serve as right boundary
         # If stack is non empty, that means we have a stack full of tall bars.
         # Each popped bar acts as as the height of a rectangle. 
         # The width of the rectangle is determined by the distance 
         # to the previous smaller bar, the left boundary 
 
-        # Note: 
         # Sentinel: 
         # Given that are trigger for the area check is that we have found the tallest wall
         # when the monotonic increasing rule has broken
         # we need to add a height wall of 0 at the end of the heights array as a sentinel
         # so that it triggers and checks the last valid height
 
-        # Space complexity: stores heights for up to n heights O(n)
+        # sc: stores heights for up to n heights O(n)
         stack = []
         max_area = 0
 
         # Sentinel: 0-height bar to trigger monotonic increasing rule break
         heights.append(0)
 
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate over list of n length O(n)
         for i in range(len(heights)):
 
             # Check: if current bar breaks monotonic increasing order
@@ -2380,8 +2381,8 @@ Constraints:
             # curr height is no longer covered by the tall bars, add to stack 
             stack.append(i)
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return max_area
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2392,7 +2393,7 @@ Constraints:
 | Overall | O(n) | O(n) | Iterate over list of n length dominates, leading to O(n) | Stack index storage dominates, leading to O(n) |
 
 
-## Solution 2: Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
+## Solution 2: [Monotonic] Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         
@@ -2403,7 +2404,7 @@ Constraints:
         stack = []
 
         # Sentinel: iteration through -1
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate over list of n length O(n)
         for i in range(n-1, -2, -1):
 
             # Sentinel: append a sentinel index of -1, height of 0
@@ -2437,8 +2438,8 @@ Constraints:
             if i >= 0:
                 stack.append(i)
 
-        # overall: time complexity 
-        # overall: space complexity
+        # overall: tc 
+        # overall: sc
         return max_area
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
