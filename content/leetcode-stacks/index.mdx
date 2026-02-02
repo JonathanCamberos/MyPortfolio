@@ -643,64 +643,74 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 ```python
 class MinStack:
 
+    # Main + MinTracker Stack:
+    # Tracks the min value at each level of the main stack. 
+
     # overall: sc O(n)
     def __init__(self):
 
-        # Note:
-        # minTracker stack tracks the min value at each level of the main stack. 
-
         # sc: two stacks for n elements O(n)
 
-        # stores all pushed values
+        # all values
         self.mainStack = []
-        # for each level, stores minimum value
+        # minimum value at current level
         self.minTracker = []
-        # logical size
-        self.mainSize = 0
+        # pointer to the curr element
+        self.logicalSize = 0
 
+    # helper:
+    # edge case checker for empty stack
     def _validateNotEmpty(self, errMsg: str):
-        if self.mainSize == 0:
+        if self.logicalSize == 0:
             raise IndexError(errMsg)
 
-    def _compressStack(self, stack):
-        return self.mainSize < len(stack)
+    # helper:
+    # checks if logical pointer is behind actual length of stack
+    def _checkLogicalVsActualSize(self, stack):
+        return self.logicalSize < len(stack)
             
     # overall: tc O(1)
     def push(self, val: int):
 
-        # add new val at index or append
-        if self._compressStack(self.mainStack):
-            self.mainStack[self.mainSize] = val
+        # If logical pointe ris behind actual length, we replace at pointer
+        # else append to end of the stack
+        if self._checkLogicalVsActualSize(self.mainStack):
+            self.mainStack[self.logicalSize] = val
         else:
             self.mainStack.append(val)
 
-        # add new min at index or append
-        if self._compressStack(self.minTracker):
-            # min between (new value, previous level of min stack)
-            self.minTracker[self.mainSize] = min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val)
+        # new min:
+        # check if non empty stack, if so compare against previous min
+        # else update to new value
+        currMin = min(val, self.minTracker[self.logicalSize - 1] if self.logicalSize > 0 else val)
+
+        # If logical pointer is behind actual length, we replace at pointer
+        # else append to end of the stack
+        if self._checkLogicalVsActualSize(self.minTracker):
+            self.minTracker[self.logicalSize] = currMin
         else:
-            self.minTracker.append(min(val, self.minTracker[self.mainSize - 1] if self.mainSize > 0 else val))
+            self.minTracker.append(currMin)
         
-        # increases logical size
-        self.mainSize += 1
+        # increase logical size
+        self.logicalSize += 1
 
     # overall: tc O(1)
     def pop(self):
         # validate non empty, decrease logical length
-        self._validateNotEmpty("Invalid pop, stack is empty")
-        self.mainSize -= 1
+        self._validateNotEmpty("Invalid pop(), stack is empty")
+        self.logicalSize -= 1
 
     # overall: tc O(1)
     def top(self):
         # validate non empty, return elem
-        self._validateNotEmpty("Invalid top, stack is empty")
-        return self.mainStack[self.mainSize - 1]
+        self._validateNotEmpty("Invalid top(), stack is empty")
+        return self.mainStack[self.logicalSize - 1]
 
     # overall: tc O(1)
     def getMin(self):
         # validate non empty, return min
-        self._validateNotEmpty("Invalid getMin, stack is empty")
-        return self.minTracker[self.mainSize - 1]
+        self._validateNotEmpty("Invalid getMin(), stack is empty")
+        return self.minTracker[self.logicalSize - 1]
 
     # overall: tc O(1)
     # overall: sc O(n)
@@ -717,57 +727,64 @@ class MinStack:
 ## Solution 2: Tuple Stack - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
-    
-    # overall: space complexity O(n)
+
+    # MinTracker Tuple Stack: 
+    # We combine the main and minTracker stack with a tuple (val, min), 
+    # tracking the min at each level of the stack.
+
+    # overall: sc O(n)
     def __init__(self):
 
-        # Note: 
-        # We combine the main and minTracker stack via a tuple (val, min), 
-        # to track the min at each level of the stack.
-
-        # space complexity: stores all pushed tuples (val, min) O(n)
+        # sc: stores all pushed tuples (val, min) O(n)
         self.stack = []
         self.size = 0
 
+    # helper:
+    # edge case checker for empty stack
     def _validateNotEmpty(self, errMsg: str):
         if self.size == 0:
             raise IndexError(errMsg)
  
-    def _compressStack(self):
+    # helper:
+    # checks if logical pointer is behind actual length of stack
+    def _checkLogicalVsActualSize(self):
         return self.size < len(self.stack)
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def push(self, val: int):
 
-        # min between (new value, previous level of stack)
+        # new min:
+        # check if non empty stack, if so compare against previous min
+        # else update to new value
         currMin = min(val, self.stack[self.size - 1][1] if self.size > 0 else val)
         
-        # update min at index, or append
-        if self._compressStack():
+        # If logical pointer is behind actual length, we replace at pointer
+        # else append to end of the stack
+        if self._checkLogicalVsActualSize():
             self.stack[self.size] = (val, currMin)
         else:
             self.stack.append((val, currMin))
 
-        # increases logical size
+        # increase logical size
         self.size += 1
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def pop(self):
-        self._validateNotEmpty("Invalid pop, stack is empty")
+        self._validateNotEmpty("Invalid pop(), stack is empty")
         self.size -= 1
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def top(self):
-        self._validateNotEmpty("Invalid top, stack is empty")
+        self._validateNotEmpty("Invalid top(), stack is empty")
         return self.stack[self.size - 1][0]
 
-    # overall: time complexity O(1)
+    # overall: tc O(1)
     def getMin(self):
-        self._validateNotEmpty("Invalid getMin, stack is empty")
+        self._validateNotEmpty("Invalid getMin(), stack is empty")
         return self.stack[self.size - 1][1]
 
-    # overall: time complexity O(1)
-    # overall: space complexity O(n)
+    # overall: tc O(1)
+    # overall: sc O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
