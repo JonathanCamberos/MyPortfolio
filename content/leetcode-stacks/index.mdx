@@ -942,26 +942,31 @@ operations in reverse polish notation.
 ## Solution 1: Postfix Expression Evaluation Algorithm - Stack/Expression Evaluation and Parsing 
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
-        # space complexity: stack holds up to n/2 intermediate results O(n)
+        
+        # Reverse Polish Notation:
+        # input:    ["4","13","5","/","+"]
+        # expected: 4 + (13 / 5) = 6
+        # "4"    -> [4]
+        # "13"   -> [4, 13]
+        # "5"    -> [4, 13, 5]
+        # "/"    -> [4, 2]         # a = 13, b = 5 → int(13 / 5) = 2
+        # "+"    -> [6]            # a = 4, b = 2 → 4 + 2 = 6
+
+        # sc: stack holds up to n/2 intermediate results O(n)
         stack = []
 
-        # time complexity: iterate over tokens array of n length O(n)
+        # tc: iterate over n O(n)
         for token in tokens:
 
-            # found operand, cast to int and push to stack
+            # found number, cast to int and push to stack
             if token not in "+-*/":
                 stack.append(int(token))
             
-            # found operator, grab operands and compute
+            # found operation, grab top 2 numbers from stack and compute
+            # numbers are in reverse order, so pop b first, then a.
             else:
-                # time complexity: pop two operands from stack O(1)
-                # input:    ["4","13","5","/","+"]
-                # expected: 4 + (13 / 5) = 6
-                # "4"    -> [4]
-                # "13"   -> [4, 13]
-                # "5"    -> [4, 13, 5]
-                # "/"    -> [4, 2]         # a = 13, b = 5 → int(13 / 5) = 2
-                # "+"    -> [6]            # a = 4, b = 2 → 4 + 2 = 6
+
+                # tc: pop two operands from stack O(1)
 
                 # 5
                 b = stack.pop()
@@ -977,6 +982,7 @@ operations in reverse polish notation.
                     case "*":
                         stack.append(a * b)
                     case "/":
+                        
                         # a / b
                         # 13 / 5
 
@@ -986,10 +992,10 @@ operations in reverse polish notation.
                         # int(-7 / 3)    # -2      int(division):   truncates "toward 0", as required by RPN
                         stack.append(int(a / b))
 
-        # return top of stack
+        # top of stack holds with final number
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return stack[-1]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1371,42 +1377,45 @@ def generateParenthesis(self, n: int) -> List[str]:
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
-        # Note:
-        # Backtracking explores all valid sequences of parentheses.
+        # Backtracking:
+        # Explores all valid sequences of parentheses.
         # A new string is created on each recursive call using string 
         # concatenation for string length up to 2n leading to O(n^2).
 
         res = []
 
         # Backtracking        
-        # space complexity: call stack depth is O(n), string copying adds O(n) per leaf path, leading to O(n^2)
+        # sc: call stack depth is O(n), string copying adds O(n) per leaf path, leading to O(n^2)
         def helper(current: List[str], num_open: int, num_closed: int):
 
-            # Base case: if the length of the current combination is 2 * n, it's complete
+            # Base case: 
+            # If the length of the current combination is 2 * n, we found a valid combination
             if len(current) == n * 2:
-                # time complexity: concat add to res for 2n length O(n)
+                # tc: concat add to res for 2n length O(n)
                 res.append(current)
                 return
 
-            # Check: open count is less than total expected
-            # Ensures: string is always valid, with total number of parens being valid
             # Recursive case 1: add '('
+            # Check: open count is less than total expected
+            # Implies: string is still valid
+            # Ensures: '(' will create a new valid string
             if num_open < n: 
-                # time complexity: concat per iteration O(n)
+                # tc: concat per iteration O(n)
                 helper(current + "(", num_open + 1, num_closed)
-            
-            # Check: closed count is less than open count
-            # Ensures: string is always valid, with each open having a matching close
+
             # Recursive case 2: add ')'
+            # Check: closed count is less than open count
+            # Implied: string is valid from previous, has a '(' that is waiting for a closing
+            # Ensures: The ')' will have a matching open
             if num_closed < num_open:
-                # time complexity: concat per iteration O(n)
+                # tc: concat per iteration O(n)
                 helper(current + ")", num_open, num_closed + 1)
 
-        # Start backtracking process with an empty list and counts at 0
+        # Start backtracking with empty list and 0 open and 0 closed brackets
         helper("", 0, 0)
 
-        # overall: time complexity O(Catalan(n) * n^2)
-        # overall: space complexity O(Catalan(n) * n)
+        # overall: tc O(Catalan(n) * n^2)
+        # overall: sc O(Catalan(n) * n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1419,54 +1428,62 @@ def generateParenthesis(self, n: int) -> List[str]:
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
-        # Note:
-        # Backtracking explores all valid sequences of parentheses.
+        # Backtracking:
+        # Explores all valid sequences of parentheses.
         # Only when a complete sequence is found (length == 2 * n), 
         # we convert the list to a string via concat in O(n)
 
         res = []
         
         # Backtracking
-        # time complexity: each recursion explores a state; only leaf call does ''.join(), leading to O(n)
-        # space complexity: call stack depth O(n), current list holds up to 2n
+        # tc: each recursion explores a state; only leaf call does ''.join(), leading to O(n)
+        # sc: call stack depth O(n), current list holds up to 2n
         def backtrack(current, openCount, closeCount):
 
-            # Base case: if we have used all open and close parentheses
+            # Base case: 
+            # If we have used all open and close parentheses
             if openCount == n and closeCount == n:
-                # time complexity: convert once at leaf for 2n length O(n)
+                # tc: convert once at leaf for 2n length O(n)
                 res.append("".join(current))
                 return
-            
+
+            # Recursive case 1: add '('
             # Check: open count is less than total expected
             # Ensures: string is always valid, with total number of parens being valid
-            # Recursive case 1: add '('
             if openCount < n: 
+
+                # Action:
                 current.append('(')
 
-                # Recursive call explores all combinations from new state
+                # Recursive:
+                # Explores all combinations from new state
                 helper(current, openCount + 1, closeCount)
 
-                # Backtrack by removing the last added '('
+                # Backtrack: 
+                # Remove the last added '('
                 current.pop()
             
+            # Recursive case 1: add ')'
             # Check: closed count is less than open count
             # Ensures: string is always valid, with each open having a matching close
-            # recursive case: add ')'
             if closeCount < openCount:
 
+                # Action:
                 current.append(')')
 
-                # Recursive call explores all combinations starting from new state
+                # Recursive:
+                # Explores all combinations starting from new state
                 helper(current, openCount, closeCount + 1)
 
-                # Backtrack by removing the last added ')'
+                # Backtrack:
+                # Remove the last added ')'
                 current.pop()
 
-        # starts recursion with an empty string and zero counts
+        # Start backtracking with empty list and 0 open and 0 closed brackets
         backtrack([], 0, 0)
 
-        # overall: time complexity O(Catalan(n) * n)
-        # overall: space complexity O(Catalan(n) * n)
+        # overall: tc O(Catalan(n) * n)
+        # overall: sc O(Catalan(n) * n)
         return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1479,8 +1496,8 @@ def generateParenthesis(self, n: int) -> List[str]:
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
-        # Note:
-        # Explicit stack simulates backtracking process iteratively.
+        # Explicit stack:
+        # Simulates backtracking process iteratively.
         # Each stack element stores the current string and counts of open and closed parentheses.
         # Allows state tracking without recursion.
 
@@ -1491,8 +1508,8 @@ def generateParenthesis(self, n: int) -> List[str]:
         stack = [([], 0, 0)] 
 
         # Simulate backtracking
-        # time complexity: each state processed once, building up to O(Catalan(n)) strings
-        # space complexity: stack can grow to O(Catalan(n)), result stores O(Catalan(n)) strings
+        # tc: each state processed once, building up to O(Catalan(n)) strings
+        # sc: stack can grow to O(Catalan(n)), result stores O(Catalan(n)) strings
         while stack:
 
             # Pop current state, current state is explored only once
@@ -1503,24 +1520,24 @@ def generateParenthesis(self, n: int) -> List[str]:
                 result.append("".join(curr))
                 continue
 
+            # Iterative step 1: add '('
             # Check: open count is less than total expected
             # Ensures: string is always valid, with total number of parens being valid
-            # Iterative step 1: add '('
             if openCount < n:
                 
                 # copy list to avoid mutating other branches
                 new_curr = curr + ['(']
                 stack.append((new_curr, openCount + 1, closeCount))
 
+            # Iterative step 2: add '('
             # Check: closed count is less than open count
             # Ensures: string is always valid, with each open having a matching close
-            # Iterative step 2: add '('
             if closeCount < openCount:
                 new_curr = curr + [')']
                 stack.append((new_curr, openCount, closeCount + 1))
 
-        # overall: time complexity O(Catalan(n) * n)
-        # overall: space complexity O(Catalan(n) * n)
+        # overall: tc O(Catalan(n) * n)
+        # overall: sc O(Catalan(n) * n)
         return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1534,7 +1551,7 @@ def generateParenthesis(self, n: int) -> List[str]:
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
-        # Note:
+        # Dynamic Programming:
         # We exploit the recursive structure of Catalan numbers
         # by building a list of all valid parentheses combinations for each level n
 
@@ -1547,7 +1564,7 @@ def generateParenthesis(self, n: int) -> List[str]:
         
         # Iterate: create valid lists from dp[1] to dp[n]
         # Current: building list for i pairs
-        # time complexity: iterate over list of n length O(n) 
+        # tc: iterate over list of n length O(n) 
         for i in range(1, n + 1): 
 
             # iterate over stored lists up to now
@@ -1576,8 +1593,8 @@ def generateParenthesis(self, n: int) -> List[str]:
 
                         dp[i].append(f"({left}){right}")
 
-        # overall: time complexity O(Catalan(n) * n)
-        # overall: space complexity O(Catalan(n) * n)
+        # overall: tc O(Catalan(n) * n)
+        # overall: sc O(Catalan(n) * n)
         return dp[n]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1611,6 +1628,8 @@ Constraints:
 
 
 ## Abstract
+Generate array representing the number of days until a warmer temperature.
+Generate array representing number of days until monotonic decreasing is valid.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -1844,7 +1863,7 @@ Constraints:
         return dp
 ```
 
-## Solution 1: Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
+## Solution 1: [Monotonic] Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1909,7 +1928,7 @@ Constraints:
 | Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
 | Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-## Solution 2: Reverse Iteration Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
+## Solution 2: [Monotonic] Reverse Iteration Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
@@ -1967,58 +1986,58 @@ Constraints:
 | Overall | O(n) | O(n) | Iteration over list of n temperatures dominates, leading to O(n) | Efficient pruning of colder temperatures often leads to smaller stack than forward pass but still for n elements O(n) |  
 
 
-## Solution 3: Dynamic Programming Jump Traversal using Future Warm Temperatures - Stack/Algorithm
+## Solution 3: [Dynamic Programming] Reverse Iteration With Jump Traversal Using Dynamic Programming Building Future Warm Temperatures List - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
-        # Note:
+        # Dynamic Programming:
         # This solution uses a jump-based approach via leveraging 
         # results from previously computed indices.
         # It avoids an explicit stack by simulating the search for 
         # the next warmer temperature using a two-pointer like mechanism,
         # jumping ahead using previously filled results.
-        # This effectively builds a "path" toward the next warmer day
+        # This effectively builds a shortcut path toward the next warmer day
 
-        # Key Insight:
+        # Jump Traversal:
         # Once we know the next warmer day for some index j, we can skip
         # forward using res[j] to find the next warmer day for earlier indices i.
         
-        # space complexity: result list for storing wait times o(n)
+        # sc: result list for storing wait times o(n)
         n = len(temperatures)
         dp = [0] * n
 
-        # tracking index of hottest day seen so far right to left
-        # set hottest day to last element
+        # Tracking index of hottest day seen so far with reverse iteration right to left
+        # Start with hottest day set to last element
         hottest_day = n - 1
 
-        # time complexity: reverse iterate through temperatures from second last to first O(n)
+        # Reverse iteration to build future temperature list
+        # tc: iterate over n O(n)
         for i in range(n - 2, -1, -1):
 
-            # found new hottest day, 
-            # then ignore wait days calculation
             # Check: if current temperature is >= hottest_day temp,
-            # Implies: found new hottest day, 
-            # and since we are iterating right to left, 
-            # then no hotter day can be to the right of new hottest
+            # Implies: found new hottest day
+            # Implies: No need for wait days calculation, as no future hotter day exists 
             if temperatures[i] >= temperatures[hottest_day]:
-                # new hottest day index
+                # update hottest day index
                 hottest_day = i
 
-            # find hottest day
+            # Implies: a hotter day exists
+            # Then: use hot day history to find nearest hotter day
             else:
-                # check hotter day for next index
-                j = i + 1
+
+                # Start with following day
+                tempCheckIndex = i + 1
 
                 # while hotter day not found
-                while temperatures[j] <= temperatures[i]:
-                    # jump to hottest day candidate's hottest day
-                    j += dp[j]
+                while temperatures[tempCheckIndex] <= temperatures[i]:
+                    # jump to candidate's hottest day index
+                    tempCheckIndex += dp[tempCheckIndex]
 
-                # found hotter day
-                dp[i] = j - i 
+                # found hotter day, set in list
+                dp[i] = tempCheck - i 
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return dp
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2060,7 +2079,8 @@ All of values of position are unique
 0 &lt; speed[i] &le; 10<sup>6</sup>
 
 ## Abstract
-
+Given a list of speeds, determine how many cars will catch up to another and end up bumper to bumper (fleet)
+before arriving to the destination.
 
 
 ## Space & Time Complexity
@@ -2104,18 +2124,19 @@ All of values of position are unique
 
 
 
-## Solution 1: Monotonic Increasing Stack of Slower/Higher Fleet Times - Stack/Monotonic Property Maintenance
+## Solution 1: [Monotonic] [Sorting] Increasing Stack of Slower/Higher Fleet Times Tracking Monotonic Pattern - Stack/Monotonic Property Maintenance
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
-        # Note: 
-        # Each car is represented by its position and speed
+        
+        # Sorting: 
+        # Strategy based on arrival times.
         # We calculate the the time for each car to reach the target mile.
-        # We sort the cars by highest distance first (higher value closer to target, smaller farther),
-        # so that we can process the cars in order from target to start (closer to farther),
+        # We sort the cars by highest distance first (higher value is target, smaller is further),
+        # so that we can process the cars in order from closest to target to farthest,
         # to check the generation of fleets
 
-        # Note:
-        # Monotonic stack: maintains a monotonic increasing stack of times to target
+        # Monotonic stack: 
+        # Maintains a monotonic increasing stack of times to target
         
         # space complexity: stores times for up to n fleets O(n)
         stack = []
@@ -2151,8 +2172,8 @@ All of values of position are unique
 
             # Otherwise, catches up to the fleet in front (we do nothing)
         
-        # overall: time complexity O(n log n)
-        # overall: space complexity O(n)
+        # overall: tc O(n log n)
+        # overall: sc O(n)
         return len(stack)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -2161,12 +2182,12 @@ All of values of position are unique
 | Fleet generation | O(n) | O(n) | Iterate over list of cars n length O(n) | Stack tracks time to target for up to n fleets O(n) |
 | Overall | O(n log n) | O(n) | TimSort cars by descending position dominates, leading to O(n log n) | Cars and stack dominate, leading to O(n) | 
 
-## Solution 2: Greedy Tracking One Slowest/Higher Fleet - Stack/Algorithm
+## Solution 2: [Greedy] Track Slowest/Higher Fleet With Greedy Assumption - Stack/Algorithm
 ```python
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         
-        # Note:
-        # Greedy strategy based on arrival times
+        # Greedy:
+        # Strategy based on arrival times.
         # We only need to track 1 fleet at a time,
         # since if current car cannot catch up with current fleet,
         # it cannot catch up with previously created fleets
@@ -2184,8 +2205,8 @@ All of values of position are unique
                 num_fleets += 1
                 slowest_fleet_time = currCarTimeToTarget
 
-        # overall: time complexity O(n log n)
-        # overall space complexity O(n)
+        # overall: tc O(n log n)
+        # overall: sc O(n)
         return num_fleets 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
