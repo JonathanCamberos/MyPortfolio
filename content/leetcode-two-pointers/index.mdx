@@ -2265,7 +2265,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
             # implies: stack is kept in monotonic decreasing order
             # implies: when monotonic decreasing breaks, we have found right wall
             # implies: we have a depth candidate
-            while stack and height[i] > height[stack[-1]]:
+            while stack and height[stack[-1]] < height[i]:
                 
                 # curr while loop iteration:
                 # height[i]: right wall
@@ -2299,16 +2299,21 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # monotonic stack check implies: depthCandidate < stack[-1]
                 # Thus the bucket is: [peak stack[-1]... depthCandidate ... height[i]]
 
+                # Distance:
                 rightWallIndex = i
                 leftWallIndex = stack[-1]
                 distance = rightWallIndex - leftWallIndex - 1
 
+                # Bucket Bounded Height:
                 rightHeight = height[rightWallIndex]
-                depthHeight = height[depthCandidateIndex]
                 leftHeight = height[leftWallIndex]
+                bucketLowerHeight = min(rightHeight, leftHeight)
 
-                # subtract the depth minus smaller height to get water depth
-                boundedHeight = min(rightHeight, leftHeight) - depthHeight
+                depthHeight = height[depthCandidateIndex]
+
+                # Water Caught:
+                # Smaller bucket wall height - depth = water getting caught
+                waterCaught = bucketLowerHeight - depthHeight
 
                 # add the trapped water for the current segment 
                 # [5, 0, 0, 2]
@@ -2325,7 +2330,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 
                 # So distance will always be 1 in
                 # unless we have a run of identical heights such as above
-                water += distance * boundedHeight
+                water += distance * waterCaught
 
             # implies: monotonic decreasing is still valid
             # thus: continue appending height to stack

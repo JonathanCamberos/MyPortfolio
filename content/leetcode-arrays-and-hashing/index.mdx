@@ -326,7 +326,7 @@ def majorityElement(nums: List[int]) -> int:
 ```
 
 
-# 217. Contains Duplicate ::2:: - Easy
+# 217. Contains Duplicate ::4:: - Easy
 
 Topics:  Array, Hash Table, Sorting 
 
@@ -383,7 +383,7 @@ Given a list of elements, check for duplicates.
 | Overall   | O(n) | O(n) | Iteration over input dominates, O(n)| Allocation for dictionary dominates, O(n) | 
 
 
-## Solution 2: Set [TC Opt] - Hashmap/Representation
+## Solution 2: Seen Set [TC Opt] - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -409,7 +409,30 @@ Given a list of elements, check for duplicates.
 | Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
 
 
-## Solution 3: Sort Iterate Comparison [SC Opt] - Hashmap/Representation
+## Solution 3: Unique Set Length Comparison - Hashmap/Representation
+```python
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        
+        # Create unique set
+        # tc: iterate over original n list O(n)
+        # sc: set relative to input O(n)
+        unique = set(nums)
+
+        # Compare if unique set is different than original list
+        # tc: length operation constant O(1)
+        res = len(unique) != len(nums)
+            
+        # overall: tc O(n)
+        # overall: sc O(n)
+        return res
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Set | O(n) | O(n) | Creating new set requires iteration over list in linear O(n) + in, add operation O(1) | Set size relative to input O(n) |
+| Overall | O(n) | O(n) | Iteration over list dominates, O(n) | Allocation relative to input dominates, O(n) | 
+
+
+## Solution 4: Sort Iterate Comparison [SC Opt] - Hashmap/Representation
 ```python
     def containsDuplicate(self, nums: List[int]) -> bool:
         
@@ -435,7 +458,7 @@ Given a list of elements, check for duplicates.
 | Overall | O(n) | O(n) | Iteration over list dominates, O(n) | In place sorting, no additional memory allocation O(1) | 
 
 
-# 242. Valid Anagram ::2:: - Easy
+# 242. Valid Anagram ::4:: - Easy
 
 Topics:  Hash Table, String, Sorting 
 
@@ -1439,7 +1462,7 @@ duplicate values exist in any set.
         return True
 ```
 
-## Solution 1: DefaultDict Matrix With // Floor Division For (r,c) Immutable And Hashable Tuple Key For Grid - Hashmap/Representation
+## Solution 1: DefaultDict With // Floor Division For (r,c) Immutable/Hashable Tuple Key - Hashmap/Representation
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1485,7 +1508,7 @@ duplicate values exist in any set.
 | Operations | O(1) | O(1) | Lookup, Put operation O(1) | No allocation for operations O(1) |
 | Overall | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over grid dominates, O(n<sup>2</sup>) | Allocation for grid cells O(n<sup>2</sup>) |
 
-## Solution 2: [[]] Matrix With // Floor Division To Get 9 Integer Array Indexing Options [TC Opt] - Hashmap/Representation
+## Solution 2: Array of Arrays [[]] With // Floor Division For 9 Indexing Options [TC Opt] - Hashmap/Representation
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1785,16 +1808,17 @@ def longestConsecutive(self, nums: List[int]) -> int:
         # tc: Amortized O(α(n)) per operation
         def find(x):
 
-            # if the parent of x is not itself, we have not reached the representative  
+            # Find Representative:
+            # If the parent of x is not itself, keep going up, we have not reached the representative  
             if parent[x] != x:
 
-                # Path compression
-                # set parent of curr, to parent of parent
+                # Path compression:
+                # Set parent of current, to the parent of its eventual parent,
+                # By the end the representative will be the parent of all children
                 parent[x] = find(parent[x])
 
-            # return representative of group
-            # either return self
-            # or return parent of parent
+            # Representative Found:
+            # Reached top of the group, either through compression or just regular parent, return representative
             return parent[x]
 
         # Union operation with size optimization
@@ -1808,13 +1832,13 @@ def longestConsecutive(self, nums: List[int]) -> int:
             # If trees do not share representative
             if rootX != rootY:
 
-                # Attach smaller tree to larger tree,
-                # update larger tree size and 
-                # smaller tree parent
-
+                # Grab tree sizes
                 xSize = size[rootX]
                 ySize = size[rootY]
 
+                # Attach smaller tree to larger tree:
+                # 1. update larger tree size 
+                # 2. update smaller tree parent
                 if ySize < xSize:
                     parent[rootY] = rootX
                     size[rootX] += size[rootY]
@@ -1822,30 +1846,30 @@ def longestConsecutive(self, nums: List[int]) -> int:
                     parent[rootX] = rootY
                     size[rootY] += size[rootX]
 
-        # Initialize Union Find: 
-        #   1. Set all parents to self
-        #   2. Set all sizes to 1
-        # tc: iterate list O(n)
+        # Init Union Find Tree: 
+        # tc: iterate n O(n)
         for num in nums:
 
-            # ignore duplicates
+            # Ignore duplicates that have already been initialized
             if num not in parent:
+                # 1. Set all parents to self
+                # 2. Set all sizes to 1
                 parent[num] = num
                 size[num] = 1
 
-        # Join() consecutive numbers,
-        # stores sequences represented as trees
+        # Move elements into groups of runs:
+        # Merge consecutive number sequences as trees
         # tc: iterate list O(n)
         for num in nums:
             if num + 1 in parent:
                 union(num, num + 1)
         
-        # return tree (sequence of numbers) with
-        # the longest size/length
+        # Return group/tree (sequence of numbers) with longest size/length
+        res = max(size.values())
 
         # overall: tc O(n)
         # overall: sc O(n)
-        return max(size.values())
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
