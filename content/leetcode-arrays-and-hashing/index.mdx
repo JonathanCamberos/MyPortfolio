@@ -1518,7 +1518,7 @@ duplicate values exist in any set.
                     # ------------
                     # allows to 9 indexing options
 
-                    boxKey = (j//3) + ((i//3) * 3)
+                    boxKey = (r//3) + ((c//3) * 3)
 
                     # tc: lookup operation O(1)
                     if (cell in rows[r] or 
@@ -1668,10 +1668,11 @@ This sequence does not have to follow the left to right order of the array.
         # sc: hashmap of list of n length O(n)
         seqLen = defaultdict(int)
 
-        # tc: iterate list O(n)
         # sc: ignore duplicates O(n)
         numSet = set(nums)
-        for num in nums:
+
+        # tc: iterate list O(n)
+        for num in numSet:
             
             # Get lengths of neighbor sequences
             leftContinentLenFromBoundary = seqLen[num - 1]
@@ -1687,8 +1688,8 @@ This sequence does not have to follow the left to right order of the array.
             # Update the global max
             longest = max(longest, bridgedLen)
 
-        # overall: tc 
-        # overall: sc
+        # overall: tc O(n)
+        # overall: sc O(n)
         return longest
 ```
 |  Aspect  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -1702,15 +1703,11 @@ This sequence does not have to follow the left to right order of the array.
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
 
-    
-    # Note: 
-    # although rummy has an inner while loop,
-    # each number is part of at most one sequence
-    # and are not checked again in future sequences
-    # thus, the number of times the while loop runs across 
-    # all iterations is n.
-    # so the overall tc is O(n), instead of O(n^2)
-
+    # Rummy Run:
+    # Each number is part of only 1 sequence
+    # and thus are only iterated over once.
+    # Thus, the number of times the loop runs across 
+    # all iterations is O(n)
 
     longest = 0
 
@@ -1718,21 +1715,22 @@ def longestConsecutive(self, nums: List[int]) -> int:
     numSet = set(nums)
 
     # tc: iterate list O(n)
-    for num in numSet:
+    for runStartCandidate in numSet:
 
-        # tc: lookup operation takes constant O(1)
-        # found start of a new run
-        if (num - 1) not in numSet: 
+        # Check if we have found start of a new run: the left most element of a run
+        # tc: lookup constant O(1)
+        if (runStartCandidate-1) not in numSet: 
 
-            newRunLen = 1
+            currRunLen = 1
 
-            # tc: iterate over sequence/list O(n)
-            # rummy run until missing an element
-            while (num + newRunLen) in numSet:
-                newRunLen += 1 
+            # Check if run's next element exists
+            # tc: iterate over run O(n)
+            while (runStartCandidate + currRunLen) in numSet:
+                # Point to next sequential element
+                currRunLen += 1 
 
-            # compare with global max sequence
-            longest = max(longest, newRunLen)
+            # Compare max
+            longest = max(longest, currRunLen)
 
     # overall: tc O(n)
     # overall: sc O(n)
@@ -1749,22 +1747,23 @@ def longestConsecutive(self, nums: List[int]) -> int:
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
         
-        # Check Empty: avoid max(size.values()) return error
+        # Check Empty: 
+        # Avoid max(size.values()) return error
         if len(nums) == 0:
             return 0
 
         # Union Find Initialization:
         
-        # sc: dictionary for list O(n)
         # Stores parent of each number
+        # sc: dictionary for list O(n)
         parent = {}  
 
-        # sc: dictionary for list O(n)
         # Stores the size of connected components
+        # sc: dictionary for list O(n)
         size = {}    
 
-        # tc: Amortized O(α(n)) per operation
         # Find + path compression
+        # tc: Amortized O(α(n)) per operation
         def find(x):
 
             # if the parent of x is not itself, we have not reached the representative  
@@ -1779,8 +1778,8 @@ def longestConsecutive(self, nums: List[int]) -> int:
             # or return parent of parent
             return parent[x]
 
-        # tc: Amortized O(α(n)) per operation
         # Union operation with size optimization
+        # tc: Amortized O(α(n)) per operation
         def union(x, y):
 
             # Get parent for trees x and y
@@ -1804,10 +1803,10 @@ def longestConsecutive(self, nums: List[int]) -> int:
                     parent[rootX] = rootY
                     size[rootY] += size[rootX]
 
-        # tc: iterate list O(n)
         # Initialize Union Find: 
         #   1. Set all parents to self
         #   2. Set all sizes to 1
+        # tc: iterate list O(n)
         for num in nums:
 
             # ignore duplicates
@@ -1815,9 +1814,9 @@ def longestConsecutive(self, nums: List[int]) -> int:
                 parent[num] = num
                 size[num] = 1
 
-        # tc: iterate list O(n)
         # Join() consecutive numbers,
         # stores sequences represented as trees
+        # tc: iterate list O(n)
         for num in nums:
             if num + 1 in parent:
                 union(num, num + 1)
