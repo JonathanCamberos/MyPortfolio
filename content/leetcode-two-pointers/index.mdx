@@ -2197,12 +2197,24 @@ Now we need a way to traverse the array that allows us to take advantage of this
             
             # Check: Left wall is shorter than Right wall
             # Implies: Left wall is covered by Right wall
-            if height[left] < height[right]:
+            if height[left] < height[right]:    
+                #                   *   
+                #                   *   
+                #             *     *   
+                #       ?     *     *   
+                #      ------------------
+                #      LM     L     R   
 
                 # Check: Left wall is taller than Left Max
                 # Implies: new tallest left wall found
                 # Then: Update     
                 if height[left] >= outerLeftMax:
+                    #                   *   
+                    #                   *   
+                    #             *     *   
+                    #       *     *     *   
+                    #      ------------------
+                    #      LM     L     R   
                     outerLeftMax = height[left]
 
                 # Check: Left wall is shorter than left max
@@ -2212,6 +2224,13 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # Implies: Left max is limiting factor for this bucket
                 # Then: Water depth is just limiting factor - height = outerLeftMax - height[left]
                 else:
+
+                    #                   *   
+                    #       *     w     *   
+                    #       *     *     *   
+                    #       *     *     *   
+                    #      ----------------
+                    #      LM     L     R   
                     water += outerLeftMax - height[left]
 
                 # shift pointer
@@ -2220,11 +2239,23 @@ Now we need a way to traverse the array that allows us to take advantage of this
             # Check: Right wall is shorter than Left wall
             # Implies: Right wall is covered by Left Wall
             else:
+                #       *              
+                #       *                
+                #       *     *         
+                #       *     *     ?   
+                #      ----------------
+                #       L     R     RM   
 
                 # Check: Right wall is taller than Right Max
                 # Implies: New tallest right wall found
                 # Then: update
                 if height[right] >= outerRightMax:
+                    #       *              
+                    #       *                
+                    #       *     *         
+                    #       *     *     *   
+                    #      ----------------
+                    #       L     R     RM   
                     outerRightMax = height[right]
 
                 # Check: Right wall is shorter than Right Max
@@ -2234,6 +2265,12 @@ Now we need a way to traverse the array that allows us to take advantage of this
                 # Implies: Right Max is the limiting factor for this bucket
                 # Then: Water depth is just limiting factor - height = outerRightMax - height[right]
                 else:
+                    #       *              
+                    #       *     w     *     
+                    #       *     *     *    
+                    #       *     *     *   
+                    #      ----------------
+                    #       L     R     RM   
                     water += outerRightMax - height[right]
 
                 # shift pointer
