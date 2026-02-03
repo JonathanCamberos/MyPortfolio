@@ -1251,14 +1251,16 @@ right of it.
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
+        n = len(nums)
+
         # sc: prefix, postfix, result, arrays O(n)
-        prefix = [1] * len(nums)
-        postfix = [1] * len(nums)
-        res = [1] * len(nums)
+        prefix = [1] * n
+        postfix = [1] * n
+        res = [1] * n
 
         # Prefix
         # tc: iterate list O(n)
-        for i in range(1, len(nums)):
+        for i in range(1, n):
             
             # calculate prefix of i = (prefix of i - 1) * (nums[i - 1])
             prefix[i] = prefix[i - 1] * nums[i - 1]
@@ -1267,7 +1269,7 @@ right of it.
         # postfix starts at 1 = the postfix of len(n) - 1
         # start reverse iteration at: len(n) - 2
         # tc: iterate list O(n)
-        for i in range(n - 2, -1, -1):
+        for i in range(n-2, -1, -1):
 
             # calculate postfix of i = (postfix of i + 1) * (nums[i + 1])
             postfix[i] = postfix[i + 1] * nums[i + 1]
@@ -1296,22 +1298,28 @@ right of it.
 ```python
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         
-        # sc: result array O(1) 
-        res = [1] * len(nums)
+        n = len(nums)
 
-        # Prefix
+        # sc: result array O(1) 
+        res = [1] * n
+
+        # Running Prefix: 
+        # Generated through iteration with a starting prefix for the first element being 1, 
+        # ignore and start at element 2 (index 1)
+
         # tc: iterate list O(n)
-        for i in range(1, len(nums)):
+        for i in range(1, n):
 
             # (prefix of i) = (prefix of i - 1) * (num at i - 1)
             res[i] = res[i - 1] * nums[i - 1]
 
-        # Running postfix through reverse iteration,
-        # postfix starts at 1 = the postfix of len(n) - 1
+        # Running Postfix: 
+        # Generated through reverse iteration with a starting postfix for the last element is 1, 
+        # start at the last element (index n-1)
         postfix = 1
 
         # tc: iterate list in reverse O(n)
-        for i in range(len(nums) - 1, -1, -1):
+        for i in range(n-1, -1, -1):
             
             # calculate product except self for i = (prefix of i) * (postfix of i)
             res[i] *= postfix
@@ -1431,7 +1439,7 @@ duplicate values exist in any set.
         return True
 ```
 
-## Solution 1: DefaultDict Matrix - Hashmap/Representation
+## Solution 1: DefaultDict Matrix With // Floor Division For (r,c) Tuple Key For Grid - Hashmap/Representation
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
@@ -1472,10 +1480,15 @@ duplicate values exist in any set.
 | Operations | O(1) | O(1) | Lookup, Put operation O(1) | No allocation for operations O(1) |
 | Overall | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over grid dominates, O(n<sup>2</sup>) | Allocation for grid cells O(n<sup>2</sup>) |
 
-## Solution 2: [[]] Matrix [TC Opt] - Hashmap/Representation
+## Solution 2: [[]] Matrix With // Floor Division To Get 9 Integer Indexing Options [TC Opt] - Hashmap/Representation
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
+        # Array of Array vs Dictionary:
+        # Due to the overhead of the dictionary functions,
+        # For a small use case such as 9x9 using direct array of arrays is faster.
+        # For larger use cases, dictionary would be more optimal.
+
         # sc: arrays for rows, columns, boxes O(n)
         rows = [[], [], [], [], [], [], [], [], []]
         col = [[], [], [], [], [], [], [], [], []]
@@ -1499,6 +1512,7 @@ duplicate values exist in any set.
                     # 6  6 7 8
                     # ------------
                     # allows to 9 indexing options
+
                     boxKey = (j//3) + ((i//3) * 3)
 
                     # tc: lookup operation O(1)

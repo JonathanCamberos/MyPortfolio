@@ -2483,16 +2483,20 @@ Remove k digits in a way so that resulting integer is as large as possible.
         # Same as histogram or graph problem
         # We are removing a taller height if a smaller height follows it
 
-        # Note:
-        # Monotonic stack: a stack that maintains increasing digits
-        # Greedy: remove from top of stack if higher digit at top of stack 
+        # Monotonic Stack: 
+        # A stack that maintains increasing digits
+        
+        # Greedy:
+        # Remove from top of stack if higher digit at top of stack 
         # is followed by a smaller one, as this lowers value
-        # Inverse Greedy: don't remove smaller digit if higher digit follows, as this increases value 
+        
+        # Inverse Greedy: 
+        # Do not remove smaller digit if higher digit follows, as this increases value 
 
-        # space complexity: stack holds increasing digits up to n digits O(n)
+        # sc: stack holds increasing digits up to n digits O(n)
         stack = []
 
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate over list of n length O(n)
         for digit in num:
 
             # Check: non empty stack
@@ -2516,17 +2520,18 @@ Remove k digits in a way so that resulting integer is as large as possible.
 
         # "12345" [:3] -> "123"
         # "12345" [:-3] -> "12"
-        # -3 removes 3 digits
+        # -3 removes leftmost 3 digits
         if k > 0:
             stack = stack[:-k]
 
-        # Join the stack into a number and remove leading zeros "0200" -> "200" 
+        # Remove leading zeros "0200" -> "200"
+        # Join the stack into final number
         result = ''.join(stack).lstrip('0')
 
         # Return "0" if the result is empty
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return result or "0"
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
