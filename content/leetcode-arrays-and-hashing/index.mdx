@@ -1659,10 +1659,25 @@ This sequence does not have to follow the left to right order of the array.
         return max(size.values())
 ```
 
-## Solution 1: HashMap Continent Boundaries [TC Opt] - HashMap/Representation
+## Solution 1: HashMap Bridging Left/Right Neighbor Continents And Updating Boundaries [TC Opt] - HashMap/Representation
 ```python
     def longestConsecutive(nums: List[int]) -> int:
         
+        # Continent Boundaries:
+        # If we imagined a number line, with runs of consecutive numbers being colored
+        # different colors, we could have:
+        #
+        #    0 1   4 5 6 7 8   11 12 13 14  19 
+        #    ***   #########   -----------  ++ 
+        #
+        # Continent boundaries builds the lengths of these 'continents' as we iterate
+        # by checking if a number has left and right neighbors who already have a 
+        # continent length, and then just joins the continent lengths by 'bridging the continents'
+        # by adding both the left and right neighbor continent lengths and adding +1
+        # to the total length:
+        #
+        #     leftContinent_length   "+1 Bridge"   rightContinent_length 
+
         longest = 0
 
         # sc: hashmap of list of n length O(n)
@@ -1699,7 +1714,7 @@ This sequence does not have to follow the left to right order of the array.
 | Operations | O(1) | O(1) | Get, Put operation O(1) | No allocation O(1) |
 | Overall | O(n) | O(n) | Iterate unique list dominates O(n) | Allocation for unique elements, sequence length dominates, O(n) | 
 
-## Solution 2: Set Rummy Run [TC Opt] - Hashmap/Representation
+## Solution 2: Unique Set Creating Rummy Run While Run Exists [TC Opt] - Hashmap/Representation
 ```python
 def longestConsecutive(self, nums: List[int]) -> int: 
 
@@ -1743,10 +1758,14 @@ def longestConsecutive(self, nums: List[int]) -> int:
 | Rummy Iterate | O(n) | O(1) | Iterate while valid sequence, n steps across all iterations  O(n) | No allocation O(1) |
 | Overall | O(n) | O(n) | Iterate set dominates, O(n) | Set allocation dominates, O(n) | 
 
-## Solution 3: Union Find Tree [TC Opt] - HashMap/Algorithm
+## Solution 3: Union Find Tree Grouping Elements By Run [TC Opt] - HashMap/Algorithm
 ```python
     def longestConsecutive(self, nums: List[int]) -> int:
         
+        # Union Find Tree:
+        # Tracks sets of elements broken into non overlapping groups.
+        # In this case it tracks elements broken into groups of corresponding runs.
+
         # Check Empty: 
         # Avoid max(size.values()) return error
         if len(nums) == 0:
