@@ -1439,10 +1439,15 @@ duplicate values exist in any set.
         return True
 ```
 
-## Solution 1: DefaultDict Matrix With // Floor Division For (r,c) Tuple Key For Grid - Hashmap/Representation
+## Solution 1: DefaultDict Matrix With // Floor Division For (r,c) Immutable And Hashable Tuple Key For Grid - Hashmap/Representation
 ```python 
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
+        # Dictionaries And Immutable/Hashable Keys:
+        # Since dictionaries use hashing, we can use any object that is 
+        # both immutable and hashable as the key, 
+        # which allows us to create tuples for our keys
+
         # sc: dictionary for rows, columns, boxes O(n)
         cols = defaultdict(set)
         rows = defaultdict(set)
@@ -1480,14 +1485,14 @@ duplicate values exist in any set.
 | Operations | O(1) | O(1) | Lookup, Put operation O(1) | No allocation for operations O(1) |
 | Overall | O(n<sup>2</sup>) | O(n<sup>2</sup>) | Iterate over grid dominates, O(n<sup>2</sup>) | Allocation for grid cells O(n<sup>2</sup>) |
 
-## Solution 2: [[]] Matrix With // Floor Division To Get 9 Integer Indexing Options [TC Opt] - Hashmap/Representation
+## Solution 2: [[]] Matrix With // Floor Division To Get 9 Integer Array Indexing Options [TC Opt] - Hashmap/Representation
 ```python
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         
         # Array of Array vs Dictionary:
         # Due to the overhead of the dictionary functions,
-        # For a small use case such as 9x9 using direct array of arrays is faster.
-        # For larger use cases, dictionary would be more optimal.
+        # for a small use case such as 9x9 using direct array of arrays is faster.
+        # For larger use cases though, dictionary would be more optimal.
 
         # sc: arrays for rows, columns, boxes O(n)
         rows = [[], [], [], [], [], [], [], [], []]
