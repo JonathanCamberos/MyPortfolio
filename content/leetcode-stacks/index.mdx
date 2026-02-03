@@ -2364,15 +2364,15 @@ Given array of heights, find the area of the largest rectangle in the histogram.
         #     and the height to be the height of the smaller bar we dragged across
         
         # Sentinel: 
-        # We need a left hand side limiting wall height, so we start with 0.
-        # This allows us to have a monotonic increasing rule upon grabbing the first height.
-        # This also allows us to follow implication 1, as the area being generated from 0 -> i.
+        # Exists so that even the tallest bar (like height 99) gets its area computed if no shorter bar
+        # ever appears to trigger its pop.
+        # With this, every bar eventually gets processed, even if its with a bar of width 1.
 
         # sc: stores heights for up to n heights O(n)
         stack = []
         max_area = 0
 
-        # Sentinel: 0 to start the monotonic increasing rule
+        # Sentinel: 0 to flush the remaining bars at the end
         heights.append(0)
 
         # tc: iterate over n O(n)
@@ -2422,7 +2422,7 @@ Given array of heights, find the area of the largest rectangle in the histogram.
 | Overall | O(n) | O(n) | Iterate over list of n length dominates, leading to O(n) | Stack index storage dominates, leading to O(n) |
 
 
-## Solution 2: [Monotonic] Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
+## Solution 2: [Reverse] [Monotonic] Double Dragging Reverse Iteration Monotonic Increasing of Higher Bar Height Index - Stack/Monotonic Property Maintenance 
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         
@@ -2433,7 +2433,7 @@ Given array of heights, find the area of the largest rectangle in the histogram.
         stack = []
 
         # Sentinel: iteration through -1
-        # tc: iterate over list of n length O(n)
+        # tc: iterate over n O(n)
         for i in range(n-1, -2, -1):
 
             # Sentinel: append a sentinel index of -1, height of 0
@@ -2450,15 +2450,15 @@ Given array of heights, find the area of the largest rectangle in the histogram.
                 # small height popped all taller walls
                 # so current height extends from i to (n-1)
                 if not stack:
-                    width = (n - 1) - i
-                
+                    width = (n - 1) - (i + 1) + 1      
+
                 # if stack is not empty
                 # the width is bounded from i to the right wall
                 # right wall is currently on the stack on stack[-1]
                 # -1 is to account for the right wall
                 else:
                     rightWall = stack[-1]
-                    width = (rightWall - 1) - i
+                    width = (rightWall - 1) - (i + 1) + 1
 
                 # check new area
                 max_area = max(max_area, height * width)
