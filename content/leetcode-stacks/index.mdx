@@ -2428,6 +2428,13 @@ Given array of heights, find the area of the largest rectangle in the histogram.
 ```python
     def largestRectangleArea(self, heights: List[int]) -> int:
         
+        # Monotonic Stack: 
+        # A stack that maintains monotonic increasing heights
+        # When monotonic increasing rule breaks, curr height will serve as right wall for the area to be generated.
+        # If stack is non empty, that means we have a stack full of taller bars that cover the current shorter bar.
+        # Each popped bar acts as a valid column for the height of the area we are generating. 
+        # The width of the rectangle is determined by the amount of bars that are taller than the current shorter bar,
+        # as this determines the length of the area being generated. 
 
         # Stack popping off taller bars:                                                                                                                                                                    
         #               *                                     *                                                
