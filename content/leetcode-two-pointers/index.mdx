@@ -2134,83 +2134,105 @@ Now we need a way to traverse the array that allows us to take advantage of this
     def trap(self, height: List[int]) -> int:
 
         # Bound Buckets:
-        # [4, 0, 2, 6, 3, 5]: monotonic quality determine buckets: (bucket from 4 -> 6, bucket from 6 -> 5)
-        #                     which are monotonic increasing and monotonic increasing (in reverse iteration) buckets
-        #    if we use 4 and 6 as the bucket boundaries, the bucket will catch any water up to and including 4
-        #    if we use 6 and 5 as the bucket boundaries, the bucket will catch any water up to and including 5
+        # [4, 0, 2, 6, 3, 5]: Monotonic quality defines buckets 
+        #                      1. Bucket from index 0-3 with heights of [4, 0, 2, 6]   (left to right monotonic increasing bucket)
+        #                      2. Bucket from index 3-5 with heights of [6, 3, 5]      (left to right monotonic decreasing bucket)
+        #
+        #    When we use 4 and 6 as the left and right bucket walls, the bucket will catch any water up to and including 4
+        #    When we use 6 and 5 as the left and right bucket walls, the bucket will catch any water up to and including 5
 
+        #   Bucket 1: w     Bucket 2: m
+        #       --------- ++++++
         #                *     
-        #                *  w  *
-        #       *  w  w  *  w  *
+        #                *  m  *
+        #       *  w  w  *  m  *
         #       *  w  w  *  *  *
         #       *  w  *  *  *  *
         #       *  w  *  *  *  *
         #      ------------------
         #       0  1  2  3  4  5
 
+        # Types Of Graphs
+        # case 1: [4, 0, 2, 1, 3, 5], left < right for entire array (bucket from 5 -> 6)
+        # case 2: [4, 0, 2, 6, 3, 5], left < right broken at some point (bucket from 5 -> 9, 9 -> 6)
+
+        #    case 1:                     case 2:
+        #        -------------              --------- ++++++
+        #                                            *     
+        #                      *                     *  m  *
+        #       *  w  w  w  w  *            *  w  w  *  m  *
+        #       *  w  w  w  *  *            *  w  w  *  *  *
+        #       *  w  *  w  *  *            *  w  *  *  *  *
+        #       *  w  *  *  *  *            *  w  *  *  *  *
+        #      ------------------          ------------------
+        #       0  1  2  3  4  5            0  1  2  3  4  5
+        #       ^              ^            ^              ^
+        #       L              R            L              R
+
         # Creating Buckets: 
-        # Outer Pointers: act as wall/side to outline bucket so inner depth pointers can verify monotonic quality
-        # Inner Pointers: traverse inward from both ends to track depth/height for current position
-        # Water Trapping: compare inner to outer pointer height determine if theres enough depth to trap water
+        # L/R Outer Pointers: serve as left and right most wall for buckets
+        # L/R Inner Pointers: traverse inward from both ends to determine if monotonic quality (bucket definition) as broken
+        # Water Trapping: using implications to know if left or right most wall for buckets determines water height
+
+        # Defining Bucket Depth Via Height Implications:
+        # case 1 implies: 
+        #   1. while height[left] < height[right] 
+        #   2. and while height[left] < outerLeftMax
+        #   3. we also know that height[right] < outerRightMax (same implication as 2. but for the right)
+        #   then (eventually), there is a bucket from [outerLeftMax ... left ... outerRightMax]
 
         # outer pointers
         outerLeftMax, outerRightMax = 0, 0
+        
         # inner pointers
         left, right = 0, len(height) - 1
+        
         water = 0
 
-        # Monotonic
         # tc: iterate over n O(n)
         while left < right:
-
-            # case 1: [5, 0, 3, 2, 4, 6], left < right for entire array (bucket from 5 -> 6)
-            # case 2: [5, 0, 3, 9, 4, 6], left < right broken at some point (bucket from 5 -> 9, 9 -> 6)
             
-            # case 1 implies: 
-            #   1. while height[left] < height[right] 
-            #   2. and while height[left] < outerLeftMax
-            #   3. we also know that height[right] < outerRightMax (same implication as 2. but for the right)
-            #   then (eventually), there is a bucket from [outerLeftMax ... left ... outerRightMax]
+            # We grab the lower height, so we know that at minimum, this height is bounded by the taller height
 
-            # Thus: water is limited by outerLeft/outerRight because it makes a bucket 
-            # as water will eventually be caught by right because of the implication
-            # height[left] < outerLeftMax < outerRightMax
-            # so water caught is now determined by outerLeftMax - height[left]
-
-            # on first iteration, this also checks if outerLeftMax < outerRightMax
-            # because we set outerLeft = height[left]
-            # so we know height[left] is at least 1 less than outerLeftMax
-            # and know   height[right] is at least 1 less than outerRightMax
+            
+            # Check: Left wall is shorter than Right wall
+            # Implies: Left wall is covered by Right wall
             if height[left] < height[right]:
 
-                # case 1: 
-                # implication (height[left] < outerLeftMax < outerRightMax) broken
-                # implies: outerLeftMax < height[left] ? outerRightMax (checked next iteration)
-                # then: update outerLeftMax to height[left]           
+                # Check: Left wall is taller than Left Max
+                # Implies: new tallest left wall found
+                # Then: Update     
                 if height[left] >= outerLeftMax:
                     outerLeftMax = height[left]
 
-                # case 1: implication (height[left] < outerLeftMax < outerRightMax) applies
-                # implies: height[left] < outerLeftMax < height[right]
-                # then: check if water has been caught, determined by outerLeftMax - height[left]
+                # Check: Left wall is shorter than left max
+                # Implies: Left wall is covered by left max
+                # Invariant: Left wall is already covered by Right Wall
+                # Implies: Left max is also lower than Right Wall
+                # Implies: Left max is limiting factor for this bucket
+                # Then: Water depth is just limiting factor - height = outerLeftMax - height[left]
                 else:
                     water += outerLeftMax - height[left]
 
                 # shift pointer
                 left += 1
 
+            # Check: Right wall is shorter than Left wall
+            # Implies: Right wall is covered by Left Wall
             else:
-                # implies: height[right] < height[left]
 
-                # case 1: implication (height[right] < outerRightMax < outerLeftMax) broken
-                # implies: outerRightMax < height[right] ? height[left] (checked next iteration)   
-                # then: update outerRightMax to height[right]
+                # Check: Right wall is taller than Right Max
+                # Implies: New tallest right wall found
+                # Then: update
                 if height[right] >= outerRightMax:
                     outerRightMax = height[right]
 
-                # case 1: implication (height[right] < outerRightMax < outerLeftMax) applies
-                # implies: height[right] < outerRightMax < outerLeftMax
-                # then: check if water has been caught, determined by outerRightMax - height[right]
+                # Check: Right wall is shorter than Right Max
+                # Implies: Right Wall is covered by Right Max
+                # Invariant: Right Wall is already covered by Left Wall
+                # Implies: Right Max is also lower than Left Wall
+                # Implies: Right Max is the limiting factor for this bucket
+                # Then: Water depth is just limiting factor - height = outerRightMax - height[right]
                 else:
                     water += outerRightMax - height[right]
 
