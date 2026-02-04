@@ -1383,7 +1383,7 @@ def generateParenthesis(self, n: int) -> List[str]:
         return dp[n]
 ```
 
-## Solution 1: [Backtracking] Recursive with String Concatenation - Stack/Backtracking by Tracking History or State
+## Solution 1: [Backtracking] Recursive with Immutable String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
@@ -1457,7 +1457,7 @@ def generateParenthesis(self, n: int) -> List[str]:
 | String concatenation | O(n) per path | O(n) per result | Explanation of total O(n<sup>2</sup>) is the same as the double for loop [derivation](/Notes/sorting-searching-algorithms#double-for-loop) |  |
 | Overall | O(Catalan(n) * n<sup>2</sup>) | O(Catalan(n) * n) | Catalan(n) unique strings with copy cost dominates as string grows O(n<sup>2</sup>) per solution dominates, leading to O(Catalan(n) * n<sup>2</sup>) | Catalan(n) valid strings each of length 2n dominates, leading to O(Catalan(n) * n) | 
 
-## Solution 2: [Backtracking] Recursive with Mutable List - Stack/Backtracking by Tracking History or State
+## Solution 2: [Backtracking] Recursive with Mutable List Appending - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1929,57 +1929,58 @@ Generate array representing number of days until monotonic decreasing is valid.
         return dp
 ```
 
-## Solution 1: [Monotonic] Forward Iteration Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
+## Solution 1: [Monotonic] Monotonic Decreasing Stack of Cold Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
-        # Note:
-        # Monotonic Stack: A stack that maintains monotonic decreasing temperatures 
-        # When monotonic decreasing rule breaks, the current temperature will serve as new higher temperature,
-        # and if stack is non empty, wait days distance for top of stack 
-        # while monotonic decreasing rule breaks 
+        # Monotonic Stack: 
+        # A stack that maintains monotonic decreasing temperatures 
+        # When monotonic decreasing rule breaks, that means we have found a temperature 
+        # that is hotter than at least 1 of the previous temperatures.
+        
+        # Stack:
+        #      *                                   *                             *                        *                       *
+        #      *  *                                *  *                          *  *                     *  *                    *  *    
+        #      *  *             *                  *  *             *            *  *          *          *  *       *            *  *  * 
+        #      *  *  *          *                  *  *  *          *            *  *  *       *          *  *       *            *  *  * 
+        #      *  *  *          *                  *  *  *          *            *  *  *       *          *  *       *            *  *  * 
+        #      *  *  *  *   +   *                  *  *  *  *   +   *            *  *  *   +   *          *  *   +   *            *  *  * 
+        #     ------------     ---       ==>      ------------     ---    ==>   ---------     ---   ==>  ------     ---   ==>   --------- 
+        #      0  1  2  3       4      calc wait   0  1  2  3       4            0  1  2       4          0  1       4   join()   0  1  4
+        #     older          hot day     days          
+        #                                          Day 3 waits 1 day           Day 2 waits 2 days     Day 4 is colder than Day 1
 
-        # space complexity: list wait days for n temperatures O(n)
+        # sc: list for wait time for n temperatures O(n)
         n = len(temperatures)
         res = [0] * n
 
-        # space complexity: stores indices for up to n unresolved temperatures O(n)
+        # sc: stores indices for up to n temperatures O(n)
         stack = []
 
-        # time complexity: iterate over list of n length O(n)
+        # tc: iterate over n O(n)
         for i in range(n):
 
-            # Check: stack is non empty, unresolved temperature exists
-            # Check: if current temperature[i] breaks monotonic decreasing order,
-            # will be viable to act as right temperature
-            # implies: we keep appending while monotonic decreasing stays valid
-            # implies: stack is kept in monotonic decreasing order
-            # implies: when monotonic decreasing breaks, we have found right temperature
+            # Check: if stack is non empty, need to verify monotonic decreasing
+            # Check: if monotonic decreasing broken, current temperature will serve as hot day 
+            # Implies: we need to pop off the stack until monotonic decreasing is true again
+            # Implies: for those temperatures popped, we can calculate a hot day wait time
             while stack and temperatures[stack[-1]] < temperatures[i]:
                 
-                # curr while loop iteration:
-                # temperatures[i]: right temperature
-                # pop stack[-1]: tempWaitDaysCandidateIndex
+                # i: hot day index
+                # stack[-1]: cold day index
+                coldDayIndex = stack.pop()
+                hotDayIndex = i
 
-                # while stack is non-empty:
-                # stack.pop() will iterate tempWaitDays candidate
-                # essentially dragging the right temperature over the monotonic stack,
-                # calculating all the tempWaitDays, until a temperature is higher than
-                # the current right temperature,
-                # then we just add the right wall to the stack maintaining monotonic order
-                tempWaitDaysCandidateIndex = stack.pop()
-                
-                # After stack.pop():
-                # height[i]: right temperature
-                # tempWaitDays: tempWaitDaysCandidateIndex
+                # hot day is the closest hotter day for the cold day,
+                # get distance between indexes to get how many days must be waited
+                coldDayWaitTime = hotDayIndex - coldDayIndex
 
-                # Distance from right temperature to current tempWaitDaysCandidate
-                # is the days until a warmer temperature for the current candidate
-                res[tempWaitDaysCandidateIndex] = i - tempWaitDaysCandidateIndex  
+                # set wait time for current cold day
+                res[coldDayIndex] = coldDayWaitTime
 
-            # monotonic decreasing has been re-enabled
-            # add right temperature to monotonic stack
-            # push right temperature index
+
+            # Check: appending temperature will keep monotonic decreasing rule
+            # Implies: this is the coldest day on the stack
             stack.append(i)  
         
         # overall: time complexity O(n)
@@ -1994,49 +1995,74 @@ Generate array representing number of days until monotonic decreasing is valid.
 | Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
 | Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-## Solution 2: [Monotonic] Reverse Iteration Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
+## Solution 2: [Reverse] [Monotonic] Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
-        # Note:
-        # Solution 2 tends to use less actual in memory due to more 
+        # Aggressive Pruning:
+        # Reverse tends to use less actual in memory due to more 
         # aggressive pruning of colder temperatures during reverse traversal
 
-        # iterating reverse: why monotonic decreasing?
+        # Temperatures:
+        # temp:[ 1, 2, 4, 5, 4, 3, 1]
         # index: 0  1  2  3  4  5  6
-        # temp:[ 1, 4, 6, 8, 5, 3, 2]
 
-        # a monotonic increasing (iterating backwards) would be [2, 3, 5, 8]
-        # but we don't care about decreasing cold values, but increasing hot values
-        # so we still want a monotonic decreasing (backwards) [8, 6, 4, 1]
+        # Stack appending by iterating backwards:
+        #                                        
+        #               *                    *
+        #            *  *                    *  *  *   
+        #         *  *  *                    *  *  *
+        #         *  *  *                    *  *  *  
+        #      *  *  *  *                    *  *  *  *  
+        #     ---------------   which is    ---------------    which has no hotter days
+        #      6  5  4  3   ...  really      3  4  5  6        (3 cannot wait any days for a hotter day)
+
+        # So from our stack perspective, monotonic increasing means no hotter days,
+        # so what we are looking for is monotonic decreasing, such as
+
+        # Stack appending by iterating backwards:
+        #                                        
+        #      *                                      *
+        #      *  *                                *  *  
+        #      *  *                                *  *
+        #      *  *  *                          *  *  *
+        #      *  *  *  *                    *  *  *  *  
+        #     ---------------   which is    ---------------    which has hotter days
+        #      3  2  1  0   ...  really      0  1  2  3        (0 waits 1 day, 1 waits 1 day, etc)
+
+        # So by verifying monotonic decreasing, we know the the previous thing on the stack is a hotter day        
         
-        # difference from forward iteration is that we are tracking the hot values
-        # rather than tracking the cold values 
+        # Forward vs Backwards:
+        # So the difference from forward iteration is that we are tracking the decreasing hot values
+        # rather than tracking the cold values
         
-        # space complexity: storing up to n indexes O(n)
+        # sc: storing up to n indexes O(n)
         n = len(temperatures)
         stack = []
 
-        # space complexity: storing wait days for n temperatures
+        # sc: storing wait days for n temperatures
         res = [0] * n
 
-        # time complexity: iterate over list of n temperatures O(n)
+        # tc: iterate over list of n temperatures O(n)
         for i in range(n-1, -1, -1):
 
-            # maintain decreasing temp of hot temps by:
-            # prevent equal or hotter temp from being added
-            # which will remove older hot temps
-            # and replacing with newer hot temps
+            # Check: monotonic decreasing
+            # Implies: Keep list of decreasing temp of hot temps
+            # Check: if monotonic decreasing broken, we have found a more recent temperature
+            # Then: pop() older hot temperature with new hotter temperature to ensure minimum wait time for cold days
             while stack and temperatures[stack[-1]] <= temperatures[i]:
                 stack.pop()
 
-            # check: monotonic decreasing kept with stack (backwards)
-            # which means top of stack has a hotter temperature, calculate distance
+            # Check: if stack is not empty
+            # Implies: stack has a hotter temperature, can calculate wait days
             if stack:
-                # stack[-1]: previous hot temperature
+                previousHotDayIndex = stack[-1]
+                coldDayIndex = i
+
+                waitDays = previousHotDayIndex - coldDayIndex
                 res[i] = stack[-1] - i
 
-            # Invariant: monotonic decreasing, append to list 
+            # Invariant: monotonic decreasing kept, append temperature to list 
             stack.append(i)        
         
         # overall: time complexity O(n)
@@ -2052,12 +2078,12 @@ Generate array representing number of days until monotonic decreasing is valid.
 | Overall | O(n) | O(n) | Iteration over list of n temperatures dominates, leading to O(n) | Efficient pruning of colder temperatures often leads to smaller stack than forward pass but still for n elements O(n) |  
 
 
-## Solution 3: [Dynamic Programming] Reverse Iteration With Jump Traversal Using Dynamic Programming Building Future Warm Temperatures List - Stack/Algorithm
+## Solution 3: [Reverse] [Dynamic Programming] Reverse Iteration With Jump Traversal Using Dynamic Programming Building Future Warm Temperatures List - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
         # Dynamic Programming:
-        # This solution uses a jump-based approach via leveraging 
+        # This solution uses a jump based approach via leveraging 
         # results from previously computed indices.
         # It avoids an explicit stack by simulating the search for 
         # the next warmer temperature using a two-pointer like mechanism,
