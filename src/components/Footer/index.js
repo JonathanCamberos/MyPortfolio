@@ -4,7 +4,7 @@ import startMix from "./Radio/startMix";
 
 export default function Footer({ radioLabel, setRadioLabel }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(0);
   const [trackTitle, setTrackTitle] = useState("Playlist");
   const [trackArtist, setTrackArtist] = useState("");
   const [stationIndex, setStationIndex] = useState(0);

@@ -1995,13 +1995,16 @@ Generate array representing number of days until monotonic decreasing is valid.
 | Temperature comparisons | O(1) | O(1) | Comparison operation in constant O(1) | No additional memory allocation for comparison O(1) | 
 | Overall | O(n) | O(n) | Iteration over temperatures dominates, leading to O(n) | Stack and result list dominates, leading to O(n) | 
 
-## Solution 2: [Reverse] [Monotonic] Monotonic Decreasing Stack of Warm Temps - Stack/Monotonic Property Maintenance
+## Solution 2: [Reverse] [Monotonic] Monotonic Decreasing Stack of Warm Temps [SC Opt] - Stack/Monotonic Property Maintenance
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
         # Aggressive Pruning:
-        # Reverse tends to use less actual in memory due to more 
-        # aggressive pruning of colder temperatures during reverse traversal
+        # Reverse tends to use less actual in memory.
+        # In the reverse, we are only keep track of hot temperatures in monotonic decreasing order
+        # ensuring we have a list of the most recent hot temperatures to ensure minimum wait time for cold
+        # days. So due to the aggressive pruning of colder temperatures during reverse traversal
+        # this tends to use less memory
 
         # Temperatures:
         # temp:[ 1, 2, 4, 5, 4, 3, 1]
@@ -2078,7 +2081,7 @@ Generate array representing number of days until monotonic decreasing is valid.
 | Overall | O(n) | O(n) | Iteration over list of n temperatures dominates, leading to O(n) | Efficient pruning of colder temperatures often leads to smaller stack than forward pass but still for n elements O(n) |  
 
 
-## Solution 3: [Reverse] [Dynamic Programming] Reverse Iteration With Jump Traversal Using Dynamic Programming Building Future Warm Temperatures List - Stack/Algorithm
+## Solution 3: [Reverse] [Dynamic Programming] Reverse Iteration With Jump Traversal Using Dynamic Programming Building Future Warm Temperatures List [TC Opt] - Stack/Algorithm
 ```python
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
