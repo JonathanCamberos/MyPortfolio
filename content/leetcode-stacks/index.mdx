@@ -378,7 +378,8 @@ in the correct order.
 ```python
     def isValid(self, s: str) -> bool:
 
-        # note: in python, an empty list [] is falsy evaluating to false
+        # Empty List In Python []:
+        # An empty list [] is falsy evaluating to false
         # not [] -> true
 
         # sc: relative to input O(n)
@@ -939,18 +940,26 @@ operations in reverse polish notation.
         return stack[-1]
 ```
 
-## Solution 1: Postfix Expression Evaluation Algorithm - Stack/Expression Evaluation and Parsing 
+## Solution 1: Stack Postfix Expression Evaluation Algorithm - Stack/Expression Evaluation and Parsing 
 ```python
     def evalRPN(self, tokens: List[str]) -> int:
         
         # Reverse Polish Notation:
+        # We only push numbers to the stack,
+        # and when we hit an operator we pop b the a
+        # since the numbers are on the stack in reverse
+
         # input:    ["4","13","5","/","+"]
         # expected: 4 + (13 / 5) = 6
-        # "4"    -> [4]
-        # "13"   -> [4, 13]
-        # "5"    -> [4, 13, 5]
-        # "/"    -> [4, 2]         # a = 13, b = 5 → int(13 / 5) = 2
-        # "+"    -> [6]            # a = 4, b = 2 → 4 + 2 = 6
+        # "4"    -> [4]         push() 4 to stack
+        # "13"   -> [4, 13]     push() 13 to stack
+        # "5"    -> [4, 13, 5]  push() 5 to stack
+        # "/"    -> [4]         hit operator, pop() b = 5, pop() a = 13, complete operation int(13 / 5) = 2
+        # "2"    -> [4, 2]      push() 2 to stack
+        # "+"    -> []          hit operator, pop() b = 2, pop() a = 4, finish operator (4 + 2) = 6
+        # "6"    -> [6]         push() 6 to stack
+
+        # [6] stack holds answer
 
         # sc: stack holds up to n/2 intermediate results O(n)
         stack = []
@@ -958,22 +967,21 @@ operations in reverse polish notation.
         # tc: iterate over n O(n)
         for token in tokens:
 
-            # found number, cast to int and push to stack
+            # Found Integer:
+            # Cast to int and push() to stack
             if token not in "+-*/":
                 stack.append(int(token))
             
-            # found operation, grab top 2 numbers from stack and compute
-            # numbers are in reverse order, so pop b first, then a.
+            # Found Operation:
+            # Pop() 2 numbers from stack, b then a, and compute
             else:
 
-                # tc: pop two operands from stack O(1)
-
-                # 5
+                # tc: pop operation constant O(1)
                 b = stack.pop()
-                # 13
                 a = stack.pop()
 
-                # apply operator manually and push result
+                # Complete Operation: 
+                # Push() result to stack
                 match token:
                     case "+":
                         stack.append(a + b)
@@ -987,16 +995,18 @@ operations in reverse polish notation.
                         # 13 / 5
 
                         # Explicit truncation towards zero
-                        # -7 / 3         # -2.333  division:        leaves remainder
-                        # -7 // 3        # -3      floor division:  rounds down "towards infinity"
-                        # int(-7 / 3)    # -2      int(division):   truncates "toward 0", as required by RPN
+                        # -7 / 3         # -2.333  division:        Remainder                                         x
+                        # -7 // 3        # -3      floor division:  Rounds down "towards infinity"                    x
+                        # int(-7 / 3)    # -2      int(division):   Rounds up "towards 0", as required by RPN      this one
+
                         stack.append(int(a / b))
 
-        # top of stack holds with final number
+        # Top of stack holds result
+        res = stack[-1]
 
         # overall: tc O(n)
         # overall: sc O(n)
-        return stack[-1]
+        return res
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -1373,9 +1383,22 @@ def generateParenthesis(self, n: int) -> List[str]:
         return dp[n]
 ```
 
-## Solution 1: BackTracking Recursive with String Concatenation - Stack/Backtracking by Tracking History or State
+## Solution 1: [Backtracking] Recursive with String Concatenation - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
+
+        # String Immutability:
+        # Every time we do current + "(" in python a new string is created
+        # and the entire contents of current are copied.
+        # Since this happens at every recursion level and there are Catalan(n) valid sequences,
+        # the time becomes O(Catalan(n) * n^2)
+        # due to copying. 
+        # Solution 2 has a time of O(Catalan(n) * n), this is here to show the slow version
+
+        # Temporary/Working Memory:
+        # We also use more memory with strings as along one recursion path we create ~n strings
+        # each of up to length n, so peak temporary memory is O(n^2)
+        # Solution 2 has temporary memory of O(n), since we have a single stack we are popping/appending from
 
         # Backtracking:
         # Explores all valid sequences of parentheses.
@@ -1384,35 +1407,45 @@ def generateParenthesis(self, n: int) -> List[str]:
 
         res = []
 
-        # Backtracking        
+        # tc: each recursion path creates  explores a state; only leaf call does ''.join(), leading to O(n)
         # sc: call stack depth is O(n), string copying adds O(n) per leaf path, leading to O(n^2)
-        def helper(current: List[str], num_open: int, num_closed: int):
+        def dfs_backtrack(current: List[str], num_open: int, num_closed: int):
 
-            # Base case: 
-            # If the length of the current combination is 2 * n, we found a valid combination
+            # Process Root: reached valid string 
             if len(current) == n * 2:
-                # tc: concat add to res for 2n length O(n)
                 res.append(current)
                 return
 
-            # Recursive case 1: add '('
+            # Explore Choice 1: add '('
             # Check: open count is less than total expected
-            # Implies: string is still valid
-            # Ensures: '(' will create a new valid string
+            # Implies: adding '(' will create valid string
             if num_open < n: 
-                # tc: concat per iteration O(n)
-                helper(current + "(", num_open + 1, num_closed)
 
-            # Recursive case 2: add ')'
+                # Build: append open '('
+                # tc: concat O(n)
+                new_str = current + "("
+
+                # Explore: recursion with new string copy
+                dfs_backtrack(new_str, num_open + 1, num_closed)
+
+                # Backtrack: no need to modify copy as original string still exists
+
+            # Explore Choice 2: add ')'
             # Check: closed count is less than open count
-            # Implied: string is valid from previous, has a '(' that is waiting for a closing
-            # Ensures: The ')' will have a matching open
+            # Implied: adding ')' is required for valid string
             if num_closed < num_open:
+                
+                # Build: append close ')'
                 # tc: concat per iteration O(n)
-                helper(current + ")", num_open, num_closed + 1)
+                new_str = current + ")"
+    
+                # Explore: recursion with new string copy
+                dfs_backtrack(new_str, num_open, num_closed + 1)
 
-        # Start backtracking with empty list and 0 open and 0 closed brackets
-        helper("", 0, 0)
+                # Backtrack: no need to modify copy as original string still exists
+
+        # Initial call, empty list passed
+        dfs_backtrack("", 0, 0)
 
         # overall: tc O(Catalan(n) * n^2)
         # overall: sc O(Catalan(n) * n)
@@ -1424,10 +1457,20 @@ def generateParenthesis(self, n: int) -> List[str]:
 | String concatenation | O(n) per path | O(n) per result | Explanation of total O(n<sup>2</sup>) is the same as the double for loop [derivation](/Notes/sorting-searching-algorithms#double-for-loop) |  |
 | Overall | O(Catalan(n) * n<sup>2</sup>) | O(Catalan(n) * n) | Catalan(n) unique strings with copy cost dominates as string grows O(n<sup>2</sup>) per solution dominates, leading to O(Catalan(n) * n<sup>2</sup>) | Catalan(n) valid strings each of length 2n dominates, leading to O(Catalan(n) * n) | 
 
-## Solution 2: BackTracking Recursive with Mutable List - Stack/Backtracking by Tracking History or State
+## Solution 2: [Backtracking] Recursive with Mutable List - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
+        # List Mutability:
+        # We use a single list curr and modify it in place using append/pop.
+        # Append() and pop() are both constant O(1) and no copying happens at each recursion step.
+        # The list only gets converted once we have found a valid combination using "".join(curr).
+        # Since there are Catalan(n) valid sequences 
+        # the time becomes O(Catalan(n) * n) which is faster than the string version of O(Catalan(n) * n^2)
+
+        # Temporary/Working Memory:
+        # We use a single stack to track our changes, so peak temporary memory is O(n)
+
         # Backtracking:
         # Explores all valid sequences of parentheses.
         # Only when a complete sequence is found (length == 2 * n), 
@@ -1435,10 +1478,9 @@ def generateParenthesis(self, n: int) -> List[str]:
 
         res = []
         
-        # Backtracking
         # tc: each recursion explores a state; only leaf call does ''.join(), leading to O(n)
         # sc: call stack depth O(n), current list holds up to 2n
-        def backtrack(current, openCount, closeCount):
+        def dfs_backtrack(current, openCount, closeCount):
 
             # Base case: 
             # If we have used all open and close parentheses
@@ -1452,15 +1494,13 @@ def generateParenthesis(self, n: int) -> List[str]:
             # Ensures: string is always valid, with total number of parens being valid
             if openCount < n: 
 
-                # Action:
+                # Build: append open '('
                 current.append('(')
 
-                # Recursive:
-                # Explores all combinations from new state
+                # Explore: recurse with updated list
                 helper(current, openCount + 1, closeCount)
 
-                # Backtrack: 
-                # Remove the last added '('
+                # Backtrack: remove last open '('
                 current.pop()
             
             # Recursive case 1: add ')'
@@ -1468,18 +1508,16 @@ def generateParenthesis(self, n: int) -> List[str]:
             # Ensures: string is always valid, with each open having a matching close
             if closeCount < openCount:
 
-                # Action:
+                # Build: append close ')'
                 current.append(')')
 
-                # Recursive:
-                # Explores all combinations starting from new state
+                # Explore: recurse with updated list
                 helper(current, openCount, closeCount + 1)
 
-                # Backtrack:
-                # Remove the last added ')'
+                # Backtrack: remove last open '('
                 current.pop()
 
-        # Start backtracking with empty list and 0 open and 0 closed brackets
+        # Initial call, empty list passed
         backtrack([], 0, 0)
 
         # overall: tc O(Catalan(n) * n)
@@ -1492,14 +1530,14 @@ def generateParenthesis(self, n: int) -> List[str]:
 | String creation | O(n) per complete path | O(n) per result | Only joined once per result | Each string result is size 2n |
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | Avoids repeated copies | Stores all valid combinations | 
 
-## Solution 3: Iterative State Tracking Stack - Stack/Backtracking by Tracking History or State
+## Solution 3: [Backtracking] Iterative Stack State Tracking To Mimic Recursion - Stack/Backtracking by Tracking History or State
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
 
-        # Explicit stack:
-        # Simulates backtracking process iteratively.
-        # Each stack element stores the current string and counts of open and closed parentheses.
-        # Allows state tracking without recursion.
+        # Explicit Iterative Stack:
+        # Simulates backtracking process iteratively by storing state on the stack.
+        # Each state element holds the current string and counts of open and closed parentheses,
+        # which allows state tracking without recursion
 
         # Store valid parentheses
         result = []
@@ -1512,29 +1550,47 @@ def generateParenthesis(self, n: int) -> List[str]:
         # sc: stack can grow to O(Catalan(n)), result stores O(Catalan(n)) strings
         while stack:
 
-            # Pop current state, current state is explored only once
+            # Process Root:
+            # Grab/pop current state from stack, current state is explored only once
             curr, openCount, closeCount = stack.pop()
 
-            # Base case: reached valid string
+            # Process Root: reached valid string
             if openCount == n and closeCount == n:
                 result.append("".join(curr))
                 continue
 
-            # Iterative step 1: add '('
+            # Explore Choice 1: add '('
             # Check: open count is less than total expected
-            # Ensures: string is always valid, with total number of parens being valid
+            # Implies: we have space to add an open parenthesis
             if openCount < n:
                 
-                # copy list to avoid mutating other branches
-                new_curr = curr + ['(']
+                # Build: append open '('
+                # Creating copy of list to avoid mutating other branches,
+                # (cannot do curr.append('(') because that would modify the original list)
+                new_curr = curr.copy()
+                new_curr.append('(')
+
+                # Explore: iterative recursion by putting new state on stack for future exploration
                 stack.append((new_curr, openCount + 1, closeCount))
 
-            # Iterative step 2: add '('
+                # Backtrack:
+                # No need to .pop() as the pop() from the stack will remove this new state eventually
+
+            # Explore Choice 2: add ')'
             # Check: closed count is less than open count
-            # Ensures: string is always valid, with each open having a matching close
+            # Implies: we have a matching open for our closed parenthesis
             if closeCount < openCount:
+
+                # Build: append close ')'
+                # Creating copy of list to avoid mutating other branches,
+                # (cannot do curr.append(')') because that would modify the original list)
                 new_curr = curr + [')']
+
+                # Explore: iterative recursion by putting new state on stack for future exploration
                 stack.append((new_curr, openCount, closeCount + 1))
+
+                # Backtrack:
+                # No need to .pop() as the pop() from the stack will remove this new state eventually
 
         # overall: tc O(Catalan(n) * n)
         # overall: sc O(Catalan(n) * n)
@@ -1547,7 +1603,7 @@ def generateParenthesis(self, n: int) -> List[str]:
 | Final string join | O(n) per result | O(n) per result | Each completed list is joined into a string once | Output list contains O(Catalan(n)) strings, each of length O(n) | 
 | Overall | O(Catalan(n) * n) | O(Catalan(n) * n) | One entry and exit per valid state exploring ? | Final output dominates space; stack and temp lists also contribute O(n) each | 
 
-## Solution 4: Dynamic Programming Building Parentheses Combinations - Stack/Dynamic Programming State Compression
+## Solution 4: [Dynamic Programming] Two Pointer Opposite Ends Catalan Pattern To Build Parentheses Combinations - Stack/Dynamic Programming State Compression
 ```python
     def generateParenthesis(self, n: int) -> List[str]:
         
@@ -1555,42 +1611,52 @@ def generateParenthesis(self, n: int) -> List[str]:
         # We exploit the recursive structure of Catalan numbers
         # by building a list of all valid parentheses combinations for each level n
 
+        # Two Pointer:
+        # If we have a list of valid combinations of parenthesis, 
+        # we can append them in a format that generate more valid combinations
+
         # dp:    list of list of parentheses combinations 
-        # dp[n]: list containing all valid parenthesis combinations for n pairs
-        dp = [[] for i in range(n + 1)]
-        
+        # dp[n]: list containing all valid parenthesis combinations for the nth level (n pair of parenthesis)
+        dp = []
+        for _ in range(n + 1):
+            dp.append([])     
+
         # Base case: valid combination for n = 0
         dp[0] = [""]  
         
         # Iterate: create valid lists from dp[1] to dp[n]
-        # Current: building list for i pairs
+        # Current: building list for ith pair
         # tc: iterate over list of n length O(n) 
         for i in range(1, n + 1): 
 
             # iterate over stored lists up to now
             for j in range(i):  
 
-                # Setup: Two Pointer Variation: Opposite Ends
+                # Opposite Ends Two Pointer Variation:
+                # Since pointers will meet in middle and cross each other, 
+                # they will get all variations of combinations already built,
+                # which allows us to format them to generate more valid combinations
 
-                # forward iteration: over each valid string of parentheses for level j
-                # start: first parentheses pairs level (0) pairs
+                # Setup: Opposite Ends Two Pointer Variation
+                # Forward and Reverse Iteration
+
+                # Forward Iteration List 1: 
+                # Iterate over each valid string of parentheses for level j,
+                # starting at first parentheses pairs level of 0 pairs of parenthesis
                 for left in dp[j]:
 
-                    # reverse iteration: over each valid string of parentheses for level (i - 1 - j)
-                    # start: last parentheses pairs level (i-1) pairs
+                    # Reverse Iteration List 2: 
+                    # Iterate over each valid string of parentheses for level (i - 1 - j),
+                    # starting at last parenthesis pairs level of largest number pairs currently available
                     for right in dp[i - 1 - j]:
 
-                        # Two Pointer Variation: Opposite Ends
-                        # as pointers meet in middle, number of parentheses will remain balanced
-                        # which allows us to just add them randomly within valid rules:
-
-                        # Why:
+                        # Generation Format:
                         # ({left}){right} or {left}({right}) are both valid formulas
                         # Since we are doing Opposite Ends and left and right will cross over each other,
                         # left and right will both individually use all values
                         # which means with these 2 iterations
-                        # we are eventually doing both ({left}){right} and {left}({right})
-
+                        # we are eventually doing both the same thing
+                        # dp[i].append(f"{left}({right})")
                         dp[i].append(f"({left}){right}")
 
         # overall: tc O(Catalan(n) * n)

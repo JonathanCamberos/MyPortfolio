@@ -351,11 +351,13 @@ Given a list of numbers, return all unique subsets.
         path = []  # mutable path list defined once
 
         def dfs_backtrack(start: int):
+            
             # Process Root -> shallow copy of current path (current subset)
             res.append(path[:])
 
             # Explore Choices -> for remaining elements
             for i in range(start, len(nums)):
+                
                 # Build: append current element
                 path.append(nums[i])
 
@@ -502,16 +504,7 @@ Find all combinations that add up to target.
                 return
 
             # Process -> Choices : try each candidate from current index onward, prune when in branch
-            for i in range(start, len(candidates)):
-
-                # Build: Include candidates[i] to make a new path
-                path.append(candidates[i])
-
-                # Explore: recurse with new path with same i (allow reuse)
-                dfs_backtrack(i, currSum + candidates[i])
-
-                # Backtrack: remove last candidate, attempt curr path with next candidate
-                path.pop()
+8
 
         dfs_backtrack(0, 0)
 
