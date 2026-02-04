@@ -2129,7 +2129,7 @@ Now we need a way to traverse the array that allows us to take advantage of this
 ```
 
 
-## Solution 1: [Monotonic Pointers] 2 Inner/Outer Pointers Traversal Creating Bound Buckets By Monotonic Opposite Ends Pointer Shift Modification - Two Pointers/K Pointer Variants
+## Solution 1: [Monotonic L/R Pointers] 2 Inner/Outer Pointers Traversal Creating Bound Buckets By Monotonic Opposite Ends Pointer Shift Modification - Two Pointers/K Pointer Variants
 ```python
     def trap(self, height: List[int]) -> int:
 
@@ -2437,23 +2437,26 @@ Now we need a way to traverse the array that allows us to take advantage of this
         # Compare previous max to current height
         # tc: iterate over n O(n)
         for i in range(1, n):
-            leftMax[i] = max(leftMax[i - 1], height[i])
+            previousMax = leftMax[i-1]
+            leftMax[i] = max(previousMax, height[i])
 
         # First Max Right To Left:
-        rightMax[n - 1] = height[n - 1]
+        rightMax[n-1] = height[n-1]
 
         # Iterating Right To Left:
         # Compare previous max to current height
         # tc: iterate over n O(n)
-        for i in range(n - 2, -1, -1):
-            rightMax[i] = max(rightMax[i + 1], height[i])
+        for i in range(n-2, -1, -1):
+            previousMax = rightMax[i+1]
+            rightMax[i] = max(previousMax, height[i])
 
         # Depth Calculation:
         # tc: iterate over n O(n)
         for i in range(n):
 
-            # Bucket Wall Height is bounded by lower of 2 maxes (represent bucket side heights)
-            # Calculate against height of the bottom of the bucket
+            # Bucket Wall Height:
+            # The bucket is bounded by lower of 2 maxes (they represent the Left and Right bucket side heights)
+            # Just subtract the lower height against the height of the bottom of the bucket
             water += min(leftMax[i], rightMax[i]) - height[i]
 
         # overall: tc O(n)
