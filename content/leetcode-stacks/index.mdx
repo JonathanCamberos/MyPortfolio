@@ -2086,19 +2086,21 @@ Generate array representing number of days until monotonic decreasing is valid.
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
         # Dynamic Programming:
-        # Uses a jump based approach via leveraging results from previously computed indices.
-        # Avoids a  stack by simulating the search for the next warmer temperature
-        # by iterating backwards and keeping track of the nearest hottest day,
-        # effectively building a list of shortcut paths towards the next warmer day
+        # Uses a jump approach building hopping path as we compute hotter days.
+        # Avoids a stack of temperatures by simply iterating backwards and keeping 
+        # track of the nearest hottest day, which can be used by other days to find 
+        # their own hotter day.
 
         # Jump Traversal:
-        # If we are trying to find the hottest day for index i, we know that our first candidate is the
-        # following day. 
-        # If the following day is not the nearest hottest day, then we know that the first candidate and
-        # the following day share the next following day.
+        # If we are trying to find the hottest day for index i, 
+        # we know that our first candidate is the following day. 
+        # If the following day is not the nearest hottest day, 
+        # then we know that the first candidate needs a day hotter than this first candidate.
+        # That implies, that the day at index i and the first candidate share the nearest hottest day.
+        # By that logic, we can simply 'jump' to the candidate's own hotter day and use it as 
+        # the next candidate for index i.
         
-        # So essentially, once we know the next warmer day for some index j, we can skip
-        # forward using the result array we are building to find the next warmer day.
+        # Essentially, days in the future help days in the past by building shortcuts to hotter days.
         
         # sc: result list for storing wait times o(n)
         n = len(temperatures)
@@ -2111,29 +2113,30 @@ Generate array representing number of days until monotonic decreasing is valid.
         # tc: iterate over n O(n)
         for i in range(n - 2, -1, -1):
 
-            # Check: if temperature hotter than current hottest day
-            # Implies: No need for wait days calculation, as no future hotter day exists 
+            # Check: current temperature is warmer than current hottest day
+            # Implies: no future hotter day exists, no need for wait days calculation
+            # Then: update hottest day
             if temperatures[i] >= temperatures[hottest_day]:
-                # update hottest day
                 hottest_day = i
 
-            # Check: if temperature is colder than current hottest day
-            # Then: need to calculate wait time, find the nearest hot day
+            # Check: current temperature is colder than current hottest day
+            # Implies: current temperature has at least 1 hotter day in the future
+            # Then: calculate wait days for current temperature
             else:
 
-                # First candidate is the following day
+                # Current temperatures' first hotter day candidate is the following day
                 tempCheckIndex = i + 1
 
-                # Check: if candidate is hotter than current day
-                while temperatures[tempCheckIndex] <= temperatures[i]:
+                # Check: continue while we have not found a hotter day than current temperature
+                while !(temperatures[tempCheckIndex] > temperatures[i]):
                     
-                    # Implies: candidate is not a hotter day
-                    # Implies: need a day hotter than the current candidate
-                    # Then: we can check candidates own hot day as the next candidate
+                    # Implies: candidate is not hotter
+                    # Implies: current temperature needs a day hotter than the current candidate
+                    # Then: both current day and candidate share next hottest day, check the candidate's hottest day
                     tempCheckIndex += dp[tempCheckIndex]
 
-                # Check: hotter day found
-                # Then: set day index in building list
+                # Check: found a temperature hotter than current day
+                # Then: distance between hotter day and current temperature
                 dp[i] = tempCheck - i 
 
         # overall: tc O(n)
