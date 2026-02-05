@@ -2059,14 +2059,17 @@ Generate array representing number of days until monotonic decreasing is valid.
             if stack:
 
                 # Hot and cold days
+                # Hot and cold days
                 futureHotDayIndex = stack[-1]
                 currentColdDayIndex = i
 
                 # Wait time calculation
+                # Wait time calculation
                 waitDays = futureHotDayIndex - currentColdDayIndex
                 res[i] = waitDays
+                res[i] = waitDays
 
-            # Invariant: current cold day could serve as potential more recent hot day for earlier days, append to stack
+            # Invariant: current cold day could serve as potential more recent hot day for earlier days for earlier days, append to stack
             # Invariant: this cold day will get replaced if a more recent hotter day appears
             stack.append(i)        
         
@@ -2264,6 +2267,7 @@ before arriving to the destination.
         # which represent the times of the fleets
         
         # sc: stores times for up to n fleets O(n)
+        # sc: stores times for up to n fleets O(n)
         stack = []
 
         # Pair each cars position with its speed
@@ -2295,6 +2299,7 @@ before arriving to the destination.
             # Check: if stack is not empty, check if car is slower than current fleet (does not catch up) -> car becomes new fleet -> push()
             if not stack or currTimeToTarget > stack[-1]:
 
+                # Update new fleet at top of stack
                 # Update new fleet at top of stack
                 stack.append(currTimeToTarget)
 
