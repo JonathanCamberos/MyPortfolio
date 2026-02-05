@@ -2010,35 +2010,33 @@ Generate array representing number of days until monotonic decreasing is valid.
         # temp:[ 1, 2, 4, 5, 4, 3, 1]
         # index: 0  1  2  3  4  5  6
 
-        # Stack appending by iterating backwards:
+        # Monotonic increasing stacks when iterating backwards, represent decreasing temperatures
         #                                        
-        #               *                    *
-        #            *  *                    *  *  *   
-        #         *  *  *                    *  *  *
-        #         *  *  *                    *  *  *  
-        #      *  *  *  *                    *  *  *  *  
-        #     ---------------   which is    ---------------    which has no hotter days
-        #      6  5  4  3   ...  really      3  4  5  6        (3 cannot wait any days for a hotter day)
+        #               *                       *
+        #            *  *                       *  *      
+        #         *  *  *                       *  *  *
+        #         *  *  *                       *  *  *  
+        #      *  *  *  *                       *  *  *  *  
+        #     ---------------     which      ---------------    none of these have hotter days,
+        #      6  5  4  3   ... represents      3  4  5  6      so we do not care about monotonic increasing stacks
+        
 
-        # So from our stack perspective, monotonic increasing means no hotter days,
-        # so what we are looking for is monotonic decreasing, such as
-
-        # Stack appending by iterating backwards:
+        # Monotonic decreasing stacks when iterating backwards, represent increasing temperatures
         #                                        
-        #      *                                      *
-        #      *  *                                *  *  
-        #      *  *                                *  *
-        #      *  *  *                          *  *  *
-        #      *  *  *  *                    *  *  *  *  
-        #     ---------------   which is    ---------------    which has hotter days
-        #      3  2  1  0   ...  really      0  1  2  3        (0 waits 1 day, 1 waits 1 day, etc)
+        #      *                                        *
+        #      *  *                                  *  *  
+        #      *  *                                  *  *
+        #      *  *  *                            *  *  *
+        #      *  *  *  *                      *  *  *  *  
+        #     ---------------     which      ---------------   all of these have hotter days,
+        #      3  2  1  0   ... represents     0  1  2  3      so we care about monotonic decreasing stacks
 
-        # So by verifying monotonic decreasing, we know the the previous thing on the stack is a hotter day        
-        
-        # Forward vs Backwards:
-        # So the difference from forward iteration is that we are tracking the decreasing hot values
-        # rather than tracking the cold values
-        
+
+        # Forward vs Backwards Stack Tracking:
+        # So the difference
+        #       Forward iteration: we are tracking decreasing temperatures, in order to calculate distance when a hotter day appears
+        #       Backwards iteration: we are tracking increasing temperatures, in order to keep track of the most recent hotter temperatures
+
         # sc: storing up to n indexes O(n)
         n = len(temperatures)
         stack = []
@@ -2051,7 +2049,7 @@ Generate array representing number of days until monotonic decreasing is valid.
 
             # Check: monotonic decreasing
             # Implies: Keep list of decreasing temp of hot temps
-            # Check: if monotonic decreasing broken, we have found a more recent temperature
+            # Check: if monotonic decreasing broken, we have found a more recent hotter temperature
             # Then: pop() older hot temperature with new hotter temperature to ensure minimum wait time for cold days
             while stack and temperatures[stack[-1]] <= temperatures[i]:
                 stack.pop()
@@ -2086,8 +2084,8 @@ Generate array representing number of days until monotonic decreasing is valid.
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         
         # Dynamic Programming:
-        # Uses a jump approach building hopping path as we compute hotter days.
-        # Avoids a stack of temperatures by simply iterating backwards and keeping 
+        # Uses a jump approach building a next hottest day hopping path as we compute hotter days.
+        # Avoids a stack of temperatures by iterating backwards and keeping 
         # track of the nearest hottest day, which can be used by other days to find 
         # their own hotter day.
 
@@ -2115,7 +2113,7 @@ Generate array representing number of days until monotonic decreasing is valid.
 
             # Check: current temperature is warmer than current hottest day
             # Implies: no future hotter day exists, no need for wait days calculation
-            # Then: update hottest day
+            # Then: update the hottest day
             if temperatures[i] >= temperatures[hottest_day]:
                 hottest_day = i
 
@@ -2125,19 +2123,19 @@ Generate array representing number of days until monotonic decreasing is valid.
             else:
 
                 # Current temperatures' first hotter day candidate is the following day
-                tempCheckIndex = i + 1
+                tempCandidateIndex = i + 1
 
-                # Check: continue while we have not found a hotter day than current temperature
-                while !(temperatures[tempCheckIndex] > temperatures[i]):
+                # Check: continue while the candidate is colder than the current temperature
+                while temperatures[tempCandidateIndex] <= temperatures[i]:
                     
                     # Implies: candidate is not hotter
-                    # Implies: current temperature needs a day hotter than the current candidate
-                    # Then: both current day and candidate share next hottest day, check the candidate's hottest day
-                    tempCheckIndex += dp[tempCheckIndex]
+                    # Then: to avoid checking days that are colder than the current candidate, we can
+                    # skip to the candidates own hotter day, so we never decrease in temperature moving forward
+                    tempCandidateIndex += dp[tempCandidateIndex]
 
-                # Check: found a temperature hotter than current day
-                # Then: distance between hotter day and current temperature
-                dp[i] = tempCheck - i 
+                # Check: found a temperature hotter than current temperature
+                # Then: calculate distance between hotter day and current temperature
+                dp[i] = tempCandidateIndex - i 
 
         # overall: tc O(n)
         # overall: sc O(n)
