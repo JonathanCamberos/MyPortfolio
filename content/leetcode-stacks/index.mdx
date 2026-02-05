@@ -2055,15 +2055,18 @@ Generate array representing number of days until monotonic decreasing is valid.
                 stack.pop()
 
             # Check: if stack is not empty
-            # Implies: stack has a hotter temperature, can calculate wait days
+            # Implies: stack has a hotter temperature, can calculate wait days for current cold day
             if stack:
-                previousHotDayIndex = stack[-1]
-                coldDayIndex = i
 
-                waitDays = previousHotDayIndex - coldDayIndex
+                # Wait days calculation
+                futureHotDayIndex = stack[-1]
+                currentColdDayIndex = i
+
+                waitDays = futureHotDayIndex - currentColdDayIndex
                 res[i] = stack[-1] - i
 
-            # Invariant: monotonic decreasing kept, append temperature to list 
+            # Invariant: current cold day could serve as potential more recent hot day, append to stack
+            # Invariant: this cold day will get replaced if a more recent hotter day appears
             stack.append(i)        
         
         # overall: time complexity O(n)
