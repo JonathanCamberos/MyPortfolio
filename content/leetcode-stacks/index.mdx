@@ -2058,14 +2058,15 @@ Generate array representing number of days until monotonic decreasing is valid.
             # Implies: stack has a hotter temperature, can calculate wait days for current cold day
             if stack:
 
-                # Wait days calculation
+                # Hot and cold days
                 futureHotDayIndex = stack[-1]
                 currentColdDayIndex = i
 
+                # Wait time calculation
                 waitDays = futureHotDayIndex - currentColdDayIndex
-                res[i] = stack[-1] - i
+                res[i] = waitDays
 
-            # Invariant: current cold day could serve as potential more recent hot day, append to stack
+            # Invariant: current cold day could serve as potential more recent hot day for earlier days, append to stack
             # Invariant: this cold day will get replaced if a more recent hotter day appears
             stack.append(i)        
         
@@ -2233,51 +2234,83 @@ before arriving to the destination.
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         
         # Sorting Arrival Times: 
-        # We calculate the the time for each car to reach the target mile.
-        # We sort the cars by highest distance first (higher value is target, smaller is further),
-        # so that we can process the cars in order from closest to target to farthest,
-        # to check the generation of fleets
+        # We sort the cars by closest to target to farthest from target 
+        # (higher value is closer, smaller value is further).
+        # We can use the implication that farther cars with lower arrival times 
+        # than the car in front off them will catch up and form a fleet.
+        # Once they catch up, that fleet will be determined by the slower car they just caught up with.
+
+        # As we iterate from farthest to closest: 
+        #  start with a car
+        #  if that car has a lower (quicker) arrival time than the car in front of it, it will join the car ahead (join fleet)
+        #  if the car has a higher (slower) arrival time than the car in front of it, it will stay behind the car ahead (form new fleet)
+
+        # Cars ordered from farthest to closest to target, with bars representing time to target:
+        #                  
+        #                                     (estimated)
+        #   Time to                           car 0 forms the first fleet                                               1
+        #   target   1  4  3  7  1  2         car 1 has lower time than car 0, does not catch up, forms second fleet    2
+        #           ------------------        car 2 has lower time than car 1, catches up, joins second fleet           2
+        #            0  1  2  3  4  5         car 3 has higher time than car 2, does not catch up, forms third fleet    3 
+        #       Closest             Farther   car 4 has lower time than car 3, catches up, joins third fleet            3 
+        #       car        -->      car       car 5 has lower time than car 3, catches up, joins third fleet            3
+
+        # Simple Implication:
+        # If a farther car has a lower arrival time (less stars) than the fleet ahead of it, 
+        # then that car will catch up and join the fleet
 
         # Monotonic stack: 
         # Maintains a monotonic increasing stack of times to target
+        # which represent the times of the fleets
         
-        # space complexity: stores times for up to n fleets O(n)
+        # sc: stores times for up to n fleets O(n)
         stack = []
 
-        # Sort cars by position in descending order
-        # time complexity: timSort cars by starting position distance descending O(n log n)
-        # generate fleets by going iterating over closest to target -> farthest to target        
-        # time complexity: iterate over n cars O(n) 
-        for pos, spd in sorted(zip(position, speed), reverse=True): 
-            
-            # current car time to target
+        # Pair each cars position with its speed
+        cars = list(zip(position, speed))
+
+        # Sort cars by position descending, closest to the target first has higher number
+        # tc: timSort cars by starting position distance descending O(n log n)
+        cars.sort(reverse=True)
+
+        # Iterate through closer to farthest cars
+        # tc: iterate over n cars O(n) 
+        for (pos, spd) in cars:
+
+            # Calculate: time to target for new car
             currTimeToTarget = (target - pos) / spd 
             
-            # A new fleet means if a farther car has a higher time to target than closer car
-            # then this car will never catch up to the fleet and instead will form a new fleet
-
-            # A fleet means if a farther car has a lower time to target than a closer car
-            # it will catch up to the current fleet
-
-            # stack[-1]: will have the current lowest time to target value for some fleet
-            # For each new car we check its time to target relative to the current fleet 
-
             # Thus:
             # If current car is faster (time to target <= stack top), it will catch up with fleet and merge
             # If current car is slower (time to target > stack top), it will never catch up and thus form a new fleet
             
-            # Check: stack is empty, create first fleet
-            # Check: is farther car slower than current fleet, create new fleet
+            # Farthest fleet:
+            # stack[-1] will hold the lowest time to target, for the fleet closest to the target
+
+            # No fleet will form:
+            # If current car is faster (time to target <= stack top), it will catch up with fleet and merge
+            # If farther car has longer arrival time, it will never catch up to next car
+
+            # Check: if stack is empty, car automatically becomes fleet -> push()
+            # Check: if stack is not empty, check if car is slower than current fleet (does not catch up) -> car becomes new fleet -> push()
             if not stack or currTimeToTarget > stack[-1]:
 
-                # Create new fleet at top of stack
+                # Update new fleet at top of stack
                 stack.append(currTimeToTarget)
 
-            # Otherwise, catches up to the fleet in front (we do nothing)
+            # If current car is faster (time to target <= stack top), it will catch up with fleet and merge
+            # If farther car has shorter arrival time, it will catch up to next car,
+            # and the new fleet is then determined by slower car which was caught up to.
+            else:
+                continue
+            # Check: car is faster than current fleet and catches up -> do nothing (fleet stays the same)
         
+        # number of fleets represented by number of fleets on stack
+        numOfFleets = len(stack)
+
         # overall: tc O(n log n)
         # overall: sc O(n)
-        return len(stack)
+        return numOfFleets
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- | -------- |
