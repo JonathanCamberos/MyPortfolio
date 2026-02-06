@@ -2524,9 +2524,12 @@ Given array of heights, find the area of the largest rectangle in the histogram.
         #     is the smallest height encountered so far and was covered by all other previous tall bars, 
         #     which allows the area being generated to span from 0 -> i, so width = i
         #
-        #  2. The stack does not get completely popped, which means the new height candidate
-        #     becomes the new top of the stack. 
-        #     This new height candidate will be tested as we find new bars, which may or may not be taller or shorter.
+        #  2. The stack does not get completely popped, 
+        #     which means the new height candidate is taller than at least 1 older bar.
+        #     As we generate the area, the width of the rectangle is determined by 
+        #     the distance between the bar which was not popped and the new height candidate
+        #     The new height candidate becomes the new top of the stack, and is compared against new walls,
+        #     which may or may not be taller or shorter.
         
         # Sentinel: 
         # Exists so that even the taller bars (like height 99) gets its area computed if no shorter bar
