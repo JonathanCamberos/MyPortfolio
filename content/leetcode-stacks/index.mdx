@@ -2491,11 +2491,12 @@ Given array of heights, find the area of the largest rectangle in the histogram.
 
         # Monotonic Stack: 
         # A stack that maintains monotonic increasing heights
-        # When monotonic increasing rule breaks, that implies the new height is smaller than at least 1 older heights.
+        # When monotonic increasing rule breaks, that implies the new height is smaller than at least 1 of the older heights.
         # When monotonic increasing rule is true, that implies the new height is taller than all older heights.
         # If stack is non empty, that means we have a stack full of tall bars that can serve to generating an area
-        # by covering shorter walls.
-        # The width of the rectangle is determined by the number of bars that are taller than the current shorter bar.
+        # by covering new shorter walls.
+        # The width of the rectangle is determined by the distance between the index of the tall bar on top of the stack 
+        # that is covering and the index of the new shorter bar.
 
         # Taller bars covering a shorter bar and generating area A:
         #               *                                  *                    *                            
@@ -2532,7 +2533,8 @@ Given array of heights, find the area of the largest rectangle in the histogram.
         # ever appears to trigger its pop.
         # With this, every bar eventually gets processed.
         # So the 0 is to flush the remaining bars at the end
-        heights.append(0)
+        sentinel = 0
+        heights.append(sentinel)
 
         # sc: stores indexes for up to n heights O(n)
         stack = []
