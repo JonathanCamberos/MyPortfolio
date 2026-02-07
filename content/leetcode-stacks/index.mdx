@@ -644,8 +644,52 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 ```python
 class MinStack:
 
-    # Main + MinTracker Stack:
-    # Tracks the min value at each level of the main stack. 
+    # MinStack:
+    # We need to track 2 things
+    #   - The item at the top of the stack
+    #   - The min item currently in the stack
+
+    # For our functions, they may need to update the above 2 details:
+
+    # Push():
+    #   - Put new item at top of stack
+    #   - Compare new item to current min item in stack
+
+    # Pop():
+    #   - Remove item at top of stack
+    #   - Update min item if min item was removed
+
+    # Top():
+    #   - Get item at top of stack
+    
+    # GetMin():
+    #   - Get current min element in the stack
+    
+    # Tracking Top Of Stack:
+    #   - Simple, just create a stack and pop()/push() when necessary
+
+    # Tracking Min Item:
+    #   - Push(): Represent to stack in a way that updates min item
+    #   - Pop(): Modify stack in way that updates min item if removed
+
+    # Representing The Stack:
+    # Tracking the min item is the tricky part here.
+    # But we can simply solve this by representing the stack certain way.
+    # If we keep track of the min item at each level of the stack,
+    # we can do all of the operations easily:
+
+    # Stack Represented By Level With Top Stack And Min Stack:
+    #
+    #        [ 10, 5, 7, 1 ]    <- top of stack
+    #        [ 10, 5, 5, 1 ]    <- min item at certain level of stack
+    # Level:   1   2  3  4
+
+    # This representation allows us to keep track of 
+    #   - Top of stack via the top stack 
+    #   - Min item in stack via the min stack
+
+    # Error Validation:
+    # Account for operations on empty stack, throw exception
 
     # overall: sc O(n)
     def __init__(self):
@@ -729,9 +773,47 @@ class MinStack:
 ```python
 class MinStack:
 
-    # MinTracker Tuple Stack: 
-    # We combine the main and minTracker stack with a tuple (val, min), 
-    # tracking the min at each level of the stack.
+    # MinStack:
+    # We need to track 2 things
+    #   - The item at the top of the stack
+    #   - The min item currently in the stack
+
+    # For our functions, they may need to update the above 2 details:
+
+    # Push():
+    #   - Put new item at top of stack
+    #   - Compare new item to current min item in stack
+
+    # Pop():
+    #   - Remove item at top of stack
+    #   - Update min item if min item was removed
+
+    # Top():
+    #   - Get item at top of stack
+    
+    # GetMin():
+    #   - Get current min element in the stack
+    
+    # Tracking Top Of Stack:
+    #   - Simple, just create a stack and pop()/push() when necessary
+
+    # Tracking Min Item:
+    #   - Push(): Represent to stack in a way that updates min item
+    #   - Pop(): Modify stack in way that updates min item if removed
+
+    # Representing The Stack:
+    # Tracking the min item is the tricky part here.
+    # But we can simply solve this by representing the stack certain way.
+    # If we keep track of the min item at each level of the stack,
+    # we can do all of the operations easily:
+
+    # Stack Represented By Level Wit Tuple (Top Of Stack, Min At Level):
+    #
+    #        [ (10, 10), (5, 5), (7, 5), (1, 1)]
+    # Level:       1        2       3       4
+
+    # Error Validation:
+    # Account for operations on empty stack, throw exception
 
     # overall: sc O(n)
     def __init__(self):
@@ -2796,7 +2878,7 @@ num does not have any leading zeros except for 0 itself
 ## Abstract
 Remove k digits in a way so that resulting integer is as large as possible.
 
-## Solution 1: [Greedy] Forward Iteration Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
+## Solution 1: [Greedy] Push Lower Digits To Left Of Stack Then Slice Via Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
 ```python
     def removeKdigits(self, num: str, k: int) -> str:
 
@@ -2839,7 +2921,7 @@ Remove k digits in a way so that resulting integer is as large as possible.
             
             # Check: if stack is non empty, we have a candidate for removal
             # Check: if (k > 0) we still have digits to remove
-            # Implies: if monotonic increasing broken, we can remove a larger digit
+            # Implies: if monotonic increasing broken, there is a larger digit to remove
             # Then: remove larger digit on stack to allow lower digit to be more to the left
             while stack and k > 0 and stack[-1] > digit:
                 
@@ -2849,7 +2931,7 @@ Remove k digits in a way so that resulting integer is as large as possible.
                 k -= 1
 
             # Monotonic increasing valid:
-            # New digits is as far to the left as possible
+            # New digit is as far to the left as possible
             stack.append(digit)
 
         # Building stack complete:
