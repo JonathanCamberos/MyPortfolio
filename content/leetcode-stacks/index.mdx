@@ -2796,63 +2796,86 @@ num does not have any leading zeros except for 0 itself
 ## Abstract
 Remove k digits in a way so that resulting integer is as large as possible.
 
-## Solution 1: Forward Iteration Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
+## Solution 1: [Greedy] Forward Iteration Monotonic Increasing Digits Stack - Stack/Monotonic Property Maintenance
 ```python
     def removeKdigits(self, num: str, k: int) -> str:
 
-        # Same as histogram or graph problem
-        # We are removing a taller height if a smaller height follows it
-
-        # Monotonic Stack: 
-        # A stack that maintains increasing digits
+        # Monotonic Stack:
+        # A Stack that maintains increasing digits
+        # To create the smallest number possible, we want our stack to keep smaller numbers
+        # on the left side and larger numbers on the right:
         
-        # Greedy:
-        # Remove from top of stack if higher digit at top of stack 
-        # is followed by a smaller one, as this lowers value
+        # Smaller number (left to right):
+        # stack = [ 1 2 3 4 5 ]
         
-        # Inverse Greedy: 
-        # Do not remove smaller digit if higher digit follows, as this increases value 
+        # Instead of larger number (right to left):
+        # stack = [ 5 4 3 2 1 ]
 
+        # A monotonic increasing stack allows us to create the smallest number possible
+        # A monotonic decreasing stack allows us to create the largest number possible
+
+        # So with a monotonic increasing stack, by ordering left to right,
+        # we can slice at the end and grab as many numbers as we need or remove
+        # more numbers (if we still have k left)
+        
+        # Slicing Grabbing:
+        # "12345" [:3] -> "123"
+        # 3 grabs the leftmost digits, creates the smallest number possible
+        
+        # Slicing Removal:
+        # "12345" [:-2] -> "123"
+        # -2 removes rightmost 2 digits, creates the smallest number possible
+
+        # Greedy Summary:
+        # The greedy removal is ensuring monotonic stack, 
+        # as we want the smaller numbers to be to the left as much as possible, 
+        # and we want to keep removing from the stack as long as we can (have k left)
+        
         # sc: stack holds increasing digits up to n digits O(n)
         stack = []
 
-        # tc: iterate over list of n length O(n)
+        # tc: iterate over n O(n)
         for digit in num:
-
-            # Check: non empty stack
-            # Check: we still need to remove more digits (k > 0)
-            # Check: if monotonic increasing broken
-            # Implies: found smaller digits in front of larger, replace larger value at top of stack
+            
+            # Check: if stack is non empty, we have a candidate for removal
+            # Check: if (k > 0) we still have digits to remove
+            # Implies: if monotonic increasing broken, we can remove a larger digit
+            # Then: remove larger digit on stack to allow lower digit to be more to the left
             while stack and k > 0 and stack[-1] > digit:
                 
-                # remove higher digit at top of stack
+                # Top of stack is larger than new digit, remove
                 stack.pop()
+                # Decrease remaining digits to remove
                 k -= 1
 
-            # monotonic increasing valid
+            # Monotonic increasing valid:
+            # New digits is as far to the left as possible
             stack.append(digit)
 
-        # monotonic stack is valid
-
-        # Check: if we still need to remove digits k
-        # ignore larger digits on right side, 
-        # splice and grab digits from the left side
-
-        # "12345" [:3] -> "123"
-        # "12345" [:-3] -> "12"
-        # -3 removes leftmost 3 digits
+        # Building stack complete:
+        # Digits are now ordered left to right with smallest being on the left
+        # Check: if (k > 0) we still have digits to remove
+        # Then: remove larger digits from the right side, to produce final smallest answer
         if k > 0:
             stack = stack[:-k]
 
-        # Remove leading zeros "0200" -> "200"
-        # Join the stack into final number
-        result = ''.join(stack).lstrip('0')
+        # Join all digits in the stack into a single string
+        smallerNumber = ''.join(stack)
 
-        # Return "0" if the result is empty
+        # Clean answer:
+        # Remove leading zeros "0000200" -> "200"
+        result = smallerNumber.lstrip('0')
+
+        # 0 Check:
+        # if smallerNumber was all zeros, we will get an empty string after removing zeros
+        # "0000" -> ""  
+        # so check if empty and return "0"
+        if not result:
+            result = "0"
 
         # overall: tc O(n)
         # overall: sc O(n)
-        return result or "0"
+        return result
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
