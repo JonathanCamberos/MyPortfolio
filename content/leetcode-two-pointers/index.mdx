@@ -617,8 +617,10 @@ def isPalindrome(self, s: str) -> bool:
                 else:
                     cleaned.append(c)
 
-        # tc: iterate clean list O(n)
+        # sc: two pointers O(1)
         left, right = 0, len(cleaned) - 1
+
+        # tc: iterate clean list O(n)
         while left < right:
 
             # Condition: validate palindrome

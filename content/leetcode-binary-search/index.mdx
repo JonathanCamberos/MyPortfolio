@@ -563,7 +563,7 @@ Given a sorted list of elements, find the target
             elif nums[mid] < target:
                 return bs_recursive(mid + 1, right)
 
-            # Target is lower than mid:
+            # Target is less than mid:
             # Discard right side of search space [mid, right]
             # Search left side of previous space, exclude mid: [left, mid-1]
             else:
@@ -621,7 +621,7 @@ Given a sorted list of elements, find the target
             elif nums[mid] < target:
                 left = mid + 1
             
-            # Target is lower than mid:
+            # Target is less than mid:
             # Discard right side of search space [mid, right]
             # Search left side of previous space, exclude mid: [left, mid-1]
             else: 
@@ -741,7 +741,7 @@ Given a sorted matrix, check if target is in matrix
             return False
 ```
 
-## Solution 1: Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
+## Solution 1: Iterative Two Pointer Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
@@ -781,36 +781,40 @@ Given a sorted matrix, check if target is in matrix
 
         # Flattened Representation:
         # Calculate the 2D matrix representation as a single array
+        # sc: two pointers O(1)
         rows, cols = len(matrix), len(matrix[0])
         left, right = 0, (rows * cols) - 1
 
-        # binary target search: '<='
+        # Binary Search 1: 
+        # Target Search Search Space: '<='
         # tc: binary search on flattened 2D matrix [0,(m*n)-1] O(log(m*n))
         while left <= right:
             
-            # calculating mid
+            # Current Search Space:
+            # [left, mid, right]
+
+            # Middle Target:
             mid = (left + right) // 2
             (row, col) = index_to_coords(mid, cols)
             mid_value = matrix[row][col]
 
-            # Check Mid
+            # Base Case: target found
             if mid_value == target:
                 return True
             
-            # mid is less than target:
-            # discard left side of [left, mid, right]
-            # new search interval: [mid+1, right]
+            # Target is greater than mid:
+            # Discard left side of search space [left, mid]
+            # Search right side of previous space, exclude mid: [mid+1, right]
             elif mid_value < target:
                 left = mid + 1
             
-            # mid is greater than target:
-            # discard the right side of [left, mid, right]
-            # new search interval: [left, mid-1]
+            # Target is less than mid:
+            # Discard right side of search space [mid, right]
+            # Search left side of previous space, exclude mid: [left, mid-1]
             else:
                 right = mid - 1
 
-        # left > right: searched entire array
-        # target not found and does not exist
+        # End Case: out of search space, target not found
 
         # overall tc: O(log (m * n))
         # overall sc: O(1)
@@ -830,17 +834,13 @@ Given a sorted matrix, check if target is in matrix
         # 1. Binary Search over rows to locate potential row
         # 2. Binary Search within that row to find the target
         
-        # Precondition:
-        # Each row is sorted in ascending order,
-        # and the first element of each row is greater than the last of the previous row
-
-        # diagram:
-        # matrix = [
-        # col 0   1   2
-        #   [ 1,  3,  5],   # row 0
-        #   [ 7,  9, 11],   # row 1
-        #   [13, 15, 17],   # row 2
-        # ]
+        # Matrix =        
+        #    [                row
+        #    [ 1,  3,  5],     0
+        #    [ 7,  9, 11],     1
+        #    [13, 15, 17]      2
+        #    ]
+        # col  0   1   2
 
         # Invariant (First Binary Search):
         # Target must lie within range of candidate row window [top, bottom] (if it exists)
@@ -849,36 +849,36 @@ Given a sorted matrix, check if target is in matrix
         if not matrix or not matrix[0]:
             return False
 
-        # top and bottom rows (refer to diagram)
+        # Matrix Representation:
+        # Top and bottom rows (refer to diagram)
+        # sc: two pointers O(1)
         rows, cols = len(matrix), len(matrix[0])
         top, bottom = 0, rows - 1
 
-        # binary target search: '<='
-        # time complexity: binary search over n rows O(log n)
+        # Binary Search 1: 
+        # Target Search Search Space: '<='
+        # tc: binary search over n rows O(log n)
         while top <= bottom:
 
-            # get mid
+            # Middle Target:
             mid_row = (top + bottom) // 2
 
-            # Check Mid
+            # Base Case: target found
             if matrix[mid_row][0] <= target <= matrix[mid_row][-1]:
                 break
 
-            # mid_row smallest value is greater than target:
-            # discard upper rows
-            # new search interval: [top, mid_row - 1]
-            elif matrix[mid_row][0] > target:
+            # Target is greater than mid:
+            # Discard left side of search space [left, mid]
+            # Search right side of previous space, exclude mid: [mid+1, right]
+            elif matrix[mid_row][0] < target:
+                
+            # Target is less than mid:
+            # Discard right side of search space [mid, right]
+            # Search left side of previous space, exclude mid: [left, mid-1]
+            else:
                 bottom = mid_row - 1
 
-            # mid_row smallest value is less than target:
-            # discard lower rows
-            # new search interval: [mid_row + 1, bottom]
-            else:
-                top = mid_row + 1
-
-        # No break triggered:
-        # top > bottom: all row ranges checked
-        # no target exists
+        # End Case: out of search space, target not found
         else:
             return False
             
@@ -886,35 +886,34 @@ Given a sorted matrix, check if target is in matrix
         row = mid_row
         left, right = 0, cols - 1
 
-        # binary target search: '<='
-        # time complexity: binary search across m columns in row O(log m)
+        # Binary Search 1: 
+        # Target Search Search Space: '<='
+        # tc: binary search across m columns in row O(log m)
         while left <= right:
 
-            # mid of row
+            # Middle Target:
             mid_col = (left + right) // 2
             
-            # Check mid
+            # Base Case: target found
             if matrix[row][mid_col] == target:
                 return True
             
-            # mid is less than target:
-            # discard left side of [left, mid, right]
-            # new search interval: [mid + 1, right]
+            # Target is greater than mid:
+            # Discard left side of search space [left, mid]
+            # Search right side of previous space, exclude mid: [mid+1, right]
             elif matrix[row][mid_col] < target:
                 left = mid_col + 1
             
-            # mid is greater than target:
-            # discard right side of [left, mid, right]
-            # new search interval: [left, mid - 1]
+            # Target is less than mid:
+            # Discard right side of search space [mid, right]
+            # Search left side of previous space, exclude mid: [left, mid-1]
             else:
                 right = mid_col - 1
 
+        # End Case: out of search space, target not found
 
-        # left > right: all columns in candidate row checked
-        # no target exists
-
-        # overall: time complexity O(log (m * n)) 
-        # overall: space complexity O(1)
+        # overall: tc O(log (m * n)) 
+        # overall: sc O(1)
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
