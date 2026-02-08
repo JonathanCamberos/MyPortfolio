@@ -640,7 +640,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-## Solution 1: 2 Stacks For Main and Min - Stack/Dynamic Programming State Compression
+## Solution 1: 2 Stacks For Main and Min Without Using Pop Or Push - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
 
@@ -661,9 +661,11 @@ class MinStack:
 
     # Top():
     #   - Get item at top of stack
+    #   - Do not remove item
     
     # GetMin():
     #   - Get current min element in the stack
+    #   - Do not remove item
     
     # Tracking Top Of Stack:
     #   - Simple, just create a stack and pop()/push() when necessary
@@ -676,30 +678,29 @@ class MinStack:
     # Tracking the min item is the tricky part here.
     # But we can simply solve this by representing the stack certain way.
     # If we keep track of the min item at each level of the stack,
-    # we can do all of the operations easily:
+    # regardless of push() or pop(), we can track the 2 things
 
     # Stack Represented By Level With Top Stack And Min Stack:
     #
-    #        [ 10, 5, 7, 1 ]    <- top of stack
-    #        [ 10, 5, 5, 1 ]    <- min item at certain level of stack
-    # Level:   1   2  3  4
+    #        [ 10, 5, 7, 1, 4, 7 ]    <- top of stack
+    #        [ 10, 5, 5, 1, 1, 1 ]    <- min item at certain level of stack
+    # Level:    1  2  3  4  5  6
 
     # This representation allows us to keep track of 
     #   - Top of stack via the top stack 
     #   - Min item in stack via the min stack
 
-    # Error Validation:
-    # Account for operations on empty stack, throw exception
-
     # overall: sc O(n)
     def __init__(self):
-
+ 
         # sc: two stacks for n elements O(n)
 
-        # all values
+        # literal stack to keep track of value on top of stack
         self.mainStack = []
-        # minimum value at current level
+        
+        # stack to keep track of min item for each level of the stack
         self.minTracker = []
+        
         # pointer to the curr element
         self.logicalSize = 0
 
@@ -741,20 +742,14 @@ class MinStack:
 
     # overall: tc O(1)
     def pop(self):
-        # validate non empty, decrease logical length
-        self._validateNotEmpty("Invalid pop(), stack is empty")
         self.logicalSize -= 1
 
     # overall: tc O(1)
     def top(self):
-        # validate non empty, return elem
-        self._validateNotEmpty("Invalid top(), stack is empty")
         return self.mainStack[self.logicalSize - 1]
 
     # overall: tc O(1)
     def getMin(self):
-        # validate non empty, return min
-        self._validateNotEmpty("Invalid getMin(), stack is empty")
         return self.minTracker[self.logicalSize - 1]
 
     # overall: tc O(1)
@@ -769,7 +764,7 @@ class MinStack:
 | Overall | O(1) | O(n) | Each individual operation takes constant O(1) | MainStack and minTracker memory allocation dominate for n values, leading to O(n) | 
 
 
-## Solution 2: Tuple Stack - Stack/Dynamic Programming State Compression
+## Solution 2: Tuple Stack Without Using Pop Or Push - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
 
@@ -790,9 +785,11 @@ class MinStack:
 
     # Top():
     #   - Get item at top of stack
+    #   - Do not remove item
     
     # GetMin():
     #   - Get current min element in the stack
+    #   - Do not remove item
     
     # Tracking Top Of Stack:
     #   - Simple, just create a stack and pop()/push() when necessary
@@ -805,15 +802,12 @@ class MinStack:
     # Tracking the min item is the tricky part here.
     # But we can simply solve this by representing the stack certain way.
     # If we keep track of the min item at each level of the stack,
-    # we can do all of the operations easily:
+    # regardless of push() or pop(), we can track the 2 things
 
     # Stack Represented By Level Wit Tuple (Top Of Stack, Min At Level):
     #
-    #        [ (10, 10), (5, 5), (7, 5), (1, 1)]
-    # Level:       1        2       3       4
-
-    # Error Validation:
-    # Account for operations on empty stack, throw exception
+    #        [ (10, 10), (5, 5), (7, 5), (1, 1), (4, 1), (7, 1)]
+    # Level:       1        2       3       4       5
 
     # overall: sc O(n)
     def __init__(self):
@@ -821,12 +815,6 @@ class MinStack:
         # sc: stores all pushed tuples (val, min) O(n)
         self.stack = []
         self.size = 0
-
-    # helper:
-    # edge case checker for empty stack
-    def _validateNotEmpty(self, errMsg: str):
-        if self.size == 0:
-            raise IndexError(errMsg)
  
     # helper:
     # checks if logical pointer is behind actual length of stack
@@ -853,17 +841,14 @@ class MinStack:
 
     # overall: tc O(1)
     def pop(self):
-        self._validateNotEmpty("Invalid pop(), stack is empty")
         self.size -= 1
 
     # overall: tc O(1)
     def top(self):
-        self._validateNotEmpty("Invalid top(), stack is empty")
         return self.stack[self.size - 1][0]
 
     # overall: tc O(1)
     def getMin(self):
-        self._validateNotEmpty("Invalid getMin(), stack is empty")
         return self.stack[self.size - 1][1]
 
     # overall: tc O(1)
@@ -877,6 +862,82 @@ class MinStack:
 | getMin | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
 | Overall | O(1) | O(n) | Each individual operation takes constant O(1) | Stack memory allocation dominates for n values, leading to O(n) | 
  
+## Solution 3: Simple Tuple Stack Using Pop And Push - Stack/Dynamic Programming State Compression
+```python
+class MinStack:
+
+    # MinStack:
+    # We need to track 2 things
+    #   - The item at the top of the stack
+    #   - The min item currently in the stack
+
+    # For our functions, they may need to update the above 2 details:
+
+    # Push():
+    #   - Put new item at top of stack
+    #   - Compare new item to current min item in stack
+
+    # Pop():
+    #   - Remove item at top of stack
+    #   - Update min item if min item was removed
+
+    # Top():
+    #   - Get item at top of stack
+    #   - Do not remove item
+    
+    # GetMin():
+    #   - Get current min element in the stack
+    #   - Do not remove item
+    
+    # Tracking Top Of Stack:
+    #   - Simple, just create a stack and pop()/push() when necessary
+
+    # Tracking Min Item:
+    #   - Push(): Represent to stack in a way that updates min item
+    #   - Pop(): Modify stack in way that updates min item if removed
+
+    # Representing The Stack:
+    # Tracking the min item is the tricky part here.
+    # But we can simply solve this by representing the stack certain way.
+    # If we keep track of the min item at each level of the stack,
+    # regardless of push() or pop(), we can track the 2 things
+
+    # Stack Represented By Level Wit Tuple (Top Of Stack, Min At Level):
+    #
+    #        [ (10, 10), (5, 5), (7, 5), (1, 1), (4, 1), (7, 1)]
+    # Level:       1        2       3       4       5
+
+    # overall: sc O(n)
+    def __init__(self):
+        # sc: stores all pushed tuples (val, min_so_far) O(n)
+        self.stack = []
+
+    # overall: tc O(1)
+    def push(self, val: int):
+        currMin = min(val, self.stack[-1][1] if self.stack else val)
+        self.stack.append((val, currMin))
+
+    # overall: tc O(1)
+    def pop(self):
+        self.stack.pop()
+
+    # overall: tc O(1)
+    def top(self):
+        return self.stack[-1][0]
+
+    # overall: tc O(1)
+    def getMin(self):
+        return self.stack[-1][1]
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+| Push | O(1) | O(1) | Insert into stack in constant O(1) | No additional memory allocation for insert O(1) |
+| Pop | O(1) | O(1) | Decrease logical length in constant O(1) | No additional memory allocation for decreasing logical length O(1) |
+| Top | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
+| getMin | O(1) | O(1) | Indexing into array in constant O(1) | No additional memory allocation for indexing O(1) | 
+| Overall | O(1) | O(n) | Each individual operation takes constant O(1) | Stack memory allocation dominates for n values, leading to O(n) | 
+
+
 # 150. Evaluate Reverse Polish Notation ::1:: - Medium
 
 Topics:  Array, Stack, Math, Design
