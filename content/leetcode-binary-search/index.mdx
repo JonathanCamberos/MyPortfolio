@@ -1534,6 +1534,7 @@ Find smallest number in an array that has been rotated some amount of times.
         
         # Binary Search 2: 
         # Optimization Search Space: '<'
+        # Exits when left == right, as this mean answer has been optimized
         # tc: binary search over k speeds O(log(n))
         while left < right:
 
@@ -1788,20 +1789,21 @@ Find target in an array that has been rotated some amount of times.
 ```python
     class TimeMap:
 
+        # TimeMap:
+        # We need to track 
+
         # Note:
         # Stores multiple (value, timestamp) tuples per key in insertion order
         # The 'get' function performs a reverse linear scan to find 
         # the latest time <= the query timestamp.
         # 'get' can be slow if many timestamps per key O(m)
 
-
-        # space complexity: n is the total set calls across all keys O(n)
+        # sc: n is the total set calls across all keys O(n)
         def __init__(self):
             # key -> [(value, timestamp)]
             self.store = {}
 
-
-        # overall: time complexity O(1) amortized
+        # overall: tc O(1) amortized
         def set(self, key: str, value: str, timestamp: int) -> None:
             
             # append to key list:  (value, timestamp)
@@ -1809,9 +1811,8 @@ Find target in an array that has been rotated some amount of times.
                 self.store[key] = []
             self.store[key].append((value, timestamp))
 
-
-
-        # overall: time complexity where m is number of timestamps for this key O(m)
+        # Reverse linear scan:
+        # overall: tc where m is number of timestamps for this key O(m)
         def get(self, key: str, timestamp: int) -> str:
             
             # if key list does not exist
@@ -1834,9 +1835,8 @@ Find target in an array that has been rotated some amount of times.
             # timestamp is now <= query
             return values[i][0] if i != -1 else ''
 
-
-        # overall: time complexity O(m)
-        # overall: space complexity O(n)
+        # overall: tc O(m)
+        # overall: sc O(n)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -2087,32 +2087,43 @@ Multiple peaks can exist per array.
         # Invariant:
         # At least one peak exists within interval [left, right]
         # Half of search space removed per iteration
-        # Binary Search Optimization: '<'
+
+        # Binary Search 2: 
+        # Optimization Search Space: '<'
+        # Exits when left == right, as this mean answer has been optimized
+        # tc: binary search over O(log(n))
         while left < right:
             
-            # mid
+            # Current Search Space:
+            # [left, mid, right]
+
+            # Middle Target:
             mid = (left + right) // 2
 
-            # Zoom In Excluding Mid:
-            # Peak towards right
-            # Discard left half of [left, mid, right]
-            # new search interval: [mid+1, right]
+            # Check: ii mid less than its following element
+            # Implies: peak is on the right side of mid
+            # Discard lower speeds on left side [left, mid]
+            # Search right side of previous space,
+            # and exclude mid: [mid+1, right]
             if nums[mid] < nums[mid + 1]:
                 left = mid + 1
 
-            # Zoom Including Mid:
-            # Peak towards left
-            # Discard right half of [left, mid, right] including Mid
-            # new search interval: [left, mid]
+            # Check: if mid greater than its following element
+            # Implies: peak is on left side of mid
+            # Discard lower speeds on right side [mid+1, right]
+            # Search left side of previous space,
+            # and include mid: [left, mid]
             else:
                 right = mid
 
-        # Loop Exits: left == right
-        # Invariant: peak exists within interval [left, right]
-        # both left and right are pointing to peak 
+        # Optimization Exit:
+        # left == right, answer has been optimized
+        # The space of larger elements, [left, right], 
+        # has been reduced to one element
+        # This final element is the highest peak
          
-        # overall: time complexity O(log n)
-        # overall: space complexity O(1)
+        # overall: tc O(log n)
+        # overall: sc O(1)
         return left
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
