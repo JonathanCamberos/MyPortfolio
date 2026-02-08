@@ -1213,7 +1213,7 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 | Hours calculation | O(n) | O(1) | Iterate over all piles to calculate if piles are eaten O(n) | No additional memory allocation for calculation O(1) |
 | Overall | O(n * log(max(piles))) | O(1) | Binary search over range alongside hours calculation per candidate dominates, leading to O(n * log(max(piles))) | No additional memory allocation O(1) |
 
-## Solution 2: Networking Router Analogy, Greedy Heuristic Hybrid Target Optimization Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
+## Solution 2: [Greedy] [Networking] Networking Router Analogy, Greedy Heuristic Hybrid Target Optimization Monotonic Search with Exponential Speed Doubling - Binary Search/Optimization Search Min Max
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
@@ -1227,32 +1227,9 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # Data In Packet To Be Process = Bananas In Pile
         # Maximum Allowed Latency = h deadline
         # Throughput = k eating speed
+        # -----------------------------------------------------
 
         # Koko eats bananas is a cleverly disguised networking problem!
-
-        # Greedy Start:
-        # We need to determined the highest heuristic lower bound in order to do this efficiently.
-        # We used 3 different perspectives to find our lower bound, 
-        # we must use the networking analogy to determine the 3:
-
-        # 1. Total bananas: Throughput -> Global Bandwidth
-        #   - Based on total bananas being processed
-        # 2. Smallest Pile: Fair Time Allocation + Small Packet -> Quick Packet Burst
-        #   - Speed based on smallest pile
-        # 3. Largest Pile: Unfair Time Allocation + Big Packet -> Bottleneck Prevention
-        #   - Speed based on largest pile
-
-        # Determined the perspectives by constraints:
-        # Must be lower bound and never overestimate = smallest packet
-        # Close to real answer in order to minimize search time = average of total
-        # Computable in O(n) time in order to scalable = simple perspectives
-        # Multiple heuristics to take into account different system perspectives = at least 3 perspectives
-
-        # Disregard Heuristics by bad choices:
-        # 1. Average between piles
-        #   - Does not consider the time constraint, and basically assumes infinite time
-        # 2. Max pile divided over h hours
-        #   - Does not factor rest of piles, if max pile is much larger, we would waster k speed on the smaller piles
 
         # Greedy Time Search Optimization: 
         # If the total time needed for k eating speed is double the h deadline,
@@ -1260,37 +1237,75 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # If total eating time less than double the h deadline,
         # we will increment speed k slowly by 1.
 
+        # Greedy Networking Start:
+        #   - Start with the highest reasonable lower bound to speed up search efficiently
+        #   - Different system perspectives for lower bound, at least 3
+        #   - Use the networking analogy to determine the perspectives
+
+        # Networking Analogy To Choose Heuristics:
+        #   - Packets (piles)
+        #   - Data size (bananas in pile)
+        #   - Time Constraint (h)
+        #   - Should respect at least two or all three (packets, data size, and time) in order to generate a good lower bound k
+
+        # 3 Perspectives
+        #   1. Throughput/Global Bandwidth
+        #       - Total bananas being processed
+        #   2. Quick Packet Bursts
+        #       - Smallest Pile Consideration With Fair Time Allocation
+        #       - Speed based on smallest pile
+        #       - To avoid having excessively large speed 
+        #   3. Bottleneck Prevention
+        #       - Largest Pile Consideration With Unfair Time Allocation
+        #       - Speed based on largest pile
+        #       - Avoid having small speed that gets stuck on largest pile
+
+        # Determined the perspectives by constraints:
+        # Must be lower bound and never overestimate = smallest packet
+        # Close to real answer in order to minimize search time = average of total
+        # Computable in O(n) time in order to scalable = simple perspectives
+        # Multiple heuristics to take into account different system perspectives = at least 3 perspectives
+
+        # Disregard other perspectives by bad choices:
+        # 1. Average between all piles
+        #   - Does not consider the time constraint, and basically assumes infinite time
+        # 2. Max pile divided over h hours
+        #   - Does not factor rest of piles, if max pile is much larger, we would waster k speed on the smaller piles
+
         # Pros:
         # Can outperform binary search in practice for some input with high k speeds.
         
         # Cons: 
         # Lacks worst case guarantees, (binary search guarantees O(log n) worst case)
-
-        # Choosing Heuristics Take away :
-        # Should respect at least two (or all three) key constraints, to generate a good lower bound k
-        # Packets (piles)
-        # Data size (bananas in pile)
-        # Time Constraint (h)
     
         # -----------------------------------------------------
         # 3 Heuristics -> Greedy Lower Bound Starting Speed:
 
-        # ------------
-        # Heuristic 1: Banana Based Average (Throughput Constraint)
+        # ------------------------
+        # Heuristic 1: Throughput/Global Bandwidth
+        #       - Total bananas being processed
+        # Throughput Constraint
         # Spread all bananas evenly over h available hours
         # All bananas / hours -> baseline average k speed
 
-        # Lower Bound: No matter how time is spent between small or large piles,
+        # Lower Bound: 
+        # No matter how time is spent between small or large piles,
         # if k is less than totalBananas/h, all bananas will not get finished
-        # Produces small k:
+
+        # Creates Small k:
         # Underestimates when bananas are skewed into a few large piles
         # by assuming bananas are even across piles
+        
         totalBananas = sum(piles)
         speedCheck1 = math.ceil(totalBananas / h)
 
-        # ------------
-        # Heuristic 2: Hour Per Pile Based Average, Split Time Evenly (Fair time Sharing For Each Pile Constraint)
-        # Heuristic 2: Minimum Speed to Finish Smallest Pile within Split Even Time
+        # ------------------------
+        # Heuristic 2: Quick Packet Bursts
+        #       - Smallest Pile Consideration With Fair Time Allocation
+        #       - Speed based on smallest pile
+        #       - To avoid having excessively large speed 
+        # Part 1: Split Time Evenly By Fair time Sharing For Each Pile Constraint = Hour Per Pile Based Average, 
+        # Part 2: Minimum Speed to Finish Smallest Pile within Split Even Time
         # Total hours / num of piles -> equal time allocated per pile 
         # Smallest Pile / Allocated Time -> speed k needed to eat smallest pile within allocated time
 
@@ -1305,10 +1320,13 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         evenTime = int(h/numPiles)
         speedCheck2 = math.ceil(min(piles) / evenTime)
 
-        # ------------
-        # Heuristic 3: Biggest Pile Based Speed (Bottleneck preparing detection Constraint)
-        # Give Koko 1 hour per pile, excluding the largest one,
-        # spend the remaining time on largest pile.
+        # ------------------------
+        # Heuristic 3: Bottleneck Detection Prevention
+        #       - Largest Pile Consideration With Unfair Time Allocation
+        #       - Speed based on largest pile
+        #       - Avoid having small speed that gets stuck on largest pile
+        # Part 1: Biggest Pile Based Speed
+        # Give Koko 1 hour per pile, except for the largest pile which will get the remaining time 
 
         # Lower Bound: Assume speed k is high enough to finish every pile in just 1 hour.
         # That takes (numPiles - 1) hours, leaving (h - (numPiles-1)) hours.
@@ -1319,13 +1337,11 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # since we have many h hours remaining.
         remainingTime = h - (numPiles - 1)
         speedCheck3 = math.ceil(max(piles) / remainingTime)
-        
             
         # ------------
-        # Greedy Starting Speed: Pick the highest lower bound
-        # avoids testing extremely high speeds unnecessarily
-        # by choosing realistic starting speed
-        # and only incrementing speed
+        # Greedy Starting Speed: 
+        # We have 3 lower bounds from 3 different networking perspectives
+        # Pick the highest lower bound between the 3 to avoid testing low speeds
         speed = max(speedCheck1, speedCheck2, speedCheck3)
         
 
@@ -1336,7 +1352,6 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # piles is a non empty list of positive integers
         # h >= len(piles), h is the number of hours 
         # variable 'speed' starts with speed k that is a valid lower bound based on heuristics
-
 
         # Postconditions:
         # Returns min speed k such that koko can eat all bananas within h hours
