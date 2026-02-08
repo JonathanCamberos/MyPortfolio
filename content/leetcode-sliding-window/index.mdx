@@ -141,6 +141,8 @@ Given an array of stock values, find the highest profit possible.
         #    if prices[left] > prices[right]: lower buy found, update left
         # Result: finds lowest buy and highest profit
 
+        n = len(prices)
+
         # Lowest buy price day index, curr sell price day index
         left, right = 0, 1
 
@@ -148,7 +150,7 @@ Given an array of stock values, find the highest profit possible.
         max_profit = 0
 
         # time complexity: iterate over list of n days
-        while right < len(prices):
+        while right < n:
 
             # curr day higher than min
             if prices[left] < prices[right]:
@@ -157,7 +159,7 @@ Given an array of stock values, find the highest profit possible.
                 profit = prices[right] - prices[left]
                 max_profit = max(max_profit, profit)
 
-            # curr day lower than min
+            # Curr day lower than min
             else:
                 left = right
 

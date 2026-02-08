@@ -528,18 +528,19 @@ Given a sorted list of elements, find the target
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
-        # Binary Search:
+        # Binary Search 1: Target Search
         # Recursive if statement that checks a middle target,
         # and depending on result searches the left or right subspace.
-        # Recursive binary search calls continue smaller range,
-        # leading to a call stack of O(log n) (the height of a tree)
+        # Recursive binary search calls continue for O(log n) on
+        # smaller and smaller range,
+        # and creates a call stack of O(log n)
 
         # Invariant:
         # Subarray nums[left:right] contains the target if it exists
         # Search space halves on each iteration
 
-        # Binary Search 1: 
-        # Target Search Search Space: '<='
+        #  Search 1: 
+        # Target SeBinaryarch Search Space: '<='
 
         def bs_recursive(left, right):
 
@@ -583,14 +584,16 @@ Given a sorted list of elements, find the target
 | Recursive Binary Search | O(log n) | O(log n) | Search space is halved on each recursive call O(log n) | Call stack grows to depth O(log n) |
 | Overall | O(log n) | O(log n) | Binary search over sorted list dominates, leading to O(log n) | Stack memory used for recursive calls dominates, leading to O(log n) |
 
-## Solution 2: Iterative Two Pointer Binary Search - Binary Search/Searching
+## Solution 2: Iterative Opposite Ends Two Pointer Binary Search - Binary Search/Searching
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
-        # Binary Search:
-        # Iterative if statement that checks a middle target,
-        # and depending on result searches the left or right subspace.
-        # Iterative binary search calls continue smaller range,
+        # Binary Search 1: Target Search
+        # Iterative if statement that checks a middle element,
+        # and depending on result when compared to target,
+        # searches the left or right subspace.
+        # Iterative binary search checks continue for O(log n) on 
+        # smaller and smaller range,
         # but since we are using pointers there is no call stack O(1)
 
         # Invariant:
@@ -741,7 +744,7 @@ Given a sorted matrix, check if target is in matrix
             return False
 ```
 
-## Solution 1: Iterative Two Pointer Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
+## Solution 1: Iterative Opposite Ends Two Pointer Flattened Matrix by Index To Coordinates Binary Search - Binary Search/Searching
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
@@ -825,7 +828,7 @@ Given a sorted matrix, check if target is in matrix
 | Binary search 1D index | O(log (m*n)) = O(log(m) + log(n)) | O(1) | Binary search over full flattened matrix treated as 1D O(log (m*n)) | No additional memory allocation |
 
 
-## Solution 2: Outer Binary Search Over Row Ranges And Inner Binary Search Within Row Candidate - Binary Search/Searching
+## Solution 2: Two Layer Binary Search Outer Row Range Search And Inner Row Element Search - Binary Search/Searching
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
@@ -1135,42 +1138,54 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 ## Solution 1: Binary Search - Binary Search/Optimization Search Min Max
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
-        
         import math
+
+        # Binary Search 2: Optimization Search
+        # Iterative if statement that checks if middle element is valid
+        # within some parameter check (in this case under h minimum hours),
+        # and searches the left or right subspace 
+        # and includes the middle element (if it was valid).
+        # Iterative binary search checks continue for O(log n) on 
+        # smaller and smaller range,
+        # but since we are using pointers there is no call stack O(1)
 
         # Abstraction:
         # Find minimum int k such that Koko can eat all bananas within h hours
-        
-        # piles = non empty list of positive integers
-        # len(piles) <= h, where h is the number of hours, find h
+        # Piles = non empty list of positive integers
+        # h is at least greater than the number of piles: len(piles) <= h
 
         # Search Space:
         # Left Speed: 1 banana per hour (slowest possible)       
         # Right speed: max(piles) as no pile would need more than max(piles) eating per hour
+        # [left, right] = [1, max(piles)]
         left, right = 1, max(piles)
 
         # Invariant:
         # Min k eating speed is within the interval [left, right]
         # Search space halves each iteration
 
-        # Calculate the hours needed for some candidate k eating speed
+        # Helper:
+        # Finds the number of hours h needed for candidate k eating speed
+        # to finish all of the piles of bananas
+        # tc: pile iteration O(n)
         def hours_needed(speed):
             
-            # Time needed
+            # time counter
             total_hours = 0
 
             # Koko iterates over piles to eat
             # tc: iterate over n piles O(n)
             for pile in piles:
 
-                # Koko current has candidate k eating speed
-                # For each pile koko will take ceil(pile/k) hours, 
-                # as she cannot stop in the middle of an hour so she must round up
+                # k = candidate eating speed
+                # time for pile p = ceil(bananas in p / banana eating speed)
+                # Round up time, cannot stop eating in middle of hour
                 # For example: 
-                # for a pile with 3 bananas at 9 eating speed, she will still take 1 full hour
+                # p = 3 bananas, k = 9 eating speed, 
+                # will still take 1 full hour
                 total_hours += math.ceil(pile / speed)
 
-            # result for k eating speed
+            # h hours needed for k eating speed for all piles
             return total_hours
         
         # Binary Search 2: 
