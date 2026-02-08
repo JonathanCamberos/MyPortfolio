@@ -745,7 +745,7 @@ Given a sorted matrix, check if target is in matrix
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
-        # Matrix Manipulation:
+        # Matrix Manipulation Flattening:
         # Represent the 2D matrix as a sorted 1D array by flattening its indices.
         # Then simply use binary search on the 1D index space,
         # and converts indices back to the original 2D coordinates with a helper function.
@@ -825,14 +825,14 @@ Given a sorted matrix, check if target is in matrix
 | Binary search 1D index | O(log (m*n)) = O(log(m) + log(n)) | O(1) | Binary search over full flattened matrix treated as 1D O(log (m*n)) | No additional memory allocation |
 
 
-## Solution 2: Two Phase Binary Search over Row Ranges and Binary Search in Row Candidate - Binary Search/Searching
+## Solution 2: Outer Binary Search Over Row Ranges And Inner Binary Search Within Row Candidate - Binary Search/Searching
 ```python
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         
-        # Note:
-        # Performs two separate binary searches:
-        # 1. Binary Search over rows to locate potential row
-        # 2. Binary Search within that row to find the target
+        # Outer Inner Binary Search
+        # Performs two separate binary searches
+        #   - Binary Search over rows to locate potential row candidate
+        #   - Binary Search within that row candidate to verify target existence
         
         # Matrix =        
         #    [                row
@@ -850,7 +850,7 @@ Given a sorted matrix, check if target is in matrix
             return False
 
         # Matrix Representation:
-        # Top and bottom rows (refer to diagram)
+        # Top is row 0 and bottom is row n-1 (refer to diagram)
         # sc: two pointers O(1)
         rows, cols = len(matrix), len(matrix[0])
         top, bottom = 0, rows - 1
@@ -885,6 +885,9 @@ Given a sorted matrix, check if target is in matrix
         # row boundaries
         row = mid_row
         left, right = 0, cols - 1
+
+        # Invariant (Second Binary Search):
+        # Target must lie within range of candidate row window [left, right] (if it exists)
 
         # Binary Search 1: 
         # Target Search Search Space: '<='
@@ -1131,71 +1134,77 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
 ## Solution 1: Binary Search - Binary Search/Optimization Search Min Max
 ```python
-    import math
-
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
         
-        # Note:
+        import math
+
+        # Abstraction:
         # Find minimum int k such that Koko can eat all bananas within h hours
         
-        # Preconditions:
-        # piles is a non empty list of positive integers
-        # h >= len(piles), h is the number of hours 
-
-        # Invariant:
-        # k min speed is in the interval [left, right]
-        # Search space halves each iteration
+        # piles = non empty list of positive integers
+        # len(piles) <= h, where h is the number of hours, find h
 
         # Search Space:
-        # Min speed: 1 banana per hour (slowest possible)       
-        # Max speed: max(piles), no pile would need > max(piles) per hour
+        # Left Speed: 1 banana per hour (slowest possible)       
+        # Right speed: max(piles) as no pile would need more than max(piles) eating per hour
         left, right = 1, max(piles)
-        
-        # time complexity: iterate over n piles O(n)
+
+        # Invariant:
+        # Min k eating speed is within the interval [left, right]
+        # Search space halves each iteration
+
+        # Calculate the hours needed for some candidate k eating speed
         def hours_needed(speed):
+            
+            # Time needed
             total_hours = 0
+
+            # Koko iterates over piles to eat
+            # tc: iterate over n piles O(n)
             for pile in piles:
-                # Koko has fixed eating speed k
-                # if she has pile bananas and eats at k bananas/hr
-                # she will take ceil(pile/k) (cannot stop in middle of hour)
-                # 3 bananas with speed 9, will still take 1 full hour
+
+                # Koko current has candidate k eating speed
+                # For each pile koko will take ceil(pile/k) hours, 
+                # as she cannot stop in the middle of an hour so she must round up
+                # For example: 
+                # for a pile with 3 bananas at 9 eating speed, she will still take 1 full hour
                 total_hours += math.ceil(pile / speed)
+
+            # result for k eating speed
             return total_hours
         
-        # binary optimization search: '<' for min k
-        # time complexity: binary search over k speeds O(log(max(piles)))
+        # Binary Search 2: 
+        # Optimization Search Space: '<'
+        # tc: binary search over k speeds O(log(max(piles)))
         while left < right:
 
-            # mid speed
+            # Middle Target:
             mid = (left + right) // 2
+
+            # Hours needed for candidate k eating speed
             required_hours = hours_needed(mid)
             
-            # Zoom In Including Mid:
-            # Mid is valid speed: can finish in h hours
-            # Discard faster speeds on right side of [left, mid, right]
-            # Include current mid in slower speed search
-            # new search interval: [left, mid]
+            # Optimization Target: 
+            # Candidate is valid eating speed (below h hours)
+            # Discard faster speeds on right side [mid, right]
+            # Search left side of previous space, include mid: [left, mid]
             if required_hours <= h:
                 right = mid
             
-            # Zoom In Excluding Mid:
-            # Mid is invalid speed: cannot finish in h hours
-            # Discard slower speeds on lef side of [left, mid, right]
-            # Exclude current mid from faster speed search
-            # new search interval: [mid + 1, right]
+            # Optimization Target:
+            # Candidate is not valid eating speed (above h hours)
+            # Discard slower speeds on left side [left, mid]
+            # Search right side of previous space, exclude mid: [mid+1, right]
             else:
                 left = mid + 1
         
-        # Invariant:        
-        # k min speed is in the interval [left, right]
+        # Optimization Loop Termination:
+        # left == right
+        # The space of valid speeds, [left, right], has been reduced to one speed
+        # This final speed is the optimized speed
 
-        # Loop Terminates:
-        # left == right 
-        # Valid [left, right] has been reduced to one point
-        # Both left and right point to min valid k speed
-
-        # overall: time complexity O(n * log(max(piles)))
-        # overall: space complexity O(1)
+        # overall: tc O(n * log(max(piles)))
+        # overall: sc O(1)
         return left
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -1208,46 +1217,54 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 ```python
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
+        # README.md
+        # System design exercise regarding networking packets analogy
+
         # -----------------------------------------------------
         # Network Router Analogy:
-        # Think of Koko as a router, 
-        # banana piles as incoming data packets,
-        # banana in pile as amount of data to be processed for packet p,
-        # h as the deadline (maximum allowable latency in seconds),
-        # and speed as the throughput (packets processed per second).
+        # Router = Koko
+        # Incoming Data Packets = Banana Piles
+        # Data In Packet To Be Process = Bananas In Pile
+        # Maximum Allowed Latency = h deadline
+        # Throughput = k eating speed
 
-        # Note:
+        # Koko eats bananas is a cleverly disguised networking problem!
+
         # Greedy Start:
-        # Start speed k from the highest heuristic lower bound between three choices.
+        # We need to determined the highest heuristic lower bound in order to do this efficiently.
+        # We used 3 different perspectives to find our lower bound, 
+        # we must use the networking analogy to determine the 3:
 
-        # Note:
-        # Greedy search: 
-        # If total eating time exceeds h by double allowed time:
-        # increase speed k aggressively by doubling.
-        # If total eating time is close to h:
-        # increment speed k slowly by 1.
+        # 1. Total bananas: Throughput -> Global Bandwidth
+        #   - Based on total bananas being processed
+        # 2. Smallest Pile: Fair Time Allocation + Small Packet -> Quick Packet Burst
+        #   - Speed based on smallest pile
+        # 3. Largest Pile: Unfair Time Allocation + Big Packet -> Bottleneck Prevention
+        #   - Speed based on largest pile
+
+        # Determined the perspectives by constraints:
+        # Must be lower bound and never overestimate = smallest packet
+        # Close to real answer in order to minimize search time = average of total
+        # Computable in O(n) time in order to scalable = simple perspectives
+        # Multiple heuristics to take into account different system perspectives = at least 3 perspectives
+
+        # Disregard Heuristics by bad choices:
+        # 1. Average between piles
+        #   - Does not consider the time constraint, and basically assumes infinite time
+        # 2. Max pile divided over h hours
+        #   - Does not factor rest of piles, if max pile is much larger, we would waster k speed on the smaller piles
+
+        # Greedy Time Search Optimization: 
+        # If the total time needed for k eating speed is double the h deadline,
+        # we will aggressively increase k by doubling it
+        # If total eating time less than double the h deadline,
+        # we will increment speed k slowly by 1.
 
         # Pros:
         # Can outperform binary search in practice for some input with high k speeds.
         
         # Cons: 
         # Lacks worst case guarantees, (binary search guarantees O(log n) worst case)
-
-        # Note:
-        # Choosing Heuristics -> System Level Perspective:
-        # 1. Total bananas: Throughput -> Global Bandwidth
-        # 2. Smallest Pile: Fair Time Allocation + Small Packet -> Quick Packet Burst
-        # 3. Largest Pile: Unfair Time Allocation + Big Packet -> Bottleneck Prevention
-
-        # Good Heuristics by Constraints:
-        # Must be lower bound -> never overestimate
-        # Close to real answer -> to minimize search time
-        # Computable in O(n) time -> scalable
-        # Multiple heuristics -> different system perspectives
-
-        # Discarding Heuristics -> Bad Choices:
-        # 1. Average between piles: Does not factor time constraint, assumes infinite time
-        # 2. Max pile divided over h hours: Does not factor rest of piles, high router k speed wasted on small piles
 
         # Choosing Heuristics Take away :
         # Should respect at least two (or all three) key constraints, to generate a good lower bound k
