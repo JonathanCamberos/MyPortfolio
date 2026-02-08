@@ -3,7 +3,7 @@ title: "LeetCode: Binary Search"
 description: "binary search"
 image: "../../public/Notes/binary-search.png"
 publishedAt: "2025-07-02"
-updatedAt: "2025-07-13"
+updatedAt: "2026-02-08"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -1285,9 +1285,10 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         #   - Computable in O(n) time in order to scalable = simple perspectives
         #   - Multiple heuristics to take into account different system perspectives = at least 3 perspectives
 
-        # Why not others?
+        # Why not other perspectives?
         #   - Other perspectives only take into account 1 aspect of the analogy
-        #     (packets, data size, time constraint)
+        #     (packets, data size, time constraint), and are thus not good lower bounds
+        #
         #   1. Average between all piles
         #       - Does not consider the time constraint, assumes infinite time
         #
@@ -1380,60 +1381,61 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         speed = max(speedCheck1, speedCheck2, speedCheck3)
 
         # -----------------------------------------------------
-        # Greedy Aggressive Time Search Optimization: 
+        # Greedy Aggressive Monotonic Time Search Optimization: 
         # - If the total time needed for k eating speed is double the h deadline,
         #   we will aggressively increase k by doubling it
         # - If total eating time less than double the h deadline,
         #   we will increment speed k slowly by 1.
 
+
         # -----------------------------------------------------
-        # Conditions:
-
-        # Preconditions:
-        # piles is a non empty list of positive integers
-        # h >= len(piles), h is the number of hours 
-        # variable 'speed' starts with speed k that is a valid lower bound based on heuristics
-
-        # Postconditions:
-        # Returns min speed k such that koko can eat all bananas within h hours
 
         # Invariant:
         # min valid speed k lies in [speed, +inf]
-        # speed is monotonically increasing during search
-        # first valid time <= h: speed is guaranteed to be min due to greedy monotonic increasing search strategy
+        # speed is monotonically increased during search
+        # first valid time h: speed is guaranteed to be the min 
+        #                     due to our Greedy Aggressive Monotonic Time Search Optimization
 
-        # Greedy Search:
-        # If totalTime is too large compare to h constraint, double eating k speed
-        # If totalTime is close to h constraint, increment speed k by 1
-        # monotonically increase k search speed
-
-        # phase 1 time complexity: exponential doubling O(log max(piles))
-        # phase 2 time complexity: linear scan O(max(piles))
+        # tc phase 1 doubling x2: exponential doubling O(log max(piles))
+        # tc phase 2 iterating +1: linear scan O(max(piles))
         while (True):
 
-            # Get hours for speed k
+            # time counter for candidate k
             smallKTotalTime = 0
+
+            # Koko iterates over piles to eat
+            # tc: iterate over n piles O(n)
             for pile in piles:
+
+                # k = candidate eating speed
+                # time for pile p = ceil(bananas in p / banana eating speed)
+                # Round up time, cannot stop eating in middle of hour
+                # For example: 
+                # p = 3 bananas, k = 9 eating speed, 
+                # will still take 1 full hour
                 smallKTotalTime += math.ceil(pile / speed)
 
-            # Valid speed found
-            # Implies: first valid speed we encounter is the smallest one
+            # Greedy Aggressive Monotonic Time Search Optimization: 
+
+            # Check: if valid k speed found
+            # Implies: this is the first valid k we encounter and is the min
             if smallKTotalTime <= h:
                 return speed
 
-            # speed is much too slow
-            # totalTime is twice available h -> double speed k
+            # Check: if h is double the deadline
+            # Then: aggressively double k speed
             # new search interval: [speed*2, +inf]
             elif smallKTotalTime >= 2 * h:
                 speed *= 2
 
-            # totalTime close to required time -> increment speed by 1
+            # Check: if h is below double the deadline
+            # Then: iterate by 1 until we find the first k valid speed
             # new search interval: [speed+1, +inf]
             else:
                 speed += 1
 
-        # overall: time complexity O(n * log (max(piles)))
-        # overall: space complexity O(1)
+        # overall: tc O(n * log (max(piles)))
+        # overall: sc O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
