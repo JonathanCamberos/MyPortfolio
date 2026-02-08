@@ -277,18 +277,37 @@ Given a linked list, reverse it iteratively and recursively.
 
 ## Solution 2: Recursive Clean Learning Not Linked List Building - Linked List/Simple Traversal
 ```python
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        
-        if not head or not head.next:
-            return head
+    def reverseList(self, node: Optional[ListNode]) -> Optional[ListNode]:
+                
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (3) -> (7) -> None
+
+        # To reverse a linked list, we simply have to update the parents to
+        # point to their children,
+        # and to have the original head to point to None:
+        #   None <- () <- () <- ()
+        #   None <- (1) <- (3) <- (7)
+
+        # head = [1,2,3,4,5]
+        # head = [5,4,3,2,1]
+
+        # See Solution 1 Notes:
+        # Same as previous, just simplified with 'not'
+        if not node or not node.next:
+            return node
 
         new_head = self.reverseList(head.next)
         
-        head.next.next = head
-        head.next = None
+        parent = node.next
+        parent.next = node
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        node.next = None
+
+        # overall: tc O(n)
+        # overall: sc O(n)
         return new_head 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -299,39 +318,58 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-## Solution 3: Iterative Linked List Building - Linked List/Simple Traversal
+## Solution 3: Iterative Linked List Building - Linked List/Simple Traversa
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
-        # Setting prev pointing to None (end of reversed list)
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (3) -> (7) -> None
+
+        # To reverse a linked list, we simply have to update the parents to
+        # point to their children,
+        # and to have the original head to point to None:
+        #   None <- () <- () <- ()
+        #   None <- (1) <- (3) <- (7)
+
+        # head = [1,2,3,4,5]
+        # head = [5,4,3,2,1]
+
+        # Creating a 'None' so the new tail can point at it
         prev = None
 
-        # Starting at head
+        # Curr will point to the previous element
         curr = head
 
-        # while _ is not None
-        # time complexity: iterate over list of n length O(n)
+        # Until we have reached past the tail of the original list,
+        # keep updating the current node to point to the previous node
+        # tc: iterate over n O(n)
         while curr != None:
 
-            # Grab next node, before disconnecting
+            # Grab next node before disconnecting current nodes link,
+            # and updating to previous.
+            # We need the next node in order to iterate forward
             next_node = curr.next  
 
-            # Disconnect and Reverse Flow: 
+            # Disconnect current element, and point to previous node: 
             # <- prev    curr -> next 
             # <- prev <- curr    next 
             curr.next = prev      
 
-            # Advance both prev and curr
+            # Advance both prev and curr using our saved next node
             prev = curr            
             curr = next_node       
 
-
         # Loop exits: 
-        # val: (val)  (None)
-        # node: prev -> curr
+        # curr has passed the original tail
+        # prev is at the original tail
+        # original tail becomes the new head
+        # so just return original tail (prev)
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return prev  
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -345,9 +383,26 @@ Given a linked list, reverse it iteratively and recursively.
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (3) -> (7) -> None
+
+        # To reverse a linked list, we simply have to update the parents to
+        # point to their children,
+        # and to have the original head to point to None:
+        #   None <- () <- () <- ()
+        #   None <- (1) <- (3) <- (7)
+
+        # head = [1,2,3,4,5]
+        # head = [5,4,3,2,1]
+
         prev = None
         curr = head
 
+        # See Solution 1 Notes:
+        # Same as previous, just simplified with an implied 'not'
         while curr:
 
             next_node = curr.next  
@@ -357,8 +412,8 @@ Given a linked list, reverse it iteratively and recursively.
             prev = curr            
             curr = next_node       
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return prev  
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
