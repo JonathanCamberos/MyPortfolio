@@ -640,7 +640,7 @@ We need to design a stack that runs in O(1) time complexity for each main functi
 |  |  |  |  |  | 
 
 
-## Solution 1: 2 Stacks For Main and Min Without Using Pop Or Push - Stack/Dynamic Programming State Compression
+## Solution 1: 2 Stacks For Main and Min With Length Pointer - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
 
@@ -764,7 +764,7 @@ class MinStack:
 | Overall | O(1) | O(n) | Each individual operation takes constant O(1) | MainStack and minTracker memory allocation dominate for n values, leading to O(n) | 
 
 
-## Solution 2: Tuple Stack Without Using Pop Or Push - Stack/Dynamic Programming State Compression
+## Solution 2: Tuple Stack Without With Length Pointer - Stack/Dynamic Programming State Compression
 ```python
 class MinStack:
 
