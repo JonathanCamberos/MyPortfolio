@@ -524,54 +524,64 @@ Given a sorted list of elements, find the target
         return res
 ```
 
-## Solution 1: Recursive Binary Search - Binary Search/Searching
+## Solution 1: Recursive Function Call Binary Search - Binary Search/Searching
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
-        # Note:
-        # Recursive binary search calls itself with smaller range,
-        # and leads to call stack of O(log n)
+        # Binary Search:
+        # Recursive if statement that checks a middle target,
+        # and depending on result searches the left or right subspace.
+        # Recursive binary search calls continue smaller range,
+        # leading to a call stack of O(log n) (the height of a tree)
 
-        def helper(left, right):
-            # base case: target not found
+        # Invariant:
+        # Subarray nums[left:right] contains the target if it exists
+        # Search space halves on each iteration
+
+        def bs_recursive(left, right):
+            
+            # End Case: out of search space, target not found
             if left > right:
                 return -1
 
+            # Middle Target:
             mid = (left + right) // 2
 
-            # base case: target found
+            # Base Case: target found
             if nums[mid] == target:
                 return mid
 
-            # search right side
+            # Search Right Side
             elif nums[mid] < target:
-                return helper(mid + 1, right)
-            # search left side
+                return bs_recursive(mid + 1, right)
+
+            # Search Left Side
             else:
-                return helper(left, mid - 1)
+                return bs_recursive(left, mid - 1)
 
-        # time complexity: each call halves the search space O(log n)
-        # space complexity: call stack grows with depth O(log n)
-        result = helper(0, len(nums) - 1)
+        # tc: each call halves the search space O(log n)
+        # sc: call stack grows with depth O(log n)
+        result = bs_recursive(0, len(nums) - 1)
 
-        # overall: time complexity O(log n)
-        # overall: space complexity O(log n)
+        # overall: tc O(log n)
+        # overall: sc O(log n)
         return result
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Variable assigning | O(1) | O(1) | Initializing variables in constant O(1) | No additional memory allocation for constant variables O(1) |
 | Recursive Binary Search | O(log n) | O(log n) | Search space is halved on each recursive call O(log n) | Call stack grows to depth O(log n) |
 | Overall | O(log n) | O(log n) | Binary search over sorted list dominates, leading to O(log n) | Stack memory used for recursive calls dominates, leading to O(log n) |
 
-## Solution 2: Iterative Binary Search - Binary Search/Searching
+## Solution 2: Iterative Two Pointer Binary Search - Binary Search/Searching
 ```python
     def search(self, nums: List[int], target: int) -> int:
         
-        # Note:
-        # simple binary search
-
+        # Binary Search:
+        # Iterative if statement that checks a middle target,
+        # and depending on result searches the left or right subspace.
+        # Iterative binary search calls continue smaller range,
+        # leading to a call stack of O(log n) (the height of a tree)
         # Precondition: 
         # nums is sorted in ascending order
 
@@ -579,33 +589,36 @@ Given a sorted list of elements, find the target
         # Subarray nums[left:right] contains the target if it exists
         # Search space halves on each iteration
 
-        # space complexity: simple variables in constant O(1)
+        # sc: setting up search space [0, n-1] O(1)
         left, right = 0, len(nums)-1
 
         # target binary search: '<='
-        # time complexity: search space halves each iteration O(log n)
+        # tc: search space halves each iteration O(log n)
         while left <= right:
             
+            # Middle Target
             mid = (left+right)//2
             
-            # Discard Mid
+            # Base Case: target found
             if nums[mid] == target:
                 return mid
 
-            # Mid is less than target:
-            # discard left side of [left, mid, right]
-            # new search interval: [mid+1, right]
+            # Target is greater than mid:
+            # Discard left side of search space [left, mid, right]
+            # Update search space, exclude mid: [mid+1, right]
             elif nums[mid] < target:
                 left = mid + 1
             
-            # mid is greater than target:
-            # discard right side of [left, mid, right]
-            # new search interval: [left, mid-1]
+            # Target is lower than mid:
+            # Discard right side of search space [left, mid, right]
+            # Update search space, exclude mid: [left, mid-1]
             else: 
                 right = mid - 1
 
-        # overall: time complexity O(log n)
-        # overall: space complexity O(1)
+        # End Case: out of search space, target not found
+
+        # overall: tc O(log n)
+        # overall: sc O(1)
         return -1
 ```
 
