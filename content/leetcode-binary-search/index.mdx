@@ -1344,7 +1344,6 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # Pick the highest lower bound between the 3 to avoid testing low speeds
         speed = max(speedCheck1, speedCheck2, speedCheck3)
         
-
         # -----------------------------------------------------
         # Conditions:
 
@@ -1463,64 +1462,61 @@ Find smallest number in an array that has been rotated some amount of times.
 ```python
     def findMin(self, nums: List[int]) -> int:
 
-        # Preconditions:
-        # nums is a non empty list of integers
-        # nums was originally sorted in ascending order
-        # nums has been rotated
-        # no duplicates
+        # Property of rotated sorted array:
+        # At some point, there will be an element that is splitting the array
+
+        # 1: [4, 5, 6, 7, 0, 1, 2]
+        # 7 > 2:
+        # smaller numbers on right half of mid
+
+        # 2: [10, 1, 2, 3, 6, 7, 8] 
+        # 3 < 8:
+        # smaller elements on left half of mid (including mid) 
 
         # Postcondition:
         # Loop terminates when left == right
         # both left and right point to min element
 
         # Invariant:
-        # The min value is always in the interval [left, right]
+        # The target min value is always in the search space [left, right]
         # At each iteration we discard half of search space
 
-        # outer boundaries
+        # Defining search space
         left, right = 0, len(nums) - 1
         
-        # Check: Rotated into Ascending Order
+        # Check: if array is in original correct order
         if nums[left] < nums[right]:
             return nums[left]
         
-        # Binary Optimization Search: '<' for min
+        # Binary Search 2: 
+        # Optimization Search Space: '<'
+        # tc: binary search over k speeds O(log(n))
         while left < right:
 
+            # Middle Target:
             mid = (left + right) // 2
             
-            # property of rotated sorted array:
-
-            # 1: [4, 5, 6, 7, 0, 1, 2]
-            # 7 > 2:
-            # smaller numbers on right half of mid
-
-            # 2: [10, 1, 2, 3, 6, 7, 8] 
-            # 3 < 8:
-            # smaller elements on left half of mid (including mid) 
-
-            # mid is less than right
-            # discard higher elements on right side
-            # include lower elements on left side with mid
-            # new search interval: [left, mid]
+            # Mid is less than right
+            # Smaller elements are on the left of mid
+            # Discard higher elements on right side [mid, right]
+            # Include lower elements on left side, include lower mid element [left, mid]
             if nums[mid] < nums[right]:
                 right = mid
 
-            # mid is greater than right
-            # discard higher elements on left side with mid
-            # include lower elements on right side
-            # new search interval: [mid+1, right]
+            # Mid is greater than right
+            # Smaller elements are on the right of mid
+            # Discard higher elements on left side with mid [left, mid]
+            # Include lower elements on right side, exclude larger mid element [mid+1, right]
             else:
                 left = mid+1
         
-        # Loop Terminated:
-        # left == right is the minimum element index
-
-        # Via Invariant:
-        # left and right point to min element
+        # Optimization Loop Termination:
+        # left == right
+        # The space of smaller elements, [left, right], has been reduced to one element
+        # This final element is the minimum element
         
-        # overall: time complexity O(log n)
-        # overall: space complexity O(1)
+        # overall: tc O(log n)
+        # overall: sc O(1)
         return nums[left]
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
