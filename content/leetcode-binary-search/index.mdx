@@ -1647,16 +1647,6 @@ Find target in an array that has been rotated some amount of times.
 ## Solution 1: Inequality Boundaries Discard Mid Binary Search - Binary Search/Condition Adapted Binary Search
 ```python
     def search(self, nums: List[int], target: int) -> int:
-        
-        # Precondition:
-        # num is non empty list of integers
-        # num is sorted in ascending order
-        # num has been rotated
-        # num has no duplicates
-
-        # Postcondition:
-        # Returns index of target if exists
-        # Returns -1 if target does not exist
 
         # Invariant:
         # target, if exists, is in interval [left, right]
@@ -1665,57 +1655,70 @@ Find target in an array that has been rotated some amount of times.
         #   b) contains a rotation
         # search space halves each iteration
 
-        # outer boundaries
+        # Defining search space
         left, right = 0, len(nums) - 1
 
-        # binary target search: '<='
-        # time complexity: binary search over list n length O(log n)
+        # Binary Search 1: 
+        # Target Binary Search Space: '<='        
+        # tc: binary search over list n length O(log n)
         while left <= right:
 
+            # Current Search Space:
+            # [left, mid, right]
+
+            # Middle Target:
             mid = (left + right) // 2 
 
-            # Check Mid
+            # Base Case: target found
             if nums[mid] == target:
                 return mid
 
-            # guarantees right half is sorted
-            # contains ascending range: [mid, right]
+            # Check: if mid less than right
+            # Implies: right half of search space is sorted
+            # Implies: we have a guaranteed ascending range of: [mid, right]
             if nums[mid] <= nums[right]:
                 
-                # target is within range (mid, right]
-                # discard elements on left side
-                # new search interval: [mid+1, right]
+                # Check: if target within ascending range of [mid, right]
+                # Implies: target is within right section
+                # Discard left side of search space: [left, mid]
+                # Search right side of previous space,
+                # exclude middle: [mid+1, right]
                 if nums[mid] < target <= nums[right]:
                     left = mid + 1 
                 
-                # target is not with range (mid, right]
-                # discard higher elements on right side
-                # new search interval: [left, mid-1]
+                # Check: if target not within ascending range of [mid, right]
+                # Implies: target is not with range (mid, right]
+                # Discard right side of search space: [mid, right] 
+                # Search left side of previous space
+                # exclude middle: [left, mid-1]
                 else:
                     right = mid - 1      
 
-            # guarantees left half is sorted
-            # contains ascending range: [left, mid]
+            # Check: if mid is greater than right 
+            # Implies: left half of search space is sorted
+            # Implies: we have a guaranteed ascending range of [left, mid]
             else:
 
-                # target is within range [left, mid)
-                # discard on right side
-                # new search interval: [left, mid-1]
+                # Check: if target is within ascending range of [left, mid]
+                # Implies: target is within left section
+                # Discard right side of search space: [mid, right]
+                # Search left side of previous space,
+                # exclude middle: [left, mid-1]
                 if nums[left] <= target < nums[mid]:
                     right = mid - 1 
                 
-                # target is not within range [left, mid)
-                # discard elements on left side
-                # new search interval: [mid+1, right]
+                # Check: if target is not within ascending range of [left, mid]
+                # Implies: target is within right section
+                # Discard left side of search space: [left, mid]
+                # Search right side of previous space,
+                # exclude middle: [mid+1, right]
                 else:
                     left = mid + 1
 
-        # Loop exited: left > right
-        # Invariant broken: no valid [left, right] remaining
-        # Target not found -> return -1
+        # End Case: out of search space, target not found
 
-        # overall: time complexity O(log n)
-        # overall: space complexity O(1)
+        # overall: tc O(log n)
+        # overall: sc O(1)
         return -1
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
