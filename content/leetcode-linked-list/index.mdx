@@ -3,7 +3,7 @@ title: "LeetCode: Linked List"
 description: "linked list"
 image: "../../public/Notes/linked-list.png"
 publishedAt: "2025-07-14"
-updatedAt: "2025-07-23"
+updatedAt: "2026-02-08"
 author: "jonathancamberos"
 isPublished: true
 tags:
@@ -216,39 +216,57 @@ Given a linked list, reverse it iteratively and recursively.
 ```python
 ```
 
-## Solution 1: Recursive - Linked List/Simple Traversal
+## Solution 1: Recursive Linked List Building - Linked List/Simple Traversal
 ```python
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def reverseList(self, node: Optional[ListNode]) -> Optional[ListNode]:
         
-        # Note:
-        # With recursive Linked Lists:
-        # A good way to think about the problem, is that you have access
-        # to the list in reverse order, so what actions do you need to
-        # take in order to reverse the list, while traversing the list
-        # from back to front
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (3) -> (7) -> None
+
+        # To reverse a linked list, we simply have to update the parents to
+        # point to their children,
+        # and to have the original head to point to None:
+        #   None <- () <- () <- ()
+        #   None <- (1) <- (3) <- (7)
+
+        # head = [1,2,3,4,5]
+        # head = [5,4,3,2,1]
 
         # Base case: 
-        # If current list is empty or has only one node -> this node becomes the new head
-        if head == None or head.next == None:
-            return head
+        # reached tail of original list, start to pass tail node as the new head
+        if node == None or node.next == None:
+            return node
 
-        # Recursion: reverse the rest of the list (head.next to end)
-        # After Recursion: new_head is new head of reverse list (tail of original list)
-        new_head = self.reverseList(head.next)
+        # Recursion: 
+        # call reverse list on the rest of the list (head.next to end)
+        # once we hit base case, we will pass back the new head (tail of original)
+        final_head = self.reverseList(node.next)
 
-        # Recursion Part 1: Reverse Flow of next element (by adding head <- head.next)
-        # After recursion: Point second Element to Original Head
-        head.next.next = head
+        # Grab current nodes next element:
+        parent = node.next
 
-        # Recursion Part 2: Reverse Flow of curr element (by adding None <- head), as current head may be first element in original list
-        # After recursion: point first element in original list to None
-        head.next = None
+        # Recursion Note: 
+        # Due to recursion, the parent is currently pointing to None 
+        # (updated in previous call)
+        # Now we just update parent to point to child node (finish reversing the flow):
+        parent.next = node
 
-        # Continue passing back new head (last element from original list), from the deepest recursive call
+        # Recursion Note:
+        # This node may or may not be the new tail, or a parent to a node
+        # For now we point it to None, and either:
+        #   - it gets updated in the previous recursion call, and gets pointed to its child
+        #   - it was the original head, and it stays pointing to None, as it becomes the new tail
+        node.next = None
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
-        return new_head 
+        # Continue passing back new head (tail of original), 
+        # passed from the deepest recursive call
+
+        # overall: tc O(n)
+        # overall: sc O(n)
+        return final_head 
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
@@ -257,7 +275,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 2: Recursive Clean (Learning Not) - Linked List/Simple Traversal
+## Solution 2: Recursive Clean Learning Not Linked List Building - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -281,7 +299,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-## Solution 3: Iterative - Linked List/Simple Traversal
+## Solution 3: Iterative Linked List Building - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
@@ -323,7 +341,7 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 |  |  |  |  |  |
 
-## Solution 4: Iterative Clean (Learning Not) - Linked List/Simple Traversal
+## Solution 4: Iterative Clean Learning Not Linked List Building - Linked List/Simple Traversal
 ```python
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         
