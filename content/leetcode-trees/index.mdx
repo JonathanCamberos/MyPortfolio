@@ -1013,7 +1013,7 @@ Invert the binary tree.
 |  |  |  |  |  |
 
 
-# 104. Maximum Depth of Binary Tree ::4:: - Easy
+# 104. Maximum Depth of Binary Tree ::3:: - Easy
 
 Topics:  Tree, Depth First Search, Breadth First Search, Binary Tree
 
@@ -1073,15 +1073,16 @@ Find the max depth of a binary tree.
         #         / \           / \
         #       ()   ()        4   5
 
-        # To find the height of a tree, we simply have to swap compare
+        # To find the height of a tree, we simply have to compare
         # the max height of each subtree at each root node, 
-        # and keep track of the max height found
+        # and keep track of the max height found, while adding +1
+        # to account for the current root node
 
         # DFS PostOrder: 
         # left -> right -> root
         #   1. Process left node: get height of tree
         #   2. Process right node: get height of tree
-        #   3. Process root node: compare max height between left and right
+        #   3. Process root node: compare max height between left and right, add +1
         
         # Empty Case: tree is a leaf, no height, return 0
         if not root:
@@ -1284,7 +1285,7 @@ Find the max depth of a binary tree.
 |  |  |  |  |  |
 
 
-# 543. Diameter of Binary Tree ::2:: - Easy
+# 543. Diameter of Binary Tree ::4:: - Easy
 
 Topics:  Tree, Depth First Search, Binary Tree
 
@@ -1337,16 +1338,31 @@ Find the diameter of a binary tree.
 ## Solution 1: Recursive DFS Post Order Global Max Diameter + (Tree Length) Pass Up - Tree/DFS Post Order Recursive Two Sided Bottom Up
 ```python
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
-        # Note:
-        # DFS post order: left -> right -> root
-        # 1. Process left -> right :
-        # 2. Process -> root :  connect left and right subtrees, add edge from root -> parent
-        # Result: longest path of edges
+        
+        # Tree:
+        # A tree is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #      ()             1
+        #      / \           / \
+        #    ()   ()        2   3 
+        #         / \           / \
+        #       ()   ()        4   5
 
-        max_diameter = 0
+        # To find the width of a tree, we simply have to compare
+        # the max width of each subtree at each root node, 
+        # and keep track of the max width found, while adding +1
+        # to account for the current root node
+
+        # DFS PostOrder: 
+        # left -> right -> root
+        #   1. Process left node: get width of tree
+        #   2. Process right node: get width of tree
+        #   3. Process root node: compare max width between left and right, add +1
+
+        globalDiameter = 0
         
         def dfs(node):
-            nonlocal max_diameter
+            nonlocal globalDiameter
 
             # Empty check
             if not node:
@@ -1360,7 +1376,7 @@ Find the diameter of a binary tree.
             connected_at_root = left_len + right_len
 
             # Update max diameters: 
-            max_diameter = max(max_diameter, connected_at_root)
+            globalDiameter = max(globalDiameter, connected_at_root)
 
             # Process -> root: add edge between root -> parent
             root_len = 1 + max(left_len, right_len)
@@ -1372,7 +1388,7 @@ Find the diameter of a binary tree.
 
         # overall: time complexity
         # overall: space complexity
-        return max_diameter
+        return globalDiameter
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
