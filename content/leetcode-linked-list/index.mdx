@@ -875,7 +875,7 @@ Given a linked list, order it in values tending towards middle.
         #   - add in correct order 
  
 
-        # Finding Half Point Of Original List
+        # 1. Finding Half Point Of Original List And Split List
         slow = fast = head
         while fast and fast.next:
             # slow travels half distance vs fast pointer
@@ -906,7 +906,7 @@ Given a linked list, order it in values tending towards middle.
         # to slow -> None
         slow.next = None 
 
-        # Reverse second half of list
+        # 2. Reverse Second Half Of List
         while curr:
             # grab next
             next_node = curr.next
@@ -918,6 +918,9 @@ Given a linked list, order it in values tending towards middle.
 
         # iterate over left half and right half
         left, right = head, prev
+
+
+        # 3. Connect First Half And Reversed Second Half:
 
         # Explicit Termination:
         # right half is always than the left half (by 1 or 2 nodes)
