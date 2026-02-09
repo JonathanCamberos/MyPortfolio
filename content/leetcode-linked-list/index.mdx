@@ -644,7 +644,7 @@ The number of nodes in the list is the range [0, 5000].
 -5000 &leq; Node.val &leq; 5000
 
 ## Abstraction
-Given a linked list, reverse it iteratively and recursively.
+Given a linked list, determine if there exists a cycle.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -675,31 +675,46 @@ Given a linked list, reverse it iteratively and recursively.
 ```python
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         
-        # Note:
-        # Track visited nodes to check for repeats (cycles)
-        
-        # Nodes are stored by obj reference,
-        # perfect for cycle detection
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (3) -> (7) -> None
+
+        # To check if a linked list, we simply keep track of nodes we
+        # have visited, and see if we see them again as we iterate 
+        #   (1) -> (3) -> (7) -> (9)
+        #                  ^      |     (cycle)
+        #                  |      v
+        #                 (11)<- (10)
+                
+        # Nodes are stored by obj reference
         visited = set()
 
-        # start of iteration
+        # Start iteration
         curr = head
         
-        # time complexity: iterate over list of n length O(n)
+
+        # Check: if we have passed tail of list
+        # tc: iterate over n O(n)
         while curr:
 
-            # repeated node: (cycle detected)
+            # Check: is current node in seen list
+            # Implies: we have passed through as cycle
             if curr in visited:
                 return True
 
-            # add and continue iteration
+            # Implies: have not seen current node
+            # Then: add to seen list, continue iteration
             visited.add(curr)
+            
+            # Iterate
             curr = curr.next
         
-        # no repeat nodes (no cycles)
+        # Implies: have passed tail of list, no cycles encountered
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
@@ -710,33 +725,56 @@ Given a linked list, reverse it iteratively and recursively.
 |  |  |  |  |  |
 
 
-## Solution 2: Floyd Cycle Detection Tortoise and Hare - Linked List/Simple Traversal
+## Solution 2: Floyd Cycle Detection Tortoise and Hare [SC Opt] - Linked List/Simple Traversal
 ```python
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         
-        # Note:
-        # If no cycle: fast pointer will hit None (end of list)
-        # If cycle: once both fast and slow pointer enter cycle of size k,
-        # fast pointer will lap and hit slow pointer within k steps
+        # Tortoise And Hare:
+        # We will iterate the linked list using 2 pointers
+        #   - a pointer going 2x speed (slow/tortoise)
+        #   - a pointer going 1x speed (fast/hare)
 
-        # set pointers
+        # Cycle Detection:
+        # If there is a cycle:
+        #   - fast pointer will catch up with slow pointer
+        # If there is no cycle:
+        #   - fast pointer will reach end of list
+
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (3) -> (7) -> None
+
+        # To check if a linked list, we simply keep track of nodes we
+        # have visited, and see if we see them again as we iterate 
+        #   (1) -> (3) -> (7) -> (9)
+        #                  ^      |     (cycle)
+        #                  |      v
+        #                 (11)<- (10)
+
+        # tortoise and hare pointers
         slow, fast = head, head
         
-        # time complexity: iterate over list 
+        # Check: has fast pointer reached end of list
+        # Implies: fast pointer still valid node, check if cycle detected
+        # tc: iterate over n O(n) 
         while fast and fast.next:
 
-            # move both slow and fast pointers
+            # Iterate slow pointer by 1x and fast by 2x
             slow = slow.next
             fast = fast.next.next
             
-            # check if match (cycle detected)
+            # Check: did fast catch up with slow
+            # Implies: fast went through a cycle
             if slow == fast:
                 return True
 
-        # reached end of list (no cycle detected)
+        # Implies: fast has reached end of list, never caught up with slow
+        # Implies: no cycle in list
         
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return False
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
