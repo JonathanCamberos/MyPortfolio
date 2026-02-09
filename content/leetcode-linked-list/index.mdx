@@ -840,12 +840,42 @@ Given a linked list, order it in values tending towards middle.
 ```python
     def reorderList(self, head: Optional[ListNode]) -> None:
 
-        # Note:
-        # 1. Use Tortoise Hare to find the middle
-        # 2. Reverse second half of list in place
-        # 3. Merges first half and reverse second half alternating
-        # Result: Fully in place reordering
+        # Recursive Linked Lists:
+        # A linked list is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #   () -> () -> () -> None
+        #   (1) -> (2) -> (3) -> (4) -> (5) None
 
+        # To reorder the linked list, we simply have to define the pattern to reorder:
+        #   (1) -> (2) -> (3) -> (4) -> (5) None
+        #   (1) -> (5) -> (2) -> (4) -> (3) None
+
+        # Is actually just:
+        # list1 =>   (1) -> (2) -> (3) -> None
+        # list2 =>      (5) -> (4) -> None     (+)
+        # -----------------------------------------
+
+        # So we need to create:
+        #   - First half of the list
+        #   - Reversed second half of list
+        # And then join them together
+
+        # First Half Of List 
+        #   - keep pointing to original head
+        #   - stop iteration at half
+        #   - point middle to None to split list in half
+
+        # Reversed Second Half Of List
+        #   - stop iteration at half
+        #   - keep pointing at middle element
+        #   - reverse list starting at middle element
+
+        # Join the two elements
+        #   - iterate over forward and reversed list
+        #   - add in correct order 
+ 
+
+        # Finding Half Point Of Original List
         slow = fast = head
         while fast and fast.next:
             # slow travels half distance vs fast pointer
