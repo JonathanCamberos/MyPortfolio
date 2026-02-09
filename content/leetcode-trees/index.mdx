@@ -961,10 +961,10 @@ Invert the binary tree.
 
         # BFS Iterative Level By Level: 
         # Process root level -> process left and right level
-        # 1. Process root -> : iterate over level
-        #      swap left and right subtrees
-        # 2. Process -> left -> right: append left and right iterative process
-        # Result: Top down invert
+        #   1. Process Root: iterate over roots level
+        #        - swap left and right subtrees
+        #   2. Process Left And Right: append left and right nodes to process them
+        #        - left and right will be process along with all nodes in their level
         
         # Empty Case: tree is a leaf, no swap, return None
         if not root:
@@ -977,10 +977,10 @@ Invert the binary tree.
         # tc: iterate over n O(n)
         while queue:
 
-            # Number Of Nodes In Current Level Of Tree
+            # Number Of Nodes In Current Level Of Tree:
             size = len(queue)
 
-            # Process The full Level Before Iterating To Next Level
+            # Process The full Level Before Iterating To Next Level:
             for _ in range(size):
 
                 # Remove And Process:
@@ -1211,91 +1211,71 @@ Find the max depth of a binary tree.
         return heightOfTree
 ```
 
-## Solution 3: Iterative DFS Pre Order Global Depth + Tuple (Subtree, Subtree Depth) Pass Down - Tree/DFS Pre Order Iterative One Sided Top Down
-```python
-    
-    # Note:
-    # DFS pre order iterative: root -> left -> right
-    # 1. Process root -> : root depth vs max_depth, append subtrees + 1 root depth
-    # 2. Process -> left -> right :
-    # Result: deepest branch updates global max_depth
-    
-    # Empty check
-    if not root:
-        return 0
-    
-    # iterative level stack
-    stack = [(root, 1)]
-
-    # global depth
-    max_depth = 0
-    
-    while stack:
-
-        # process entire level
-        size = len(stack)
-        for _ in range(size):
-
-            # process root -> : (node, node_depth)
-            node, node_depth = stack.popleft()
-            
-            # process root -> : max_depth vs node_depth
-            max_depth = max(max_depth, node_depth)
-            
-            # process -> left -> right : depth by + 1
-            if node.left:
-                stack.append((node.left, node_depth + 1))
-            if node.right:
-                stack.append((node.right, node_depth + 1))
-    
-    # overall: time complexity
-    # overall: space complexity
-    return max_depth
-```
-
-## Solution 4: Iterative BFS Pre Order Full Level Global Depth + Completed Level Adds to Depth - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
+## Solution 3: Iterative BFS Pre Order Full Level Global Depth + Completed Level Adds to Depth - Tree/BFS Pre Order Across Level For Level Size Based Grouping Full Across Top Down
 ```python
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        # Note:
-        # BFS pre order iterative: process level by: root -> left -> right
-        # 1. For each level: get len of level
-        # 2. Process root -> 
-        # 3. Process -> left -> right
-        # Result: depth is total of levels -> max depth 
+       
+        # Tree:
+        # A tree is made up of nodes which point to other nodes
+        # They must have pointers and they may or may not have values:
+        #      ()             1
+        #      / \           / \
+        #    ()   ()        2   3 
+        #         / \           / \
+        #       ()   ()        4   5
+
+        # To find the height of a tree, we simply have to swap compare
+        # the max height of each subtree at each root node, 
+        # and keep track of the max height found
+
+        # BFS Iterative Level By Level: 
+        # Process root level -> process left and right level
+        #   1. Process Root: iterate over roots level 
+        #       - no action needed, when finished iteration over nodes in 
+        #         level, added 1 to global depth counter
+        #   2. Process Left And Right: append left and right nodes to process them
+        #        - left and right will be process along with all nodes in their level
         
-        # Empty check
+        # Empty Case: tree is a leaf, no height, return = 0
         if not root:
             return 0
         
-        # iterative stack
-        queue = deque([root])
+        # Iterative level stack:
+        stack = [(root, 1)]
 
-        # global depth
-        depth = 0
+        # Global depth
+        globalDepth = 0
         
+        # Check: if we still have nodes to process
+        # tc: iterate over n O(n)
         while queue:
 
-            # level size
+            # Number Of Nodes In Current Level Of Tree:
             size = len(queue)
 
-            # process all nodes in current level
+            # Process The full Level Before Iterating To Next Level:
             for _ in range(size):
 
-                # pop() all nodes
+                # Remove And Process:
+                # no action needed on root node
                 node = queue.popleft()
 
-                # append() subtrees belonging to next level
+                # Prepare Next Level:
+                # Append the next level of nodes to the stack,
+                # will not affect the current level processing 
+                # as we have previously determined the number of nodes in the level 
+                # and thus the number of nodes to be process
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
 
-            # level complete, add to depth counter
-            depth += 1
+            # level complete, add +1 to depth counter to account for this level
+            globalDepth += 1
         
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
-        return depth
+        # overall: tc O(n)
+        # overall: sc O(n)
+        return globalDepth
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
