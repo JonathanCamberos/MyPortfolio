@@ -2296,117 +2296,155 @@ Find median between two sorted arrays.
 ```python
    def findMedianSortedArrays(self, nums1, nums2):
 
-        # Precondition:
-        # nums1 and nums2 are sorted in ascending order
-        # 0 <= len(nums1), len(nums2) <= 10^6
+        # --------------------------------------------------
+        # Median of merged sorted array:
+        #   - If Odd: return the middle value = [o o * o o]
+        #   - If Even: return average of two middle values = [o * * o]
 
-        # Postcondition:
-        # returns the median of the merged sorted array:
-        # If Odd: middle value of total length
-        # If Even: average of two middle values
+        # nums1 = [1, 3, 8]
+        # nums2 = [7, 9, 10, 11]
 
+        # [1, 3, 7, 8, 9, 10, 11]
+        # median = 8
+
+        # Merged array partitions represents:
+        # nums1: [1, 3 | 8]          => left max = 3, right min = 8 
+        # nums2: [7 | 9, 10, 11]     => left max = 7, right mind = 7
+
+        # The Final Partition Will Pass These Conditions:
+        #   - left side has equal or more elements than right side:
+        #       odd: left side has 1 more element than right
+        #       even: left side has same number of elements than right
+        #
+        #   - every element on left is <= than every element on the right
+
+        # The Final Partition Will Find Contain The Median:
+        #   - Odd total length, median = max(left side)
+        #   - Even total length, median = (max(left side) + min(right side)) / 2
+
+        # Final Partition:
+        # nums1: [1, 3, 8 | ]
+        # nums2: [7 | 9, 10, 11]
+
+        # Odd Length:
+        # median = 8
+    
+        # --------------------------------------------------
         # Invariant:
         # At each iteration, we maintain a partition (cut point) in nums1 (partitionX)
         # and implicit partition (cut point) in nums2 (partitionY) such that:
-        # 1. Total count of elements between both left partitions = 
-        # Total count of elements between both right partitions
-        # 2. maxLeftX <= minRightY and maxLeftY <= minRightX:
-        # means the partition correctly divides arrays so  
-        # 3. all elements in left partitions are less than or equal to all elements in right partitions.
+        #
+        #   1. Left num count >= Right num count
+        #
+        #   2. max left <= min right & max left <= min right:
+        #
+        #   3. all left elements <= all right elements
         
-        # sanity check smaller array
+        # --------------------------------------------------
+        # Ensures: nums1 is the smaller or equal array
         if len(nums1) > len(nums2):
             nums1, nums2 = nums2, nums1
 
-        # lens of the two arrays        
-        m, n = len(nums1), len(nums2)
+        # Len of two arrays        
+        num1Len, num2Len = len(nums1), len(nums2)
+        
+        # Preparing for nums2 determination
+        totalLen = num1Len + num2Len
+        leftSize = (totalLen + 1) // 2   # how many elements should be on the left
 
-        # search space for the cut point in nums1
-        # range between [0, m]
-        # can put anywhere from no elements to all elements on left
-        low, high = 0, m
+        # Search space for nums1 cut point: [0, len(nums1)]
+        nums1Left, nums1Right = 0, num1Len
 
-        # Target Binary Search: "<=" in smaller array
-        # Each iteration is "guess" a cut across the smaller array 
-        # (and implicitly the larger array) such that the Partition Rule is true
-        while low <= high:
+        # Binary Search 1:
+        # Target Binary Search Space: '<='
+        # Each iteration is a 'guess' in smaller array that partitions it,
+        # this 'guess' implicitly creates a second 'guess' in the the larger array as well
+        while nums1Left <= nums1Right:
 
-            # Guess cut point for nums1
-            # current nums1 search interval: [low, high]
-            
-            # we guess partitionX in nums1, and computer partitionY in nums2 accordingly
-            partitionX = (low + high) // 2
+            # Current Search Space nums1 Cut:
+            # [low, mid, high]
+           
+            # nums1 Cut:
+            # guess cut point in nums1, and computer cut point in nums2 accordingly
+            nums1Guess = (nums1Left + nums1Right) // 2
 
-            # Total count left half is fixed (half of all elements),
-            # so once you choose how many elements from nums1 go left (partitionX),
-            # you know how many elements from nums2 must go left (partitionY),
-            # in order to keep the two half of all elements balanced
+            # Invariant 1: Left num count >= Right num count
+            #
+            #   - nums1 cut grabs a certain number of elements from nums1 and assigns them to the
+            #     left or right side
+            #  
+            #   - this determines how many elements we need from nums2 for the left and right side
+            #     to keep invariant 1 true
 
-            # (5+1)//2 -> 3, (6+1)//2 -> 3
-            partitionY = (m + n + 1) // 2 - partitionX
+            # Examples:
+            #   nums1 = [1, 3, 8]        # num1Len = 3
+            #   nums2 = [7, 9, 10, 11]  # num2Len = 4
+            #   nums1Guess = 1 
+            # (6+1)//2 -> 3
+            nums2Determined = leftSize - nums1Guess
 
             # Grab values for partitions
             # Allow for our invariant condition to be possible
             # after reaching out of bounds of array
-            # if maxLeftX <= minRightY and maxLeftY <= minRightX:
+            # if num1MaxLeft <= num2MinRight and num2MaxLeft <= num1MinRight:
 
             # If the left part of nums1 is empty (partitionX == 0), then the maximum of an empty set should not restrict the comparison.
-            # Setting maxLeftX = -inf ensures the condition maxLeftX <= minRightY is always satisfied in this case.
-            maxLeftX = float('-inf') if partitionX == 0 else nums1[partitionX - 1]
+            # Setting num1MaxLeft = -inf ensures the condition num1MaxLeft <= num2MinRight is always satisfied in this case.
+            num1MaxLeft = float('-inf') if nums1Guess == 0 else nums1[nums1Guess - 1]
             
             # If the right part of nums1 is empty (partitionX == m), then there are no values to compare in the right half.
-            # Setting minRightX = +inf ensures the condition maxLeftY <= minRightX is always satisfied in this case.
-            minRightX = float('inf') if partitionX == m else nums1[partitionX]
+            # Setting num1MinRight = +inf ensures the condition num2MaxLeft <= num1MinRight is always satisfied in this case.
+            num1MinRight = float('inf') if nums1Guess == num1Len else nums1[nums1Guess]
 
             # If the left part of nums2 is empty (partitionY == 0), then the maximum of an empty set should not restrict the comparison.
-            # Setting maxLeftY = -inf ensures the condition maxLeftY <= minRightX is always satisfied in this case.
-            maxLeftY = float('-inf') if partitionY == 0 else nums2[partitionY - 1]
+            # Setting num2MaxLeft = -inf ensures the condition num2MaxLeft <= num1MinRight is always satisfied in this case.
+            num2MaxLeft = float('-inf') if nums2Determined == 0 else nums2[nums2Determined - 1]
             
             # If the right part of nums2 is empty (partitionY == n), then the minimum of an empty set should not restrict the comparison.
-            # Setting minRightY = inf ensures the condition maxLeftX <= minRightY is always satisfied in this case.
-            minRightY = float('inf') if partitionY == n else nums2[partitionY]
+            # Setting num2MinRight = inf ensures the condition num1MaxLeft <= num2MinRight is always satisfied in this case.
+            num2MinRight = float('inf') if nums2Determined == num2Len else nums2[nums2Determined]
 
             # Discard Mid via Partitions Rule:
             # max of left partition nums1 < min of right partition of nums2
             # max of left partition nums2 < min of right partition of nums1
             # we have successfully split 'merged' array into halves
-            if maxLeftX <= minRightY and maxLeftY <= minRightX:
+            if num1MaxLeft <= num2MinRight and num2MaxLeft <= num1MinRight:
 
                 # Even Merged Array
-                if (m + n) % 2 == 0:
-                    return (max(maxLeftX, maxLeftY) + min(minRightX, minRightY)) / 2
+                if (nums1Len + nums2Len) % 2 == 0:
+                    return (max(num1MaxLeft, num2MaxLeft) + min(num1MinRight, num2MinRight)) / 2
                 
                 # Odd Merged Array:
                 else:
-                    return max(maxLeftX, maxLeftY)
+                    return max(num1MaxLeft, num2MaxLeft)
             
             # Continue Split Monotonic Increasing Shift
 
-            # If maxLeftX > minRightY:
+            # If num1MaxLeft > num2MinRight:
             # Means largest element on the left side of nums1 partition is greater
             # than the smallest element on the right side of nums2 partition
             # Implies: our partitionX is too far right -> too many elements from nums1
             # are in the left half
 
-            # Condition Breaks Invariant: maxLeftX <= minRightY
+            # Condition Breaks Invariant: num1MaxLeft <= num2MinRight
 
             # Discard right half of [low, partitionX, high]
             # new search interval: [low, partitionX - 1]
-            elif maxLeftX > minRightY:
-                high = partitionX - 1
+            elif num1MaxLeft > num2MinRight:
+                nums1Right = nums1Guess - 1
 
-            # If maxLeftY > minRightX
+            # If num2MaxLeft > num1MinRight
             # Means largest element on the left side of nums2 partition is greater
             # than the smallest element on the right side of nums1 partition
             # Implies: our partitionX is too far left -> not enough elements from nums1
             # are in the left half
 
-            # Condition Breaks Invariant: maxLeftY <= minRIghtX
+            # Condition Breaks Invariant: num2MaxLeft <= num1MinRight
 
             # Discard left half of [low, partitionX, high]
             # new search interval: [partition + 1, high] 
-            elif maxLeftY > minRightX:
-                low = partitionX + 1 
+            elif num2MaxLeft > num1MinRight:
+                nums1Left = nums1Guess + 1 
 
 
         # overall: time complexity O(log (min(m, n)))
