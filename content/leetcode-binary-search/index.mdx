@@ -1306,11 +1306,13 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # this does not have a worst case guarantee
     
         # ------------------------
-        # Perspective 1: Throughput/Global Bandwidth
-        #       - Total bananas being processed
+        # Perspective 1: Total Data Volume + Required Processing/Throughput
+        #       - Compute total workload (total bananas)
+        #       - Determine minimum average processing rate (throughput) needed to finish within h hours
+        #       - Provides a baseline lower bound for the eating speed
         
-        # Throughput Constraint:
-        # Big number of bananas coming through, what do we do?
+        # Throughput Constraint Summary:
+        #   - Speed needed to process largest pile while spending most of time on largest pile
 
         # Solution Idea:
         # Spread all bananas evenly over h available hours
@@ -1328,13 +1330,14 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         speedCheck1 = math.ceil(totalBananas / h)
 
         # ------------------------
-        # Perspective 2: Quick Packet Bursts
-        #       - Smallest Pile Consideration With Fair Time Allocation
-        #       - Speed based on smallest pile
-        #       - To avoid having excessively large speed 
+        # Perspective 2: Smallest Packet Processing + Even Time
+        #       - Assume time is evenly split among all piles
+        #       - Focus on the smallest pile
+        #       - Determine a minimum speed to finish the smallest pile using evenly split time
+        #       - Prevents overestimating speed due to small piles, giving a realistic lower bound
 
-        # Quick Packet Bursts Constraint:
-        #   - The minimum speed needed to finish the smallest pile by splitting the time evenly between piles
+        # Quick Packet Bursts Constraint Summary:
+        #   - The minimum speed needed to finish the smallest pile while splitting the time evenly between piles
 
         # Solution Idea:
         # Part 1: Split Time Evenly Between Piles (Fair time Sharing) = Hour Per Pile Based Average, 
@@ -1351,12 +1354,13 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         speedCheck2 = math.ceil(smallestPile / splittingTimeEvenly)
 
         # ------------------------
-        # Perspective 3: Bottleneck Detection Prevention
-        #       - Largest Pile Consideration With Unfair Time Allocation
-        #       - Speed based on largest pile
-        #       - Avoid having small speed that gets stuck on largest pile
+        # Perspective 3: Largest Pile + Bottleneck Time Simulation
+        #       - Assume bottleneck scenario, most time is spent on largest pile
+        #       - Focus on the largest pile
+        #       - Ensures chosen speed process largest pile under h deadline
+        #       - Provides another lower bound to prevent underestimating speed
 
-        # Bottleneck Constraint:
+        # Bottleneck Constraint Summary:
         #   - Spend the majority of time on the largest pile, to simulate a bottleneck
         #     and determine a speed that will work within that constraint
 
