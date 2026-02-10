@@ -346,35 +346,60 @@ Given a list of numbers, return all unique subsets.
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
+        # Backtracking:
+        # Recursive function that builds a solution incrementally,
+        # exploring all possible choices at each step.
+        # When a partial solution violates constraints, 
+        # the recursion backtracks (undoes the choice)
+        # and explores alternative paths.
+        # The recursion continues until all valid solutions are generated.
+        # Time complexity depends on the branching factor and depth of recursion,
+        # and the recursive call stack creates a space complexity of O(depth).
+
         # Result list
         res = []
         path = []  # mutable path list defined once
 
         def dfs_backtrack(start: int):
             
-            # Process Root -> shallow copy of current path (current subset)
+            # Process Root:
+            # Add subset to result list by creating a shallow copy of current subset
             res.append(path[:])
 
-            # Explore Choices -> for remaining elements
+            # Explore All Choices:
+            # Iterate over choices and append to current subset
             for i in range(start, len(nums)):
                 
-                # Build: append current element
+                # Build New Path: 
+                # append current number
                 path.append(nums[i])
 
-                # Explore: recurse with next index
-                dfs_backtrack(i + 1)
+                # Recurse New Path: 
+                # recurse with next index to avoid repeat exploring current path and duplicates
+                dfs_backtrack(i+1)
 
-                # Backtrack: remove last element
+                # Backtrack To Current Path: 
+                # remove last number to explore next choice
                 path.pop()
 
-        dfs_backtrack(0)  # initial call, no path passed
+        # Initial call, no path passed
+        dfs_backtrack(0)
+
+        # overall: tc O(n * 2^n)
+        # overall: sc O(n * 2^n)
         return res
 ```
-
 
 ## Solution 2: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
+
+        # Iterative Subset Construction (Backtracking Without Recursion):
+        # Iteratively builds all subsets by expanding previously generated subsets.
+        # At each step, a new number is added to all existing subsets to form new ones.
+        # This simulates the backtracking process without using recursion.
+        # Time complexity depends on the number of subsets generated (2^n),
+        # and space complexity depends on storing all subsets (O(2^n)).
 
         # Note:
         # Iterative: Build subsets in order to append to existing subsets
@@ -382,32 +407,92 @@ Given a list of numbers, return all unique subsets.
         # 2. Process Choices -> for each num in nums, add to existing subsets
         # Result: Subsets continue building with new nums to provide all subsets
 
-        # Process Root -> : start with empty subset
+        # Process Root:
+        # first valid subset is the empty subset
         res = [[]]
 
-        # Process -> Choices : iterate through all numbers in nums
-        # since we build as we go, we cant build backwards, so we cant create a duplicate?
+        # Process Choices: 
+        # Iterate through all numbers in nums
         for n in nums:
 
+            # Explore All Current Paths:
+            # Iterate over all existing subsets at this state
+            currentSubsetNum = len(res)
             # Explore -> : iterate over existing subsets, append to create new subset
-            for i in range(len(res)):
+            for i in range(currentSubsetNum):
 
-                # Build -> : for all existing subset, add curr number
-                # new string 
-                new = res[i] + [n]
+                # Build New Path:
+                # Create a new subset by adding current number to an existing subset
+                newSubset = res[i] + [n]
 
-                # Incorrect:
+                # Incorrect String Modification:
                 # new = res[i].append(n)
                 # .append() always returns None,
                 # as modification is in-place
 
-                # Explore -> : append new subset to allow for iterative exploration
-                res.append(new)
+                # Explore New Path: 
+                # Append the new subset to the result list to allow for iterative exploration
+                res.append(newSubset)
 
-                # Backtrack -> : implicit, existing subsets remain for following iterations
+                # Backtrack:
+                # Implicit as original subsets remain in result list are 
+                # unchanged and will be used for future iterations
 
-        # overall: time complexity
-        # overall space complexity
+        # overall: tc O(n * 2^n)
+        # overall: sc O(2^n)
+        return res
+```
+
+## Solution 3: Yield Version - Backtracking/Generate All Combinations Or Subsets
+```python
+    def subsets(self, nums: List[int]) -> Iterable[List[int]]:
+
+        # Generator / Yield Semantics:
+        # We use `yield` to produce subsets one at a time instead of storing them all in a list.
+        # This allows the function to pause and resume execution, generating each subset lazily.
+        # As a result, only the current path and recursion stack are kept in memory at any time.
+        # This reduces auxiliary space from O(n * 2^n) to O(n), excluding the output.
+        # Time complexity remains O(n * 2^n) since all subsets must still be generated.
+
+        # Backtracking: Recursive Generator
+        # Recursive function that builds a subset incrementally,
+        # yielding each valid subset immediately instead of storing all of them.
+        # This simulates the backtracking process without using extra storage.
+        # The recursion explores all possible choices and backtracks after each branch.
+        # Time complexity depends on the total number of subsets generated (2^n),
+        # and the recursive call stack creates a space complexity of O(n).
+
+        # Mutable path list used to build subsets
+        path = []
+
+        def dfs_backtrack(start: int):
+
+            # Process Root:
+            # Yield the current subset by creating a shallow copy of the path
+            yield path[:]
+
+            # Explore All Choices:
+            # Iterate over remaining elements starting from index `start`
+            for i in range(start, len(nums)):
+
+                # Build New Path:
+                # Append current number to the path
+                path.append(nums[i])
+
+                # Recurse New Path:
+                # Recurse with next index to avoid duplicates and reuse
+                yield from dfs_backtrack(i + 1)
+
+                # Backtrack To Current Path:
+                # Remove last number to explore alternative paths
+                path.pop()
+
+        # Initial call, no path passed
+        res = dfs_backtrack(0)
+
+        # overall: tc O(n * 2^n)           # must generate all subsets
+        # overall: sc O(n)                 # auxiliary, excluding output
+        # overall: sc O(n * 2^n)          # including output (storing all subsets)
         return res
 ```
 

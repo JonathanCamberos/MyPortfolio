@@ -552,7 +552,7 @@ Given a sorted list of elements, find the target
             # [left, mid, right]
             
             # End Case: out of search space, target not found
-            if left > right:
+            if !(left <= right):
                 return -1
 
             # Middle Target:
@@ -1511,17 +1511,19 @@ Find smallest number in an array that has been rotated some amount of times.
         # Property of rotated sorted array:
         # At some point, there will be an element that is splitting the array
 
-        # 1: [4, 5, 6, 7, 0, 1, 2]
-        # 7 > 2:
-        # smaller numbers on right half of mid
+        # ------------------------
 
-        # 2: [10, 1, 2, 3, 6, 7, 8] 
-        # 3 < 8:
-        # smaller elements on left half of mid (including mid) 
+        # T/F Function: compare mid to right
 
-        # Postcondition:
-        # Loop terminates when left == right
-        # both left and right point to min element
+        # Example 1:
+        # arr = [4, 5, 6, 7, 0, 1, 2]
+        # mid < right => 7 < 2 ==> false ==> smaller nums on right half of mid (excluding mid)
+
+        # Example 2:
+        # arr = [10, 1, 2, 3, 6, 7, 8] 
+        # mid < right => 3 < 8 ==> true ==> smaller nums on left half of mid (including mid) 
+
+        # ------------------------
 
         # Invariant:
         # The target min value is always in the search space [left, right]
@@ -1650,6 +1652,10 @@ Find target in an array that has been rotated some amount of times.
 ## Solution 1: Inequality Boundaries Discard Mid Binary Search - Binary Search/Condition Adapted Binary Search
 ```python
     def search(self, nums: List[int], target: int) -> int:
+
+        # Property of rotated sorted array:
+        # At some point, there will be an element that is splitting the array
+
 
         # Invariant:
         # target, if exists, is in interval [left, right]
