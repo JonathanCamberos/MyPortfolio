@@ -595,9 +595,9 @@ Given a sorted list of elements, find the target
         # Binary Search: Iterative
         # Iterative function that checks a middle target,
         # and depending on result searches the left or right subspace.
-        # The iterative function calls continue for o(log n) on
+        # The iterative function calls continue for O(log n) on
         # smaller and smaller range determining the time complexity,
-        # but since we are using pointers there is no call stack 
+        # and since we are using pointers there is no call stack 
         # leaving a space complexity of O(1)
 
         # Invariant:
@@ -641,7 +641,6 @@ Given a sorted list of elements, find the target
         # overall: sc O(1)
         return -1
 ```
-
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
 | -------- | --------------- | ---------------- | ------------- |  ------------ |
 | Variable assigning | O(1) | O(1) | Initializing variables in constant O(1) | No additional memory allocation for constant variables O(1) |
@@ -775,27 +774,28 @@ Given a sorted matrix, check if target is in matrix
         # Search space is reduced by half on each iteration.
 
         # Helper:
-        # Revert 1D index back to original 2D coordinates (row, col)
-        # Flat Index 4 = (4//3, 4%3) = Matrix (1, 1)
-        # Flat Index 5 = (5//3, 5%3) = Matrix (1, 2)
+        # Revert 1D flat index to original 2D tuple coordinates (row, col)
+        # Flat Index 4 => (4//3, 4%3) = Matrix (1, 1)
+        # Flat Index 5 => (5//3, 5%3) = Matrix (1, 2)
         def index_to_coords(index, cols) -> tuple[int, int]:
             row = index // cols
             col = index % cols
             return (row, col)
 
-        # Empty Check:
+        # Empty Check: target not within matrix
         if not matrix or not matrix[0]:
             return False
 
         # Flattened Representation:
         # Calculate the 2D matrix representation as a single array
-        # sc: two pointers O(1)
+        # sc: setting up search space [0, n-1] O(1)
         rows, cols = len(matrix), len(matrix[0])
         left, right = 0, (rows * cols) - 1
 
         # Binary Search 1: 
         # Target Search Search Space: '<='
-        # tc: binary search on flattened 2D matrix [0,(m*n)-1] O(log(m*n))
+        # Exits when left > right, as this means target was not found
+        # tc: binary search over m*n O(log(m*n))
         while left <= right:
             
             # Current Search Space:
@@ -851,20 +851,26 @@ Given a sorted matrix, check if target is in matrix
         # col  0   1   2
 
         # Invariant (First Binary Search):
-        # Target must lie within range of candidate row window [top, bottom] (if it exists)
+        # Target, if it exists, lies within row range [matrix[row][0], matrix[row][-1]]
+        # Search space is reduced by half on each iteration.
 
-        # Empty Check
+        # Invariant (Second Binary Search):
+        # Target, if it exists, lies within row elements [left, right]
+        # Search space is reduced by half on each iteration.
+
+        # Empty Check: target not within matrix
         if not matrix or not matrix[0]:
             return False
 
         # Matrix Representation:
         # Top is row 0 and bottom is row n-1 (refer to diagram)
-        # sc: two pointers O(1)
+        # sc: setting up search space [0, n-1] O(1)
         rows, cols = len(matrix), len(matrix[0])
         top, bottom = 0, rows - 1
 
         # Binary Search 1: 
         # Target Search Search Space: '<='
+        # Exits when left > right, as this means target was not found
         # tc: binary search over n rows O(log n)
         while top <= bottom:
 
@@ -893,9 +899,6 @@ Given a sorted matrix, check if target is in matrix
         # row boundaries
         row = mid_row
         left, right = 0, cols - 1
-
-        # Invariant (Second Binary Search):
-        # Target must lie within range of candidate row window [left, right] (if it exists)
 
         # Binary Search 1: 
         # Target Search Search Space: '<='
@@ -1145,24 +1148,25 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
         import math
 
-        # Binary Search 2: Optimization Search
-        # Iterative if statement that checks if middle element is valid
-        # within some parameter check (in this case under h minimum hours),
-        # and searches the left or right subspace 
-        # and includes the middle element (if it was valid).
-        # Iterative binary search checks continue for O(log n) on 
-        # smaller and smaller range,
-        # but since we are using pointers there is no call stack O(1)
+        # Binary Search: Optimization Search
+        # Iterative function that checks if middle element is valid
+        # using some constraint, in this case under h minimum hours,
+        # and depending on result searches the left or right subspace
+        # but also includes the middle element if it was valid.
+        # The iterative function calls continue for O(log n) on
+        # smaller and smaller range determining the time complexity,
+        # and since we are using pointers there is no call stack 
+        # leaving a space complexity of O(1)
 
-        # Abstraction:
-        # Find minimum int k such that Koko can eat all bananas within h hours
-        # Piles = non empty list of positive integers
-        # h is at least greater than the number of piles: len(piles) <= h
+        # Banana Abstraction:
+        #   - k = minimum eating speed such that koko is able to eat all bananas 
+        #     within the h hours deadline
+        #   - Piles = groups of bananas, piles vary in size, only positive integers
+        #   - h = hours deadline is at least greater than the number of piles: len(piles) <= h
 
-        # Search Space:
-        # Left Speed: 1 banana per hour (slowest possible)       
-        # Right speed: max(piles) as no pile would need more than max(piles) eating per hour
-        # [left, right] = [1, max(piles)]
+        # Setting Up Search Space:
+        #   - Left Speed: 1 banana per hour (slowest possible)       
+        #   - Right speed: max(piles) as no pile would need more than max(piles) eating per hour
         left, right = 1, max(piles)
 
         # Invariant:
@@ -1170,9 +1174,8 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # Search space halves each iteration
 
         # Helper:
-        # Finds the number of hours h needed for candidate k eating speed
-        # to finish all of the piles of bananas
-        # tc: pile iteration O(n)
+        # Finds the h number of hours needed for some k eating speed to finish piles
+        # overall tc: iterate over n piles O(n)
         def hours_needed(speed):
             
             # time counter
@@ -1182,21 +1185,19 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
             # tc: iterate over n piles O(n)
             for pile in piles:
 
-                # k = candidate eating speed
-                # time for pile p = ceil(bananas in p / banana eating speed)
-                # Round up time, cannot stop eating in middle of hour
-                # For example: 
-                # p = 3 bananas, k = 9 eating speed, 
-                # will still take 1 full hour
+                # Round up time:
+                # We cannot stop eating in middle of hour, example:
+                # p = 3 bananas, k = 9 eating speed, bananas / eating speed, 
+                # will still take 1 full hour, so we must round the result up
                 total_hours += math.ceil(pile / speed)
 
-            # h hours needed for k eating speed for all piles
+            # total h hours needed for k eating speed for all piles
             return total_hours
         
         # Binary Search 2: 
         # Optimization Search Space: '<'
         # Exits when left == right, as this mean answer has been optimized
-        # tc: binary search over 1 -> max(piles) speeds O(log(max(piles)))
+        # tc: binary search over speeds 1 -> max(piles) speeds O(log(max(piles)))
         while left < right:
 
             # Middle Target:
@@ -1207,22 +1208,19 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
             
             # Candidate is valid eating speed (below h hours)
             # Discard faster speeds on right side [mid, right]
-            # Search left side of previous space, 
-            # and include mid: [left, mid]
+            # Search left side of previous space, and include mid => [left, mid]
             if required_hours <= h:
                 right = mid
             
             # Candidate is not valid eating speed (above h hours)
             # Discard slower speeds on left side [left, mid]
-            # Search right side of previous space, 
-            # and exclude mid: [mid+1, right]
+            # Search right side of previous space, and exclude mid => [mid+1, right]
             else:
                 left = mid + 1
         
         # Optimization Exit:
         # left == right, answer has been optimized
-        # The space of valid speeds, [left, right], 
-        # has been reduced to one speed
+        # The space of valid speeds, [left, right], has been reduced to one speed
         # This final speed is the optimized speed
 
         # overall: tc O(n * log(max(piles)))
