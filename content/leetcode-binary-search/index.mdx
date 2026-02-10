@@ -1178,7 +1178,7 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # overall tc: iterate over n piles O(n)
         def hours_needed(speed):
             
-            # time counter
+            # time counter for candidate k
             total_hours = 0
 
             # Koko iterates over piles to eat
@@ -1252,7 +1252,7 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
 
         # Greedy Choosing K Speed Start:
         #   - Start with the highest reasonable lower bound to speed up search efficiently
-        #   - Different system perspectives for lower bound, at least 3
+        #   - Different system perspectives for lower bound, use at least 3 perspectives
         #   - Use the networking analogy to determine the perspectives
 
         # Review Networking Analogy To Choose Perspectives:
@@ -1334,24 +1334,21 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         #       - To avoid having excessively large speed 
 
         # Quick Packet Bursts Constraint:
-        #
+        #   - The minimum speed needed to finish the smallest pile by splitting the time evenly between piles
 
         # Solution Idea:
-        # Part 1: Split Time Evenly By Fair time Sharing For Each Pile Constraint = Hour Per Pile Based Average, 
-        # Part 2: Minimum Speed to Finish Smallest Pile within Split Even Time
-        # Total hours / num of piles -> equal time allocated per pile 
-        # Smallest Pile / Allocated Time -> speed k needed to eat smallest pile within allocated time
+        # Part 1: Split Time Evenly Between Piles (Fair time Sharing) = Hour Per Pile Based Average, 
+        # Part 2: Minimum Speed to Finish Smallest Pile using Split Even Time = Minimum Speed Needed For Fair Time Sharing
 
-        # Lower Bound: If each pile gets equal time, this is the minimum speed 
-        # required to finished the smallest pile without exceeding time budget
-        # Produces small k:
-        # Dividing h across numPiles, regardless of pile size, 
-        # giving each pile generous time budget,
-        # and since we are testing it on the smallest pile, 
-        # which doesn't need much time, makes k small
+        # Lower Bound: 
+        # If each pile gets equal time, find the minimum speed 
+        # required to finished with the smallest pile have the same time as all other piles.
+        # Since we are determining k based on the smallest pile, which does not need much time, 
+        # this produces a small k:
         numPiles = len(piles)
-        evenTime = int(h/numPiles)
-        speedCheck2 = math.ceil(min(piles) / evenTime)
+        splittingTimeEvenly = int(h/numPiles)
+        smallestPile = min(piles)
+        speedCheck2 = math.ceil(smallestPile / splittingTimeEvenly)
 
         # ------------------------
         # Perspective 3: Bottleneck Detection Prevention
@@ -1360,25 +1357,24 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         #       - Avoid having small speed that gets stuck on largest pile
 
         # Bottleneck Constraint:
-        #
+        #   - Spend the majority of time on the largest pile, to simulate a bottleneck
+        #     and determine a speed that will work within that constraint
 
         # Solution Idea:
-        # Part 1: Biggest Pile Based Speed
-        # Give Koko 1 hour per pile, except for the largest pile which will get the remaining time 
+        # Part 1: Simulate a bottleneck, by assuming we will spend little time on smaller piles, giving them all 1 hour
+        # Part 2: Simulate a bottleneck, by assuming we will spend most of our time on the largest pile, giving it the rest of the time
 
-        # Lower Bound: Assume speed k is high enough to finish every pile in just 1 hour.
-        # That takes (numPiles - 1) hours, leaving (h - (numPiles-1)) hours.
-        # To finish the largest pile in this remaining time,
-        # k must be at least maxPile / remaining time.
-        # Otherwise, the final pile will not get finished.
-        # Produces small k:
-        # since we have many h hours remaining.
+        # Lower Bound: 
+        # As the largest pile has a large number of hours to finish,
+        # this allows the k eating speed to be lower,
+        # this produces a small k:
         remainingTime = h - (numPiles - 1)
         speedCheck3 = math.ceil(max(piles) / remainingTime)
             
         # ------------
-        # Greedy Starting Speed k:
-        #   - Start k at highest lower bound between the 3 perspectives 
+        # Greedy Starting Speed k: highest lower bound
+        #   - We have created 3 lower bounds between the 3 perspectives 
+        #   - We will pick the highest lower bound between the 3
         #   - Avoids wasting time on speeds below k
         speed = max(speedCheck1, speedCheck2, speedCheck3)
 
@@ -1389,7 +1385,6 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # - If total eating time less than double the h deadline,
         #   we will increment speed k slowly by 1.
 
-
         # -----------------------------------------------------
 
         # Invariant:
@@ -1398,8 +1393,9 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
         # first valid time h: speed is guaranteed to be the min 
         #                     due to our Greedy Aggressive Monotonic Time Search Optimization
 
-        # tc phase 1 doubling x2: exponential doubling O(log max(piles))
-        # tc phase 2 iterating +1: linear scan O(max(piles))
+        # tc doubling x2: exponential doubling O(log max(piles))
+        # tc iterating +1: linear scan O(max(piles))
+        # overall: worst case linear scan O(max(piles)/2) => O(max(piles))
         while (True):
 
             # time counter for candidate k
@@ -1409,34 +1405,34 @@ def minEatingSpeed(self, piles: List[int], h: int) -> int:
             # tc: iterate over n piles O(n)
             for pile in piles:
 
-                # k = candidate eating speed
-                # time for pile p = ceil(bananas in p / banana eating speed)
-                # Round up time, cannot stop eating in middle of hour
-                # For example: 
-                # p = 3 bananas, k = 9 eating speed, 
-                # will still take 1 full hour
+                # Round up time:
+                # We cannot stop eating in middle of hour, example:
+                # p = 3 bananas, k = 9 eating speed, bananas / eating speed, 
+                # will still take 1 full hour, so we must round the result up
                 smallKTotalTime += math.ceil(pile / speed)
 
             # Greedy Aggressive Monotonic Time Search Optimization: 
 
             # Check: if valid k speed found
-            # Implies: this is the first valid k we encounter and is the min
+            # Implies: we were iterating and found the first valid k, the is the min
             if smallKTotalTime <= h:
                 return speed
 
             # Check: if h is double the deadline
-            # Then: aggressively double k speed
-            # new search interval: [speed*2, +inf]
+            # Implies: k is at least half as slow as it should be
+            # Then: aggressively double k speed,
+            # tc: search space halves each iteration [speed*2, +inf]: O(log n)
             elif smallKTotalTime >= 2 * h:
                 speed *= 2
 
             # Check: if h is below double the deadline
-            # Then: iterate by 1 until we find the first k valid speed
-            # new search interval: [speed+1, +inf]
+            # Implies: k is close to its min speed
+            # Then: iterate by 1 until we find the first valid k speed
+            # tc: search space decreases by 1 each iteration [speed+1, +inf]: O(n)
             else:
                 speed += 1
 
-        # overall: tc O(n * log (max(piles)))
+        # overall: tc best: O(n * log(max(piles))), worst: O(n * max(piles))
         # overall: sc O(1)
 ```
 |  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
