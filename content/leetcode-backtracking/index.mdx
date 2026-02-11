@@ -346,9 +346,26 @@ Given a list of numbers, return all unique subsets.
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
-        # Backtracking 1: All Subsets
+        # Backtracking 1: Hit All Path Max Depths
         # Recursive function that builds a solution incrementally,
         # exploring all possible choices at each step.
+
+        # Determining Backtracking Complexity:
+        # For backtracking, we can determine the complexity by seeing how many choices 
+        # we have at a branch,
+        # for this we have the 2 options of 1. adding or 2. not adding a number to the path,
+        # and we have this choice for n numbers, so we get 2^n 
+
+        # Shallow Copy:
+        # A shallow copy means that the top level object is copied, but the elements inside
+        # are not duplicated, they are still references to the same objects.
+        # if a an object like school, had inner student objects, if we copied the school object, 
+        # the new object would still refer to the original student objects
+        # Since we are dealing with integers, a deep copy is not required, shallow is fine,
+        # but it is interesting to note that different path objects will be sharing the same
+        # reference to integer objects, but again, this is fine since in python integers are immutable
+        # tc: copy in O(n), since path can have up to n elements
+        # sc: copy in O(n), list of n elements added to the result list
         
         # Backtracking Path:
         # Follows the standard choose -> explore -> unchoose pattern:
@@ -356,23 +373,21 @@ Given a list of numbers, return all unique subsets.
         #   2. Explore: recurse to build further subsets from the next index
         #   3. Unchoose (Backtrack): remove the last number to restore state
         # The recursion continues until all valid subsets are generated.
-        # Time complexity: branching factor (2 choices per number) and recursion depth
-        # Space complexity: includes the recursion stack and result storage
 
-        # sc: O(2^n) for result list, since there are 2^n possible subsets
+        # sc: O(n * 2^n) 2^n subsets each length up to n
         res = []
-        # sc: O(n), holds the current subset during recursion (max depth = n)
+        
+        # sc: O(n), holds current subset during recursion of max length n
         path = []  
 
-
-        # overall: tc O(n * 2^n)  2^n subsets, each copied to result of size up to n
-        # overall: sc O(n * 2^n)  recursion stack O(n) + result list storing all subsets
+        # tc: O(n * 2^n)  2^n subsets, each copied (length <= n)
+        # sc: O(n * 2^n)  2^n subsets, each stores (length <= n) + recursion stack O(n) overruled
         def dfs_backtrack(start: int):
             
             # Process Root: Check 1 Base Case
 
-            # Base Case 1: valid subset
-            # Add current subset (shallow copy) to results
+            # Base Case 1: add subset
+            # add current subset (shallow copy) to full subset list
             # tc: O(n) for copy of path (max length n)
             # sc: O(n) added to result
             res.append(path[:])
@@ -381,14 +396,14 @@ Given a list of numbers, return all unique subsets.
             # tc: iterate over n
             for i in range(start, len(nums)):
                 
-                # Choice:
-                # build next path: append number to current path
+                # Choose:
+                # build next path, append number to current path
                 # tc: O(1), sc: O(1)
                 path.append(nums[i])
 
-                # Explore
+                # Explore:
                 # recurse to build further subsets
-                # use next index to avoid using current candidate
+                # use next index to avoid reusing current number candidate
                 # tc: O(2^n) total recursive calls (all possible subsets)
                 dfs_backtrack(i+1)
 
@@ -408,7 +423,6 @@ Given a list of numbers, return all unique subsets.
 ## Solution 2: Iterative Append to Existing Subsets - Backtracking/Generate All Combinations Or Subsets
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
-
 
         # Backtracking 1: All Subsets
         # Iterative function that builds a solution incrementally,
@@ -587,9 +601,10 @@ Find all combinations that add up to target.
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
-        # Backtracking: Pruning
+        # Backtracking 2: Pruning Invalid Solutions
         # Recursive function that builds a solution incrementally,
         # exploring only choices that can still lead to a valid solution.
+        
         # When a partial solution violates constraints (in this case, sum > target),
         # the recursion stops immediately and prunes the branch
         # instead of continuing to explore further.
