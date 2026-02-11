@@ -261,14 +261,28 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
-        # Note:
-        # Recursive DFS traversal: mark visited cells to avoid re-processing
+        # Graph Representation:
+        # This problem is equivalent to finding out the number of connected components in a graph
+
+        # Grid Graph (Implicit Adjacency Matrix Via Coordinates And Directions):
+        
+        #     A  B  C
+        # A [ 0  1  0 ]
+        # B [ 1  0  1 ]
+        # C [ 0  1  0 ]
+
+        # Each cell is connected up to 4 neighbors (up, down, left, right)
+        # Edges are implicit, based on grid position
+        # Each cell in a node
+
+        # Recursive DFS traversal: 
+        # Mark visited cells to avoid re-processing
         # 1. Process Root -> check if current cell is '1'
         # 2. Process Choices -> explore four neighbors (up, down, left, right)
         # 3. Backtrack -> recursion returns after marking all connected land
         # Result: increment island count per root land cell
         
-        # Empty check
+        # Empty Check: no islands, grid is empty
         if not grid:
             return 0
         
