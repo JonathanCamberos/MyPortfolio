@@ -420,7 +420,7 @@ There will be at most 2 dots in word for search queries.
 At most 10<sup>4</sup> calls will be made to addWord and search.
 
 ## Abstraction
-Implement a trie data structure with add work functionality.
+Implement a trie data structure with add word functionality.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -465,8 +465,8 @@ class WordDictionary:
         # it only points to child chars
         self.root = TrieNode()
 
-    # time complexity:
-    # space complexity: 
+    # tc:
+    # sc: 
     def addWord(self, word: str) -> None:
         
         # Note:
@@ -490,8 +490,8 @@ class WordDictionary:
         node.is_end = True
 
 
-    # time complexity:
-    # space complexity:
+    # tc:
+    # sc:
     def search(self, word: str) -> bool:
         
         # Note:
@@ -533,8 +533,8 @@ class WordDictionary:
         return dfs(0, self.root)
 
     
-    # overall: time complexity
-    # overall: space complexity
+    # overall: tc
+    # overall: sc
 ```
 
 # 212. Word Search II ::2:: - Hard

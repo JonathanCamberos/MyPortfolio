@@ -322,6 +322,21 @@ Implement a heap that will keep track of the kth highest score for a data stream
 ```python
 class KthLargest:
 
+    # MinHeap:
+    # We need to track 2 things
+    #   - The min item currently in the stack
+    #   - Number of items in the stack
+
+    # For our functions, they may need to update the above 2
+
+    # KthLargest():
+    #   - Initializes the minHeap
+    #   - Starts adding more numbers
+
+    # Add():
+    #   - Adds a number to the minHeap
+    #   - Returns the kth largest element up to that point
+
     def __init__(self, k: int, nums: list[int]):
         
         # Note:
@@ -338,8 +353,8 @@ class KthLargest:
         for num in nums:
             self.add(num)
     
-    # time complexity:
-    # space complexity: 
+    # tc:
+    # sc: 
     def add(self, val: int) -> int:
 
         # Note:
@@ -360,8 +375,8 @@ class KthLargest:
         # return top score
         return self.minHeap[0]
 
-    # overall: time complexity
-    # overall: space complexity 
+    # overall: tc
+    # overall: sc 
 ```
 
 
