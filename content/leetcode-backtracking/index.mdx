@@ -346,40 +346,55 @@ Given a list of numbers, return all unique subsets.
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
-        # Backtracking:
+        # Backtracking 1: All Subsets
         # Recursive function that builds a solution incrementally,
         # exploring all possible choices at each step.
-        # When a partial solution violates constraints, 
-        # the recursion backtracks (undoes the choice)
-        # and explores alternative paths.
-        # The recursion continues until all valid solutions are generated.
-        # Time complexity depends on the branching factor and depth of recursion,
-        # and the recursive call stack creates a space complexity of O(depth).
+        
+        # Backtracking Path:
+        # Follows the standard choose -> explore -> unchoose pattern:
+        #   1. Choose: add a number to the current path
+        #   2. Explore: recurse to build further subsets from the next index
+        #   3. Unchoose (Backtrack): remove the last number to restore state
+        # The recursion continues until all valid subsets are generated.
+        # Time complexity: branching factor (2 choices per number) and recursion depth
+        # Space complexity: includes the recursion stack and result storage
 
-        # Result list
+        # sc: O(2^n) for result list, since there are 2^n possible subsets
         res = []
-        path = []  # mutable path list defined once
+        # sc: O(n), holds the current subset during recursion (max depth = n)
+        path = []  
 
+
+        # overall: tc O(n * 2^n)  2^n subsets, each copied to result of size up to n
+        # overall: sc O(n * 2^n)  recursion stack O(n) + result list storing all subsets
         def dfs_backtrack(start: int):
             
-            # Process Root:
-            # Add subset to result list by creating a shallow copy of current subset
+            # Process Root: Check 1 Base Case
+
+            # Base Case 1: valid subset
+            # Add current subset (shallow copy) to results
+            # tc: O(n) for copy of path (max length n)
+            # sc: O(n) added to result
             res.append(path[:])
 
-            # Explore All Choices:
-            # Iterate over choices and append to current subset
+            # Process Choices:
+            # tc: iterate over n
             for i in range(start, len(nums)):
                 
-                # Build New Path: 
-                # append current number
+                # Choice:
+                # build next path: append number to current path
+                # tc: O(1), sc: O(1)
                 path.append(nums[i])
 
-                # Recurse New Path: 
-                # recurse with next index to avoid repeat exploring current path and duplicates
+                # Explore
+                # recurse to build further subsets
+                # use next index to avoid using current candidate
+                # tc: O(2^n) total recursive calls (all possible subsets)
                 dfs_backtrack(i+1)
 
-                # Backtrack To Current Path: 
+                # Unchoose: Backtrack 
                 # remove last number to explore next choice
+                # tc: O(1), sc: O(1)
                 path.pop()
 
         # Initial call, no path passed
@@ -394,12 +409,19 @@ Given a list of numbers, return all unique subsets.
 ```python
     def subsets(self, nums: List[int]) -> List[List[int]]:
 
-        # Iterative Subset Construction (Backtracking Without Recursion):
+
+        # Backtracking 1: All Subsets
+        # Iterative function that builds a solution incrementally,
+        # exploring all possible choices at each step.
+
         # Iteratively builds all subsets by expanding previously generated subsets.
-        # At each step, a new number is added to all existing subsets to form new ones.
-        # This simulates the backtracking process without using recursion.
-        # Time complexity depends on the number of subsets generated (2^n),
-        # and space complexity depends on storing all subsets (O(2^n)).
+        # Conceptually follows the same choose -> explore -> unchoose pattern:
+        #   1. Choose: add a number to a subset
+        #   2. Explore: form new subsets by including this number in all existing subsets
+        #   3. Unchoose: implicit, as original subsets remain unchanged
+        # Continues until all valid subsets are generated.
+        # Time complexity: 2^n subsets × O(n) for copying each
+        # Space complexity: includes all subsets stored (O(2^n)).
 
         # Note:
         # Iterative: Build subsets in order to append to existing subsets
@@ -407,22 +429,24 @@ Given a list of numbers, return all unique subsets.
         # 2. Process Choices -> for each num in nums, add to existing subsets
         # Result: Subsets continue building with new nums to provide all subsets
 
-        # Process Root:
+        # Process Root: Check 1 Base Case
+
+        # Base Case: Empty Subset
         # first valid subset is the empty subset
+        # sc: O(2^n) for result list, since there are 2^n possible subsets
         res = [[]]
 
         # Process Choices: 
-        # Iterate through all numbers in nums
+        # tc: iterate over n O(n)
         for n in nums:
 
-            # Explore All Current Paths:
-            # Iterate over all existing subsets at this state
+            # Grab all current paths:
+            # New paths will be build upon current paths, grab current paths
             currentSubsetNum = len(res)
-            # Explore -> : iterate over existing subsets, append to create new subset
             for i in range(currentSubsetNum):
 
-                # Build New Path:
-                # Create a new subset by adding current number to an existing subset
+                # Choose:
+                # build new path, new subset by adding number to an existing subset
                 newSubset = res[i] + [n]
 
                 # Incorrect String Modification:
@@ -430,13 +454,14 @@ Given a list of numbers, return all unique subsets.
                 # .append() always returns None,
                 # as modification is in-place
 
-                # Explore New Path: 
-                # Append the new subset to the result list to allow for iterative exploration
+                # Explore:
+                # append new subset to result list, will be explored in future iterations
+                # sc: relative to input, added new subset O(n)
                 res.append(newSubset)
 
-                # Backtrack:
-                # Implicit as original subsets remain in result list are 
-                # unchanged and will be used for future iterations
+                # Unchoose (backtrack):
+                # implicit, original smaller subsets remain unchanged in res list,
+                # will be used in future iterations 
 
         # overall: tc O(n * 2^n)
         # overall: sc O(2^n)
@@ -558,47 +583,99 @@ Find all combinations that add up to target.
 ```python
 ```
 
-## Solution 1: Recursive Unsorted Late Branch Pruning Backtracking on Global Path  - Backtracking/Generate All Combinations Or Subsets
+## Solution 1: Late Pruning Recursive Unsorted Forward Backtracking On Global Path  - Backtracking/Generate All Combinations Or Subsets
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
-        # Note:
-        # Recursive DFS backtracking: Track current path and sum
-        # 1. Process Root -> check if current sum equals target
-        # 2. Process Choices -> explore each candidate from current index onwards
-        # 3. Backtrack -> remove last choice to try next candidate
-        # Result: all valid combinations appended to res
-        
-        # Note:
-        # "Late Pruning": pruning happens after adding elements. 
-        # Branches grow first, then are cut off if sum exceeds target. 
-        # Creates unnecessary branches compared to early pruning.
+        # Backtracking: Pruning
+        # Recursive function that builds a solution incrementally,
+        # exploring only choices that can still lead to a valid solution.
+        # When a partial solution violates constraints (in this case, sum > target),
+        # the recursion stops immediately and prunes the branch
+        # instead of continuing to explore further.
+        # This reduces the search space compared to full backtracking,
+        # improving practical runtime while preserving correctness.
+        # Time complexity remains exponential in the worst case,
+        # where all paths end up being valid,
+        # but pruning lowers the effective branching factor.
+        # Space complexity is O(depth) due to the recursion call stack.
 
+        # Late Pruning:
+        # Candidates are added first, and only then pruned within the branch itself.
+        # This creates more branches than early pruning solutions, as invalid branches
+        # are explored first and only pruned after exceeding constraints.
+
+        # Backtracking (DFS) with Late Pruning:
+        # Recursive function that builds solutions incrementally using a global path.
+        # Follows the standard choose -> explore -> unchoose pattern:
+        #   1. Choose: add a candidate to the current path
+        #   2. Explore: recurse to build further choices from the current index (reuse allowed)
+        #       - Process current root:
+        #       - Check if the current sum equals the target
+        #       - Late Pruning: stop recursion if the current sum exceeds the target
+        #   3. Unchoose (Backtrack): remove the last candidate to restore state
+        # Result: all valid combinations are appended to the result list
+
+        # sc: O(1) initially, grows as valid combinations are added
         res = []
+
+        # sc: O(depth), holds the current path during recursion
         path = []
 
         def dfs_backtrack(start, currSum):
 
-            # Process Root -> check if sum reached target, shallow copy
+            # Process Root: Check 2 Base Cases
+
+            # Base Case 1: target found
             if currSum == target:
+
+                # tc: O(depth) for shallow copy
+                # sc: O(depth) added to result
                 res.append(path[:])
                 return
 
-            # Late Branch Pruning -> we can only prune branch after adding elements
+            # Base Case 2: late branch pruning
+            # Check: if sum is exceeds the target
+            # Then: prune future branches and return
+            # tc: O(1)
+            # sc: O(1)
             if currSum > target:
                 return
 
-            # Process -> Choices : try each candidate from current index onward, prune when in branch
-8
+            # Process Choices:
 
+            # Process Choices -> explore candidates from current index forward
+            for i in range(start, len(candidates)):
+
+                # tc: O(1), sc: O(1)
+                candidate = candidates[i]
+
+                # Choose: 
+                # build next path
+                # tc: O(1), sc: O(1)
+                path.append(candidate)
+
+                # Explore:
+                # recurse with same index (allowing reuse of current candidate)
+                # tc: up to n recursive calls per level, max depth ~ target / min_cand
+                # tc: O(n^(target/min_cand)) in worst case
+                dfs_backtrack(i, currSum + candidate)
+
+                # Unchoose: backtrack:
+                # remove last candidate
+                # tc: O(1), sc: O(1)
+                path.pop()
+
+        # Start recursion from index 0 with sum 0
+        # tc: O(n^(target/min_cand)), sc: O(target/min_cand) recursion stack
         dfs_backtrack(0, 0)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(n^(target/min_cand))
+        # overall: sc O(target/min_cand + output size)
         return res
 ```
 
-## Solution 2: Recursive Sorted Early Candidate Pruning Forward Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
+## Solution 2: Early Pruning Recursive Sorted Forward Backtracking On Global Path - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         
@@ -649,7 +726,7 @@ Find all combinations that add up to target.
         return res
 ```
 
-## Solution 3: Recursive Sorted Early Pruning Backwards Backtracking on Global Path - Backtracking/Generate While Constraint Satisfaction
+## Solution 3: Early Pruning Recursive Sorted Backward Backtracking On Global Path - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
                 
@@ -711,7 +788,7 @@ Find all combinations that add up to target.
         return res
 ```
 
-## Solution 4: Iterative DFS Early Pruning with Explicit Stack - Backtracking/Generate While Constraint Satisfaction
+## Solution 4: Early Pruning Iterative DFS Sorted Forward Backtracking With Explicit Stack - Backtracking/Generate While Constraint Satisfaction
 ```python
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
                 
@@ -952,7 +1029,6 @@ Find all combinations that add up to target with no guaranteed unique values.
         dfs_backtracking(len(candidates) - 1, target)
         return res
 ```
-
 
 
 # 46. Permutations ::1:: - Medium
