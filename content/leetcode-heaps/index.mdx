@@ -318,7 +318,7 @@ Implement a heap that will keep track of the kth highest score for a data stream
 ```python
 ```
 
-## Solution 1: Min Heap of Size k - Heap/Heap
+## Solution 1: Min Heap Of Size K Tracks The Kth Largest Element - Heap/Heap
 ```python
 class KthLargest:
 
@@ -443,37 +443,59 @@ stone loses weight equal to the weight of the less heavy stone.
 ```python
 ```
 
-## Solution 1: Max Heap - Heap/Heap
+## Solution 1: Inverted MinHeap Is A MaxHeap Of Size K Tracking The Kth Smallest Element - Heap/Heap
 ```python
     def lastStoneWeight(self, stones: list[int]) -> int:
-        # Note:
-        # 1. MaxHeap via MinHeap with negative values
-        # 2. Continue smashing pairs of stones until heap size 1
-        # Result: final stone weight or all stones destroyed
-       
-        # turn list to negative numbers
+        
+        # MaxHeap:
+        # We use a max heap to always extract the two largest stones efficiently.
+        # Since Python only provides a min heap, we simulate a max heap
+        # by inserting negative values.
+
+        # Heap Strategy:
+        # 1. Build a max heap from the input stones.
+        # 2. Repeatedly remove the two largest stones.
+        # 3. Smash them together and, if a remainder exists, push it back into the heap.
+        # 4. Continue until at most one stone remains.
+        # Result: return the final stone weight or 0 if all stones are destroyed.
+
+
+        # MaxHeap List:
+        # Turn positive stone weights into negative weights
+        # tc:
+        # sc:
         maxHeap = [-stone for stone in stones]
 
-        # transform list into heap, in place, in linear time
+        # MaxHeap:
+        # Transform negative list into heap in place in linear time
+        # MinHeap with negative numbers is a MaxHeap
+        # tc:
+        # sc:
         heapq.heapify(maxHeap)
 
-        # remove top two stones until one stone left 
+        # remove top two stones until one stone left
+        # tc:
         while len(maxHeap) > 1:
 
-            # grab two heaviest stones
-            first = -(heapq.heappop(maxHeap))
-            second = -(heapq.heappop(maxHeap))
+            # Grab two heaviest stones
+            heaviest = -(heapq.heappop(maxHeap))
+            second_heaviest = -(heapq.heappop(maxHeap))
 
-            # push if partial stone remains
-            if first != second:
-                remainingStoneWeight = -(first - second)
+            # If remainder stone
+            if heaviest != second_heaviest:
+
+                # Get remainder stone
+                remainingStoneWeight = -(heaviest - second_heaviest)
+
+                # Push remaining stone back to MaxHeap
                 heapq.heappush(maxHeap, remainingStoneWeight)
 
-        # check if stone remains
+        # Check: if any stone remains
+        # Grab the heaviest stone
         res = -maxHeap[0] if maxHeap else 0
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc
+        # overall: sc
         return res
 ```
 
@@ -532,6 +554,8 @@ Given a list of point on a X-Y grid, find the k closest points to the origin.
 ## Solution 1: Max Heap of size k - Heap/Heap
 ```python
     def kClosest(self, points: list[list[int]], k: int) -> list[list[int]]:
+        
+        
         # Note:
         # 1. We want the k points with the smallest Euclidean distances from (0, 0).
         # 2. Instead of computing sqrt(x^2 + y^2), we can use the squared distance x^2 + y^2
