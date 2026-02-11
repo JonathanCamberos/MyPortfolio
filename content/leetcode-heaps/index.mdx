@@ -324,7 +324,7 @@ class KthLargest:
 
     # MinHeap:
     # We need to track 2 things
-    #   - The min item currently in the stack
+    #   - The root min item currently in the stack, which represents kth highest
     #   - Number of items in the stack
 
     # For our functions, they may need to update the above 2
@@ -339,17 +339,17 @@ class KthLargest:
 
     def __init__(self, k: int, nums: list[int]):
         
-        # Note:
-        # 1.  MinHeap of size k containing the k largest elements seen so far.
-        # Result: Top k scores saved, with lowest top score at root
+        # MinHeap of size k:
+        # will contain the k largest elements seen so far,
+        # lowest top score at root which represents the kth highest number
 
-        # size of minHeap     
+        # limiting size of minHeap to be size k    
         self.k = k
 
         # minHeap
         self.minHeap = []
         
-        # stream input data
+        # mimic 'streaming' input data into minHeap
         for num in nums:
             self.add(num)
     
@@ -357,28 +357,31 @@ class KthLargest:
     # sc: 
     def add(self, val: int) -> int:
 
-        # Note:
-        # 1. if minHeap is less than capacity, simply push
-        # 2. if minHeap is out of space, push only if new score beats lowest score (root)
+        # Attempt to add element to stack
+        #   - if minHeap has less elements than k, simply add new element
+        #   - if minHeap is out of space, push only if new score is higher than 
+        #     current lowest score at the root
 
-        # heap still has space, simply push
+        # Heap still has space, add element
         if len(self.minHeap) < self.k:
             heapq.heappush(self.minHeap, val)
 
-        # heap is out of space, check if valid add
+        # Heap is out of space, check against min element
         else:
-            # push if new score beats lowest high score (root)
+            # Grab min element
             smallestTopScore = self.minHeap[0]
+
+            # Add score if its higher than current lowest element
             if val > smallestTopScore:
+                # Replace root element
                 heapq.heapreplace(self.minHeap, val)
         
-        # return top score
+        # return top k score
         return self.minHeap[0]
 
     # overall: tc
     # overall: sc 
 ```
-
 
 # 1046. Last Stone Weight ::1:: - Easy
 
