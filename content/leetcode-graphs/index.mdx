@@ -257,127 +257,218 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 ```python
 ```
 
-## Solution 1: Recursive DFS with Visited Set - Graph/something
+## Solution 1: Recursive DFS With Tracking Visited Set - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
-        # Graph Representation:
+        # Connected Components In A Graph:
         # This problem is equivalent to finding out the number of connected components in a graph
+        # Each land cell ('1') is a node, and edges exist between two nodes if they
+        # are adjacent vertically or horizontally
+
+        # Backtracking vs Recursive Graph Traversal:
+        # Recursion is a concept, backtracking is a technique using it.
+        # Recursion doesn't imply you are backtracking.
+        # Backtracking is the concept of returning 'state' back to what it was at the parent call. 
+        # 'State' is data, it can be a collection (array,map,etc). State can also be a primitive var. 
+        # This problem uses recursion but is not backtracking since we are not tracking nor reverting state.
+
+        # Recursive Graph Traversal:
+        # Although recursion returns to previous cells to explore other neighbors,
+        # this is not backtracking in the algorithmic sense.
+        # Backtracking requires undoing choices (e.g., path.pop()) to explore
+        # alternative solution paths from the same state.
+        # In this graph traversal, once a cell is marked visited, it is never unmarked,
+        # and we simply recurse.
+        # Therefore, this is DFS for connected components, not backtracking.
 
         # Grid Graph (Implicit Adjacency Matrix Via Coordinates And Directions):
-        
-        #     A  B  C
-        # A [ 0  1  0 ]
-        # B [ 1  0  1 ]
-        # C [ 0  1  0 ]
+        #   - Nodes: (r, c)
+        #   - Edges: implicit based on position
+        #   - Neighbors: up, down, left, right
+
+        # Grid:
+        #           A  B  C
+        #       A [ 0  1  0 ]
+        #       B [ 1  0  1 ]
+        #       C [ 0  1  0 ]
 
         # Each cell is connected up to 4 neighbors (up, down, left, right)
         # Edges are implicit, based on grid position
         # Each cell in a node
 
         # Recursive DFS traversal: 
-        # Mark visited cells to avoid re-processing
-        # 1. Process Root -> check if current cell is '1'
-        # 2. Process Choices -> explore four neighbors (up, down, left, right)
-        # 3. Backtrack -> recursion returns after marking all connected land
+        # Explore connected land cells in the grid.
+        # 0. Late Pruning: skip if cell is out of bounds, water, or has already been visited
+        # 1. Process Root: check if current cell is land ('1'), mark current cell as visited
+        # 2. Explore: recursively visit all neighbors (up, down, left, right)
+        # 3. Return: recursion returns to parent to continue exploring remaining neighbors
         # Result: increment island count per root land cell
         
         # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not grid:
             return 0
         
-        # boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         rows, cols = len(grid), len(grid[0])
 
-        # tracking
+        # tracking visited land cells to avoid reprocessing
+        # sc: O(r*c)
         visited = set()
 
         # count
+        # sc: O(1)
         islands = 0
 
         # visits any land touching (r, c)
         def dfs(r, c):
 
-            # Late Pruning -> skip if out-of-bounds, water, or already visited
+            # Late Pruning:
+            # skip if cell is out of bounds, water, or has already been visited
+            # tc: O(1), sc: O(1)
             if (r < 0 or r >= rows or 
                 c < 0 or c >= cols or 
                 grid[r][c] == "0" or 
                 (r, c) in visited):
                 return
 
-            # Process Root -> mark current cell as visited land
+            # Process Root:
+            # mark current cell as visited
+            # tc: O(1), sc: O(1)
             visited.add((r, c))
 
-            # Explore -> visit all 4 neighbors
+            # Explore:
+            # recursively visit all neighbors (up, down, left, right)
+            # tc: O(1) per call, but overall bounded by number of cells
+            # sc: O(r*c) recursion stack grows with connected component size
             dfs(r + 1, c)
             dfs(r - 1, c)
             dfs(r, c + 1)
             dfs(r, c - 1)
 
-            # Backtrack -> implicit, no undo needed
+            # Return:
+            # implicit, recursion returns to parent to continue exploring remaining neighbors
 
-        # iterate over grid
+        # iterate over all cells
+        # tc: O(r*c), sc: O(1)
         for r in range(rows):
             for c in range(cols):
 
-                # Process Root -> unvisited land found
+                # Initial Call:
+                # land that has not been visited found, start dfs exploration at cell
+                # tc: O(1), sc: O(1)
                 if grid[r][c] == '1' and (r, c) not in visited:
                     islands += 1
                     dfs(r, c)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(r*c)
+        # overall: sc O(r*c)
         return islands
 ```
 
-## Solution 2: Recursive DFS with In Place Flood Fill - Graph/something
+## Solution 2: Recursive DFS With Turning Visited Land Into Water Tracking - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
-        # Note:
-        # Recursive DFS flood fill: mark visited land in-place
-        # 1. Process Root -> check if current cell is '1'
-        # 2. Process Choices -> explore four neighbors
-        # 3. Backtrack -> recursion returns after marking all connected land
+        
+        # Connected Components In A Graph:
+        # This problem is equivalent to finding out the number of connected components in a graph
+        # Each land cell ('1') is a node, and edges exist between two nodes if they
+        # are adjacent vertically or horizontally
+
+        # Backtracking vs Recursive Graph Traversal:
+        # Recursion is a concept, backtracking is a technique using it.
+        # Recursion doesn't imply you are backtracking.
+        # Backtracking is the concept of returning 'state' back to what it was at the parent call. 
+        # 'State' is data, it can be a collection (array,map,etc). State can also be a primitive var. 
+        # This problem uses recursion but is not backtracking since we are not tracking nor reverting state.
+
+        # Recursive Graph Traversal:
+        # Although recursion returns to previous cells to explore other neighbors,
+        # this is not backtracking in the algorithmic sense.
+        # Backtracking requires undoing choices (e.g., path.pop()) to explore
+        # alternative solution paths from the same state.
+        # In this graph traversal, once a cell is marked visited, it is never unmarked,
+        # and we simply recurse.
+        # Therefore, this is DFS for connected components, not backtracking.
+
+        # Grid Graph (Implicit Adjacency Matrix Via Coordinates And Directions):
+        #   - Nodes: (r, c)
+        #   - Edges: implicit based on position
+        #   - Neighbors: up, down, left, right
+
+        # Grid:
+        #           A  B  C
+        #       A [ 0  1  0 ]
+        #       B [ 1  0  1 ]
+        #       C [ 0  1  0 ]
+
+        # Each cell is connected up to 4 neighbors (up, down, left, right)
+        # Edges are implicit, based on grid position
+        # Each cell in a node
+
+        # Recursive DFS traversal: 
+        # Explore connected land cells in the grid.
+        # 0. Late Pruning: skip if cell is out of bounds or water
+        # 1. Process Root: check if current cell is land ('1'), turn land into water ('0') 'marking' it as water
+        # 2. Explore: recursively visit all neighbors (up, down, left, right)
+        # 3. Return: recursion returns to parent to continue exploring remaining neighbors
         # Result: increment island count per root land cell
         
-        # Empty check
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not grid:
             return 0
         
-        # boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         rows, cols = len(grid), len(grid[0])
 
         # count
+        # sc: O(1)
         islands = 0
 
         # visits any land touching (r, c)
         def dfs(r, c):
 
-            # Late Pruning -> skip out-of-bounds or water
-            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == '0':
+            # Late Pruning:
+            # skip if cell is out of bounds or water
+            # tc: O(1), sc: O(1)
+            if (r < 0 or r >= rows or 
+                c < 0 or c >= cols or 
+                grid[r][c] == '0'):
                 return
 
-            # Build / Mark -> sink current land
+            # Process Root:
+            # turn land into water, 'marking' current cell as visited
+            # tc: O(1), sc: O(1)
             grid[r][c] = '0'
 
-            # Explore -> visit all 4 neighbors
+            # Explore:
+            # recursively visit all neighbors (up, down, left, right)
+            # tc: O(1) per call, but overall bounded by number of cells
+            # sc: O(r*c) recursion stack grows with connected component size
             dfs(r + 1, c)
             dfs(r - 1, c)
             dfs(r, c + 1)
             dfs(r, c - 1)
 
-            # Backtrack -> implicit, no undo needed
+            # Return:
+            # implicit, recursion returns to parent to continue exploring remaining neighbors
 
+        # iterate over all cells
+        # tc: O(r*c), sc: O(1)
         for r in range(rows):
             for c in range(cols):
 
-                # Process Root -> unvisited land found
+                # Initial Call:
+                # land that has not been visited found, start dfs exploration at cell
+                # tc: O(1), sc: O(1)
                 if grid[r][c] == '1':
                     islands += 1
                     dfs(r, c)
 
-        # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) worst-case recursion depth
+        # overall: tc O(r*c)
+        # overall: sc O(r*c)
         return islands
 ```
 
@@ -385,19 +476,38 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
-        # Note:
-        # Iterative BFS flood fill: explore entire island per root land
-        # 1. Process Root -> enqueue starting land cell
-        # 2. Process Choices -> explore neighbors iteratively
-        # 3. Backtrack -> implicit by queue processing
-        # Result: increment island count per root land cell
+        # Connected Components In A Graph:
+        # This problem is equivalent to finding out the number of connected components in a graph
+        # Each land cell ('1') is a node, and edges exist between two nodes if they
+        # are adjacent vertically or horizontally
 
-        # Empty check
+        # BFS vs Backtracking vs Recursive DFS:
+        # BFS uses a queue to explore nodes level by level.
+        # This is iterative graph traversal; state is updated in-place (grid marked '0').
+        # Backtracking is not used: BFS does not undo any state to explore alternative paths.
+        # Unlike recursive DFS, we explore neighbors using a queue, and each cell is processed exactly once.
+
+        # Grid Graph (Implicit Adjacency Matrix Via Coordinates And Directions):
+        #   - Nodes: (r, c)
+        #   - Edges: implicit based on position
+        #   - Neighbors: up, down, left, right
+
+        # BFS Iterative Flood Fill:
+        # 1. Process Root -> enqueue starting land cell
+        # 2. Process Choices -> explore neighbors iteratively using queue
+        # 3. Return -> queue empties after exploring all connected land
+        # Note: grid is modified in-place to mark visited cells
+
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not grid:
             return 0
 
-        # boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         rows, cols = len(grid), len(grid[0])
+
+        # count
+        # sc: O(1)
         islands = 0
 
         # visits any land touching (r, c)
@@ -414,35 +524,71 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 
             while queue:
 
-                # grab 
+                # Get Current Root:
+                # tc O(1), sc O(1) 
                 cr, cc = queue.popleft()
 
-                # Explore -> neighbors in 4 directions
+                # Explore:
+                # iteratively visit all neighbors (up, down, left, right)
+                # tc: O(1) per call, but overall bounded by number of cells
+                # sc: O(r*c) recursion stack grows with connected component size
                 for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = cr + dr, cc + dc
 
-                    # Late Pruning -> skip out-of-bounds or water
-                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                        # Late Pruning:
+                        # skip if cell is out of bounds or water
+                        # tc: O(1), sc: O(1)
+                        if (0 <= nr < rows and 
+                            0 <= nc < cols and 
+                            grid[nr][nc] == '1'):
+                        
+                        # Process Root:
+                        # mark current cell as visited
+                        # tc: O(1), sc: O(1)
                         grid[nr][nc] = '0'
                         queue.append((nr, nc))
 
-        # iterate over grid
+
+        # iterate over all cells
+        # tc: O(r*c), sc: O(1)
         for r in range(rows):
             for c in range(cols):
 
-                # Process Root -> unvisited land found
+                # Initial Call:
+                # land that has not been visited found, start bfs exploration at cell
+                # tc: O(1), sc: O(1)
                 if grid[r][c] == '1':
                     islands += 1
                     bfs(r, c)
 
-        # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) worst-case queue
+        # overall: tc O(r*c)
+        # overall: sc O(r*c)
         return islands
 ```
 
 ## Solution 4: Union Find - Graph/something
-```python
+```python 
     def numIslands(self, grid: List[List[str]]) -> int:
+
+        # Connected Components In A Graph:
+        # This problem is equivalent to finding out the number of connected components in a graph
+        # Each land cell ('1') is a node, and edges exist between two nodes if they
+        # are adjacent vertically or horizontally
+
+        # Union-Find vs BFS/DFS:
+        # Unlike BFS or DFS, we do not traverse the graph recursively or iteratively.
+        # Union-Find maintains a parent pointer and rank (height) to track connected components efficiently.
+        # No backtracking is involved, we never revert a union, we only merge sets.
+        # Path compression ensures find() is nearly O(1) amortized.
+
+        # Island To Water Mimicking With Union() Same Root Ignoring:
+        # In Union-Find, we can think of each connected land cell as a node in a tree.
+        # When we union two adjacent land cells, they share the same root, meaning they belong
+        # to the same island (connected component). By checking `if rootX == rootY: return`,
+        # we effectively ignore pairs that are already connected, which mimics "flooding" the island
+        # with water: once two parts are connected, we never need to process the connection again.
+        # This avoids duplicate work, just like marking visited cells in DFS/BFS. The union by rank
+        # ensures that the tree stays shallow, keeping operations efficient.
 
         # Note:
         # Union-Find approach: treat each land cell as a node
@@ -451,76 +597,97 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # 3. Backtrack -> implicit via union
         # Result: number of connected components = number of islands
 
-        # Empty check
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not grid:
             return 0
         
-        # boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         rows, cols = len(grid), len(grid[0])
 
-        # parent and rank (size)
+        # parent and rank for each land cell
+        # sc: O(r*c) 
         parent = {}
         rank = {}
 
-        # initialize unions -> set parent to self rank to 0
+        # Initialize Union-Find:
+        # tc: iterate over all cells O(r*c)
+        # sc: add all cells O(r*c)
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == '1':
+
+                    # Each land cell is its own parent initially, rank = 0
                     parent[(r, c)] = (r, c)
                     rank[(r, c)] = 0
 
-        # Find Path compression
+        # Find with Path Compression
+        # tc: O(α(n)) amortized per call
+        # sc: O(1) per call        
         def find(x):
+
+            # if parent of cell isn't self, go up to parent
             if parent[x] != x:
                 parent[x] = find(parent[x])
+
+            # returns parent of original, after path compression
             return parent[x]
 
-        # Union between sets
+        # Union by Rank
+        # tc: O(α(n)) amortized
+        # sc: O(1)
         def union(x, y):
+
+            # Ignore if nodes share the same root (are in the same tree)
+            # Acts as the water flooding as once x and y share the same root (are marked as connected),
+            # the pair will never be explored again
             rootX, rootY = find(x), find(y)
             if rootX == rootY:
                 return
 
-            # union by rank (height based)
+            # Attach smaller rank tree to larger rank tree
             if rank[rootX] > rank[rootY]:
                parent[rootY] = rootX
             elif rank[rootX] < rank[rootY]:
                 parent[rootX] = rootY
             else:
+
                 # height of tree only increases by 1 on equal size trees
                 # A=3, B=2 -> B will point to Root A, leading to height of 3
                 parent[rootY] = rootX
                 rank[rootX] += 1
 
-            # union by size (weight based)
-            # if rank[rootX] > rank[rootY]:
-            #     rank[rootX] += rank[rootY]
-            #     parent[rootY] = rootX
-            # else rank[rootX] < rank[rootY]:
-            #     rank[rootY] += rank[rootX]
-            #     parent[rootX] = rootY
 
-        # iterate over grid
+        # iterate over all cells
+        # tc: O(r*c)
         for r in range(rows):
             for c in range(cols):
 
-                # island found
+                # Initial Call:
+                # land has been found, start dfs exploration at cell
+                # tc: O(1), sc: O(1)
                 if grid[r][c] == '1':
 
-                    # Process Choices -> 
-                    # Union only down and right to avoid double union
+                    # Explore:
+                    # Union the adjacent lands, only down and right to avoid duplicates
                     for dr, dc in [(1,0), (0,1)]:
                         nr, nc = r + dr, c + dc
 
-                        # Early Candidate Pruning -> boundaries
-                        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                        # Early Pruning:
+                        # only union if in bounds and land
+                        if (0 <= nr < rows and 
+                            0 <= nc < cols and 
+                            grid[nr][nc] == '1'):
                             union((r, c), (nr, nc))
 
-        # Unique root count -> Unique Island Counts
+        # Count unique roots to determine number of islands
+        # tc: O(r*c * α(n)) amortized
+        # sc: O(r*c) for set of roots
         roots = set(find(cell) for cell in parent)
 
-        # overall: time complexity
-        # overall: space complexity
+
+        # overall: tc O(r*c * α(r*c)) ≈ O(r*c)
+        # overall: sc O(r*c) for parent, rank, and roots set
         return len(roots)
 ```
 
