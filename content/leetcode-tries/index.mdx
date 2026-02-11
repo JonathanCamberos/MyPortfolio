@@ -194,75 +194,172 @@ Implement a trie data structure.
 ```python
 ```
 
-## Solution 1: Trie Implementation - Trie/Trie Insert and Search Recursive
+## Solution 1: Recursive Trie Implementation - Trie/Trie Insert and Search Recursive
 ```python
 class TrieNode:
+
     def __init__(self):
-        # list of char subtrees for current node: char -> TrieNode
+        # list of continuing letters (subtrees) for node: char -> TrieNode
         self.subtrees = {}
-        # Indicates end of a valid word
+        # marks current node as valid end of word
         self.is_end = False
 
 
 class Trie:
 
     def __init__(self):
-
-        # Note:
-        # root node does not store any chars itself,
-        # it only points to child chars
+        # Root node does not store any chars itself
         self.root = TrieNode()
 
-    # time complexity:
-    # space complexity:
+    # Recursive Insert
+    # tc: O(n), word length
+    # sc: O(n), node creation
+    def insert(self, word: str) -> None:
+
+        def dfs_insert(node: TrieNode, i: int):
+            # Base case: finished word
+            if i == len(word):
+                node.is_end = True
+                return
+
+            c = word[i]
+            if c not in node.subtrees:
+                node.subtrees[c] = TrieNode()
+            
+            # Recurse to next letter
+            dfs_insert(node.subtrees[c], i + 1)
+
+        dfs_insert(self.root, 0)
+
+    # Recursive Search
+    # tc: O(n), word length
+    # sc: O(n), recursion stack
+    def search(self, word: str) -> bool:
+
+        def dfs_search(node: TrieNode, i: int) -> bool:
+            # Base case: finished word
+            if i == len(word):
+                return node.is_end
+
+            c = word[i]
+            if c not in node.subtrees:
+                return False
+
+            # Recurse to next letter
+            return dfs_search(node.subtrees[c], i + 1)
+
+        return dfs_search(self.root, 0)
+
+    # Recursive StartsWith
+    # tc: O(n), prefix length
+    # sc: O(n), recursion stack
+    def startsWith(self, prefix: str) -> bool:
+
+        def dfs_startsWith(node: TrieNode, i: int) -> bool:
+            # Base case: finished prefix
+            if i == len(prefix):
+                return True
+
+            c = prefix[i]
+            if c not in node.subtrees:
+                return False
+
+            # Recurse to next letter
+            return dfs_startsWith(node.subtrees[c], i + 1)
+
+        return dfs_startsWith(self.root, 0)
+
+    # overall: tc O(n) per operation
+    # overall: sc O(n) per operation (recursion stack)
+```
+
+
+## Solution 2: Iterative Trie Implementation - Trie/Trie Insert and Search Recursive
+```python
+class TrieNode:
+
+    # TrieNode:
+    # We need to track 
+    #   - subtrees for current node (letters current letter can continue to)
+    #   - if current node represents the valid end of a node
+
+    # For our functions, they may need to update the above 2 details
+    
+    # Insert():
+    #   - Insert a new word into the trie tree
+    #   - Add letters to existing trie nodes
+
+    # Search():
+    #   - Check if a word exists in the trie tree
+    #   - Travel down trie nodes to verify word exists
+
+    # StartsWith():
+    #   - Check if a word exists in the trie tree that has a prefix
+    #   - Travel down trie node to verify prefix, and then continue to 
+    #     verify if any word uses it
+
+    def __init__(self):
+
+        # list of continuing letters (subtrees) for node: char -> TrieNode
+        self.subtrees = {}
+        # marks current node as valid end of word
+        self.is_end = False
+
+
+class Trie:
+
+    def __init__(self):
+        # Root node:
+        # Does not store any chars itself,
+        # only points to its child char nodes
+        self.root = TrieNode()
+
+    # tc: iterate over word of length n O(n)
+    # sc: subtree node creation for n nodes O(n)
     def insert(self, word: str) -> None:
         
-        # Note:
-        #   Insert word char by char into the trie
-        #   If a char path does not exist, create a new TrieNode
-
         # start search at root
         node = self.root
 
-        # insert each char
+        # Insert each letter of word into trie tree in correct order
         for c in word:
 
-            # if subtree does not exist, create new
+            # if subtree does not exist for current letter, add to list
             if c not in node.subtrees:
                 node.subtrees[c] = TrieNode()
 
-            # iterate to subtree
+            # iterate to next letter node
             node = node.subtrees[c]
 
-        # mark last char
+        # finished adding all chars to trie tree, mark last char 
+        # as valid end to a word
         node.is_end = True
 
-    # time complexity:
-    # space complexity:
+    # tc:
+    # sc:
     def search(self, word: str) -> bool:
         
-        # Note:
-        #   Traverse the trie following each character
-        #   Return True only if final node marks end of a valid word
+        #   Return True only if final node is valid end
         
         # start at root
         node = self.root
 
-        # for each char
+        # Traverse the trie using words char
+        # tc: iterate over word length n O(n)
         for c in word:
 
-            # if subtree does not exist, work is not in trie
+            # if subtree does not exist, word path is not in trie
             if c not in node.subtrees:
                 return False
 
-            # iterate to subtree
+            # iterate to next letter node
             node = node.subtrees[c]
         
-        # check if valid end of word
+        # check if last char is valid end of a word
         return node.is_end
 
-    # time complexity:
-    # space complexity:
+    # tc:
+    # sc:
     def startsWith(self, prefix: str) -> bool:
         
         # Note:
@@ -285,8 +382,8 @@ class Trie:
         # entire prefix exists, true
         return True
 
-    # overall: time complexity
-    # overall: space complexity
+    # overall: tc
+    # overall: sc
 ```
 
 # 211. Design Add and Search Words Data Structure ::1:: - Medium
