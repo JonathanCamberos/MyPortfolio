@@ -257,7 +257,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 ```python
 ```
 
-## Solution 1: Recursive DFS With Tracking Visited Set - Graph/something
+## Solution 1: Recursive DFS Late Pruning With Tracking Visited Set - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -367,7 +367,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         return islands
 ```
 
-## Solution 2: Recursive DFS With Turning Visited Land Into Water Tracking - Graph/something
+## Solution 2: Recursive DFS Early Pruning With Turning Visited Land Into Water Tracking - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
         
@@ -430,27 +430,29 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # visits any land touching (r, c)
         def dfs(r, c):
 
-            # Late Pruning:
-            # skip if cell is out of bounds or water
-            # tc: O(1), sc: O(1)
-            if (r < 0 or r >= rows or 
-                c < 0 or c >= cols or 
-                grid[r][c] == '0'):
-                return
-
             # Process Root:
             # turn land into water, 'marking' current cell as visited
             # tc: O(1), sc: O(1)
             grid[r][c] = '0'
 
+
             # Explore:
-            # recursively visit all neighbors (up, down, left, right)
-            # tc: O(1) per call, but overall bounded by number of cells
-            # sc: O(r*c) recursion stack grows with connected component size
-            dfs(r + 1, c)
-            dfs(r - 1, c)
-            dfs(r, c + 1)
-            dfs(r, c - 1)
+            # Check: if neighbors are valid
+            # Then: visit neighbor recursively
+            # tc: O(1) per call, overall bounded by number of cells
+            # sc: O(r*c) worst-case recursion stack
+            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                nr, nc = r + dr, c + dc
+
+                # Early Pruning:
+                # only recurse if neighbor is in bounds and is land
+                # tc: O(1), sc: O(1)
+                if (0 <= nr < rows and 
+                    0 <= nc < cols and 
+                    grid[nr][nc] == '1'):
+
+                    # recurse into neighbor
+                    dfs(nr, nc)
 
             # Return:
             # implicit, recursion returns to parent to continue exploring remaining neighbors
@@ -472,7 +474,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         return islands
 ```
 
-## Solution 3: Iterative BFS with In Place Flood Fill - Graph/something
+## Solution 3: Iterative BFS Early Pruning With In Place Flood Fill - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -524,7 +526,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 
             while queue:
 
-                # Get Current Root:
+                # Get Current Cell:
                 # tc O(1), sc O(1) 
                 cr, cc = queue.popleft()
 
@@ -535,8 +537,8 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                 for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = cr + dr, cc + dc
 
-                        # Late Pruning:
-                        # skip if cell is out of bounds or water
+                        # Early Pruning:
+                        # only enqueue if in bounds and land
                         # tc: O(1), sc: O(1)
                         if (0 <= nr < rows and 
                             0 <= nc < cols and 
@@ -547,6 +549,9 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                         # tc: O(1), sc: O(1)
                         grid[nr][nc] = '0'
                         queue.append((nr, nc))
+
+        # Return:
+        # implicit, queue empties after full island is explored
 
 
         # iterate over all cells
@@ -566,7 +571,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         return islands
 ```
 
-## Solution 4: Union Find - Graph/something
+## Solution 4: Union Find Early Pruning - Graph/something
 ```python 
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -576,26 +581,37 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # are adjacent vertically or horizontally
 
         # Union-Find vs BFS/DFS:
-        # Unlike BFS or DFS, we do not traverse the graph recursively or iteratively.
-        # Union-Find maintains a parent pointer and rank (height) to track connected components efficiently.
-        # No backtracking is involved, we never revert a union, we only merge sets.
-        # Path compression ensures find() is nearly O(1) amortized.
 
-        # Island To Water Mimicking With Union() Same Root Ignoring:
+        # DFS/BFS are traversal algorithms. When you start from one land cell, you must walk the entire island.
+        # If you skip even one direction, you may fail to reach part of the island.
+        
+        # Union-Find is not traversing the island — it is connecting components while scanning the grid.
+
+        # In other words, DFS/BFS must finish when its starts. 
+        # Union-Find on the other hand connects components as it goes, so it does not have to completely finish
+
+        # That distinction is one of the key reasons Union-Find can safely use only right/down 
+        # while DFS/BFS must explore all 4 directions as DFS must explore all its options, 
+        # but Union Find will eventually finish as we iterate so we only need down right.
+        
+        # Island To Water Mimicking Via Union(x, y) Same Root Ignoring:
         # In Union-Find, we can think of each connected land cell as a node in a tree.
         # When we union two adjacent land cells, they share the same root, meaning they belong
-        # to the same island (connected component). By checking `if rootX == rootY: return`,
-        # we effectively ignore pairs that are already connected, which mimics "flooding" the island
-        # with water: once two parts are connected, we never need to process the connection again.
-        # This avoids duplicate work, just like marking visited cells in DFS/BFS. The union by rank
-        # ensures that the tree stays shallow, keeping operations efficient.
+        # to the same island (connected component). By checking 'if rootX == rootY: return',
+        # we effectively ignore pairs that are already connected, which mimics 'flooding' the island
+        # with water or marking it as visited.
+        # Once two parts are connected, we never need to process that connection again.
+        # This avoids duplicate work, just like marking visited cells in DFS/BFS. 
+        # The union by rank ensures that the tree stays shallow, keeping operations efficient.
 
-        # Note:
-        # Union-Find approach: treat each land cell as a node
-        # 1. Process Root -> initialize parent and rank for each land
-        # 2. Process Choices -> union adjacent lands (right and down)
-        # 3. Backtrack -> implicit via union
-        # Result: number of connected components = number of islands
+        # Union-Find Approach: Connected Components in a Graph
+        # Each land cell is treated as a node, and edges exist between adjacent land cells (up, down, left, right).
+        # 0. Initialize Trees -> Each land node starts as its own parent with rank 0.
+        # 1. Process Root -> iterate over all land cells and prepare them for unions.
+        # 2. Process Choices -> union adjacent land nodes (only right and down to avoid duplicates).
+        # 3. Ignore Already Connected Nodes -> if two nodes share the same root, skip union, 
+        #    which mimics “flooding” the island like marking visited cells in DFS/BFS.
+        # Result: the number of unique roots after all unions gives the total number of islands.
 
         # Empty Check: no islands, grid is empty
         # tc: O(1)
@@ -754,17 +770,38 @@ Given a graph, return the largest island.
 ## Solution 1: Recursive DFS with Flood Fill - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        # Note:
-        # 1. Treat grid as a graph: 1 = land node, edges = 4-direction adjacency
-        # 2. DFS flood fill sinks land in-place to mark visited cells
-        # 3. Track area of each island during DFS
-        # 4. Return the maximum island area
+
+        # Connected Components In A Graph:
+        # This problem is equivalent to finding out the number of connected components in a graph
+        # Each land cell ('1') is a node, and edges exist between two nodes if they
+        # are adjacent vertically or horizontally
+
+        # Connected Components In A Grid Graph:
+        # This problem is equivalent to finding the largest connected component
+        # in a graph where:
+        #   - Nodes: land cells (value = 1)
+        #   - Edges: adjacency in 4 directions (up, down, left, right)
+
+        # Backtracking vs Recursive Graph Traversal:
+        # Recursion is a concept, backtracking is a technique using it.
+        # Recursion does not imply backtracking.
+        # Backtracking requires reverting state (e.g., path.pop()) to explore alternatives.
+        # This problem uses recursion but is not backtracking since once land is sunk (set to 0),
+        # it is never restored — we are performing a flood fill traversal.
+
+        # Recursive Flood Fill (DFS Traversal):
+        # 0. Late Pruning: skip if out of bounds or water
+        # 1. Process Root: sink current land cell and count it
+        # 2. Explore: recursively visit all 4 neighbors
+        # 3. Return: return total area of the connected component
+        # Result: track and return the maximum island area
 
         # Empty check
+        # tc: O(1)
         if not grid:
             return 0
 
-        # Boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         m, n = len(grid), len(grid[0])
 
         # max
