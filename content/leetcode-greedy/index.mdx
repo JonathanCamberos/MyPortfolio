@@ -106,29 +106,48 @@ Given an array, return the sum of the largest subarray.
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
 
-        # Note:
-        # Kadane's Algorithm (Greedy / DP)
-        # iterate over array
-        # at every step either extend subarray or start new subarray
-        # Result -> max sum
+        # Kadane's Algorithm (Greedy / 1D DP):
+        # The maximum subarray problem can be solved by iterating through the array
+        # and maintaining two key variables:
+        #   1. local_max -> maximum subarray sum ending at the current index
+        #   2. global_max -> maximum subarray sum seen so far
+        # At each step, we either:
+        #   - Extend the previous subarray (local_max + nums[i])
+        #   - Start a new subarray at current element (nums[i])
+        # The invariant: global_max always stores the maximum sum encountered
 
+        # num of nums
+        # tc: O(1)
         n = len(nums)
 
+        # local_max: max sum ending at current index
+        # global_max: overall max sum
+        # sc: O(1)
         local_max = nums[0]
         global_max = nums[0]
 
-        # iterate over array
+        # tc: iterate over n O(n)
         for i in range(1, n):
 
-            # nums[i]: start new subarray at i
-            # local_max + nums[i]: extend previous subarray
-            local_max = max(nums[i], local_max + nums[i])
+            # At each index:
+            # we are deciding whether to extend the array, 
+            # or to stop the array and start a new one at the current index
 
-            # compare to global max
+            # extend previous subarray
+            extend_prev = local_max + nums[i]
+
+            # start a new subarray at current element
+            start_new = nums[i]
+
+            # choose the better option
+            local_max = max(start_new, extend_prev)
+
+            # Update global max if current local_max is greater
+            # tc: O(1)
             global_max = max(global_max, local_max)
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return global_max
 ```
 
@@ -136,33 +155,47 @@ Given an array, return the sum of the largest subarray.
 ```python
     def maxSubArray(self, nums: List[int]) -> int:
 
-        # Note:
-        # Greedy (Kadane’s Algorithm)
-        # iterate over array
-        # at every step either extend subarray or start new subarray
-        # Result -> max sum
+        # Kadane’s Algorithm (Greedy / Practical):
+        # The maximum subarray problem can also be solved by maintaining:
+        #   1. current_sum -> running sum of the subarray ending at the current index
+        #   2. max_sum -> maximum sum seen so far
+        # At each step, we either:
+        #   - Extend the previous subarray by adding nums[i] (current_sum + nums[i])
+        #   - Reset current_sum to 0 if the previous sum would reduce the total
+        # This ensures current_sum always represents the best subarray ending at current index
+        # max_sum tracks the overall maximum sum encountered
 
-        max_sum = nums[0]
-        current_sum = 0
+        # Initialize variables
+        # sc: O(1)
 
-        # iterate over array
+        # overall max subarray sum
+        max_array_sum = nums[0]
+
+        # max sum ending at current index
+        subarray_sum = 0
+
+        # tc: iterate over n O(n)
         for num in nums:
 
+            # Extend the previous subarray to include current index
+            # tc: O(1)
+            subarray_sum += num
 
-            # extend subarray: current_sum + num
-            current_sum += num
+            # Decision point: 
+            #   - if current index causes subarray_sum to become negative,
+            #     it is better to start a new subarray.
+            #   - In other words, if current index causes subarray_sum to 
+            #     at least be 0 or positive, it should be included.
+            if subarray_sum < 0:
+                subarray_sum = 0
 
-            # start new subarray at i
-            if current_sum < 0:
-                current_sum = 0
+            # Update max_sum if current_sum is greater
+            if subarray_sum > max_array_sum:
+                max_array_sum = subarray_sum
 
-            # compare to global max
-            if current_sum > max_sum:
-                max_sum = current_sum
-
-        # overall: time complexity
-        # overall: space complexity
-        return max_sum
+        # overall: tc O(n)
+        # overall: sc O(1)
+        return max_array_sum
 ```
 
 ## Solution 3: Divide and Conquer - Greedy/Greedy
