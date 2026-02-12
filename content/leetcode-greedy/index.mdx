@@ -1,7 +1,7 @@
 ---
 title: "Greedy"
 description: "greedy"
-image: "../../public/Notes/greedy-3.png"
+image: "../../public/Notes/greedy-6.png"
 publishedAt: "2025-08-29"
 updatedAt: "2025-09-05" 
 author: "jonathancamberos"
@@ -340,37 +340,53 @@ index possible from that index.
 ```python
     def canJump(self, nums: List[int]) -> bool:
         
-        # Note:
-        # 
-        # Rolling Variable -> tracks farthest possible index we can reach
-        # Iterate over array -> 
-        # 2. Build From Previous -> maintain farthest reachable index so far
-        # 3. Explore Choices -> if current index > farthest, return False (stuck)
-        # 4. Result -> if iteration completes, last index is reachable
+        # Greedy / 1D DP Approach:
+        # We want to determine if we can reach the last index of the array.
+        # Key idea:
+        #   1. Maintain a rolling variable 'farthest' that represents 
+        #      the farthest reachable index so far
+        #   2. Iterate through the array:
+        #       - If 'farthest' < current index, we cannot reach the current index, we got stuck
+        #       - Otherwise, update 'farthest' to include jumps from current index
+        #       - If last index <= 'farthest', we have passed the end, we can early exit
+        
+        # This is effectively a linear greedy scan, 
+        # using previously computed reachability to avoid recomputation
 
+        # number of indexes
+        # tc: O(1)
         n = len(nums)
 
-        # rolling variable
+        # Rolling Variable:
+        # farthest index currently reachable
+        # sc: O(1)
         farthest = 0
 
-        # iterate array
+        # tc: iterate over n O(n)
         for i in range(n):
 
-            # reached an unreachable index, cannot reach end
-            if i > farthest:
+            # Check: is current index past what we can reach
+            # Implies: we cannot jump to current index, we got stuck
+            # tc: O(1)
+            if farthest < i:
                 return False
 
-            # Build From Previous -> update farthest reachable
+            # Implies: we are able to jump to the current index
+            # Then: add the jumping distance from the current index to our farthest counter
+            # tc: O(1)
             farthest = max(farthest, i + nums[i])
 
-            # Early exit -> can already reach or surpass last index
-            if farthest >= n - 1:
+            # Check: have we passed the last index
+            # Implies: we can early exit, we reached the end
+            # tc: O(1)
+            if n-1 <= farthest:
                 return True
 
-        # last index is not reachable
+        # Implies: ran out of index to jump from,
+        #          we never reached the end
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(n)
+        # overall: sc O(1)
         return False
 ```
 
@@ -437,49 +453,73 @@ index possible from that index.
 ```python
     def jump(self, nums: List[int]) -> int:
         
-        # Note:
-        # Greedy (layer expansion like BFS)
-
-        # A layer in this context is a BFS level of the array.
-        # Each level contains all indices you can reach with the same number
-        # of jumps. 
+        # Greedy / Layer-by-Layer Expansion (BFS Analogy):
+        # We want the minimum number of jumps to reach the last index.
         
+        # Key Idea:
+        # Treat the array like levels in BFS.
+        #   - All indexes reached in k jumps are in the same k layer 
+        #   - When we finishing checking all indexes within the k layer, we will determine
+        #     the rightmost index we can jump to from any index in this k layer
+
+        # We keep track of:
+        #   1. current_end: boundaries of current k layer
+        #   2. farthest:    farthest index reachable from this layer 
+        
+        # When we reach 'current_end', we:
+        #   - Increment jump count
+        #   - Move to next layer by setting current_end = farthest
+        
+        # This works because we always greedily expand the next layer
+        # as far as possible before committing to another jump.
+
         n = len(nums)
 
-        # no jumps needed
+        # Single Index: no jumps needed
         if n == 1:
             return 0
 
-        # Each level contains all indices you can reach with the same number
-        # of jumps. 
-        jumps = 0
+        # Tracker for current number of jumps
+        k_jumps = 0
+        
+        # We check every k layer, to fins the rightmost index we can jump to,
+        # we use layer_boundary to mark the end of the current layer we are checking
+        k_layer_boundary = 0
 
-        # current_end marks the rightmost index in the current layer. 
-        # So when we reach current_end, it means we have finished exploring the
-        # current layer, and current_end holds the best next move for this layer.
-        current_end = 0
-
-        # keeps track of the furthest index we can reach in this layer.
+        # While checking k layer, we track of the furthest index we can reach from this layer
         farthest = 0
 
-        # iterate -> 0 to n-2
-        # problem guarantees we can always reach the last index,
-        # so we don't need to check for unreachable branches
+        # We are guaranteed to reach the last index,
+        # can simply iterate without checking for unreachable indexes
+        # tc: iterate over n O(n)
         for i in range(n-1):
 
-            # update farthest reachable index for index
+            # Check: candidate i within layer k, how far can we jump
+            reach_from_i = i + nums[i]
+
+            # Check: does candidate i provide a farther jump than the current
+            #        farthest possible for this k layer
             farthest = max(farthest, i + nums[i])
 
-            # reach end of current layer, go to next layer
-            if i == current_end:
-                jumps += 1          # need to jump
-                current_end = farthest  # move to next layer
+            # Check: does our farthest jump pass the last index
+            # Implies: found shortest number of jumps
+            if farthest >= n - 1:
+                return k_jumps + 1
 
-        # Result -> total jumps
+            # Check: have we finished checking all indexes within this k layer
+            # Implies: we have checked all of our options
+            # Then: jump to the rightmost index we have found for this k layer
+            if i == k_layer_boundary:
 
-        # overall: time complexity
-        # overall: space complexity
-        return jumps
+                # update jump count
+                k_jumps += 1
+
+                # mark next layer as the farthest jump
+                k_layer_boundary = farthest
+
+        # overall: tc O(n)
+        # overall: sc O(1)
+        return k_jumps
 ```
 
 
@@ -548,47 +588,60 @@ Return -1 if not possible.
 ```python
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         
-        # Note:
-        # Greedy Linear Scan
-        # 0. Direct Boundary -> if total gas < total cost, impossible (-1)
-        # 1. Process root -> traverse stations
-        # 2. Build From Previous -> track current tank balance
-        # 3. Explore Choices -> if tank < 0, reset start to next station
-        # 4. Result -> return start index (guaranteed unique if feasible)
+        # Greedy / Linear Scan Approach:
+        # We want to determine the unique starting station (if any)
+        # from which we can complete a full circuit.
 
+        # Key Ideas:
+        #   1. If total gas < total cost, completing the circuit is impossible.
+        #   2. Traverse stations while maintaining a running fuel balance (tank).
+        #   3. If tank becomes negative at station i, then:
+        #       - No station between the previous start and i can be a valid start.
+        #       - We reset the start to i + 1 and restart the tank.
+        #   4. If a solution exists, it is guaranteed to be unique.
+
+        # number of stations
+        # tc: O(1)
         n = len(gas)
 
-        # not enough total gas to cover total cost
+        # Direct Boundary Check:
+        # If total gas is less than total cost, it's impossible to complete the loop
+        # tc: O(n)
         if sum(gas) < sum(cost):
             return -1
 
-        # current gas
+        # Rolling Variable:
+        # tank -> current gas balance while traversing
+        # sc: O(1)
         tank = 0
-        # candidate starting station
+
+        # Candidate starting station
         start = 0
 
-        # try each starting station
+        # tc: iterate over n O(n)
         for i in range(n):
 
-            # Question guarantees solution to be unique, so:
-            # you don't need to try every starting point individually.
-            # As you iterate, you maintain a running tank balance.
-            # You never actually traverse every “branch”, but the greedy 
-            # reset logic ensures the feasible branch is picked.
 
-            # update tank balance
+            # Build From Previous:
+            # Update current gas balance after traveling from station i
+            # tc: O(1)
             tank += gas[i] - cost[i]
 
-            # reset start if tank is negative
-            # try next start candidate
+            # Explore Choices:
+            # If tank < 0, we cannot reach station i+1 from current start
+            # Implies:
+            #   - Any station between 'start' and i is also invalid as a start
+            #   - Reset start to i + 1 and reset tank
+            # tc: O(1)
             if tank < 0:
                 tank = 0
                 start = i + 1
 
-        # Result -> guaranteed unique if feasible
+        # Result:
+        # Since total gas >= total cost, the final 'start' is guaranteed to work
 
-        # overall: time complexity 
-        # overall: space complexity
+        # overall: tc O(n) 
+        # overall: sc O(1)
         return start
 ```
 

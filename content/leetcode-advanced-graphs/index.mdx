@@ -101,61 +101,66 @@ to get from start node to target node.
 ```python
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         
-        # Note:
-        # Why Dijkstras algorithm
-        # Dijkstras algorithm is designed to find the shortest path 
-        # from a single source to all nodes in a weighted graph 
-        # with non-negative edge weights, which fits this case
-
-        # Directed Edge -> signal path with weight w (time)
-        # Want minimum time for signal at k to reach all nodes
-        # If some node is unreachable, we return -1
-
-        # Note:
-        # 1. Build adjacency list: graph[src] = list of (dest, time)
-        # 2. MinHeap to always expand node with smallest current time
-        # 3. Track shortest times to each node in a dictionary
-        # 4. If all nodes are reached, return max shortest time
-        # 5. If some node is unreachable, return -1
-        # Result -> min time if all nodes are reachable
+        # Dijkstra's Algorithm (Single-Source Shortest Path):
+        # We want the minimum time for a signal sent from node k
+        # to reach all n nodes in a directed graph with non-negative weights.
         
-        # Build adjacency list
+        # Key Ideas:
+        #   1. Model the network as a directed weighted graph.
+        #   2. Use a min-heap to always expand the node with the smallest
+        #      known signal arrival time.
+        #   3. Maintain a dictionary of shortest known times to each node.
+        #   4. If all nodes are reached, return the maximum of these times.
+        #   5. If some node is unreachable, return -1.
+
+        # Build adjacency list: graph[src] = [(dest, weight), ...]
+        # tc: O(edge)
         graph = defaultdict(list)
         for u, v, w in times:
             graph[u].append((v, w))
         
-        # MinHeap: (time_to_reach_node, node)
+        # Min-Heap:
+        # Each entry is (time_to_reach_node, node)
+        # sc: O(node)
         heap = [(0, k)]
         
-        # Track seen nodes with shortest known times
+        # Dictionary to track shortest known time to each node
+        # Invariant: once a node is added here, its shortest time is finalized
         shortest_time = {}
         
+        # tc: each node/edge O(e) processed via O(log n) heap operations O(e log n)
         while heap:
 
-            # next smallest time node
+            # Pop node with smallest known arrival time
             time, node = heapq.heappop(heap)
             
-            # already visited neighbor with shorter time, skip
+            # Skip if this node already has a finalized shortest time
+            # (We found a better path earlier)
             if node in shortest_time:
                 continue
             
-            # Record shortest time to reach node
+            # Record shortest time to reach this node
             shortest_time[node] = time
             
-            # Explore Choices -> push adjacent neighbors onto minHeap
+            # Explore Choices:
+            # Relax all outgoing edges from this node
             for neighbor, wt in graph[node]:
+
+                # If neighbor not finalized, push updated time candidate
                 if neighbor not in shortest_time:
                     heapq.heappush(heap, (time + wt, neighbor))
         
-        # Check if all nodes were reached
+        # After processing:
+        # If not all nodes were reached, signal cannot reach everyone
         if len(shortest_time) != n:
             return -1
         
-        # max time among all shortest times -> min time required
+        # Result:
+        # The total network delay is the maximum shortest arrival time
         res = max(shortest_time.values())
 
-        # overall: time complexity O(E log N) for min-heap operations
-        # overall: space complexity O(N + E) for graph and shortest_time     
+        # overall: tc O(e log n)
+        # overall: sc O(n + e)     
         return res
 ```
 
