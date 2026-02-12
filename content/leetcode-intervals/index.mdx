@@ -96,7 +96,7 @@ remains sorted and non-overlapping.
 ```python
 ```
 
-## Solution 1: Greedy Merge - Intervals/Intervals
+## Solution 1: [Greedy] Greedy Merge - Intervals/Intervals
 ```python
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
         
@@ -104,7 +104,7 @@ remains sorted and non-overlapping.
         # We are inserting a new interval into a list of non-overlapping, sorted intervals
         # and returning a merged list of non-overlapping intervals.
 
-        # Key Idea (Greedy):
+        # Greedy Merge Idea:
         # 1. Intervals ending before the new interval -> no overlap, add directly
         # 2. Intervals overlapping with new interval -> merge into one
         # 3. Intervals starting after the new interval ends -> add directly
@@ -226,85 +226,152 @@ merge all overlapping intervals.
 ```python
 ```
 
-## Solution 1: Greedy Sort Merge - Intervals/Intervals
+## Solution 1: [Sorting] [Greedy] Sort Intervals By Start Time Greedy Linear Scan Last Interval Merge - Intervals/Intervals
 ```python
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         
-        # Note:
-        # Greedy / Sorting approach
-        # 1. Process root -> sort intervals by start time
-        # 2. Build -> iterate through sorted intervals, merging overlapping ones
-        # 3. Explore Choices -> if current interval overlaps previous, merge; else, append
-        # 4. Result -> list of merged, non-overlapping intervals
+        # Interval Merging / Greedy + Sorting:
+        # Goal: merge all overlapping intervals into a list of non-overlapping intervals
 
-        # Empty check
+        # This is the same as Merge Intervals, just that the list is not sorted
+        # and the intervals may overlap
+
+        # Linear Greedy Scan:
+        # The current greedy merge works because intervals are sorted by start time.
+        # The properties of the intervals sorted by start time, allow us to assume:
+        #   - All previous intervals have already been merged into merged[-1], the last interval
+        #   - No earlier intervals can overlap the current interval
+        #   - Two possibilities exist for the current interval
+        #       - Overlaps with merged[-1] => merge by updated the end
+        #       - No overlap with merged[-1] => append as new interval
+
+        # Key Idea (Sort + Greedy Linear Scan):
+        # 1. Process Root -> sort intervals by start time
+        # 2. Build -> iterate through sorted intervals, merging overlapping ones
+        # 3. Explore Choices -> if current interval overlaps previous (last interval in merged list), 
+        #    merge then; else, append as a new last interval
+
+        # Empty check: no intervals, return []
         if not intervals:
             return []
 
         # Sort intervals by start time
+        # tc: python (2.3-3.10) TimSort, Python (3.11+) PowerSort Worst/Avg: O(n log n), Best: O(n)
+        # sc: sorts in place, no extra memory O(1)
         intervals.sort(key=lambda x: x[0])
 
-        # Initialize with first interval
+        # Initialize merged list with lowest start time interval,
+        # at the top of the minHeap
+        # tc: O(1)
         merged = [intervals[0]]
 
-        # Iterate over all intervals
+        # tc: terate over all intervals O(n)
         for i in range(1, len(intervals)):
 
-            # curr interval
+            # Current interval
             current = intervals[i]
 
             # rightmost interval
             last_merged = merged[-1]
 
-            # if intervals overlap, merge
+            # Current interval either:
+            #   - does overlap with last interval on the merged list
+            #   - does not overlap with last interval on the merged list
+
+            # if intervals overlap, merge by updated the end time
             if current[0] <= last_merged[1]:
                 last_merged[1] = max(last_merged[1], current[1])
 
-            # no overlap, append interval to list
+            # no overlap, append new interval to merged list
             else:
                 merged.append(current)
 
-        # overall: time complexity O(n log n)
-        # overall: space complexity O(n)
+        # overall: tc O(n log n)
+        # overall: sc O(n)
         return merged 
 ```
 
-## Solution 2: Greedy Heap Merge - Intervals/Intervals
+## Solution 2: [No Sorting] [Greedy] MinHeap By Interval Start Time Greedy Linear Scan Last Interval Merge - Intervals/Intervals
 ```python
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         
-        # Note:
-        # Greedy / Heap approach
-        # 1. Push all intervals into a min-heap (ordered by start)
-        # 2. Pop intervals one by one
-        # 3. Interval does not overlap with end of array, append
-        # 4. Interval overlaps with end of array, merge 
-        # Result -> List of merged intervals
+        # Interval Merging / Greedy + Heap:
+        # Goal: merge all overlapping intervals into a list of non-overlapping intervals
 
-        # Empty check
+        # Linear Greedy Scan:
+        # The current greedy merge works because intervals are sorted by start time.
+        # The properties of the intervals sorted by start time, allow us to assume:
+        #   - All previous intervals have already been merged into merged[-1], the last interval
+        #   - No earlier intervals can overlap the current interval
+        #   - Two possibilities exist for the current interval
+        #       - Overlaps with merged[-1] => merge by updated the end
+        #       - No overlap with merged[-1] => append as new interval
+
+        # MinHeap / Priority Queue
+        # Maintains a binary heap where the smallest element is at the root.
+        # Allows for efficient access to the minimum element
+        #   - Insertion(): parent less than or equal to children
+        #   - Pop(): restructures heap to keep new min at top
+        #   - Push()
+        #       - New element < current top => bubble up to maintain heap property
+        #       - New element >= current top => placed in proper position via bubble up
+        # Guarantees root has current min with O(1) access and insertion/removal in O(log n)
+
+        # Heapify vs Sequential Insertions
+        # A heap can be build in two ways:
+        #
+        #   1. Sequential Insertions:
+        #       - pushes n elements one by one, each in O(log k) => O(n log n)
+        #
+        #   2. Heapify (bottom-up):
+        #       - adjusts n elements at once starting from the last parent up to the root
+        #       - lower levels require fewer comparisons, so total work => O(n)
+
+        # Key Idea (Greedy + Heap):
+        # 1. Push all intervals into a min-heap ordered by start time
+        # 2. Pop intervals one by one
+        # 3. Explore Choices:
+        #      - If no overlap with last interval in result, append
+        #      - If overlap, merge intervals
+        # 4. Result -> list of merged intervals
+
+        # Empty check: no intervals, return []
         if not intervals:
             return []
 
-        # 1. Push all intervals into a min-heap (ordered by start)
+        # Sort Intervals By Start Time:
+        # Push all intervals into a minHeap (ordered by start)
+        # tc: heapify O(n)
+        # sc: n intervals in heap O(n)
         heap = [(s, e) for s, e in intervals]
         heapq.heapify(heap)
 
+        # final interval list
+        # sc: O(n)
         merged = []
 
-        # 2. Pop intervals one by one
+        # Pop intervals one by one from low start to high start time
+        # tc: n removals in log n leading to O(n log n) 
         while heap:
+
+            # Grab interval with lowest start time
+            # tc: O(log n)
             start, end = heapq.heappop(heap)
 
-            # 3. Interval does not overlap with end of array, append
+            # Current interval either:
+            #   - does overlap with last interval on the merged list
+            #   - does not overlap with last interval on the merged list
+
+            # if intervals overlap, merge by updated the end time
             if not merged or merged[-1][1] < start:
                 merged.append([start, end])
 
-            # 4. Interval overlaps with end of array, merge 
+            # no overlap, append new interval to merged list
             else:
                 merged[-1][1] = max(merged[-1][1], end)
 
-        # overall: time complexity O(n log n) (heapify + n pops)
-        # overall: space complexity O(n) for merged list
+        # overall: tc O(n log n)
+        # overall: sc O(n)
         return merged
 ```
 
