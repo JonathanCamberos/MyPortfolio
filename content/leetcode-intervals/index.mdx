@@ -100,46 +100,77 @@ remains sorted and non-overlapping.
 ```python
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
         
-        # Note:
-        # Iterate over all intervals:
-        #   1. Interval ends before newInterval starts -> add to list
-        #   2. Interval overlaps -> merge into newInterval, then add
-        #   3. Interval starts after newInterval ends -> add to list
-        # Result -> merged list of intervals
+        # Interval Insertion / Greedy Merge:
+        # We are inserting a new interval into a list of non-overlapping, sorted intervals
+        # and returning a merged list of non-overlapping intervals.
 
+        # Key Idea (Greedy):
+        # 1. Intervals ending before the new interval -> no overlap, add directly
+        # 2. Intervals overlapping with new interval -> merge into one
+        # 3. Intervals starting after the new interval ends -> add directly
+        # We iterate once over all intervals, maintaining a merged interval along the way.
+
+        # num of intervals
+        # sc: O(1)
         n = len(intervals)
 
+        # sc: list of n intervals O(n)
         res = []
 
-        # to create merged interval
+        # new interval to be added
+        # sc: O(1)
         start = newInterval[0]
         end = newInterval[1]
 
+        # iterate over list of sorted intervals
+        # sc: O(1)
         i = 0
 
-        # 1. Interval ends before newInterval starts -> add to list
+        # Base Case: intervals before newInterval
+        # Check: interval_end < newInterval_start 
+        # Then: append to new list
+        # tc: O(n)
         while i < n and intervals[i][1] < start:
+
+            # simply add interval
             res.append(intervals[i])
+
+            # iterate to next interval
             i += 1
 
-        # 2. Interval overlaps -> merge into newInterval, then add
+        # Merge Case: interval overlaps with newInterval
+        # Check: Interval overlaps
+        # Then: merge into interval + newInterval
+        # tc: O(n)
         while i < n and intervals[i][0] <= end:
 
-            # update start and end of merged interval
+            # Determine new start and end of merged interval
+
+            # update start to be min between interval and newInterval
             start = min(start, intervals[i][0])
+            # update end to be max between interval and newInterval
             end = max(end, intervals[i][1])
+
+            # iterate to next interval
             i += 1
 
         # Append merged interval
         res.append([start, end])
 
-        # 3. Interval starts after newInterval ends -> add to list
+        # Base Case: intervals after newInterval
+        # Check: newInterval_end < interval_star
+        # Then: append to new list
+        # tc: O(n)
         while i < n:
+
+            # simply add interval
             res.append(intervals[i])
+
+            # iterate to next interval
             i += 1
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return res
 ```
 

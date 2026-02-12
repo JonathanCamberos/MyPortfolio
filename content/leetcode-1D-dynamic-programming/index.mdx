@@ -820,7 +820,7 @@ by either climbing 1 or 2 steps at a time.
         OnePrev = 1  # first step
 
         # Iterative Build (Bottom-Up Traversal):
-        # Start from step 2 up to n
+        # Start from [2, n]
         # For each step i, build current number of ways from previous two
         # tc: O(1) per iteration, overall O(n)
         for i in range(2, n+1):
@@ -901,43 +901,70 @@ find the cheapest cost to climb to the top.
 ```python
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         
-        # Note:
-        # Top Down DP (memoized recursion)
-        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it
-        # 1. Memo Check -> computed previously
-        # 2. Padding Boundary -> ground step 0
-        # 3. Padded Boundary -> first element
-        # 4. Build From Previous -> grab from previous two steps and sum paths
-        # 5. Memo return -> return ways, calculated once
-        # Result: min cost to reach n from last or 2nd to last step
+        # Dynamic Programming (DP):
+        # DP is used when a problem has:
+        #   1. Overlapping subproblems
+        #   2. Optimal substructure
+        # Top-Down DP computes the solution recursively and caches results
+        # to avoid recomputation.
 
+        # Three DP Perspectives:
+        # 1. i -> N (Top-Down Recursive with Memoization)
+        # 2. 0 -> i (Bottom-Up Recursive)
+        # 3. 0 → i (Bottom-Up Iterative / Tabulation)
+        # This solution uses i → N (Top-Down Recursive with Memoization)
+
+        # Problem Setup:
+        # Let dfs(i) represent the minimum cost to reach step i
+        # starting from step 0, considering cost array indexing (cost[i-1]).
+
+        # Recurrence Relation:
+        # Minimum cost to reach step i is:
+        # cost to step i-1 + min(cost to reach i-1, cost to reach i-2)
+            
+        # sc: setting up search space rows [0, n] O(1)
         n = len(cost)
 
+        # Memoization: avoid recomputation of overlapping subproblems
+        # sc: O(n) for memo dictionary
         memo = {}
 
         def dfs(i):
 
-            # Memo Check -> computed previously
+            # Memo Check:
+            # If step i has been computed previously, return it
+            # tc: O(1)
             if i in memo:
                 return memo[i]
 
-            # Padding Boundary -> ground step 0
+            # Base Case: Ground Step
+            # i == 0 -> no cost to stay at ground
+            # tc: O(1)
             if i == 0:
                 return 0
 
-            # Padded Boundary -> first element
+            # Base Case: First Step
+            # i == 1 -> cost to reach first step is cost[0]
+            # tc: O(1)
             if i == 1:
                 return cost[0]
 
-            # Build From Previous -> min cost to reach current step
+            # Build From Previous:
+            # Number of ways to reach step i is cost to reach step i + min(cost between previous two steps)
             memo[i] = cost[i-1] + min(dfs(i-1), dfs(i-2))
+            
+            # Return:
+            # Min cost to reach step i
+            # tc: O(1)
             return memo[i]
 
-        # res -> reach step n by coming from last two steps
+        # Return:
+        # Minimum cost to reach step i
+        # tc: O(1)
         res = min(dfs(n), dfs(n-1))
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n) (memo + recursive stack)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return res
 ```
 
