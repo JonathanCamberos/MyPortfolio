@@ -559,43 +559,92 @@ by either climbing 1 or 2 steps at a time.
 ```python
     def climbStairs(self, n: int) -> int:
 
-        # Note:
-        # Top Down DP (memoized recursion)
-        # 0. Direct Length -> no need for len == n check, recursive padding boundary covers it
-        # 1. Memo Check -> computed previously
-        # 2. Pad Boundaries -> overshot case case
-        # 3. Padded Boundary -> last element n
-        # 3. Build From Previous -> grab from previous two steps and sum paths
-        # 5. Memo Return -> return ways, calculated once
-        # Result: Ways to climb from 0 to nth step
+        # Dynamic Programming (DP):
+        # DP is used when a problem has:
+        #   1. Overlapping subproblems
+        #   2. Optimal substructure
+        # Instead of recomputing subproblems, we cache results and compute 
+        # each subproblem only once.
 
+        # Three DP Perspectives:
+        # 1. i -> N (Top-Down Recursive with Memoization)
+        # 2. 0 -> i (Bottom-Up Recursive)
+        # 3. 0 -> i (Bottom-Up Iterative / Tabulation)
+
+        # State Definition:
+        # Let dfs(i) represent the number of ways to reach step n
+        # starting from step i.
+
+        # Recurrence Relation:
+        # From step i, you can:
+        #   - take 1 step -> go to i + 1
+        #   - take 2 steps -> go to i + 2
+        # Therefore:
+        #   dfs(i) = dfs(i + 1) + dfs(i + 2)
+
+        # Base Cases (Padded Boundaries):
+        #   - If i == n: reached the top -> 1 valid way
+        #   - If i > n: overshot -> 0 valid ways
+        # Padding eliminates the need for explicit length checks.
+
+        # Memoization (Caching Overlapping Subproblems):
+        # Multiple paths can reach the same step i.
+        # Without caching, recursion becomes exponential.
+        # With memoization, each state i is computed once.
+
+        # Top-Down Traversal:
+        # We start at step 0 and recursively move forward toward n.
+        # Results propagate backward through the call stack.
+        # This is DFS over a linear state space with caching.
+
+        # State Space (1D DP Array Conceptually):
+        #   Nodes: i where 0 <= i <= n
+        #   Edges: i -> i+1, i -> i+2
+        # This forms a directed acyclic graph (DAG).
+        # We are counting paths from node 0 to node n.
+
+        # Memoization: avoid recomputation of overlapping sub problems
+        # sc: O(n) for memo dictionary
         memo = {}
 
         def dfs(i):
 
-            # Memo Check -> computed previously
+            # Memo Check:
+            # Check: if step has been computed previously
+            # tc: O(1)
             if i in memo:
                 return memo[i]
             
-            # Pad Boundaries -> overshot case case
+            # Base Case: Overshot
+            # Check: i > n, we've exceeded to top step
+            # tc: O(1)
             if i > n:
                 return 0
 
-            # Padded Boundary -> last element n
+            # Base Case: Target
+            # Check: i == n, we've reached the top step
+            # tc: O(1)
             if i == n:
                 return 1
 
-            # Build From Previous -> grab from previous two steps and sum paths
+            # Recurrence Relation:
+            # Build from future states: take 1 and 2 steps
+            # dfs(i) = dfs(i+1) + dfs(i+2)
+            # tc: O(1) per call, overall O(n) due to memoization
             memo[i] = dfs(i + 1) + dfs(i + 2)
 
-            # Memo return: return ways, calculated once
+            # Return:
+            # Number of ways for step i
+            # tc: O(1)
             return memo[i]
 
-        # res -> ways to get from 0 to nth step
+        # Initial Call:
+        # Number of ways starting from step 0
+        # tc: O(1)
         res = dfs(0)
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n) (memo + recursion stack)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return res
 ```
 
@@ -603,44 +652,82 @@ by either climbing 1 or 2 steps at a time.
 ```python
     def climbStairs(self, n: int) -> int:
 
-        # Note:
-        # Top Down DP (memoized recursion)
-        # 0. Direct Length -> no need for len == 1 check, recursive padding boundary covers it
-        # 1. Memo Check -> computed previously
-        # 2. Pad Boundaries -> 0 ground case
-        # 3. Padded Boundary -> 1st element
-        # 4. Build From Previous -> grab from previous two steps and sum paths
-        # 5. Memo return -> return ways, calculated once
-        # Result: Ways to climb from 0 to nth step
+        # Dynamic Programming (DP):
+        # DP is used when a problem has:
+        #   1. Overlapping subproblems
+        #   2. Optimal substructure
+        # Instead of recomputing subproblems, we cache results and compute 
+        # each subproblem only once.
 
+        # Three DP Perspectives:
+        # 1. i -> N (Top-Down Recursive with Memoization)
+        # 2. 0 -> i (Bottom-Up Recursive)
+        # 3. 0 -> i (Bottom-Up Iterative / Tabulation)
+        # This solution uses 0 -> i (Top-Down Recursive with Memoization)
+
+        # State Definition:
+        # Let dfs(i) represent the number of ways to reach step i
+        # starting from step 0.
+
+        # Recurrence Relation:
+        # To reach step i, you can come from:
+        #   - step i-1 (1 step)
+        #   - step i-2 (2 steps)
+        # Therefore:
+        #   dfs(i) = dfs(i - 1) + dfs(i - 2)
+
+        # Base Cases (Padded Boundaries):
+        #   - If i == 0: ground level -> 1 valid way
+        #   - If i == 1: first step -> 1 valid way
+        # Padding eliminates the need for explicit length checks.
+
+        # Memoization (Caching Overlapping Subproblems):
+        # Multiple paths can reach the same step i.
+        # Without caching, recursion becomes exponential.
+        # With memoization, each state i is computed once.
         # Ways to climb from 0 to ith step
+
+        # sc: O(n) for memo dictionary
         memo = {}
 
         def dfs(i):
 
-            # Memo Check -> computed previously
+            # Memo Check:
+            # Check: if step has been computed previously
+            # tc: O(1)
             if i in memo:
                 return memo[i]
             
-            # Pad Boundaries -> 0 ground case
+            # Base Case: Ground Level
+            # i == 0, 1 way to reach ground level
+            # tc: O(1)
             if i == 0:
                 return 1
 
-            # Padded Boundary -> 1st element
+            # Base Case: First Step
+            # i == 1, 1 way to reach first step
+            # tc: O(1)
             if i == 1:
                 return 1
 
-            # Build From Previous -> grab from previous two steps and sum paths
+            # Recurrence Relation:
+            # Build from previous states: step i-1 and i-2
+            # dfs(i) = dfs(i - 1) + dfs(i - 2)
+            # tc: O(1) per call, overall O(n) due to memoization
             memo[i] = dfs(i - 1) + dfs(i - 2)
 
-            # Memo return -> return ways, calculated once
+            # Return:
+            # Number of ways to reach step i
+            # tc: O(1)
             return memo[i]
 
-        # res -> ways to climb from 0 to nth step
+        # Initial Call:
+        # Number of ways to reach step n
+        # tc: O(1)
         res = dfs(n)
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n) (memo + recursion stack)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return res
 ```
 
@@ -648,29 +735,53 @@ by either climbing 1 or 2 steps at a time.
 ```python
     def climbStairs(self, n: int) -> int:
         
-        # Note:
-        # Iterative Bottom Up Tabulation
-        # 1. Pad Array -> 0 ground case, dp size (N+1)
-        # 2. Padded -> grab 1st element
-        # 3. Iterate -> 2 to n
-        # 4. Build From Previous -> grab from previous two steps and sum paths
-        # Result: ways to climb to nth step
+        # Dynamic Programming (DP):
+        # DP is used when a problem has:
+        #   1. Overlapping subproblems
+        #   2. Optimal substructure
+        # Bottom-Up DP builds solutions iteratively from the smallest subproblems
+        # to the target, eliminating recursion entirely.
 
-        # Pad Array -> 0 ground case, dp size (N+1)
-        dp = [0] * (n + 1)   # padding:
-        dp[0] = 1            # padding: ground case, does not exist in array
-        dp[1] = 1            # padded: first step
+        # Three DP Perspectives:
+        # 1. i -> N (Top-Down Recursive with Memoization)
+        # 2. 0 -> i (Top-Down Recursive / 0 → i)
+        # 3. 0 -> i (Bottom-Up Iterative / Tabulation)
+        # This solution uses 0 → i (Bottom-Up Iterative Tabulation)
 
-        # Iterate -> 2 to nth
+        # State Definition:
+        # dp[i] represents the number of ways to reach step i from step 0.
+
+        # Base Cases (Padded Boundaries):
+        #   - dp[0] = 1 -> 1 way to stay at ground level
+        #   - dp[1] = 1 -> 1 way to reach first step
+        # Padding simplifies the iterative logic, avoiding index errors.
+
+        # Array Size:
+        # if n = 5, the steps are [0, 1, 2, 3, 4, 5] => 6 elements => n + 1.
+
+        # Initialize DP Array:
+        # sc: O(n) for dp array
+        dp = [0] * (n+1)
+        dp[0] = 1            # ground level
+        dp[1] = 1            # first step
+
+        # Iterate Build (Bottom-Up Traversal):
+        # Start from step 2 up to n
+        # For each step i, build dp[i] from dp[i-1] and dp[i-2]
+        # tc: iterate over n O(n)
         for i in range(2, n+1):
-            # Build From Previous -> grab from previous two steps and sum paths
+
+            # Build From Previous:
+            # Number of ways to reach step i is sum of ways to reach previous two steps
             dp[i] = dp[i-1] + dp[i-2]
 
-        # res -> nth step
+        # Result:
+        # Number of ways to reach step n
+        # tc: O(1)
         res = dp[n]
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return res
 ```
 
@@ -678,33 +789,57 @@ by either climbing 1 or 2 steps at a time.
 ```python
     def climbStairs(self, n: int) -> int:
         
-        # Note:
-        # Iterative Bottom Up Variables
-        # 1. Pad Variables -> 0 ground case
-        # 2. Padded -> grab 2st element
-        # 3. Iterate -> 2 to n
-        # 4. Build From Previous -> grab from previous two steps and sum paths
-        # 5. Roll Variables -> Iterate Variables
-        # Result: ways to climb to nth step
+        # Dynamic Programming (DP):
+        # DP is used when a problem has:
+        #   1. Overlapping subproblems
+        #   2. Optimal substructure
+        # Bottom-Up DP can be optimized to use constant space by only
+        # storing the last two computed states, since each state depends
+        # only on the previous two.
+        
+        # Three DP Perspectives:
+        # 1. i -> N (Top-Down Recursive with Memoization)
+        # 2. 0 -> i (Top-Down Recursive / 0 → i)
+        # 3. 0 → i (Bottom-Up Iterative / Tabulation)
+        # This solution uses 0 → i (Bottom-Up Iterative with Rolling Variables)
 
-        # Pad Variables -> 0 ground case
-        TwoPrev = 1  # padding:
-        OnePrev = 1  # padded: 1st element
+        # State Definition:
+        # prev2: number of ways to reach step i-2
+        # prev1: number of ways to reach step i-1
+        # curr: number of ways to reach step i
+        # Only two previous states are needed because dp[i] = dp[i-1] + dp[i-2]
 
-        # Iterate -> 2 to n
+
+        # State Definition:
+        # prev2: step i-2
+        # prev1: step i-1
+        # curr:  step i
+        # Only two previous states are needed because dp[i] = dp[i-1] + dp[i-2]
+        # sc: O(1)
+        TwoPrev = 1  # ground
+        OnePrev = 1  # first step
+
+        # Iterative Build (Bottom-Up Traversal):
+        # Start from step 2 up to n
+        # For each step i, build current number of ways from previous two
+        # tc: O(1) per iteration, overall O(n)
         for i in range(2, n+1):
 
-            # Build From Previous -> grab from previous two steps and sum paths
+            # Build From Previous:
+            # Number of ways to reach step i is sum of ways to reach previous two steps
             curr = TwoPrev + OnePrev
 
-            # Slide Window -> Roll Variables
+            # Roll Variable:
+            # Move values forward
             TwoPrev, OnePrev = OnePrev, curr
         
-        # res -> ways to climb to n step
+        # Result:
+        # Number of ways to reach step n
+        # tc: O(1)
         res = OnePrev
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return res
 ```
 
