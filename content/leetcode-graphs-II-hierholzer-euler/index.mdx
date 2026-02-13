@@ -95,46 +95,47 @@ EDge weights are only 0 or 1
 ## Multi Source BFS
 Rotting oranges
 
-# 1003. Network Delay Time ::1:: - Medium
 
-Topics:  Depth First Search, Breadth First Search, Graph, Heap (Priority Queue), Shortest Path
+# 332. Reconstruct Itinerary ::1:: - Hard
+
+Topics:  Depth First Search, Graph, Eulerian Circuit
 
 ## Intro
-> You are given a network of n nodes, labeled from 1 to n. 
-> You are also given times, a list of travel times as directed 
-> edges times[i] = (ui, vi, wi), where ui is the source 
-> node, vi is the target node, and wi is the time it takes for 
-> a signal to travel from source to target.
-> We will send a signal from a given node k. Return the
-> minimum time it takes for all the n nodes to receive the 
-> signal. If it is impossible for all the n nodes to receive the 
-> signal, return -1.
+> You are given a list of airline tickets where 
+> tickets[i] = [fromi, toi] represent the departure and the
+> arrival airports of one flight. Reconstruct the
+> itinerary in order and return it.
+> All of the tickets belong to a man who departs from 
+> "JFK", thus, the itinerary must begin with "JFK". If 
+> there are multiple valid itineraries, you should return 
+> the itinerary that has the smallest lexical order when 
+> read as a single string.
+> For example, the itinerary ["JFK", "LGA"] has a 
+> smaller lexical order than ["JFK", "LGB"].
+> You may assume all tickets form at least one valid 
+> itinerary. You must use all the tickets once and only once.
 
 |  Example Input           | Output |  
 | ---------------- | ------ | 
-| times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2 | 2 |
-| times = [[1,2,1]], n = 2, k = 1 | 1 |
-| times = [[1,2,1]], n = 2, k = 2 | -1 |
+| tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]] | ["JFK","MUC","LHR","SFO","SJC"] |
+| tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]] | ["JFK","ATL","JFK","SFO","ATL","SFO"] |
 
 Constraints:
 
-1 &leq; k &leq; n &leq; 100
+1 &leq; tickets.length &leq; 300
 
-1 &leq; times.length &leq; 6000
+tickets[i].length == 2
 
-times[i].length == 3
+fromi.length == 2
 
-1 &leq; ui, vi &leq; n
+toi.length == 3
 
-ui != vi
+fromi and toi consist of uppercase English letters.
 
-0 &leq; wi &leq; 100
-
-All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
+fromi != toi
 
 ## Abstraction
-Given a graph, each node with 1 edges, determine how much time is needed
-to get from start node to target node.
+Given a graph, determine the flight path.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -161,71 +162,101 @@ to get from start node to target node.
 ```python
 ```
 
-## Solution 1: [Dijkstra's] BFS And MinHeap To Keep Shortest Path - Advanced Graphs/Advanced Graphs
+## Solution 1: [Hierholzer's] [Eulerian Path] Hierholzer's Algorithm Eulerian Path via DFS + MinHeap for Lexical Order - Advanced Graphs/Advanced Graphs
 ```python
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
         
-        # Dijkstra's Algorithm (Single-Source Shortest Path):
-        # We want the minimum time for a signal sent from node k
-        # to reach all n nodes in a directed graph with non-negative weights.
-        
-        # Key Ideas:
-        #   1. Model the network as a directed weighted graph.
-        #   2. Use a min-heap to always expand the node with the smallest
-        #      known signal arrival time.
-        #   3. Maintain a dictionary of shortest known times to each node.
-        #   4. If all nodes are reached, return the maximum of these times.
-        #   5. If some node is unreachable, return -1.
-
-        # Build adjacency list: graph[src] = [(dest, weight), ...]
-        # tc: O(edge)
-        graph = defaultdict(list)
-        for u, v, w in times:
-            graph[u].append((v, w))
-        
-        # Min-Heap:
-        # Each entry is (time_to_reach_node, node)
-        # sc: O(node)
-        heap = [(0, k)]
-        
-        # Dictionary to track shortest known time to each node
-        # Invariant: once a node is added here, its shortest time is finalized
-        shortest_time = {}
-        
-        # tc: each node/edge O(e) processed via O(log n) heap operations O(e log n)
-        while heap:
-
-            # Pop node with smallest known arrival time
-            time, node = heapq.heappop(heap)
-            
-            # Skip if this node already has a finalized shortest time
-            # (We found a better path earlier)
-            if node in shortest_time:
-                continue
-            
-            # Record shortest time to reach this node
-            shortest_time[node] = time
-            
-            # Explore Choices:
-            # Relax all outgoing edges from this node
-            for neighbor, wt in graph[node]:
-
-                # If neighbor not finalized, push updated time candidate
-                if neighbor not in shortest_time:
-                    heapq.heappush(heap, (time + wt, neighbor))
-        
-        # After processing:
-        # If not all nodes were reached, signal cannot reach everyone
-        if len(shortest_time) != n:
-            return -1
-        
+        # Hierholzer's Algorithm / DFS on Graphs:
+        # Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.
+        # Key differences:
+        #   1. DFS on Trees:
+        #        - Visits each node exactly once
+        #        - Appends nodes in post-order (after visiting children)
+        #        - No cycles, so edges are implicitly used exactly once
+        #   2. Hierholzer DFS on Graphs:
+        #        - Visits each edge exactly once (nodes can be visited multiple times)
+        #        - Removes edges as they are used to prevent revisiting
+        #        - Appends nodes in post-order after all outgoing edges are traversed
+        #        - Handles cycles and constructs Eulerian paths or circuits
+        #   3. Analogy:
+        #        - Tree DFS explores nodes, Hierholzer DFS explores edges
+        #        - Post-order ensures correct construction of paths in both
         # Result:
-        # The total network delay is the maximum shortest arrival time
-        res = max(shortest_time.values())
+        #   - DFS-like traversal that builds a valid Eulerian path using every edge exactly once
 
-        # overall: tc O(e log n)
-        # overall: sc O(n + e)     
+        # Hierholzer’s Algorithm:
+        # Designed to construct an Eulerian path efficiently.
+        # Core Idea: 
+        #   - Recursively follow edges, removing them as you go, using each edge exactly once.
+        #   - PostOrder Construction: append airports after visiting all outbound edges,
+        #                             so the path is built in reverse.
+        #   - Lexical Order Preserved: if multiple edges exist, minHeap allows to choose the smallest airport
+        
+        # Eulerian Path:
+        # A trail in a graph that visits every edge exactly once, allowing for revisiting vertices.
+        # - In the context of flight tickets:
+        #     - Each ticket represents a directed edge from one airport to another.
+        #     - We must use all tickets exactly once, starting from "JFK".
+        #     - We are allow to revisit airports
+
+        # Graph Existence rules:
+        #   1. At most: one node has (out-degree - in-degree) = 1 (starting node)
+        #   2. At most: one node has (in-degree - out-degree) = 1 (ending node)
+        #   3. All other nodes have equal degrees (in-degree == out-degree).
+
+        # Directed Graph (Adjacency List):
+        #   - Vertices: airports
+        #   - Edges: flight tickets (from src -> dest)
+        #   - Neighbors: destinations reachable from a given airport
+        #   - MinHeap ensures lexical order when multiple choices exist
+
+        # Note:
+        # 1. Build graph: graph[src] = MinHeap of destinations
+        #    (MinHeap ensures lexical order when multiple choices exist)
+        # 2. Use DFS to traverse graph:
+        #      Always choose the smallest lexical destination first
+        #      Remove tickets (edges) as we use them
+        # 3. Append airports to itinerary in post-order (after visiting neighbors/edges)
+        # 4. Reverse itinerary at the end to get correct order starting at JFK
+        # Result -> shortest path through all airports starting at jfk
+
+
+        # Build adjacency list with MinHeaps
+        # sc: O(V), number of vertices
+        graph = defaultdict(list)
+        
+        # Build MinHeap for each source airport
+        # sc: O(E), one entry per edge used
+        for src, dest in tickets:
+            heapq.heappush(graph[src], dest)
+        
+        # itinerary build in reverse (post order)
+        # sc: O(E), one entry per edge used
+        itinerary = []
+
+        def dfs(airport):
+
+            # Explore all neighbors in lexical order
+            # tc: each edge processed once -> O(E)
+            while graph[airport]:
+                # tc: O(log E) per pop
+                next_dest = heapq.heappop(graph[airport])
+                dfs(next_dest)
+            
+            # PostOrder append to itinerary
+            # sc: O(1) per append, overall O(E)
+            itinerary.append(airport)
+
+        # Start Eulerian Path via DFS + MinHeap from "JFK"
+        # tc: O(E log E) for all recursive DFS calls with heap pops
+        dfs("JFK")
+        
+        # Reverse to get correct order
+        # tc: O(E), sc: O(E) for reversed list
+        res = itinerary[::-1]
+
+        # overall: tc O(e log e)
+        # overall: sc O(e + v)
         return res
 ```
-
 

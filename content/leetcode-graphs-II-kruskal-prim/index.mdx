@@ -1,0 +1,274 @@
+---
+title: "LeetCode: Graphs II Kruskal Prim"
+description: "advanced graphs"
+image: "../../public/Notes/kruskal.png"
+publishedAt: "2026-02-12"
+updatedAt: "2026-02-12"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- data structures and algorithms
+---
+
+# Advanced Graphs Intro
+
+## What is Advanced Graphs
+
+graphs 2!
+
+## Advanced Graphs IRL
+graphs2!
+
+## Traversal Algorithm (Foundation)
+
+### DFS
+
+### BFS
+
+## Shortest Path Algorithms
+
+### Dijkstra's (minHeap) 
+Graphs with non negative weights
+
+Dijkstra's Algorithm / Greedy BFS with MinHeap:
+Dijkstra is a graph traversal algorithm for finding the shortest path from a single source
+to all other nodes in a weighted graph with non-negative edge weights.
+Key Concepts:
+    1. BFS Analogy:
+        - Similar to BFS layer expansion, but we expand nodes in order of minimum current distance
+        - Instead of levels, we prioritize nodes by shortest accumulated distance
+    2. Greedy Choice:
+        - Always pick the next node with the smallest known distance (via MinHeap)
+        - Guarantees that when a node is popped from the heap, its shortest distance is final
+    3. Differences vs DFS/BFS:
+        - DFS/BFS explores nodes without weights consideration (uniform cost or unweighted)
+        - Dijkstra accounts for edge weights and ensures optimal distances incrementally
+    4. Graph Representation:
+        - Nodes: vertices of the graph
+        - Edges: weighted directed edges (u, v, w)
+        - Implicit adjacency list or matrix
+Result:
+    - Shortest distances from source to all reachable nodes
+    - Unreachable nodes can be detected if not visited during traversal
+
+### Bellman Ford
+Graphs with negative weights
+
+## Minimum Spanning Tree (MST)
+Kruskal 
+
+Prims
+
+## Hierholzer's
+Hierholzer's Algorithm / DFS on Graphs:
+Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.
+Key differences:
+    1. DFS on Trees:
+        - Visits each node exactly once
+        - Appends nodes in post-order (after visiting children)
+        - No cycles, so edges are implicitly used exactly once
+    2. Hierholzer DFS on Graphs:
+        - Visits each edge exactly once (nodes can be visited multiple times)
+        - Removes edges as they are used to prevent revisiting
+        - Appends nodes in post-order after all outgoing edges are traversed
+        - Handles cycles and constructs Eulerian paths or circuits
+    3. Analogy:
+        - Tree DFS explores nodes, Hierholzer DFS explores edges
+        - Post-order ensures correct construction of paths in both
+Result:
+    - DFS-like traversal that builds a valid Eulerian path using every edge exactly once
+
+
+## Topological Sorting (DAG Only)
+
+### Kahn's (BFS + Indegree)
+
+### DFS based Topological Sort
+
+## Union Find (Disjoint Set Union)
+
+## A*
+
+## 0-1 BFS
+EDge weights are only 0 or 1
+
+## Multi Source BFS
+Rotting oranges
+
+
+# 1584. Min Cost to Connect All Points ::2:: - Medium
+
+Topics:  Array, Union Find, Graph, Minimum Spanning Tree
+
+## Intro
+> You are given an array points representing integer 
+> coordinates of some points on a 2D-plane, where 
+> points[i] = [xi, yi].
+> The cost of connecting two points [xi, yi] and [xj, yj] 
+> is the manhattan distance between them: 
+> |xi - xj| + |yi - yj|, where |val| denotes the absolute value of val.
+> Return the minimum cost to make all points connected. All 
+> points are connected if there is exactly one simple path 
+> between any two points.
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| points = [[0,0],[2,2],[3,10],[5,2],[7,0]] | 20 |
+| points = [[3,12],[-2,5],[-4,1]] | 18 |
+
+Constraints:
+
+1 &leq; points.length &leq; 1000
+
+-10<sup>6</sup> &leq; xi, yi &leq; 10<sup>6</sup>
+
+All pairs (xi, yi) are distinct.
+
+## Abstraction
+Given a graph, determine the min cost to connect all nodes.
+
+## Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+## Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## Find the Bug:
+```python
+```
+
+## Solution 1: Kruskal's Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
+```python
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x):
+        # path compression
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y):
+        xr, yr = self.find(x), self.find(y)
+
+        # already connected
+        if xr == yr:
+            return False
+        # union by rank
+        if self.rank[xr] < self.rank[yr]:
+            self.parent[xr] = yr
+        elif self.rank[xr] > self.rank[yr]:
+            self.parent[yr] = xr
+        else:
+            self.parent[yr] = xr
+            self.rank[xr] += 1
+        return True
+
+class Solution:
+    def minCostConnectPoints(self, points: list[list[int]]) -> int:
+        
+        # Why Kruskals Algorithm?
+        # Edge Based
+        # Good when we can easily compute all pairwise edges
+        # Add edges in increasing order + avoiding cycles with Union Find
+        # Stop when MST has n-1 edges, ensures min total cost 
+
+        # Note:
+        # 1. Compute all pairwise edges with Manhattan distance
+        # 2. Sort edges by cost
+        # 3. Use Union-Find to connect points without forming cycles
+        # 4. Sum the costs of edges added to MST
+
+        n = len(points)
+        edges = []
+
+        # Build all edges (Manhattan distance)
+        for i in range(n):
+            for j in range(i + 1, n):
+                xi, yi = points[i]
+                xj, yj = points[j]
+                cost = abs(xi - xj) + abs(yi - yj)
+                edges.append((cost, i, j))
+
+        # Sort edges by cost
+        edges.sort()
+
+        uf = UnionFind(n)
+        total_cost = 0
+        edges_used = 0
+
+        # Kruskal’s main loop
+        for cost, i, j in edges:
+            if uf.union(i, j):
+                total_cost += cost
+                edges_used += 1
+
+                # MST complete
+                if edges_used == n - 1:
+                    break
+
+
+        # overall: time complexity O(n^2 log n) for edge sorting
+        # overall: space complexity O(n^2) for edges
+        return total_cost
+```
+
+
+## Solution 2: Prim's Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
+```python
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+
+        # Why Prims Algorithm?
+        # Node Based
+        # Grow MST from starting point using smallest connecting edge
+        # Efficient when checking edges dynamically with a MinHeap
+        # Stops when all points are connected, ensures min total cost
+
+        n = len(points)
+
+        # shortest edge to MST
+        min_dist = [float('inf')] * n
+        visited = [False] * n
+        min_dist[0] = 0
+
+        # (cost, point)
+        heap = [(0,0)]
+        total_cost = 0
+        
+
+        while heap:
+            cost, u = heapq.heappop(heap)
+            if visited[u]:
+                continue
+            visited[u] = True
+            total_cost += cost
+
+            # Explore all possible new edges
+            for v in range(n):
+                if not visited[v]:
+                    dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
+                    if dist < min_dist[v]:
+                        min_dist[v] = dist
+                        heapq.heappush(heap,(dist, v))
+
+        # overall: time complexity O(n^2 log n)
+        # overall: space complexity O(n)
+        return total_cost
+```

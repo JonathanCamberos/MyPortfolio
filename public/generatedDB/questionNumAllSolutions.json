@@ -2183,18 +2183,6 @@
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
-  "269": [
-    {
-      "number": 1,
-      "name": "Topological Sort using BFS",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def foreignDictionary(self, words: List[str]) -> str:\n        \n        # Why Topological Sort?\n        # Each character -> node in directed graph\n        # Edge (c1 -> c2) means -> c1 comes before c2 in alien dictionary\n        # Topological sort -> Finding a valid order of characters\n        # Finding a valid order of characters is equivalent to performing\n        # a topological sort on this graph.\n        # If cycle exists, no valid order exists\n\n        # Note:\n        # 1. Build a graph of character dependencies from adjacent words\n        # 2. Count in-degrees for each character\n        # 3. Use BFS to perform topological sort\n        # 4. Detect cycles: if result length != total unique chars, return \"\"\n\n        # Initialize graph and in-degree counts\n        graph = defaultdict(set)  # char -> set of chars that come after it\n        in_degree = {c: 0 for word in words for c in word}\n\n        # Build graph edges based on adjacent words\n        for i in range(len(words) - 1):\n            word1, word2 = words[i], words[i+1]\n            min_len = min(len(word1), len(word2))\n            found_diff = False\n\n            for j in range(min_len):\n                c1, c2 = word1[j], word2[j]\n                if c1 != c2:\n                    if c2 not in graph[c1]:\n                        graph[c1].add(c2)\n                        in_degree[c2] += 1\n                    found_diff = True\n                    break\n\n            # Edge case: prefix situation invalid, e.g., \"abc\" before \"ab\"\n            if not found_diff and len(word1) > len(word2):\n                return \"\"\n\n        # BFS topological sort\n        queue = deque([c for c in in_degree if in_degree[c] == 0])\n        result = []\n\n        while queue:\n            c = queue.popleft()\n            result.append(c)\n            for nei in graph[c]:\n                in_degree[nei] -= 1\n                if in_degree[nei] == 0:\n                    queue.append(nei)\n\n        # Check for cycle\n        if len(result) != len(in_degree):\n            return \"\"\n\n        res = \"\".join(result)\n\n\n        # overall: time complexity O(C + W*L)\n        # C = number of unique characters, W = number of words, L = average word length\n        # overall: space complexity O(C + W*L) for graph and in-degree\n        return res",
-      "questionNumber": 269,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-topological-sort-using-bfs---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
-    }
-  ],
   "271": [
     {
       "number": 1,
@@ -2431,18 +2419,6 @@
       "questionNumber": 329,
       "solutionLink": "/Notes/2d-dynamic-programming#solution-2-0-to-i-iterative-bottom-up-array---2d-dynamic-programming2d-dynamic-programming",
       "blog": "2D Dynamic Programming"
-    }
-  ],
-  "332": [
-    {
-      "number": 1,
-      "name": "[Hierholzer's] [Eulerian Path] Hierholzer's Algorithm Eulerian Path via DFS + MinHeap for Lexical Order",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def findItinerary(self, tickets: List[List[str]]) -> List[str]:\n        \n        # Hierholzer's Algorithm / DFS on Graphs:\n        # Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.\n        # Key differences:\n        #   1. DFS on Trees:\n        #        - Visits each node exactly once\n        #        - Appends nodes in post-order (after visiting children)\n        #        - No cycles, so edges are implicitly used exactly once\n        #   2. Hierholzer DFS on Graphs:\n        #        - Visits each edge exactly once (nodes can be visited multiple times)\n        #        - Removes edges as they are used to prevent revisiting\n        #        - Appends nodes in post-order after all outgoing edges are traversed\n        #        - Handles cycles and constructs Eulerian paths or circuits\n        #   3. Analogy:\n        #        - Tree DFS explores nodes, Hierholzer DFS explores edges\n        #        - Post-order ensures correct construction of paths in both\n        # Result:\n        #   - DFS-like traversal that builds a valid Eulerian path using every edge exactly once\n\n        # Hierholzer’s Algorithm:\n        # Designed to construct an Eulerian path efficiently.\n        # Core Idea: \n        #   - Recursively follow edges, removing them as you go, using each edge exactly once.\n        #   - PostOrder Construction: append airports after visiting all outbound edges,\n        #                             so the path is built in reverse.\n        #   - Lexical Order Preserved: if multiple edges exist, minHeap allows to choose the smallest airport\n        \n        # Eulerian Path:\n        # A trail in a graph that visits every edge exactly once, allowing for revisiting vertices.\n        # - In the context of flight tickets:\n        #     - Each ticket represents a directed edge from one airport to another.\n        #     - We must use all tickets exactly once, starting from \"JFK\".\n        #     - We are allow to revisit airports\n\n        # Graph Existence rules:\n        #   1. At most: one node has (out-degree - in-degree) = 1 (starting node)\n        #   2. At most: one node has (in-degree - out-degree) = 1 (ending node)\n        #   3. All other nodes have equal degrees (in-degree == out-degree).\n\n        # Directed Graph (Adjacency List):\n        #   - Vertices: airports\n        #   - Edges: flight tickets (from src -> dest)\n        #   - Neighbors: destinations reachable from a given airport\n        #   - MinHeap ensures lexical order when multiple choices exist\n\n        # Note:\n        # 1. Build graph: graph[src] = MinHeap of destinations\n        #    (MinHeap ensures lexical order when multiple choices exist)\n        # 2. Use DFS to traverse graph:\n        #      Always choose the smallest lexical destination first\n        #      Remove tickets (edges) as we use them\n        # 3. Append airports to itinerary in post-order (after visiting neighbors/edges)\n        # 4. Reverse itinerary at the end to get correct order starting at JFK\n        # Result -> shortest path through all airports starting at jfk\n\n\n        # Build adjacency list with MinHeaps\n        # sc: O(V), number of vertices\n        graph = defaultdict(list)\n        \n        # Build MinHeap for each source airport\n        # sc: O(E), one entry per edge used\n        for src, dest in tickets:\n            heapq.heappush(graph[src], dest)\n        \n        # itinerary build in reverse (post order)\n        # sc: O(E), one entry per edge used\n        itinerary = []\n\n        def dfs(airport):\n\n            # Explore all neighbors in lexical order\n            # tc: each edge processed once -> O(E)\n            while graph[airport]:\n                # tc: O(log E) per pop\n                next_dest = heapq.heappop(graph[airport])\n                dfs(next_dest)\n            \n            # PostOrder append to itinerary\n            # sc: O(1) per append, overall O(E)\n            itinerary.append(airport)\n\n        # Start Eulerian Path via DFS + MinHeap from \"JFK\"\n        # tc: O(E log E) for all recursive DFS calls with heap pops\n        dfs(\"JFK\")\n        \n        # Reverse to get correct order\n        # tc: O(E), sc: O(E) for reversed list\n        res = itinerary[::-1]\n\n        # overall: tc O(e log e)\n        # overall: sc O(e + v)\n        return res",
-      "questionNumber": 332,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-hierholzer-s-eulerian-path-hierholzer-s-algorithm-eulerian-path-via-dfs-minheap-for-lexical-order---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
     }
   ],
   "338": [
@@ -2903,18 +2879,6 @@
       "blog": "LeetCode: Stacks"
     }
   ],
-  "743": [
-    {
-      "number": 1,
-      "name": "[Dijkstra's] BFS And MinHeap To Keep Shortest Path",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:\n        \n        # Dijkstra's Algorithm (Single-Source Shortest Path):\n        # We want the minimum time for a signal sent from node k\n        # to reach all n nodes in a directed graph with non-negative weights.\n        \n        # Key Ideas:\n        #   1. Model the network as a directed weighted graph.\n        #   2. Use a min-heap to always expand the node with the smallest\n        #      known signal arrival time.\n        #   3. Maintain a dictionary of shortest known times to each node.\n        #   4. If all nodes are reached, return the maximum of these times.\n        #   5. If some node is unreachable, return -1.\n\n        # Build adjacency list: graph[src] = [(dest, weight), ...]\n        # tc: O(edge)\n        graph = defaultdict(list)\n        for u, v, w in times:\n            graph[u].append((v, w))\n        \n        # Min-Heap:\n        # Each entry is (time_to_reach_node, node)\n        # sc: O(node)\n        heap = [(0, k)]\n        \n        # Dictionary to track shortest known time to each node\n        # Invariant: once a node is added here, its shortest time is finalized\n        shortest_time = {}\n        \n        # tc: each node/edge O(e) processed via O(log n) heap operations O(e log n)\n        while heap:\n\n            # Pop node with smallest known arrival time\n            time, node = heapq.heappop(heap)\n            \n            # Skip if this node already has a finalized shortest time\n            # (We found a better path earlier)\n            if node in shortest_time:\n                continue\n            \n            # Record shortest time to reach this node\n            shortest_time[node] = time\n            \n            # Explore Choices:\n            # Relax all outgoing edges from this node\n            for neighbor, wt in graph[node]:\n\n                # If neighbor not finalized, push updated time candidate\n                if neighbor not in shortest_time:\n                    heapq.heappush(heap, (time + wt, neighbor))\n        \n        # After processing:\n        # If not all nodes were reached, signal cannot reach everyone\n        if len(shortest_time) != n:\n            return -1\n        \n        # Result:\n        # The total network delay is the maximum shortest arrival time\n        res = max(shortest_time.values())\n\n        # overall: tc O(e log n)\n        # overall: sc O(n + e)     \n        return res",
-      "questionNumber": 743,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-dijkstra-s-bfs-and-minheap-to-keep-shortest-path---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
-    }
-  ],
   "746": [
     {
       "number": 1,
@@ -2967,30 +2931,6 @@
       "questionNumber": 763,
       "solutionLink": "/Notes/greedy#solution-1-greedy---greedygreedy",
       "blog": "Greedy"
-    }
-  ],
-  "778": [
-    {
-      "number": 1,
-      "name": "Dijkstra + MinHeap",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def swimInWater(self, grid: List[List[int]]) -> int:\n        \n        # Why Dijkstras + MinHeap? \n        # Cell -> Node\n        # Weight -> determined by max elevation along path so far\n        # Dijkstras algo finds path from source (0,0) to target (n-1,n-1)\n        # that minimizes the max elevation\n        # MinHeap ensures we always expand the path with lowest current\n        # maximum elevation\n        # Guarantees minimum time t\n        # Result -> path of minimum height\n        \n        # Note:\n        # 1. We want min time t to reach (n-1, n-1)\n        # 2. At any step, t = max elevation along the path\n        # 3. Use min-heap to always expand the path with lowest t so far\n        # 4. Track visited cells to avoid revisiting\n\n        n = len(grid)\n        visited = [[False] * n for _ in range(n)]\n        \n        # (time_so_far, row, col)\n        min_heap = [(grid[0][0], 0, 0)]\n        directions = [(0,1),(1,0),(-1,0),(0,-1)]\n\n        while min_heap:\n            t, r, c = heappop(min_heap)\n            if visited[r][c]:\n                continue\n            visited[r][c] = True\n\n            # Reached target cell\n            if r == n - 1 and c == n - 1:\n                return t\n\n            for dr, dc in directions:\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < n and 0 <= nc < n and not visited[nr][nc]:\n\n                    # time to reach neighbor = max(current path t, neighbor elevation)                    \n                    heappush(min_heap, (max(t, grid[nr][nc]), nr, nc))\n\n        # default, problem guarantees a path exists\n        \n        # overall: time complexity O(n^2 * log(n^2)) due to heap operations\n        # overall: space complexity O(n^2) for heap and visited\n        return 0",
-      "questionNumber": 778,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-dijkstra-minheap---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
-    }
-  ],
-  "787": [
-    {
-      "number": 1,
-      "name": "Modified Dijkstra via BFS + MinHeap",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:\n        \n        # Modified Disjkstras?\n        # Modified for graphs with 'stops' constraint\n        # Each node in heap is (stops_so_far, current_node, cost_so_far)\n        # MinHeap guarantees we expand path with lowest cost so far\n        # Only continue paths that respect the stops limit (<= k)\n        \n        # Build adjacency list\n        adj={i:[] for i in range(n)}\n        for u,v,w in flights:\n            adj[u].append((v,w))\n\n        # Initialize distance array and min-heap\n        dist=[float('inf')]*n\n        dist[src]=0\n        q=[]\n        \n        # (stops_so_far, current_node, cost_so_far)\n        heapq.heappush(q,(0, src, 0))\n\n        # Process heap\n        while q:\n            stops,node,wei=heapq.heappop(q)\n\n            # Skip if stops exceed limit\n            if stops>k:\n                continue\n\n            # Explore neighbors \n            for nei,w in adj[node]:\n                next_cost = cost + w\n\n                # Only push if we improve distance\n                if dist[nei]>next_cost and stops<=k:\n                    dist[nei]=next_cost\n                    heapq.heappush(q,((stops+1,nei,next_cost)))\n        print(dist)\n\n        # Check if destination reachable\n        if dist[dst]==float('inf'):\n            return -1\n\n        res = dist[dst]\n\n        # overall: time complexity O(E log N) in practice, E = # of edges\n        # overall: space complexity O(N + E) for adjacency list and heap    \n        return res",
-      "questionNumber": 787,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-modified-dijkstra-via-bfs-minheap---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
     }
   ],
   "846": [
@@ -3209,40 +3149,6 @@
       "questionNumber": 1448,
       "solutionLink": "/Notes/leetcode-trees#solution-2-dfs-pre-order-iterative-pass-root-max-so-far-tuple-down---treedfs-pre-order-traversal",
       "blog": "LeetCode: Trees"
-    }
-  ],
-  "1584": [
-    {
-      "number": 1,
-      "name": "Kruskal's Algorithm + Union-Find",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "class UnionFind:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n\n    def find(self, x):\n        # path compression\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x])\n        return self.parent[x]\n\n    def union(self, x, y):\n        xr, yr = self.find(x), self.find(y)\n\n        # already connected\n        if xr == yr:\n            return False\n        # union by rank\n        if self.rank[xr] < self.rank[yr]:\n            self.parent[xr] = yr\n        elif self.rank[xr] > self.rank[yr]:\n            self.parent[yr] = xr\n        else:\n            self.parent[yr] = xr\n            self.rank[xr] += 1\n        return True\n\nclass Solution:\n    def minCostConnectPoints(self, points: list[list[int]]) -> int:\n        \n        # Why Kruskals Algorithm?\n        # Edge Based\n        # Good when we can easily compute all pairwise edges\n        # Add edges in increasing order + avoiding cycles with Union Find\n        # Stop when MST has n-1 edges, ensures min total cost \n\n        # Note:\n        # 1. Compute all pairwise edges with Manhattan distance\n        # 2. Sort edges by cost\n        # 3. Use Union-Find to connect points without forming cycles\n        # 4. Sum the costs of edges added to MST\n\n        n = len(points)\n        edges = []\n\n        # Build all edges (Manhattan distance)\n        for i in range(n):\n            for j in range(i + 1, n):\n                xi, yi = points[i]\n                xj, yj = points[j]\n                cost = abs(xi - xj) + abs(yi - yj)\n                edges.append((cost, i, j))\n\n        # Sort edges by cost\n        edges.sort()\n\n        uf = UnionFind(n)\n        total_cost = 0\n        edges_used = 0\n\n        # Kruskal’s main loop\n        for cost, i, j in edges:\n            if uf.union(i, j):\n                total_cost += cost\n                edges_used += 1\n\n                # MST complete\n                if edges_used == n - 1:\n                    break\n\n\n        # overall: time complexity O(n^2 log n) for edge sorting\n        # overall: space complexity O(n^2) for edges\n        return total_cost",
-      "questionNumber": 1584,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-kruskal-s-algorithm-union-find---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
-    },
-    {
-      "number": 2,
-      "name": "Prim's Algorithm + MinHeap",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def minCostConnectPoints(self, points: List[List[int]]) -> int:\n\n        # Why Prims Algorithm?\n        # Node Based\n        # Grow MST from starting point using smallest connecting edge\n        # Efficient when checking edges dynamically with a MinHeap\n        # Stops when all points are connected, ensures min total cost\n\n        n = len(points)\n\n        # shortest edge to MST\n        min_dist = [float('inf')] * n\n        visited = [False] * n\n        min_dist[0] = 0\n\n        # (cost, point)\n        heap = [(0,0)]\n        total_cost = 0\n        \n\n        while heap:\n            cost, u = heapq.heappop(heap)\n            if visited[u]:\n                continue\n            visited[u] = True\n            total_cost += cost\n\n            # Explore all possible new edges\n            for v in range(n):\n                if not visited[v]:\n                    dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])\n                    if dist < min_dist[v]:\n                        min_dist[v] = dist\n                        heapq.heappush(heap,(dist, v))\n\n        # overall: time complexity O(n^2 log n)\n        # overall: space complexity O(n)\n        return total_cost",
-      "questionNumber": 1584,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-2-prim-s-algorithm-minheap---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
-    }
-  ],
-  "1631": [
-    {
-      "number": 1,
-      "name": "Dijkstra + MinHeap",
-      "type": "advanced-graphs",
-      "application": "advanced-graphs",
-      "code": "def minimumEffortPath(self, heights: List[List[int]]) -> int:\n        \n        # Why Dijkstras + MinHeap?\n        # Dijkstras finds shortest path from a source node to all other nodes\n        # in a weighted graph with non-negative edge weights, our case\n        \n        # Cell -> Node\n        # Effort (absolute height difference) -> Weight\n        # MinHeap ensures we always explore next cell with minimal effort first\n        # Guarantees the minimum maximum effort path to the bottom-right cell.\n        \n        # Note:\n        # 1. Use MinHeap to track cells by minimal effort seen so far\n        # 2. Effort to reach a cell -> max(absolute difference along path)\n        # 3. Track visited/effort for each cell\n        # 4. Pop cell with lowest effort from heap, update neighbors\n        # 5. Stop when reaching bottom-right cell\n        # Result -> path of lowest effort\n\n        rows, cols = len(heights), len(heights[0])\n        efforts = [[float('inf')] * cols for _ in range(rows)]\n        efforts[0][0] = 0\n\n        # (effort, row, col)\n        min_heap = [(0, 0, 0)]\n        directions = [(0,1),(1,0),(-1,0),(0,-1)]\n\n        while min_heap:\n            curr_effort, r, c = heappop(min_heap)\n\n            # Reached target -> bottom right\n            if r == rows - 1 and c == cols - 1:\n                return curr_effort\n\n            for dr, dc in directions:\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < rows and 0 <= nc < cols:\n                    next_effort = max(curr_effort, abs(heights[r][c] - heights[nr][nc]))\n                    if next_effort < efforts[nr][nc]:\n                        efforts[nr][nc] = next_effort\n                        heappush(min_heap, (next_effort, nr, nc))\n\n        # default, though problem guarantees a path exists\n    \n        # overall: time complexity O(R*C*log(R*C)) due to heap operations\n        # overall: space complexity O(R*C) for effort tracking and heap\n        return 0",
-      "questionNumber": 1631,
-      "solutionLink": "/Notes/leetcode-advanced-graphs#solution-1-dijkstra-minheap---advanced-graphsadvanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
     }
   ],
   "1851": [
