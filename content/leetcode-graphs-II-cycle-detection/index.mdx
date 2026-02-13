@@ -1,0 +1,228 @@
+---
+title: "LeetCode: Graphs II Cycle Detection"
+description: "advanced graphs"
+image: "../../public/Notes/cycle-detection.png"
+publishedAt: "2026-02-12"
+updatedAt: "2026-02-12"
+author: "jonathancamberos"
+isPublished: true
+tags:
+- data structures and algorithms
+---
+
+# Advanced Graphs Intro
+
+## What is Advanced Graphs
+
+graphs 2!
+
+## Advanced Graphs IRL
+graphs2!
+
+## Traversal Algorithm (Foundation)
+
+### DFS
+
+### BFS
+
+## Shortest Path Algorithms
+
+### Dijkstra's (minHeap) 
+Graphs with non negative weights
+
+Dijkstra's Algorithm / Greedy BFS with MinHeap:
+Dijkstra is a graph traversal algorithm for finding the shortest path from a single source
+to all other nodes in a weighted graph with non-negative edge weights.
+Key Concepts:
+    1. BFS Analogy:
+        - Similar to BFS layer expansion, but we expand nodes in order of minimum current distance
+        - Instead of levels, we prioritize nodes by shortest accumulated distance
+    2. Greedy Choice:
+        - Always pick the next node with the smallest known distance (via MinHeap)
+        - Guarantees that when a node is popped from the heap, its shortest distance is final
+    3. Differences vs DFS/BFS:
+        - DFS/BFS explores nodes without weights consideration (uniform cost or unweighted)
+        - Dijkstra accounts for edge weights and ensures optimal distances incrementally
+    4. Graph Representation:
+        - Nodes: vertices of the graph
+        - Edges: weighted directed edges (u, v, w)
+        - Implicit adjacency list or matrix
+Result:
+    - Shortest distances from source to all reachable nodes
+    - Unreachable nodes can be detected if not visited during traversal
+
+### Bellman Ford
+Graphs with negative weights
+
+## Minimum Spanning Tree (MST)
+Kruskal 
+
+Prims
+
+## Hierholzer's
+Hierholzer's Algorithm / DFS on Graphs:
+Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.
+Key differences:
+    1. DFS on Trees:
+        - Visits each node exactly once
+        - Appends nodes in post-order (after visiting children)
+        - No cycles, so edges are implicitly used exactly once
+    2. Hierholzer DFS on Graphs:
+        - Visits each edge exactly once (nodes can be visited multiple times)
+        - Removes edges as they are used to prevent revisiting
+        - Appends nodes in post-order after all outgoing edges are traversed
+        - Handles cycles and constructs Eulerian paths or circuits
+    3. Analogy:
+        - Tree DFS explores nodes, Hierholzer DFS explores edges
+        - Post-order ensures correct construction of paths in both
+Result:
+    - DFS-like traversal that builds a valid Eulerian path using every edge exactly once
+
+
+## Topological Sorting (DAG Only)
+
+### Kahn's (BFS + Indegree)
+
+### DFS based Topological Sort
+
+## Union Find (Disjoint Set Union)
+
+## A*
+
+## 0-1 BFS
+EDge weights are only 0 or 1
+
+## Multi Source BFS
+Rotting oranges
+
+
+# 2000. Alien Dictionary ::1:: - Hard
+
+Topics:  Breadth First Search, Graph, Topological Sort
+
+## Intro
+> There is a foreign language which uses the latin 
+> alphabet, but the order among letters is not
+> "a", "b", "c" ... "z" as in English.
+> You receive a list of non-empty strings words from the
+> dictionary, where the words are sorted 
+> lexicographically based on the rules of this new 
+> language. 
+> Derive the order of letters in this language. If the order 
+> is invalid, return an empty string. If there are multiple 
+> valid order of letters, return any of them.
+> A string a is lexicographically smaller than a string b 
+> if either of the following is true:
+> The first letter where they differ is smaller in a
+> than in b.
+> a is a prefix of b and a.length < b.length.
+
+
+|  Example Input           | Output |  
+| ---------------- | ------ | 
+| ["z","o"] | "zo" |
+| ["hrn","hrf","er","enn","rfnn"] | "hernf" |
+
+Constraints:
+
+The input words will contain characters only from lowercase 'a' to 'z'.
+
+1 &leq; nums.length &leq; 100
+
+1 &leq; words[i].length &leq; 100
+
+
+## Abstraction
+Given a foreign language, derive the order of letters.
+
+## Space & Time Complexity
+|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
+| ---------- | --------------- | ---------------- | ----------- | ------------ |
+|  |  |  |  |  |
+
+
+| Bug | Error |
+| --- | ----- |
+|  |  | 
+
+
+## Brute Force:
+```python
+```
+|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
+| -------- | --------------- | ---------------- | ------------- |  ------------ |
+|  |  |  |  |  |
+|  |  |  |  |  |
+|  |  |  |  |  |
+
+
+## Find the Bug:
+```python
+```
+
+## Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
+```python
+    def foreignDictionary(self, words: List[str]) -> str:
+        
+        # Why Topological Sort?
+        # Each character -> node in directed graph
+        # Edge (c1 -> c2) means -> c1 comes before c2 in alien dictionary
+        # Topological sort -> Finding a valid order of characters
+        # Finding a valid order of characters is equivalent to performing
+        # a topological sort on this graph.
+        # If cycle exists, no valid order exists
+
+        # Note:
+        # 1. Build a graph of character dependencies from adjacent words
+        # 2. Count in-degrees for each character
+        # 3. Use BFS to perform topological sort
+        # 4. Detect cycles: if result length != total unique chars, return ""
+
+        # Initialize graph and in-degree counts
+        graph = defaultdict(set)  # char -> set of chars that come after it
+        in_degree = {c: 0 for word in words for c in word}
+
+        # Build graph edges based on adjacent words
+        for i in range(len(words) - 1):
+            word1, word2 = words[i], words[i+1]
+            min_len = min(len(word1), len(word2))
+            found_diff = False
+
+            for j in range(min_len):
+                c1, c2 = word1[j], word2[j]
+                if c1 != c2:
+                    if c2 not in graph[c1]:
+                        graph[c1].add(c2)
+                        in_degree[c2] += 1
+                    found_diff = True
+                    break
+
+            # Edge case: prefix situation invalid, e.g., "abc" before "ab"
+            if not found_diff and len(word1) > len(word2):
+                return ""
+
+        # BFS topological sort
+        queue = deque([c for c in in_degree if in_degree[c] == 0])
+        result = []
+
+        while queue:
+            c = queue.popleft()
+            result.append(c)
+            for nei in graph[c]:
+                in_degree[nei] -= 1
+                if in_degree[nei] == 0:
+                    queue.append(nei)
+
+        # Check for cycle
+        if len(result) != len(in_degree):
+            return ""
+
+        res = "".join(result)
+
+
+        # overall: time complexity O(C + W*L)
+        # C = number of unique characters, W = number of words, L = average word length
+        # overall: space complexity O(C + W*L) for graph and in-degree
+        return res
+```
+
