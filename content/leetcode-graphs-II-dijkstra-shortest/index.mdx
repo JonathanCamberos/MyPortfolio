@@ -1,5 +1,5 @@
 ---
-title: "LeetCode: Graphs II 01 BFS"
+title: "LeetCode: Graphs II Dijkstras"
 description: "advanced graphs"
 image: "../../public/Notes/dijkstras.png"
 publishedAt: "2026-02-12"
@@ -10,24 +10,27 @@ tags:
 - data structures and algorithms
 ---
 
-# Advanced Graphs Intro
+# Dijkstras Algorithm Intro 
 
-## What is Advanced Graphs
+## Graph Requirements
+Weighted, Directed Graph 
 
-graphs 2!
+## Output
+Shortest path from one node to every other node in graph.
+Differs from prim's and kruskal's which result in minimum spanning trees
 
-## Advanced Graphs IRL
-graphs2!
+## Video Animation
+https://www.youtube.com/watch?v=_lHSawdgXpI
 
-## Traversal Algorithm (Foundation)
+## Pseudo Code
 
-### DFS
+## Time Complexity
 
-### BFS
+## Space Complexity
 
-## Shortest Path Algorithms
+## IRL Use Case
 
-### Dijkstra's (minHeap) 
+## What is Dijkstras Algorithm
 Graphs with non negative weights
 
 Dijkstra's Algorithm / Greedy BFS with MinHeap:
@@ -51,49 +54,6 @@ Result:
     - Shortest distances from source to all reachable nodes
     - Unreachable nodes can be detected if not visited during traversal
 
-### Bellman Ford
-Graphs with negative weights
-
-## Minimum Spanning Tree (MST)
-Kruskal 
-
-Prims
-
-## Hierholzer's
-Hierholzer's Algorithm / DFS on Graphs:
-Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.
-Key differences:
-    1. DFS on Trees:
-        - Visits each node exactly once
-        - Appends nodes in post-order (after visiting children)
-        - No cycles, so edges are implicitly used exactly once
-    2. Hierholzer DFS on Graphs:
-        - Visits each edge exactly once (nodes can be visited multiple times)
-        - Removes edges as they are used to prevent revisiting
-        - Appends nodes in post-order after all outgoing edges are traversed
-        - Handles cycles and constructs Eulerian paths or circuits
-    3. Analogy:
-        - Tree DFS explores nodes, Hierholzer DFS explores edges
-        - Post-order ensures correct construction of paths in both
-Result:
-    - DFS-like traversal that builds a valid Eulerian path using every edge exactly once
-
-
-## Topological Sorting (DAG Only)
-
-### Kahn's (BFS + Indegree)
-
-### DFS based Topological Sort
-
-## Union Find (Disjoint Set Union)
-
-## A*
-
-## 0-1 BFS
-EDge weights are only 0 or 1
-
-## Multi Source BFS
-Rotting oranges
 
 # 743. Network Delay Time ::1:: - Medium
 
