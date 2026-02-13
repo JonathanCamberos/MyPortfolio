@@ -335,7 +335,61 @@ there are to the end.
 ```python
 ```
 
-## Solution 1: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 1: i to N Recursive with Memoization Top Down - 2D Dynamic Programming/2D Dynamic Programming
+```python
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        # Three DP Perspectives:
+        # 1. i -> N (Top-Down Recursive with Memoization)
+        # 2. 0 -> i (Bottom-Up Recursive Thought Process)
+        # 3. 0 -> i (Bottom-Up Iterative / Tabulation)
+
+        # Top-Down Recursive (i -> N):
+        # Think forward from current position:
+        # From (r, c), how many ways to reach (m-1, n-1)?
+        #
+        # Recurrence:
+        # ways(r,c) = ways(r+1,c) + ways(r,c+1)
+        #
+        # Base Cases:
+        # 1. If out of bounds → 0 ways
+        # 2. If at destination → 1 way
+        #
+        # Memoization avoids recomputation of overlapping subproblems.
+
+        memo = {}
+
+        def dfs(r, c):
+
+            # Base Case 1: Out of bounds
+            if r >= m or c >= n:
+                return 0
+
+            # Base Case 2: Reached destination
+            if r == m - 1 and c == n - 1:
+                return 1
+
+            # Memo check
+            if (r, c) in memo:
+                return memo[(r, c)]
+
+            # Explore: move down and right
+            down = dfs(r + 1, c)
+            right = dfs(r, c + 1)
+
+            # Build
+            memo[(r, c)] = down + right
+            return memo[(r, c)]
+
+        res = dfs(0, 0)
+
+        # overall: time complexity O(m*n)
+        # overall: space complexity O(m*n) (memo + recursion stack)
+        return res
+```
+
+
+## Solution 2: 0 to i Iterative Bottom Up Array - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def uniquePaths(self, m: int, n: int) -> int:
         
@@ -374,7 +428,7 @@ there are to the end.
         return res
 ```
 
-## Solution 2: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
+## Solution 3: 0 to i Iterative Bottom Up Variables - 2D Dynamic Programming/2D Dynamic Programming
 ```python
     def uniquePaths(self, m: int, n: int) -> int:
         

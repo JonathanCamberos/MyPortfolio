@@ -17,19 +17,83 @@ tags:
 graphs 2!
 
 ## Advanced Graphs IRL
-
 graphs2!
 
-## Advanced Graphs Application: Advanced Graphs
-Pattern: grahps2 ! 
+## Traversal Algorithm (Foundation)
 
-Ex: bits numbers!!
-```python
-    def graaaph!(n: int) -> int:
+### DFS
 
-        return n+1
-```
+### BFS
 
+## Shortest Path Algorithms
+
+### Dijkstra's (minHeap) 
+Graphs with non negative weights
+
+Dijkstra's Algorithm / Greedy BFS with MinHeap:
+Dijkstra is a graph traversal algorithm for finding the shortest path from a single source
+to all other nodes in a weighted graph with non-negative edge weights.
+Key Concepts:
+    1. BFS Analogy:
+        - Similar to BFS layer expansion, but we expand nodes in order of minimum current distance
+        - Instead of levels, we prioritize nodes by shortest accumulated distance
+    2. Greedy Choice:
+        - Always pick the next node with the smallest known distance (via MinHeap)
+        - Guarantees that when a node is popped from the heap, its shortest distance is final
+    3. Differences vs DFS/BFS:
+        - DFS/BFS explores nodes without weights consideration (uniform cost or unweighted)
+        - Dijkstra accounts for edge weights and ensures optimal distances incrementally
+    4. Graph Representation:
+        - Nodes: vertices of the graph
+        - Edges: weighted directed edges (u, v, w)
+        - Implicit adjacency list or matrix
+Result:
+    - Shortest distances from source to all reachable nodes
+    - Unreachable nodes can be detected if not visited during traversal
+
+### Bellman Ford
+Graphs with negative weights
+
+## Minimum Spanning Tree (MST)
+Kruskal 
+
+Prims
+
+## Hierholzer's
+Hierholzer's Algorithm / DFS on Graphs:
+Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.
+Key differences:
+    1. DFS on Trees:
+        - Visits each node exactly once
+        - Appends nodes in post-order (after visiting children)
+        - No cycles, so edges are implicitly used exactly once
+    2. Hierholzer DFS on Graphs:
+        - Visits each edge exactly once (nodes can be visited multiple times)
+        - Removes edges as they are used to prevent revisiting
+        - Appends nodes in post-order after all outgoing edges are traversed
+        - Handles cycles and constructs Eulerian paths or circuits
+    3. Analogy:
+        - Tree DFS explores nodes, Hierholzer DFS explores edges
+        - Post-order ensures correct construction of paths in both
+Result:
+    - DFS-like traversal that builds a valid Eulerian path using every edge exactly once
+
+
+## Topological Sorting (DAG Only)
+
+### Kahn's (BFS + Indegree)
+
+### DFS based Topological Sort
+
+## Union Find (Disjoint Set Union)
+
+## A*
+
+## 0-1 BFS
+EDge weights are only 0 or 1
+
+## Multi Source BFS
+Rotting oranges
 
 # 743. Network Delay Time ::1:: - Medium
 
@@ -97,7 +161,7 @@ to get from start node to target node.
 ```python
 ```
 
-## Solution 1: Dijkstras Algorithm via BFS + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 1: [Dijkstra's] BFS And MinHeap To Keep Shortest Path - Advanced Graphs/Advanced Graphs
 ```python
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         
@@ -231,19 +295,53 @@ Given a graph, determine the flight path.
 ```python
 ```
 
-## Solution 1: Hierholzers Algorithm Eulerian Path via DFS + MinHeap for Lexical Order - Advanced Graphs/Advanced Graphs
+## Solution 1: [Hierholzer's] [Eulerian Path] Hierholzer's Algorithm Eulerian Path via DFS + MinHeap for Lexical Order - Advanced Graphs/Advanced Graphs
 ```python
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
         
-        # Note:
-        # Why Hierholzers Algorithm?
-        # Hierholzers algorithm is designed to find an Eulerian path or 
-        # circuit in a graph a path that uses every edge exactly once.
+        # Hierholzer's Algorithm / DFS on Graphs:
+        # Hierholzer is similar to DFS on trees, but adapted for graphs with cycles.
+        # Key differences:
+        #   1. DFS on Trees:
+        #        - Visits each node exactly once
+        #        - Appends nodes in post-order (after visiting children)
+        #        - No cycles, so edges are implicitly used exactly once
+        #   2. Hierholzer DFS on Graphs:
+        #        - Visits each edge exactly once (nodes can be visited multiple times)
+        #        - Removes edges as they are used to prevent revisiting
+        #        - Appends nodes in post-order after all outgoing edges are traversed
+        #        - Handles cycles and constructs Eulerian paths or circuits
+        #   3. Analogy:
+        #        - Tree DFS explores nodes, Hierholzer DFS explores edges
+        #        - Post-order ensures correct construction of paths in both
+        # Result:
+        #   - DFS-like traversal that builds a valid Eulerian path using every edge exactly once
+
+        # Hierholzer’s Algorithm:
+        # Designed to construct an Eulerian path efficiently.
+        # Core Idea: 
+        #   - Recursively follow edges, removing them as you go, using each edge exactly once.
+        #   - PostOrder Construction: append airports after visiting all outbound edges,
+        #                             so the path is built in reverse.
+        #   - Lexical Order Preserved: if multiple edges exist, minHeap allows to choose the smallest airport
         
-        # In our case:
-        # Flight ticket -> edge
-        # Must use all tickets once -> Eulerian path
-        # Start -> "JFK"
+        # Eulerian Path:
+        # A trail in a graph that visits every edge exactly once, allowing for revisiting vertices.
+        # - In the context of flight tickets:
+        #     - Each ticket represents a directed edge from one airport to another.
+        #     - We must use all tickets exactly once, starting from "JFK".
+        #     - We are allow to revisit airports
+
+        # Graph Existence rules:
+        #   1. At most: one node has (out-degree - in-degree) = 1 (starting node)
+        #   2. At most: one node has (in-degree - out-degree) = 1 (ending node)
+        #   3. All other nodes have equal degrees (in-degree == out-degree).
+
+        # Directed Graph (Adjacency List):
+        #   - Vertices: airports
+        #   - Edges: flight tickets (from src -> dest)
+        #   - Neighbors: destinations reachable from a given airport
+        #   - MinHeap ensures lexical order when multiple choices exist
 
         # Note:
         # 1. Build graph: graph[src] = MinHeap of destinations
@@ -255,34 +353,43 @@ Given a graph, determine the flight path.
         # 4. Reverse itinerary at the end to get correct order starting at JFK
         # Result -> shortest path through all airports starting at jfk
 
+
         # Build adjacency list with MinHeaps
+        # sc: O(V), number of vertices
         graph = defaultdict(list)
         
         # Build MinHeap for each source airport
+        # sc: O(E), one entry per edge used
         for src, dest in tickets:
             heapq.heappush(graph[src], dest)
         
         # itinerary build in reverse (post order)
+        # sc: O(E), one entry per edge used
         itinerary = []
 
         def dfs(airport):
 
-            # Explore all neighbors -> left1, left2.. 
+            # Explore all neighbors in lexical order
+            # tc: each edge processed once -> O(E)
             while graph[airport]:
+                # tc: O(log E) per pop
                 next_dest = heapq.heappop(graph[airport])
                 dfs(next_dest)
             
-            # post order append
+            # PostOrder append to itinerary
+            # sc: O(1) per append, overall O(E)
             itinerary.append(airport)
 
-        # Start Eulerian Oath via DFS + MinHeap from "JFK"
+        # Start Eulerian Path via DFS + MinHeap from "JFK"
+        # tc: O(E log E) for all recursive DFS calls with heap pops
         dfs("JFK")
         
         # Reverse to get correct order
+        # tc: O(E), sc: O(E) for reversed list
         res = itinerary[::-1]
 
-        # overall: time complexity O(E log E) due to heap operations
-        # overall: space complexity O(E + V) for graph + recursion stack
+        # overall: tc O(e log e)
+        # overall: sc O(e + v)
         return res
 ```
 
@@ -343,7 +450,7 @@ Given a graph, determine the min cost to connect all nodes.
 ```python
 ```
 
-## Solution 1: Kruskals Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
+## Solution 1: Kruskal's Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
 ```python
 class UnionFind:
     def __init__(self, n):
@@ -422,7 +529,7 @@ class Solution:
 ```
 
 
-## Solution 2: Prim’s Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 2: Prim's Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
 

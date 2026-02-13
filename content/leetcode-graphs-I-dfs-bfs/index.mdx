@@ -1,5 +1,5 @@
 ---
-title: "LeetCode: Graphs"
+title: "LeetCode: I Graphs DFS BFS"
 description: "graphs"
 image: "../../public/Notes/graph.png"
 publishedAt: "2025-08-02"
@@ -85,7 +85,9 @@ Space complexity O(m) -> useful for algorithms that only need edges
 
 Simplest representation for algorithms that only care about edges.
 
-## Graph Application: DFS Pre Order
+## DFS
+
+### Pre Order
 Use pre order DFS when you need to process a node immediately before
 exploring its neighbors
 
@@ -103,7 +105,7 @@ def dfs_pre(r, c, grid):
 # Example: numIslands uses pre-order DFS to flood fill
 ```
 
-## Graph Application: DFS In Order (Binary Tree Only)
+### DFS In Order (Binary Tree Only)
 Use in order DFS mainly for binary trees where left -> right order matters
 
 Ex: Extract sorted values from a BST
@@ -119,7 +121,7 @@ def inorder(node, res):
 ```
 
 
-## Graph Application: DFS Post Order
+### Post Order
 Use post order DFS when you want to process a node after exploring
 all its neighbors.
 
@@ -141,7 +143,7 @@ def dfs_post(r, c, grid):
 # Example: maxAreaOfIsland uses post-order DFS to sum area
 ```
 
-## Graph Application: BFS Level Order / Flood Fill
+## BFS
 Use BFS when you need shortest path in unweighted graphs, or to
 expand layers level by level.
 
@@ -163,7 +165,7 @@ def bfs_shortest(grid, start):
                 queue.append((nr,nc, dist + 1))
 ```
 
-## Graph Application: Union Find Disjoint Set
+## Union Find
 Use Union Find to efficiently track connected components in dynamic graphs.
 
 Ex: Count islands or merge friend groups

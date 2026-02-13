@@ -552,53 +552,6 @@
       "blog": "LeetCode: Backtracking"
     }
   ],
-  "graph": [
-    {
-      "type": "Graph",
-      "title": "DFS Pre Order",
-      "summary": "Use pre order DFS when you need to process a node immediately before exploring its neighbors",
-      "exampleIntro": "Sink islands or mark visited immediately in a grid",
-      "codeExample": "def dfs_pre(r, c, grid):\n    if not (0 <= r < len(grid) and 0 <= c < len(grid[0])) or grid[r][c] == '0':\n        return\n\n    grid[r][c] = '0'  # mark visited (pre-order processing)\n\n    for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:\n        dfs_pre(r + dr, c + dc, grid)\n\n# Example: numIslands uses pre-order DFS to flood fill",
-      "useCaseLink": "/Notes/leetcode-graphs#graph-application-dfs-pre-order",
-      "blog": "LeetCode: Graphs"
-    },
-    {
-      "type": "Graph",
-      "title": "DFS In Order (Binary Tree Only)",
-      "summary": "Use in order DFS mainly for binary trees where left -> right order matters",
-      "exampleIntro": "Extract sorted values from a BST",
-      "codeExample": "def inorder(node, res):\n    if not node:\n        return\n    inorder(node.left, res)\n    res.append(node.val)  # process node in between left/right\n    inorder(node.right, res)\n\n# Example: LeetCode 98, Validate BST or BST inorder traversal",
-      "useCaseLink": "/Notes/leetcode-graphs#graph-application-dfs-in-order-binary-tree-only",
-      "blog": "LeetCode: Graphs"
-    },
-    {
-      "type": "Graph",
-      "title": "DFS Post Order",
-      "summary": "Use post order DFS when you want to process a node after exploring all its neighbors.",
-      "exampleIntro": "Calculate size of connected components or backtracking cleanup",
-      "codeExample": "def dfs_post(r, c, grid):\n    if not (0 <= r < len(grid) and 0 <= c < len(grid[0])) or grid[r][c] == '0':\n        return 0\n\n    grid[r][c] = '0'  # mark visited\n    size = 1  # count current cell\n\n    for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:\n        size += dfs_post(r + dr, c + dc, grid)\n\n    return size  # post-order: aggregate after children\n\n# Example: maxAreaOfIsland uses post-order DFS to sum area",
-      "useCaseLink": "/Notes/leetcode-graphs#graph-application-dfs-post-order",
-      "blog": "LeetCode: Graphs"
-    },
-    {
-      "type": "Graph",
-      "title": "BFS Level Order / Flood Fill",
-      "summary": "Use BFS when you need shortest path in unweighted graphs, or to expand layers level by level.",
-      "exampleIntro": "Shortest path in 2D grid:",
-      "codeExample": "def bfs_shortest(grid, start):\n    queue = deque([(*start, 0)])  # (r, c, distance)\n    visited = set([start])\n\n    while queue:\n        r, c, dist = queue.popleft()\n        if grid[r][c] == 'target':\n            return dist\n\n        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and (nr,nc) not in visited:\n                visited.add((nr,nc))\n                queue.append((nr,nc, dist + 1))",
-      "useCaseLink": "/Notes/leetcode-graphs#graph-application-bfs-level-order-flood-fill",
-      "blog": "LeetCode: Graphs"
-    },
-    {
-      "type": "Graph",
-      "title": "Union Find Disjoint Set",
-      "summary": "Use Union Find to efficiently track connected components in dynamic graphs.",
-      "exampleIntro": "Count islands or merge friend groups",
-      "codeExample": "def numIslandsUnion(grid):\n        parent = {}\n        \n        def find(x):\n            if parent[x] != x:\n                parent[x] = find(parent[x])\n            return parent[x]\n        \n        def union(x, y):\n            parent[find(x)] = find(y)\n        \n        for r in range(len(grid)):\n            for c in range(len(grid[0])):\n                if grid[r][c] == '1':\n                    parent[(r,c)] = (r,c)\n        \n        for r in range(len(grid)):\n            for c in range(len(grid[0])):\n                if grid[r][c] == '1':\n                    for dr, dc in [(1,0),(0,1)]:\n                        nr, nc = r+dr, c+dc\n                        if (nr,nc) in parent:\n                            union((r,c),(nr,nc))\n        \n        roots = {find(x) for x in parent}\n        return len(roots)",
-      "useCaseLink": "/Notes/leetcode-graphs#graph-application-union-find-disjoint-set",
-      "blog": "LeetCode: Graphs"
-    }
-  ],
   "1d-dynamic-programming": [
     {
       "type": "1D Dynamic Programming",
@@ -724,17 +677,6 @@
       "codeExample": "def math!(n: int) -> int:\n\n        return n+1",
       "useCaseLink": "/Notes/leetcode-math-and-geometry#math-and-geometry-application-math-and-geometry",
       "blog": "LeetCode: Math and Geometry"
-    }
-  ],
-  "advanced-graphs": [
-    {
-      "type": "Advanced Graphs",
-      "title": "Advanced Graphs",
-      "summary": "Pattern: grahps2 !",
-      "exampleIntro": "bits numbers!!",
-      "codeExample": "def graaaph!(n: int) -> int:\n\n        return n+1",
-      "useCaseLink": "/Notes/leetcode-advanced-graphs#advanced-graphs-application-advanced-graphs",
-      "blog": "LeetCode: Advanced Graphs"
     }
   ],
   "2d-dynamic-programming": [

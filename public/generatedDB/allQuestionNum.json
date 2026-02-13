@@ -830,21 +830,6 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 218
   },
-  "127": {
-    "questionNum": 127,
-    "questionTitle": "Word Ladder ::3::",
-    "questionDifficulty": "Hard",
-    "questionBlurb": "A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that: Every adjacent pair of words differs by a single letter. Every si for 1 &leq; i &leq; k is in wordList. Note that beginWord does not need to be in wordList sk == endWord Given two words, beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.",
-    "questionTopics": [
-      "Hash Table",
-      "String",
-      "Breadth First Search"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#127-word-ladder-3---hard",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
   "128": {
     "questionNum": 128,
     "questionTitle": "Longest Consecutive Sequence ::3::",
@@ -860,23 +845,6 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 218
   },
-  "130": {
-    "questionNum": 130,
-    "questionTitle": "Surrounded Regions ::3::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "You are given an m x n matrix board containing letters 'X' and 'O', capture regions that are surrounded: Connect: A cell is connected to adjacent cells horizontally or vertically. Region: To form a region connect every 'O' cell. Surround: The region is surrounded with 'X' cells if you can connect the region with 'X' cells and none of the region cells are on the edge of the board. To capture a surrounded region, replace all 'O's with 'X's in-place within the original board. You do not need to return anything.",
-    "questionTopics": [
-      "Array",
-      "Depth First Search",
-      "Breadth First Search",
-      "Union Find",
-      "Matrix"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#130-surrounded-regions-3---medium",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
   "131": {
     "questionNum": 131,
     "questionTitle": "Palindrome Partitioning ::2::",
@@ -889,22 +857,6 @@
     ],
     "questionLink": "/Notes/leetcode-backtracking#131-palindrome-partitioning-2---medium",
     "blog": "LeetCode: Backtracking",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "133": {
-    "questionNum": 133,
-    "questionTitle": "Clone Graph ::2::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "Given a reference of a node in a connected undirected graph. Return a deep copy (clone) of the graph. Each node in the graph contains a value (int) and a list (List[Node]) of its neighbors. class Node ( public int val; public List[Node] neighbors; ) Test case format: For simplicity, each node's value is the same as the node's index (1-indexed). For example, the first node with val == 1, the second node with val == 2, and so on. The graph is represented in the test case using an adjacency list. An adjacency list is a collection of unordered lists used to represent a finite graph. Each list describes the set of neighbors of a node in the graph. The given node will always be the first node with val = 1. You must return the copy of the given node as a reference to the cloned graph.",
-    "questionTopics": [
-      "Hash Table",
-      "Depth First Search",
-      "Breadth First Search",
-      "Graph"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#133-clone-graph-2---medium",
-    "blog": "LeetCode: Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1159,23 +1111,6 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
-  "200": {
-    "questionNum": 200,
-    "questionTitle": "Number of Islands ::4::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.",
-    "questionTopics": [
-      "Array",
-      "Depth First Search",
-      "Breadth First Search",
-      "Union Find",
-      "Matrix"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#200-number-of-islands-4---medium",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
   "202": {
     "questionNum": 202,
     "questionTitle": "Happy Number ::1::",
@@ -1205,22 +1140,6 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
-  "207": {
-    "questionNum": 207,
-    "questionTitle": "Course Schedule ::2::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai. For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1. Return true if you can finish all courses. Otherwise, return false.",
-    "questionTopics": [
-      "Depth First Search",
-      "Breadth First Search",
-      "Graph",
-      "Topological Sort"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#207-course-schedule-2---medium",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
   "208": {
     "questionNum": 208,
     "questionTitle": "Implement Trie (Prefix Tree) ::1::",
@@ -1234,22 +1153,6 @@
     ],
     "questionLink": "/Notes/leetcode-tries#208-implement-trie-prefix-tree-1---medium",
     "blog": "LeetCode: Tries",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "210": {
-    "questionNum": 210,
-    "questionTitle": "Course Schedule II ::3::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai. For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1. Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.",
-    "questionTopics": [
-      "Depth First Search",
-      "Breadth First Search",
-      "Graph",
-      "Topological Sort"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#210-course-schedule-ii-3---medium",
-    "blog": "LeetCode: Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1459,22 +1362,6 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
-  "261": {
-    "questionNum": 261,
-    "questionTitle": "Graph Valid Tree ::3::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), write a function to check whether these edges make up a valid tree. You can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not appear together in edges.",
-    "questionTopics": [
-      "Depth First Search",
-      "Breadth First Search",
-      "Graph",
-      "Union Find"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#261-graph-valid-tree-3---medium",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
   "268": {
     "questionNum": 268,
     "questionTitle": "Missing Number ::2::",
@@ -1521,22 +1408,6 @@
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 218
-  },
-  "286": {
-    "questionNum": 286,
-    "questionTitle": "Walls and Gates ::2::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "You are given a (m) x (n 2D) grid initialized with these three possible values: -1 - A water cell that can not be traversed. 0 - A treasure chest. INF - A land cell that can be traversed. We use the integer 2^31 - 1 = 2147483647 to represent INF. Fill each land cell with the distance to its nearest treasure chest. If a land cell cannot reach a treasure chest then the value should remain INF. Assume the grid can only be traversed up, down, left, or right. Modify the grid in-place.",
-    "questionTopics": [
-      "Hash Table",
-      "Depth First Search",
-      "Breadth First Search",
-      "Graph"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#286-walls-and-gates-2---medium",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
   },
   "287": {
     "questionNum": 287,
@@ -1644,22 +1515,6 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#322-coin-change-3---medium",
     "blog": "1D Dynamic Programming",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "323": {
-    "questionNum": 323,
-    "questionTitle": "Number of Connected Components in an Undirected Graph ::3::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "There is an undirected graph with n nodes. There is also an edges array, where edges[i] = [a, b] means that there is an edge between node a and node b in the graph. The nodes are numbered from 0 to n - 1. Return the total number of connected components in that graph.",
-    "questionTopics": [
-      "Depth First Search",
-      "Breadth First Search",
-      "Graph",
-      "Union Find"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#323-number-of-connected-components-in-an-undirected-graph-3---medium",
-    "blog": "LeetCode: Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1789,21 +1644,6 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#416-partition-equal-subset-sum-2---medium",
     "blog": "1D Dynamic Programming",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "417": {
-    "questionNum": 417,
-    "questionTitle": "Pacific Atlantic Water Flow ::2::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges. The island is partitioned into a grid of square cells. You are given an m x n integer matrix heights where heights[r][c] represents the height above sea level of the cell at coordinate (r, c). The island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is less than or equal to the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean. Return a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans.",
-    "questionTopics": [
-      "Array",
-      "Breadth First Search",
-      "Matrix"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#417-pacific-atlantic-water-flow-2---medium",
-    "blog": "LeetCode: Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1960,39 +1800,6 @@
     ],
     "questionLink": "/Notes/greedy#678-valid-parenthesis-string-2---medium",
     "blog": "Greedy",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "684": {
-    "questionNum": 684,
-    "questionTitle": "Redundant Connection ::3::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "In this problem, a tree is an undirected graph that is connected and has no cycles. You are given a graph that started as a tree with n nodes labeled from 1 to n, with one additional edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed. The graph is represented as an array edges of length n where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the graph. Return an edge that can be removed so that the resulting graph is a tree of n nodes. If there are multiple answers, return the answer that occurs last in the input.",
-    "questionTopics": [
-      "Depth First Search",
-      "Breadth First Search",
-      "Union Find",
-      "Graph"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#684-redundant-connection-3---medium",
-    "blog": "LeetCode: Graphs",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "695": {
-    "questionNum": 695,
-    "questionTitle": "Max Area of Island ::3::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water. The area of an island is the number of cells with a value 1 in the island. Return the maximum area of an island in grid. If there is no island, return 0.",
-    "questionTopics": [
-      "Array",
-      "Depth First Search",
-      "Breadth First Search",
-      "Union Find",
-      "Matrix"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#695-max-area-of-island-3---medium",
-    "blog": "LeetCode: Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -2210,21 +2017,6 @@
     ],
     "questionLink": "/Notes/leetcode-binary-search#981-time-based-key-value-store-2---medium",
     "blog": "LeetCode: Binary Search",
-    "lastSubmittedDate": null,
-    "coldnessCount": -1
-  },
-  "994": {
-    "questionNum": 994,
-    "questionTitle": "Rotting Oranges ::2::",
-    "questionDifficulty": "Medium",
-    "questionBlurb": "You are given an m x n grid where each cell can have one of three values: 0 representing an empty cell, 1 representing a fresh orange, or 2 representing a rotten orange. Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten. Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.",
-    "questionTopics": [
-      "Array",
-      "Breadth First Search",
-      "Matrix"
-    ],
-    "questionLink": "/Notes/leetcode-graphs#994-rotting-oranges-2---medium",
-    "blog": "LeetCode: Graphs",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
