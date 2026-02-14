@@ -493,55 +493,78 @@ return the only number that is missing from the range.
 ```python
     def missingNumber(self, nums: List[int]) -> int:
         
-        # Note:
-        # Math approach
-        # 0. The sum of numbers 0 -> n is (n * (n+1)/2)
-        # 1. Sum all elements in nums
-        # 2. Missing = expected sum - actual sum
+        # Math Approach:
+        # Find missing number from range [0, n]
+
+        # Idea:
+        # Compare Excepted vs Actual Sum
+        #   - sum of [0, n]
+        #   - actual sum of array
+
+        # sum(0..n) = n * (n+1) // 2
+
+        # missing number = expected_sum - actual sum
 
         n = len(nums)
         
+        # Sum of numbers 0 to n
         expected_sum = n * (n + 1) // 2
         
-        sum = 0
+        # Running sum of array elements
+        actual_sum = 0
+
+        # tc: O(n)
         for n in nums:
-            sum += n
+            actual_sum += n
 
-        missing = expected_sum - sum
+        # Compute missing value
+        missing = expected_sum - actual_sum
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return missing
 ```
 
-## Solution 2: XOR Trick  - Bit Manipulation/Bit Manipulation
+## Solution 2: [XOR] Cancel Duplicates Trick  - Bit Manipulation/Bit Manipulation
 ```python
     def missingNumber(self, nums: List[int]) -> int:
         
-        # Note:
-        # XOR approach
-        # 1. num XOR num -> 0, all paired numbers cancel out
-        # 2. Iterate over range -> num XOR index -> 0
-        # 3. Missing number -> will not XOR correctly, will remain at end
-        # Result -> missing number
+        # XOR Cancellation Trick
+        # Find missing number from range [0, n]
+
+        # Idea:
+        # XOR cancels duplicates
+
+        # XOR Properties:
+        # 1. a ^ a = 0  (duplicates cancel)
+        # 2. a ^ 0 = a  (identity)
+        # 3. XOR is commutative + associative
+
+        # If we XOR:
+        #  all indices (0..n)
+        #  with all array values
+
+        # every paired number cancels, leaving only the missing number
 
         n = len(nums)
 
+        # Running XOR Result
+        # Holds XOR of processed indices and numbers
+        # sc: O(1)
         missing = 0
 
-        # loop from 0 to n inclusive
+        # tc: iterate over n O(n)
         for i in range(n + 1):
 
-            # XOR index and array value
-            if i < n:
-                missing ^= i ^ nums[i]
+            # XOR current index
+            missing ^= i
 
-            # i == n, just XOR the number n, avoid out of bounds index
-            else:
-                missing ^= i
+            # XOR Corresponding value (if exists)
+            if i < n: 
+                missing ^= nums[i]
 
-        # Time Complexity: O(n)
-        # Space Complexity: O(1)
+        # overall: tc O(n)
+        # overall: sc O(n)
         return missing
 ```
 
@@ -592,68 +615,103 @@ Given two integers, return the sum without using operators.
 ```python
     def getSum(self, a: int, b: int) -> int:
         
-        # -----------------------------------------
-        # a  b  '^' sum (without carry)  carry
-        # 0  0        0                    0
-        # 0  1        1                    0
-        # 1  0        1                    0
-        # 1  1        0                    1
+        # Bit Manipulation Addition
+        # Add two integers without '+' or '-'
 
-        # -----------------------------------------
-        # Note:
-        # all bits are processed in parallel, one bit at a time
+        # Idea:
+        # Binary addition can be split into:
+        #   1. XOR (^) => sum WITHOUT carry
+        #   2. AND (&) => determine if bits exist
+        #   3. AND (&) + left shift (<<) => carry bits 
 
-        # Iteration 1: sum bits 0 and 1 (rightmost two bits) 
-        # a = 0110
-        # b = 0011
-        # sum_ = a ^ b = 0101
-        # carry = (a & b) << 1 = 0100  (carry from bit 1 moves to bit 2)
+        # Example Truth Table:
+        # -------------------------------
+        #    a    b     XOR(sum)    Carry
+        #    0    0        0          0
+        #    0    1        1          0
+        #    1    0        1          0
+        #    1    1        0          1
 
-        # Iteration 2: sum bits 2 and 2 (carry affecting bit 2)
-        # a = sum_ = 0101
-        # b = carry = 0100
-        # sum_ = a ^ b = 0001
-        # carry = (a & b) << 1 = 0100 << 1 = 1000  (carry from bit 2 moves to bit 3)
+        # Variables:
+        # sum_without_carry = a ^ b
+        # carry             = (a & b) << 1
 
-        # Iteration 3: sum bits 3 and 3 (carry affecting highest bit)
-        # a = 0001
-        # b = 1000
-        # sum_ = 1001
-        # carry = (a & b) << 1 = 0000  (no more carry)
+        # Repeat until carry becomes 0
 
-        # Done, carry is 0 → final sum = 1001 (9)
+        # Python Specific:
+        # Python integers are unlimited in size, 
+        # but this problem expects 32-bit signed integers range: -2^31 => 2^31 - 1
 
-        # -----------------------------------------
+        # Example:
+        #   a = 4294967295
+        #   32-bit binary = 11111111 11111111 11111111 11111111
+        #   python sees = +4294967295
 
-        # Note:
-        # 1. (a ^ b) -> acts as sum without carry, mask ensures all operations are restricted to 32 bits
-        # 2. (a & b) << 1 -> Carry is 1 only when both bits are 1, otherwise 0
-        # 2. carry -> Use AND (&) + left shift (<<)
-        # 3. Repeat until carry is 0 -> no value left
-        # 4. Handle negative numbers with 32-bit mask
-        # Result ->
+        # Two's Complement Rule:
+        # This differs from pythons view, here the leftmost bit acts as the sign bit
+        # Leftmost bit = sign bit
+        #   1 => negative number
+        #   0 => positive number
 
-        # limit to 32 bits
+        # Example:
+        #   a = 4294967295
+        #   32-bit binary = 11111111 11111111 11111111 11111111
+        #   Two's Complement Sees = -1 
+
+        # So we check:
+        #   if a > maxInt:
+        # as this number should be negative
+
+        # Converting 32-bit Unsigned Integer To 32-bit Signed Integer
+        # ~(a ^ MASK)
+
+
+        # Mask to limit to 32 bits
         MASK = 0xFFFFFFFF
+
+        # MaxInt to compare 32-bit Unsigned at the end
         maxInt = 2**31 - 1
 
-        # while carry is not 0
+
+        # tc: iterate while carry is not 0 O(?)
         while b != 0:
 
-            # sum without carry
-            sum_ = (a ^ b) & MASK
+            # Sum without carry:
+            # XOR keeps bits where exactly one is set
+            xor_sum = a ^ b
 
-            # carry
-            carry = ((a & b) << 1) & MASK
+            # restrict to 32 bits
+            sum = xor_sum & MASK
+
+            # Carry Calculation:
+            # AND finds positions where BOTH bits are 1 (results in a carry)
+            carry_bits = a & b
+
+            # shift carry to next higher bit position
+            shifted_carry = carry_bits << 1
+
+            # restrict to 32 bits
+            carry = shifted_carry & MASK
             
-            # update a and b
-            a, b = sum_, carry
+            # Update for the next iteration
+            a = sum
+            b = carry
 
-        # if a > 2^31-1, it's negative in 32-bit signed
-        res = a if a <= maxInt else ~(a ^ MASK)
+        # If result exceeds max signed int,
+        # we must converted a 32-bit unsigned value into a 32-bit signed
+        if a <= maxInt:
+            res = a
+        else:
+            # Conversion from 32-bit unsigned integer to 32-bit signed integer:
 
-        # overall: time complexity O(1)
-        # overall: space complexity O(1)
+            # flip bits outside mask range
+            flipped = a ^ MASK
+
+            # apply bitwise NOT
+            res = ~flipped
+
+        # overall: tc O(1)
+        # overall: sc O(1)
         return res
 ```
 
@@ -710,60 +768,57 @@ Given a 32-bit integer, reverse it.
 ```python
     def reverse(self, x: int) -> int:
         
-        # -----------------------------------------
-        # Iterative process: process each digit from right to left
+        # Reverse Integer Iteratively:
+        
+        # Idea:
+        #   Extract digits from right to left using (mod 10)
+        #   Append to result by multiplying current result by 10 and adding the digit
+        #   Track sign separately
+        #   Ensure 32-bit signed integer overflow check
 
-        # Example: x = 123
-        # Iteration 1:
-        #   digit = 123 % 10 = 3
-        #   x = 123 // 10 = 12
-        #   res = 0 * 10 + 3 = 3
-        #
-        # Iteration 2:
-        #   digit = 12 % 10 = 2
-        #   x = 12 // 10 = 1
-        #   res = 3 * 10 + 2 = 32
-        #
-        # Iteration 3:
-        #   digit = 1 % 10 = 1
-        #   x = 1 // 10 = 0
-        #   res = 32 * 10 + 1 = 321
-        #
-        # Done, x == 0 → final reversed number = 321
+        # 32-bit signed integer limits
+        maxInt = 2**31 - 1 # 2147483647
+        minInt = -2**31    # -2147483648
 
-        # -----------------------------------------
-        # Note:
-        # 1. Extract digits one by one using modulo 10
-        # 2. Append to result using multiply by 10 + digit
-        # 3. Handle negative numbers
-        # 4. Check for 32-bit overflow
-        # Result -> 
-
-
-        INT_MAX = 2**31 - 1 # 2147483647
-        INT_MIN = -2**31    # -2147483648
-
+        # Reversed Result
+        # sc: O(1)
         res = 0
+
+        # Tracking Sign
         sign = 1 if x >= 0 else -1
+
+        # Work with absolute value
         x = abs(x)
 
+        # Process digits iteratively
         while x != 0:
+
+            # Grab rightmost digit
             digit = x % 10
+
+            # Remove digit from x
             x //= 10
 
+            # Overflow Check:
+            # If res*1- + digit would exceed 32-bit signed integer, return 0
+            # Example:
+            # res = 214748364, digit = 8
+            # res*10 + digit = 2147483648 > intMax => overflow
             # Check overflow before multiplying by 10
-            if res > (INT_MAX - digit) // 10:
-            
-                # would overflow 32-bit signed integer
+            if res > (maxInt - digit) // 10:
                 return 0
 
+            # Append digit to revered number
+            # res_new = res*10 + digit
             res = res * 10 + digit
 
         # Apply original sign
+        # Positive number => same
+        # Negative number => multiply by -1
         res1 = sign * res
 
-        # overall: time complexity O(log10(x))
-        # overall: space complexity O(1)
+        # overall: tc O(log10(x))
+        # overall: sc O(1)
         return res1
 ```
 
