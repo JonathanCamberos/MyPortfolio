@@ -259,7 +259,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 ```python
 ```
 
-## Solution 1: Recursive DFS Late Pruning With Tracking Visited Set - Graph/something
+## Solution 1: [DFS] DFS Recursive Late Pruning Track All Visited Land In Current Island - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -324,14 +324,14 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         islands = 0
 
         # visits any land touching (r, c)
-        def dfs(r, c):
+        def dfs_MarkVisitedLand(r, c):
 
             # Late Pruning:
             # skip if cell is out of bounds, water, or has already been visited
             # tc: O(1), sc: O(1)
             if (r < 0 or r >= rows or 
                 c < 0 or c >= cols or 
-                grid[r][c] == "0" or 
+                grid[r][c] == '0' or 
                 (r, c) in visited):
                 return
 
@@ -360,16 +360,21 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                 # Initial Call:
                 # land that has not been visited found, start dfs exploration at cell
                 # tc: O(1), sc: O(1)
-                if grid[r][c] == '1' and (r, c) not in visited:
+                if (grid[r][c] == '1' and 
+                    (r, c) not in visited):
+
+                    # found new island
                     islands += 1
-                    dfs(r, c)
+
+                    # zero out this entire island's land
+                    dfs_MarkVisitedLand(r, c)
 
         # overall: tc O(r*c)
         # overall: sc O(r*c)
         return islands
 ```
 
-## Solution 2: Recursive DFS Early Pruning With Turning Visited Land Into Water Tracking - Graph/something
+## Solution 2: [DFS] DFS Recursive Early Pruning Sink All Visited Land In Current Island - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
         
@@ -430,7 +435,8 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         islands = 0
 
         # visits any land touching (r, c)
-        def dfs(r, c):
+        # sc: O(r*c) worst case recursion depth
+        def dfs_SinkVisitedLand(r, c):
 
             # Process Root:
             # turn land into water, 'marking' current cell as visited
@@ -454,29 +460,34 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                     grid[nr][nc] == '1'):
 
                     # recurse into neighbor
-                    dfs(nr, nc)
+                    dfs_SinkVisitedIsland(nr, nc)
 
             # Return:
             # implicit, recursion returns to parent to continue exploring remaining neighbors
 
         # iterate over all cells
-        # tc: O(r*c), sc: O(1)
+        # tc: O(r*c)
         for r in range(rows):
             for c in range(cols):
 
                 # Initial Call:
                 # land that has not been visited found, start dfs exploration at cell
-                # tc: O(1), sc: O(1)
+                # tc: O(1)
                 if grid[r][c] == '1':
+
+                    # found new island
                     islands += 1
-                    dfs(r, c)
+
+                    # zero out this entire island's land
+                    dfs_SinkVisitedIsland(r, c)
+
 
         # overall: tc O(r*c)
         # overall: sc O(r*c)
         return islands
 ```
 
-## Solution 3: Iterative BFS Early Pruning With In Place Flood Fill - Graph/something
+## Solution 3: [BFS] BFS Iterative Early Pruning Sink All Visited Land In Current Island - Graph/something
 ```python
     def numIslands(self, grid: List[List[str]]) -> int:
 
@@ -514,18 +525,22 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # sc: O(1)
         islands = 0
 
-        # visits any land touching (r, c)
-        def bfs(r, c):
+        # Visit Any land Touching (r, c)
+        def bfs_SinkVisitedLand(r, c):
 
-            # iterative queue
+            # Iterative queue
+            # sc: O(r*c)
             queue = deque()
 
-            # start iteration
+            # Start iteration
+            # 
             queue.append((r, c))
 
-            # Build -> sink root island
+            # Build:
+            # Sink root island
             grid[r][c] = '0'
 
+            # While we have land in current island
             while queue:
 
                 # Get Current Cell:
@@ -539,13 +554,13 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                 for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = cr + dr, cc + dc
 
-                        # Early Pruning:
-                        # only enqueue if in bounds and land
-                        # tc: O(1), sc: O(1)
-                        if (0 <= nr < rows and 
-                            0 <= nc < cols and 
-                            grid[nr][nc] == '1'):
-                        
+                    # Early Pruning:
+                    # only enqueue if in bounds and land
+                    # tc: O(1), sc: O(1)
+                    if (0 <= nr < rows and 
+                        0 <= nc < cols and 
+                        grid[nr][nc] == '1'):
+                    
                         # Process Root:
                         # mark current cell as visited
                         # tc: O(1), sc: O(1)
@@ -553,20 +568,23 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                         queue.append((nr, nc))
 
         # Return:
-        # implicit, queue empties after full island is explored
-
+        # implicit, queue empties after all land in current island is explored
 
         # iterate over all cells
-        # tc: O(r*c), sc: O(1)
+        # tc: O(r*c)
         for r in range(rows):
             for c in range(cols):
 
                 # Initial Call:
                 # land that has not been visited found, start bfs exploration at cell
-                # tc: O(1), sc: O(1)
+                # tc: O(1)
                 if grid[r][c] == '1':
+
+                    # found new island
                     islands += 1
-                    bfs(r, c)
+
+                    # zero out this entire island's land
+                    bfs_SinkVisitedLand(r, c)
 
         # overall: tc O(r*c)
         # overall: sc O(r*c)
@@ -615,6 +633,36 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         #    which mimics “flooding” the island like marking visited cells in DFS/BFS.
         # Result: the number of unique roots after all unions gives the total number of islands.
 
+        # Rank:                     After: Find(3) and path compression
+        #   0
+        #   |                           0           
+        #   1       Rank of          |  |  |        But rank is
+        #   |           3            1  2  3          still 3 
+        #   2
+        #   |                                 - Recomputing heights would be expensive
+        #   3                                 - Rank only guides future unions
+        #                                     - Rank is accurate before compression, not after compression
+        #                                     - Rank = upper bound on tree height
+        #
+        # Rank represents a conservative estimate of tree height used for balancing. 
+        # Path compression can flatten trees and reduce real height, 
+        # but rank is not updated because it only needs to remain an upper bound.
+
+        # Rank Fun Fact:
+        # Rank grows exponentially with number of nodes
+        # For rank of 30 we need 2^30 = ~1 billion nodes required
+        # And since most problems are << 1 billion, we never pass a rank of 30
+        # which usually ensures a time complexity of O(1)
+
+        # Path Compression
+        # Keeps trees balanced and prevents extremely tall trees
+        # Flattens trees dynamically during operations
+
+        # Path Compression + Union By Rank:
+        # Actual Tree Height << log2(N)
+        # Which allows us to say the amortized cost per union/find is α(N)
+        # α(N) grows so slowly that for all practical N (even N ~ 10^80). its <= 5)
+
         # Empty Check: no islands, grid is empty
         # tc: O(1)
         if not grid:
@@ -623,20 +671,24 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         rows, cols = len(grid), len(grid[0])
 
-        # parent and rank for each land cell
+        # Parent and rank for each land cell
         # sc: O(r*c) 
         parent = {}
         rank = {}
 
-        # Initialize Union-Find:
+        # Initialize Union Find:
         # tc: iterate over all cells O(r*c)
         # sc: add all cells O(r*c)
         for r in range(rows):
             for c in range(cols):
+
+                # If cell is land
                 if grid[r][c] == '1':
 
-                    # Each land cell is its own parent initially, rank = 0
+                    # Each land cell is its own root land for its island initially
                     parent[(r, c)] = (r, c)
+
+                    # Rank = 0
                     rank[(r, c)] = 0
 
         # Find with Path Compression
@@ -656,25 +708,26 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # sc: O(1)
         def union(x, y):
 
-            # Ignore if nodes share the same root (are in the same tree)
-            # Acts as the water flooding as once x and y share the same root (are marked as connected),
-            # the pair will never be explored again
+            # Ignore if nodes share the same root (part of the same island)
+            # This will act as:
+            #   - tracking visited nodes: marks all land in a island
+            #   - will not connect land already marked as being in the same island
             rootX, rootY = find(x), find(y)
             if rootX == rootY:
                 return
 
-            # Attach smaller rank tree to larger rank tree
+            # Union By Rank (upper bound on tree height)
+            # tc: O(1)
             if rank[rootX] > rank[rootY]:
                parent[rootY] = rootX
             elif rank[rootX] < rank[rootY]:
                 parent[rootX] = rootY
             else:
-
-                # height of tree only increases by 1 on equal size trees
-                # A=3, B=2 -> B will point to Root A, leading to height of 3
+                
+                # Both Trees Have Same Rank:
+                # Join to either, and increase rank of parent by 1 
                 parent[rootY] = rootX
                 rank[rootX] += 1
-
 
         # iterate over all cells
         # tc: O(r*c)
@@ -687,7 +740,8 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                 if grid[r][c] == '1':
 
                     # Explore:
-                    # Union the adjacent lands, only down and right to avoid duplicates
+                    # Union the adjacent lands, 
+                    # only down and right as we will finish the rest as we iterate and Union
                     for dr, dc in [(1,0), (0,1)]:
                         nr, nc = r + dr, c + dc
 
@@ -702,7 +756,6 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # tc: O(r*c * α(n)) amortized
         # sc: O(r*c) for set of roots
         roots = set(find(cell) for cell in parent)
-
 
         # overall: tc O(r*c * α(r*c)) ≈ O(r*c)
         # overall: sc O(r*c) for parent, rank, and roots set
