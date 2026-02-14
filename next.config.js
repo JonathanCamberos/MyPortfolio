@@ -39,7 +39,6 @@ const filePaths = [
   'content/leetcode-intervals/index.mdx',
   'content/leetcode-bit-manipulation/index.mdx',
   'content/leetcode-math-and-geometry/index.mdx',
-  'content/leetcode-advanced-graphs/index.mdx',
   'content/leetcode-2D-dynamic-programming/index.mdx'
 
 ];
