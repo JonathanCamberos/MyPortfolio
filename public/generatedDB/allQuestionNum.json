@@ -1248,8 +1248,8 @@
       "Graph",
       "Topological Sort"
     ],
-    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#210-course-schedule-ii-3---medium",
-    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "questionLink": "/Notes/leetcode-graphs-ii-cycle-detection#210-course-schedule-ii-3---medium",
+    "blog": "LeetCode: Graphs II Cycle Detection",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1683,6 +1683,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "332": {
+    "questionNum": 332,
+    "questionTitle": "Reconstruct Itinerary ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it. All of the tickets belong to a man who departs from \"JFK\", thus, the itinerary must begin with \"JFK\". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary [\"JFK\", \"LGA\"] has a smaller lexical order than [\"JFK\", \"LGB\"]. You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.",
+    "questionTopics": [
+      "Depth First Search",
+      "Graph",
+      "Eulerian Circuit"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-hierholzers-eulers#332-reconstruct-itinerary-1---hard",
+    "blog": "LeetCode: Graphs II Hierholzers Eulers",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "338": {
     "questionNum": 338,
     "questionTitle": "Counting Bits ::2::",
@@ -2096,6 +2111,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "785": {
+    "questionNum": 785,
+    "questionTitle": "Is Graph Bipartite ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There is an undirected graph with n nodes, where each node is numbered between 0 and n - 1. You are given a 2D array graph, where graph[u] is an array of nodes that node u is adjacent to. More formally, for each v in graph[u], there is an undirected edge between node u and node v. The graph has the following properties: There are no self-edges (graph[u] does not contain u). There are no parallel edges (graph[u] does not contain duplicate values). If v is in graph[u], then u is in graph[v] (the graph is undirected). The graph may not be connected, meaning there may be wo nodes u and v such that there is no path between them. A graph is bipartite if the nodes can be partitioned into two independent sets A and B such that every edge in the graph connects a node in set A and a node in set B. Return true if and only if it is bipartite.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Graph Theory"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-bipartite#785-is-graph-bipartite-1---medium",
+    "blog": "LeetCode: Graphs II Bipartite",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "787": {
     "questionNum": 787,
     "questionTitle": "Cheapest Flights Within K Stops ::1::",
@@ -2271,6 +2302,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "1192": {
+    "questionNum": 1192,
+    "questionTitle": "Critical Connections in a Network ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network. A critical connection is a connection that, if removed, will make some servers unable to reach some other server. Return all critical connections in the network in any order.",
+    "questionTopics": [
+      "Depth First Search",
+      "Graph Theory",
+      "Biconnected Component"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-tarjan#1192-critical-connections-in-a-network-1---hard",
+    "blog": "LeetCode: Graphs II Tarjan",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "1448": {
     "questionNum": 1448,
     "questionTitle": "Count Good Nodes in Binary Tree ::2::",
@@ -2366,6 +2412,24 @@
     ],
     "questionLink": "/Notes/leetcode-math-and-geometry#2013-detect-squares-1---medium",
     "blog": "LeetCode: Math and Geometry",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "2290": {
+    "questionNum": 2290,
+    "questionTitle": "Minimum Obstacle Removal to Reach Corner ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given a 0-indexed 2D integer array grid of size m x n. Each cell has one of two values: 0 represents an empty cell, 1 represents an obstacle that may be removed. You can move up, down, left, or right from and to an empty cell. Return the minimum number of obstacles to remove so you can move from the upper left corner (0, 0) to the lower right corner (m - 1, n - 1).",
+    "questionTopics": [
+      "Array",
+      "Breadth First Search",
+      "Graph Theory",
+      "Heap (Priority Queue)",
+      "Matrix",
+      "Shortest Path"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-01-bfs#2290-minimum-obstacle-removal-to-reach-corner-1---hard",
+    "blog": "LeetCode: Graphs II 01 BFS",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   }

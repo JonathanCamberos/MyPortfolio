@@ -110,6 +110,7 @@
   "322. Coin Change ::3::": 322,
   "323. Number of Connected Components in an Undirected Graph ::3::": 323,
   "329. Longest Increasing Path in a Matrix ::3::": 329,
+  "332. Reconstruct Itinerary ::1::": 332,
   "338. Counting Bits ::2::": 338,
   "347. Top K Elements in List ::3::": 347,
   "355. Design Twitter ::2::": 355,
@@ -136,6 +137,7 @@
   "746. Min Cost Climbing Stairs ::4::": 746,
   "763. Partition Labels ::1::": 763,
   "778. Swim in Rising Water ::1::": 778,
+  "785. Is Graph Bipartite ::1::": 785,
   "787. Cheapest Flights Within K Stops ::1::": 787,
   "846. Hand of Straights ::1::": 846,
   "853. Car Fleet ::2::": 853,
@@ -147,10 +149,12 @@
   "1091. Shortest Path In Binary Matrix ::1::": 1091,
   "1137. Nth Tribonacci Number ::3::": 1137,
   "1143. Longest Common Subsequence ::3::": 1143,
+  "1192. Critical Connections in a Network ::1::": 1192,
   "1448. Count Good Nodes in Binary Tree ::2::": 1448,
   "1584. Min Cost to Connect All Points ::2::": 1584,
   "1631. Path With Minimum Effort ::1::": 1631,
   "1851. Minimum Interval to Include Each Query ::3::": 1851,
   "1899. Merge Triplets to Form Target Triplet ::1::": 1899,
-  "2013. Detect Squares ::1::": 2013
+  "2013. Detect Squares ::1::": 2013,
+  "2290. Minimum Obstacle Removal to Reach Corner ::1::": 2290
 }

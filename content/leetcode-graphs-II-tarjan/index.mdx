@@ -97,44 +97,39 @@ Indices and low link arrays: O(V)
     Identify clusters where every node can reach every other node
 
 
-# 2002. Alien Dictionary ::1:: - Hard
+# 1192. Critical Connections in a Network ::1:: - Hard
 
-Topics:  Breadth First Search, Graph, Topological Sort
+Topics:  Depth First Search, Graph Theory, Biconnected Component
 
 ## Intro
-> There is a foreign language which uses the latin 
-> alphabet, but the order among letters is not
-> "a", "b", "c" ... "z" as in English.
-> You receive a list of non-empty strings words from the
-> dictionary, where the words are sorted 
-> lexicographically based on the rules of this new 
-> language. 
-> Derive the order of letters in this language. If the order 
-> is invalid, return an empty string. If there are multiple 
-> valid order of letters, return any of them.
-> A string a is lexicographically smaller than a string b 
-> if either of the following is true:
-> The first letter where they differ is smaller in a
-> than in b.
-> a is a prefix of b and a.length < b.length.
+> There are n servers numbered from 0 to n - 1 connected by 
+> undirected server-to-server connections forming a network where 
+> connections[i] = [ai, bi] represents a connection between servers 
+> ai and bi. Any server can reach other servers directly or indirectly 
+> through the network.
+> A critical connection is a connection that, if removed, will make some 
+> servers unable to reach some other server.
+> Return all critical connections in the network in any order.
 
 
 |  Example Input           | Output |  
 | ---------------- | ------ | 
-| ["z","o"] | "zo" |
-| ["hrn","hrf","er","enn","rfnn"] | "hernf" |
+| n = 4, connections = [[0,1],[1,2],[2,0],[1,3]] | [[1,3]] |
+| n = 2, connections = [[0,1]] | [[0,1]] |
 
 Constraints:
 
-The input words will contain characters only from lowercase 'a' to 'z'.
+2 &leq; n &leq; 10^5
 
-1 &leq; nums.length &leq; 100
+n-1 &leq; connections.length &leq; 10^5
 
-1 &leq; words[i].length &leq; 100
+0 &leq; ai, bi &leq; n-1
+
+ai != bi
 
 
 ## Abstraction
-Given a foreign language, derive the order of letters.
+Find the number of SCC and determine the number of critical connections between them
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -161,69 +156,56 @@ Given a foreign language, derive the order of letters.
 ```python
 ```
 
-## Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
+## Solution 1: [Tarjan] Tarjan Solutions Bridges In Undirected Graph - Advanced Graphs/Advanced Graphs
 ```python
-    def foreignDictionary(self, words: List[str]) -> str:
+    def criticalConnections(n: int, connections: list[list[int]]) -> list[list[int]]:
         
-        # Why Topological Sort?
-        # Each character -> node in directed graph
-        # Edge (c1 -> c2) means -> c1 comes before c2 in alien dictionary
-        # Topological sort -> Finding a valid order of characters
-        # Finding a valid order of characters is equivalent to performing
-        # a topological sort on this graph.
-        # If cycle exists, no valid order exists
+        # Build the graph (undirected)
+        # graph[u] = list of neighbors
+        graph = defaultdict(list)
+        for u, v in connections:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        # Initialize Tarjan bookkeeping arrays
+        disc = [-1] * n      # discovery times of nodes
+        low = [-1] * n       # lowest discovery time reachable from the node
+        time = [0]           # global timestamp counter (wrapped in list to mutate)
+        res = []             # store critical connections (bridges)
+        
+        # Define DFS
+        def dfs(u, parent):
 
-        # Note:
-        # 1. Build a graph of character dependencies from adjacent words
-        # 2. Count in-degrees for each character
-        # 3. Use BFS to perform topological sort
-        # 4. Detect cycles: if result length != total unique chars, return ""
-
-        # Initialize graph and in-degree counts
-        graph = defaultdict(set)  # char -> set of chars that come after it
-        in_degree = {c: 0 for word in words for c in word}
-
-        # Build graph edges based on adjacent words
-        for i in range(len(words) - 1):
-            word1, word2 = words[i], words[i+1]
-            min_len = min(len(word1), len(word2))
-            found_diff = False
-
-            for j in range(min_len):
-                c1, c2 = word1[j], word2[j]
-                if c1 != c2:
-                    if c2 not in graph[c1]:
-                        graph[c1].add(c2)
-                        in_degree[c2] += 1
-                    found_diff = True
-                    break
-
-            # Edge case: prefix situation invalid, e.g., "abc" before "ab"
-            if not found_diff and len(word1) > len(word2):
-                return ""
-
-        # BFS topological sort
-        queue = deque([c for c in in_degree if in_degree[c] == 0])
-        result = []
-
-        while queue:
-            c = queue.popleft()
-            result.append(c)
-            for nei in graph[c]:
-                in_degree[nei] -= 1
-                if in_degree[nei] == 0:
-                    queue.append(nei)
-
-        # Check for cycle
-        if len(result) != len(in_degree):
-            return ""
-
-        res = "".join(result)
-
-
-        # overall: time complexity O(C + W*L)
-        # C = number of unique characters, W = number of words, L = average word length
-        # overall: space complexity O(C + W*L) for graph and in-degree
+            disc[u] = low[u] = time[0]    # set discovery & low-link to current time
+            time[0] += 1                  # increment global time
+            
+            # Process all neighbors
+            for v in graph[u]:
+                if v == parent:
+                    # Ignore the edge back to parent
+                    continue
+                
+                if disc[v] == -1:
+                    # Neighbor not visited → recurse
+                    dfs(v, u)
+                    
+                    # After returning from recursion:
+                    # Update low-link of u based on subtree rooted at v
+                    low[u] = min(low[u], low[v])
+                    
+                    # Tarjan Bridge Condition:
+                    # If low[v] > disc[u], edge u-v is a bridge
+                    if low[v] > disc[u]:
+                        res.append([u, v])
+                
+                else:
+                    # Neighbor already visited → update low-link using back-edge
+                    low[u] = min(low[u], disc[v])
+        
+        # Run DFS from node 0 (graph is connected by problem statement)
+        dfs(0, -1)
+        
+        # Return list of critical connections (bridges)
         return res
 ```
 

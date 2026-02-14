@@ -102,44 +102,52 @@ DFS recursion stack: O(V)
     Two groups that must not conflict
 
 
-# 2001. Alien Dictionary ::1:: - Hard
+# 785. Is Graph Bipartite ::1:: - Medium
 
-Topics:  Breadth First Search, Graph, Topological Sort
+Topics:  Depth First Search, Breadth First Search, Union Find, Graph Theory
 
 ## Intro
-> There is a foreign language which uses the latin 
-> alphabet, but the order among letters is not
-> "a", "b", "c" ... "z" as in English.
-> You receive a list of non-empty strings words from the
-> dictionary, where the words are sorted 
-> lexicographically based on the rules of this new 
-> language. 
-> Derive the order of letters in this language. If the order 
-> is invalid, return an empty string. If there are multiple 
-> valid order of letters, return any of them.
-> A string a is lexicographically smaller than a string b 
-> if either of the following is true:
-> The first letter where they differ is smaller in a
-> than in b.
-> a is a prefix of b and a.length < b.length.
+> There is an undirected graph with n nodes, where each node is 
+> numbered between 0 and n - 1. You are given a 2D array 
+> graph, where graph[u] is an array of nodes that node u is
+> adjacent to. More formally, for each v in graph[u], there is an 
+> undirected edge between node u and node v. The graph has 
+> the following properties:
+> There are no self-edges (graph[u] does not contain u).
+> There are no parallel edges (graph[u] does not contain duplicate values).
+> If v is in graph[u], then u is in graph[v] (the graph is undirected).
+> The graph may not be connected, meaning there may be 
+> wo nodes u and v such that there is no path between them.
+> A graph is bipartite if the nodes can be partitioned into two 
+> independent sets A and B such that every edge in the graph 
+> connects a node in set A and a node in set B.
+> Return true if and only if it is bipartite.
 
 
 |  Example Input           | Output |  
 | ---------------- | ------ | 
-| ["z","o"] | "zo" |
-| ["hrn","hrf","er","enn","rfnn"] | "hernf" |
+| graph = [[1,2,3],[0,2],[0,1,3],[0,2]] | false |
+| graph = [[1,3],[0,2],[1,3],[0,2]] | true |
 
 Constraints:
 
-The input words will contain characters only from lowercase 'a' to 'z'.
+graph.length == n
 
-1 &leq; nums.length &leq; 100
+1 &leq; n &leq; 100
 
-1 &leq; words[i].length &leq; 100
+0 &leq; graph[u].length &lt;
+
+0 &leq; graph[u][i] &leq; n-1
+
+graph[u] does not contain u
+
+All the values of graph[u] are unique
+
+If graph[u] contains v, then graph[v], contains u
 
 
 ## Abstraction
-Given a foreign language, derive the order of letters.
+Given a graph, determine if it is bipartite
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -166,69 +174,45 @@ Given a foreign language, derive the order of letters.
 ```python
 ```
 
-## Solution 1: Topological Sort using BFS - Advanced Graphs/Advanced Graphs
+## Solution 1: [Bipartite] Topological Sort using BFS - Advanced Graphs/Advanced Graphs
 ```python
-    def foreignDictionary(self, words: List[str]) -> str:
+
+    def isBipartite(self, graph: List[List[int]]) -> bool:
         
-        # Why Topological Sort?
-        # Each character -> node in directed graph
-        # Edge (c1 -> c2) means -> c1 comes before c2 in alien dictionary
-        # Topological sort -> Finding a valid order of characters
-        # Finding a valid order of characters is equivalent to performing
-        # a topological sort on this graph.
-        # If cycle exists, no valid order exists
+        from collections import deque
+        from typing import List
 
-        # Note:
-        # 1. Build a graph of character dependencies from adjacent words
-        # 2. Count in-degrees for each character
-        # 3. Use BFS to perform topological sort
-        # 4. Detect cycles: if result length != total unique chars, return ""
-
-        # Initialize graph and in-degree counts
-        graph = defaultdict(set)  # char -> set of chars that come after it
-        in_degree = {c: 0 for word in words for c in word}
-
-        # Build graph edges based on adjacent words
-        for i in range(len(words) - 1):
-            word1, word2 = words[i], words[i+1]
-            min_len = min(len(word1), len(word2))
-            found_diff = False
-
-            for j in range(min_len):
-                c1, c2 = word1[j], word2[j]
-                if c1 != c2:
-                    if c2 not in graph[c1]:
-                        graph[c1].add(c2)
-                        in_degree[c2] += 1
-                    found_diff = True
-                    break
-
-            # Edge case: prefix situation invalid, e.g., "abc" before "ab"
-            if not found_diff and len(word1) > len(word2):
-                return ""
-
-        # BFS topological sort
-        queue = deque([c for c in in_degree if in_degree[c] == 0])
-        result = []
-
-        while queue:
-            c = queue.popleft()
-            result.append(c)
-            for nei in graph[c]:
-                in_degree[nei] -= 1
-                if in_degree[nei] == 0:
-                    queue.append(nei)
-
-        # Check for cycle
-        if len(result) != len(in_degree):
-            return ""
-
-        res = "".join(result)
-
-
-        # overall: time complexity O(C + W*L)
-        # C = number of unique characters, W = number of words, L = average word length
-        # overall: space complexity O(C + W*L) for graph and in-degree
-        return res
+        # Initialization
+        n = len(graph)              # number of nodes
+        color = [0] * n             # 0 = uncolored, 1 = color A, -1 = color B
+        
+        # Traverse all components (graph may be disconnected)
+        for i in range(n):
+            if color[i] != 0:
+                continue            # already colored in a previous BFS
+            
+            # Start BFS from uncolored node i
+            queue = deque([i])
+            color[i] = 1             # assign initial color
+            
+            # BFS traversal for coloring
+            while queue:
+                node = queue.popleft()
+                
+                # Explore neighbors
+                for nei in graph[node]:
+                    
+                    if color[nei] == 0:
+                        # Neighbor uncolored: assign opposite color
+                        color[nei] = -color[node]
+                        queue.append(nei)
+                    
+                    elif color[nei] == color[node]:
+                        # Neighbor already colored same as current: conflict
+                        # Graph is not bipartite
+                        return False
+        
+        # If all nodes processed without conflict: bipartite
+        return True
 ```
 
