@@ -83,24 +83,33 @@ Given a list of integers, find the integer that only appears once.
 ```python
 ```
 
-## Solution 1: Bit Manipulation XOR Trick - Bit Manipulation/Bit Manipulation
+## Solution 1: [XOR] Duplicate Cancellation Single Identity Trick - Bit Manipulation/Bit Manipulation
 ```python
     def singleNumber(self, nums: List[int]) -> int:
         
-        # Note:
-        # 1. num XOR num -> 0
-        # 2. num XOR 0 -> num
-        # 3. XOR is commutative and associative
-        # 4. Iterate XOR over all pairs of numbers to leave the unique number
+        # XOR Cancellation:
+        # Every number appears twice except one, return the single number 
 
+        # Idea:
+        # XOR cancels duplicate numbers
+
+        # XOR Properties:
+        # 1. a ^ a = 0      (duplicates cancel)
+        # 2. a ^ 0 = a      (identity)
+        # 3. XOR is commutative and associative
+    
+        # Running Product 
         result = 0
 
-        # Accumulative XOR to generate the unique number
+        # tc: iterate over n O(n)
         for num in nums:
+
+            # XOR over all numbers, duplicates are remove, single remains
+            # tc: O(1)
             result ^= num
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(1)
+        # overall: tc O(n)
+        # overall: sc O(1)
         return result
 ```
 
@@ -158,59 +167,79 @@ in its binary representation.
 ```python
 ```
 
-## Solution 1: Basic Shift and Mask - Bit Manipulation/Bit Manipulation
+## Solution 1: [(>>) Shift and (& 1) Mask ] Shift All Bits By 1 And Bit Mast Rightmost - Bit Manipulation/Bit Manipulation
 ```python
     def hammingWeight(self, n: int) -> int:
         
-        # Note:
-        # 1. Given a 32-bit signed integer, check all bits for set
-        # 2. Set bit check -> check lowest bit
-        # 3. Iterate -> shift binary representation by 1
-        # Result -> count of set bits of binary representation
+        # Basic Shift + Mask:
+        # Count number of set bits (1s) in binary representation
 
+        # Idea:
+        # - Check lowest bit using AND mask
+        # - Shift bits right to process next position
+
+        # Bit Properties:
+        # 1. n & 1 = returns rightmost bit (1 if set, 0 if not)
+        # 2. n >> 1 = shift all bits right by one position
+
+        # Running Count:
+        # stores total number of set bits found so far
+        # sc: O(1)
         count = 0
 
+        # tc: iterate over 32 bits (problem constraint) O(1)
         for _ in range(32):
             
-            # set bit check -> validate if lowest bit is 1
+            # Grab rightmost bit, add to running count
+            # 1 if set, 0 is not
+            # tc: O(1)
             count += n & 1 
 
-            # iterate -> shift right by 1 regardless
+            # Shift all bits right by one position, to process next bit
+            # tc: O(1)
             n >>= 1
 
-        # overall: time complexity O(32) = O(1)
-        # overall: space complexity O(1)
+        # overall: tc O(32) ~= O(1)
+        # overall: sc O(1)
         return count
 ```
 
-## Solution 2: Brian Kernighan Algorithm - Bit Manipulation/Bit Manipulation
+## Solution 2: [Brian Kernighan] Brian Kernighan Algorithm [TC Opt] - Bit Manipulation/Bit Manipulation
 ```python
     def hammingWeight(self, n: int) -> int:
         
-        # Note:
-        # 1. Iterate while some bit is set
-        # 2. Removes the lowest/rightmost set bit
-        # 3. Add to count
-        # Result -> count number of set bits
+        # Brian Kernighan Algorithm
+        # Count number of set bits efficiently
 
+        # Idea:
+        # Each operation removes ONE set bit
+
+        # Trick:
+        # n & (n - 1) clears the rightmost set bit
+
+        # n     = 101000
+        # n - 1 = 101111  &
+        # -----------------
+        # res   = 100000
+
+        # Running Count:
+        # counts how many set bits have been removed
+        # sc: O(1)
         count = 0
 
-        # continues while some bit is set
+        # Continues while any bit is set
+        # Runs only k times (k = number of set bits)
+        # tc: O(k)
         while n:
             
-            # clears the right most 1 and everything to the right of it
-            # n      = 101000
-            # n - 1  = 100111
-            # ----------------
-            # n&(n-1)= 100000
-
+            # Remove the lowest (rightmost) set bit
             n &= (n - 1)
 
-            # add to set bit count
+            # Increment count for removed bit
             count += 1
 
-        # overall: time complexity O(k), k = number of set bits
-        # overall: space complexity O(1)
+        # overall: tc O(k) =~ O(1)
+        # overall: sc O(1)
         return count
 ```
 
@@ -261,26 +290,53 @@ where each index is the number of set bits for that integer.
 ```python
 ```
 
-## Solution 1: DP with Integer Division + Bit Shift - Bit Manipulation/Bit Manipulation
+## Solution 1: [5 (101) == 2 (10) + 5's Rightmost bit (1)] DP with Integer Division + Bit Shift - Bit Manipulation/Bit Manipulation
 ```python
     def countBits(self, n: int) -> List[int]:
         
-        # Note:
-        # 1. DP relation via bit manipulation
-        #    i >> 1 removes the least significant bit
-        #    i & 1 checks if least significant bit is set
-        # 2. Recurrence:
-        #    dp[i] = dp[i >> 1] + (i & 1)
-        # 3. Build array bottom-up from 0 to n
+        # Dynamic Programming + Bit Manipulation
+        # For every number i in [0, n], compute the number of set bits (1s)
 
-        ans = [0] * (n + 1)
+        # Idea:
+        # Reuse previously computed results using DP
 
+        # Bit Properties:
+        # 1. n & 1 = returns rightmost bit (1 if set, 0 if not)
+        # 2. n >> 1 = shift all bits right by one position
+
+        # - i >> 1 gives the number without its last bit
+        # - (i & 1) tells whether that removed bit was a 1
+
+        # (101) == (10) + 1 Example:
+        # i = 5  => (101)
+        # 5 >> 1 = 2 => (10)
+        # dp[5] = dp[2] + 1
+
+        # dp[i] = number of set bits in i
+        
+        # dp[0] = 0 by definition
+        # sc: O(n)
+        res = [0] * (n+1)
+
+
+        # Build DP Bottom Up
+        # tc: O(n)
         for i in range(1, n + 1):
-            ans[i] = ans[i >> 1] + (i & 1)
 
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
-        return ans
+            # Remove lowest bit
+            prev_num_removing_rightmost = i >> 1
+
+            # Check lowest bit
+            current_num_rightmost_bit = i & 1
+
+            # DP Recurrence:
+            # dp[i] = dp[i >> 1] + (i & 1)
+            # bits(i) = bits(i without last bit) + last bit (may be set or unset)
+            res[i] = res[prev_num_removing_rightmost] + current_num_rightmost_bit
+
+        # overall: tc O(n)
+        # overall: sc O(n)
+        return res
 ```
 
 
@@ -336,30 +392,46 @@ Reverse bits of a 32 signed integer.
 ```python
     def reverseBits(self, n: int) -> int:
 
-        # Note:
-        # 1. Given a 32-bit signed integer
-        # 2. Iterate res left by 1 and n right by 1 to continuing copying right most bit
-        # Result -> reversed n
+        # Iterative Bit Manipulation
+        # Reverse all 32 bits of an integer
 
-        result = 0
+        # Idea:
+        # Build teh result one bit at a time
 
-        # Iterate over 32 bits
+        # Process:
+        # - Read n from right to left (Least Significant/Smallest to Most Significant/Largest)
+        # - Build result from left to right
+
+        # Running result stores reversed bits build so far
+        # sc: O(1)
+        reversed = 0
+
+        # Iterate over 32 bits (problem constraint)
+        # tc: O(1)
         for _ in range(32):
 
-            # shift result left by 1, making space for new rightmost bit
-            result <<= 1
+            # Shift result left
+            # Creates space for next incoming bit
+            # tc: O(1)
+            reversed <<= 1
 
-            # copy n's rightmost bit (least significant) to res
-            result |= n & 1
+            # Grab lowest/rightmost bit from n (0 or 1)
+            # tc: O(1)
+            rightmost_digit = n & 1
+
+            # Add
+            # tc: O(1)
+            reversed |= rightmost_digit
             
-            # shift n right by 1, preparing next bit for copy
+            # Shift n right:
+            # Prepare next bit for extraction 
+            # tc: O(1)
             n >>= 1
         
-        # overall: time complexity O(n)
-        # overall: space complexity O(n)
-        return result
+        # overall: tc O(32) =~ O(1)
+        # overall: sc O(1)
+        return reversed
 ```
-
 
 # 268. Missing Number ::2:: - Easy
 

@@ -1436,12 +1436,12 @@
   "136": [
     {
       "number": 1,
-      "name": "Bit Manipulation XOR Trick",
+      "name": "[XOR] Duplicate Cancellation Single Identity Trick",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def singleNumber(self, nums: List[int]) -> int:\n        \n        # Note:\n        # 1. num XOR num -> 0\n        # 2. num XOR 0 -> num\n        # 3. XOR is commutative and associative\n        # 4. Iterate XOR over all pairs of numbers to leave the unique number\n\n        result = 0\n\n        # Accumulative XOR to generate the unique number\n        for num in nums:\n            result ^= num\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(1)\n        return result",
+      "code": "def singleNumber(self, nums: List[int]) -> int:\n        \n        # XOR Cancellation:\n        # Every number appears twice except one, return the single number \n\n        # Idea:\n        # XOR cancels duplicate numbers\n\n        # XOR Properties:\n        # 1. a ^ a = 0      (duplicates cancel)\n        # 2. a ^ 0 = a      (identity)\n        # 3. XOR is commutative and associative\n    \n        # Running Product \n        result = 0\n\n        # tc: iterate over n O(n)\n        for num in nums:\n\n            # XOR over all numbers, duplicates are remove, single remains\n            # tc: O(1)\n            result ^= num\n\n        # overall: tc O(n)\n        # overall: sc O(1)\n        return result",
       "questionNumber": 136,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-bit-manipulation-xor-trick---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-xor-duplicate-cancellation-single-identity-trick---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
@@ -1743,7 +1743,7 @@
       "name": "Iterative Bit Manipulation",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def reverseBits(self, n: int) -> int:\n\n        # Note:\n        # 1. Given a 32-bit signed integer\n        # 2. Iterate res left by 1 and n right by 1 to continuing copying right most bit\n        # Result -> reversed n\n\n        result = 0\n\n        # Iterate over 32 bits\n        for _ in range(32):\n\n            # shift result left by 1, making space for new rightmost bit\n            result <<= 1\n\n            # copy n's rightmost bit (least significant) to res\n            result |= n & 1\n            \n            # shift n right by 1, preparing next bit for copy\n            n >>= 1\n        \n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return result",
+      "code": "def reverseBits(self, n: int) -> int:\n\n        # Iterative Bit Manipulation\n        # Reverse all 32 bits of an integer\n\n        # Idea:\n        # Build teh result one bit at a time\n\n        # Process:\n        # - Read n from right to left (Least Significant/Smallest to Most Significant/Largest)\n        # - Build result from left to right\n\n        # Running result stores reversed bits build so far\n        # sc: O(1)\n        reversed = 0\n\n        # Iterate over 32 bits (problem constraint)\n        # tc: O(1)\n        for _ in range(32):\n\n            # Shift result left\n            # Creates space for next incoming bit\n            # tc: O(1)\n            reversed <<= 1\n\n            # Grab lowest/rightmost bit from n (0 or 1)\n            # tc: O(1)\n            rightmost_digit = n & 1\n\n            # Add\n            # tc: O(1)\n            reversed |= rightmost_digit\n            \n            # Shift n right:\n            # Prepare next bit for extraction \n            # tc: O(1)\n            n >>= 1\n        \n        # overall: tc O(32) =~ O(1)\n        # overall: sc O(1)\n        return reversed",
       "questionNumber": 190,
       "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-iterative-bit-manipulation---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
@@ -1752,22 +1752,22 @@
   "191": [
     {
       "number": 1,
-      "name": "Basic Shift and Mask",
+      "name": "[(>>) Shift and (& 1) Mask ] Shift All Bits By 1 And Bit Mast Rightmost",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def hammingWeight(self, n: int) -> int:\n        \n        # Note:\n        # 1. Given a 32-bit signed integer, check all bits for set\n        # 2. Set bit check -> check lowest bit\n        # 3. Iterate -> shift binary representation by 1\n        # Result -> count of set bits of binary representation\n\n        count = 0\n\n        for _ in range(32):\n            \n            # set bit check -> validate if lowest bit is 1\n            count += n & 1 \n\n            # iterate -> shift right by 1 regardless\n            n >>= 1\n\n        # overall: time complexity O(32) = O(1)\n        # overall: space complexity O(1)\n        return count",
+      "code": "def hammingWeight(self, n: int) -> int:\n        \n        # Basic Shift + Mask:\n        # Count number of set bits (1s) in binary representation\n\n        # Idea:\n        # - Check lowest bit using AND mask\n        # - Shift bits right to process next position\n\n        # Bit Properties:\n        # 1. n & 1 = returns rightmost bit (1 if set, 0 if not)\n        # 2. n >> 1 = shift all bits right by one position\n\n        # Running Count:\n        # stores total number of set bits found so far\n        # sc: O(1)\n        count = 0\n\n        # tc: iterate over 32 bits (problem constraint) O(1)\n        for _ in range(32):\n            \n            # Grab rightmost bit, add to running count\n            # 1 if set, 0 is not\n            # tc: O(1)\n            count += n & 1 \n\n            # Shift all bits right by one position, to process next bit\n            # tc: O(1)\n            n >>= 1\n\n        # overall: tc O(32) ~= O(1)\n        # overall: sc O(1)\n        return count",
       "questionNumber": 191,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-basic-shift-and-mask---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-shift-and-1-mask-shift-all-bits-by-1-and-bit-mast-rightmost---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     },
     {
       "number": 2,
-      "name": "Brian Kernighan Algorithm",
+      "name": "[Brian Kernighan] Brian Kernighan Algorithm [TC Opt]",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def hammingWeight(self, n: int) -> int:\n        \n        # Note:\n        # 1. Iterate while some bit is set\n        # 2. Removes the lowest/rightmost set bit\n        # 3. Add to count\n        # Result -> count number of set bits\n\n        count = 0\n\n        # continues while some bit is set\n        while n:\n            \n            # clears the right most 1 and everything to the right of it\n            # n      = 101000\n            # n - 1  = 100111\n            # ----------------\n            # n&(n-1)= 100000\n\n            n &= (n - 1)\n\n            # add to set bit count\n            count += 1\n\n        # overall: time complexity O(k), k = number of set bits\n        # overall: space complexity O(1)\n        return count",
+      "code": "def hammingWeight(self, n: int) -> int:\n        \n        # Brian Kernighan Algorithm\n        # Count number of set bits efficiently\n\n        # Idea:\n        # Each operation removes ONE set bit\n\n        # Trick:\n        # n & (n - 1) clears the rightmost set bit\n\n        # n     = 101000\n        # n - 1 = 101111  &\n        # -----------------\n        # res   = 100000\n\n        # Running Count:\n        # counts how many set bits have been removed\n        # sc: O(1)\n        count = 0\n\n        # Continues while any bit is set\n        # Runs only k times (k = number of set bits)\n        # tc: O(k)\n        while n:\n            \n            # Remove the lowest (rightmost) set bit\n            n &= (n - 1)\n\n            # Increment count for removed bit\n            count += 1\n\n        # overall: tc O(k) =~ O(1)\n        # overall: sc O(1)\n        return count",
       "questionNumber": 191,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-brian-kernighan-algorithm---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-2-brian-kernighan-brian-kernighan-algorithm-tc-opt---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
@@ -2686,12 +2686,12 @@
   "338": [
     {
       "number": 1,
-      "name": "DP with Integer Division + Bit Shift",
+      "name": "[5 (101) == 2 (10) + 5's Rightmost bit (1)] DP with Integer Division + Bit Shift",
       "type": "bit-manipulation",
       "application": "bit-manipulation",
-      "code": "def countBits(self, n: int) -> List[int]:\n        \n        # Note:\n        # 1. DP relation via bit manipulation\n        #    i >> 1 removes the least significant bit\n        #    i & 1 checks if least significant bit is set\n        # 2. Recurrence:\n        #    dp[i] = dp[i >> 1] + (i & 1)\n        # 3. Build array bottom-up from 0 to n\n\n        ans = [0] * (n + 1)\n\n        for i in range(1, n + 1):\n            ans[i] = ans[i >> 1] + (i & 1)\n\n        # overall: time complexity O(n)\n        # overall: space complexity O(n)\n        return ans",
+      "code": "def countBits(self, n: int) -> List[int]:\n        \n        # Dynamic Programming + Bit Manipulation\n        # For every number i in [0, n], compute the number of set bits (1s)\n\n        # Idea:\n        # Reuse previously computed results using DP\n\n        # Bit Properties:\n        # 1. n & 1 = returns rightmost bit (1 if set, 0 if not)\n        # 2. n >> 1 = shift all bits right by one position\n\n        # - i >> 1 gives the number without its last bit\n        # - (i & 1) tells whether that removed bit was a 1\n\n        # (101) == (10) + 1 Example:\n        # i = 5  => (101)\n        # 5 >> 1 = 2 => (10)\n        # dp[5] = dp[2] + 1\n\n        # dp[i] = number of set bits in i\n        \n        # dp[0] = 0 by definition\n        # sc: O(n)\n        res = [0] * (n+1)\n\n\n        # Build DP Bottom Up\n        # tc: O(n)\n        for i in range(1, n + 1):\n\n            # Remove lowest bit\n            prev_num_removing_rightmost = i >> 1\n\n            # Check lowest bit\n            current_num_rightmost_bit = i & 1\n\n            # DP Recurrence:\n            # dp[i] = dp[i >> 1] + (i & 1)\n            # bits(i) = bits(i without last bit) + last bit (may be set or unset)\n            res[i] = res[prev_num_removing_rightmost] + current_num_rightmost_bit\n\n        # overall: tc O(n)\n        # overall: sc O(n)\n        return res",
       "questionNumber": 338,
-      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-dp-with-integer-division-bit-shift---bit-manipulationbit-manipulation",
+      "solutionLink": "/Notes/leetcode-bit-manipulation#solution-1-5-101-2-10-5-s-rightmost-bit-1-dp-with-integer-division-bit-shift---bit-manipulationbit-manipulation",
       "blog": "LeetCode: Bit Manipulation"
     }
   ],
