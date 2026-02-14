@@ -141,138 +141,176 @@ Given a grid with oranges, return how much time until no fresh oranges remain.
 ```python
 ```
 
-## Solution 1: Iterative BFS Rotten Multi Source with Global Minutes Overwrite - Graph/something
+## Solution 1: [Multi Source BFS] Iterative BFS Rotten Multi Source with Global Minutes Overwrite - Graph/something
 ```python
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        # Note:
-        # 1. Start BFS from all initially rotten oranges (multi-source BFS)
-        # 2. Each BFS level = 1 minute of rotting spread
-        # 3. Track fresh oranges count, decrement when they rot
-        # 4. Return minutes if all fresh rot, else -1
+        
+        # Multi Source BFS (Time Stored In Queue)
+        # Determine minimum minutes required for all fresh oranges to rot
 
-        # Empty check
+        # Idea:
+        # - Start BFS from ALL rotten oranges simultaneously
+        # - Each expansion spreads rot to neighbors
+        # - Time (minutes) is carried inside queue state
+
+        # BFS Property:
+        # First time an orange is visited = earliest minute it rots
+
+        # Edge Case + Setup
+
+        # Empty Check: no time
         if not grid:
             return -1
 
         # boundaries
+        # sc: O(1)
         m, n = len(grid), len(grid[0])
 
-        # count
+        # Count Fresh Oranges
         fresh = 0
 
-        # time
+        # Final Elapsed Time
         minutes = 0
 
-        # iterative queue
+        # Iterative Queue Holds: (row, col, minute)
+        # sc: O(m*n)
         queue = deque()
 
-        # set up multi source BFS
+        # Multi Source Setup
+        # Iterate across all cells
+        # tc: O(m*n)
         for r in range(m):
             for c in range(n):
 
-                # Append Rotten Source to BFS
+                # Append ALL rotten oranges as BFS roots
                 if grid[r][c] == 2:
-                    # (row, col, minute)
+                    # add rotten orange as (row, col, minute)
                     queue.append((r, c, 0))
                 
                 # Add to fresh count
                 elif grid[r][c] == 1:
                     fresh += 1
 
-        # iterate over rotten sources
+        # BFS Traversal:
+        # Each poop represents earliest time this cell rots
+        # tc: O(m*n) each cell processed once
         while queue:
 
-            # next rotten orange
-            # minutes will be overwritten by pop,
-            # last pop will have the longest and final minute count
+            # Process Root
             r, c, minutes = queue.popleft()
 
-            # Process Choices -> 
+            # Process Choices:
+            # 4 direction spread
             for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                 nr, nc = r + dr, c + dc
 
-                # Early Prune -> : valid boundary and fresh orange
+                # Early Prune:
+                # valid bounds + fresh orange
                 if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+
+                    # Rot orange immediately
                     grid[nr][nc] = 2
                     fresh -= 1
                     
-                    # add to time and pass down
+                    # Pass next minute down BFS
                     queue.append((nr, nc, minutes + 1))
 
-        # total time taken if no oranges remain, else fresh orange remain so -1
+        # Final Validation:
+        # if fresh oranges remain, they are unreachable
         res = minutes if fresh == 0 else -1
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(m*n)
+        # overall: sc O(m*n)
         return res
 ```
 
-## Solution 2: Iterative BFS Rotten Multi Source with Level Processing Minutes Trigger - Graph/something
+## Solution 2: [Multi Source BFS] Iterative BFS Rotten Multi Source with Level Processing Minutes Trigger - Graph/something
 ```python
     def orangesRotting(self, grid: List[List[int]]) -> int:
         
-        # Note:
-        # 1. Instead of storing time in queue, process BFS by levels
-        # 2. Each level of queue expansion corresponds to +1 minute
-        # 3. Track number of fresh oranges, ensure all rot or return -1
+        # Multi Source BFS (Time Stored In Queue)
+        # Determine minimum minutes required for all fresh oranges to rot
 
-        # Empty check
+        # Idea:
+        # - Start BFS from ALL rotten oranges simultaneously
+        # - Each expansion spreads rot to neighbors
+        # - Time (minutes) is carried inside queue state
+
+        # BFS Property:
+        # First time an orange is visited = earliest minute it rots
+
+        # Edge Case + Setup
+
+        # Empty Check: no time
         if not grid:
             return -1
 
         # boundaries
+        # sc: O(1)
         m, n = len(grid), len(grid[0])
 
-        # count
+        # Count Fresh Oranges
         fresh = 0
 
-        # time
+        # Final Elapsed Time
         minutes = 0
 
-        # iterative
+        # Iterative Queue Holds: (row, col, minute)
+        # sc: O(m*n)
         queue = deque()
 
-        # set up multi source BFS
+        # Multi Source Setup
+        # Iterate across all cells
+        # tc: O(m*n)
         for r in range(m):
             for c in range(n):
 
-                # append rotten source to queue
+                # Append ALL rotten oranges as BFS roots
                 if grid[r][c] == 2:
-                    queue.append((r, c))
-
-                # add to fresh count
+                    # add rotten orange as (row, col, minute)
+                    queue.append((r, c, 0))
+                
+                # Add to fresh count
                 elif grid[r][c] == 1:
                     fresh += 1
 
-        # iterate over rotten sources
+        # BFS Traversal:
+        # Each poop represents earliest time this cell rots
+        # tc: O(m*n) each cell processed once
         while queue and fresh > 0:
 
-            # Process roots -> process all sources at this level
+            # Process Multiple Roots:
+            # All sources at this level
             for _ in range(len(queue)):
 
-                # next candidate
+                # Process current root
                 r, c = queue.popleft()
 
-                # Process Choices -> : visit neighbors
+                # Process Choices:
+                # 4 direction spread
                 for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = r + dr, c + dc
 
-                    # Early Pruning -> valid bounds and fresh fruit
+                    # Early Pruning:
+                    # Valid bounds and fresh fruit
                     if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+
+                        # Rot orange immediately
                         grid[nr][nc] = 2
                         fresh -= 1
 
-                        # add next rotten source to queue
+                        # Add next rotten source to queue
                         queue.append((nr, nc))
 
-            # iterate tick for next source level
+            # Iterate global minutes tick for next source level
             minutes += 1
 
-        # total time taken if no oranges remain, else fresh orange remain so -1
+        # Final Validation:
+        # if fresh oranges remain, they are unreachable
         res = minutes if fresh == 0 else -1
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(m*n)
+        # overall: sc O(m*n)
         return res
 ```
 
