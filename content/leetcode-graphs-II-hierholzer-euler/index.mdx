@@ -12,22 +12,75 @@ tags:
 
 # Hierholzers Algorithm Intro
 
+## Intro
+Hierholzers Algorithm is used to find a Eulerian path or Eulerian circuit in a graph.
+
+Eulerian Path: 
+    - Visits every edge exactly once
+    - May start and end at different vertices
+
+Eulerian Circuit:
+    - Eulerian Path that starts and ends at the same vertex
+
+The algorithm efficiently constructs that path by traversing edges while removing them,
+ensuring every edge is visited exactly once.
+
 ## Graph Requirements
+1. Directed or Undirected
+2. Must satisfy Eulerian conditions:
+    - Eulerian Circuit:
+        Directed: Every vertex has equal in and out degrees 
+        Undirected: Every vertex has even degrees
+
+    - Eulerian Path:
+        Exactly 0 or 2 vertices have unequal degree
+
+3. Represented Using:
+    - Adjacency List (preferred for edge removal)
+    - Edge list also works
 
 ## Output
+Eulerian Path or Eulerian Circuit: 
+    - list of vertices in the order of traversal
+    - visited every edge exactly once
+
 
 ## Video Animation
 Hierholzers: https://www.youtube.com/watch?v=qZrfK2iE4UA
 
 ## Pseudo Code
+```python 
+    def hierholzer(graph, start):
+
+        path = []        # final Eulerian path/circuit
+        stack = [start]  # stack to track current path
+
+        while stack:
+            u = stack[-1]
+            if graph[u]:
+                v = graph[u].pop()   # remove edge from u to v
+                stack.append(v)
+            else:
+                path.append(stack.pop())
+
+        return path[::-1]  # reverse to get correct order
+```
 
 ## Time Complexity
+Each edge is visited and removed exactly once: O(E)
 
 ## Space Complexity
+Stack: Up to O(V) in worst case
+Path Storage: O(E + 1) vertices
+
+O(V + E)
 
 ## IRL Use Case
+- Route Planning
+    Postman problems (traverse each street exactly once)
 
-## What is Hierholzers Algorithm
+- Puzzle Solving
+    Draw shapes without lifting a pen
 
 
 # 332. Reconstruct Itinerary ::1:: - Hard

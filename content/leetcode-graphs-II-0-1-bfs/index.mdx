@@ -12,21 +12,71 @@ tags:
 
 # Zero One BFS Algorithm Intro 
 
+## Intro
+01 BFS is an efficient shortest path algorithm for graphs where edge weights 
+are only 0 or 1
+
+Special case of BFS/Dijkstras
+
+Instead of using a standard priority queue, it uses a deque to achieve O(V + E) time
+
+Efficiently computes shortest distances from a single source in such graphs
+
 ## Graph Requirements
+1. Weighted graph with edge weights only 0 or 1 only
+2. Directed or Undirected
+3. Represented Using:
+    - Adjacency List
 
 ## Output
+Shortest distance from the source node to all other nodes
+Optionally, the path itself
 
 ## Video Animation
 
 ## Pseudo Code
+```python
+    from collections import deque
+
+    def zero_one_bfs(graph, source):
+
+        n = len(graph)
+        dist = [float('inf')] * n
+        dist[source] = 0
+
+        dq = deque()
+        dq.append(source)
+
+        while dq:
+            node = dq.popleft()
+            for neighbor, weight in graph[node]:
+                if dist[node] + weight < dist[neighbor]:
+                    dist[neighbor] = dist[node] + weight
+                    if weight == 0:
+                        dq.appendleft(neighbor)  # 0-weight edges prioritized
+                    else:
+                        dq.append(neighbor)      # 1-weight edges go to back
+
+        return dist
+```
 
 ## Time Complexity
+Each vertex is processed at most once
+Each edge is considered at most once
+
+Must faster than Dijkstras for this specific case O(E + V) instead of O(E log V)
 
 ## Space Complexity
+Distance Array: O(V)
+Deque: O(V) in worst case
 
 ## IRL Use Case
+- Special Graphs
+    Slide (0 cost) vs Step (1 cost)
 
-## What is Zero One BFS Algorithm
+- Network Propagation With Free/Paid Edges
+    0 for instance transfer, 1 for delayed transfer
+
 
 # 1006. Network Delay Time ::1:: - Medium
 

@@ -12,64 +12,109 @@ tags:
 
 # Multi Source BFS Algorithm Intro
 
+## Intro
+Multi Source BFS is an extension of Breadth First Search where we start BFS 
+simultaneously from multiple source nodes.
+
+It is commonly used to propagate distance or spread signals from multiple starting
+points and find shortest distances to all nodes or earliest reach times.
+
+Unlike regular BFS single source, we enqueue all sources initially
+and expand layer by layer
+
 ## Graph Requirements
+1. Unweighted or uniformly weighted graph (BFS gives shortest paths in unweighted graphs)
+2. Directed or Undirected
+3. Represented Using:
+    - Adjacency List
+    - Adjacency Matrix
 
 ## Output
+Shortest distance from the nearest source node to every other node
+
+Can also track levels or earliest arrival times from any source
+
+Useful for problems like 'spread of infection' or 'fire spread'
 
 ## Video Animation
 Multi Source BFS: ?
 
 ## Pseudo Code
+```python
+    def multi_source_bfs(graph, sources):
+
+        visited = set(sources)
+        distance = {node: 0 for node in sources}  # Distance from nearest source
+        queue = deque(sources)
+
+        while queue:
+            node = queue.popleft()
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    distance[neighbor] = distance[node] + 1
+                    queue.append(neighbor)
+
+        return distance
+```
 
 ## Time Complexity
+Each node is visited at most once
+Each edge is processed at most once
+
+O(V + E)
+
 
 ## Space Complexity
+Queue: O(V)
+Visited Set: O(V)
+Distance Map: O(V)
+
+O(V)
+
 
 ## IRL Use Case
+- Fire/Contamination Spread Simulation
+    Track earliest time fire or infection reaches each point from multiple starting locations
 
-## What is Multi Source BFS Algorithm
+- Network Signal Propagation
+    Spread from multiple routers in a network
 
 
-# 1001. Network Delay Time ::1:: - Medium
+# 994. Rotting Oranges ::2:: - Medium
 
-Topics:  Depth First Search, Breadth First Search, Graph, Heap (Priority Queue), Shortest Path
+Topics:  Array, Breadth First Search, Matrix
 
 ## Intro
-> You are given a network of n nodes, labeled from 1 to n. 
-> You are also given times, a list of travel times as directed 
-> edges times[i] = (ui, vi, wi), where ui is the source 
-> node, vi is the target node, and wi is the time it takes for 
-> a signal to travel from source to target.
-> We will send a signal from a given node k. Return the
-> minimum time it takes for all the n nodes to receive the 
-> signal. If it is impossible for all the n nodes to receive the 
-> signal, return -1.
+> You are given an m x n grid where each cell can have one of 
+> three values:
+> 0 representing an empty cell,
+> 1 representing a fresh orange, or
+> 2 representing a rotten orange.
+> Every minute, any fresh orange that is 4-directionally adjacent to 
+> a rotten orange becomes rotten.
+> Return the minimum number of minutes that must elapse until no
+> cell has a fresh orange. If this is impossible, return -1.
+
 
 |  Example Input           | Output |  
 | ---------------- | ------ | 
-| times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2 | 2 |
-| times = [[1,2,1]], n = 2, k = 1 | 1 |
-| times = [[1,2,1]], n = 2, k = 2 | -1 |
+| grid = [[2,1,1],[1,1,0],[0,1,1]] | 4 |
+| grid = [[2,1,1],[0,1,1],[1,0,1]] | -1 |
+| grid = [[0,2]] | 0 |
 
 Constraints:
 
-1 &leq; k &leq; n &leq; 100
+m == grid.length
 
-1 &leq; times.length &leq; 6000
+n == grid[i].length
 
-times[i].length == 3
+1 &leq; m, n &leq; 10
 
-1 &leq; ui, vi &leq; n
-
-ui != vi
-
-0 &leq; wi &leq; 100
-
-All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
+grid[i][j] is 0, 1, or 2.
 
 ## Abstraction
-Given a graph, each node with 1 edges, determine how much time is needed
-to get from start node to target node.
+Given a grid with oranges, return how much time until no fresh oranges remain.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -96,71 +141,138 @@ to get from start node to target node.
 ```python
 ```
 
-## Solution 1: [Dijkstra's] BFS And MinHeap To Keep Shortest Path - Advanced Graphs/Advanced Graphs
+## Solution 1: Iterative BFS Rotten Multi Source with Global Minutes Overwrite - Graph/something
 ```python
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        
-        # Dijkstra's Algorithm (Single-Source Shortest Path):
-        # We want the minimum time for a signal sent from node k
-        # to reach all n nodes in a directed graph with non-negative weights.
-        
-        # Key Ideas:
-        #   1. Model the network as a directed weighted graph.
-        #   2. Use a min-heap to always expand the node with the smallest
-        #      known signal arrival time.
-        #   3. Maintain a dictionary of shortest known times to each node.
-        #   4. If all nodes are reached, return the maximum of these times.
-        #   5. If some node is unreachable, return -1.
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        # Note:
+        # 1. Start BFS from all initially rotten oranges (multi-source BFS)
+        # 2. Each BFS level = 1 minute of rotting spread
+        # 3. Track fresh oranges count, decrement when they rot
+        # 4. Return minutes if all fresh rot, else -1
 
-        # Build adjacency list: graph[src] = [(dest, weight), ...]
-        # tc: O(edge)
-        graph = defaultdict(list)
-        for u, v, w in times:
-            graph[u].append((v, w))
-        
-        # Min-Heap:
-        # Each entry is (time_to_reach_node, node)
-        # sc: O(node)
-        heap = [(0, k)]
-        
-        # Dictionary to track shortest known time to each node
-        # Invariant: once a node is added here, its shortest time is finalized
-        shortest_time = {}
-        
-        # tc: each node/edge O(e) processed via O(log n) heap operations O(e log n)
-        while heap:
-
-            # Pop node with smallest known arrival time
-            time, node = heapq.heappop(heap)
-            
-            # Skip if this node already has a finalized shortest time
-            # (We found a better path earlier)
-            if node in shortest_time:
-                continue
-            
-            # Record shortest time to reach this node
-            shortest_time[node] = time
-            
-            # Explore Choices:
-            # Relax all outgoing edges from this node
-            for neighbor, wt in graph[node]:
-
-                # If neighbor not finalized, push updated time candidate
-                if neighbor not in shortest_time:
-                    heapq.heappush(heap, (time + wt, neighbor))
-        
-        # After processing:
-        # If not all nodes were reached, signal cannot reach everyone
-        if len(shortest_time) != n:
+        # Empty check
+        if not grid:
             return -1
-        
-        # Result:
-        # The total network delay is the maximum shortest arrival time
-        res = max(shortest_time.values())
 
-        # overall: tc O(e log n)
-        # overall: sc O(n + e)     
+        # boundaries
+        m, n = len(grid), len(grid[0])
+
+        # count
+        fresh = 0
+
+        # time
+        minutes = 0
+
+        # iterative queue
+        queue = deque()
+
+        # set up multi source BFS
+        for r in range(m):
+            for c in range(n):
+
+                # Append Rotten Source to BFS
+                if grid[r][c] == 2:
+                    # (row, col, minute)
+                    queue.append((r, c, 0))
+                
+                # Add to fresh count
+                elif grid[r][c] == 1:
+                    fresh += 1
+
+        # iterate over rotten sources
+        while queue:
+
+            # next rotten orange
+            # minutes will be overwritten by pop,
+            # last pop will have the longest and final minute count
+            r, c, minutes = queue.popleft()
+
+            # Process Choices -> 
+            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                nr, nc = r + dr, c + dc
+
+                # Early Prune -> : valid boundary and fresh orange
+                if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                    grid[nr][nc] = 2
+                    fresh -= 1
+                    
+                    # add to time and pass down
+                    queue.append((nr, nc, minutes + 1))
+
+        # total time taken if no oranges remain, else fresh orange remain so -1
+        res = minutes if fresh == 0 else -1
+
+        # overall: time complexity
+        # overall: space complexity
         return res
 ```
 
+## Solution 2: Iterative BFS Rotten Multi Source with Level Processing Minutes Trigger - Graph/something
+```python
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        
+        # Note:
+        # 1. Instead of storing time in queue, process BFS by levels
+        # 2. Each level of queue expansion corresponds to +1 minute
+        # 3. Track number of fresh oranges, ensure all rot or return -1
+
+        # Empty check
+        if not grid:
+            return -1
+
+        # boundaries
+        m, n = len(grid), len(grid[0])
+
+        # count
+        fresh = 0
+
+        # time
+        minutes = 0
+
+        # iterative
+        queue = deque()
+
+        # set up multi source BFS
+        for r in range(m):
+            for c in range(n):
+
+                # append rotten source to queue
+                if grid[r][c] == 2:
+                    queue.append((r, c))
+
+                # add to fresh count
+                elif grid[r][c] == 1:
+                    fresh += 1
+
+        # iterate over rotten sources
+        while queue and fresh > 0:
+
+            # Process roots -> process all sources at this level
+            for _ in range(len(queue)):
+
+                # next candidate
+                r, c = queue.popleft()
+
+                # Process Choices -> : visit neighbors
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                    nr, nc = r + dr, c + dc
+
+                    # Early Pruning -> valid bounds and fresh fruit
+                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
+                        grid[nr][nc] = 2
+                        fresh -= 1
+
+                        # add next rotten source to queue
+                        queue.append((nr, nc))
+
+            # iterate tick for next source level
+            minutes += 1
+
+        # total time taken if no oranges remain, else fresh orange remain so -1
+        res = minutes if fresh == 0 else -1
+
+        # overall: time complexity
+        # overall: space complexity
+        return res
+```
 

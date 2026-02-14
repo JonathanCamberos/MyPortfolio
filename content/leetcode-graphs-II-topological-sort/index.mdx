@@ -10,14 +10,66 @@ tags:
 - data structures and algorithms
 ---
 
-# Topological Sort Algorithm Intro
+# Kahn's BFS Topological Sort Algorithm Intro
+
+## Intro
+Topological Sort is a linear ordering of vertices in a Directed Acyclic Graph (DAG)
+such that for every directed edge (u -> v), where vertex u comes before vertex v
+in the ordering. 
+
+Commonly used to model dependencies or task scheduling
+
+Not defined for graphs with cycles
+
+## Graph Requirements
+1. Directed Acyclic Graph (DAG)
+2. Represented Using:
+    - Adjacency List
+    - Adjacency Matrix
+
+## Output
+A list of vertices in topologically sorted order
+Can have multiple valid orders if multiple vertices have no dependencies
+
+## Video Animation
+Kahn: https://www.youtube.com/watch?v=7J3GadLzydI
+
+## Pseudo Code
+```python
+    def topo_sort_dfs(graph):
+        visited = set()
+        stack = []
+
+        def dfs(node):
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    dfs(neighbor)
+            stack.append(node)
+
+        for node in graph:
+            if node not in visited:
+                dfs(node)
+
+        return stack[::-1]  # reverse to get correct topological order
+```
+
+## Time Complexity
+
+## Space Complexity
+
+## IRL Use Case
+
+# DFS Topological Sort Algorithm Intro
+
+## Intro
 
 ## Graph Requirements
 
 ## Output
 
 ## Video Animation
-Topological Sort: https://www.youtube.com/watch?v=7J3GadLzydI
+DFS Topological Sort: https://www.youtube.com/watch?v=_1TDxihjtoE
 
 ## Pseudo Code
 
@@ -27,7 +79,6 @@ Topological Sort: https://www.youtube.com/watch?v=7J3GadLzydI
 
 ## IRL Use Case
 
-## What is Topological Sort Algorithm
 
 
 # 269. Alien Dictionary ::1:: - Hard

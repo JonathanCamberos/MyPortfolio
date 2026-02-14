@@ -10,24 +10,91 @@ tags:
 - data structures and algorithms
 ---
 
-# Tarjan Algorithm Intro
+# Tarjan's Algorithm Intro
+
+## Intro
+Tarjan's Algorithm is used to find Strongly Connected Components (SCCs) in a directed groups.
+
+SCC: a maximal subset of vertices where every vertex is reachable from every other
+vertex in the subset
+
+It uses DFS and low link values to efficiently detect SCCs in O(V + E) time.
 
 ## Graph Requirements
+1. Directed Graphs
+2. Can have cycles, Tarjan will identify them as SCCs
+3. Represented Using:
+    - Adjacency List
+    - Edge List
 
 ## Output
+List of SCCs, each being a set of vertices
+
+Vertices in each SCC are mutually reachable
 
 ## Video Animation
 Tarjan: https://www.youtube.com/watch?v=_1TDxihjtoE
 
 ## Pseudo Code
+```python
+    def tarjan_scc(graph):
+
+        index = 0
+        indices = {}
+        lowlink = {}
+        stack = []
+        on_stack = set()
+        sccs = []
+
+        def dfs(v):
+            nonlocal index
+            indices[v] = index
+            lowlink[v] = index
+            index += 1
+            stack.append(v)
+            on_stack.add(v)
+
+            for w in graph[v]:
+                if w not in indices:
+                    dfs(w)
+                    lowlink[v] = min(lowlink[v], lowlink[w])
+                elif w in on_stack:
+                    lowlink[v] = min(lowlink[v], indices[w])
+
+            # If node is root of SCC
+            if lowlink[v] == indices[v]:
+                scc = []
+                while True:
+                    w = stack.pop()
+                    on_stack.remove(w)
+                    scc.append(w)
+                    if w == v:
+                        break
+                sccs.append(scc)
+
+        for node in graph:
+            if node not in indices:
+                dfs(node)
+
+        return sccs
+```
 
 ## Time Complexity
+Each vertex visited once
+Each edge processed once
+
+O(V + E)
 
 ## Space Complexity
+Stack: O(V)
+Indices and low link arrays: O(V)
+
 
 ## IRL Use Case
-
-## What is Tarjan Algorithm
+- Compiler Optimization
+    Detect mutually dependent modules or functions
+- Network Connectivity Analysis
+    Identify clusters where every node can reach every other node
 
 
 # 2002. Alien Dictionary ::1:: - Hard

@@ -1,5 +1,5 @@
 ---
-title: "LeetCode: Graphs II Kruskal Prim"
+title: "LeetCode: Graphs II Kruskal Prim Minimum Spanning Tree"
 description: "advanced graphs"
 image: "../../public/Notes/kruskal.png"
 publishedAt: "2026-02-12"
@@ -10,26 +10,155 @@ tags:
 - data structures and algorithms
 ---
 
-# Kruskal And Prims Algorithm Intro
+# Kruskal Algorithm Intro
+
+## Intro
+Kruskal's Algorithm is a greedy algorithm for finding a Minimum Spanning Tree (MST)
+in a weighted, connected graph.
+
+It connects all vertices with a minimum total edge weight while avoiding cycles.
 
 ## Graph Requirements
+1. Weight Graph
+2. Directed or Undirected (usually undirected for MST)
+3. Edge weights can be 0 or positive numbers
+4. Represented using:
+    - Edge List (most common)
+    - Adjacency List or Matrix 
 
 ## Output
+A Minimum Spanning Tree: a subset of edges connecting all vertices
+with minimum total weight
+
+Total weight of the Minimum Spanning Tree
 
 ## Video Animation
 Kruskal: https://www.youtube.com/watch?v=71UQH7Pr9kU
 
+## Pseudo Code
+```python
+    def kruskal(edges, V):
+
+        # Sort edges by weight
+        edges.sort(key=lambda x: x[2])
+
+        # Union Find data structure
+        parent = [i for i in range(V)]
+        rank = [0] * V
+
+        def find(u):
+            if parent[u] != u:
+                parent[u] = find(parent[u])
+            return parent[u]
+
+        def union(u, v):
+            pu, pv = find(u), find(v)
+            if pu == pv:
+                return False
+            if rank[pu] < rank[pv]:
+                parent[pu] = pv
+            else:
+                parent[pv] = pu
+                if rank[pu] == rank[pv]:
+                    rank[pu] += 1
+            return True
+
+        mst = []
+        total_weight = 0
+        for u, v, w in edges:
+            if union(u, v):
+                mst.append((u, v, w))
+                total_weight += w
+
+        return mst, total_weight
+```
+
+## Time Complexity
+Sorting Edges: O(E log E)
+Union Find operations: O(E) with path compression and union by rank
+
+Overall: O(E log E)
+
+## Space Complexity
+Union Find parent and rank arrays: O(V)
+MST edges storage: O(V)
+
+## IRL Use Case
+-  Network Design
+    Minimizing the cost of connecting computers, phones, or cables
+- Road Rail Planning:
+    Building a minimal network connecting all cities
+
+
+# Prims Algorithm Intro
+
+## Intro
+Prim's Algorithm is a greedy algorithm to find a Minimum Spanning Tree (MST)
+starting from a node and growing the tree edge by edge
+
+Unlike Kruskal, which sorts edges globally, Prim's always expands
+from the current MST
+
+## Graph Requirements
+1. Weight Graph
+2. Directed or Undirected (usually undirected for MST)
+3. Edge weights non-negative
+4. Represented Using:
+    - Adjacency List (most efficient)
+    - Adjacency Matrix
+
+## Output
+A Minimum Spanning Tree: subset of edges connecting all vertices with
+minimal total edge weight
+
+Total weight of the Minimum Spanning Tree.
+
+## Video Animation
 Prims: www.youtube.com/watch?v=cplfcGZmX7I
 
 ## Pseudo Code
+```python
+    def prim(graph, start):
+        """
+        graph: adjacency list {node: [(neighbor, weight), ...]}
+        start: starting vertex
+        """
+
+        visited = set()
+        min_heap = [(0, start)]
+        total_weight = 0
+        mst = []
+
+        while min_heap and len(visited) < len(graph):
+            w, u = heapq.heappop(min_heap)
+            if u in visited:
+                continue
+            visited.add(u)
+            total_weight += w
+
+            for v, weight in graph[u]:
+                if v not in visited:
+                    heapq.heappush(min_heap, (weight, v))
+                    mst.append((u, v, weight))
+
+        return mst, total_weight
+```
 
 ## Time Complexity
+Using Adjacency List + MinHeap: O(E log V)
+
+Each edge is pushed once, each heap operation costs O(log v)
 
 ## Space Complexity
+MinHeap: O(V)
+Visited Set: O(V)
+MST Edge: O(V)
 
 ## IRL Use Case
-
-## What is Kruskal And Prims Algorithm
+-  Network Design
+    Minimizing the cost of connecting computers, phones, or cables
+- Road Rail Planning:
+    Building a minimal network connecting all cities
 
 
 # 1584. Min Cost to Connect All Points ::2:: - Medium

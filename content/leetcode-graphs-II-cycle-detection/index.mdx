@@ -12,24 +12,93 @@ tags:
 
 # Cycle Detection Algorithm Intro
 
+## Intro
+Cycle Detection in a graph determines whether the graph contains a loop,
+a path that starts and ends at the same vertex.
+
+In directed graphs, cycles follow the direction of edges
+In undirected graphs, cycles are formed if a vertex is 
+reachable through a path other than its parent
+
+Fundamental in graph validation, scheduling, and dependency resolution.
+
 ## Graph Requirements
+1. Directed or Undirected
+2. Represented Using:
+    - Adjacency List
+    - Adjacency Matrix
 
 ## Output
+True or False whether a cycle exists
+Optionally, can return that actual cycle path
 
 ## Video Animation
 Cycle Detection: https://www.youtube.com/watch?v=tg96sZqhXyU
 
-Cycle Detection: 
+## Undirected Pseudo Code
+```python
+    def has_cycle_undirected(graph):
+        visited = set()
 
-## Pseudo Code
+        def dfs(node, parent):
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    if dfs(neighbor, node):
+                        return True
+                elif neighbor != parent:
+                    return True
+            return False
+
+        for node in graph:
+            if node not in visited:
+                if dfs(node, -1):
+                    return True
+        return False
+```
+
+## Directed Pseudo Code
+```python
+    def has_cycle_directed(graph):
+        visited = set()
+        rec_stack = set()
+
+        def dfs(node):
+            visited.add(node)
+            rec_stack.add(node)
+
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    if dfs(neighbor):
+                        return True
+                elif neighbor in rec_stack:
+                    return True
+
+            rec_stack.remove(node)
+            return False
+
+        for node in graph:
+            if node not in visited:
+                if dfs(node):
+                    return True
+        return False
+```
 
 ## Time Complexity
+Each vertex visited once
+Each edge processed once
+
+O(V + E)
 
 ## Space Complexity
+Visited set: O(V)
+Recursion Stack/Call Stack: O(V)
 
 ## IRL Use Case
-
-## What is Cycle Detection Algorithm
+- Deadlock Detection in OS
+    Detect circular wait conditions among processes
+- Dependency Management
+    Detect Circular Library or Module dependencies
 
 
 # 2000. Alien Dictionary ::1:: - Hard

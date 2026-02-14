@@ -1,5 +1,5 @@
 ---
-title: "LeetCode: Graphs II Dijkstras"
+title: "LeetCode: Graphs II Dijkstras BellmanFord Single Source Shortest Path"
 description: "advanced graphs"
 image: "../../public/Notes/dijkstras.png"
 publishedAt: "2026-02-12"
@@ -22,10 +22,10 @@ Like BFS, it expands outward from the source node.
 Unlike BFS, it chooses the next closest node by total distance, not by layer
 
 ## Graph Requirements
-- Weighted Graph
-- Non-negative Edge Weights
-- Directed or Non Directed
-- Represented Using:
+1. Weighted Graph
+2. Non-negative Edge Weights
+3. Directed or Non Directed
+4. Represented Using:
     - Adjacency List
     - Adjacency Matrix
 
@@ -101,9 +101,8 @@ Heap operations cost log V
 V = number of vertices
 E = number of edges
 
-Using adjacency list + minHeap: O(V + E)
+Using adjacency list + minHeap: O(V)
 
-Each vertex and edge is stored in adjacency list: O(V + E)
 Distance Map: O(V)
 Visited Set: O(V)
 MinHeap: O(V)
@@ -118,6 +117,78 @@ MinHeap: O(V)
 - Game AI Path Finding
     NPC movement optimization on weighted maps
 
+
+
+# Bellman Ford Algorithm Intro
+
+## Intro
+Bellman Ford is a single source shortest path algorithm that works for 
+graphs with negative edge weights.
+
+It finds the shortest distance from a source node to all other nodes in a
+weighted graph and can detect negative weight cycles.
+
+Unlike Dijkstra, it does not require non-negative weights, but it is slower
+
+## Graph Requirements
+1. Weight Graph, can include negative weights
+2. Directed or Undirected
+3. No requirements for non-negative edges
+4. Represented Using:
+    - Adjacency List
+    - Edge List
+
+## Output
+- Shortest distance from a source to every other node
+- Can indicate if a negative weight cycle exists (impossible to define shortest paths)
+
+## Video Animation
+https://www.youtube.com/watch?v=obWXjtg0L64
+
+## Relaxing Analogy
+Think of it as repeatedly 'relaxing' edges:
+    For each 
+
+## Pseudo Code
+```python
+    def bellman_ford(edges, V, source):
+
+        # Initialize distances
+        dist = [float('inf')] * V
+        dist[source] = 0
+
+        # Relax all edges V-1 times
+        for _ in range(V - 1):
+            for u, v, w in edges:
+                if dist[u] + w < dist[v]:
+                    dist[v] = dist[u] + w
+
+        # Check for negative weight cycles
+        for u, v, w in edges:
+            if dist[u] + w < dist[v]:
+                raise ValueError("Graph contains a negative weight cycle")
+
+        return dist
+```
+
+## Time Complexity
+V = number of vertices
+E = number of edges
+
+Relaxing All Edges V-1 Times: O(V * E)
+
+## Space Complexity
+V = number of vertices
+E = number of edges
+
+Distance Array: O(V)
+
+## IRL Use Case
+- Network Routing
+    Supports networks where some paths may have penalties or negative costs
+
+- Timing Scheduling Problems
+    Detect impossible schedules due ot negative constraints
 
 
 # 743. Network Delay Time ::1:: - Medium

@@ -12,24 +12,82 @@ tags:
 
 # A Star Heuristic Algorithm Intro
 
+## Intro
+A* is a graph search algorithm used to find the shortest path from a start node
+to a goal node efficiently
+
+Combines Dijkstra's Algorithm with a heuristic function to guide the search.
+
+Uses f(n) = g(n) + h(n):
+    - g(n): cost from start to current node
+    - h(n): estimated cost from current node to goal (heuristic)
+
+The heuristic helps prioritize nodes likely to lead to the goal,
+making it faster than Dijkstras in many cases.
+
 ## Graph Requirements
+1. Weighted Graph (non-negative weights for correctness)
+2. Directed or Undirected
+3. Heuristic function h(n) must be admissible (never overestimates the true cost)
+4. Represented Using:
+    - Adjacency List
+    - Grid or coordinate system for spatial problem
 
 ## Output
+Shortest path from start to goal
+Total path cost
+Optionally the sequence of nodes visited
 
 ## Video Animation
 A Star Heuristic: https://www.youtube.com/watch?v=71CEj4gKDnE
 
-
 ## Pseudo Code
+```python
+    def a_star(graph, start, goal, h):
+
+        open_set = []
+        heapq.heappush(open_set, (h(start), 0, start, [start]))  # (f = g+h, g, node, path)
+
+        visited = set()
+
+        while open_set:
+            f, g, node, path = heapq.heappop(open_set)
+
+            if node == goal:
+                return path, g
+
+            if node in visited:
+                continue
+            visited.add(node)
+
+            for neighbor, cost in graph[node]:
+                if neighbor not in visited:
+                    g_new = g + cost
+                    f_new = g_new + h(neighbor)
+                    heapq.heappush(open_set, (f_new, g_new, neighbor, path + [neighbor]))
+
+        return None, float('inf')  # no path found
+```
 
 ## Time Complexity
+Best case (good heuristic): O(E) only relevant nodes explored
+
+Worst case (bad heuristic) O(E log V), becomes Dijkstras
 
 ## Space Complexity
+Priority Queue: O(V)
+Visited Set: O(V)
+Path Storage: O(V)
 
 ## IRL Use Case
+- Path Finding In Games
+    NPC movements on maps, grids or graph navigation
 
-## What is A Star Heuristic Algorithm
+- GPS Navigation
+    Shortest path considering estimated distance to destination
 
+- Robotics
+    Efficient movement planning for autonomous robots
 
 # 1002. Network Delay Time ::1:: - Medium
 

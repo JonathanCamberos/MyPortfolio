@@ -12,22 +12,94 @@ tags:
 
 # Bipartite Algorithm Intro
 
+## Intro
+A bipartite graph is a graph whose vertices can be divided into two disjoint sets
+such that every edge connects a vertex from one set to a vertex from the other.
+
+No edge exists between vertices within the same set
+Commonly used in matching problems, scheduling, and network flows
+Can be checked using BFS or DFS coloring techniques
+
 ## Graph Requirements
+1. Directed or Undirected
+2. Represented Using:
+    - Adjacency List
+    - Adjacency Matrix
 
 ## Output
+True or False whether the graph is bipartite
+Optionally, the two sets of vertices if it is bipartite
+
 
 ## Video Animation
 Bipartite: https://www.youtube.com/watch?v=Zg6UAnAzGGs
 
-## Pseudo Code
+## BFS Pseudo Code
+```python
+    from collections import deque
+
+    def is_bipartite(graph):
+
+        color = {}
+
+        for node in graph:
+            if node not in color:
+                queue = deque([node])
+                color[node] = 0  # start coloring with 0
+
+                while queue:
+                    u = queue.popleft()
+                    for v in graph[u]:
+                        if v not in color:
+                            color[v] = 1 - color[u]  # alternate color
+                            queue.append(v)
+                        elif color[v] == color[u]:
+                            return False  # conflict detected
+
+        return True
+```
+
+### DFS Pseudo Code
+```python
+    def is_bipartite_dfs(graph):
+        color = {}
+
+        def dfs(node, c):
+            color[node] = c
+            for neighbor in graph[node]:
+                if neighbor not in color:
+                    if not dfs(neighbor, 1 - c):
+                        return False
+                elif color[neighbor] == c:
+                    return False
+            return True
+
+        for node in graph:
+            if node not in color:
+                if not dfs(node, 0):
+                    return False
+
+        return True
+```
 
 ## Time Complexity
+Each vertex is visited once
+Each edge is processed once
+
+O(V + E)
 
 ## Space Complexity
+Color map: O(V)
+BFS queue: O(V)
+DFS recursion stack: O(V)
 
 ## IRL Use Case
-
-## What is Bipartite Algorithm
+- Matching Problems
+    Job assignments or tasks
+- Network Flows
+    Bipartite graphs are foundational for max flow/min cut problems
+- Scheduling
+    Two groups that must not conflict
 
 
 # 2001. Alien Dictionary ::1:: - Hard
