@@ -328,7 +328,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 
             # Late Pruning:
             # skip if cell is out of bounds, water, or has already been visited
-            # tc: O(1), sc: O(1)
+            # tc: O(1)
             if (r < 0 or r >= rows or 
                 c < 0 or c >= cols or 
                 grid[r][c] == '0' or 
@@ -528,12 +528,11 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # Visit Any land Touching (r, c)
         def bfs_SinkVisitedLand(r, c):
 
-            # Iterative queue
+            # Initialize an empty queue
             # sc: O(r*c)
             queue = deque()
 
-            # Start iteration
-            # 
+            # Add root land to queue execution
             queue.append((r, c))
 
             # Build:
@@ -543,8 +542,8 @@ that is surrounded by water, and islands can connect horizontally or vertically.
             # While we have land in current island
             while queue:
 
-                # Get Current Cell:
-                # tc O(1), sc O(1) 
+                # Get Bottom Of Queue Cell (original root):
+                # tc O(1)
                 cr, cc = queue.popleft()
 
                 # Explore:
@@ -556,7 +555,7 @@ that is surrounded by water, and islands can connect horizontally or vertically.
 
                     # Early Pruning:
                     # only enqueue if in bounds and land
-                    # tc: O(1), sc: O(1)
+                    # tc: O(1)
                     if (0 <= nr < rows and 
                         0 <= nc < cols and 
                         grid[nr][nc] == '1'):
@@ -565,6 +564,8 @@ that is surrounded by water, and islands can connect horizontally or vertically.
                         # mark current cell as visited
                         # tc: O(1), sc: O(1)
                         grid[nr][nc] = '0'
+
+                        # Add land to bfs queue for execution
                         queue.append((nr, nc))
 
         # Return:
@@ -655,8 +656,11 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # which usually ensures a time complexity of O(1)
 
         # Path Compression
-        # Keeps trees balanced and prevents extremely tall trees
-        # Flattens trees dynamically during operations
+        # Path compression flattens the trees whenever you call find(),
+        # It keeps trees balanced and prevents extremely tall trees
+        # After a few finds, the tree can become almost flat
+        # It doesn't prevent the rank from being high, but it
+        # dramatically reduces the actual traversal length during finds
 
         # Path Compression + Union By Rank:
         # Actual Tree Height << log2(N)
@@ -757,12 +761,10 @@ that is surrounded by water, and islands can connect horizontally or vertically.
         # sc: O(r*c) for set of roots
         roots = set(find(cell) for cell in parent)
 
-        # overall: tc O(r*c * α(r*c)) ≈ O(r*c)
-        # overall: sc O(r*c) for parent, rank, and roots set
+        # overall: tc O(r*c * α(r*c)) =~ O(r*c)
+        # overall: sc O(r*c)
         return len(roots)
 ```
-
-
 
 # 695. Max Area of Island ::3:: - Medium
 
@@ -796,6 +798,8 @@ grid[i][j] is either 0 or 1
 
 ## Abstraction
 Given a graph, return the largest island.
+Same as Number of Islands except we just keep track of the size of the current 
+island as we sink it.
 
 ## Space & Time Complexity
 |  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
@@ -822,7 +826,7 @@ Given a graph, return the largest island.
 ```python
 ```
 
-## Solution 1: Recursive DFS Early Pruning With Flood Fill - Graph/something
+## Solution 1: [DFS] DFS Recursive Late Pruning Sink All Visited Land In Current Island - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
 
@@ -859,102 +863,161 @@ Given a graph, return the largest island.
         # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         m, n = len(grid), len(grid[0])
 
-        # max
+        # Tracking Global Max Island
+        # sc: O(1)
         max_area = 0
 
-        def dfs(r: int, c: int) -> int:
-            # Late Candidate Prune -> : out of bounds or water
-            if r < 0 or c < 0 or r >= m or c >= n:
+        def dfs_SinkVisitedIsland(r: int, c: int) -> int:
+
+            # Late Pruning:
+            # skip if cell is out of bounds or water
+            # tc: O(1)
+            if (r < 0 or r >= m or 
+                c < 0 or c >= n or
+                grid[r][c] == 0):
                 return 0
 
-            # Late Candidate Prune -> : water
-            if grid[r][c] == 0:
-                return 0
-
-            # Process Root -> sink land
+            # Process Root:
+            # turn land into water, 'marking' current cell as visited
+            # tc: O(1), sc: O(1)
             grid[r][c] = 0
 
-            # Process Root -> count land from root
+            # Process Root:
+            # Track size for current island
             area = 1
 
-            # Process Choices -> explore neighbors, add to land count
+            # Process Choices:
+            # Explore neighbors, see if there is land to add for current island
+            # and sink said neighbors
             area += dfs(r + 1, c)
             area += dfs(r - 1, c)
             area += dfs(r, c + 1)
             area += dfs(r, c - 1)
 
-            # Backtrack -> return root land count to parent
+            # Return:
+            # return land count for current land to parent land 
+            # (and eventually return to the original root land we hit)
             return area
     
-        # iterate over grid
+        # iterate over all cells
+        # tc: O(r*c)
         for r in range(m):
             for c in range(n):
 
-                # Process Root -> unvisited land found
+                # Initial Call:
+                # land that has not been visited found, start dfs exploration at cell
+                # tc: O(1)
                 if grid[r][c] == 1:
 
-                    # grab area of new island, check with max
-                    island_area = dfs(r, c)
+                    # found new island, get island area
+                    island_area = dfs_SinkVisitedIsland(r, c)
+
+                    # compare local island area to global max island area
                     max_area = max(max_area, island_area)
 
-        # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) worst-case (DFS recursion stack)
+        # overall: tc O(r*c)
+        # overall: sc O(r*c)
         return max_area
 ```
 
-
-## Solution 2: Iterative BFS Early Pruning With Flood Fill - Graph/something
+## Solution 2: [BFS] BFS Iterative Early Pruning Sink All Visited Land In Current Island - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        
+        
         # Note:
         # 1. Treat grid as a graph: 1 = land, edges = 4-direction adjacency
         # 2. BFS explores each island iteratively using a queue
         # 3. Sink land cells in-place to mark visited
         # 4. Track area of each island, return maximum
 
-        # Empty check
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not grid:
             return 0
 
-        # Boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         m, n = len(grid), len(grid[0])
 
-        # max
+        # Tracking Global Max Island
+        # sc: O(1)
         max_area = 0
 
-        def bfs(r, c):
-            # start BFS for this island
+
+        def bfs_SinkVisitedLand(r, c):
+
+            # area count for local island
             area = 0
-            queue = deque([(r, c)])
+
+            # Iterative queue
+            # sc: O(r*c)
+            queue = deque()
+
+            # Add root land to queue execution
+            queue.append((r, c))
+
+            # Build:
+            # Sink root island
             grid[r][c] = 0  # mark visited
 
+            # While we have land in current island
             while queue:
+
+                # Get Bottom Of Queue Cell (original root):
+                # tc O(1)
                 cr, cc = queue.popleft()
+
+                # Add to local island land counter
                 area += 1
 
+                # Explore:
+                # iteratively visit all neighbors (up, down, left, right)
+                # tc: O(1) per call, but overall bounded by number of cells
+                # sc: O(r*c) recursion stack grows with connected component size
                 for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
                     nr, nc = cr + dr, cc + dc
+
+                    # Early Pruning:
+                    # only enqueue if in bounds and land
+                    # tc: O(1)
                     if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
-                        grid[nr][nc] = 0  # mark visited
+
+                        # Process Root:
+                        # mark current cell as visited
+                        # tc: O(1), sc: O(1)
+                        grid[nr][nc] = 0
+
+                        # Add land to bfs queue for execution
                         queue.append((nr, nc))
 
+            # Return:
+            # pass local island area to root island
             return area
 
 
-        # iterate over grid 
+        # iterate over all cells
+        # tc: O(r*c)
         for r in range(m):
             for c in range(n):
+
+                # Initial Call:
+                # land that has not been visited found, start bfs exploration at cell
+                # tc: O(1)
                 if grid[r][c] == 1:
-                    island_area = bfs(r, c)
+
+                    # found new island
+                    island_area = bfs_SinkVisitedLand(r, c)
+
+                    # compare local island area to global island area
                     max_area = max(max_area, island_area)
 
 
-        # overall: time complexity O(m * n)
-        # overall: space complexity O(m * n) worst-case (queue holds all land cells)
+        # overall: tc O(m*n)
+        # overall: sc O(m*n)
         return max_area
 ```
 
-## Solution 3: Union Find Early Pruning - Graph/something
+## Solution 3: [Union Find] Union Find Early Pruning Union By Size To Keep Track Of Island Sizes - Graph/something
 ```python
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         
@@ -966,31 +1029,55 @@ Given a graph, return the largest island.
         # 4. Late Prune -> skip water cells
         # Result: max size among all connected components = max island area
 
-        # Empty check
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not grid:
             return 0
 
-        # Boundaries
+        # sc: setting up search space rows [0, n-1] and columns [0 n-1] O(1)
         m, n = len(grid), len(grid[0])
 
-        # Union find info
+        # Parent and size for each land cell
+        # sc: O(r*c) 
         parent = {}
         size = {}
 
-        # Find Path Compression
+        # Initialize Union Find:
+        # tc: iterate over all cells O(r*c)
+        # sc: add all cells O(r*c)
+        for r in range(m):
+            for c in range(n):
+                if grid[r][c] == 1:
+                    parent[(r, c)] = (r, c)
+                    size[(r, c)] = 1
+
+        # Find with Path Compression
+        # tc: O(α(n)) amortized per call
+        # sc: O(1) per call
         def find(x):
+
+            # if parent of cell isn't self, go up to parent
             if parent[x] != x:
                 parent[x] = find(parent[x])
+
+            # returns parent of original, after path compression
             return parent[x]
 
-        # Union two sets
+        # Union by Rank
+        # tc: O(α(n)) amortized
+        # sc: O(1)
         def union(x, y):
             
+            # Ignore if nodes share the same root (part of the same island)
+            # This will act as:
+            #   - tracking visited nodes: marks all land in a island
+            #   - will not connect land already marked as being in the same island
             rootX, rootY = find(x), find(y)
             if rootX == rootY:
                 return
             
-            # Union by size
+            # Union By Rank (upper bound on tree height)
+            # tc: O(1)
             if size[rootX] >= size[rootY]:
                 parent[rootY] = rootX
                 size[rootX] += size[rootY]
@@ -998,36 +1085,35 @@ Given a graph, return the largest island.
                 parent[rootX] = rootY
                 size[rootY] += size[rootX]
 
-        # Init Union Find,
-        # set parent to self and size to 0
+
+        # iterate over all cells
+        # tc: O(r*c)
         for r in range(m):
             for c in range(n):
-                if grid[r][c] == 1:
-                    parent[(r, c)] = (r, c)
-                    size[(r, c)] = 1
 
-        # Iterate over grid and Union adjacent 
-        # bottom and right land cells (to avoid double union)
-        for r in range(m):
-            for c in range(n):
+                # Initial Call:
+                # land has been found, start dfs exploration at cell
+                # tc: O(1), sc: O(1)
                 if grid[r][c] == 1:
 
-                    # Process Choices -> 
-                    # Union only down and right to avoid double union
+                    # Explore:
+                    # Union the adjacent lands, 
+                    # only down and right as we will finish the rest as we iterate and Union
                     for dr, dc in [(1,0), (0,1)]:
                         nr, nc = r + dr, c + dc
+
+                        # Early Pruning:
+                        # only union if in bounds and land
                         if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == 1:
                             union((r, c), (nr, nc))
 
-        # grab the largest union size
+        # Return tree with most nodes
         largestIsland = max(size.values(), default=0)
 
-        # overall: time complexity
-        # overall: space complexity
+        # overall: tc O(r*c * α(r*c)) =~ O(r*c)
+        # overall: sc O(r*c)
         return largestIsland
 ```
-
-
 
 # 133. Clone Graph ::2:: - Medium
 
@@ -1098,48 +1184,61 @@ Given a graph represented by an adjacency matrix, return a deep copy.
 ```python
 ```
 
-## Solution 1: Recursive DFS - Graph/something
+## Solution 1: [DFS] Recursive DFS - Graph/something
 ```python
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        
         # Note:
         # 1. Use DFS to traverse the graph
         # 2. Use a hashmap to store already cloned nodes
         # 3. For each node, recursively clone its neighbors
         # 4. Return the cloned node corresponding to the input
         
-        # Empty check
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not node:
             return None
 
-        # original -> deep copy
+        # Deep copy for new list
+        # sc: O(n)
         cloned = {}
 
+        # tc O(V + E) visit each node and edge once
+        # sc O(V), for hashmap + recursion stack
         def dfs(n) -> Node:
 
-            # Early Prune -> node already cloned
-            if n in cloned:
-                return cloned[n]
-
-            # Process Root -> clone current node
+            # Process Root:
+            # clone current node
             copy = Node(n.val)
+
+            # Add clone to hashmap
             cloned[n] = copy
 
-            # Process Candidates -> recursively clone all neighbors
+            # Process Candidates:
+            # recursively clone all neighbors
             for neighbor in n.neighbors:
-                copy.neighbors.append(dfs(neighbor))
+                
+                # Early Prune: only recurse if neighbor not yet cloned
+                if neighbor not in cloned:
+                    copy.neighbors.append(dfs(neighbor))
+                # else just grab neighbor from clone hashmap
+                else:
+                    copy.neighbors.append(cloned[neighbor])
 
-            # Backtrack -> return cloned node
+            # Return:
+            # pass back the cloned node
             return copy
 
-        # grab root of cloned graph
+        # Initial Call:
+        # return new root of cloned graph
         cloneRoot = dfs(node)
 
-        # overall: time complexity O(V + E), visit each node and edge once
-        # overall: space complexity O(V), for hashmap + recursion stack
+        # overall: tc O(V + E) 
+        # overall: sc O(V)
         return cloneRoot
 ```
 
-## Solution 2: Iterative BFS - Graph/something
+## Solution 2: [BFS] Iterative BFS - Graph/something
 ```python
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         
@@ -1151,139 +1250,53 @@ Given a graph represented by an adjacency matrix, return a deep copy.
         # 5. Early Prune -> skip already cloned neighbors
         # 6. Backtrack -> queue ensures all reachable nodes are processed
 
-        # Empty check
+        # Empty Check: no islands, grid is empty
+        # tc: O(1)
         if not node:
             return None
 
-        # clone root
+        # Deep copy of root for new list
+        # sc: O(n)
         cloned = {node: Node(node.val)}
 
-        # iterative queue
-        queue = deque([node])
+        # Iterative queue
+        # sc: O(V)
+        queue = deque()
 
-        # iterate over all nodes
+        # Append Original Root Node
+        # tc: O(1)
+        queue.append(node)
+
+        # While we still have nodes in original graph
+        # tc O(V + E), each node and edge visited once
+        # sc O(V), for hashmap + queue
         while queue:
 
-            # get previous roots neighbor
+            # Get Bottom Of Queue Node (original root):
+            # tc O(1)
             current = queue.popleft()
 
-            # iterate over neighbors
+            # Iterate over node's neighbors
             for neighbor in current.neighbors:
 
-                # Early Prune -> neighbor already cloned
+                # Early Prune: only recurse if neighbor not yet cloned
                 if neighbor not in cloned:
                     cloned[neighbor] = Node(neighbor.val)
                     queue.append(neighbor)
 
-                # Process Candidate -> connect cloned neighbor
+                # Grab neighbor from clone hashmap
                 cloned[current].neighbors.append(cloned[neighbor])
 
-        # overall: time complexity O(V + E), each node and edge visited once
-        # overall: space complexity O(V), for hashmap + queue
-        return cloned[node]
-```
+        cloneRoot = cloned[node]
 
-# 286. Walls and Gates ::2:: - Medium
-
-Topics:  Hash Table, Depth First Search, Breadth First Search, Graph
-
-## Intro
-> You are given a (m) x (n 2D) grid initialized with 
-> these three possible values:
-> -1 - A water cell that can not be traversed.
-> 0 - A treasure chest.
-> INF - A land cell that can be traversed. 
-> We use the integer 2^31 - 1 = 2147483647 to represent INF.
-> Fill each land cell with the distance to its nearest 
-> treasure chest. If a land cell cannot reach a
-> treasure chest then the value should remain INF.
-> Assume the grid can only be traversed up, down, 
-> left, or right.
-> Modify the grid in-place.
-
-|  Example Input           | Output |  
-| ---------------- | ------ | 
-| look at diagram | look at diagram |
-
-Constraints:
-
-m == grid.length
-
-n == grid[i].length
-
-1 &leq; m, n &leq; 100
-
-grid[i][j] is one of [-1, 0, 2147483647]
-
-## Abstraction
-Given grid, fill each land grid with the distance to the nearest treasure.
-
-## Space & Time Complexity
-|  Solution  | Time Complexity | Space Complexity | Time Remark | Space Remark |  
-| ---------- | --------------- | ---------------- | ----------- | ------------ |
-|  |  |  |  |  |
-
-
-| Bug | Error |
-| --- | ----- |
-|  |  | 
-
-
-## Brute Force:
-```python
-```
-|  Aspect  | Time Complexity | Space Complexity |  Time Remarks | Space Remarks |
-| -------- | --------------- | ---------------- | ------------- |  ------------ |
-|  |  |  |  |  |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-
-## Find the Bug:
-```python
-```
-
-## Solution 1: Multi Source BFS - Graph/something
-```python
-    def islandsAndTreasure(self, grid: List[List[int]]) -> None:
-        if not grid:
-            return
-
-        m, n = len(grid), len(grid[0])
-        INF = 2147483647
-        q = deque()
-
-        # Step 1: Collect all treasure chests (multi-source roots)
-        for r in range(m):
-            for c in range(n):
-                if grid[r][c] == 0:
-                    q.append((r, c))
-
-        # Step 2: BFS flood fill
-        while q:
-            r, c = q.popleft()
-
-            for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
-                nr, nc = r + dr, c + dc
-
-                # Late Candidate Prune: out of bounds or not INF
-                if not (0 <= nr < m and 0 <= nc < n):
-                    continue
-                if grid[nr][nc] != INF:
-                    continue
-
-                # Process Root: update distance from nearest treasure
-                grid[nr][nc] = grid[r][c] + 1
-
-                # Process Choices: explore neighbor
-                q.append((nr, nc))
-
-        # overall: time O(m * n), space O(m * n) (queue worst-case)
+        # overall: tc O(V + E)
+        # overall: sc O(V)
+        return cloneRoot
 ```
 
 # 417. Pacific Atlantic Water Flow ::2:: - Medium
 
-Topics:  Array, Breadth First Search, Matrix
+Topics:  Array, Depth First Search, Breadth First Search, Matrix
 
 ## Intro
 > There is an m x n rectangular island that borders both
@@ -1348,7 +1361,7 @@ Given a grid of heights, return which cells can flow to the ocean.
 ```python
 ```
 
-## Solution 1: Recursive DFS Reverse Flow - Graph/something
+## Solution 1: [DFS] DFS Recursive Reverse Flow - Graph/something
 ```python
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         
@@ -1410,7 +1423,7 @@ Given a grid of heights, return which cells can flow to the ocean.
 ```
 
 
-## Solution 2: Iterative BFS Reverse Flow - Graph/something
+## Solution 2: [BFS] Iterative BFS Reverse Flow - Graph/something
 ```python
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         
