@@ -830,6 +830,21 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 219
   },
+  "127": {
+    "questionNum": 127,
+    "questionTitle": "Word Ladder ::3::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that: Every adjacent pair of words differs by a single letter. Every si for 1 &leq; i &leq; k is in wordList. Note that beginWord does not need to be in wordList sk == endWord Given two words, beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.",
+    "questionTopics": [
+      "Hash Table",
+      "String",
+      "Breadth First Search"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#127-word-ladder-3---hard",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "128": {
     "questionNum": 128,
     "questionTitle": "Longest Consecutive Sequence ::3::",
@@ -845,6 +860,23 @@
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 219
   },
+  "130": {
+    "questionNum": 130,
+    "questionTitle": "Surrounded Regions ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an m x n matrix board containing letters 'X' and 'O', capture regions that are surrounded: Connect: A cell is connected to adjacent cells horizontally or vertically. Region: To form a region connect every 'O' cell. Surround: The region is surrounded with 'X' cells if you can connect the region with 'X' cells and none of the region cells are on the edge of the board. To capture a surrounded region, replace all 'O's with 'X's in-place within the original board. You do not need to return anything.",
+    "questionTopics": [
+      "Array",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#130-surrounded-regions-3---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "131": {
     "questionNum": 131,
     "questionTitle": "Palindrome Partitioning ::2::",
@@ -857,6 +889,22 @@
     ],
     "questionLink": "/Notes/leetcode-backtracking#131-palindrome-partitioning-2---medium",
     "blog": "LeetCode: Backtracking",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "133": {
+    "questionNum": 133,
+    "questionTitle": "Clone Graph ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given a reference of a node in a connected undirected graph. Return a deep copy (clone) of the graph. Each node in the graph contains a value (int) and a list (List[Node]) of its neighbors. class Node ( public int val; public List[Node] neighbors; ) Test case format: For simplicity, each node's value is the same as the node's index (1-indexed). For example, the first node with val == 1, the second node with val == 2, and so on. The graph is represented in the test case using an adjacency list. An adjacency list is a collection of unordered lists used to represent a finite graph. Each list describes the set of neighbors of a node in the graph. The given node will always be the first node with val = 1. You must return the copy of the given node as a reference to the cloned graph.",
+    "questionTopics": [
+      "Hash Table",
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#133-clone-graph-2---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1111,6 +1159,23 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "200": {
+    "questionNum": 200,
+    "questionTitle": "Number of Islands ::4::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.",
+    "questionTopics": [
+      "Array",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#200-number-of-islands-4---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "202": {
     "questionNum": 202,
     "questionTitle": "Happy Number ::1::",
@@ -1140,6 +1205,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "207": {
+    "questionNum": 207,
+    "questionTitle": "Course Schedule ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai. For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1. Return true if you can finish all courses. Otherwise, return false.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Topological Sort"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#207-course-schedule-2---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "208": {
     "questionNum": 208,
     "questionTitle": "Implement Trie (Prefix Tree) ::1::",
@@ -1153,6 +1234,22 @@
     ],
     "questionLink": "/Notes/leetcode-tries#208-implement-trie-prefix-tree-1---medium",
     "blog": "LeetCode: Tries",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "210": {
+    "questionNum": 210,
+    "questionTitle": "Course Schedule II ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai. For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1. Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Topological Sort"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#210-course-schedule-ii-3---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1362,6 +1459,22 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "261": {
+    "questionNum": 261,
+    "questionTitle": "Graph Valid Tree ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), write a function to check whether these edges make up a valid tree. You can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not appear together in edges.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Union Find"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#261-graph-valid-tree-3---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "268": {
     "questionNum": 268,
     "questionTitle": "Missing Number ::2::",
@@ -1380,6 +1493,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "269": {
+    "questionNum": 269,
+    "questionTitle": "Alien Dictionary ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "There is a foreign language which uses the latin alphabet, but the order among letters is not \"a\", \"b\", \"c\" ... \"z\" as in English. You receive a list of non-empty strings words from the dictionary, where the words are sorted lexicographically based on the rules of this new language. Derive the order of letters in this language. If the order is invalid, return an empty string. If there are multiple valid order of letters, return any of them. A string a is lexicographically smaller than a string b if either of the following is true: The first letter where they differ is smaller in a than in b. a is a prefix of b and a.length < b.length.",
+    "questionTopics": [
+      "Breadth First Search",
+      "Graph",
+      "Topological Sort"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-topological-sort#269-alien-dictionary-1---hard",
+    "blog": "LeetCode: Graphs II Topological Sort",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "271": {
     "questionNum": 271,
     "questionTitle": "String Encode and Decode ::2::",
@@ -1393,6 +1521,22 @@
     "blog": "LeetCode: Two Pointers",
     "lastSubmittedDate": "2025-07-10T08:20:00",
     "coldnessCount": 219
+  },
+  "286": {
+    "questionNum": 286,
+    "questionTitle": "Walls and Gates ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a (m) x (n 2D) grid initialized with these three possible values: -1 - A water cell that can not be traversed. 0 - A treasure chest. INF - A land cell that can be traversed. We use the integer 2^31 - 1 = 2147483647 to represent INF. Fill each land cell with the distance to its nearest treasure chest. If a land cell cannot reach a treasure chest then the value should remain INF. Assume the grid can only be traversed up, down, left, or right. Modify the grid in-place.",
+    "questionTopics": [
+      "Hash Table",
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#286-walls-and-gates-2---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
   },
   "287": {
     "questionNum": 287,
@@ -1500,6 +1644,22 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#322-coin-change-3---medium",
     "blog": "1D Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "323": {
+    "questionNum": 323,
+    "questionTitle": "Number of Connected Components in an Undirected Graph ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There is an undirected graph with n nodes. There is also an edges array, where edges[i] = [a, b] means that there is an edge between node a and node b in the graph. The nodes are numbered from 0 to n - 1. Return the total number of connected components in that graph.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Union Find"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#323-number-of-connected-components-in-an-undirected-graph-3---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1614,6 +1774,21 @@
     ],
     "questionLink": "/Notes/1d-dynamic-programming#416-partition-equal-subset-sum-2---medium",
     "blog": "1D Dynamic Programming",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "417": {
+    "questionNum": 417,
+    "questionTitle": "Pacific Atlantic Water Flow ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges. The island is partitioned into a grid of square cells. You are given an m x n integer matrix heights where heights[r][c] represents the height above sea level of the cell at coordinate (r, c). The island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is less than or equal to the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean. Return a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans.",
+    "questionTopics": [
+      "Array",
+      "Breadth First Search",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#417-pacific-atlantic-water-flow-2---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1773,6 +1948,39 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "684": {
+    "questionNum": 684,
+    "questionTitle": "Redundant Connection ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "In this problem, a tree is an undirected graph that is connected and has no cycles. You are given a graph that started as a tree with n nodes labeled from 1 to n, with one additional edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed. The graph is represented as an array edges of length n where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the graph. Return an edge that can be removed so that the resulting graph is a tree of n nodes. If there are multiple answers, return the answer that occurs last in the input.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Graph"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#684-redundant-connection-3---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "695": {
+    "questionNum": 695,
+    "questionTitle": "Max Area of Island ::3::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water. The area of an island is the number of cells with a value 1 in the island. Return the maximum area of an island in grid. If there is no island, return 0.",
+    "questionTopics": [
+      "Array",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#695-max-area-of-island-3---medium",
+    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "703": {
     "questionNum": 703,
     "questionTitle": "Kth Largest Element in a Stream ::1::",
@@ -1822,6 +2030,23 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "743": {
+    "questionNum": 743,
+    "questionTitle": "Network Delay Time ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target. We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.",
+    "questionTopics": [
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Heap (Priority Queue)",
+      "Shortest Path"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-dijkstras-bellmanford-single-source-shortest-path#743-network-delay-time-1---medium",
+    "blog": "LeetCode: Graphs II Dijkstras BellmanFord Single Source Shortest Path",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "746": {
     "questionNum": 746,
     "questionTitle": "Min Cost Climbing Stairs ::4::",
@@ -1849,6 +2074,43 @@
     ],
     "questionLink": "/Notes/greedy#763-partition-labels-1---medium",
     "blog": "Greedy",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "778": {
+    "questionNum": 778,
+    "questionTitle": "Swim in Rising Water ::1::",
+    "questionDifficulty": "Hard",
+    "questionBlurb": "You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j). It starts raining, and water gradually rises over time. At time t, the water level is t, meaning any cell with elevation less than equal to t is submerged or reachable. You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most t. You can swim infinite distances in zero time. Of course, you must stay within the boundaries of the grid during your swim. Return the minimum time until you can reach the bottom right square (n - 1, n - 1) if you start at the top left square (0, 0).",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Heap (Priority Queue)",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-dijkstras-bellmanford-single-source-shortest-path#778-swim-in-rising-water-1---hard",
+    "blog": "LeetCode: Graphs II Dijkstras BellmanFord Single Source Shortest Path",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "787": {
+    "questionNum": 787,
+    "questionTitle": "Cheapest Flights Within K Stops ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that pricei. You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.",
+    "questionTopics": [
+      "Dynamic Programming",
+      "Depth First Search",
+      "Breadth First Search",
+      "Graph",
+      "Heap (Priority Queue)",
+      "Shortest Path"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-dijkstras-bellmanford-single-source-shortest-path#787-cheapest-flights-within-k-stops-1---medium",
+    "blog": "LeetCode: Graphs II Dijkstras BellmanFord Single Source Shortest Path",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1936,6 +2198,21 @@
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
+  "994": {
+    "questionNum": 994,
+    "questionTitle": "Rotting Oranges ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an m x n grid where each cell can have one of three values: 0 representing an empty cell, 1 representing a fresh orange, or 2 representing a rotten orange. Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten. Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.",
+    "questionTopics": [
+      "Array",
+      "Breadth First Search",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-multi-source-bfs#994-rotting-oranges-2---medium",
+    "blog": "LeetCode: Graphs II Multi Source BFS",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
   "1046": {
     "questionNum": 1046,
     "questionTitle": "Last Stone Weight ::1::",
@@ -1947,6 +2224,21 @@
     ],
     "questionLink": "/Notes/leetcode-heaps#1046-last-stone-weight-1---easy",
     "blog": "LeetCode: Heaps",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1091": {
+    "questionNum": 1091,
+    "questionTitle": "Shortest Path In Binary Matrix ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix. If there is no clear path, return -1. A clear path in a binary matrix is a path from the top-left cell (i.e., (0, 0)) to the bottom-right cell (i.e., (n - 1, n - 1)) such that: All the visited cells of the path are 0. All the adjacent cells of the path are 8-directionally connected (i.e., they are different and they share an edge or a corner). The length of a clear path is the number of visited cells of this path.",
+    "questionTopics": [
+      "Array",
+      "Breadth First Search",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-a-star-heuristic#1091-shortest-path-in-binary-matrix-1---medium",
+    "blog": "LeetCode: Graphs II A Star Heuristic",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
@@ -1992,6 +2284,41 @@
     ],
     "questionLink": "/Notes/leetcode-trees#1448-count-good-nodes-in-binary-tree-2---medium",
     "blog": "LeetCode: Trees",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1584": {
+    "questionNum": 1584,
+    "questionTitle": "Min Cost to Connect All Points ::2::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are given an array points representing integer coordinates of some points on a 2D-plane, where points[i] = [xi, yi]. The cost of connecting two points [xi, yi] and [xj, yj] is the manhattan distance between them: |xi - xj| + |yi - yj|, where |val| denotes the absolute value of val. Return the minimum cost to make all points connected. All points are connected if there is exactly one simple path between any two points.",
+    "questionTopics": [
+      "Array",
+      "Union Find",
+      "Graph",
+      "Minimum Spanning Tree"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-kruskal-prim-minimum-spanning-tree#1584-min-cost-to-connect-all-points-2---medium",
+    "blog": "LeetCode: Graphs II Kruskal Prim Minimum Spanning Tree",
+    "lastSubmittedDate": null,
+    "coldnessCount": -1
+  },
+  "1631": {
+    "questionNum": 1631,
+    "questionTitle": "Path With Minimum Effort ::1::",
+    "questionDifficulty": "Medium",
+    "questionBlurb": "You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort. A route's effort is the maximum absolute difference in heights between two consecutive cells of the route. Return the minimum effort required to travel from the top- left cell to the bottom-right cell.",
+    "questionTopics": [
+      "Array",
+      "Binary Search",
+      "Depth First Search",
+      "Breadth First Search",
+      "Union Find",
+      "Heap (Priority Queue)",
+      "Matrix"
+    ],
+    "questionLink": "/Notes/leetcode-graphs-ii-dijkstras-bellmanford-single-source-shortest-path#1631-path-with-minimum-effort-1---medium",
+    "blog": "LeetCode: Graphs II Dijkstras BellmanFord Single Source Shortest Path",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
