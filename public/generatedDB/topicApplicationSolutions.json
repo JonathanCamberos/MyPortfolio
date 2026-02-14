@@ -2071,26 +2071,6 @@
       },
       {
         "number": 1,
-        "name": "Recursive DFS Cycle Detection",
-        "type": "graph",
-        "application": "something",
-        "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. Build a graph from prerequisites (course -> list of courses depending on it).\n        # 2. Use DFS to detect cycles.\n        #    visited[course] = 0: unvisited\n        #    visited[course] = 1: visiting (currently in recursion stack)\n        #    visited[course] = 2: visited (safe, no cycles in this path)\n        # 3. If a cycle is found, return False (cannot finish all courses).\n        # 4. Otherwise, all courses can be completed.\n\n        # Build graph\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n\n        # State array\n        # 0 = unvisited, 1 = visiting, 2 = visited\n        visited = [0] * numCourses\n\n        def dfs(course):\n            # Early Prune -> cycle detected\n            if visited[course] == 1:\n                return False\n            # Late Prune -> already processed\n            if visited[course] == 2:\n                return True\n\n            # Process Root -> mark as visiting\n            visited[course] = 1\n\n            # Process Candidates -> traverse neighbors\n            for nei in graph[course]:\n                if not dfs(nei):\n                    return False\n            \n            # LAte Prune -> mark as visited\n            visited[course] = 2\n            return True\n\n        # Process Roots -> traverse all courses\n        for c in range(numCourses):\n            if not dfs(c):\n                return False\n\n        # All courses processed, no cycles\n\n        # overall: time complexity\n        # overall: space complexity\n        return True",
-        "questionNumber": 207,
-        "solutionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#solution-1-recursive-dfs-cycle-detection---graphsomething",
-        "blog": "LeetCode: I Graphs DFS BFS Union Find"
-      },
-      {
-        "number": 2,
-        "name": "Iterative BFS Topological Sort",
-        "type": "graph",
-        "application": "something",
-        "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. Build graph (course -> list of dependent courses) and indegree array.\n        # 2. BFS from courses with indegree 0 (no prerequisites).\n        # 3. Reduce indegree of neighbors; add to queue when indegree becomes 0.\n        # 4. Count processed courses; if count == numCourses, return True.\n\n        # Init graph and indegree\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        # Process Roots -> start with courses without prerequisites (0 indegree)\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        count = 0\n\n        # Process Candidates -> BFS topological sort\n        while queue:\n            curr = queue.popleft()\n            count += 1\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                # Early Prune -> neighbor ready to process\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        # Late Prune -> if all courses processed, no cycles\n        return count == numCourses",
-        "questionNumber": 207,
-        "solutionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#solution-2-iterative-bfs-topological-sort---graphsomething",
-        "blog": "LeetCode: I Graphs DFS BFS Union Find"
-      },
-      {
-        "number": 1,
         "name": "DFS Cycle Detection + Connectivity Check",
         "type": "graph",
         "application": "something",
@@ -2198,6 +2178,26 @@
         "questionNumber": 127,
         "solutionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#solution-2-bidirectional-bfs---graphsomething",
         "blog": "LeetCode: I Graphs DFS BFS Union Find"
+      },
+      {
+        "number": 1,
+        "name": "Recursive DFS Cycle Detection",
+        "type": "graph",
+        "application": "something",
+        "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. Build a graph from prerequisites (course -> list of courses depending on it).\n        # 2. Use DFS to detect cycles.\n        #    visited[course] = 0: unvisited\n        #    visited[course] = 1: visiting (currently in recursion stack)\n        #    visited[course] = 2: visited (safe, no cycles in this path)\n        # 3. If a cycle is found, return False (cannot finish all courses).\n        # 4. Otherwise, all courses can be completed.\n\n        # Build graph\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n\n        # State array\n        # 0 = unvisited, 1 = visiting, 2 = visited\n        visited = [0] * numCourses\n\n        def dfs(course):\n            # Early Prune -> cycle detected\n            if visited[course] == 1:\n                return False\n            # Late Prune -> already processed\n            if visited[course] == 2:\n                return True\n\n            # Process Root -> mark as visiting\n            visited[course] = 1\n\n            # Process Candidates -> traverse neighbors\n            for nei in graph[course]:\n                if not dfs(nei):\n                    return False\n            \n            # LAte Prune -> mark as visited\n            visited[course] = 2\n            return True\n\n        # Process Roots -> traverse all courses\n        for c in range(numCourses):\n            if not dfs(c):\n                return False\n\n        # All courses processed, no cycles\n\n        # overall: time complexity\n        # overall: space complexity\n        return True",
+        "questionNumber": 207,
+        "solutionLink": "/Notes/leetcode-graphs-ii-cycle-detection#solution-1-recursive-dfs-cycle-detection---graphsomething",
+        "blog": "LeetCode: Graphs II Cycle Detection"
+      },
+      {
+        "number": 2,
+        "name": "Iterative BFS Topological Sort",
+        "type": "graph",
+        "application": "something",
+        "code": "def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        \n        # Note:\n        # 1. Build graph (course -> list of dependent courses) and indegree array.\n        # 2. BFS from courses with indegree 0 (no prerequisites).\n        # 3. Reduce indegree of neighbors; add to queue when indegree becomes 0.\n        # 4. Count processed courses; if count == numCourses, return True.\n\n        # Init graph and indegree\n        indegree = [0] * numCourses\n        graph = {i: [] for i in range(numCourses)}\n        for course, prereq in prerequisites:\n            graph[prereq].append(course)\n            indegree[course] += 1\n\n        # Process Roots -> start with courses without prerequisites (0 indegree)\n        queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n        count = 0\n\n        # Process Candidates -> BFS topological sort\n        while queue:\n            curr = queue.popleft()\n            count += 1\n            for nei in graph[curr]:\n                indegree[nei] -= 1\n                # Early Prune -> neighbor ready to process\n                if indegree[nei] == 0:\n                    queue.append(nei)\n\n        # Late Prune -> if all courses processed, no cycles\n        return count == numCourses",
+        "questionNumber": 207,
+        "solutionLink": "/Notes/leetcode-graphs-ii-cycle-detection#solution-2-iterative-bfs-topological-sort---graphsomething",
+        "blog": "LeetCode: Graphs II Cycle Detection"
       },
       {
         "number": 1,

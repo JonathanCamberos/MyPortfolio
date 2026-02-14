@@ -1216,8 +1216,8 @@
       "Graph",
       "Topological Sort"
     ],
-    "questionLink": "/Notes/leetcode-i-graphs-dfs-bfs-union-find#207-course-schedule-2---medium",
-    "blog": "LeetCode: I Graphs DFS BFS Union Find",
+    "questionLink": "/Notes/leetcode-graphs-ii-cycle-detection#207-course-schedule-2---medium",
+    "blog": "LeetCode: Graphs II Cycle Detection",
     "lastSubmittedDate": null,
     "coldnessCount": -1
   },
