@@ -2,15 +2,15 @@
 title: "LeetCode: Graphs II Dijkstras BellmanFord Single Source Shortest Path"
 description: "advanced graphs"
 image: "../../public/Notes/dijkstras.png"
-publishedAt: "2026-02-12"
-updatedAt: "2026-02-12"
+publishedAt: "2026-02-13"
+updatedAt: "2026-02-13"
 author: "jonathancamberos"
 isPublished: true
 tags:
 - data structures and algorithms
 ---
 
-# Dijkstra's Algorithm Intro 
+# Dijkstra's Algorithm Intro
 
 ## Intro
 Dijkstra's Algorithm is a graph traversal algorithm used to find the shortest path
@@ -262,9 +262,20 @@ to get from start node to target node.
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         
         # Dijkstra's Algorithm (Single-Source Shortest Path):
-        # We want the minimum time for a signal sent from node k
-        # to reach all n nodes in a directed graph with non-negative weights.
-        
+        # Find minimum time for node k signal to reach all nodes in 
+        # a directed weighted graph
+
+        # Similar to BFS layer expansion, bt instead of expanding level by level, 
+        # we expand the node with the smallest current travel time using a minHeap
+
+        # Greedy:
+        # Once a node is popped from the hea, its shortest time is finalized
+        # because weights are non negative
+
+        # Graph Construction:
+        # Build Adjacency List:
+        # graph[u] = [(v, weight), ...]
+
         # Key Ideas:
         #   1. Model the network as a directed weighted graph.
         #   2. Use a min-heap to always expand the node with the smallest
@@ -273,56 +284,153 @@ to get from start node to target node.
         #   4. If all nodes are reached, return the maximum of these times.
         #   5. If some node is unreachable, return -1.
 
-        # Build adjacency list: graph[src] = [(dest, weight), ...]
-        # tc: O(edge)
+        # sc: O(E)  adjacency list storage
         graph = defaultdict(list)
+
+        # Build adjacency list: graph[src_node] = [(dest_node, weight), ...]
+        # tc: O(E)  iterate over all edges        
         for u, v, w in times:
             graph[u].append((v, w))
         
         # Min-Heap:
-        # Each entry is (time_to_reach_node, node)
-        # sc: O(node)
+        # ensures we always explore the node with the smallest known travel time next
+        # sc: O(V) worst case
         heap = [(0, k)]
         
-        # Dictionary to track shortest known time to each node
-        # Invariant: once a node is added here, its shortest time is finalized
+        # Invariant:
+        # Tracks finalized shortest time to each node
+        # Once a node enters shortest_time,
+        # its minimum distance is guaranteed final, because graph is non-negative
+        # sc: O(V)
         shortest_time = {}
         
-        # tc: each node/edge O(e) processed via O(log n) heap operations O(e log n)
+        # Dijkstras Traversal (Greedy BFS)
+        # - each edge may be pushed into heap
+        # - heap operations cost log V
+        # tc: O(E log V)
         while heap:
 
-            # Pop node with smallest known arrival time
+            # MinHeap root holds node with smallest known arrival time
+            # tc: O(log V)
             time, node = heapq.heappop(heap)
             
-            # Skip if this node already has a finalized shortest time
-            # (We found a better path earlier)
+            # Skip outdated candidates:
+            # another shorter path already finalized this node
+            # tc: O(1)
             if node in shortest_time:
                 continue
             
-            # Record shortest time to reach this node
+            # Finalize shortest time
             shortest_time[node] = time
             
-            # Explore Choices:
-            # Relax all outgoing edges from this node
+            # Explore Choices (edge relaxation):
+            # Try extending path to neighbors
             for neighbor, wt in graph[node]:
 
-                # If neighbor not finalized, push updated time candidate
+                # Only explore neighbors if time not yet finalized
                 if neighbor not in shortest_time:
+
+                    # push time to minHeap
+                    # tc: heap push
                     heapq.heappush(heap, (time + wt, neighbor))
         
-        # After processing:
-        # If not all nodes were reached, signal cannot reach everyone
+
+        # Final Validation:
+        # if not all nodes were reached, signal cannot propagate everywhere
+        # tc: O(1)
         if len(shortest_time) != n:
             return -1
         
-        # Result:
-        # The total network delay is the maximum shortest arrival time
+        # Network delay = longest shortest path
+        # (last node to receive signal)
+        # tc: O(V)
         res = max(shortest_time.values())
 
-        # overall: tc O(e log n)
-        # overall: sc O(n + e)     
+        # overall: tc O(E log V)
+        # overall: sc O(V + E)     
         return res
 ```
+
+## Solution 2: [Bellman Ford] BFS And MinHeap To Keep Shortest Path - Advanced Graphs/Advanced Graphs
+```python
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        
+        # Bellman For  Algorithm (Single-Source Shortest Path):
+        # Find minimum time for node k signal to reach all nodes in 
+        # a directed weighted graph
+
+        # Unlike Dijkstra:
+        # - Works even if graph contains negative weights
+        # - Does NOT rely on greedy heap expansion
+
+        # Core Idea:
+        # Repeatedly relax ALL edges
+        # Each full iteration allows shortest paths using 
+        # one more edge to propagate through the graph
+
+        # After (V - 1) passes:
+        # shortest paths must be finalized
+        # (because longest simple path uses at most V-1 edges)
+
+        # Initialize distances:
+        # Distance array:
+
+        # dist[node] = shortest known time from k -> node
+        INF = float('inf')
+
+        # Nodes are 1-indexes, so size n+1
+        # sc: O(V)
+        dist = [INF] * (n + 1)
+
+        # Source node distance = 0
+        dist[k] = 0
+
+        # Relax Edges (V - 1) Times
+        # Relaxation:
+        # If going through improves distance to v, update it.
+        # Why V-1 loops?
+        # A shortest path can contain at most V-1 edges
+        # tc: O(V * E)
+        for i in range(n - 1):
+
+            # Optimization:
+            # If no update occurs during a pass,
+            # algorithm can stop early.
+            updated = False
+            
+            # Process every edge
+            # tc per pass: O(E)
+            for u, v, w in times:
+
+                # Only relax if source node reachable
+                if dist[u] != INF and dist[u] + w < dist[v]:
+
+                    # Relax edge (u -> v)
+                    dist[v] = dist[u] + w
+                    updated = True
+
+
+            # Early stopping condition:
+            # shortest paths already finalized
+            if not updated:
+                break
+
+        # Final Validation: 
+        # Network delay = maximum shortests distance
+
+        # If nay node remains INF: unreachable
+        # tc: O(V)
+        max_dist = max(dist[1:])
+
+        # Return -1 if graph disconnected
+        if max_dist == INF:
+            return -1
+        
+        # tc: O(V * E)
+        # sc: O(V)
+        return max_dist
+```
+
 
 
 # 1631. Path With Minimum Effort ::1:: - Medium

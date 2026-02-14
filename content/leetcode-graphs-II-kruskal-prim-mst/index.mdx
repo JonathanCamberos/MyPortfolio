@@ -217,26 +217,39 @@ Given a graph, determine the min cost to connect all nodes.
 ```python
 ```
 
-## Solution 1: Kruskal's Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
+## Solution 1: [Kruskal] Algorithm + Union-Find - Advanced Graphs/Advanced Graphs
 ```python
 class UnionFind:
+
     def __init__(self, n):
+
+        # Each node starts as its own parent (separate component)
+        # sc: O(V)
         self.parent = list(range(n))
+
+        # Rank approximates tree depth (used for balancing)
+        # sc: O(V)
         self.rank = [0] * n
 
     def find(self, x):
-        # path compression
+        # Find root representative of component
+        # Path Compression:
+        # Flattens tree for faster future lookups
+        # tc: O(1) amortized
         if self.parent[x] != x:
             self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
 
     def union(self, x, y):
+
         xr, yr = self.find(x), self.find(y)
 
-        # already connected
+        # Already connected: adding edge creates cycle
         if xr == yr:
             return False
-        # union by rank
+
+        # Union by Rank:
+        # Attach smaller tree under larger tree
         if self.rank[xr] < self.rank[yr]:
             self.parent[xr] = yr
         elif self.rank[xr] > self.rank[yr]:
@@ -249,22 +262,27 @@ class UnionFind:
 class Solution:
     def minCostConnectPoints(self, points: list[list[int]]) -> int:
         
-        # Why Kruskals Algorithm?
-        # Edge Based
-        # Good when we can easily compute all pairwise edges
-        # Add edges in increasing order + avoiding cycles with Union Find
-        # Stop when MST has n-1 edges, ensures min total cost 
+        # Kruskal's Algorithm (Minimum Spanning Tree)
+        # Connect all points with minimum total edge cost.
 
-        # Note:
-        # 1. Compute all pairwise edges with Manhattan distance
-        # 2. Sort edges by cost
-        # 3. Use Union-Find to connect points without forming cycles
-        # 4. Sum the costs of edges added to MST
+        # 1. Build ALL possible edges
+        # 2. Sort edges by smallest weight
+        # 3. Greedily add edges if they do NOT form a cycle
+
+        # Cycle detection is handled efficiently using Union Find
 
         n = len(points)
         edges = []
 
-        # Build all edges (Manhattan distance)
+
+        # Build All Pairwise Edges:
+        # Manhattan distance used as edge weight
+
+        # Number of edges:
+        # n(n-1)/2 : O(n^2)
+
+        # tc: O(n^2)
+        # sc: O(n^2)
         for i in range(n):
             for j in range(i + 1, n):
                 xi, yi = points[i]
@@ -272,68 +290,106 @@ class Solution:
                 cost = abs(xi - xj) + abs(yi - yj)
                 edges.append((cost, i, j))
 
-        # Sort edges by cost
+
+        # Sort edges by cost:
+        # tc: O(E log E)
         edges.sort()
+
+        # Greedy Step:
+        # Always try smallest edge first
 
         uf = UnionFind(n)
         total_cost = 0
         edges_used = 0
 
-        # Kruskal’s main loop
+        # Process edges in increasing order
         for cost, i, j in edges:
+
+            # Union succeeds ONLY if no cycle formed
             if uf.union(i, j):
                 total_cost += cost
                 edges_used += 1
 
-                # MST complete
+                # MST complete once n-1 edges chosen
                 if edges_used == n - 1:
                     break
 
 
-        # overall: time complexity O(n^2 log n) for edge sorting
-        # overall: space complexity O(n^2) for edges
+        # overall: tc O(n^2 log n)
+        # overall: sc: P(n^2)
         return total_cost
 ```
 
 
-## Solution 2: Prim's Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
+## Solution 2: [Prim] Algorithm + MinHeap - Advanced Graphs/Advanced Graphs
 ```python
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
 
-        # Why Prims Algorithm?
-        # Node Based
-        # Grow MST from starting point using smallest connecting edge
-        # Efficient when checking edges dynamically with a MinHeap
-        # Stops when all points are connected, ensures min total cost
+        # Prim's Algorithm (Minimum Spanning Tree)
+        # Grow MST from a starting node
+
+        # Idea:
+        # 1. Similar to Dijkstra's greedy expansion
+        # 2. Always add the CHEAPEST edge connecting
+        #    current MST to a new node
+
+        # Difference from Kruskal:
+        # Node based expansion (not edge based)
+        # No explicit cycle detection needed
 
         n = len(points)
 
-        # shortest edge to MST
+        # data Structures
+
+        # Minimum cost edge needed to connect each node to MST
+        # sc: O(V)
         min_dist = [float('inf')] * n
+        
+        # Track nodes already included in MST
+        # sc: O(V)
         visited = [False] * n
+
+        # Start from node 0
         min_dist[0] = 0
 
-        # (cost, point)
+        # MinHeap:
+        # (edge_cost, node)
+        # ensures smallest connecting edge expanded next
+        # sc: O(V)
         heap = [(0,0)]
+
         total_cost = 0
         
 
+        # Prim Traversal (Greedy Expansion)
+        # Similar to dijkstra:
+        # always expand lowest cost frontier edge
+        # tc: O(n^2 log n)
         while heap:
+
             cost, u = heapq.heappop(heap)
+            
+            # Skip outdated heap entries
             if visited[u]:
                 continue
+
+            # Add node to MST
             visited[u] = True
             total_cost += cost
 
-            # Explore all possible new edges
+            # Explore Candidate Edges:
+            # Dynamically compute distance to all unvisited nodes 
             for v in range(n):
+
                 if not visited[v]:
                     dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
+                    
+                    # if cheaper connection found: update heap
                     if dist < min_dist[v]:
                         min_dist[v] = dist
                         heapq.heappush(heap,(dist, v))
 
-        # overall: time complexity O(n^2 log n)
-        # overall: space complexity O(n)
+        # overall: tc O(n^2 log n)
+        # overall: sc O(n)
         return total_cost
 ```
